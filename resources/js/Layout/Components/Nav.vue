@@ -5,12 +5,12 @@ import { Link } from '@inertiajs/vue3'
 <template>
     <nav class="bg-white shadow-md h-24 flex items-center px-8 md:px-[160px] justify-between">
       <!-- Logo -->
-      <div class="text-xl font-bold text-gray-800">MyLogo</div>
+      <div class="text-xl font-bold text-gray-800"><Link href="/">{{ logo }}</Link></div>
 
       <!-- Navigation Links -->
       <div class="hidden md:flex space-x-6">
-        <Link href="/about" class="text-gray-600 hover:text-gray-900">Over mij</Link>
-        <Link href="/contact" class="text-gray-600 hover:text-gray-900">Contact</Link>
+        <Link href="/about" class="text-gray-600 hover:text-gray-900">{{ about }}</Link>
+        <Link href="/contact" class="text-gray-600 hover:text-gray-900">{{ contact }}</Link>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -22,8 +22,8 @@ import { Link } from '@inertiajs/vue3'
 
       <!-- Mobile Menu -->
       <div v-if="isMenuOpen" class="absolute top-24 left-0 w-full bg-white shadow-md md:hidden flex flex-col items-center space-y-4 py-4">
-        <Link href="/about" class="text-gray-600 hover:text-gray-900">About</Link>
-        <Link href="/contact" class="text-gray-600 hover:text-gray-900">Contact</Link>
+        <Link href="/about" class="text-gray-600 hover:text-gray-900">{{ about }}</Link>
+        <Link href="/contact" class="text-gray-600 hover:text-gray-900">{{ contact }}</Link>
       </div>
     </nav>
   </template>
@@ -32,7 +32,10 @@ import { Link } from '@inertiajs/vue3'
   export default {
     data() {
       return {
-        isMenuOpen: false,
+        logo: "TussenTijd Reizen",
+        about: "Over mij",
+        contact: "Contact",
+        isMenuOpen: false
       };
     },
     methods: {

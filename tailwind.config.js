@@ -17,6 +17,13 @@ export default {
             height: {
                 'screen-minus-nav': 'calc(100vh - 6rem)',
               },
+              colors: {
+                'light': '#f9f7f3',
+                'primary': '#b5e2fa',
+                'secondary': '#0fa3b1',
+                'accent': '#eddea4',
+                'dark': '#f7a072',
+              }
         },
     },
     plugins: [],
