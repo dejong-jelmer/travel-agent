@@ -11,7 +11,7 @@ export default {
     data() {
       return {
         title: "TussenTijd Reizen",
-        subtitle: "Bezoek het verleden met oog voor de toekomst"
+        subtitle: "Historische reizen met oog voor de toekomst"
       };
     }
 }

@@ -4,7 +4,7 @@ import Chevron from './Icons/Chevron.vue';
 </script>
 <template>
     <div class="w-full px-4 flex items-center justify-center gap-4 overflow-hidden">
-      <button @click="prevSlide" class="text-4xl font-thin text-secondary hover:text-primary transition-colors rotate-180">
+      <button @click="prevSlide" class="text-4xl font-thin text-custom-secondary hover:text-custom-primary transition-colors rotate-180">
         <Chevron />
       </button>
       <div class="w-full overflow-hidden py-4">
@@ -28,7 +28,7 @@ import Chevron from './Icons/Chevron.vue';
             </div>
         </div>
       </div>
-      <button @click="nextSlide" class="text-4xl font-thin text-secondary hover:text-primary transition-colors">
+      <button @click="nextSlide" class="text-4xl font-thin text-custom-secondary hover:text-custom-primary transition-colors">
         <Chevron />
     </button>
     </div>
