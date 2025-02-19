@@ -1,6 +1,5 @@
 <?php
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\LoginController;
 use Inertia\Inertia;
 
 Route::get('/', function() {
@@ -18,6 +17,3 @@ Route::get('/contact', function() {
         'title' => 'Contact - TussenTijd Reizen'
     ]);
 });
-
-
-Route::get('/admin', [LoginController::class, 'show']);
