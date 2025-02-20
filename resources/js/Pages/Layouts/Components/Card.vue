@@ -1,5 +1,5 @@
 <script setup>
-    import Train from './Icons/Train.vue';
+    import Train from '../../Icons/Train.vue';
 
     defineProps({ product: Object })
 </script>

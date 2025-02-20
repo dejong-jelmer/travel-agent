@@ -1,9 +1,11 @@
 <script setup>
-import { Link } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
+const user = usePage().props.auth.user;
 </script>
 
 <template>
-    <nav class="bg-white shadow-md h-24 flex items-center px-8 md:px-[160px] justify-between">
+    <nav class="fixed inset-0 bg-white shadow-md h-24 flex items-center px-8 md:px-[160px] justify-between">
       <!-- Logo -->
       <div class="text-xl font-bold text-gray-800"><Link href="/">{{ logo }}</Link></div>
 
@@ -11,6 +13,10 @@ import { Link } from '@inertiajs/vue3'
       <div class="hidden md:flex space-x-6">
         <Link href="/about" class="text-gray-600 hover:text-gray-900">{{ about }}</Link>
         <Link href="/contact" class="text-gray-600 hover:text-gray-900">{{ contact }}</Link>
+        <template v-if="user">
+            <Link href="/admin/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</Link>
+            <Link href="/admin/logout" class="text-gray-600 hover:text-gray-900">Loguit</Link>
+        </template>
       </div>
 
       <!-- Mobile Menu Button -->
@@ -24,6 +30,10 @@ import { Link } from '@inertiajs/vue3'
       <div v-if="isMenuOpen" class="absolute top-24 left-0 w-full bg-white shadow-md md:hidden flex flex-col items-center space-y-4 py-4">
         <Link href="/about" class="text-gray-600 hover:text-gray-900">{{ about }}</Link>
         <Link href="/contact" class="text-gray-600 hover:text-gray-900">{{ contact }}</Link>
+        <template v-if="user">
+            <Link href="/admin/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</Link>
+            <Link href="/admin/logout" class="text-gray-600 hover:text-gray-900">Loguit</Link>
+        </template>
       </div>
     </nav>
   </template>

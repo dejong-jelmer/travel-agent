@@ -1,6 +1,6 @@
 <script setup>
-import Card from './Card.vue'
-import Chevron from './Icons/Chevron.vue';
+import Card from './Card.vue';
+import Chevron from '../../Icons/Chevron.vue';
 </script>
 <template>
     <div class="w-full px-4 flex items-center justify-center gap-4 overflow-hidden">
