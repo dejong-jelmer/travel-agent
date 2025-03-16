@@ -1,0 +1,65 @@
+<?php
+
+namespace Tests\Feature;
+
+use Tests\TestCase;
+use App\Models\Product;
+use App\Models\Country;
+use Inertia\Testing\AssertableInertia;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
+class HomeTest extends TestCase
+{
+    use RefreshDatabase;
+
+    public function test_home_page_displays_products()
+    {
+        $country = Country::factory()->create();
+        $product = Product::factory()->create(['country_id' => $country->id]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertInertia(fn (AssertableInertia $page) =>
+            $page->component('Home')
+                ->has('products', 1)
+                ->where('products.0.id', $product->id)
+                ->where('products.0.country.id', $country->id)
+        );
+
+        $response->assertStatus(200);
+    }
+
+    public function test_about_page_returns_200()
+    {
+        $this->get(route('about'))->assertStatus(200);
+    }
+
+    public function test_contact_page_returns_200()
+    {
+        $this->get(route('contact'))->assertStatus(200);
+    }
+
+    public function test_product_page_displays_correct_product()
+    {
+        $country = Country::factory()->create();
+        $product = Product::factory()->create(['country_id' => $country->id, 'price' => 895.00]);
+
+        $response = $this->get(route('trip.show', $product));
+
+        $response->assertInertia(fn (AssertableInertia $page) =>
+            $page->component('Products/Show')
+                ->has('product')
+                ->where('product.id', $product->id)
+                ->where('product.name', $product->name)
+                ->where('product.slug', $product->slug)
+                ->where('product.duration', $product->duration)
+                ->where('product.price', (string) number_format((float) $product->price, 2, '.', ''))
+                ->where('product.active', $product->active)
+                ->where('product.featured', $product->featured)
+                ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
+                ->where('product.country_id', $product->country->id)
+        );
+
+        $response->assertStatus(200);
+    }
+}

@@ -22,18 +22,20 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
+        // dd($this);
         return [
             'name' => ['required', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'duration' => ['required', 'integer', 'min:0'],
-            // 'image' => ['required', 'image'],
-            'images' => ['array'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', 'max:5120'],
+            'images.*' => ['image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', 'max:5120'],
             'active' => ['boolean'],
             'featured' => ['boolean'],
             'published_at' => ['nullable', 'date'],
+            'country_id' => ['required', 'exists:countries,id'],
             // 'category_id' => ['required', 'exists:categories,id'],
-            // 'country_id' => ['required', 'exists:countries,id'],
         ];
     }
 }

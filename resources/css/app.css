@@ -1,3 +1,21 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .section {
+        @apply px-40 pt-20
+    }
+
+    .form-input {
+        @apply block w-full mt-2 px-3 py-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-primary focus:border-custom-primary text-base;
+    }
+
+    .form-label {
+        @apply block text-base font-bold;
+    }
+
+    .form-button {
+        @apply px-6 py-3 font-semibold text-white bg-custom-dark rounded-lg shadow-lg transition-all duration-300 ease-out hover:bg-custom-primary focus:outline-none focus:ring-2 focus:ring-custom-dark focus:ring-offset-2 cursor-pointer
+    }
+}

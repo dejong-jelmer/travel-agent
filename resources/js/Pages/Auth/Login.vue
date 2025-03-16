@@ -1,11 +1,11 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
-import { defineProps } from "vue";
 
 const props = defineProps({
     message: String,
     error: Boolean,
 });
+const loginMsg = `${window.appName} - Login` || 'Login';
 </script>
 
 <template>
@@ -17,7 +17,7 @@ const props = defineProps({
                     <span class="block sm:inline">{{ props.message }}</span>
                 </div>
             </div>
-            <h2 class="text-2xl font-bold mb-6 text-center text-white">TussenTijd Reizen - Login</h2>
+            <h2 class="text-2xl font-bold mb-6 text-center text-white" v-text="`${loginMsg}`"></h2>
             <form @submit.prevent="handleLogin">
                 <div class="mb-4">
                     <label for="email" class="block text-sm font-medium text-white">Email</label>

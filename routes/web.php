@@ -2,37 +2,31 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\HomeController;
 use Inertia\Inertia;
+use App\Models\Product;
 
-Route::get('/', function() {
-    return Inertia::render('Homepage/Home');
-});
+Route::get('/', [HomeController::class, 'home'])->name("home");
+Route::get('/over-mij', [HomeController::class, 'about'])->name("about");
+Route::get('/contact', [HomeController::class, 'contact'])->name("contact");
 
-Route::get('/about', function() {
-    return Inertia::render('Homepage/About', [
-        'title' => 'Over mij - TussenTijd Reizen'
-    ]);
-});
+Route::get('/{product:slug}', [HomeController::class, 'showProduct'])->name('trip.show');
 
-Route::get('/contact', function() {
-    return Inertia::render('Homepage/Contact', [
-        'title' => 'Contact - TussenTijd Reizen'
-    ]);
-});
-
-Route::get('/admin', function() {
+Route::get('/admin/login', function() {
     return Inertia::render('Auth/Login', [
-        'title' => 'Admin - TussenTijd Reizen'
+        'title' => 'Admin - ' . env('APP_NAME')
     ]);
-})->name('admin');
+})->middleware('guest')->name('admin');
 Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
+
 Route::group(['prefix' => 'admin', 'middleware'=> 'auth'], function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
     Route::get('/dashboard', function() {
         return Inertia::render('Admin/Dashboard', [
-            'title' => 'Admin dashboard - TussenTijd Reizen'
+            'title' => 'Admin dashboard - ' . env('APP_NAME')
         ]);
     })->name('admin.dashboard');
 
-    Route::resource('/products', ProductController::class);
+    Route::resource('/products', ProductController::class)->except(['update']);
+    Route::post('/products/update/{product}', [ProductController::class, 'update'])->name('products.update');
 });
