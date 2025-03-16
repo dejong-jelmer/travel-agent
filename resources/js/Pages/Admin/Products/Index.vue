@@ -18,7 +18,7 @@ import { Link } from '@inertiajs/vue3';
                     <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
                     <th class="py-3 px-6 text-center">#</th>
                     <th class="py-3 px-6 text-center">Product</th>
-                    <th class="py-3 px-6 text-center">Land</th>
+                    <th class="py-3 px-6 text-center">Land(en)</th>
                     <th class="py-3 px-6 text-center">Prijs</th>
                     <th class="py-3 px-6 text-center">Dagen</th>
                     </tr>
@@ -32,7 +32,7 @@ import { Link } from '@inertiajs/vue3';
                     >
                     <td class="py-3 px-6 text-center">{{ index + 1 }}</td>
                     <td class="py-3 px-6 text-center">{{ product.name }}</td>
-                    <td class="py-3 px-6 text-center">{{ product.country.name }}</td>
+                    <td class="py-3 px-6 text-center">{{ product.countries?.map(country => country.name).join(", ") }}</td>
                     <td class="py-3 px-6 text-center">€ {{ product.price }}</td>
                     <td class="py-3 px-6 text-center">{{ product.duration }}</td>
                     </tr>

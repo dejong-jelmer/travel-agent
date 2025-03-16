@@ -12,7 +12,7 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->redirectGuestsTo('/admin');
+        $middleware->redirectGuestsTo('/admin/login');
         $middleware->web(append: [
             HandleInertiaRequests::class,
         ]);

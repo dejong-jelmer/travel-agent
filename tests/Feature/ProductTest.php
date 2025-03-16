@@ -25,11 +25,16 @@ class ProductTest extends TestCase
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        $country = Country::factory()->create();
+        $countries = Country::factory(2)->create();
         $products = Product::factory()
             ->count(3)
             ->has(ProductImage::factory()->count(2), 'images')
-            ->create(['country_id' => $country->id, 'price' => 895.00]);
+            ->create(['price' => 895.00])->each(function ($product) use ($countries) {
+                $product->countries()->attach([
+                    $countries->first()->id,
+                    $countries->last()->id,
+                ]);
+            });
 
         $response = $this->get(route('products.index'));
 
@@ -38,11 +43,18 @@ class ProductTest extends TestCase
             $page->component('Admin/Products/Index')
                 ->has('products', 3)
                 ->where('products.0.id', $products[0]->id)
-                ->where('products.0.country.id', $country->id)
                 ->where('products.0.price', (string) number_format((float) $products[0]->price, 2, '.', ''))
                 ->has('products.0.images', 2)
                 ->where('products.0.images.0.id', $products[0]->images[0]->id)
         );
+
+        foreach($products as $product) {
+            $this->assertDatabaseHas('country_product', [
+                'product_id' => $product->id,
+                'country_id' => $countries->first()->id,
+                'country_id' => $countries->last()->id,
+            ]);
+        }
 
         $response->assertStatus(200);
     }
@@ -66,12 +78,12 @@ class ProductTest extends TestCase
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        $country = Country::factory()->create();
-        $description = fake()->text();
+        $countries = Country::factory(2)->create();
+
+        $description = fake()->paragraph();
 
         Storage::fake('public');
         Storage::makeDirectory('images/products/featured');
-        $image = UploadedFile::fake()->image("image0.jpg");
 
         $productData = [
             'name' => 'Test Product',
@@ -79,20 +91,26 @@ class ProductTest extends TestCase
             'description' => $description,
             'price' => "895.00",
             'duration' => 8,
-            'image' => $image,
+            'image' => UploadedFile::fake()->image("image.jpg"),
             'images' => [
                 UploadedFile::fake()->image('image1.jpg'),
                 UploadedFile::fake()->image('image2.jpg'),
             ],
-            'country_id' => $country->id
+            'countries' => $countries->modelKeys()
         ];
 
         $response = $this->post(route('products.store'), $productData);
         $response->assertRedirect(route('products.index'));
 
-        $this->assertDatabaseHas('products', Arr::except($productData, ['image', 'images']));
-
         $product = Product::first();
+
+        $this->assertDatabaseHas('products', Arr::except($productData, ['image', 'images', 'countries']));
+        $this->assertDatabaseHas('country_product', [
+            'product_id' => $product->id,
+            'country_id' => $countries->first()->id,
+            'country_id' => $countries->last()->id,
+        ]);
+
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
             'image' => "images/products/featured/{$productData['image']->hashName()}",
@@ -120,7 +138,8 @@ class ProductTest extends TestCase
         $country = Country::factory()->create();
         $product = Product::factory()
             ->has(ProductImage::factory()->count(3), 'images')
-            ->create(['country_id' => $country->id]);
+            ->create();
+        $product->countries()->attach($country->id);
 
         $response = $this->get(route('products.show', $product));
         $response->assertInertia(
@@ -135,9 +154,8 @@ class ProductTest extends TestCase
                     ->where('product.active', $product->active)
                     ->where('product.featured', $product->featured)
                     ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
-                    ->where('product.country_id', $product->country->id)
                     ->has('product.images', 3)
-
+                    ->has('product.countries', 1)
             );
 
         $response->assertStatus(200);
@@ -148,10 +166,10 @@ class ProductTest extends TestCase
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        $country = Country::factory()->create();
+        $countries = Country::factory(2)->create();
         $product = Product::factory()
-            ->has(ProductImage::factory()->count(3), 'images')
-            ->create(['country_id' => $country->id]);
+            ->has($images = ProductImage::factory()->count(3), 'images')
+            ->create();
 
         $response = $this->get(route('products.edit', $product));
 
@@ -159,10 +177,9 @@ class ProductTest extends TestCase
             ->component('Admin/Products/Edit')
                 ->has('product')
                 ->where('product.id', $product->id)
-                ->where('product.country_id', $country->id)
                 ->has('product.images', 3)
+                ->has('countries', 2)
                 ->etc()
-                ->has('countries', Country::count())
         );
 
         $response->assertStatus(200);
@@ -173,14 +190,13 @@ class ProductTest extends TestCase
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        $country = Country::factory()->create();
-        $product = Product::factory()->create(['country_id' => $country->id]);
+        $countries = Country::factory(2)->create();
+        $product = Product::factory()->create();
 
         $description = fake()->text();
 
         Storage::fake('public');
         Storage::makeDirectory('images/products/featured');
-        $image = UploadedFile::fake()->image("product.jpg");
 
         $productData = [
             'name' => 'Test Product',
@@ -188,17 +204,37 @@ class ProductTest extends TestCase
             'description' => $description,
             'price' => "895.00",
             'duration' => 8,
-            'image' => $image,
-            'country_id' => $country->id
+            'image' => UploadedFile::fake()->image("image.jpg"),
+            'images' => [
+                UploadedFile::fake()->image('image1.jpg'),
+                UploadedFile::fake()->image('image2.jpg'),
+            ],
+            'countries' => $countries->modelKeys()
         ];
 
         $response = $this->post(route('products.update', $product), $productData);
         $response->assertRedirect(route('products.index'));
 
-        $this->assertDatabaseHas('products', Arr::except($productData, 'image'));
+        $this->assertDatabaseHas('products', Arr::except($productData, ['image', 'images', 'countries']));
+        $this->assertDatabaseHas('country_product', [
+            'product_id' => $product->id,
+            'country_id' => $countries->first()->id,
+            'country_id' => $countries->last()->id,
+        ]);
 
         $product = Product::first();
-
         Storage::disk('public')->assertExists($product->getRawOriginal('image'));
+
+        $this->assertCount(2, $product->images);
+
+        foreach ($product->images as $index => $image) {
+            $path = "images/products/{$productData['images'][$index]->hashName()}";
+            $this->assertDatabaseHas('product_images', [
+                'product_id' => $product->id,
+                'path' => $path,
+            ]);
+
+            Storage::disk('public')->assertExists($path);
+        }
     }
 }

@@ -26,7 +26,7 @@ class ProductFactory extends Factory
     {
         $country = Country::inRandomOrder()->first();
         $city = fake()->city();
-        $text = fake()->text();
+        $text = fake()->paragraph();
         $path = fake()->randomElement(self::IMG_PATHS);
         return [
             'name' => $city,
@@ -38,8 +38,6 @@ class ProductFactory extends Factory
             'active' => true,
             'featured' => true,
             'published_at' => now(),
-            'country_id' => $country->id
-            // 'category_id' => 1,
         ];
     }
 }

@@ -23,7 +23,7 @@ class ProductController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Products/Index', [
-            'products' => Product::with(['country'])->get(),
+            'products' => Product::with(['countries'])->get(),
             'title' => "Admin producten - {$this->appName}"
         ]);
     }
@@ -48,6 +48,8 @@ class ProductController extends Controller
 
         $validatedFiles = $request->safe()->only(['image', 'images']);
         $validatedFields = $request->safe()->except(['image', 'images']);
+        $countries = $request->safe()->countries ?? [];
+
         if(isset($validatedFiles['image'])) {
             $imagePath = $validatedFiles['image']->store('images/products/featured', 'public');
             $product->image = $imagePath;
@@ -55,6 +57,9 @@ class ProductController extends Controller
 
         $product->fill($validatedFields);
         $product->save();
+        if(count($countries)) {
+            $product->countries()->sync($countries);
+        }
 
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
             $imagePaths = [];
@@ -74,7 +79,7 @@ class ProductController extends Controller
     public function show(Product $product): Response
     {
         return Inertia::render('Admin/Products/Show', [
-            'product' => $product->with(['images', 'country'])->first(),
+            'product' => $product->with(['images', 'countries'])->first(),
             'title' => "Admin product - {$this->appName}"
         ]);
     }
@@ -85,7 +90,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return Inertia::render('Admin/Products/Edit', [
-            'product' => $product->with(['images', 'country'])->first(),
+            'product' => $product->with(['images', 'countries'])->first(),
             'countries' => Country::all(),
             'title' => "Admin product bewerken - {$this->appName}"
         ]);
@@ -97,7 +102,8 @@ class ProductController extends Controller
     public function update(StoreProductRequest $request, Product $product): RedirectResponse
     {
         $validatedFiles = $request->safe()->only(['image', 'images']);
-        $validatedFields = $request->safe()->except(['image', 'images']);
+        $validatedFields = $request->safe()->except(['image', 'images', 'countries']);
+        $countries = $request->safe()->countries ?? [];
 
         if (isset($validatedFiles['image'])) {
             $imagePath = $validatedFiles['image']->store('images/products/featured', 'public');
@@ -118,6 +124,9 @@ class ProductController extends Controller
 
         $product->fill($validatedFields);
         $product->save();
+        if(count($countries)) {
+            $product->countries()->sync($countries);
+        }
 
         return redirect()->route('products.index');
     }

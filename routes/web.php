@@ -2,6 +2,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ItineraryController;
 use App\Http\Controllers\HomeController;
 use Inertia\Inertia;
 use App\Models\Product;
@@ -29,4 +30,8 @@ Route::group(['prefix' => 'admin', 'middleware'=> 'auth'], function () {
 
     Route::resource('/products', ProductController::class)->except(['update']);
     Route::post('/products/update/{product}', [ProductController::class, 'update'])->name('products.update');
+
+    Route::resource('products.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
+    Route::resource('itineraries', ItineraryController::class)->only(['show', 'edit', 'update', 'destroy']);
+
 });

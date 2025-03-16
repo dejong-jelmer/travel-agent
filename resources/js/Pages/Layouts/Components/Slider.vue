@@ -6,7 +6,7 @@ import { isMobile, isTablet } from 'mobile-device-detect';
 </script>
 <template>
     <div class="w-full px-4 flex items-center justify-center overflow-hidden">
-        <template v-if="items.length >= 3">
+        <template v-if="items.length > 3">
             <button @click="prevSlide"
                 class="hidden md:block text-4xl font-thin text-custom-secondary hover:text-custom-primary transition-colors rotate-180">
                 <Chevron />
@@ -23,7 +23,7 @@ import { isMobile, isTablet } from 'mobile-device-detect';
                 </div>
             </div>
         </div>
-        <template v-if="items.length >= 3">
+        <template v-if="items.length > 3">
             <button @click="nextSlide"
                 class="hidden md:block text-4xl font-thin text-custom-secondary hover:text-custom-primary transition-colors">
                 <Chevron />

@@ -23,12 +23,18 @@ const props = defineProps({
                     <Input type="text" name="name" label="Naam" v-model="form.name" :feedback="errors.name"/>
                     <Input type="text" name="slug" label="Slug" v-model="form.slug" :feedback="errors.slug"/>
                     <Text name="description" label="Omschrijving" v-model="form.description" />
-
                 </div>
                 <div class="space-y-6">
                     <Input type="number" name="price" label="Prijs (€)" v-model="form.price" :feedback="errors.price" />
                     <Input type="number" name="duration" label="Duur (dagen)" v-model="form.duration" :feedback="errors.duration" />
-                    <Select :items="countries" name="country" label="Land" v-model="form.country_id" :feedback="errors.country_id" />
+                    <Select
+                        name="country" label="Land"
+                        v-model="form.countries"
+                        :multiple="true"
+                        :options="countries"
+                        :feedback="errors.countries"
+                        :first-option="'Koppel één of meerder landen'"
+                    />
                 </div>
                 <div class="space-y-6">
                     <label class="form-label">Hoofdafbeelding (URL)</label>
@@ -70,6 +76,7 @@ export default {
         description: '',
         price: '',
         duration: '',
+        countries: [],
         image: '',
         images: '',
         active: false,

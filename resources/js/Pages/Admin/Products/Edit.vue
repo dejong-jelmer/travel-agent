@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { useForm } from "@inertiajs/vue3";
 import Layout from "@/Pages/Layouts/Layout.vue";
 import Input from "@/Pages/Layouts/Components/Form/Input.vue";
@@ -22,13 +23,20 @@ const props = defineProps({
             <div class="gap-6 bg-white p-8 rounded-lg shadow grid grid-cols-2">
                 <div class="space-y-6">
                     <Input type="text" name="name" label="Naam" v-model="form.name" :feedback="errors.name"/>
+                    <Input type="text" name="slug" label="Slug" v-model="form.slug" :feedback="errors.slug"/>
                     <Text name="description" label="Omschrijving" v-model="form.description" />
-
                 </div>
                 <div class="space-y-6">
                     <Input type="number" name="price" label="Prijs (€)" v-model="form.price" :feedback="errors.price" />
                     <Input type="number" name="durantion" label="Duur (dagen)" v-model="form.duration" :feedback="errors.duration" />
-                    <Select :items="countries" name="country" label="Land" v-model="form.country_id" :feedback="errors.country_id" />
+                    <Select
+                        name="country" label="Land"
+                        v-model="form.countries"
+                        :options="countries"
+                        :multiple="true"
+                        :feedback="errors.countries"
+                        :first-option="'Koppel één of meerder landen'"
+                    />
                 </div>
                 <div class="space-y-6">
                     <label class="form-label">Hoofdafbeelding (URL)</label>
@@ -68,16 +76,13 @@ export default {
         description: this.product.description,
         price: this.product.price,
         duration: this.product.duration,
-        country_id: this.product.country.id,
+        countries: this.product.countries?.map(country => country.id),
         image: this.product.image,
         images: this.product.image_urls,
         active: this.product.active,
         featured: this.product.featured,
       },
     }
-  },
-  mounted() {
-    console.log("Product: ", this.product.image_urls);
   },
   watch: {
     uploadedImages: {
@@ -93,8 +98,6 @@ export default {
     },
     submit() {
         const form = useForm(this.form);
-
-        console.log("Form: ", form);
         form.post(route("products.update", this.product.id), { forceFormData: true });
     }
   },

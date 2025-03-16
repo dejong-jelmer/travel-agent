@@ -18,7 +18,7 @@ defineProps({ product: Object })
                 </div>
             </div>
             <div class="p-5 space-y-4 text-left">
-                <h3 class="text-xl font-semibold text-gray-700">{{ product.country.name }}</h3>
+                <h3 class="text-xl font-semibold text-gray-700">{{ product.countries[0].name }}</h3>
                 <h4 class="text-xl font-semibold text-gray-700">{{ product.name }}</h4>
                 <div class="grid grid-cols-2 gap-4">
                     <div class="grid grid-cols-2 gap-4 text-left">
@@ -41,18 +41,3 @@ defineProps({ product: Object })
     </Link>
 </template>
 
-<script>
-export default {
-    data() {
-        return {
-            imageUrl: "https://picsum.photos/400/225",
-            country: "Frankrijk",
-            days: "8",
-            price: "895,-",
-            title: "De prehistorische mens en de grotten in de valei van de Vézère"
-        };
-    }
-};
-</script>
-
-<style scoped></style>

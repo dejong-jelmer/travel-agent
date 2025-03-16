@@ -34,7 +34,8 @@ class StoreProductRequest extends FormRequest
             'active' => ['boolean'],
             'featured' => ['boolean'],
             'published_at' => ['nullable', 'date'],
-            'country_id' => ['required', 'exists:countries,id'],
+            'countries' => ['required', 'array'],
+            // 'country_id' => ['required', 'exists:countries,id'],
             // 'category_id' => ['required', 'exists:categories,id'],
         ];
     }

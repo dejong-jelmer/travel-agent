@@ -3,6 +3,7 @@ namespace App\Models;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,8 +23,6 @@ class Product extends Model
         'active',
         'featured',
         'published_at',
-        'category_id',
-        'country_id',
     ];
 
     protected $appends = ['image_urls'];
@@ -46,14 +45,24 @@ class Product extends Model
         return $this->belongsTo(Category::class);
     }
 
-    public function country(): BelongsTo
+    public function country(): Country
     {
-        return $this->belongsTo(Country::class);
+        return $this->countries()->first();
+    }
+
+    public function countries(): BelongsToMany
+    {
+        return $this->belongsToMany(Country::class);
     }
 
     public function images()
     {
         return $this->hasMany(ProductImage::class);
+    }
+
+    public function itineraries()
+    {
+        return $this->hasMany(Itinerary::class);
     }
 
     protected function image(): Attribute

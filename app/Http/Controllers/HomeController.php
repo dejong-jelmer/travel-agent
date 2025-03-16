@@ -20,7 +20,7 @@ class HomeController extends Controller
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'products' => Product::with('country')->get(),
+            'products' => Product::with('countries')->get(),
         ]);
     }
 

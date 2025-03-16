@@ -22,13 +22,11 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->boolean('featured')->default(false);
             $table->timestamp('published_at')->nullable();
-            $table->integer('country_id');
-            // $table->foreignId('country_id')->constrained();
             // $table->foreignId('itinerary_id')
             //     ->constrained()
             //     ->onDelete('cascade');
-            $table->softDeletes();
             // $table->foreignId('category_id')->constrained();
+            $table->softDeletes();
 
             $table->timestamps();
         });
