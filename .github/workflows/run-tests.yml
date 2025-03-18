@@ -63,5 +63,13 @@ jobs:
       - name: Voer database migraties uit
         run: php artisan migrate --env=testing --force
 
+      - name: Setup Node.js (voorbeeld voor JavaScript/TypeScript projecten)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install
+
       - name: Voer de tests uit
         run: php artisan test
