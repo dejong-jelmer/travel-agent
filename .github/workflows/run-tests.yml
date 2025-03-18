@@ -31,8 +31,8 @@ jobs:
       - name: Installeer PHP en extensies
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
-          extensions:  dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          php-version: '8.2'
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, imagick
           coverage: none
 
       - name: Run composer install
@@ -42,6 +42,21 @@ jobs:
         run: |
             cp .env.example .env
             php artisan key:generate
+            - name: Clear cache
+            run: |
+              php artisan cache:clear
+              php artisan config:clear
+              php artisan route:clear
+              php artisan view:clear
+
+      - name: Install Node.js dependencies
+        run: npm install
+
+      - name: Compile assets
+        run: npm run dev
+
+      - name: Migrate database
+        run: php artisan migrate --seed
 
       - name: Run tests
         run: php artisan test
