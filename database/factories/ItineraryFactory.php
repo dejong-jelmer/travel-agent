@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use App\Models\Product;
+use App\Models\Itinerary;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Itinerary>
@@ -18,7 +20,8 @@ class ItineraryFactory extends Factory
     {
         return [
             'title' => fake()->city() . ' - ' . fake()->city(),
-            'description' => fake()->paragraph(),
+            'subtitle' => 'Overnachting in een hotel',
+            'description' => fake()->text(500),
             'image' => "images/products/itineraries/image.jpg",
         ];
     }

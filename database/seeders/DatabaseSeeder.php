@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@mail.com',
         ]);
 
-        Product::factory(8)->create()->each(function ($product) use ($countries) {
+        $order = 0;
+        Product::factory(8)->create()->each(function ($product) use ($countries, &$order) {
             $product->countries()->attach(
                     $countries->random(rand(1, 3))
                         ->pluck('id')
@@ -33,10 +34,12 @@ class DatabaseSeeder extends Seeder
             ProductImage::factory(rand(3, 5))->create([
                 'product_id' => $product->id,
             ]);
-
-            Itinerary::factory($product->duration)->create([
-                'product_id' => $product->id,
-            ]);
+            for ($i = 1; $i <= $product->duration; $i++) {
+                Itinerary::factory()->create([
+                    'product_id' => $product->id,
+                    'order' => $i,
+                ]);
+            }
         });
     }
 }

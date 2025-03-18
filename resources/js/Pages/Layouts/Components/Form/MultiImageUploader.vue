@@ -21,12 +21,12 @@
 export default {
     name: "MultiImageUploader",
     props: {
-        modelValue: Array, // Ondersteunt v-model binding
+        modelValue: Array,
     },
     data() {
         return {
-            uploadedImages: [], // Bevat de geüploade afbeeldingen
-            previewImages: this.modelValue, // Bevat previews van de geselecteerde afbeeldingen
+            uploadedImages: [],
+            previewImages: this.modelValue,
         };
     },
     mounted() {
@@ -34,24 +34,20 @@ export default {
     },
     methods: {
         async convertImageUrlsToFiles(imageUrls) {
-            this.uploadedImages = []; // Reset de array voordat we nieuwe bestanden toevoegen
+            this.uploadedImages = [];
 
             try {
-                // Loop door elke URL en converteer deze naar een File object
                 for (const imageUrl of imageUrls) {
                     const response = await fetch(imageUrl);
                     if (!response.ok) {
                         throw new Error(`Kon de afbeelding niet downloaden: ${imageUrl}`);
                     }
 
-                    // Converteer de afbeelding naar een Blob
                     const blob = await response.blob();
 
-                    // Maak een File object van de Blob
-                    const fileName = imageUrl.split('/').pop(); // Haal de bestandsnaam uit de URL
+                    const fileName = imageUrl.split('/').pop();
                     const file = new File([blob], fileName, { type: blob.type });
 
-                    // Voeg het File object toe aan de array
                     this.uploadedImages.push(file);
                 }
                 this.$emit("update:modelValue", [...this.uploadedImages]);
@@ -59,7 +55,7 @@ export default {
                 console.log('Array van File objecten:', this.uploadedImages);
             } catch (error) {
                 console.error('Fout bij het converteren van de URLs naar File objecten:', error);
-                this.uploadedImages = []; // Reset de array bij een fout
+                this.uploadedImages = [];
             }
         },
         handleFiles(event) {

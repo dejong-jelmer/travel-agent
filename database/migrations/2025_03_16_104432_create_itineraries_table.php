@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->string('sub')->nullable();
+            $table->string('subtitle')->nullable();
             $table->text('description');
             $table->string('image')->nullable();
             $table->string('remark')->nullable();
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

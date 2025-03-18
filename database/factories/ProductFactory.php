@@ -5,7 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Country;
-
+use PHPUnit\Framework\Constraint\Count;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -25,6 +25,10 @@ class ProductFactory extends Factory
     public function definition(): array
     {
         $country = Country::inRandomOrder()->first();
+        while ($country === null) {
+            Country::factory()->create();
+            $country = Country::inRandomOrder()->first();
+        }
         $city = fake()->city();
         $text = fake()->paragraph();
         $path = fake()->randomElement(self::IMG_PATHS);

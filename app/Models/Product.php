@@ -62,7 +62,7 @@ class Product extends Model
 
     public function itineraries()
     {
-        return $this->hasMany(Itinerary::class);
+        return $this->hasMany(Itinerary::class)->orderBy('order');
     }
 
     protected function image(): Attribute

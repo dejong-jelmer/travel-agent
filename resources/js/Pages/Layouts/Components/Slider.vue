@@ -50,9 +50,6 @@ export default {
             prevTranslate: 0,
         };
     },
-    created() {
-        console.log("is mobile: ", isMobile)
-    },
     methods: {
         nextSlide() {
             if (this.currentIndex < this.items.length - this.visibleItems) {

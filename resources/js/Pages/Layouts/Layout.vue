@@ -19,7 +19,7 @@ watchEffect(() => {
         <Nav></Nav>
         <SideMenu v-if="user"/>
         <slot name="header"></slot>
-        <section class="px-40 pt-40">
+        <section class="p-40">
             <slot />
         </section>
         <footer>

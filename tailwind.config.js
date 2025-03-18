@@ -20,9 +20,10 @@ export default {
               colors: {
                 'custom-light': '#8ecae6',
                 'custom-primary': '#219ebc',
-                'custom-dark': '#023047',
+                'custom-dark': '#231942',
                 'custom-secondary': '#ffb703',
                 'custom-accent': '#fb8500',
+                'custom-red': '#f44336'
               },
               textShadow: {
                 'default': '2px 2px 4px rgba(0, 0, 0, 0.5)',
