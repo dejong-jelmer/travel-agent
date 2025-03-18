@@ -32,47 +32,16 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.2
-          extensions: mbstring, bcmath, pdo, pdo_mysql
+          extensions:  dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
 
-      - name: Cache Composer dependencies
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: composer-
+      - name: Run composer install
+        run: composer install -n --prefer-dist
 
-      - name: Installeer Composer dependencies
-        run: composer install --prefer-dist --no-progress --no-interaction
-
-      - name: Kopieer .env bestand
-        run: cp .env.example .env
-
-      - name: Genereer application key
-        run: php artisan key:generate
-
-      - name: Wacht tot MySQL gereed is
+      - name: Prepare Laravel Application
         run: |
-          echo "Wachten op MySQL..."
-          sleep 15s  # Verhoog naar 15 seconden om zeker te zijn dat MySQL klaar is
+            cp .env.ci .env
+            php artisan key:generate
 
-      - name: Controleer databaseverbinding
-        run: |
-          mysql -h 127.0.0.1 -uuser -ppassword -e "SHOW DATABASES;"
-
-      - name: Voer database migraties uit
-        run: php artisan migrate --env=testing --force
-
-      - name: Setup Node.js (voorbeeld voor JavaScript/TypeScript projecten)
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build assets
-        run: npm run prod
-
-      - name: Voer de tests uit
+      - name: Run tests
         run: php artisan test
