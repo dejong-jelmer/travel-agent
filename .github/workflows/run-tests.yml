@@ -60,6 +60,12 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -uuser -ppassword -e "SHOW DATABASES;"
 
+      - name: Installeer NPM dependencies
+        run: npm install
+
+      - name: Build de Vite assets
+        run: npm run build
+
       - name: Voer database migraties uit
         run: php artisan migrate --env=testing --force
 
