@@ -36,7 +36,7 @@ class ProductTest extends TestCase
                 ]);
             });
 
-        $response = $this->get(route('products.index'));
+        $response = $this->actingAs($admin)->withHeader('X-Inertia', 'true')->get(route('products.index'));
 
         $response->assertInertia(
             fn(AssertableInertia $page) =>
