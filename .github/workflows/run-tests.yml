@@ -42,8 +42,8 @@ jobs:
         run: |
             cp .env.example .env
             php artisan key:generate
-            - name: Clear cache
-            run: |
+      - name: Clear cache
+        run: |
               php artisan cache:clear
               php artisan config:clear
               php artisan route:clear
