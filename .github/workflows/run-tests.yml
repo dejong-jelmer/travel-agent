@@ -63,5 +63,5 @@ jobs:
       - name: Voer database migraties uit
         run: php artisan migrate --env=testing --force
 
-      - name: Voer de tests uit
-        run: php artisan test
+      - name: Voer de tests uit (verbose)
+        run: php artisan test -v
