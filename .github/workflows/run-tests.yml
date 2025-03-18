@@ -69,5 +69,8 @@ jobs:
       - name: Voer database migraties uit
         run: php artisan migrate --env=testing --force
 
-      - name: Voer de tests uit
-        run: php artisan test
+      - name: Debug fouten
+        run: cat storage/logs/laravel.log || true
+
+      - name: Voer de tests uit (verbose mode)
+        run: php artisan test --verbose
