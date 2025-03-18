@@ -3,10 +3,10 @@ name: Laravel Tests
 on:
   push:
     branches:
-      - main  # Voer de actie uit bij een push naar main
+      - main
   pull_request:
     branches:
-      - main  # Voer ook tests uit bij pull requests naar main
+      - main
 
 jobs:
   test:
@@ -22,7 +22,7 @@ jobs:
           MYSQL_PASSWORD: password
         ports:
           - 3306:3306
-        options: --health-cmd="mysqladmin ping --host=localhost --user=root --password=root" --health-interval=10s --health-timeout=5s --health-retries=5
+        options: --health-cmd="mysqladmin ping --host=localhost --user=root --password=root" --health-interval=10s --health-timeout=5s --health-retries=10
 
     steps:
       - name: Haal de repository op
@@ -31,7 +31,7 @@ jobs:
       - name: Installeer PHP en extensies
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2  # Pas aan naar jouw PHP-versie
+          php-version: 8.2
           extensions: mbstring, bcmath, pdo, pdo_mysql
           coverage: none
 
@@ -52,7 +52,13 @@ jobs:
         run: php artisan key:generate
 
       - name: Wacht tot MySQL gereed is
-        run: sleep 10s
+        run: |
+          echo "Wachten op MySQL..."
+          sleep 15s  # Verhoog naar 15 seconden om zeker te zijn dat MySQL klaar is
+
+      - name: Controleer databaseverbinding
+        run: |
+          mysql -h 127.0.0.1 -uuser -ppassword -e "SHOW DATABASES;"
 
       - name: Voer database migraties uit
         run: php artisan migrate --env=testing --force
