@@ -27,12 +27,15 @@ Route::group(['prefix' => 'admin', 'middleware'=> 'auth'], function () {
             'title' => 'Admin dashboard - ' . env('APP_NAME')
         ]);
     })->name('admin.dashboard');
+
     // Product routes
     Route::resource('/products', ProductController::class)->except(['update']);
     Route::post('/products/update/{product}', [ProductController::class, 'update'])->name('products.update');
+
     // Product Itinerary routes
     Route::resource('products.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
     Route::patch('/products/{product}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('products.itineraries.order');
+
     // Itinerary routes
     Route::resource('itineraries', ItineraryController::class)->only(['show', 'edit', 'update', 'destroy']);
 

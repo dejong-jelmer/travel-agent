@@ -71,5 +71,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Build assets
+        run: npm run prod
+
       - name: Voer de tests uit
         run: php artisan test
