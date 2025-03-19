@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
+use App\Models\Country;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
-use App\Models\Country;
-use PHPUnit\Framework\Constraint\Count;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Product>
@@ -17,6 +16,7 @@ class ProductFactory extends Factory
         '0atWniYhuFME7Eam8Xs5voQCuH2qKfVTrUqMqWSm',
         'xBdb4Xf3B1rrgtNqgBMn2BKrPHwRcs9suliMoVE6',
     ];
+
     /**
      * Define the model's default state.
      *
@@ -32,6 +32,7 @@ class ProductFactory extends Factory
         $city = fake()->city();
         $text = fake()->paragraph();
         $path = fake()->randomElement(self::IMG_PATHS);
+
         return [
             'name' => $city,
             'slug' => Str::slug("bijzondere-reis-naar-{$city}-{$country->name}"),

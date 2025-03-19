@@ -3,17 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use GuzzleHttp\Handler\Proxy;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class HomeController extends Controller
 {
-    private String $appName;
+    private string $appName;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->appName = env('APP_NAME');
     }
 
@@ -42,7 +40,7 @@ class HomeController extends Controller
     {
         return Inertia::render('Products/Show', [
             'title' => "{$this->appName} - {$product->name}",
-            'product' => $product
+            'product' => $product,
         ]);
     }
 }

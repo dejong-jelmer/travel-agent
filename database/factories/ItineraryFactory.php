@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Product;
-use App\Models\Itinerary;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Itinerary>
@@ -19,10 +17,10 @@ class ItineraryFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->city() . ' - ' . fake()->city(),
+            'title' => fake()->city().' - '.fake()->city(),
             'subtitle' => 'Overnachting in een hotel',
             'description' => fake()->text(500),
-            'image' => "images/products/itineraries/image.jpg",
+            'image' => 'images/products/itineraries/image.jpg',
         ];
     }
 }

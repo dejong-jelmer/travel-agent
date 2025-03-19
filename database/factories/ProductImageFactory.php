@@ -30,6 +30,7 @@ class ProductImageFactory extends Factory
     public function definition(): array
     {
         $path = fake()->randomElement(self::IMG_PATHS);
+
         return [
             'path' => "images/products/{$path}.jpg",
         ];

@@ -3,10 +3,10 @@
 namespace Database\Seeders;
 
 use App\Models\Country;
+use App\Models\Itinerary;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
-use App\Models\Itinerary;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -27,9 +27,9 @@ class DatabaseSeeder extends Seeder
         $order = 0;
         Product::factory(8)->create()->each(function ($product) use ($countries, &$order) {
             $product->countries()->attach(
-                    $countries->random(rand(1, 3))
-                        ->pluck('id')
-                        ->toArray()
+                $countries->random(rand(1, 3))
+                    ->pluck('id')
+                    ->toArray()
             );
             ProductImage::factory(rand(3, 5))->create([
                 'product_id' => $product->id,
