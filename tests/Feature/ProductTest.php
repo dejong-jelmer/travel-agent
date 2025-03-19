@@ -2,22 +2,19 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
-use App\Models\User;
 use App\Models\Country;
 use App\Models\Product;
 use App\Models\ProductImage;
-use Inertia\Testing\AssertableInertia;
+use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
-
+use Inertia\Testing\AssertableInertia;
+use Tests\TestCase;
 
 class ProductTest extends TestCase
 {
-
     use RefreshDatabase;
 
     public function test_admin_can_view_the_product_index_page(): void
@@ -39,8 +36,7 @@ class ProductTest extends TestCase
         $response = $this->get(route('products.index'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) =>
-            $page->component('Admin/Products/Index')
+            fn (AssertableInertia $page) => $page->component('Admin/Products/Index')
                 ->has('products', 3)
                 ->where('products.0.id', $products[0]->id)
                 ->where('products.0.price', (string) number_format((float) $products[0]->price, 2, '.', ''))
@@ -48,7 +44,7 @@ class ProductTest extends TestCase
                 ->where('products.0.images.0.id', $products[0]->images[0]->id)
         );
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $this->assertDatabaseHas('country_product', [
                 'product_id' => $product->id,
                 'country_id' => $countries->first()->id,
@@ -67,8 +63,7 @@ class ProductTest extends TestCase
         $response = $this->get(route('products.create'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) =>
-            $page->component('Admin/Products/Create')
+            fn (AssertableInertia $page) => $page->component('Admin/Products/Create')
         );
         $response->assertStatus(200);
     }
@@ -89,14 +84,14 @@ class ProductTest extends TestCase
             'name' => 'Test Product',
             'slug' => 'test-slug-for-product',
             'description' => $description,
-            'price' => "895.00",
+            'price' => '895.00',
             'duration' => 8,
-            'image' => UploadedFile::fake()->image("image.jpg"),
+            'image' => UploadedFile::fake()->image('image.jpg'),
             'images' => [
                 UploadedFile::fake()->image('image1.jpg'),
                 UploadedFile::fake()->image('image2.jpg'),
             ],
-            'countries' => $countries->modelKeys()
+            'countries' => $countries->modelKeys(),
         ];
 
         $response = $this->post(route('products.store'), $productData);
@@ -143,20 +138,19 @@ class ProductTest extends TestCase
 
         $response = $this->get(route('products.show', $product));
         $response->assertInertia(
-            fn(AssertableInertia $page) =>
-                $page->component('Admin/Products/Show')
-                    ->has('product')
-                    ->where('product.id', $product->id)
-                    ->where('product.name', $product->name)
-                    ->where('product.slug', $product->slug)
-                    ->where('product.duration', $product->duration)
-                    ->where('product.price', (string) number_format((float) $product->price, 2, '.', ''))
-                    ->where('product.active', $product->active)
-                    ->where('product.featured', $product->featured)
-                    ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
-                    ->has('product.images', 3)
-                    ->has('product.countries', 1)
-            );
+            fn (AssertableInertia $page) => $page->component('Admin/Products/Show')
+                ->has('product')
+                ->where('product.id', $product->id)
+                ->where('product.name', $product->name)
+                ->where('product.slug', $product->slug)
+                ->where('product.duration', $product->duration)
+                ->where('product.price', (string) number_format((float) $product->price, 2, '.', ''))
+                ->where('product.active', $product->active)
+                ->where('product.featured', $product->featured)
+                ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
+                ->has('product.images', 3)
+                ->has('product.countries', 1)
+        );
 
         $response->assertStatus(200);
     }
@@ -175,11 +169,11 @@ class ProductTest extends TestCase
 
         $response->assertInertia(fn (AssertableInertia $page) => $page
             ->component('Admin/Products/Edit')
-                ->has('product')
-                ->where('product.id', $product->id)
-                ->has('product.images', 3)
-                ->has('countries', 2)
-                ->etc()
+            ->has('product')
+            ->where('product.id', $product->id)
+            ->has('product.images', 3)
+            ->has('countries', 2)
+            ->etc()
         );
 
         $response->assertStatus(200);
@@ -202,14 +196,14 @@ class ProductTest extends TestCase
             'name' => 'Test Product',
             'slug' => 'test-slug-for-product',
             'description' => $description,
-            'price' => "895.00",
+            'price' => '895.00',
             'duration' => 8,
-            'image' => UploadedFile::fake()->image("image.jpg"),
+            'image' => UploadedFile::fake()->image('image.jpg'),
             'images' => [
                 UploadedFile::fake()->image('image1.jpg'),
                 UploadedFile::fake()->image('image2.jpg'),
             ],
-            'countries' => $countries->modelKeys()
+            'countries' => $countries->modelKeys(),
         ];
 
         $response = $this->post(route('products.update', $product), $productData);

@@ -3,12 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Itinerary;
-use Inertia\Inertia;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
 
 class ItineraryController extends Controller
 {
@@ -28,7 +27,7 @@ class ItineraryController extends Controller
         $validated = $request->validate([
             'itineraries' => 'required|array',
             'itineraries.*.id' => 'exists:itineraries,id',
-            'itineraries.*.order' => "integer|between:0,{$product->itineraries()->count()}"
+            'itineraries.*.order' => "integer|between:0,{$product->itineraries()->count()}",
         ]);
 
         foreach ($validated['itineraries'] as $itinerary) {
@@ -72,7 +71,7 @@ class ItineraryController extends Controller
     {
         // Here we want to show the form for editing an existing itinerary block.
         return Inertia::render('Admin/Itineraries/Edit', [
-            'itinerary' => $itinerary
+            'itinerary' => $itinerary,
         ]);
     }
 

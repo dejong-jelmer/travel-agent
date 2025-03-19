@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\Product;
 use App\Models\Country;
-use Inertia\Testing\AssertableInertia;
+use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
+use Tests\TestCase;
 
 class HomeTest extends TestCase
 {
@@ -20,11 +20,10 @@ class HomeTest extends TestCase
 
         $response = $this->get(route('home'));
 
-        $response->assertInertia(fn (AssertableInertia $page) =>
-            $page->component('Home')
-                ->has('products', 1)
-                ->where('products.0.id', $product->id)
-                ->where('products.0.price', (string) number_format((float) $product->price, 2, '.', ''))
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
+            ->has('products', 1)
+            ->where('products.0.id', $product->id)
+            ->where('products.0.price', (string) number_format((float) $product->price, 2, '.', ''))
         );
         $this->assertDatabaseHas('country_product', [
             'product_id' => $product->id,
@@ -52,17 +51,16 @@ class HomeTest extends TestCase
 
         $response = $this->get(route('trip.show', $product));
 
-        $response->assertInertia(fn (AssertableInertia $page) =>
-            $page->component('Products/Show')
-                ->has('product')
-                ->where('product.id', $product->id)
-                ->where('product.name', $product->name)
-                ->where('product.slug', $product->slug)
-                ->where('product.duration', $product->duration)
-                ->where('product.price', (string) number_format((float) $product->price, 2, '.', ''))
-                ->where('product.active', $product->active)
-                ->where('product.featured', $product->featured)
-                ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Products/Show')
+            ->has('product')
+            ->where('product.id', $product->id)
+            ->where('product.name', $product->name)
+            ->where('product.slug', $product->slug)
+            ->where('product.duration', $product->duration)
+            ->where('product.price', (string) number_format((float) $product->price, 2, '.', ''))
+            ->where('product.active', $product->active)
+            ->where('product.featured', $product->featured)
+            ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
         );
 
         $this->assertDatabaseHas('country_product', [

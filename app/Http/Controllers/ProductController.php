@@ -2,18 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
-use Inertia\Inertia;
-use Inertia\Response;
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Country;
-use \Illuminate\Http\RedirectResponse;
+use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 
 class ProductController extends Controller
 {
-    private String $appName;
+    private string $appName;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->appName = env('APP_NAME');
     }
 
@@ -24,7 +25,7 @@ class ProductController extends Controller
     {
         return Inertia::render('Admin/Products/Index', [
             'products' => Product::with(['countries'])->get(),
-            'title' => "Admin producten - {$this->appName}"
+            'title' => "Admin producten - {$this->appName}",
         ]);
     }
 
@@ -35,7 +36,7 @@ class ProductController extends Controller
     {
         return Inertia::render('Admin/Products/Create', [
             'countries' => Country::all(),
-            'title' => "Admin product aanmaken - {$this->appName}"
+            'title' => "Admin product aanmaken - {$this->appName}",
         ]);
     }
 
@@ -50,14 +51,14 @@ class ProductController extends Controller
         $validatedFields = $request->safe()->except(['image', 'images']);
         $countries = $request->safe()->countries ?? [];
 
-        if(isset($validatedFiles['image'])) {
+        if (isset($validatedFiles['image'])) {
             $imagePath = $validatedFiles['image']->store('images/products/featured', 'public');
             $product->image = $imagePath;
         }
 
         $product->fill($validatedFields);
         $product->save();
-        if(count($countries)) {
+        if (count($countries)) {
             $product->countries()->sync($countries);
         }
 
@@ -80,7 +81,7 @@ class ProductController extends Controller
     {
         return Inertia::render('Admin/Products/Show', [
             'product' => $product->with(['images', 'countries'])->first(),
-            'title' => "Admin product - {$this->appName}"
+            'title' => "Admin product - {$this->appName}",
         ]);
     }
 
@@ -92,7 +93,7 @@ class ProductController extends Controller
         return Inertia::render('Admin/Products/Edit', [
             'product' => $product->with(['images', 'countries'])->first(),
             'countries' => Country::all(),
-            'title' => "Admin product bewerken - {$this->appName}"
+            'title' => "Admin product bewerken - {$this->appName}",
         ]);
     }
 
@@ -124,7 +125,7 @@ class ProductController extends Controller
 
         $product->fill($validatedFields);
         $product->save();
-        if(count($countries)) {
+        if (count($countries)) {
             $product->countries()->sync($countries);
         }
 

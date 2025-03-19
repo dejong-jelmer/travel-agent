@@ -3,16 +3,16 @@
 namespace Tests\Feature;
 
 use App\Models\Itinerary;
-use Inertia\Testing\AssertableInertia;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use App\Models\Product;
-use Tests\TestCase;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Inertia\Testing\AssertableInertia;
+use Tests\TestCase;
 
 class ItineraryTest extends TestCase
 {
     use RefreshDatabase;
+
     public function test_product_itineraries_shows_product_itinerary(): void
     {
         $admin = User::factory()->create();
@@ -29,8 +29,7 @@ class ItineraryTest extends TestCase
         $response = $this->get(route('products.itineraries.index', $product));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) =>
-            $page->component('Admin/Products/Itineraries/Index')
+            fn (AssertableInertia $page) => $page->component('Admin/Products/Itineraries/Index')
                 ->has('product')
                 ->has('product.itineraries', $product->itineraries->count())
         );

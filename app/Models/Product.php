@@ -1,12 +1,14 @@
 <?php
+
 namespace App\Models;
-use Illuminate\Support\Facades\Storage;
+
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Support\Facades\Storage;
 
 class Product extends Model
 {
@@ -74,7 +76,7 @@ class Product extends Model
 
     public function getImageUrlsAttribute(): Collection
     {
-        return $this->images->map(fn($image) => $image->path);
+        return $this->images->map(fn ($image) => $image->path);
     }
 
     public function deleteImage(): void
