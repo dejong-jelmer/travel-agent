@@ -12,10 +12,14 @@ use Inertia\Response;
 class ProductController extends Controller
 {
     private string $appName;
+    private string $featuredImagePath;
+    private string $imagesPath;
 
     public function __construct()
     {
         $this->appName = env('APP_NAME');
+        $this->featuredImagePath = config('product.featured-image-path');
+        $this->imagesPath = config('product.images-path');
     }
 
     /**
@@ -52,7 +56,7 @@ class ProductController extends Controller
         $countries = $request->safe()->countries ?? [];
 
         if (isset($validatedFiles['image'])) {
-            $imagePath = $validatedFiles['image']->store('images/products/featured', 'public');
+            $imagePath = $validatedFiles['image']->store($this->featuredImagePath, 'public');
             $product->image = $imagePath;
         }
 
@@ -65,7 +69,7 @@ class ProductController extends Controller
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
             $imagePaths = [];
             foreach ($validatedFiles['images'] as $image) {
-                $path = $image->store('images/products', 'public');
+                $path = $image->store($this->imagesPath, 'public');
                 $imagePaths[] = ['path' => $path];
             }
             $product->images()->createMany($imagePaths);
@@ -107,7 +111,7 @@ class ProductController extends Controller
         $countries = $request->safe()->countries ?? [];
 
         if (isset($validatedFiles['image'])) {
-            $imagePath = $validatedFiles['image']->store('images/products/featured', 'public');
+            $imagePath = $validatedFiles['image']->store($this->featuredImagePath, 'public');
             $product->deleteImage();
             $product->image = $imagePath;
         }
@@ -116,7 +120,7 @@ class ProductController extends Controller
             $product->deleteImages();
 
             foreach ($validatedFiles['images'] as $image) {
-                $path = $image->store('images/products', 'public');
+                $path = $image->store($this->imagesPath, 'public');
                 $imagePaths[] = ['path' => $path];
             }
 
