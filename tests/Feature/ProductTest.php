@@ -12,24 +12,21 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
-use Illuminate\Support\Collection;
 
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
-    private Collection $countries;
+
     public function setUp(): void
     {
         parent::setUp();
         $admin = User::factory()->create();
         $this->actingAs($admin);
-
-        $this->countries = Country::factory(2)->create();
     }
 
     public function test_admin_can_view_the_product_index_page(): void
     {
-        $countries = $this->countries;
+        $countries = Country::factory(2)->create();
         $products = Product::factory()
             ->count(3)
             ->has(ProductImage::factory()->count(2), 'images')
