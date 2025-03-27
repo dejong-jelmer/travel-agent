@@ -28,7 +28,7 @@ class ProductController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Products/Index', [
-            'products' => Product::with(['countries'])->get(),
+            'products' => Product::with(['countries', 'itineraries'])->get(),
             'title' => "Admin producten - {$this->appName}",
         ]);
     }
@@ -56,7 +56,8 @@ class ProductController extends Controller
         $countries = $request->safe()->countries ?? [];
 
         if (isset($validatedFiles['image'])) {
-            $imagePath = $validatedFiles['image']->store($this->featuredImagePath, 'public');
+            $image = $validatedFiles['image'];
+            $imagePath = $image->storeAs($this->featuredImagePath, $image->getClientOriginalName(), 'public');
             $product->image = $imagePath;
         }
 
@@ -69,13 +70,13 @@ class ProductController extends Controller
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
             $imagePaths = [];
             foreach ($validatedFiles['images'] as $image) {
-                $path = $image->store($this->imagesPath, 'public');
+                $path = $image->storeAs($this->imagesPath, $image->getClientOriginalName(), 'public');
                 $imagePaths[] = ['path' => $path];
             }
             $product->images()->createMany($imagePaths);
         }
 
-        return redirect()->route('products.index');
+        return redirect()->route('products.show', $product)->with('success', __('Product aangemaakt'));
     }
 
     /**
@@ -84,7 +85,7 @@ class ProductController extends Controller
     public function show(Product $product): Response
     {
         return Inertia::render('Admin/Products/Show', [
-            'product' => $product->with(['images', 'countries'])->first(),
+            'product' => $product->load(['images', 'countries', 'itineraries']),
             'title' => "Admin product - {$this->appName}",
         ]);
     }
@@ -95,7 +96,7 @@ class ProductController extends Controller
     public function edit(Product $product)
     {
         return Inertia::render('Admin/Products/Edit', [
-            'product' => $product->with(['images', 'countries'])->first(),
+            'product' => $product->load(['images', 'countries']),
             'countries' => Country::all(),
             'title' => "Admin product bewerken - {$this->appName}",
         ]);
@@ -111,8 +112,11 @@ class ProductController extends Controller
         $countries = $request->safe()->countries ?? [];
 
         if (isset($validatedFiles['image'])) {
-            $imagePath = $validatedFiles['image']->store($this->featuredImagePath, 'public');
-            $product->deleteImage();
+            if($product->hasImage()) {
+                $product->deleteImage();
+            }
+            $image = $validatedFiles['image'];
+            $imagePath = $image->storeAs($this->featuredImagePath, $image->getClientOriginalName(), 'public');
             $product->image = $imagePath;
         }
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
@@ -120,7 +124,7 @@ class ProductController extends Controller
             $product->deleteImages();
 
             foreach ($validatedFiles['images'] as $image) {
-                $path = $image->store($this->imagesPath, 'public');
+                $path = $image->storeAs($this->imagesPath, $image->getClientOriginalName(), 'public');
                 $imagePaths[] = ['path' => $path];
             }
 
@@ -133,7 +137,7 @@ class ProductController extends Controller
             $product->countries()->sync($countries);
         }
 
-        return redirect()->route('products.index');
+        return redirect()->route('products.show', $product)->with('success', __('Product aangepast'));
     }
 
     /**

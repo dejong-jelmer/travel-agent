@@ -1,7 +1,7 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
-import { usePage } from '@inertiajs/vue3';
-const user = usePage().props.auth.user;
+import { Link, usePage } from '@inertiajs/vue3';
+
+const user = usePage().props.auth?.user ?? {};
 </script>
 
 <template>
@@ -17,8 +17,7 @@ const user = usePage().props.auth.user;
         <div class="hidden md:flex space-x-6 text-shadow text-xl">
             <Link href="/over-mij" class="text-white hover:text-custom-dark">{{ about }}</Link>
             <Link href="/contact" class="text-white hover:text-custom-dark">{{ contact }}</Link>
-            <template v-if="user">
-                <Link href="/admin/dashboard" class="text-white hover:text-custom-dark">Dashboard</Link>
+            <template v-if="!!user.id">
                 <Link href="/admin/logout" class="text-white hover:text-custom-dark">Loguit</Link>
             </template>
         </div>
@@ -37,7 +36,7 @@ const user = usePage().props.auth.user;
             class="absolute top-24 left-0 w-full bg-white shadow-md md:hidden flex flex-col items-center space-y-4 py-4">
             <Link href="/about" class="text-gray-600 hover:text-gray-900">{{ about }}</Link>
             <Link href="/contact" class="text-gray-600 hover:text-gray-900">{{ contact }}</Link>
-            <template v-if="user">
+            <template v-if="!!user.id">
                 <Link href="/admin/dashboard" class="text-gray-600 hover:text-gray-900">Dashboard</Link>
                 <Link href="/admin/logout" class="text-gray-600 hover:text-gray-900">Loguit</Link>
             </template>

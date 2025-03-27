@@ -4,32 +4,35 @@ namespace App\Http\Controllers;
 
 use App\Models\Itinerary;
 use App\Models\Product;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Http\Requests\StoreItineraryRequest;
+use App\Http\Requests\UpdateItineraryOrderRequest;
+use \Illuminate\Http\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ItineraryController extends Controller
 {
+    private string $imagePath;
+
+    public function __construct()
+    {
+        $this->imagePath = config('itinerary.image-path');
+    }
+
     /**
      * Display a listing of a product's itinerary.
      */
     public function index(Product $product): Response
     {
-        // Overview of a product itinerary
         return Inertia::render('Admin/Products/Itineraries/Index', [
             'product' => $product->load('itineraries'),
         ]);
     }
 
-    public function updateOrder(Request $request, Product $product): HttpResponse
+    public function updateOrder(UpdateItineraryOrderRequest $request, Product $product): HttpResponse
     {
-        $validated = $request->validate([
-            'itineraries' => 'required|array',
-            'itineraries.*.id' => 'exists:itineraries,id',
-            'itineraries.*.order' => "integer|between:0,{$product->itineraries()->count()}",
-        ]);
-
+        $validated = $request->safe();
         foreach ($validated['itineraries'] as $itinerary) {
             $product->itineraries()->where('id', $itinerary['id'])->update(['order' => $itinerary['order']]);
         }
@@ -42,26 +45,35 @@ class ItineraryController extends Controller
     /**
      * Show the form for creating a new itinerary block for the product.
      */
-    public function create(Product $product)
+    public function create(Product $product): Response
     {
-        // Here we want to show the create a new itinerary block form for $product.
+        return Inertia::render('Admin/Products/Itineraries/Create', [
+            'product' => $product,
+        ]);
     }
 
     /**
      * Store a newly created itinerary block for the product.
      */
-    public function store(Request $request, Product $product)
+    public function store(StoreItineraryRequest $request, Product $product): RedirectResponse
     {
-        // Here we want to store the newly create itinerary block for the $product.
-    }
+        $itinerary = new Itinerary();
+        $validatedFields = $request->safe()->except('image');
+        $validatedImage = $request->safe()->only('image');
 
-    /**
-     * Display a single the itinerary block.
-     */
-    public function show(Itinerary $itinerary)
-    {
-        // Here we want to show a single itinerary block.
-        dd($itinerary);
+        if (isset($validatedImage['image'])) {
+            $image = $validatedImage['image'];
+            $imagePath = $image->storeAs($this->imagePath, $image->getClientOriginalName(), 'public');
+            $itinerary->image = $imagePath;
+        }
+        $itinerary->fill($validatedFields);
+        $itinerary->product()->associate($product);
+        $itinerary->order = $product->itineraries->count() + 1;
+        $itinerary->save();
+
+        return redirect()
+            ->route('products.itineraries.index', $itinerary->product)
+            ->with('success', __('Aanmaken van het reisplan is gelukt!'));
     }
 
     /**
@@ -69,7 +81,6 @@ class ItineraryController extends Controller
      */
     public function edit(Itinerary $itinerary): Response
     {
-        // Here we want to show the form for editing an existing itinerary block.
         return Inertia::render('Admin/Itineraries/Edit', [
             'itinerary' => $itinerary,
         ]);
@@ -78,16 +89,37 @@ class ItineraryController extends Controller
     /**
      * Update an itinerary block in storage.
      */
-    public function update(Request $request, Itinerary $itinerary)
+    public function update(StoreItineraryRequest $request, Itinerary $itinerary): RedirectResponse
     {
-        // Here we want to update the an excisting itinerary block for the $product.
+        $validatedFields = $request->safe()->except('image');
+        $validatedImage = $request->safe()->only('image');
+
+        if (isset($validatedImage['image'])) {
+            if($itinerary->hasImage()) {
+                $itinerary->deleteImage();
+            }
+            $image = $validatedImage['image'];
+            $imagePath = $image->storeAs($this->imagePath, $image->getClientOriginalName(), 'public');
+            $itinerary->image = $imagePath;
+        }
+
+        $itinerary->update($validatedFields);
+
+        return redirect()
+            ->route('products.itineraries.index', $itinerary->product)
+            ->with('success', 'Aanpassen van het reisplan is gelukt!.');
     }
 
     /**
      * Remove an itinerary block from storage.
      */
-    public function destroy(Itinerary $itinerary)
+    public function destroy(Itinerary $itinerary): RedirectResponse
     {
-        // Here we want to delete the $itinerary.
+        $product = $itinerary->product;
+        Itinerary::destroy($itinerary->id);
+
+        return redirect()
+            ->route('products.itineraries.index', $product)
+            ->with('success', 'Verwijderen van het reisplan is gelukt!.');
     }
 }

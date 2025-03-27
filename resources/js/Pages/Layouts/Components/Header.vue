@@ -11,7 +11,7 @@ export default {
     data() {
       return {
         title: window.appName,
-        subtitle: "Historische reizen met oog voor de toekomst"
+        subtitle: "reizen met oog voor de toekomst"
       };
     }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import Train from '@/Pages/Icons/Train.vue';
+import { Train } from '@/Pages/Icons';
 import { Link } from '@inertiajs/vue3';
 
 

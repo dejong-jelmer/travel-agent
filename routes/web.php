@@ -38,6 +38,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     Route::patch('/products/{product}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('products.itineraries.order');
 
     // Itinerary routes
-    Route::resource('itineraries', ItineraryController::class)->only(['show', 'edit', 'update', 'destroy']);
+    Route::resource('itineraries', ItineraryController::class)->only(['edit', 'destroy']);
+    Route::post('/itineraries/{itinerary}', [ItineraryController::class, 'update'])->name('itineraries.update');
 
 });

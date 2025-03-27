@@ -6,7 +6,6 @@ import Slider from '@/Pages/Layouts/Components/Slider.vue';
 const props = defineProps({
     products: Array
 });
-console.log('Products: ', props.products);
 </script>
 
 <template>
@@ -14,7 +13,7 @@ console.log('Products: ', props.products);
         <template v-slot:header>
             <Header></Header>
         </template>
-        <article class="relative w-full h-full">
+        <article class="relative h-full">
             <Slider class="absolute" :items="products" />
         </article>
   </Layout>

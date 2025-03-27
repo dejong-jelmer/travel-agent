@@ -1,40 +1,48 @@
 <script setup>
-import Edit from '@/Pages/Icons/Edit.vue';
+import { Edit } from '@/Pages/Icons';
 import { Link } from '@inertiajs/vue3';
-
+import { Warning } from '@/Pages/Icons';
 </script>
 <template>
-    <div class="relative w-fit mx-auto" :class="{ 'cursor-grab': isAdmin }">
-        <div v-if="isAdmin" class="absolute w-5 top-0 right-[-20px]">
+    <div class="relative max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden p-4 sm:p-6 lg:p-8"
+        :class="{ 'cursor-grab': isAdmin }">
+        <div v-if="isAdmin" class="absolute top-2 right-2">
             <Link :href="route('itineraries.edit', itinerary)">
-                <button  class="bg-custom-red p-2 rounded-lg">
-                    <Edit class="h-5 stroke-white" />
+                <button class="bg-transparent p-2 rounded-lg">
+                    <Edit class="h-5 stroke-custom-red" />
                 </button>
             </Link>
         </div>
-        <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden flex">
-          <!-- Text Section -->
-          <div class="p-8 w-3/4 space-y-1">
-            <div class="space-x-4">
-                <h2 class="inline-flex text-base font-bold text-custom-light">Dag {{ itinerary.order }}</h2>
-                <h1 class="inline-flex text-xl font-semibold text-custom-dark">{{ itinerary.title }}</h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-6 gap-4 items-center">
+            <div class="flex justify-center lg:col-span-2 order-1 lg:order-2">
+                <img :src="itinerary.image" alt="Reisbeschrijving"
+                    class="w-[120px] h-[120px] sm:w-[150px] sm:h-[150px] object-cover rounded-lg">
             </div>
-            <div class="space-y-8">
-                <h5 class="inline-flex text-sm font-semibold text-custom-primary">{{ itinerary.subtitle }}</h5>
-                <p class="text-gray-700 leading-relaxed">
-                  {{ itinerary.description }}
+
+            <div class="lg:col-span-4 order-2 lg:order-1">
+                <h2 class="text-base font-bold text-custom-light">
+                    Dag {{ itinerary.order }}
+                </h2>
+                <h1 class="text-xl font-semibold text-custom-dark mt-1">
+                    {{ itinerary.title }}
+                </h1>
+                <h5 class="text-sm font-semibold text-custom-primary mt-2">
+                    {{ itinerary.subtitle }}
+                </h5>
+                <p class="text-gray-700 leading-relaxed mt-4">
+                    {{ itinerary.description }}
                 </p>
+                <div v-if="itinerary.remark" class="flex items-center mt-4">
+                    <div class="w-full p-2 bg-gray-200 rounded-md inline-flex gap-x-4 border border-gray-600 text-gray-600 text-sm">
+                        <Warning class="h-5 w-5" />{{ itinerary.remark }}
+                    </div>
+                </div>
             </div>
-          </div>
-
-          <!-- Image Section -->
-          <div class="w-1/4 inline-flex my-auto justify-center">
-            <img :src="imageUrl" alt="Reisbeschrijving" class="w-auto h-auto object-center">
-          </div>
         </div>
-
     </div>
-  </template>
+</template>
+
 
 <script>
 
@@ -43,10 +51,6 @@ export default {
         itinerary: {
             type: Object
         },
-        imageUrl: {
-            type: String,
-            required: true
-        },
         isAdmin: {
             type: Boolean,
             default: false
@@ -54,7 +58,3 @@ export default {
     }
 }
 </script>
-
-<style scoped>
-/* Optionele custom styles kunnen hier toegevoegd worden */
-</style>

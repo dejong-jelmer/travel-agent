@@ -22,7 +22,8 @@ const props = defineProps({
     },
     required: {
         type: Boolean,
-        default: true
+        required: false,
+        default: null,
     },
     multiple: {
         type: Boolean,
@@ -38,15 +39,10 @@ const handleChange = (event) => {
 <template>
     <div>
         <label :for="name" class="form-label">{{ label }}</label>
-        <select class="form-input"
-            :id="name"
-            :placeholder="name"
-            :required="required"
-            :multiple="multiple" @change="handleChange">
+        <select class="form-input" :id="name" :placeholder="name" :required="required" :multiple="multiple"
+            @change="handleChange">
             <option v-if="firstOption" value="" disabled>{{ firstOption }}</option>
-            <option v-for="option in options"
-                :selected="modelValue.includes(option.id)"
-                :key="option.id"
+            <option v-for="option in options" :selected="modelValue.includes(option.id)" :key="option.id"
                 :value="option.id">{{ option.name }}</option>
         </select>
         <template v-if="feedback">

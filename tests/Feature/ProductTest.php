@@ -12,25 +12,48 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
+use Illuminate\Database\Eloquent\Collection;
 
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
+
+    private array $productData;
+    private Collection $countries;
+    private Product $product;
 
     public function setUp(): void
     {
         parent::setUp();
         $admin = User::factory()->create();
         $this->actingAs($admin);
+
+        $this->countries = Country::factory(2)->create();
+        Storage::fake('public');
+        Storage::makeDirectory(config('product.featured-image-path'));
+
+        $this->productData = [
+            'name' => fake()->words(2, true),
+            'slug' => fake()->slug(),
+            'description' => fake()->paragraph(),
+            'price' => (string) fake()->randomFloat(2, 300, 5000),
+            'duration' => fake()->randomDigit(),
+            'image' => UploadedFile::fake()->image('image.jpg'),
+            'images' => [
+                UploadedFile::fake()->image('image1.jpg'),
+                UploadedFile::fake()->image('image2.jpg'),
+            ],
+            'countries' => $this->countries->modelKeys(),
+        ];
     }
 
     public function test_admin_can_view_the_product_index_page(): void
     {
-        $countries = Country::factory(2)->create();
+        $countries = $this->countries;
         $products = Product::factory()
             ->count(3)
             ->has(ProductImage::factory()->count(2), 'images')
-            ->create(['price' => 895.00])->each(function ($product) use ($countries) {
+            ->create()->each(function ($product) use ($countries) {
                 $product->countries()->attach([
                     $countries->first()->id,
                     $countries->last()->id,
@@ -71,56 +94,33 @@ class ProductTest extends TestCase
 
     public function test_admin_can_store_a_new_product(): void
     {
-        $countries = Country::factory(2)->create();
-
-        $description = fake()->paragraph();
-
-        Storage::fake('public');
-        Storage::makeDirectory(config('product.featured-image-path'));
-
-        $productData = [
-            'name' => 'Test Product',
-            'slug' => 'test-slug-for-product',
-            'description' => $description,
-            'price' => '895.00',
-            'duration' => 8,
-            'image' => UploadedFile::fake()->image('image.jpg'),
-            'images' => [
-                UploadedFile::fake()->image('image1.jpg'),
-                UploadedFile::fake()->image('image2.jpg'),
-            ],
-            'countries' => $countries->modelKeys(),
-        ];
-
-        $response = $this->post(route('products.store'), $productData);
-        $response->assertRedirect(route('products.index'));
-
+        $response = $this->post(route('products.store'), $this->productData);
         $product = Product::first();
+        $response->assertRedirect(route('products.show', $product));
 
-        $this->assertDatabaseHas('products', Arr::except($productData, ['image', 'images', 'countries']));
+        $this->assertDatabaseHas('products', Arr::except($this->productData, ['image', 'images', 'countries']));
         $this->assertDatabaseHas('country_product', [
             'product_id' => $product->id,
-            'country_id' => $countries->first()->id,
-            'country_id' => $countries->last()->id,
+            'country_id' => $this->countries->first()->id,
+            'country_id' => $this->countries->last()->id,
         ]);
-
+        $imagePath = config('product.featured-image-path') . "/{$this->productData['image']->getClientOriginalName()}";
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
-            'image' => config('product.featured-image-path') . "/{$productData['image']->hashName()}",
+            'image' => $imagePath,
         ]);
 
-        Storage::disk('public')->assertExists($product->getRawOriginal('image'));
+        Storage::disk('public')->assertExists($imagePath);
         $this->assertCount(2, $product->images);
 
         foreach ($product->images as $index => $image) {
-            $path = config('product.images-path') ."/{$productData['images'][$index]->hashName()}";
+            $path = config('product.images-path') ."/{$this->productData['images'][$index]->getClientOriginalName()}";
             $this->assertDatabaseHas('product_images', [
                 'product_id' => $product->id,
                 'path' => $path,
             ]);
             Storage::disk('public')->assertExists($path);
         }
-
     }
 
     public function test_admin_can_show_singel_product(): void
@@ -150,7 +150,7 @@ class ProductTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_admin_can_render_the_product_edit_page(): void
+    public function test_admin_can_show_the_product_edit_page(): void
     {
         $product = Product::factory()
             ->has(Country::factory()->count(2), 'countries')
@@ -172,50 +172,33 @@ class ProductTest extends TestCase
 
     public function test_admin_can_update_an_existing_product(): void
     {
-        $countries = Country::factory(2)->create();
+        $countries = $this->countries;
         $product = Product::factory()->create();
-
-        $description = fake()->text();
 
         Storage::fake('public');
         Storage::makeDirectory(config('product.featured-image-path'));
 
-        $productData = [
-            'name' => 'Test Product',
-            'slug' => 'test-slug-for-product',
-            'description' => $description,
-            'price' => '895.00',
-            'duration' => 8,
-            'image' => UploadedFile::fake()->image('image.jpg'),
-            'images' => [
-                UploadedFile::fake()->image('image1.jpg'),
-                UploadedFile::fake()->image('image2.jpg'),
-            ],
-            'countries' => $countries->modelKeys(),
-        ];
+        $response = $this->post(route('products.update', $product), $this->productData);
+        $response->assertRedirect(route('products.show', $product));
 
-        $response = $this->post(route('products.update', $product), $productData);
-        $response->assertRedirect(route('products.index'));
-
-        $this->assertDatabaseHas('products', Arr::except($productData, ['image', 'images', 'countries']));
+        $this->assertDatabaseHas('products', Arr::except($this->productData, ['image', 'images', 'countries']));
         $this->assertDatabaseHas('country_product', [
             'product_id' => $product->id,
             'country_id' => $countries->first()->id,
             'country_id' => $countries->last()->id,
         ]);
 
-        $product = Product::first();
-        Storage::disk('public')->assertExists($product->getRawOriginal('image'));
-
+        $imagePath = config('product.featured-image-path') . "/{$this->productData['image']->getClientOriginalName()}";
+        Storage::disk('public')->assertExists($imagePath);
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
-            'image' => config('product.featured-image-path') . "/{$productData['image']->hashName()}",
+            'image' => $imagePath,
         ]);
 
         $this->assertCount(2, $product->images);
 
         foreach ($product->images as $index => $image) {
-            $path = config('product.images-path') ."/{$productData['images'][$index]->hashName()}";
+            $path = config('product.images-path') ."/{$this->productData['images'][$index]->getClientOriginalName()}";
             $this->assertDatabaseHas('product_images', [
                 'product_id' => $product->id,
                 'path' => $path,
