@@ -12,7 +12,8 @@
         },
         required: {
             type: Boolean,
-            default: true
+            required: false,
+            default: null,
         }
      });
 

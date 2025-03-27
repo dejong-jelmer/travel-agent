@@ -79,16 +79,23 @@ class Product extends Model
         return $this->images->map(fn ($image) => $image->path);
     }
 
-    public function deleteImage(): void
+    public function hasImage(): bool
     {
-        Storage::disk('public')->delete($this->getAttributes()['image']);
+        return Storage::disk('public')->exists($this->getAttributes()['image']);
+    }
 
+    public function deleteImage(?String $path = null): void
+    {
+        Storage::disk('public')->delete($path ?? $this->getAttributes()['image']);
     }
 
     public function deleteImages(): void
     {
         foreach ($this->images as $image) {
-            Storage::disk('public')->delete($image->getAttributes()['path']);
+            $path = $image->getAttributes()['path'];
+            if($this->hasImage($path)) {
+                Storage::disk('public')->delete($path);
+            }
         }
         $this->images()->delete();
     }

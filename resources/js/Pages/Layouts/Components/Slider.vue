@@ -1,6 +1,6 @@
 <script setup>
 import Card from './Card.vue';
-import Chevron from '@/Pages/Icons/Chevron.vue';
+import { Chevron } from '@/Pages/Icons';
 import { isMobile, isTablet } from 'mobile-device-detect';
 
 </script>
@@ -43,7 +43,7 @@ export default {
     data() {
         return {
             currentIndex: 0,
-            visibleItems: isMobile ? 1 : (isTablet ? 2 : 3),
+            visibleItems: isMobile ? 3 : (isTablet ? 2 : 3),
             isDragging: false,
             startPosX: 0,
             currentTranslate: 0,

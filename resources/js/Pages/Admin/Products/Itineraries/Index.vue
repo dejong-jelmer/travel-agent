@@ -1,30 +1,41 @@
 <script setup>
 import Layout from '@/Pages/Layouts/Layout.vue'
 import SortableBlocks from '@/Pages/Layouts/Components/SortableBlocks.vue';
-import { Link } from '@inertiajs/vue3';
+import Itinerary from '@/Pages/Layouts/Components/Itinerary.vue';
+import { usePage, Link } from '@inertiajs/vue3';
+import { ref } from "vue";
 
+const user = usePage().props.auth?.user ?? {};
 const props = defineProps({
     product: Object,
-    // itineraries: Object,
 });
-console.log(props.product.id);
+const duration = ref(props.product.duration || 0);
+const itineraries = ref(props.product.itineraries.length || 0);
 </script>
 <template>
     <Layout>
-        <SortableBlocks :blocks="product.itineraries" @update:order="updateOrder">
-            <template v-slot:default="slotProps">
-                <Itinerary
-                    :isAdmin="true"
-                    :itinerary="slotProps.block"
-                    imageUrl="https://picsum.photos/150/150"
-                />
-            </template>
-        </SortableBlocks>
+        <div class="space-y-4">
+            <div class="w-full justify-end flex items-center">
+                <Link v-if="product.itineraries?.length < product.duration" class="form-button" as="button" :href="route('products.itineraries.create', product)">Voeg een itinerary block toe</Link>
+                <Link v-else :href="route('products.edit', product)" class="text-sm info-button">Itinerary block toevoegen? <br /> Verleng het aantal reisdagen</Link>
+            </div>
+            <SortableBlocks
+                :blocks="product.itineraries"
+                @update:order="updateOrder"
+                class="grid gap-y-10"
+                >
+                <template v-slot:default="slotProps">
+                    <Itinerary
+                        :isAdmin="!!user.id"
+                        :itinerary="slotProps.block"
+                    />
+                </template>
+            </SortableBlocks>
+        </div>
     </Layout>
 </template>
 <script>
 import axios from "axios";
-import Itinerary from '../../../Layouts/Components/Itinerary.vue';
 
 export default {
     components: {
@@ -36,9 +47,6 @@ export default {
             type: Array,
             required: true,
         },
-    },
-    mounted() {
-        console.log(this.product);
     },
     methods: {
         updateOrder(orderedItinerary) {

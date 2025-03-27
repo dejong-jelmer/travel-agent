@@ -1,12 +1,14 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import Layout from "@/Pages/Layouts/Layout.vue";
-import Input from "@/Pages/Layouts/Components/Form/Input.vue";
-import Text from "@/Pages/Layouts/Components/Form/Text.vue";
-import Select from "@/Pages/Layouts/Components/Form/Select.vue";
-import ImageUploader from "@/Pages/Layouts/Components/Form/ImageUploader.vue";
-import Checkbox from "@/Pages/Layouts/Components/Form/Checkbox.vue";
-import MultiImageUploader from "@/Pages/Layouts/Components/Form/MultiImageUploader.vue";
+import {
+    Input,
+    Select,
+    Text,
+    Checkbox,
+    ImageUploader,
+    MultiImageUploader
+} from '@/Pages/Layouts/Components/Form';
 
 
 const props = defineProps({
@@ -20,17 +22,18 @@ const props = defineProps({
         <form  @submit.prevent="submit" >
             <div class="gap-6 bg-white p-8 rounded-lg shadow grid grid-cols-2">
                 <div class="space-y-6">
-                    <Input type="text" name="name" label="Naam" v-model="form.name" :feedback="errors.name"/>
-                    <Input type="text" name="slug" label="Slug" v-model="form.slug" :feedback="errors.slug"/>
-                    <Text name="description" label="Omschrijving" v-model="form.description" />
+                    <Input type="text" name="name" label="Naam" :required="true" v-model="form.name" :feedback="errors.name"/>
+                    <Input type="text" name="slug" label="Slug" :required="true" v-model="form.slug" :feedback="errors.slug"/>
+                    <Text name="description" label="Omschrijving" :required="true" v-model="form.description" />
                 </div>
                 <div class="space-y-6">
-                    <Input type="number" name="price" label="Prijs (€)" v-model="form.price" :feedback="errors.price" />
-                    <Input type="number" name="duration" label="Duur (dagen)" v-model="form.duration" :feedback="errors.duration" />
+                    <Input type="number" name="price" label="Prijs (€)" :required="true" v-model="form.price" :feedback="errors.price" />
+                    <Input type="number" name="duration" label="Duur (dagen)" :required="true" v-model="form.duration" :feedback="errors.duration" />
                     <Select
                         name="country" label="Land"
                         v-model="form.countries"
                         :multiple="true"
+                        :required="true"
                         :options="countries"
                         :feedback="errors.countries"
                         :first-option="'Koppel één of meerder landen'"

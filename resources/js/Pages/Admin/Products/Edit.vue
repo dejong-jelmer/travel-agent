@@ -1,13 +1,14 @@
 <script setup>
-import { ref } from 'vue';
 import { useForm } from "@inertiajs/vue3";
 import Layout from "@/Pages/Layouts/Layout.vue";
-import Input from "@/Pages/Layouts/Components/Form/Input.vue";
-import Text from "@/Pages/Layouts/Components/Form/Text.vue";
-import Select from "@/Pages/Layouts/Components/Form/Select.vue";
-import Checkbox from "@/Pages/Layouts/Components/Form/Checkbox.vue";
-import ImageUploader from "@/Pages/Layouts/Components/Form/ImageUploader.vue";
-import MultiImageUploader from "@/Pages/Layouts/Components/Form/MultiImageUploader.vue";
+import {
+    Input,
+    Select,
+    Text,
+    Checkbox,
+    ImageUploader,
+    MultiImageUploader
+} from '@/Pages/Layouts/Components/Form';
 
 
 const props = defineProps({
@@ -18,22 +19,24 @@ const props = defineProps({
 </script>
 
 <template>
+    {{ errors }}
     <Layout>
         <form  @submit.prevent="submit" >
             <div class="gap-6 bg-white p-8 rounded-lg shadow grid grid-cols-2">
                 <div class="space-y-6">
-                    <Input type="text" name="name" label="Naam" v-model="form.name" :feedback="errors.name"/>
-                    <Input type="text" name="slug" label="Slug" v-model="form.slug" :feedback="errors.slug"/>
-                    <Text name="description" label="Omschrijving" v-model="form.description" />
+                    <Input type="text" name="name" label="Naam" :required="true" v-model="form.name" :feedback="errors.name"/>
+                    <Input type="text" name="slug" label="Slug" :required="true" v-model="form.slug" :feedback="errors.slug"/>
+                    <Text name="description" label="Omschrijving" :required="true" v-model="form.description" />
                 </div>
                 <div class="space-y-6">
-                    <Input type="number" name="price" label="Prijs (€)" v-model="form.price" :feedback="errors.price" />
-                    <Input type="number" name="durantion" label="Duur (dagen)" v-model="form.duration" :feedback="errors.duration" />
+                    <Input type="number" name="price" label="Prijs (€)" :required="true" v-model="form.price" :feedback="errors.price" />
+                    <Input type="number" name="durantion" label="Duur (dagen)" :required="true" v-model="form.duration" :feedback="errors.duration" />
                     <Select
                         name="country" label="Land"
                         v-model="form.countries"
                         :options="countries"
                         :multiple="true"
+                        :required="true"
                         :feedback="errors.countries"
                         :first-option="'Koppel één of meerder landen'"
                     />
@@ -51,7 +54,8 @@ const props = defineProps({
                 <div class="space-y-6">
                     <Checkbox v-model="form.active" name="active" label="Actief" />
                     <Checkbox v-model="form.featured" name="featured" label="Uitgelicht" />
-                    <MultiImageUploader v-model="uploadedImages" />
+                    <MultiImageUploader v-model="form.images" />
+                    {{ product }}
                 </div>
                 <button type="submit" class="form-button">Opslaan</button>
             </div>
@@ -74,6 +78,7 @@ export default {
       form: {
         name: this.product.name,
         description: this.product.description,
+        slug: this.product.slug,
         price: this.product.price,
         duration: this.product.duration,
         countries: this.product.countries?.map(country => country.id),
@@ -98,7 +103,7 @@ export default {
     },
     submit() {
         const form = useForm(this.form);
-        form.post(route("products.update", this.product.id), { forceFormData: true });
+        form.post(route("products.update", this.product), { forceFormData: true });
     }
   },
 };

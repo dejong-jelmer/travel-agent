@@ -6,14 +6,14 @@ const props = defineProps({
     product: Object,
     required: true,
 });
-
 </script>
 
 <template>
     <Layout>
         <div class="space-y-4">
             <div class="flex justify-end">
-                <Link class="form-button" as="button" :href="route('products.itineraries.index', product)">Bekijk itinerary</Link>
+                <Link v-if="product.itineraries?.length" class="form-button" as="button" :href="route('products.itineraries.index', product)">Bekijk itinerary</Link>
+                <Link v-else class="form-button" as="button" :href="route('products.itineraries.create', product)">Maak een itinerary</Link>
             </div>
             <div class="bg-white p-6 rounded-lg shadow grid grid-cols-2 gap-y-4">
                 <h2 class="text-2xl font-bold mb-4">{{ product.name }}</h2>
