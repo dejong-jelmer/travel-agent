@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Itinerary;
-use App\Models\Product;
-use Inertia\Inertia;
-use Inertia\Response;
 use App\Http\Requests\StoreItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
-use \Illuminate\Http\RedirectResponse;
+use App\Models\Itinerary;
+use App\Models\Product;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
+use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ItineraryController extends Controller
@@ -57,7 +57,7 @@ class ItineraryController extends Controller
      */
     public function store(StoreItineraryRequest $request, Product $product): RedirectResponse
     {
-        $itinerary = new Itinerary();
+        $itinerary = new Itinerary;
         $validatedFields = $request->safe()->except('image');
         $validatedImage = $request->safe()->only('image');
 
@@ -95,7 +95,7 @@ class ItineraryController extends Controller
         $validatedImage = $request->safe()->only('image');
 
         if (isset($validatedImage['image'])) {
-            if($itinerary->hasImage()) {
+            if ($itinerary->hasImage()) {
                 $itinerary->deleteImage();
             }
             $image = $validatedImage['image'];

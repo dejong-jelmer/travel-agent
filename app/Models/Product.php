@@ -84,7 +84,7 @@ class Product extends Model
         return Storage::disk('public')->exists($this->getAttributes()['image']);
     }
 
-    public function deleteImage(?String $path = null): void
+    public function deleteImage(?string $path = null): void
     {
         Storage::disk('public')->delete($path ?? $this->getAttributes()['image']);
     }
@@ -93,7 +93,7 @@ class Product extends Model
     {
         foreach ($this->images as $image) {
             $path = $image->getAttributes()['path'];
-            if($this->hasImage($path)) {
+            if ($this->hasImage($path)) {
                 Storage::disk('public')->delete($path);
             }
         }

@@ -2,12 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-
-
 
 class Itinerary extends Model
 {
@@ -28,8 +26,9 @@ class Itinerary extends Model
         static::deleting(function ($itinerary) {
             Storage::disk('public')->delete($itinerary->getAttributes()['image']);
         });
-        static::deleted(fn($itinerary) => $itinerary->reOrder());
+        static::deleted(fn ($itinerary) => $itinerary->reOrder());
     }
+
     public function product()
     {
         return $this->belongsTo(Product::class);
@@ -38,7 +37,7 @@ class Itinerary extends Model
     protected function image(): Attribute
     {
         return Attribute::make(
-            get: fn(string $value) => Storage::url($value)
+            get: fn (string $value) => Storage::url($value)
         );
     }
 
@@ -60,7 +59,7 @@ class Itinerary extends Model
             ->orderBy('order')
             ->get();
 
-        foreach($itineraries as $itinerary) {
+        foreach ($itineraries as $itinerary) {
             $itinerary->order = $order++;
             $itinerary->save();
         }

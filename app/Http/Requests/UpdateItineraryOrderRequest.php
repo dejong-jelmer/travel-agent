@@ -23,6 +23,7 @@ class UpdateItineraryOrderRequest extends FormRequest
     public function rules(): array
     {
         $product = $this->route('product');
+
         return [
             'itineraries' => 'required|array',
             'itineraries.*.id' => 'exists:itineraries,id',
