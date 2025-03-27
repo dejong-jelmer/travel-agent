@@ -66,7 +66,7 @@ class ProductTest extends TestCase
             fn (AssertableInertia $page) => $page->component('Admin/Products/Index')
                 ->has('products', 3)
                 ->where('products.0.id', $products[0]->id)
-                ->where('products.0.price', (string) number_format((float) $products[0]->price, 2, '.', ''))
+                ->where('products.0.price', price($products[0]->price))
                 ->has('products.0.images', 2)
                 ->where('products.0.images.0.id', $products[0]->images[0]->id)
         );
@@ -139,7 +139,7 @@ class ProductTest extends TestCase
                 ->where('product.name', $product->name)
                 ->where('product.slug', $product->slug)
                 ->where('product.duration', $product->duration)
-                ->where('product.price', (string) number_format((float) $product->price, 2, '.', ''))
+                ->where('product.price', price($product->price))
                 ->where('product.active', $product->active)
                 ->where('product.featured', $product->featured)
                 ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
