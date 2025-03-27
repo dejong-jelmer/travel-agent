@@ -20,7 +20,7 @@ class ItineraryFactory extends Factory
             'title' => fake()->city().' - '.fake()->city(),
             'subtitle' => 'Overnachting in een hotel',
             'description' => fake()->text(500),
-            'image' => config('itinerary.image-path') . '/itinerary-image.jpg',
+            'image' => config('itinerary.image-path').'/itinerary-image.jpg',
         ];
     }
 }

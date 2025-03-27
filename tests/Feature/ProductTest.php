@@ -6,23 +6,25 @@ use App\Models\Country;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
-use Illuminate\Database\Eloquent\Collection;
 
 class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
     private array $productData;
+
     private Collection $countries;
+
     private Product $product;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
         $admin = User::factory()->create();
@@ -104,7 +106,7 @@ class ProductTest extends TestCase
             'country_id' => $this->countries->first()->id,
             'country_id' => $this->countries->last()->id,
         ]);
-        $imagePath = config('product.featured-image-path') . "/{$this->productData['image']->getClientOriginalName()}";
+        $imagePath = config('product.featured-image-path')."/{$this->productData['image']->getClientOriginalName()}";
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
             'image' => $imagePath,
@@ -114,7 +116,7 @@ class ProductTest extends TestCase
         $this->assertCount(2, $product->images);
 
         foreach ($product->images as $index => $image) {
-            $path = config('product.images-path') ."/{$this->productData['images'][$index]->getClientOriginalName()}";
+            $path = config('product.images-path')."/{$this->productData['images'][$index]->getClientOriginalName()}";
             $this->assertDatabaseHas('product_images', [
                 'product_id' => $product->id,
                 'path' => $path,
@@ -188,7 +190,7 @@ class ProductTest extends TestCase
             'country_id' => $countries->last()->id,
         ]);
 
-        $imagePath = config('product.featured-image-path') . "/{$this->productData['image']->getClientOriginalName()}";
+        $imagePath = config('product.featured-image-path')."/{$this->productData['image']->getClientOriginalName()}";
         Storage::disk('public')->assertExists($imagePath);
         $this->assertDatabaseHas('products', [
             'id' => $product->id,
@@ -198,7 +200,7 @@ class ProductTest extends TestCase
         $this->assertCount(2, $product->images);
 
         foreach ($product->images as $index => $image) {
-            $path = config('product.images-path') ."/{$this->productData['images'][$index]->getClientOriginalName()}";
+            $path = config('product.images-path')."/{$this->productData['images'][$index]->getClientOriginalName()}";
             $this->assertDatabaseHas('product_images', [
                 'product_id' => $product->id,
                 'path' => $path,

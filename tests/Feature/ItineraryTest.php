@@ -6,21 +6,23 @@ use App\Models\Itinerary;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Inertia\Testing\AssertableInertia;
-use Tests\TestCase;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
+use Inertia\Testing\AssertableInertia;
+use Tests\TestCase;
 
 class ItineraryTest extends TestCase
 {
     use RefreshDatabase;
 
     private Product $product;
-    private Itinerary $itinerary;
-    private String $imagePath;
 
-    public function setUp(): void
+    private Itinerary $itinerary;
+
+    private string $imagePath;
+
+    protected function setUp(): void
     {
         parent::setUp();
         $admin = User::factory()->create();
@@ -40,7 +42,7 @@ class ItineraryTest extends TestCase
         $response = $this->get(route('products.itineraries.index', $this->product));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Admin/Products/Itineraries/Index')
+            fn (AssertableInertia $page) => $page->component('Admin/Products/Itineraries/Index')
                 ->has('product')
                 ->has('product.itineraries', $this->product->itineraries->count())
         );
@@ -53,7 +55,7 @@ class ItineraryTest extends TestCase
         $response = $this->patch(
             route('products.itineraries.order', $this->product),
             [
-                'itineraries' => $this->product->itineraries->toArray()
+                'itineraries' => $this->product->itineraries->toArray(),
             ]
         );
         $response
@@ -90,7 +92,7 @@ class ItineraryTest extends TestCase
         $response->assertRedirect(route('products.itineraries.index', $product));
 
         $this->assertDatabaseHas('itineraries', Arr::except($itineraryData, ['image']));
-        $storedImagePath = $this->imagePath . "/{$itineraryData['image']->getClientOriginalName()}";
+        $storedImagePath = $this->imagePath."/{$itineraryData['image']->getClientOriginalName()}";
 
         $itinerary = Itinerary::where('product_id', $product->id)->first();
         $this->assertDatabaseHas('itineraries', [
@@ -132,7 +134,7 @@ class ItineraryTest extends TestCase
         $response->assertRedirect(route('products.itineraries.index', $this->product));
 
         $this->assertDatabaseHas('itineraries', Arr::except($itineraryData, ['image']));
-        $storedImagePath = $this->imagePath . "/{$itineraryData['image']->getClientOriginalName()}";
+        $storedImagePath = $this->imagePath."/{$itineraryData['image']->getClientOriginalName()}";
 
         $this->assertDatabaseHas('itineraries', [
             'id' => $this->itinerary->id,

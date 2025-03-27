@@ -12,7 +12,9 @@ use Inertia\Response;
 class ProductController extends Controller
 {
     private string $appName;
+
     private string $featuredImagePath;
+
     private string $imagesPath;
 
     public function __construct()
@@ -112,7 +114,7 @@ class ProductController extends Controller
         $countries = $request->safe()->countries ?? [];
 
         if (isset($validatedFiles['image'])) {
-            if($product->hasImage()) {
+            if ($product->hasImage()) {
                 $product->deleteImage();
             }
             $image = $validatedFiles['image'];
