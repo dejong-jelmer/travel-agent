@@ -1,3 +1,8 @@
+<script setup>
+import { usePage } from '@inertiajs/vue3';
+const page = usePage();
+const settings = page.props.settings;
+</script>
 <template>
     <div>
         <!-- File Input -->
@@ -16,7 +21,8 @@
         </div>
         <div v-if="imageFile" class="mt-8">
             <p>Bestandsnaam: {{ imageFile.name }}</p>
-            <p>Bestandsgrote: {{ imageFile.size }} bytes</p>
+            <p :class="{'text-custom-red': sizeExceedsMax(imageFile.size, (settings.maxFileSize * 1000))}">Bestandsgrote: {{ formatBytes(imageFile.size) }}</p>
+            <p v-if="sizeExceedsMax(imageFile.size, (settings.maxFileSize * 1000))" class="text-custom-red">Maximale bestandsgrote is {{ formatBytes(settings.maxFileSize, true) }}</p>
             <p>Bestandstype: {{ imageFile.type }}</p>
         </div>
     </div>
@@ -75,6 +81,16 @@ export default {
             this.imagePreview = URL.createObjectURL(file);
             this.$emit('image-uploaded', file);
         },
+        formatBytes(bytes, isKb = false, decimals = 2) {
+            if (bytes === 0) return "0 Bytes";
+            bytes = isKb ? (bytes * 1000) : bytes;
+            const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
+            const i = Math.floor(Math.log(bytes) / Math.log(1024));
+            return parseFloat((bytes / Math.pow(1024, i)).toFixed(decimals)) + " " + sizes[i];
+        },
+        sizeExceedsMax(bytes, maxBytes) {
+            return bytes > maxBytes;
+        }
     },
 };
 </script>

@@ -6,7 +6,7 @@ const goBack = () => {
 </script>
 
 <template>
-    <button @click="goBack" class="p-1 w-9 mb-2 info-button">
+    <button @click="goBack" class="mb-2 info-button">
         <Back class="h-5"/>
     </button>
 </template>

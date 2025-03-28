@@ -1,5 +1,6 @@
 <script setup>
 import { Link, useForm } from "@inertiajs/vue3";
+import { Inertia } from '@inertiajs/inertia';
 
 import Layout from "@/Pages/Layouts/Layout.vue";
 import { Input, Text, ImageUploader } from '@/Pages/Layouts/Components/Form';
@@ -12,7 +13,6 @@ const props = defineProps({
 
 <template>
     <Layout>
-        {{ errors }}
         <form @submit.prevent="submit">
             <div class="gap-6 bg-white p-8 rounded-lg shadow grid laptop:grid-cols-2">
                 <div class="space-y-6">
@@ -30,10 +30,6 @@ const props = defineProps({
 
                 </div>
                 <button type="submit" class="form-button">Opslaan</button>
-                <Link as="button" class="form-button bg-red-700 hover:bg-red-400"
-                    :href="route('itineraries.destroy', itinerary)" method="delete" @click.prevent="confirmDelete">
-                Verwijderen
-                </Link>
             </div>
         </form>
     </Layout>
@@ -72,11 +68,6 @@ export default {
         submit() {
             const form = useForm(this.form);
             form.post(route("itineraries.update", this.itinerary.id), { forceFormData: true });
-        },
-        confirmDelete(event) {
-            if (!confirm('Weet je zeker dat je dit reisplan wilt verwijderen?')) {
-                event.preventDefault();
-            }
         },
     }
 };

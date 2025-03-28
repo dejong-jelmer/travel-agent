@@ -6,6 +6,7 @@ use App\Http\Requests\StoreProductRequest;
 use App\Models\Country;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -139,14 +140,17 @@ class ProductController extends Controller
             $product->countries()->sync($countries);
         }
 
-        return redirect()->route('products.show', $product)->with('success', __('Product aangepast'));
+        return redirect()->route('products.show', $product)
+            ->with('success', __('Product aangepast'));
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product): RedirectResponse
     {
-        //
+        Product::destroy($product->id);
+        return redirect()->route('products.index')
+            ->with('success', __('Product verwijderd'));
     }
 }

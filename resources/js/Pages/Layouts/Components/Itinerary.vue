@@ -1,19 +1,21 @@
 <script setup>
-import { Edit } from '@/Pages/Icons';
-import { Link } from '@inertiajs/vue3';
 import { Warning } from '@/Pages/Icons';
+import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
+
+const  confirmDelete = (href) => {
+    if (!confirm('Weet je zeker dat je dit reisplan wilt verwijderen?')) {
+        return;
+    }
+    Inertia.delete(href);
+}
 </script>
 <template>
     <div class="relative max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl overflow-hidden p-4 sm:p-6 lg:p-8"
         :class="{ 'cursor-grab': isAdmin }">
-        <div v-if="isAdmin" class="absolute top-2 right-2">
-            <Link :href="route('itineraries.edit', itinerary)">
-                <button class="bg-transparent p-2 rounded-lg">
-                    <Edit class="h-5 stroke-custom-red" />
-                </button>
-            </Link>
+        <div v-if="isAdmin" class="absolute top-2 right-2 flex flex-col gap-y-2">
+            <IconLink icon="Delete" :href="route('itineraries.destroy', itinerary)" method="delete" :showConfirm="true" prompt="Weet je zeker dat je dit reisplan wilt verwijderen?"/>
+            <IconLink icon="Edit" :href="route('itineraries.edit', itinerary)" />
         </div>
-
         <div class="grid grid-cols-1 lg:grid-cols-6 gap-4 items-center">
             <div class="flex justify-center lg:col-span-2 order-1 lg:order-2">
                 <img :src="itinerary.image" alt="Reisbeschrijving"

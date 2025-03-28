@@ -22,15 +22,15 @@ class StoreProductRequest extends FormRequest
      */
     public function rules(): array
     {
-        // dd($this);
+        $maxFileSize = config('app-settings.maxFileSize');
         return [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
             'price' => ['required', 'numeric', 'min:0'],
             'duration' => ['required', 'integer', 'min:0'],
-            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', 'max:5120'],
-            'images.*' => ['image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', 'max:5120'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', "max:{$maxFileSize}"],
+            'images.*' => ['image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', "max:{$maxFileSize}"],
             'active' => ['boolean'],
             'featured' => ['boolean'],
             'published_at' => ['nullable', 'date'],

@@ -116,10 +116,11 @@ class ItineraryController extends Controller
     public function destroy(Itinerary $itinerary): RedirectResponse
     {
         $product = $itinerary->product;
+        $itineraryTitle = $itinerary->title;
         Itinerary::destroy($itinerary->id);
 
         return redirect()
             ->route('products.itineraries.index', $product)
-            ->with('success', 'Verwijderen van het reisplan is gelukt!.');
+            ->with('success', "Reisplan \"{$itineraryTitle}\" is verwijderd!.");
     }
 }

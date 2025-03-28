@@ -32,13 +32,17 @@ class ProductFactory extends Factory
         $city = fake()->city();
         $text = fake()->paragraph();
         $path = fake()->randomElement(self::IMG_PATHS);
+        $duration = fake()->randomDigit();
+        while($duration < 4) {
+            $duration = fake()->randomDigit();
+        }
 
         return [
             'name' => $city,
             'slug' => Str::slug("bijzondere-reis-naar-{$city}-{$country->name}"),
             'description' => "Mooie reis prachtige reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
             'price' => randomPrice(),
-            'duration' => fake()->randomDigit(),
+            'duration' => $duration,
             'image' => "images/products/featured/{$path}.jpg",
             'active' => true,
             'featured' => true,

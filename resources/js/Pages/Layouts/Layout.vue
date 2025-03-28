@@ -13,8 +13,6 @@ const flash = usePage().props.flash ?? {};
 watchEffect(() => {
   document.title = usePage().props.title || `${window.appName} - Historische reizen met oog voor de toekomst`;
 });
-
-console.log(flash);
 </script>
 
 <template>

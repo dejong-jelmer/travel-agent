@@ -1,3 +1,4 @@
+import 'tippy.js/dist/tippy.css'
 import axios from 'axios';
 window.axios = axios;
 
