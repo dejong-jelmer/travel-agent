@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use App\Casts\PriceCast;
 
 class Product extends Model
 {
@@ -28,6 +29,10 @@ class Product extends Model
     ];
 
     protected $appends = ['image_urls'];
+
+    protected $casts = [
+        'price' => PriceCast::class,
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -65,6 +70,11 @@ class Product extends Model
     public function itineraries()
     {
         return $this->hasMany(Itinerary::class)->orderBy('order');
+    }
+
+    public function getRaw(String $value): float
+    {
+        return (float) $this->getRawOriginal($value);
     }
 
     protected function image(): Attribute

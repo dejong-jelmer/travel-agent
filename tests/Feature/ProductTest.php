@@ -38,7 +38,7 @@ class ProductTest extends TestCase
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
-            'price' => (string) fake()->randomFloat(2, 300, 5000),
+            'price' => randomPrice(),
             'duration' => fake()->randomDigit(),
             'image' => UploadedFile::fake()->image('image.jpg'),
             'images' => [
@@ -68,7 +68,7 @@ class ProductTest extends TestCase
             fn (AssertableInertia $page) => $page->component('Admin/Products/Index')
                 ->has('products', 3)
                 ->where('products.0.id', $products[0]->id)
-                ->where('products.0.price', price($products[0]->price))
+                ->where('products.0.price', $products[0]->price)
                 ->has('products.0.images', 2)
                 ->where('products.0.images.0.id', $products[0]->images[0]->id)
         );
@@ -141,7 +141,7 @@ class ProductTest extends TestCase
                 ->where('product.name', $product->name)
                 ->where('product.slug', $product->slug)
                 ->where('product.duration', $product->duration)
-                ->where('product.price', price($product->price))
+                ->where('product.price', $product->price)
                 ->where('product.active', $product->active)
                 ->where('product.featured', $product->featured)
                 ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))

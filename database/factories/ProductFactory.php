@@ -37,7 +37,7 @@ class ProductFactory extends Factory
             'name' => $city,
             'slug' => Str::slug("bijzondere-reis-naar-{$city}-{$country->name}"),
             'description' => "Mooie reis prachtige reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
-            'price' => fake()->randomFloat(2, 200, 1200),
+            'price' => randomPrice(),
             'duration' => fake()->randomDigit(),
             'image' => "images/products/featured/{$path}.jpg",
             'active' => true,

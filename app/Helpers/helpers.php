@@ -1,8 +1,7 @@
 <?php
-
-if (! function_exists('price')) {
-    function price(mixed $price)
+if(! function_exists('randomPrice')) {
+    function randomPrice(int $min = 200, int $max = 5000): String
     {
-        return (string) number_format((float) $price, 2, '.', '');
+        return (string) fake()->randomFloat(2, $min, $max);
     }
 }
