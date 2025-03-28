@@ -15,7 +15,7 @@ class HomeTest extends TestCase
     public function test_home_page_displays_products()
     {
         $country = Country::factory()->create();
-        $product = Product::factory()->create(['price' => 895.00]);
+        $product = Product::factory()->create();
         $product->countries()->attach($country->id);
 
         $response = $this->get(route('home'));
@@ -23,7 +23,7 @@ class HomeTest extends TestCase
         $response->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
             ->has('products', 1)
             ->where('products.0.id', $product->id)
-            ->where('products.0.price', (string) number_format((float) $product->price, 2, '.', ''))
+            ->where('products.0.price', $product->price)
         );
         $this->assertDatabaseHas('country_product', [
             'product_id' => $product->id,
@@ -46,7 +46,7 @@ class HomeTest extends TestCase
     public function test_product_page_displays_correct_product()
     {
         $country = Country::factory()->create();
-        $product = Product::factory()->create(['price' => 895.00]);
+        $product = Product::factory()->create();
         $product->countries()->attach($country->id);
 
         $response = $this->get(route('trip.show', $product));
@@ -57,7 +57,7 @@ class HomeTest extends TestCase
             ->where('product.name', $product->name)
             ->where('product.slug', $product->slug)
             ->where('product.duration', $product->duration)
-            ->where('product.price', (string) number_format((float) $product->price, 2, '.', ''))
+            ->where('product.price', $product->price)
             ->where('product.active', $product->active)
             ->where('product.featured', $product->featured)
             ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))

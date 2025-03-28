@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('slug');
             $table->string('name');
             $table->text('description');
-            $table->decimal('price', 8, 2);
+            $table->decimal('price', 8, 2)->default(0.00)->nullable(false);
             $table->integer('duration');
             $table->string('image');
             $table->boolean('active')->default(true);
