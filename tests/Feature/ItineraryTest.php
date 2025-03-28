@@ -100,7 +100,7 @@ class ItineraryTest extends TestCase
             'image' => $storedImagePath,
         ]);
 
-        Storage::disk('public')->assertExists($storedImagePath);
+        Storage::assertExists($storedImagePath);
     }
 
     public function test_admin_can_show_the_itinerary_edit_page(): void
@@ -141,7 +141,7 @@ class ItineraryTest extends TestCase
             'image' => $storedImagePath,
         ]);
 
-        Storage::disk('public')->assertExists($storedImagePath);
+        Storage::assertExists($storedImagePath);
     }
 
     public function test_admin_can_destroy_an_existing_itinerary(): void
