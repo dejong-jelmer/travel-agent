@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\PriceCast;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use App\Casts\PriceCast;
 
 class Product extends Model
 {
@@ -72,7 +72,7 @@ class Product extends Model
         return $this->hasMany(Itinerary::class)->orderBy('order');
     }
 
-    public function getRaw(String $value): float
+    public function getRaw(string $value): float
     {
         return (float) $this->getRawOriginal($value);
     }
