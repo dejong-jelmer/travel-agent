@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
+use Illuminate\Support\Facades\Config;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -40,6 +41,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => Auth::user(),
             ],
+            'settings' => Config::get('app-settings'),
         ]);
     }
 }

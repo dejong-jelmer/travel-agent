@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->string('remark')->nullable();
             $table->integer('order')->default(0);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

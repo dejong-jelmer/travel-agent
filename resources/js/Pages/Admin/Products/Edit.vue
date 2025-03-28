@@ -19,7 +19,6 @@ const props = defineProps({
 </script>
 
 <template>
-    {{ errors }}
     <Layout>
         <form  @submit.prevent="submit" >
             <div class="gap-6 bg-white p-8 rounded-lg shadow grid grid-cols-2">
@@ -44,18 +43,11 @@ const props = defineProps({
                 <div class="space-y-6">
                     <label class="form-label">Hoofdafbeelding (URL)</label>
                     <ImageUploader v-model="product.image" @image-uploaded="handleImageUploaded" />
-                    <div v-if="uploadedImage" class="mt-8">
-                        <h2 class="text-xl font-semibold mb-2">Data van geuploade afbeelding:</h2>
-                        <p>File Name: {{ uploadedImage.name }}</p>
-                        <p>File Size: {{ uploadedImage.size }} bytes</p>
-                        <p>File Type: {{ uploadedImage.type }}</p>
-                    </div>
                 </div>
                 <div class="space-y-6">
                     <Checkbox v-model="form.active" name="active" label="Actief" />
                     <Checkbox v-model="form.featured" name="featured" label="Uitgelicht" />
                     <MultiImageUploader v-model="form.images" />
-                    {{ product }}
                 </div>
                 <button type="submit" class="form-button">Opslaan</button>
             </div>

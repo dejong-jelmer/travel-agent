@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory,
+        SoftDeletes;
 
     protected $fillable = [
         'name',
@@ -47,19 +49,34 @@ class Product extends Model
         ];
     }
 
+    protected static function booted()
+    {
+        parent::boot();
+        static::deleting(function ($product) {
+            Storage::disk('public')->delete($product->getAttributes()['image']);
+            $product->images()->delete();
+            $product->itineraries()->delete();
+        });
+
+        static::restoring(function ($product) {
+            $product->images()->withTrashed()->restore();
+            $product->itineraries()->withTrashed()->restore();
+        });
+    }
+
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
     }
 
-    public function country(): Country
-    {
-        return $this->countries()->first();
-    }
-
     public function countries(): BelongsToMany
     {
         return $this->belongsToMany(Country::class);
+    }
+
+    public function country(): Country
+    {
+        return $this->countries()->first();
     }
 
     public function images()

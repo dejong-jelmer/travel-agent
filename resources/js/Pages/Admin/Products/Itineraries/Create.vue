@@ -12,7 +12,6 @@ const props = defineProps({
 
 <template>
     <Layout>
-        {{ errors }}
         <form  @submit.prevent="submit" >
             <div class="gap-6 bg-white p-8 rounded-lg shadow grid grid-cols-2">
                 <div class="space-y-6">
@@ -24,12 +23,6 @@ const props = defineProps({
                     <Input type="text" name="remark" label="Opmerking" v-model="form.remark" :feedback="errors.remark"/>
                     <label class="form-label">Hoofdafbeelding (URL)</label>
                     <ImageUploader v-model="form.image" @image-uploaded="handleImageUploaded" />
-                    <div v-if="uploadedImage" class="mt-8">
-                        <h2 class="text-xl font-semibold mb-2">Data van geuploade afbeelding:</h2>
-                        <p>File Name: {{ uploadedImage.name }}</p>
-                        <p>File Size: {{ uploadedImage.size }} bytes</p>
-                        <p>File Type: {{ uploadedImage.type }}</p>
-                    </div>
                 </div>
                 <button type="submit" class="form-button">Opslaan</button>
             </div>
