@@ -33,7 +33,7 @@ class ProductFactory extends Factory
         $text = fake()->paragraph();
         $path = fake()->randomElement(self::IMG_PATHS);
         $duration = fake()->randomDigit();
-        while($duration < 4) {
+        while ($duration < 4) {
             $duration = fake()->randomDigit();
         }
 
