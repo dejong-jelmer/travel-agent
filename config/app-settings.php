@@ -1,4 +1,5 @@
 <?php
+
 return [
-    'maxFileSize' => '2000'
+    'maxFileSize' => '2000',
 ];
