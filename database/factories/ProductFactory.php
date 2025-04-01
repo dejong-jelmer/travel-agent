@@ -26,7 +26,7 @@ class ProductFactory extends Factory
         $city = fake()->city();
         $text = fake()->paragraph();
         $duration = fake()->randomDigit();
-        while($duration < 4) {
+        while ($duration < 4) {
             $duration = fake()->randomDigit();
         }
 
