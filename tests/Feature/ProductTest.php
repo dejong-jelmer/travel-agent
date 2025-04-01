@@ -3,8 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Country;
-use App\Models\Product;
 use App\Models\Image;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -46,7 +46,7 @@ class ProductTest extends TestCase
             'images' => [],
             'countries' => $this->countries->modelKeys(),
         ];
-        for($i = 1; $i <= Self::RELATIONS; $i++) {
+        for ($i = 1; $i <= self::RELATIONS; $i++) {
             $this->productData['images'][] = UploadedFile::fake()->image("image$i.jpg");
         }
     }
@@ -135,7 +135,7 @@ class ProductTest extends TestCase
             ->has(Image::factory()->count(self::RELATIONS), 'images')
             ->create();
 
-        foreach($countries as $country) {
+        foreach ($countries as $country) {
             $product->countries()->attach($country->id);
         }
 
@@ -231,14 +231,14 @@ class ProductTest extends TestCase
             'imageable_type' => Product::class,
         ]);
 
-         $response = $this->delete(route('products.destroy', $product));
+        $response = $this->delete(route('products.destroy', $product));
 
-         $response->assertRedirect(route('products.index'));
+        $response->assertRedirect(route('products.index'));
 
-         $this->assertSoftDeleted($product);
-         $this->assertSoftDeleted($featuredImage);
-         foreach($images as $image) {
-             $this->assertSoftDeleted($image);
-         }
+        $this->assertSoftDeleted($product);
+        $this->assertSoftDeleted($featuredImage);
+        foreach ($images as $image) {
+            $this->assertSoftDeleted($image);
+        }
     }
 }
