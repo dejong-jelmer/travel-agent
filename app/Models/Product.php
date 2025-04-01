@@ -3,18 +3,18 @@
 namespace App\Models;
 
 use App\Casts\PriceCast;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\StoreableImage;
 
 class Product extends Model
 {
     use HasFactory,
+        StoreableImage,
         SoftDeletes;
 
     protected $fillable = [
@@ -23,14 +23,15 @@ class Product extends Model
         'description',
         'price',
         'duration',
-        'image',
-        'images',
         'active',
         'featured',
         'published_at',
     ];
 
-    protected $appends = ['image_urls'];
+    protected $appends = [
+        'image_urls',
+        'raw_price',
+    ];
 
     protected $casts = [
         'price' => PriceCast::class,
@@ -53,8 +54,8 @@ class Product extends Model
     {
         parent::boot();
         static::deleting(function ($product) {
-            Storage::disk('public')->delete($product->getAttributes()['image']);
             $product->images()->delete();
+            $product->featuredImage()->delete();
             $product->itineraries()->delete();
         });
 
@@ -79,51 +80,29 @@ class Product extends Model
         return $this->countries()->first();
     }
 
-    public function images()
-    {
-        return $this->hasMany(ProductImage::class);
-    }
-
     public function itineraries()
     {
         return $this->hasMany(Itinerary::class)->orderBy('order');
     }
 
-    public function getRaw(string $value): float
+    public function getRawPriceAttribute(): float
     {
-        return (float) $this->getRawOriginal($value);
+        return (float) $this->getRawOriginal('price');
     }
 
-    protected function image(): Attribute
+    public function images()
     {
-        return Attribute::make(
-            get: fn (string $value) => Storage::url($value)
-        );
+        return $this->morphMany(Image::class, 'imageable')->where('featured', false);
+    }
+
+    public function featuredImage()
+    {
+        return $this->morphOne(Image::class, 'imageable')->where('featured', true);
     }
 
     public function getImageUrlsAttribute(): Collection
     {
-        return $this->images->map(fn ($image) => $image->path);
+        return $this->images->pluck('path');
     }
 
-    public function hasImage(): bool
-    {
-        return Storage::disk('public')->exists($this->getAttributes()['image']);
-    }
-
-    public function deleteImage(?string $path = null): void
-    {
-        Storage::disk('public')->delete($path ?? $this->getAttributes()['image']);
-    }
-
-    public function deleteImages(): void
-    {
-        foreach ($this->images as $image) {
-            $path = $image->getAttributes()['path'];
-            if ($this->hasImage($path)) {
-                Storage::disk('public')->delete($path);
-            }
-        }
-        $this->images()->delete();
-    }
 }

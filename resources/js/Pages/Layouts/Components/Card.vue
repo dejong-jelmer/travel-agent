@@ -10,7 +10,7 @@ defineProps({ product: Object })
     <Link :href="route('trip.show', product)">
         <div class="max-w-md h-auto mx-auto bg-white rounded-2xl shadow-md relative select-none">
             <div class="h-[55%] min-h-[250px] bg-cover bg-center rounded-t-2xl overflow-hidden"
-                :style="`background-image: url(${product.image})`">
+                :style="`background-image: url(${product.featured_image?.path})`">
                 <div
                     class="absolute left-auto top-0 right-0 w-[30%] rounded-bl-2xl bg-white text-black py-4 text-left pl-6">
                     <div class="text-sm">Vanaf</div>

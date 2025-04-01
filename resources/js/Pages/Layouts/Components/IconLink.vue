@@ -1,7 +1,7 @@
 <script setup>
-import { Delete, Edit, View, Itinerary } from '@/Pages/Icons';
+import { Delete, Edit, View, Itinerary, Save, Add } from '@/Pages/Icons';
 import { Inertia } from '@inertiajs/inertia';
-import { shallowRef, markRaw } from 'vue';
+import { shallowRef, markRaw, computed } from 'vue';
 
 const props = defineProps({
     icon: {
@@ -10,20 +10,25 @@ const props = defineProps({
     },
     href: {
         type: String,
-        required: true
+        required: false,
     },
     method: {
         type: String,
-        default: 'get'
+        default: 'get',
     },
     showConfirm: {
         type:Boolean,
-        default: false
+        default: false,
     },
     prompt: {
         type: String,
-        required: false
+        required: false,
     },
+    type: {
+        type: String,
+        required: false,
+        default: 'danger',
+    }
 });
 
 const icons = {
@@ -31,23 +36,41 @@ const icons = {
     Edit: markRaw(Edit),
     View: markRaw(View),
     Itinerary: markRaw(Itinerary),
+    Save: markRaw(Save),
+    Add: markRaw(Add),
 };
 const currentIcon = shallowRef(icons[`${props.icon}`]);
 
 const confirmDelete = (href, showConfirm, prompt) => {
-    if(showConfirm) {
-        if (!confirm(prompt)) {
-            return;
+    if(href) {
+        if(showConfirm) {
+            if (!confirm(prompt)) {
+                return;
+            }
         }
+        Inertia[`${props.method}`](href);
     }
-    Inertia[`${props.method}`](href);
 }
 </script>
 
 <template>
-    <div class="group w-fit mx-auto" @click="confirmDelete(href, showConfirm, prompt)">
-        <button class="bg-transparent p-2 rounded-lg border border-custom-red group-hover:bg-custom-red">
-            <component :is="currentIcon" class="h-5 stroke-custom-red group-hover:stroke-white" />
+    <div class="group w-fit" @click="confirmDelete(href, showConfirm, prompt)">
+        <button
+            class="p-2 rounded-lg border"
+            :class="{
+                    'bg-custom-red group-hover:bg-white border-custom-red': type === 'delete',
+                    'bg-white group-hover:bg-custom-red border group-hover:border-custom-red': type === 'danger',
+                    'bg-white group-hover:bg-custom-dark border group-hover:border-custom-dark': type === 'info'
+                }"
+            >
+            <component :is="currentIcon"
+                class="h-5"
+                :class="{
+                        'stroke-white group-hover:stroke-custom-red': type === 'delete',
+                        'stroke-custom-red group-hover:stroke-white': type === 'danger',
+                        'stroke-custom-dark group-hover:stroke-white': type === 'info'
+                    }"
+            />
         </button>
     </div>
 </template>

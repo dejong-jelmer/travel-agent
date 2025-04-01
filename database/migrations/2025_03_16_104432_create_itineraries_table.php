@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('subtitle')->nullable();
             $table->text('description');
-            $table->string('image')->nullable();
+            // $table->string('image')->nullable();
             $table->string('remark')->nullable();
             $table->integer('order')->default(0);
             $table->softDeletes();

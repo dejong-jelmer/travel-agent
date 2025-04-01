@@ -6,7 +6,6 @@ use App\Http\Requests\StoreProductRequest;
 use App\Models\Country;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,15 +13,9 @@ class ProductController extends Controller
 {
     private string $appName;
 
-    private string $featuredImagePath;
-
-    private string $imagesPath;
-
     public function __construct()
     {
         $this->appName = env('APP_NAME');
-        $this->featuredImagePath = config('product.featured-image-path');
-        $this->imagesPath = config('product.images-path');
     }
 
     /**
@@ -31,7 +24,7 @@ class ProductController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Products/Index', [
-            'products' => Product::with(['countries', 'itineraries'])->get(),
+            'products' => Product::with(['countries', 'itineraries', 'featuredImage'])->get(),
             'title' => "Admin producten - {$this->appName}",
         ]);
     }
@@ -54,29 +47,17 @@ class ProductController extends Controller
     {
         $product = new Product;
 
-        $validatedFiles = $request->safe()->only(['image', 'images']);
-        $validatedFields = $request->safe()->except(['image', 'images']);
+        $validatedFiles = $request->safe()->only(['featuredImage', 'images']);
+        $validatedFields = $request->safe()->except(['featuredImage', 'images']);
         $countries = $request->safe()->countries ?? [];
-
-        if (isset($validatedFiles['image'])) {
-            $image = $validatedFiles['image'];
-            $imagePath = $image->storeAs($this->featuredImagePath, $image->getClientOriginalName(), 'public');
-            $product->image = $imagePath;
-        }
 
         $product->fill($validatedFields);
         $product->save();
+        $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
+        $product->storeImages($validatedFiles['images'], 'images');
+
         if (count($countries)) {
             $product->countries()->sync($countries);
-        }
-
-        if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
-            $imagePaths = [];
-            foreach ($validatedFiles['images'] as $image) {
-                $path = $image->storeAs($this->imagesPath, $image->getClientOriginalName(), 'public');
-                $imagePaths[] = ['path' => $path];
-            }
-            $product->images()->createMany($imagePaths);
         }
 
         return redirect()->route('products.show', $product)->with('success', __('Product aangemaakt'));
@@ -88,7 +69,7 @@ class ProductController extends Controller
     public function show(Product $product): Response
     {
         return Inertia::render('Admin/Products/Show', [
-            'product' => $product->load(['images', 'countries', 'itineraries']),
+            'product' => $product->load(['featuredImage', 'images', 'countries', 'itineraries']),
             'title' => "Admin product - {$this->appName}",
         ]);
     }
@@ -96,10 +77,10 @@ class ProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Product $product): Response
     {
         return Inertia::render('Admin/Products/Edit', [
-            'product' => $product->load(['images', 'countries']),
+            'product' => $product->load(['featuredImage', 'images', 'countries']),
             'countries' => Country::all(),
             'title' => "Admin product bewerken - {$this->appName}",
         ]);
@@ -110,32 +91,15 @@ class ProductController extends Controller
      */
     public function update(StoreProductRequest $request, Product $product): RedirectResponse
     {
-        $validatedFiles = $request->safe()->only(['image', 'images']);
-        $validatedFields = $request->safe()->except(['image', 'images', 'countries']);
+        $validatedFiles = $request->safe()->only(['featuredImage', 'images']);
+        $validatedFields = $request->safe()->except(['featuredImage', 'images', 'countries']);
         $countries = $request->safe()->countries ?? [];
-
-        if (isset($validatedFiles['image'])) {
-            if ($product->hasImage()) {
-                $product->deleteImage();
-            }
-            $image = $validatedFiles['image'];
-            $imagePath = $image->storeAs($this->featuredImagePath, $image->getClientOriginalName(), 'public');
-            $product->image = $imagePath;
-        }
-        if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
-            $imagePaths = [];
-            $product->deleteImages();
-
-            foreach ($validatedFiles['images'] as $image) {
-                $path = $image->storeAs($this->imagesPath, $image->getClientOriginalName(), 'public');
-                $imagePaths[] = ['path' => $path];
-            }
-
-            $product->images()->createMany($imagePaths);
-        }
 
         $product->fill($validatedFields);
         $product->save();
+        $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
+        $product->storeImages($validatedFiles['images'], 'images');
+
         if (count($countries)) {
             $product->countries()->sync($countries);
         }

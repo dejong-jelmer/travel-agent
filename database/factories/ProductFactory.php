@@ -11,12 +11,6 @@ use Illuminate\Support\Str;
  */
 class ProductFactory extends Factory
 {
-    const IMG_PATHS = [
-        '0CVO5DSMb45wY5Gce6OmDFtObj7C6IYqhVDc1O3G',
-        '0atWniYhuFME7Eam8Xs5voQCuH2qKfVTrUqMqWSm',
-        'xBdb4Xf3B1rrgtNqgBMn2BKrPHwRcs9suliMoVE6',
-    ];
-
     /**
      * Define the model's default state.
      *
@@ -31,7 +25,6 @@ class ProductFactory extends Factory
         }
         $city = fake()->city();
         $text = fake()->paragraph();
-        $path = fake()->randomElement(self::IMG_PATHS);
         $duration = fake()->randomDigit();
         while($duration < 4) {
             $duration = fake()->randomDigit();
@@ -43,7 +36,6 @@ class ProductFactory extends Factory
             'description' => "Mooie reis prachtige reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
             'price' => randomPrice(),
             'duration' => $duration,
-            'image' => "images/products/featured/{$path}.jpg",
             'active' => true,
             'featured' => true,
             'published_at' => now(),

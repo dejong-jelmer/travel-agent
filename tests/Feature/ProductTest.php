@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Country;
 use App\Models\Product;
-use App\Models\ProductImage;
+use App\Models\Image;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -24,15 +24,17 @@ class ProductTest extends TestCase
 
     private Product $product;
 
+    const RELATIONS = 2;
+
     protected function setUp(): void
     {
         parent::setUp();
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        $this->countries = Country::factory(2)->create();
+        $this->countries = Country::factory(self::RELATIONS)->create();
         Storage::fake('public');
-        Storage::makeDirectory(config('product.featured-image-path'));
+        Storage::makeDirectory('images');
 
         $this->productData = [
             'name' => fake()->words(2, true),
@@ -40,13 +42,13 @@ class ProductTest extends TestCase
             'description' => fake()->paragraph(),
             'price' => randomPrice(),
             'duration' => fake()->randomDigit(),
-            'image' => UploadedFile::fake()->image('image.jpg'),
-            'images' => [
-                UploadedFile::fake()->image('image1.jpg'),
-                UploadedFile::fake()->image('image2.jpg'),
-            ],
+            'featuredImage' => UploadedFile::fake()->image('image.jpg'),
+            'images' => [],
             'countries' => $this->countries->modelKeys(),
         ];
+        for($i = 1; $i <= Self::RELATIONS; $i++) {
+            $this->productData['images'][] = UploadedFile::fake()->image("image$i.jpg");
+        }
     }
 
     public function test_admin_can_view_the_product_index_page(): void
@@ -54,7 +56,6 @@ class ProductTest extends TestCase
         $countries = $this->countries;
         $products = Product::factory()
             ->count(3)
-            ->has(ProductImage::factory()->count(2), 'images')
             ->create()->each(function ($product) use ($countries) {
                 $product->countries()->attach([
                     $countries->first()->id,
@@ -69,8 +70,7 @@ class ProductTest extends TestCase
                 ->has('products', 3)
                 ->where('products.0.id', $products[0]->id)
                 ->where('products.0.price', $products[0]->price)
-                ->has('products.0.images', 2)
-                ->where('products.0.images.0.id', $products[0]->images[0]->id)
+                ->where('products.0.featured_image', $products[0]->featuredImage)
         );
 
         foreach ($products as $product) {
@@ -100,25 +100,27 @@ class ProductTest extends TestCase
         $product = Product::first();
         $response->assertRedirect(route('products.show', $product));
 
-        $this->assertDatabaseHas('products', Arr::except($this->productData, ['image', 'images', 'countries']));
+        $this->assertDatabaseHas('products', Arr::except($this->productData, ['featuredImage', 'images', 'countries']));
         $this->assertDatabaseHas('country_product', [
             'product_id' => $product->id,
             'country_id' => $this->countries->first()->id,
             'country_id' => $this->countries->last()->id,
         ]);
-        $imagePath = config('product.featured-image-path')."/{$this->productData['image']->getClientOriginalName()}";
-        $this->assertDatabaseHas('products', [
-            'id' => $product->id,
-            'image' => $imagePath,
+
+        $featuredImagePath = $this->productData['featuredImage']->getClientOriginalName();
+        $this->assertDatabaseHas('images', [
+            'imageable_id' => $product->id,
+            'path' => $featuredImagePath,
+            'featured' => true,
         ]);
 
-        Storage::assertExists($imagePath);
-        $this->assertCount(2, $product->images);
+        Storage::assertExists($featuredImagePath);
+        $this->assertCount(self::RELATIONS, $product->images);
 
         foreach ($product->images as $index => $image) {
-            $path = config('product.images-path')."/{$this->productData['images'][$index]->getClientOriginalName()}";
-            $this->assertDatabaseHas('product_images', [
-                'product_id' => $product->id,
+            $path = $this->productData['images'][$index]->getClientOriginalName();
+            $this->assertDatabaseHas('images', [
+                'imageable_id' => $product->id,
                 'path' => $path,
             ]);
             Storage::assertExists($path);
@@ -127,11 +129,15 @@ class ProductTest extends TestCase
 
     public function test_admin_can_show_singel_product(): void
     {
-        $country = Country::factory()->create();
+        $countries = Country::factory(self::RELATIONS)->create();
         $product = Product::factory()
-            ->has(ProductImage::factory()->count(3), 'images')
+            ->has(Image::factory(['featured' => true]), 'featuredImage')
+            ->has(Image::factory()->count(self::RELATIONS), 'images')
             ->create();
-        $product->countries()->attach($country->id);
+
+        foreach($countries as $country) {
+            $product->countries()->attach($country->id);
+        }
 
         $response = $this->get(route('products.show', $product));
         $response->assertInertia(
@@ -145,8 +151,9 @@ class ProductTest extends TestCase
                 ->where('product.active', $product->active)
                 ->where('product.featured', $product->featured)
                 ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
-                ->has('product.images', 3)
-                ->has('product.countries', 1)
+                ->where('product.featured_image', $product->featuredImage)
+                ->has('product.images', self::RELATIONS)
+                ->has('product.countries', self::RELATIONS)
         );
 
         $response->assertStatus(200);
@@ -155,8 +162,9 @@ class ProductTest extends TestCase
     public function test_admin_can_show_the_product_edit_page(): void
     {
         $product = Product::factory()
-            ->has(Country::factory()->count(2), 'countries')
-            ->has(ProductImage::factory()->count(3), 'images')
+            ->has(Country::factory()->count(self::RELATIONS), 'countries')
+            ->has(Image::factory(['featured' => true]), 'featuredImage')
+            ->has(Image::factory()->count(self::RELATIONS), 'images')
             ->create();
         $response = $this->get(route('products.edit', $product));
 
@@ -164,8 +172,9 @@ class ProductTest extends TestCase
             ->component('Admin/Products/Edit')
             ->has('product')
             ->where('product.id', $product->id)
-            ->has('product.images', 3)
-            ->has('product.countries', 2)
+            ->where('product.featured_image', $product->featuredImage)
+            ->has('product.images', self::RELATIONS)
+            ->has('product.countries', self::RELATIONS)
             ->etc()
         );
 
@@ -177,36 +186,59 @@ class ProductTest extends TestCase
         $countries = $this->countries;
         $product = Product::factory()->create();
 
-        Storage::fake('public');
-        Storage::makeDirectory(config('product.featured-image-path'));
-
         $response = $this->post(route('products.update', $product), $this->productData);
         $response->assertRedirect(route('products.show', $product));
 
-        $this->assertDatabaseHas('products', Arr::except($this->productData, ['image', 'images', 'countries']));
+        $this->assertDatabaseHas('products', Arr::except($this->productData, ['featuredImage', 'images', 'countries']));
         $this->assertDatabaseHas('country_product', [
             'product_id' => $product->id,
             'country_id' => $countries->first()->id,
             'country_id' => $countries->last()->id,
         ]);
 
-        $imagePath = config('product.featured-image-path')."/{$this->productData['image']->getClientOriginalName()}";
-        Storage::assertExists($imagePath);
-        $this->assertDatabaseHas('products', [
-            'id' => $product->id,
-            'image' => $imagePath,
+        $featuredImagePath = $this->productData['featuredImage']->getClientOriginalName();
+        Storage::assertExists($featuredImagePath);
+        $this->assertDatabaseHas('images', [
+            'imageable_id' => $product->id,
+            'path' => $featuredImagePath,
         ]);
 
-        $this->assertCount(2, $product->images);
+        $this->assertCount(self::RELATIONS, $product->images);
 
         foreach ($product->images as $index => $image) {
-            $path = config('product.images-path')."/{$this->productData['images'][$index]->getClientOriginalName()}";
-            $this->assertDatabaseHas('product_images', [
-                'product_id' => $product->id,
+            $path = $this->productData['images'][$index]->getClientOriginalName();
+            $this->assertDatabaseHas('images', [
+                'imageable_id' => $product->id,
                 'path' => $path,
             ]);
 
             Storage::assertExists($path);
         }
+    }
+
+    public function test_admin_can_destroy_a_product(): void
+    {
+        $product = Product::factory()->create();
+
+        $featuredImage = Image::factory()->create([
+            'imageable_id' => $product->id,
+            'imageable_type' => Product::class,
+            'featured' => true,
+        ]);
+
+        $images = Image::factory(self::RELATIONS)->create([
+            'imageable_id' => $product->id,
+            'imageable_type' => Product::class,
+        ]);
+
+         $response = $this->delete(route('products.destroy', $product));
+
+         $response->assertRedirect(route('products.index'));
+
+         $this->assertSoftDeleted($product);
+         $this->assertSoftDeleted($featuredImage);
+         foreach($images as $image) {
+             $this->assertSoftDeleted($image);
+         }
     }
 }
