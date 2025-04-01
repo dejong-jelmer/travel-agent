@@ -23,6 +23,7 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         $maxFileSize = config('app-settings.maxFileSize');
+
         return [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
