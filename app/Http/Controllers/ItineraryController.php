@@ -86,7 +86,6 @@ class ItineraryController extends Controller
         $itinerary->update($validatedFields);
         $itinerary->storeImages($validatedImage['image'], 'image');
 
-
         return redirect()
             ->route('products.itineraries.index', $itinerary->product)
             ->with('success', 'Aanpassen van het reisplan is gelukt!.');

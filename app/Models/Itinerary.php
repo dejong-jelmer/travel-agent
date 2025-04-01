@@ -2,16 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\StoreableImage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Traits\StoreableImage;
 
 class Itinerary extends Model
 {
     use HasFactory,
-        StoreableImage,
-        SoftDeletes;
+        SoftDeletes,
+        StoreableImage;
 
     protected $fillable = [
         'product_id',
