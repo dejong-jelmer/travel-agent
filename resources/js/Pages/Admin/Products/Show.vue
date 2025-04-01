@@ -9,7 +9,7 @@ const props = defineProps({
     required: true,
 });
 
-const  confirmDelete = (event, href) => {
+const confirmDelete = (event, href) => {
     if (!confirm('Weet je zeker dat je dit reisproduct wilt verwijderen?')) {
         return;
     }
@@ -19,32 +19,43 @@ const  confirmDelete = (event, href) => {
 
 <template>
     <Layout>
-        <div class="space-y-4">
-            <div class="bg-white p-6 rounded-lg shadow grid laptop:grid-cols-2 gap-y-4">
-                <h2 class="text-2xl font-bold mb-4">{{ product.name }}</h2>
-
-                <p><strong>Beschrijving:</strong> {{ product.description }}</p>
-                <p><strong>Prijs:</strong> €{{ product.price }}</p>
-                <p><strong>Duur:</strong> {{ product.duration }} dagen</p>
-                <p><strong>Land:</strong> {{ product.countries[0].name }}</p>
-
-                <div>
-                    <strong>Hoofdafbeelding:</strong>
-                    <img :src="product.image" alt="Product image" class="w-32 h-32 object-cover rounded mt-2" />
-                </div>
-
-                <div>
-                    <strong>Andere afbeeldingen:</strong>
-                    <div class="flex space-x-4">
-                        <template v-for="(image, index) in product.images" :key="index">
-                            <img :src="image.path" :alt="`Product image ${index}`"
-                                class="w-32 h-32 object-cover rounded mt-2" />
-                        </template>
+        <div class="space-y-6 p-4 tablet:p-6 laptop:p-8 desktop:p-10">
+            <div class="bg-white p-6 rounded-2xl shadow-lg grid gap-6 laptop:grid-cols-2">
+                <!-- Product details -->
+                <div class="space-y-4">
+                    <h2 class="text-3xl font-bold text-gray-800">{{ product.name }}</h2>
+                    <p class="text-gray-600"><strong>Beschrijving:</strong> {{ product.description }}</p>
+                    <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-gray-700"><strong>Prijs:</strong> €{{ product.price }}</p>
+                            <p class="text-gray-700"><strong>Land:</strong> {{ product.countries[0].name }}</p>
+                        </div>
+                        <div>
+                            <p class="text-gray-700"><strong>Duur:</strong> {{ product.duration }} dagen</p>
+                            <p class="text-gray-700"><strong>Actief:</strong> {{ product.active ? "Ja" : "Nee" }}</p>
+                            <p class="text-gray-700"><strong>Uitgelicht:</strong> {{ product.featured ? "Ja" : "Nee" }}
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <p><strong>Actief:</strong> {{ product.active ? "Ja" : "Nee" }}</p>
-                <p><strong>Uitgelicht:</strong> {{ product.featured ? "Ja" : "Nee" }}</p>
+                <!-- Images -->
+                <div class="space-y-4">
+                    <div>
+                        <strong class="text-gray-800">Hoofdafbeelding:</strong>
+                        <img :src="product.featured_image?.path" alt="Product image"
+                            class="w-full max-w-sm h-auto object-cover rounded-lg mt-2 shadow-md" />
+                    </div>
+                    <div>
+                        <strong class="text-gray-800">Andere afbeeldingen:</strong>
+                        <div class="flex flex-wrap gap-4">
+                            <template v-for="(image, index) in product.images" :key="index">
+                                <img :src="image.path" :alt="`Product image ${index}`"
+                                    class="w-24 h-24 tablet:w-32 tablet:h-32 object-cover rounded-lg shadow-md" />
+                            </template>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </Layout>

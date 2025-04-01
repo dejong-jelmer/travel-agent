@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Traits\StoreableImage;
 
 class Itinerary extends Model
 {
     use HasFactory,
+        StoreableImage,
         SoftDeletes;
 
     protected $fillable = [
@@ -18,16 +18,13 @@ class Itinerary extends Model
         'title',
         'description',
         'subtitle',
-        'image',
         'remark',
     ];
 
     protected static function boot()
     {
         parent::boot();
-        static::deleting(function ($itinerary) {
-            Storage::disk('public')->delete($itinerary->getAttributes()['image']);
-        });
+        static::deleting(fn ($itinerary) => $itinerary->image()->delete());
         static::deleted(fn ($itinerary) => $itinerary->reOrder());
     }
 
@@ -36,21 +33,9 @@ class Itinerary extends Model
         return $this->belongsTo(Product::class);
     }
 
-    protected function image(): Attribute
+    public function image()
     {
-        return Attribute::make(
-            get: fn (string $value) => Storage::url($value)
-        );
-    }
-
-    public function hasImage(): bool
-    {
-        return Storage::disk('public')->exists($this->getAttributes()['image']);
-    }
-
-    public function deleteImage(): void
-    {
-        Storage::disk('public')->delete($this->getAttributes()['image']);
+        return $this->morphOne(Image::class, 'imageable');
     }
 
     public function reOrder(): void

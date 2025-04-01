@@ -6,9 +6,9 @@ const settings = page.props.settings;
 <template>
     <div>
         <!-- File Input -->
-        <div class="flex items-left justify-left my-4">
+        <div class="flex items-left justify-left gap-6 flex-warp mb-4">
             <label for="image-upload" class="form-button">
-                {{ imagePreview ? 'Afbeelding toevoegen' : 'Wijzig afbeelding' }}
+                {{ label }}
             </label>
             <input id="image-upload" type="file" accept="image/*" class="hidden" @change="handleImageUpload" />
         </div>
@@ -32,7 +32,11 @@ const settings = page.props.settings;
 export default {
     name: 'ImageUploader',
     props: {
-        modelValue: String,
+        modelValue: {
+            type: [Object, String],
+            required: false
+        },
+        label: String,
     },
     data() {
         return {
@@ -42,7 +46,9 @@ export default {
         };
     },
     mounted() {
-        this.convertImageUrlToFile(this.modelValue);
+        if(this.modelValue) {
+            this.convertImageUrlToFile(this.modelValue);
+        }
     },
     methods: {
         async convertImageUrlToFile(imageUrl) {
@@ -69,7 +75,6 @@ export default {
                 return;
             }
             if (file && file.type.startsWith('image/')) {
-                console.log(file);
                 this.handleFileChange(file);
             } else {
                 this.errorMessage = 'Please upload a valid image file.';
@@ -79,7 +84,7 @@ export default {
         handleFileChange(file) {
             this.imageFile = file;
             this.imagePreview = URL.createObjectURL(file);
-            this.$emit('image-uploaded', file);
+            this.$emit('update:modelValue', file);
         },
         formatBytes(bytes, isKb = false, decimals = 2) {
             if (bytes === 0) return "0 Bytes";

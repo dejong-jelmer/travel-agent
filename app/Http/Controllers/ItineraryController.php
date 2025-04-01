@@ -13,20 +13,13 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ItineraryController extends Controller
 {
-    private string $imagePath;
-
-    public function __construct()
-    {
-        $this->imagePath = config('itinerary.image-path');
-    }
-
     /**
      * Display a listing of a product's itinerary.
      */
     public function index(Product $product): Response
     {
         return Inertia::render('Admin/Products/Itineraries/Index', [
-            'product' => $product->load('itineraries'),
+            'product' => $product->load('itineraries.image'),
         ]);
     }
 
@@ -61,15 +54,11 @@ class ItineraryController extends Controller
         $validatedFields = $request->safe()->except('image');
         $validatedImage = $request->safe()->only('image');
 
-        if (isset($validatedImage['image'])) {
-            $image = $validatedImage['image'];
-            $imagePath = $image->storeAs($this->imagePath, $image->getClientOriginalName(), 'public');
-            $itinerary->image = $imagePath;
-        }
         $itinerary->fill($validatedFields);
         $itinerary->product()->associate($product);
         $itinerary->order = $product->itineraries->count() + 1;
         $itinerary->save();
+        $itinerary->storeImages($validatedImage['image'], 'image');
 
         return redirect()
             ->route('products.itineraries.index', $itinerary->product)
@@ -82,7 +71,7 @@ class ItineraryController extends Controller
     public function edit(Itinerary $itinerary): Response
     {
         return Inertia::render('Admin/Itineraries/Edit', [
-            'itinerary' => $itinerary,
+            'itinerary' => $itinerary->load('image'),
         ]);
     }
 
@@ -94,16 +83,9 @@ class ItineraryController extends Controller
         $validatedFields = $request->safe()->except('image');
         $validatedImage = $request->safe()->only('image');
 
-        if (isset($validatedImage['image'])) {
-            if ($itinerary->hasImage()) {
-                $itinerary->deleteImage();
-            }
-            $image = $validatedImage['image'];
-            $imagePath = $image->storeAs($this->imagePath, $image->getClientOriginalName(), 'public');
-            $itinerary->image = $imagePath;
-        }
-
         $itinerary->update($validatedFields);
+        $itinerary->storeImages($validatedImage['image'], 'image');
+
 
         return redirect()
             ->route('products.itineraries.index', $itinerary->product)

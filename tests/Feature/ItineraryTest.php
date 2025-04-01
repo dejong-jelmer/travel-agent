@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Itinerary;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Image;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
@@ -20,19 +21,16 @@ class ItineraryTest extends TestCase
 
     private Itinerary $itinerary;
 
-    private string $imagePath;
-
     protected function setUp(): void
     {
         parent::setUp();
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        $this->imagePath = config('itinerary.image-path');
+        Storage::fake('public');
+        Storage::makeDirectory('images');
 
-        $this->product = Product::factory()
-            ->has(Itinerary::factory()->count(8), 'itineraries')
-            ->create();
+        $this->product = Product::factory()->has(Itinerary::factory()->count(8), 'itineraries')->create();
 
         $this->itinerary = $this->product->itineraries->first();
     }
@@ -75,9 +73,6 @@ class ItineraryTest extends TestCase
 
     public function test_admin_can_store_a_new_itinerary(): void
     {
-        Storage::fake('public');
-        Storage::makeDirectory($this->imagePath);
-
         $itineraryData = [
             'title' => fake()->city().' - '.fake()->city(),
             'subtitle' => fake()->words(4, true),
@@ -92,12 +87,12 @@ class ItineraryTest extends TestCase
         $response->assertRedirect(route('products.itineraries.index', $product));
 
         $this->assertDatabaseHas('itineraries', Arr::except($itineraryData, ['image']));
-        $storedImagePath = $this->imagePath."/{$itineraryData['image']->getClientOriginalName()}";
+        $storedImagePath = $itineraryData['image']->getClientOriginalName();
 
         $itinerary = Itinerary::where('product_id', $product->id)->first();
-        $this->assertDatabaseHas('itineraries', [
-            'id' => $itinerary->id,
-            'image' => $storedImagePath,
+        $this->assertDatabaseHas('images', [
+            'imageable_id' => $itinerary->id,
+            'path' => $storedImagePath,
         ]);
 
         Storage::assertExists($storedImagePath);
@@ -119,9 +114,6 @@ class ItineraryTest extends TestCase
 
     public function test_admin_can_update_an_existing_itinerary(): void
     {
-        Storage::fake('public');
-        Storage::makeDirectory($this->imagePath);
-
         $itineraryData = [
             'title' => fake()->city().' - '.fake()->city(),
             'subtitle' => fake()->words(4, true),
@@ -134,19 +126,26 @@ class ItineraryTest extends TestCase
         $response->assertRedirect(route('products.itineraries.index', $this->product));
 
         $this->assertDatabaseHas('itineraries', Arr::except($itineraryData, ['image']));
-        $storedImagePath = $this->imagePath."/{$itineraryData['image']->getClientOriginalName()}";
+        $storedImagePath = $itineraryData['image']->getClientOriginalName();
 
-        $this->assertDatabaseHas('itineraries', [
-            'id' => $this->itinerary->id,
-            'image' => $storedImagePath,
+        $this->assertDatabaseHas('images', [
+            'imageable_id' => $this->itinerary->id,
+            'path' => $storedImagePath,
         ]);
 
         Storage::assertExists($storedImagePath);
     }
 
-    public function test_admin_can_destroy_an_existing_itinerary(): void
+    public function test_admin_can_destroy_an_itinerary(): void
     {
+        $image = Image::factory()->create([
+            'imageable_id' => $this->itinerary->id,
+            'imageable_type' => Itinerary::class,
+        ]);
         $response = $this->delete(route('itineraries.destroy', $this->itinerary));
         $response->assertRedirect(route('products.itineraries.index', $this->product));
+
+        $this->assertSoftDeleted($this->itinerary);
+        $this->assertSoftDeleted($image);
     }
 }

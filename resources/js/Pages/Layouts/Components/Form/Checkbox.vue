@@ -1,5 +1,5 @@
 <template>
-    <label class="flex items-center space-x-2 cursor-pointer">
+    <label class="flex items-center gap-x-2 cursor-pointer">
       <input
         type="checkbox"
         :checked="modelValue"
@@ -7,7 +7,7 @@
         class="hidden peer"
       />
       <div
-        class="w-5 h-5 flex items-center justify-center border-2 border-custom-secondary rounded-md transition-all peer-checked:bg-custom-primary peer-checked:border-custom-secondary"
+        class="w-5 h-5 flex items-center justify-center border-2 border-custom-dark rounded-md transition-all peer-checked:bg-custom-primary peer-checked:border-custom-primary"
       >
         <svg
           v-if="modelValue"

@@ -21,56 +21,64 @@
 export default {
     name: "MultiImageUploader",
     props: {
-        modelValue: Array,
+        modelValue: {
+            type: Array,
+            default: () => [],
+        },
     },
     data() {
         return {
             uploadedImages: [],
-            previewImages: this.modelValue,
         };
     },
-    mounted() {
-        this.convertImageUrlsToFiles(this.modelValue);
+    async mounted() {
+        if (!this.initialized) {
+            const imageUrls = this.modelValue.filter(url => typeof url === 'string');
+            if (imageUrls.length > 0) {
+                await this.convertImageUrlsToFiles(imageUrls);
+            }
+        }
+    },
+    computed: {
+        previewImages() {
+            return this.uploadedImages.map(file => URL.createObjectURL(file));
+        },
     },
     methods: {
         async convertImageUrlsToFiles(imageUrls) {
-            this.uploadedImages = [];
-
-            try {
-                for (const imageUrl of imageUrls) {
+            let newFiles = [];
+            for (const imageUrl of imageUrls) {
+                try {
                     const response = await fetch(imageUrl);
                     if (!response.ok) {
-                        throw new Error(`Kon de afbeelding niet downloaden: ${imageUrl}`);
+                        console.warn(`Kon de afbeelding niet downloaden: ${imageUrl}`);
+                        continue;
                     }
-
                     const blob = await response.blob();
-
                     const fileName = imageUrl.split('/').pop();
                     const file = new File([blob], fileName, { type: blob.type });
-
-                    this.uploadedImages.push(file);
+                    newFiles.push(file);
+                } catch (error) {
+                    console.error("Fout bij het converteren van de URLs naar File objecten:", error);
                 }
-                this.$emit("update:modelValue", [...this.uploadedImages]);
-
-                console.log('Array van File objecten:', this.uploadedImages);
-            } catch (error) {
-                console.error('Fout bij het converteren van de URLs naar File objecten:', error);
-                this.uploadedImages = [];
+            }
+            if (newFiles.length > 0) {
+                this.uploadedImages.push(...newFiles);
+                this.emitUpdate();
             }
         },
         handleFiles(event) {
             const files = Array.from(event.target.files);
-            const newImages = files.map((file) => URL.createObjectURL(file));
-
-            this.previewImages.push(...newImages);
-            this.$emit("update:modelValue", [...files]);
+            this.uploadedImages.push(...files);
+            this.emitUpdate();
         },
         removeImage(index) {
-            this.previewImages.splice(index, 1);
-            const updatedFiles = [...this.modelValue];
-            updatedFiles.splice(index, 1);
-            this.$emit("update:modelValue", updatedFiles);
+            this.uploadedImages.splice(index, 1);
+            this.emitUpdate();
         },
+        emitUpdate() {
+            this.$emit("update:modelValue", [...this.uploadedImages]);
+        }
     },
 };
 </script>
