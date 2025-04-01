@@ -26,6 +26,7 @@ class Itinerary extends Model
         parent::boot();
         static::deleting(fn ($itinerary) => $itinerary->image()->delete());
         static::deleted(fn ($itinerary) => $itinerary->reOrder());
+        static::restoring(fn ($itinerary) => $itinerary->image()->withTrashed()->restore());
     }
 
     public function product()

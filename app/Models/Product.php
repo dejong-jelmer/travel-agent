@@ -61,6 +61,7 @@ class Product extends Model
 
         static::restoring(function ($product) {
             $product->images()->withTrashed()->restore();
+            $product->featuredImage()->withTrashed()->restore();
             $product->itineraries()->withTrashed()->restore();
         });
     }
