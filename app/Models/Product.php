@@ -77,12 +77,12 @@ class Product extends Model
         return $this->belongsToMany(Country::class);
     }
 
-    public function getCountriesListAttribute(): String
+    public function getCountriesListAttribute(): string
     {
         $countries = $this->countries->pluck('name');
 
         if ($countries->count() > 1) {
-            return $countries->slice(0, -1)->implode(', ') . ' & ' . $countries->last();
+            return $countries->slice(0, -1)->implode(', ').' & '.$countries->last();
         }
 
         return $countries->first() ?? '';

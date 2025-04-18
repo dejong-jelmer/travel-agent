@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
-use libphonenumber\PhoneNumberUtil;
 use libphonenumber\PhoneNumberFormat;
+use libphonenumber\PhoneNumberUtil;
 
 class PhoneNumberService
 {
     protected string $raw;
+
     protected $parsed;
+
     protected PhoneNumberUtil $util;
 
     public function __construct(string $phoneNumber)

@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\ContactFromData;
+use App\Http\Requests\ContactRequest;
+use App\Mail\ContactMail;
 use App\Models\Product;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
-use App\Mail\ContactMail;
-use App\Http\Requests\ContactRequest;
-use Illuminate\Support\Facades\Mail;
-use App\DTO\ContactFromData;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller

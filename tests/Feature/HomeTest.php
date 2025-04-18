@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Mail\ContactMail;
 use App\Models\Country;
 use App\Models\Product;
-use App\Mail\ContactMail;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -82,7 +82,7 @@ class HomeTest extends TestCase
             'text' => fake()->text(500),
         ];
 
-        $response = $this->post(route("contact", $contactData));
+        $response = $this->post(route('contact', $contactData));
         $response->assertStatus(200);
 
         $toAddress = config('mail.to');

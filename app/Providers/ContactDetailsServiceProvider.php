@@ -4,8 +4,8 @@ namespace App\Providers;
 
 use App\DTO\ContactDetails;
 use App\Services\ContactDetailsService;
-use Illuminate\Support\ServiceProvider;
 use App\Services\PhoneNumberService;
+use Illuminate\Support\ServiceProvider;
 
 class ContactDetailsServiceProvider extends ServiceProvider
 {
@@ -23,6 +23,7 @@ class ContactDetailsServiceProvider extends ServiceProvider
                 mapsLink: config('contact.maps'),
                 telephone: new PhoneNumberService(config('contact.phone'))
             );
+
             return new ContactDetailsService($details);
         });
     }

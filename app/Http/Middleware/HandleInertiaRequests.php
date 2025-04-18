@@ -2,13 +2,11 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\ContactDetailsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
-use App\Services\PhoneNumberService;
-use App\Services\ContactDetailsService;
 use Inertia\Middleware;
-use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -63,7 +61,7 @@ class HandleInertiaRequests extends Middleware
                 'mapsLink' => function () use ($contactService) {
                     return $contactService->getContact('mapsLink');
                 },
-            ]
+            ],
         ]);
     }
 }
