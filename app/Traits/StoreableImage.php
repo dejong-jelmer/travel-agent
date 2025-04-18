@@ -16,7 +16,7 @@ trait StoreableImage
      *
      * @throws \InvalidArgumentException  if array doesn't have instances of \Illuminate\Http\UploadedFile
      */
-    public function storeImages(UploadedFile|array $files = [], String $relation, bool $isFeatured = false): void
+    public function storeImages(UploadedFile|array $files, String $relation, bool $isFeatured = false): void
     {
         $imagePaths = [];
         $images = is_array($files) ? $files : [$files];
@@ -26,7 +26,7 @@ trait StoreableImage
                 throw new InvalidArgumentException('Expected instance of Illuminate\Http\UploadedFile.');
             }
             $imagePaths[] = [
-                'path' => $image->storeAs($image->getClientOriginalName()) ?: $image->getClientOriginalName(),
+                'path' => $image->storeAs('', $image->getClientOriginalName(), 'public') ?: $image->getClientOriginalName(),
                 'featured' => $isFeatured,
             ];
         }

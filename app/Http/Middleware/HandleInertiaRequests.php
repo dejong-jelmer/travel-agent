@@ -5,7 +5,10 @@ namespace App\Http\Middleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Config;
+use App\Services\PhoneNumberService;
+use App\Services\ContactDetailsService;
 use Inertia\Middleware;
+use SebastianBergmann\CodeUnit\FunctionUnit;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -37,11 +40,30 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $contactService = app(ContactDetailsService::class);
+
         return array_merge(parent::share($request), [
             'auth' => [
                 'user' => Auth::user(),
             ],
             'settings' => Config::get('app-settings'),
+            'contact' => [
+                'telephone' => function () use ($contactService) {
+                    return [
+                        'tel' => $contactService->getContact('telephone')->forTelLink(),
+                        'display' => $contactService->getContact('telephone')->forDisplay(),
+                    ];
+                },
+                'fullAddress' => function () use ($contactService) {
+                    return $contactService->fullAddress();
+                },
+                'mail' => function () use ($contactService) {
+                    return $contactService->getContact('mail');
+                },
+                'mapsLink' => function () use ($contactService) {
+                    return $contactService->getContact('mapsLink');
+                },
+            ]
         ]);
     }
 }

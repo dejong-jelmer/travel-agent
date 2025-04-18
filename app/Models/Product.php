@@ -31,6 +31,7 @@ class Product extends Model
     protected $appends = [
         'image_urls',
         'raw_price',
+        'countries_list',
     ];
 
     protected $casts = [
@@ -76,9 +77,15 @@ class Product extends Model
         return $this->belongsToMany(Country::class);
     }
 
-    public function country(): Country
+    public function getCountriesListAttribute(): String
     {
-        return $this->countries()->first();
+        $countries = $this->countries->pluck('name');
+
+        if ($countries->count() > 1) {
+            return $countries->slice(0, -1)->implode(', ') . ' & ' . $countries->last();
+        }
+
+        return $countries->first() ?? '';
     }
 
     public function itineraries()
@@ -105,5 +112,4 @@ class Product extends Model
     {
         return $this->images->pluck('path');
     }
-
 }

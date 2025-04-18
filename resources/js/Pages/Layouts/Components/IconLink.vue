@@ -1,7 +1,7 @@
 <script setup>
 import { Delete, Edit, View, Itinerary, Save, Add } from '@/Pages/Icons';
 import { Inertia } from '@inertiajs/inertia';
-import { shallowRef, markRaw, computed } from 'vue';
+import { shallowRef, markRaw } from 'vue';
 
 const props = defineProps({
     icon: {

@@ -1,18 +1,33 @@
 <template>
-    <div class="h-screen bg-cover bg-center flex items-center justify-center text-white text-center px-6" style="background-image: url('https://picsum.photos/1600/900');">
-      <div>
-        <h1 class="text-4xl md:text-6xl font-bold text-shadow-lg">{{ title }}</h1>
-        <p class="mt-4 text-lg md:text-xl text-shadow-xl">{{ subtitle }}</p>
-      </div>
+    <div  :class="navbarClasses" class="fixed inset-x-0 top-0 z-10">
+        <Topbar></Topbar>
+        <Nav></Nav>
     </div>
 </template>
-<script>
-export default {
-    data() {
-      return {
-        title: window.appName,
-        subtitle: "reizen met oog voor de toekomst"
-      };
-    }
+<script setup>
+import Nav from './Nav.vue';
+import Topbar from './Topbar.vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue'
+
+const scrolledPast = ref(false)
+
+const onScroll = () => {
+  scrolledPast.value = window.scrollY > window.innerHeight
 }
+
+onMounted(() => {
+  window.addEventListener('scroll', onScroll)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', onScroll)
+})
+
+const navbarClasses = computed(() => {
+  return [
+    'transition-all duration-300',
+    scrolledPast.value ? 'bg-deep-green' : 'bg-transparent'
+  ]
+})
 </script>
+

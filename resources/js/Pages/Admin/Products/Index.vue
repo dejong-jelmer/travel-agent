@@ -1,8 +1,15 @@
 <script setup>
+import { reactive, ref } from 'vue'
 import Layout from '@/Pages/Layouts/Layout.vue'
 import { Link } from '@inertiajs/vue3';
 import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
 import { More } from '@/Pages/Icons';
+import { Inertia } from '@inertiajs/inertia';
+
+defineProps({
+    products: Array,
+})
+const showMoreOptions = reactive({});
 
 </script>
 <template>
@@ -28,7 +35,7 @@ import { More } from '@/Pages/Icons';
                         <tr v-for="(product, index) in products" :key="product.id" class="hover:bg-gray-100 transition">
                             <td class="py-4 px-6 text-center">{{ index + 1 }}</td>
                             <td class="py-4 px-6 text-center">{{ product.name }}</td>
-                            <td class="py-4 px-6 text-center">{{ product.countries?.map(country => country.name).join(",") }}</td>
+                            <td class="py-4 px-6 text-center">{{ product.countries_list }}</td>
                             <td class="py-4 px-6 text-center">€ {{ product.price }}</td>
                             <td class="py-4 px-6 text-center">{{ product.duration }}</td>
                             <td class="py-4 px-6 text-center space-y-2">
@@ -59,21 +66,3 @@ import { More } from '@/Pages/Icons';
         </div>
     </Layout>
 </template>
-
-<script>
-export default {
-    props: {
-        products: Array,
-    },
-    data() {
-        return {
-            showMoreOptions: {}
-        }
-    },
-    methods: {
-        editProduct(product) {
-            this.$inertia.visit(route('products.show', { product }));
-        }
-    }
-};
-</script>

@@ -9,6 +9,7 @@ import {
     MultiImageUploader
 } from './Form';
 
+const emit = defineEmits(['submit'])
 
 const props = defineProps({
     errors: Object,
@@ -20,7 +21,7 @@ const props = defineProps({
     <form @submit.prevent="submit">
         <div class="mx-4 p-4 tablet:p-6 laptop:p-8 space-y-6 bg-white rounded-lg shadow">
             <div class="w-full flex justify-start">
-                <IconLink icon="Save" @click="submit" v-tippy="'Sla reisproduct op'" class="mx-0" />
+                <IconLink icon="Save" @click="emit('submit')" v-tippy="'Sla reisproduct op'" class="mx-0" />
             </div>
 
             <div class="flex flex-col tablet:flex-row tablet:space-x-6 space-y-6 tablet:space-y-0">
@@ -49,7 +50,7 @@ const props = defineProps({
                                 v-model="form.duration" :feedback="errors.duration" />
                             <Select name="country" label="Gekoppelde landen" v-model="form.countries" :multiple="true"
                                 :required="true" :options="countries" :feedback="errors.countries"
-                                :first-option="'Koppel één of meerdere landen'" />
+                                :placeholder="'Koppel één of meerdere landen'" />
                         </div>
                     </div>
                 </div>
@@ -57,19 +58,3 @@ const props = defineProps({
         </div>
     </form>
 </template>
-<script>
-export default {
-    components: {
-        ImageUploader,
-        MultiImageUploader,
-        Input,
-        Text,
-        Checkbox
-    },
-    methods: {
-        submit() {
-            this.$emit('submit');
-        }
-    }
-}
-</script>

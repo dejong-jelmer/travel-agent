@@ -1,15 +1,28 @@
 <script setup>
+import { reactive } from "vue";
 import { useForm } from "@inertiajs/vue3";
-
 import Layout from "@/Pages/Layouts/Layout.vue";
-import { Input, Text, ImageUploader } from '@/Pages/Layouts/Components/Form';
-import ItineraryForm from '@/Pages/Layouts/Components/ItineraryForm.vue';
-
+import ItineraryForm from "@/Pages/Layouts/Components/ItineraryForm.vue";
 
 const props = defineProps({
     product: Object,
     errors: Object,
 });
+
+const form = reactive({
+    title: '',
+    subtitle: '',
+    description: '',
+    image: '',
+    remark: '',
+});
+
+function submit() {
+    const submitForm = useForm(form);
+    submitForm.post(route("products.itineraries.store", props.product.id), {
+        forceFormData: true,
+    });
+}
 </script>
 
 <template>
@@ -17,29 +30,3 @@ const props = defineProps({
         <ItineraryForm :form="form" :errors="errors" @submit="submit" />
     </Layout>
 </template>
-<script>
-export default {
-  components: {
-    ItineraryForm,
-  },
-  data() {
-    return {
-      uploadedImage: null,
-      form: {
-        title: '',
-        subtitle: '',
-        description: '',
-        image: '',
-        remark: '',
-      },
-    }
-  },
-
-  methods: {
-    submit() {
-        const form = useForm(this.form);
-        form.post(route("products.itineraries.store", this.product.id), { forceFormData: true });
-    }
-  },
-};
-</script>
