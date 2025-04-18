@@ -3,9 +3,9 @@
 namespace Database\Seeders;
 
 use App\Models\Country;
+use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Product;
-use App\Models\Image;
 use App\Models\User;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;

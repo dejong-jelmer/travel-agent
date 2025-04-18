@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Image;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;

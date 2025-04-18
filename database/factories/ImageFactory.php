@@ -24,6 +24,7 @@ class ImageFactory extends Factory
         'Verona-Opreisnl-Ciaotutti-768x488',
         'Visit-Sopot-Hotel-Sofitel-Grand-Sopot-_DSC1934m1_e-1200x801-1187768066',
     ];
+
     /**
      * Define the model's default state.
      *
@@ -32,7 +33,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'path' => fake()->randomElement(self::PATHS) . '.jpg',
+            'path' => fake()->randomElement(self::PATHS).'.jpg',
             'featured' => false,
         ];
     }
