@@ -6,7 +6,7 @@ import Header from '@/Pages/Layouts/Components/Header.vue';
 import FlashMessage from '@/Pages/Layouts/Components/FlashMessage.vue';
 import Back from '@/Pages/Layouts/Components/Back.vue';
 import Footer from '@/Pages/Layouts/Components/Footer.vue';
-import { useToastWatcher } from '@/composables/toastWatcher.js';
+import { useToastWatcher } from '@/Composables/toastWatcher.js';
 
 const props = defineProps({
      title: String,
