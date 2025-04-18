@@ -4,7 +4,6 @@ namespace App\Mail;
 
 use App\DTO\ContactFromData;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
@@ -19,7 +18,7 @@ class ContactMail extends Mailable
      */
     public function __construct(
         public ContactFromData $contact
-    ){}
+    ) {}
 
     /**
      * Get the message envelope.
