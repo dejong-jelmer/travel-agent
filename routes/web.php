@@ -10,8 +10,9 @@ use Inertia\Inertia;
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-mij', [HomeController::class, 'about'])->name('about');
-Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-Route::get('/{product:slug}', [HomeController::class, 'showProduct'])->name('trip.show');
+Route::get('/contact', [HomeController::class, 'contact']);
+Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact');
+Route::get('/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');
 
 // Admin routes
 Route::get('/admin/login', function () {

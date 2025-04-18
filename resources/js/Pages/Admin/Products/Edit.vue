@@ -1,14 +1,32 @@
 <script setup>
+import { reactive } from 'vue'
 import { useForm } from "@inertiajs/vue3";
 import Layout from "@/Pages/Layouts/Layout.vue";
 import ProductForm from '@/Pages/Layouts/Components/ProductForm.vue';
-
 
 const props = defineProps({
     product: Object,
     errors: Object,
     countries: Object,
 });
+
+const form = reactive({
+    name: props.product.name,
+    description: props.product.description,
+    slug: props.product.slug,
+    price: props.product.raw_price,
+    duration: props.product.duration,
+    countries: props.product.countries?.map(country => country.id),
+    featuredImage: props.product.featured_image?.path,
+    images: props.product.image_urls,
+    active: props.product.active,
+    featured: props.product.featured,
+})
+
+function submit() {
+    const submitForm = useForm(form);
+    submitForm.post(route("products.update", props.product), { forceFormData: true });
+}
 </script>
 
 <template>
@@ -16,29 +34,3 @@ const props = defineProps({
         <ProductForm :form="form" :errors="errors" :countries="countries" @submit="submit" />
     </Layout>
 </template>
-<script>
-export default {
-  data() {
-    return {
-      form: {
-        name: this.product.name,
-        description: this.product.description,
-        slug: this.product.slug,
-        price: this.product.raw_price,
-        duration: this.product.duration,
-        countries: this.product.countries?.map(country => country.id),
-        featuredImage: this.product.featured_image?.path,
-        images: this.product.image_urls,
-        active: this.product.active,
-        featured: this.product.featured,
-      },
-    }
-  },
-  methods: {
-    submit() {
-        const form = useForm(this.form);
-        form.post(route("products.update", this.product), { forceFormData: true });
-    }
-  },
-};
-</script>

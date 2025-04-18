@@ -3,12 +3,8 @@
 @tailwind utilities;
 
 @layer components {
-    .section {
-        @apply px-40 pt-20
-    }
-
     .form-input {
-        @apply block w-full mt-2 px-3 py-4 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-custom-primary focus:border-custom-primary text-base;
+        @apply block w-full mt-2 px-3 py-4 border border-deep-blue text-deep-blue rounded-md shadow-sm focus:outline-none focus:ring-ochre-yellow focus:border-ochre-yellow text-base;
     }
 
     .form-label {
@@ -16,13 +12,10 @@
     }
 
     .form-button {
-        @apply px-6 py-3 font-semibold cursor-pointer select-none text-white bg-custom-dark rounded-lg shadow-lg transition-all duration-300 ease-out hover:bg-custom-primary focus:outline-none focus:ring-2 focus:ring-custom-dark focus:ring-offset-2 cursor-pointer
-    }
-    .info-button {
-        @apply bg-transparent p-2 rounded-lg border border-custom-dark hover:bg-gray-300;
+        @apply px-6 py-3 font-semibold cursor-pointer select-none text-white bg-custom-dark rounded-lg shadow-lg transition-all duration-300 ease-out hover:bg-custom-primary focus:outline-none focus:ring-2 focus:ring-custom-dark focus:ring-offset-2;
     }
 
-    .form-button-danger {
-        @apply form-button bg-red-700 hover:bg-red-400
+    .info-button {
+        @apply bg-transparent p-2 rounded-lg border border-custom-dark hover:bg-gray-300;
     }
 }

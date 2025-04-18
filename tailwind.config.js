@@ -1,4 +1,5 @@
 import defaultTheme from 'tailwindcss/defaultTheme';
+import screens from './resources/js/screens.js';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -12,45 +13,43 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Roboto', ...defaultTheme.fontFamily.sans],
+                sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+            },
+            fontSize: {
+                '2xs': '10px'
             },
             height: {
                 'screen-minus-nav': 'calc(100vh - 6rem)',
-              },
-              colors: {
+            },
+            colors: {
+                'deep-green': '#2F4F4F',
+                'light-green': '#AFCB98',
+                'ochre-yellow': '#D4A017',
+                'light-beige': '#F4EDE2',
+                'warm-terracotta': '#C96F53',
+                'deep-blue': '#1B3A4B',
+                'light-blue': '#A7C6DA',
+                'background-peach': '#FAF3EB ',
+                // custom
                 'custom-light': '#8ecae6',
                 'custom-primary': '#219ebc',
                 'custom-dark': '#231942',
                 'custom-secondary': '#ffb703',
                 'custom-accent': '#fb8500',
                 'custom-red': '#f44336'
-              },
-              textShadow: {
-                'default': '2px 2px 4px rgba(0, 0, 0, 0.5)',
-                'lg': '4px 4px 8px rgba(0, 0, 0, 0.5)',
-                'xl': '6px 6px 12px rgba(0, 0, 0, 0.5)',
-              },
-              screens: {
-                'tablet': '640px',
-                'laptop': '1024px',
-                'desktop': '1580px',
-              },
+            },
+            screens: screens, // {tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
+            keyframes: {
+                'slide-left-right': {
+                    '0%, 100%': { transform: 'translateX(0px)' },
+                    '33%': { transform: 'translateX(-25px)' },
+                    '66%': { transform: 'translateX(25px)' },
+                },
+            },
+            animation: {
+                'wiggle-x': 'slide-left-right 6s ease-in-out infinite',
+            },
         },
     },
-    plugins: [
-    function({ addUtilities }) {
-        const newUtilities = {
-          '.text-shadow': {
-            textShadow: '2px 2px 4px rgba(0, 0, 0, 0.5)',
-          },
-          '.text-shadow-lg': {
-            textShadow: '4px 4px 8px rgba(0, 0, 0, 0.5)',
-          },
-          '.text-shadow-xl': {
-            textShadow: '6px 6px 12px rgba(0, 0, 0, 0.5)',
-          },
-        };
-        addUtilities(newUtilities);
-      }
-    ],
+    plugins: [],
 };

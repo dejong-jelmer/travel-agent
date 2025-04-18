@@ -1,34 +1,40 @@
 <script setup>
-import Nav from './Components/Nav.vue';
 import { Head, usePage } from '@inertiajs/vue3';
-import { watchEffect } from 'vue';
+import { watchEffect, watch } from 'vue';
 import SideMenu from '@/Pages/Layouts/Components/SideMenu.vue';
+import Header from '@/Pages/Layouts/Components/Header.vue';
 import FlashMessage from '@/Pages/Layouts/Components/FlashMessage.vue';
 import Back from '@/Pages/Layouts/Components/Back.vue';
+import Footer from '@/Pages/Layouts/Components/Footer.vue';
+import { useToastWatcher } from '@/composables/toastWatcher.js';
 
-const props = defineProps({ title: String });
+const props = defineProps({
+     title: String,
+     telephone: Object
+    });
+console.log(props.telephone);
+
 const user = usePage().props.auth?.user ?? {};
 const flash = usePage().props.flash ?? {};
-
 watchEffect(() => {
-  document.title = usePage().props.title || `${window.appName} - Historische reizen met oog voor de toekomst`;
+    document.title = usePage().props.title || `${window.appName} - Historische reizen met oog voor de toekomst`;
+});
+
+Object.entries(flash).forEach(([type, message]) => {
+  useToastWatcher(message, type);
 });
 </script>
 
 <template>
     <Head :title="title" />
     <main>
-        <Nav></Nav>
+        <slot name="hero"></slot>
+        <Header></Header>
         <SideMenu v-if="!!user.id"/>
-        <slot name="header"></slot>
-        <section class="py-40 px-2 desktop:px-40">
-            <Back v-if="!!user.id"/>
-            <FlashMessage v-if="flash.success" type="success" :message="flash.success" />
-            <FlashMessage v-if="flash.error" type="error" :message="flash.error" />
+        <section class="pt-40 px-2 wide:px-40">
+            <!-- <Back v-if="!!user.id"/> -->
             <slot></slot>
         </section>
-        <footer>
-            <slot name="footer"></slot>
-        </footer>
+        <Footer />
     </main>
 </template>

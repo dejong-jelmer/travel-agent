@@ -5,6 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use Inertia\Inertia;
 use Inertia\Response;
+use App\Mail\ContactMail;
+use App\Http\Requests\ContactRequest;
+use Illuminate\Support\Facades\Mail;
+use App\DTO\ContactFromData;
+use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller
 {
@@ -36,11 +41,32 @@ class HomeController extends Controller
         ]);
     }
 
-    public function showProduct(Product $product): Response
+    public function submitContact(ContactRequest $request): HttpResponse
     {
-        return Inertia::render('Products/Show', [
-            'title' => "{$this->appName} - {$product->name}",
-            'product' => $product,
+        $validated = $request->safe();
+        $address = config('contact.mail');
+
+        $contact = new ContactFromData(
+            name: $validated['name'],
+            email: $validated['email'],
+            text: $validated['text'],
+            telephone: $validated['telephone'],
+        );
+
+        Mail::to($address)->queue(
+            new ContactMail($contact)
+        );
+
+        return response()->json([
+            'success' => true,
+        ], 200);
+    }
+
+    public function showTrip(Product $trip): Response
+    {
+        return Inertia::render('Trips/Show', [
+            'title' => "{$this->appName} - {$trip->name}",
+            'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries']),
         ]);
     }
 }
