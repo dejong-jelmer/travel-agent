@@ -3,8 +3,7 @@
 namespace App\Services;
 
 use App\DTO\ContactDetails;
-use App\Services\PhoneNumberService;
-use \InvalidArgumentException;
+use InvalidArgumentException;
 
 class ContactDetailsService
 {
@@ -14,14 +13,16 @@ class ContactDetailsService
 
     public function fullAddress(): string
     {
-        return $this->details->address . PHP_EOL . $this->details->postal . ' ' . $this->details->city;
+        return $this->details->address.PHP_EOL.$this->details->postal.' '.$this->details->city;
     }
 
     /**
      * Retrieves a specific contact detail based on the provided key.
-     * @param string $detail The key of the desired contact detail (e.g., 'telephone', 'email', etc.).
+     *
+     * @param  string  $detail  The key of the desired contact detail (e.g., 'telephone', 'email', etc.).
      * @return PhoneNumberService|string Returns a `PhoneNumberService` instance for 'telephone',
      *                                   or a string for other details.
+     *
      * @throws InvalidArgumentException If the given detail does not exist on the `$details` object.
      */
     public function getContact(string $detail): PhoneNumberService|string
@@ -30,7 +31,7 @@ class ContactDetailsService
             'telephone' => $this->getTelephone(),
             default => property_exists($this->details, $detail)
                 ? $this->details->$detail
-                : throw new InvalidArgumentException("Contact detail '$detail' is nog a valid property of '" . ContactDetails::class . "'")
+                : throw new InvalidArgumentException("Contact detail '$detail' is nog a valid property of '".ContactDetails::class."'")
         };
     }
 
