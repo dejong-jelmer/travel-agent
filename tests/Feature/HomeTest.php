@@ -74,18 +74,20 @@ class HomeTest extends TestCase
 
     public function test_subtmit_contact_sends_contact_email()
     {
+        $faker = app(\Faker\Generator::class);
         Mail::fake();
+
         $contactData = [
             'name' => fake()->name(),
             'email' => fake()->email(),
-            'telephone' => fake()->e164PhoneNumber(),
+            'telephone' => $faker->validDutchMobileNumber(),
             'text' => fake()->text(500),
         ];
 
         $response = $this->post(route('contact', $contactData));
         $response->assertStatus(200);
 
-        $toAddress = config('mail.to');
+        $toAddress = config('contact.mail');
         Mail::assertQueued(ContactMail::class, function ($mail) use ($toAddress, $contactData) {
             return $mail->hasTo($toAddress) &&
                    $mail->contact->name === $contactData['name'] &&
