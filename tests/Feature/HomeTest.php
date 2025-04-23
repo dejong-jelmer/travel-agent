@@ -78,7 +78,7 @@ class HomeTest extends TestCase
         $contactData = [
             'name' => fake()->name(),
             'email' => fake()->email(),
-            'telephone' => fake()->phoneNumber(),
+            'telephone' => fake()->e164PhoneNumber(),
             'text' => fake()->text(500),
         ];
 
