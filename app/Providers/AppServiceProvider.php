@@ -5,7 +5,6 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
-use App\Providers\FakerPhoneServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
