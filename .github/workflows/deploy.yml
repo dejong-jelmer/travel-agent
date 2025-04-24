@@ -37,20 +37,13 @@ jobs:
           rm -rf node_modules tests .github
 
       - name: 🚀 Deploy Laravel core to laravel_project/
-        uses: pressidium/lftp-mirror-action@v1
-        with:
-          host: ${{ secrets.SFTP_HOST }}
-          user: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          localDir: './'
-          remoteDir: '/domains/omdatwereizen.nl/laravel_project'
-          mirrorArgs: '--exclude public/'
+        run: |
+            lftp -u ${{ secrets.SFTP_USER }},${{ secrets.SFTP_PASSWORD }} sftp://${{ secrets.SFTP_HOST }} <<EOF
+            mirror --reverse --verbose --exclude public/ ./ /domains/omdatwereizen.nl/laravel_project
+            EOF
 
       - name: 🌐 Deploy public/ to DEFAULT/
-        uses: pressidium/lftp-mirror-action@v1
-        with:
-          host: ${{ secrets.SFTP_HOST }}
-          user: ${{ secrets.SFTP_USER }}
-          password: ${{ secrets.SFTP_PASSWORD }}
-          localDir: './public'
-          remoteDir: '/home/webmaster/domains/mijndomein.nl/DEFAULT'
+        run: |
+            lftp -u ${{ secrets.SFTP_USER }},${{ secrets.SFTP_PASSWORD }} sftp://${{ secrets.SFTP_HOST }} <<EOF
+            mirror --reverse --verbose ./public /domains/omdatwereizen.nl/DEFAULT
+            EOF
