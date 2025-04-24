@@ -36,17 +36,17 @@ jobs:
         run: |
           rm -rf node_modules tests .github
 
-      - name: Install lftp
-        run: sudo apt-get update && sudo apt-get install -y lftp
+      - name: Setup SSH key for authentication
+        run: |
+            mkdir -p ~/.ssh
+            echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+            chmod 600 ~/.ssh/id_rsa
+            ssh-keyscan -H ${{ secrets.SFTP_HOST }} >> ~/.ssh/known_hosts
 
       - name: 🚀 Deploy Laravel core to laravel_project/
         run: |
-            lftp -u ${{ secrets.SFTP_USER }},${{ secrets.SFTP_PASSWORD }} sftp://${{ secrets.SFTP_HOST }} <<EOF
-            mirror --reverse --verbose --exclude public/ ./ /domains/omdatwereizen.nl/laravel_project
-            EOF
+            rsync -avz --exclude public/ --delete ./ username@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/laravel_project
 
       - name: 🌐 Deploy public/ to DEFAULT/
         run: |
-            lftp -u ${{ secrets.SFTP_USER }},${{ secrets.SFTP_PASSWORD }} sftp://${{ secrets.SFTP_HOST }} <<EOF
-            mirror --reverse --verbose ./public /domains/omdatwereizen.nl/DEFAULT
-            EOF
+            rsync -avz ./public/ username@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
