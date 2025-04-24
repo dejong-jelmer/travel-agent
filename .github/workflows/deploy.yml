@@ -1,4 +1,4 @@
-name: Deploy to Production
+name: Build and Deploy to Shared Hosting
 
 on:
   push:
@@ -6,46 +6,41 @@ on:
       - production
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-    - name: Add SSH key
-      uses: webfactory/ssh-agent@v0.8.0
-      with:
-        ssh-private-key: ${{ secrets.SSH_KEY }}
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: mbstring, xml, bcmath
+          coverage: none
 
-    - name: Deploy to Debian server
-      run: |
-        ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-          set -e
+      - name: Install Composer dependencies
+        run: composer install --no-dev --optimize-autoloader
 
-          echo "🔄 Switching to project directory"
-          cd /domains/omdatwereizen.nl
+      - name: Setup Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
-          echo "📥 Pulling latest changes"
-          git pull origin production
+      - name: Install frontend dependencies
+        run: npm ci
 
-          echo "💾 Installing PHP dependencies"
-          composer install --no-dev --optimize-autoloader
+      - name: Build frontend
+        run: npm run build
 
-          echo "📦 Installing Node dependencies"
-          npm ci
+      - name: Upload to server via SFTP
+        uses: pressidium/lftp-mirror-action@v1
+        with:
+          host: ${{ secrets.SFTP_HOST }}
+          user: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          localDir: './'
+          remoteDir: '/domains/omdatwereizen.nl/public_html'
+          mirrorArgs: '--exclude .git/ --exclude node_modules/ --exclude tests/ --exclude .github/'
 
-          echo "⚙️ Building frontend"
-          npm run build
-
-          echo "🧼 Clearing and caching Laravel config"
-          php artisan config:clear
-          php artisan config:cache
-          php artisan route:cache
-          php artisan view:cache
-
-          echo "📂 Running migrations"
-          # php artisan migrate --force
-
-          echo "✅ Deployment complete"
-        EOF
