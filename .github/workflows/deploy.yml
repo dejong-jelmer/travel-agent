@@ -1,56 +1,83 @@
-name: Build & Deploy Laravel to Shared Hosting
+name: 🚀 Deploy Laravel App to Production
 
 on:
   push:
     branches:
       - production
+  pull_request:
+    branches:
+      - production
 
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 🛒 Checkout repo
+      - name: 🛒 Checkout code
         uses: actions/checkout@v3
 
-      - name: 🧰 Setup PHP
+      - name: 🧰 Setup PHP & Composer
         uses: shivammathur/setup-php@v2
         with:
           php-version: 8.3
-          extensions: mbstring, xml, bcmath
+          extensions: mbstring, bcmath, intl, pdo, openssl
 
       - name: 📦 Install Composer dependencies
         run: composer install --no-dev --optimize-autoloader
 
-      - name: ⚙️ Setup Node
+      - name: 🧶 Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '22'
 
-      - name: 📦 Install NPM dependencies & build
-        run: |
-          npm ci
-          npm run build
+      - name: 📦 Install NPM dependencies
+        run: npm ci
+
+      - name: 🔨 Build Vite assets
+        run: npm run build
 
       - name: 🧼 Clean up dev files
         run: |
           rm -rf node_modules tests .github
-      - name: Fix permissions before deploy
-        run: |
-          chmod -R 775 storage
-          chmod -R 775 bootstrap/cache
 
-      - name: Setup SSH key for authentication
+      - name: 🧠 Set production paths in index.php
+        run: |
+          sed -i "s|__DIR__.'/../vendor/autoload.php'|__DIR__.'/../../laravel_project/vendor/autoload.php'|" public/index.php
+          sed -i "s|__DIR__.'/../bootstrap/app.php'|__DIR__.'/../../laravel_project/bootstrap/app.php'|" public/index.php
+
+      - name: 🐘 Prepare logs and permissions
+        run: |
+          mkdir -p storage/logs
+          touch storage/logs/laravel.log
+          chmod -R 775 storage bootstrap/cache
+      - name: 🔑 Setup SSH key for authentication
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: 🚀 Deploy Laravel core to laravel_project/
+      - name: 🚚 Upload to server
         run: |
-          rsync -avz --exclude public/ --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/laravel_project
+          chmod 600 ~/.ssh/id_rsa
+          rsync -avz --delete \
+            --exclude=node_modules \
+            --exclude=.git \
+            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            ./ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/laravel_project
 
       - name: 🌐 Deploy public/ to DEFAULT/
         run: |
           rsync -avz ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
+
+      - name: 📁 Copy .env on server
+        run: |
+          ssh -i ~/.ssh/deploy ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cp /domains/domein.nl/.env /domains/omdatwereizen.nl/laravel_project/.env && \
+            cd /domains/domein.nl/laravel_project && \
+            php artisan key:generate && \
+            php artisan config:clear && \
+            php artisan config:cache && \
+            php artisan route:cache && \
+            php artisan view:cache"
