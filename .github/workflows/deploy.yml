@@ -35,7 +35,7 @@ jobs:
       - name: 🧼 Clean up dev files
         run: |
           rm -rf node_modules tests .github
-
+          
       - name: Setup SSH key for authentication
         run: |
             mkdir -p ~/.ssh
