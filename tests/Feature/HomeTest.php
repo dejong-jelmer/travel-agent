@@ -74,13 +74,13 @@ class HomeTest extends TestCase
 
     public function test_subtmit_contact_sends_contact_email()
     {
-        // $faker = app(\Faker\Generator::class);
+        $faker = app(\Faker\Generator::class);
         Mail::fake();
 
         $contactData = [
             'name' => fake()->name(),
             'email' => fake()->email(),
-            'telephone' => fake()->phoneNumber(),
+            'telephone' => $faker->validDutchMobileNumber(),
             'text' => fake()->text(500),
         ];
 

@@ -18,7 +18,7 @@ class ContactRequest extends FormRequest
         : 'email:rfc,dns';
 
         $phoneValidation = app()->environment('testing')
-        ? ''
+        ? 'phone'
         : 'phone:NL,BE,FORMAT_E164';
 
         return [
