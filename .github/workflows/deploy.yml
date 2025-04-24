@@ -35,18 +35,22 @@ jobs:
       - name: 🧼 Clean up dev files
         run: |
           rm -rf node_modules tests .github
+      - name: Fix permissions before deploy
+        run: |
+          chmod -R 775 storage
+          chmod -R 775 bootstrap/cache
 
       - name: Setup SSH key for authentication
         run: |
-            mkdir -p ~/.ssh
-            echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-            chmod 600 ~/.ssh/id_rsa
-            ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: 🚀 Deploy Laravel core to laravel_project/
         run: |
-            rsync -avz --exclude public/ --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/laravel_project
+          rsync -avz --exclude public/ --delete ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/laravel_project
 
       - name: 🌐 Deploy public/ to DEFAULT/
         run: |
-            rsync -avz ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
+          rsync -avz ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
