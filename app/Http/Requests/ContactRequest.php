@@ -18,14 +18,14 @@ class ContactRequest extends FormRequest
         : 'email:rfc,dns';
 
         $phoneValidation = app()->environment('testing')
-        ? 'phone:'
+        ? ''
         : 'phone:NL,BE,FORMAT_E164';
 
         return [
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', $emailValidation, 'max:100'],
             'text' => ['required', 'string', 'min:5', 'max:2000'],
-            'telephone' => ['nullable', 'string', 'phone:NL,BE,FORMAT_E164'],
+            'telephone' => ['nullable', 'string', $phoneValidation],
         ];
     }
 
