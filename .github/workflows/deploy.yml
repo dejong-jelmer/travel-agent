@@ -4,9 +4,6 @@ on:
   push:
     branches:
       - production
-  pull_request:
-    branches:
-      - production
 
 jobs:
   deploy:
@@ -74,8 +71,8 @@ jobs:
       - name: 📁 Copy .env on server
         run: |
           ssh -i ~/.ssh/deploy ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            cp /domains/domein.nl/.env /domains/omdatwereizen.nl/laravel_project/.env && \
-            cd /domains/domein.nl/laravel_project && \
+            cp /domains/omdatwereizen.nl/.env /domains/omdatwereizen.nl/laravel_project/.env && \
+            cd /domains/omdatwereizen.nl/laravel_project && \
             php artisan key:generate && \
             php artisan config:clear && \
             php artisan config:cache && \
