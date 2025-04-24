@@ -1,6 +1,12 @@
-name: Fix Code Style
+name: Fix Code Style - lint
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   lint:
