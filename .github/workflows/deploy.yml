@@ -36,6 +36,9 @@ jobs:
         run: |
           rm -rf node_modules tests .github
 
+      - name: Install lftp
+        run: sudo apt-get update && sudo apt-get install -y lftp
+
       - name: 🚀 Deploy Laravel core to laravel_project/
         run: |
             lftp -u ${{ secrets.SFTP_USER }},${{ secrets.SFTP_PASSWORD }} sftp://${{ secrets.SFTP_HOST }} <<EOF
