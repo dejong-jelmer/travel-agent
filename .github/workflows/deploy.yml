@@ -68,6 +68,7 @@ jobs:
       - name: 🧼 Run artisan clear cache commands
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/omdatwereizen.nl/laravel_project &&
             php artisan config:clear && \
             php artisan config:cache && \
             php artisan route:cache && \
