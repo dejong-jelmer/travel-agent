@@ -86,9 +86,9 @@ class HomeTest extends TestCase
 
         $response = $this->post(route('contact', $contactData));
         $response->assertStatus(200);
-
         $toAddress = config('contact.mail');
-        Mail::assertQueued(ContactMail::class, function ($mail) use ($toAddress, $contactData) {
+
+        Mail::assertSent(ContactMail::class, function ($mail) use ($toAddress, $contactData) {
             return $mail->hasTo($toAddress) &&
                    $mail->contact->name === $contactData['name'] &&
                    $mail->contact->email === $contactData['email'] &&

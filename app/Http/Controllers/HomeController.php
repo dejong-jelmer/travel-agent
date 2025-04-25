@@ -53,7 +53,7 @@ class HomeController extends Controller
             telephone: $validated['telephone'],
         );
 
-        Mail::to($address)->queue(
+        Mail::to($address)->send(
             new ContactMail($contact)
         );
 
