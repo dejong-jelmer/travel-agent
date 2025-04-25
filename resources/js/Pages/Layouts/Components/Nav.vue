@@ -55,7 +55,7 @@ const user = usePage().props.auth?.user ?? {};
 export default {
     data() {
         return {
-            logo: "/logo/logo.png",
+            logo: "images/logo/logo.png",
             isMenuOpen: false,
             links: {
                 home: {

@@ -33,21 +33,12 @@ jobs:
       - name: 🔨 Build Vite assets
         run: npm run build
 
-      - name: 🧼 Clean up dev files
-        run: |
-          rm -rf node_modules tests .github
-
       - name: 🧠 Set production paths in index.php
         run: |
           sed -i "s|__DIR__.'/../storage/framework/maintenance.php'|__DIR__.'/../laravel_project/storage/framework/maintenance.php'|" public/index.php
           sed -i "s|__DIR__.'/../vendor/autoload.php'|__DIR__.'/../laravel_project/vendor/autoload.php'|" public/index.php
           sed -i "s|__DIR__.'/../bootstrap/app.php'|__DIR__.'/../laravel_project/bootstrap/app.php'|" public/index.php
 
-      - name: 🐘 Prepare logs and permissions
-        run: |
-          mkdir -p storage/logs
-          touch storage/logs/laravel.log
-          chmod -R 775 storage bootstrap/cache
       - name: 🔑 Setup SSH key for authentication
         run: |
           mkdir -p ~/.ssh
@@ -61,6 +52,8 @@ jobs:
           rsync -avz --delete \
             --exclude=node_modules \
             --exclude=.git \
+            --exclude=.env \
+            --exclude=storage/app/public \
             --exclude=storage/logs \
             --exclude=storage/framework/sessions \
             --exclude=storage/framework/cache \
@@ -77,9 +70,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cp /domains/omdatwereizen.nl/.env /domains/omdatwereizen.nl/laravel_project/.env && \
             cd /domains/omdatwereizen.nl/laravel_project && \
-            php artisan key:generate && \
             php artisan config:clear && \
             php artisan config:cache && \
             php artisan route:cache && \
-            php artisan view:cache && \
-            php artisan storage:link"
+            php artisan view:cache"
