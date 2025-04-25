@@ -61,6 +61,8 @@ jobs:
           rsync -avz --delete \
             --exclude=node_modules \
             --exclude=.git \
+            --exclude=.env \
+            --exclude=storage/app/public \
             --exclude=storage/logs \
             --exclude=storage/framework/sessions \
             --exclude=storage/framework/cache \
@@ -77,9 +79,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cp /domains/omdatwereizen.nl/.env /domains/omdatwereizen.nl/laravel_project/.env && \
             cd /domains/omdatwereizen.nl/laravel_project && \
-            php artisan key:generate && \
             php artisan config:clear && \
             php artisan config:cache && \
             php artisan route:cache && \
-            php artisan view:cache && \
-            php artisan storage:link"
+            php artisan view:cache"
