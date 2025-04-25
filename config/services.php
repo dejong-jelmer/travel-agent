@@ -14,12 +14,12 @@ return [
     |
     */
     'mailjet' => [
-        'key'    => env('MAILJET_API_KEY'),
+        'key' => env('MAILJET_API_KEY'),
         'secret' => env('MAILJET_API_SECRET'),
         'options' => [
-            'url'      => env('MAILJET_API_URL', 'https://api.mailjet.com'),
-            'version'  => 'v3.1',
-            'call'     => true,
+            'url' => env('MAILJET_API_URL', 'https://api.mailjet.com'),
+            'version' => 'v3.1',
+            'call' => true,
         ],
     ],
 
