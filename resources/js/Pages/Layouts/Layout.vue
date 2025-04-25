@@ -12,7 +12,6 @@ const props = defineProps({
      title: String,
      telephone: Object
     });
-console.log(props.telephone);
 
 const user = usePage().props.auth?.user ?? {};
 const flash = usePage().props.flash ?? {};

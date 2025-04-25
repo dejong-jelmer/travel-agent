@@ -65,11 +65,9 @@ jobs:
         run: |
           rsync -avz ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
 
-      - name: 📁 Copy .env on server
+      - name: 🧼 Run artisan clear cache commands
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            cp /domains/omdatwereizen.nl/.env /domains/omdatwereizen.nl/laravel_project/.env && \
-            cd /domains/omdatwereizen.nl/laravel_project && \
             php artisan config:clear && \
             php artisan config:cache && \
             php artisan route:cache && \
