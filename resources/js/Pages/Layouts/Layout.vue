@@ -28,12 +28,10 @@ Object.entries(flash).forEach(([type, message]) => {
     <Head :title="title" />
     <main>
         <slot name="hero"></slot>
-        <Header></Header>
+        <Header />
         <SideMenu v-if="!!user.id"/>
-        <section class="pt-40 px-2 wide:px-40">
-            <!-- <Back v-if="!!user.id"/> -->
-            <slot></slot>
-        </section>
+        <!-- <Back v-if="!!user.id"/> -->
+        <slot></slot>
         <Footer />
     </main>
 </template>

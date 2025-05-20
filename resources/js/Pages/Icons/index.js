@@ -19,6 +19,7 @@ import Euro from './Euro.vue';
 import Duration from './Duration.vue';
 import Directions from './Directions.vue';
 import Swipe from './Swipe.vue';
+import Logo from './Logo.vue';
 
 export {
     Chevron,
@@ -42,4 +43,5 @@ export {
     Duration,
     Directions,
     Swipe,
+    Logo,
 };

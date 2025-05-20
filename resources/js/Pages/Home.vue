@@ -13,23 +13,27 @@ const props = defineProps({
 <template>
     <Layout>
         <template v-slot:hero>
-            <Hero />
+            <section class="section">
+                <Hero />
+            </section>
         </template>
         <main>
-            <article class="h-auto">
-                <Slider :items="products" />
-            </article>
+            <section class="section bg-background-gray">
+                <article class="h-auto">
+                    <Slider :items="products" />
+                </article>
+            </section>
             <article id="contact" class="max-w-screen-desktop scroll-mt-12 mx-auto h-auto py-24 px-1 laptop:px-8">
                 <div
-                    class="px-6 tablet:px-24 py-10 tablet:py-24 border border-deep-blue rounded-2xl"
+                    class="px-6 tablet:px-24 py-10 tablet:py-24 laptop:border laptop:border-primary-green laptop:rounded-xl"
                 >
                     <div class="grid gap-y-6 tablet:gap-y-10">
                         <h2
-                            class="font-semibold text-2xl tablet:text-4xl text-warm-terracotta"
+                            class="font-semibold text-2xl tablet:text-4xl text-accent-earth"
                         >
                             Omdat we graag contact hebben
                         </h2>
-                        <p class="text-base tablet:text-xl text-deep-blue">
+                        <p class="text-base tablet:text-xl text-primary-green">
                             En we u met alle plezier helpen.
                             <br />
                             Bel

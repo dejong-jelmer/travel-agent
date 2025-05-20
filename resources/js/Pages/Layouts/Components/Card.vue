@@ -7,8 +7,8 @@ defineProps({ product: Object });
 </script>
 
 <template>
-    <div class="mx-auto bg-white rounded-2xl shadow-md select-none">
-        <div class="h-[55%] min-h-[180px] rounded-t-2xl overflow-hidden relative">
+    <div class="mx-auto bg-white rounded-xl shadow-sm select-none">
+        <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
             <Link :href="route('trip.show', product)">
                 <div
                     class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 hover:scale-110"
@@ -16,37 +16,37 @@ defineProps({ product: Object });
                 ></div>
             </Link>
         </div>
-        <div class="py-5 px-8 space-y-5 text-left">
-            <h3 class="text-base text-deep-blue line-clamp-1">
+        <div class="py-5 px-8 space-y-2 text-left">
+            <h3 class="text-base text-secondary-blue line-clamp-1">
                 {{ product.countries_list }}
             </h3>
             <h4
-                class="text-xl laptop:text-2xl leading-6 font-bold text-warm-terracotta line-clamp-2 min-h-0 laptop:min-h-16"
+                class="text-xl laptop:text-2xl leading-6 font-bold text-accent-earth line-clamp-2 min-h-0 laptop:min-h-8"
             >
                 {{ product.name }}
             </h4>
-            <p class="text-base text-deep-blue line-clamp-3">{{ product.description }}</p>
+            <p class="text-sm text-contrast-blue line-clamp-3">{{ product.description }}</p>
             <div class="grid gap-y-4">
                 <div class="flex justify-between">
                     <div class="flex flex-col space-y-2">
                         <div class="inline-flex gap-x-1 items-center">
-                            <Euro class="h-8 w-8 text-ochre-yellow"></Euro>
-                            <p class="text-base text-deep-blue inline">
-                                Vanaf&nbsp;€&nbsp;<span class="font-bold"
-                                    >{{ product.price }},-</span
+                            <Euro class="h-6 w-6 text-accent-earth"></Euro>
+                            <p class="text-sm text-contrast-blue inline">
+                                Vanaf&nbsp;<span class="font-bold"
+                                    >€&nbsp;{{ product.price }},-</span
                                 >
                             </p>
                         </div>
                         <div class="inline-flex gap-x-1 items-center">
-                            <Duration class="h-8 w-8 text-ochre-yellow"></Duration>
-                            <p class="text-base text-deep-blue inline">
+                            <Duration class="h-6 w-6 text-accent-earth"></Duration>
+                            <p class="text-sm text-primary-green inline">
                                 {{ product.duration }}&nbsp;dagen
                             </p>
                         </div>
                         <div class="inline-flex gap-x-1 items-center">
-                            <Directions class="h-8 w-8 text-ochre-yellow"></Directions>
-                            <p class="text-base text-deep-blue inline">
-                                <Train class="h-8 w-8 text-deep-blue" />
+                            <Directions class="h-6 w-6 text-accent-earth"></Directions>
+                            <p class="text-sm text-contrast-blue inline">
+                                <Train class="h-6 w-6 text-contrast-blue" />
                             </p>
                         </div>
                     </div>

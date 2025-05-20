@@ -13,7 +13,9 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Poppins', ...defaultTheme.fontFamily.sans],
+                poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
+                tahu : ['tahu', ...defaultTheme.fontFamily.sans],
+                reenie: ['Reenie Beanie', 'cursive'],
             },
             fontSize: {
                 '2xs': '10px'
@@ -22,21 +24,28 @@ export default {
                 'screen-minus-nav': 'calc(100vh - 6rem)',
             },
             colors: {
-                'deep-green': '#2F4F4F',
-                'light-green': '#AFCB98',
-                'ochre-yellow': '#D4A017',
-                'light-beige': '#F4EDE2',
-                'warm-terracotta': '#C96F53',
-                'deep-blue': '#1B3A4B',
-                'light-blue': '#A7C6DA',
-                'background-peach': '#FAF3EB ',
-                // custom
-                'custom-light': '#8ecae6',
-                'custom-primary': '#219ebc',
-                'custom-dark': '#231942',
-                'custom-secondary': '#ffb703',
-                'custom-accent': '#fb8500',
-                'custom-red': '#f44336'
+                primary: {
+                    green: '#1B3A4B', // Bosgroen - Duurzaamheid, natuur, stabiliteit
+                },
+                secondary: {
+                    blue: '#A3BCCB', // Zachtblauw - Betrouwbaarheid, rust
+                },
+                accent: {
+                    earth: '#DCC7AA', // Warm zand - Aards, avontuurlijk maar kalm
+                },
+                background: {
+                    gray: '#F2F4F3', //	Mistgrijs -	Licht, schoon, neutraal
+                },
+                contrast: {
+                    blue: '#2F3E46' , // Nachtblauw	- Diepte, betrouwbaarheid
+                    pink: '#B17C65', // Koperroze - Gedempt, elegant, warm
+                },
+                //🎨 Voorbeeldgebruik:
+                // Primair (Bosgroen): Knoppen, links, headers.
+                // Secundair (Zachtblauw): Achtergronden van secties of iconen.
+                // Accent (Warm zand): Call-to-action-knoppen, illustraties, hover-effecten.
+                // Mistgrijs: Algemene achtergrond, whitespace.
+                // Nachtblauw: Footer, titels, belangrijke nadruk.
             },
             screens: screens, // {tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
             keyframes: {

@@ -91,12 +91,12 @@ const endDrag = () => {
             <template v-if="items.length > visibleItems">
                 <button
                     @click="prevSlide"
-                    class="hidden tablet:block text-4xl font-thin text-deep-blue hover:text-light-blue transition-colors rotate-180"
+                    class="hidden tablet:block text-4xl font-thin text-primary-green hover:text-light-blue transition-colors rotate-180"
                 >
                     <Chevron class="h-12 w-12" />
                 </button>
             </template>
-            <div class="w-full overflow-hidden">
+            <div class="max-w-screen-desktop overflow-hidden">
                 <div
                     ref="slider"
                     class="flex transition-transform duration-500 ease-in-out"
@@ -127,7 +127,7 @@ const endDrag = () => {
             <template v-if="items.length > visibleItems">
                 <button
                     @click="nextSlide"
-                    class="hidden tablet:block text-4xl font-thin text-deep-blue hover:text-light-blue transition-colors"
+                    class="hidden tablet:block text-4xl font-thin text-primary-green hover:text-light-blue transition-colors"
                 >
                     <Chevron class="h-12 w-12" />
                 </button>
@@ -136,4 +136,3 @@ const endDrag = () => {
         <Swiper :hasDragged="hasDragged" />
     </div>
 </template>
-

@@ -1,7 +1,7 @@
 <template>
-    <div  :class="navbarClasses" class="fixed inset-x-0 top-0 z-10">
+    <div :class="navbarClasses" class="fixed inset-x-0 top-0 z-10">
         <Topbar></Topbar>
-        <Nav></Nav>
+        <Nav :class="textIconClasses"></Nav>
     </div>
 </template>
 <script setup>
@@ -22,11 +22,17 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', onScroll)
 })
+const textIconClasses = computed(() => {
+  return [
+    'transition-all duration-300',
+    scrolledPast.value ? 'text-white' : 'text-primary-green'
+  ]
+})
 
 const navbarClasses = computed(() => {
   return [
     'transition-all duration-300',
-    scrolledPast.value ? 'bg-deep-green' : 'bg-transparent'
+    scrolledPast.value ? 'bg-primary-green' : 'bg-transparent'
   ]
 })
 </script>

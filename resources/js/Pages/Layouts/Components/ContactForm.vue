@@ -44,7 +44,7 @@ function submit() {
         <div class="px-0 grid gap-y-6 tablet:gap-y-12">
             <div class="grid tablet:grid-cols-2 gap-6 tablet:gap-12">
                 <div
-                    class="grid gap-6 tablet:flex tablet:flex-col h-full justify-between"
+                    class="grid grid-cols-1 gap-y-6 tablet:flex tablet:flex-col h-full justify-between"
                 >
                     <Input
                         type="text"
