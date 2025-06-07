@@ -5,8 +5,11 @@ namespace App\Helpers;
 class Breadcrumbs
 {
     const PROD_LABEL = ['label' => 'Reis producten'];
+
     const PROD_ROUTE = ['route' => 'products.index'];
+
     const DASH_LABEL = ['label' => 'Dashboard'];
+
     const DASH_ROUTE = ['route' => 'admin.dashboard'];
 
     public static function generate(): array
@@ -50,6 +53,7 @@ class Breadcrumbs
     protected static function productShow(): array
     {
         $product = request()->route('product');
+
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
             [...self::PROD_LABEL, ...self::PROD_ROUTE],
@@ -60,6 +64,7 @@ class Breadcrumbs
     protected static function productEdit(): array
     {
         $product = request()->route('product');
+
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
             [...self::PROD_LABEL, ...self::PROD_ROUTE],
@@ -70,6 +75,7 @@ class Breadcrumbs
     protected static function productItinerariesIndex(): array
     {
         $product = request()->route('product');
+
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
             [...self::PROD_LABEL, ...self::PROD_ROUTE],
@@ -82,6 +88,7 @@ class Breadcrumbs
     {
         $itinerary = request()->route('itinerary');
         $product = $itinerary?->product;
+
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
             [...self::PROD_LABEL, ...self::PROD_ROUTE],

@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Log; // Optioneel, voor logging van fouten
+// Optioneel, voor logging van fouten
 use InvalidArgumentException;
 
 trait StoreableImage
@@ -39,7 +39,7 @@ trait StoreableImage
             }
         }
         $this->$relation()->forceDelete();
-        if (!empty($imageDatabaseEntries)) {
+        if (! empty($imageDatabaseEntries)) {
             $this->$relation()->createMany($imageDatabaseEntries);
         }
     }

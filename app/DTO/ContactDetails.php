@@ -2,8 +2,8 @@
 
 namespace App\DTO;
 
-use App\Services\PhoneNumberService;
 use App\Services\AntiSpamEmailService;
+use App\Services\PhoneNumberService;
 
 class ContactDetails
 {

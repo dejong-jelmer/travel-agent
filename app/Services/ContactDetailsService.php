@@ -13,7 +13,7 @@ class ContactDetailsService
 
     public function fullAddress(): string
     {
-        return $this->details->address . PHP_EOL . $this->details->postal . ' ' . $this->details->city;
+        return $this->details->address.PHP_EOL.$this->details->postal.' '.$this->details->city;
     }
 
     /**
@@ -21,7 +21,7 @@ class ContactDetailsService
      *
      * @param  string  $detail  The key of the desired contact detail (e.g., 'telephone', 'email', etc.).
      * @return PhoneNumberService|AntiSpamEmailService|string Returns a `PhoneNumberService` instance for 'telephone',
-     *                                   or a string for other details.
+     *                                                        or a string for other details.
      *
      * @throws InvalidArgumentException If the given detail does not exist on the `$details` object.
      */
@@ -32,7 +32,7 @@ class ContactDetailsService
             'mail' => $this->getSpamSafeEmail(),
             default => property_exists($this->details, $detail)
                 ? $this->details->$detail
-                : throw new InvalidArgumentException("Contact detail '$detail' is not a valid property of '" . ContactDetails::class . "'")
+                : throw new InvalidArgumentException("Contact detail '$detail' is not a valid property of '".ContactDetails::class."'")
         };
     }
 
