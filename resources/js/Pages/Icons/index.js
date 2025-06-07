@@ -1,4 +1,3 @@
-import Chevron from './Chevron.vue';
 import Edit from './Edit.vue';
 import Train from './Train.vue';
 import NightTrain from './NightTrain.vue';
@@ -6,7 +5,7 @@ import Warning from './Warning.vue';
 import Back from './Back.vue';
 import Delete from './Delete.vue';
 import View from './View.vue';
-import Itinerary from './Itinerary.vue';
+import Calendar from './Calendar.vue';
 import More from './More.vue';
 import Save from './Save.vue';
 import Add from './Add.vue';
@@ -16,12 +15,15 @@ import Sto from './Sto.vue';
 import Calamiteiten from './Calamiteiten.vue';
 import VvKR from './VvKR.vue';
 import Euro from './Euro.vue';
-import Duration from './Duration.vue';
+import Clock from './Clock.vue';
 import Directions from './Directions.vue';
 import Swipe from './Swipe.vue';
+import Logo from './Logo.vue';
+import Tree from './Tree.vue';
+import MapPin from './MapPin.vue';
+import Star from './Star.vue';
 
 export {
-    Chevron,
     Edit,
     Train,
     NightTrain,
@@ -29,7 +31,7 @@ export {
     Back,
     Delete,
     View,
-    Itinerary,
+    Calendar,
     More,
     Save,
     Add,
@@ -39,7 +41,11 @@ export {
     Calamiteiten,
     VvKR,
     Euro,
-    Duration,
+    Clock,
     Directions,
     Swipe,
+    Logo,
+    Tree,
+    MapPin,
+    Star,
 };

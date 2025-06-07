@@ -2,7 +2,7 @@
 import { reactive } from 'vue'
 import { useForm } from "@inertiajs/vue3";
 import IconLink from "@/Pages/Layouts/Components/IconLink.vue";
-import Layout from "@/Pages/Layouts/Layout.vue";
+import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
 import ProductForm from "@/Pages/Layouts/Components/ProductForm.vue";
 
 const props = defineProps({
@@ -30,12 +30,14 @@ function submit() {
 </script>
 
 <template>
-    <Layout>
-        <ProductForm
-            :form="form"
-            :errors="errors"
-            :countries="countries"
-            @submit="submit"
-        />
-    </Layout>
+    <AdminLayout>
+        <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
+            <ProductForm
+                :form="form"
+                :errors="errors"
+                :countries="countries"
+                @submit="submit"
+            />
+        </div>
+    </AdminLayout>
 </template>

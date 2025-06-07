@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Helpers\Breadcrumbs;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
@@ -31,5 +32,7 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
         ]);
+
+        Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());
     }
 }

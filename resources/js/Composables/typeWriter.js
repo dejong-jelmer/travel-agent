@@ -14,12 +14,10 @@ export function useTypeWriter(strings = [], speed = 100, pause = 1500) {
     if (isPaused.value) return;
 
     if (!isDeleting.value) {
-      // Typen
       output.value = current.substring(0, charIndex.value + 1);
       charIndex.value++;
 
       if (charIndex.value === current.length) {
-        // Volledig getypt → pauze en dan wissen
         isPaused.value = true;
         setTimeout(() => {
           isDeleting.value = true;
@@ -29,12 +27,10 @@ export function useTypeWriter(strings = [], speed = 100, pause = 1500) {
         return;
       }
     } else {
-      // Wissen
       output.value = current.substring(0, charIndex.value - 1);
       charIndex.value--;
 
       if (charIndex.value === 0) {
-        // Volledig gewist → volgende zin
         isDeleting.value = false;
         index.value++;
         isPaused.value = true;

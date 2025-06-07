@@ -4,7 +4,11 @@ import Layout from '@/Pages/Layouts/Layout.vue';
 
 <template>
   <Layout>
-    <h1>Contact</h1>
-    <p></p>
+    <section class="section">
+      <article>
+        <h1>Contact</h1>
+        <p></p>
+      </article>
+    </section>
   </Layout>
 </template>
