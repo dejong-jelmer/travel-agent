@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
+use App\Helpers\Breadcrumbs;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
-use App\Helpers\Breadcrumbs;
 
 class AppServiceProvider extends ServiceProvider
 {

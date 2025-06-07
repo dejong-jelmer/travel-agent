@@ -4,8 +4,10 @@ namespace App\Services;
 
 class AntiSpamEmailService
 {
-    private string $localPart; 
+    private string $localPart;
+
     private string $domain;
+
     private string $tld;
 
     public function __construct(protected string $email)
@@ -44,11 +46,11 @@ class AntiSpamEmailService
         $randomClasses = ['txt', 'info', 'data', 'content', 'text'];
         shuffle($randomClasses);
 
-        $antiSpamEmail = '<span class="' . $randomClasses[0] . '">' . htmlspecialchars($this->localPart) . '</span>';
-        $antiSpamEmail .= '<span class="' . $randomClasses[1] . '">&#64;</span>';
-        $antiSpamEmail .= '<span class="' . $randomClasses[2] . '">' . htmlspecialchars($this->domain) . '</span>';
-        $antiSpamEmail .= '<span class="' . $randomClasses[3] . '" aria-hidden="true">' . htmlspecialchars('-info') . '</span>';
-        $antiSpamEmail .= '<span class="' . $randomClasses[4] . '">&#46;' . htmlspecialchars($this->tld) . '</span>';
+        $antiSpamEmail = '<span class="'.$randomClasses[0].'">'.htmlspecialchars($this->localPart).'</span>';
+        $antiSpamEmail .= '<span class="'.$randomClasses[1].'">&#64;</span>';
+        $antiSpamEmail .= '<span class="'.$randomClasses[2].'">'.htmlspecialchars($this->domain).'</span>';
+        $antiSpamEmail .= '<span class="'.$randomClasses[3].'" aria-hidden="true">'.htmlspecialchars('-info').'</span>';
+        $antiSpamEmail .= '<span class="'.$randomClasses[4].'">&#46;'.htmlspecialchars($this->tld).'</span>';
 
         return $antiSpamEmail;
     }

@@ -33,7 +33,6 @@ class PhoneNumberService
             : $this->raw;
     }
 
-
     private function phoneToScrambledHex(string $phone): string
     {
         return bin2hex(strrev($phone));
