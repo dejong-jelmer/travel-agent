@@ -1,10 +1,8 @@
 <script setup>
-import { reactive, ref } from 'vue'
-import Layout from '@/Pages/Layouts/Layout.vue'
-import { Link } from '@inertiajs/vue3';
+import { reactive } from 'vue'
+import AdminLayout from '@/Pages/Layouts/AdminLayout.vue'
 import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
 import { More } from '@/Pages/Icons';
-import { Inertia } from '@inertiajs/inertia';
 
 defineProps({
     products: Array,
@@ -13,11 +11,12 @@ const showMoreOptions = reactive({});
 
 </script>
 <template>
-    <Layout>
-        <div class="pt-[100px] px-4 tablet:px-6 laptop:px-12 desktop:px-16">
+    <AdminLayout>
+        <div class="">
             <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
                 <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Producten</h1>
-                <IconLink v-tippy="'Voeg een reisproduct toe'" icon="Add" type="info" :href="route('products.create')" />
+                <IconLink v-tippy="'Voeg een reisproduct toe'" icon="Add" type="info"
+                    :href="route('products.create')" />
             </div>
             <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
                 <table class="w-full border-collapse">
@@ -50,12 +49,13 @@ const showMoreOptions = reactive({});
                                     </button>
                                 </div>
                                 <div v-if="showMoreOptions[product.id]" class="space-y-2">
-                                    <IconLink class="mx-auto" icon="Itinerary" :href="product.itineraries?.length ?
+                                    <IconLink class="mx-auto" icon="Calendar" :href="product.itineraries?.length ?
                                         route('products.itineraries.index', product)
                                         : route('products.itineraries.create', product)"
                                         v-tippy="'Bekijk reisplan van deze reis'" />
-                                    <IconLink class="mx-auto" type="delete" icon="Delete" :href="route('products.destroy', product)" method="delete"
-                                        :showConfirm="true" prompt="Weet je zeker dat je deze reis wilt verwijderen?"
+                                    <IconLink class="mx-auto" type="delete" icon="Delete"
+                                        :href="route('products.destroy', product)" method="delete" :showConfirm="true"
+                                        prompt="Weet je zeker dat je deze reis wilt verwijderen?"
                                         v-tippy="'Verwijder reisproduct!'" />
                                 </div>
                             </td>
@@ -64,5 +64,5 @@ const showMoreOptions = reactive({});
                 </table>
             </div>
         </div>
-    </Layout>
+    </AdminLayout>
 </template>

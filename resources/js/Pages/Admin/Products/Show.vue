@@ -1,25 +1,16 @@
 <script setup>
-import Layout from "@/Pages/Layouts/Layout.vue";
-import { Link } from '@inertiajs/vue3';
-import { Inertia } from '@inertiajs/inertia';
-
+import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
 
 const props = defineProps({
     product: Object,
     required: true,
 });
 
-const confirmDelete = (event, href) => {
-    if (!confirm('Weet je zeker dat je dit reisproduct wilt verwijderen?')) {
-        return;
-    }
-    Inertia.delete(href);
-}
 </script>
 
 <template>
-    <Layout>
-        <div class="space-y-6 p-4 tablet:p-6 laptop:p-8 desktop:p-10">
+    <AdminLayout>
+        <div class="space-y-6">
             <div class="bg-white p-6 rounded-2xl shadow-lg grid gap-6 laptop:grid-cols-2">
                 <!-- Product details -->
                 <div class="space-y-4">
@@ -58,5 +49,5 @@ const confirmDelete = (event, href) => {
                 </div>
             </div>
         </div>
-    </Layout>
+    </AdminLayout>
 </template>

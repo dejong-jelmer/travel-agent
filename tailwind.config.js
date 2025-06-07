@@ -14,8 +14,9 @@ export default {
         extend: {
             fontFamily: {
                 poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
-                tahu : ['tahu', ...defaultTheme.fontFamily.sans],
+                tahu: ['tahu', ...defaultTheme.fontFamily.sans],
                 reenie: ['Reenie Beanie', 'cursive'],
+                elite: ['Special Elite', 'system-ui'],
             },
             fontSize: {
                 '2xs': '10px'
@@ -25,28 +26,48 @@ export default {
             },
             colors: {
                 primary: {
-                    green: '#1B3A4B', // Bosgroen - Duurzaamheid, natuur, stabiliteit
+                    default: '#2F3E46',    // Donkergroengrijs
+                    dark: '#1B3A4B',       // Donkerbluaw variant voor tekst/contrast
                 },
                 secondary: {
-                    blue: '#A3BCCB', // Zachtblauw - Betrouwbaarheid, rust
+                    sage: '#AFCB98',       // Saliegroen - Duurzaamheid/natuur accent
+                    stone: '#A3BCCB',      // Zachtblauw - Subtiele accenten, borders
                 },
                 accent: {
-                    earth: '#DCC7AA', // Warm zand - Aards, avontuurlijk maar kalm
+                    earth: '#DCC7AA',      // Primary CTA's (warm, uitnodigend)
+                    gold: '#D4A017',       // Highlights, belangrijke info
+                    terracotta: '#B17C65', // Culturele/historische touch
                 },
-                background: {
-                    gray: '#F2F4F3', //	Mistgrijs -	Licht, schoon, neutraal
+                neutral: {
+                    25: '#FAFAFA',         // Een nog lichtere, bijna witte tint
+                    50: '#F2F4F3',         // Lichte achtergrond
                 },
-                contrast: {
-                    blue: '#2F3E46' , // Nachtblauw	- Diepte, betrouwbaarheid
-                    pink: '#B17C65', // Koperroze - Gedempt, elegant, warm
-                },
-                //🎨 Voorbeeldgebruik:
-                // Primair (Bosgroen): Knoppen, links, headers.
-                // Secundair (Zachtblauw): Achtergronden van secties of iconen.
-                // Accent (Warm zand): Call-to-action-knoppen, illustraties, hover-effecten.
-                // Mistgrijs: Algemene achtergrond, whitespace.
-                // Nachtblauw: Footer, titels, belangrijke nadruk.
+                status: {
+                    error: '#C5534A',      // Of welke rode tint je kiest
+                    success: '#6B8E5A',    // Optioneel: past bij je groene palet
+                    warning: '#D4A017',    // Je hebt al goudgeel die perfect werkt
+                }
             },
+            // colors: {
+            //     primary: {
+            //         green: '#2F3E46', // Bosgroen - Duurzaamheid, natuur, stabiliteit
+            //     },
+            //     secondary: {
+            //         blue: '#A3BCCB', // Zachtblauw - Betrouwbaarheid, rust
+            //     },
+            //     accent: {
+            //         earth: '#DCC7AA', // Warm zand - Aards, avontuurlijk maar kalm
+            //         yellow: '#D4A017', // Goudgeel - Warme, rijke gele diepe, maar gedempte uitstraling
+            //     },
+            //     background: {
+            //         gray: '#F2F4F3', //	Mistgrijs -	Licht, schoon, neutraal
+            //         green: '#AFCB98', // Zachtgroen - Zachte, gedempte groentint. Kalm en natuurlijk.
+            //     },
+            //     contrast: {
+            //         blue: '#1B3A4B', // Nachtblauw	- Diepte, betrouwbaarheid
+            //         pink: '#B17C65', // Koperroze - Gedempt, elegant, warm
+            //     },
+            // },
             screens: screens, // {tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
             keyframes: {
                 'slide-left-right': {

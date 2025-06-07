@@ -9,13 +9,83 @@
     font-style: normal;
 }
 
-html, body {
+@font-face {
+    font-family: "Special Elite", system-ui;
+    src: url('/public/fonts/SpecialElite-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+html,
+body {
     overflow-x: hidden;
-  }
+}
+
+.bg-gradient-organic {
+    background: linear-gradient(135deg,
+        #F2F4F3 0%,
+        rgba(175, 203, 152, 0.08) 25%,
+        rgba(163, 188, 203, 0.06) 50%,
+        rgba(220, 199, 170, 0.04) 75%,
+        #F2F4F3 100%
+    );
+}
+
+.bg-gradient-subtle {
+    background: linear-gradient(180deg,
+        #F2F4F3 0%,
+        rgba(175, 203, 152, 0.05) 100%
+    );
+}
+
+.floating-elements::before {
+    content: '';
+    position: absolute;
+    top: 10%;
+    right: 15%;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(175, 203, 152, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+}
+
+.floating-elements::after {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    left: 10%;
+    width: 80px;
+    height: 80px;
+    background: radial-gradient(circle, rgba(212, 160, 23, 0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+.decorative-line {
+    background: linear-gradient(90deg,
+        transparent 0%,
+        #D4A017 50%,
+        transparent 100%
+    );
+}
+
+.organic-shape {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+
+.reverse-organic-shape {
+    clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+}
 
 @layer components {
     .form-input {
-        @apply block w-full mt-2 px-3 py-4 border border-primary-green text-primary-green rounded-md shadow-sm focus:outline-none focus:ring-contrast-pink focus:border-contrast-pink text-base;
+        @apply block w-full mt-2 px-3 py-4 border border-primary-default text-primary-default rounded-md shadow-sm focus:outline-none focus:ring-secondary-stone focus:border-secondary-stone text-base;
     }
 
     .form-label {
@@ -23,14 +93,31 @@ html, body {
     }
 
     .form-button {
-        @apply px-6 py-3 font-semibold cursor-pointer select-none text-white bg-primary-green rounded-lg shadow-lg transition-all duration-300 ease-out hover:bg-accent-earth focus:outline-none focus:ring-2 focus:ring-secondary-blue focus:ring-offset-2;
+        @apply px-6 py-3 font-semibold cursor-pointer select-none border border-primary-default text-primary-default bg-white rounded-lg transition-all duration-300 ease-out hover:bg-primary-default hover:text-white;
     }
 
     .info-button {
-        @apply bg-transparent p-2 rounded-lg border border-primary-green hover:bg-gray-300;
+        @apply bg-transparent p-2 rounded-lg border border-primary-default hover:bg-gray-300;
     }
 
     .section {
         @apply py-10 laptop:py-40 px-2 wide:px-40;
+    }
+
+    a.email-field>span:nth-child(4) {
+        @apply hidden;
+    }
+
+    a.email-field {
+        @apply inline select-none;
+    }
+
+    a.email-field>span {
+        @apply pointer-events-none;
+    }
+
+    a.email-field:hover,
+    a.tel-field:hover {
+        @apply underline;
     }
 }

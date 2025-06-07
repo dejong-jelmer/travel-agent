@@ -7,7 +7,7 @@ const props = defineProps({
     error: Boolean,
 });
 
-const loginMsg = `Omdat we nu eenmaal moeten inloggen` || "Login";
+const loginMsg = `Omdat we moeten inloggen` || "Login";
 
 const form = reactive({
     email: '',

@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\DTO\ContactDetails;
 use App\Services\ContactDetailsService;
 use App\Services\PhoneNumberService;
+use App\Services\AntiSpamEmailService;
 use Illuminate\Support\ServiceProvider;
 
 class ContactDetailsServiceProvider extends ServiceProvider
@@ -16,11 +17,11 @@ class ContactDetailsServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ContactDetailsService::class, function ($app) {
             $details = new ContactDetails(
-                mail: config('contact.mail'),
                 address: config('contact.address'),
                 postal: config('contact.postal'),
                 city: config('contact.city'),
                 mapsLink: config('contact.maps'),
+                mail: new AntiSpamEmailService(config('contact.mail')),
                 telephone: new PhoneNumberService(config('contact.phone'))
             );
 

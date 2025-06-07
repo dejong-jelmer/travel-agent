@@ -26,17 +26,16 @@ class PhoneNumberService
         return $this->parsed && $this->util->isValidNumber($this->parsed);
     }
 
-    public function forTelLink(): string
+    public function getPhoneNumber(): string
     {
         return $this->isValid()
-            ? $this->util->format($this->parsed, PhoneNumberFormat::E164)
+            ? $this->phoneToScrambledHex($this->util->format($this->parsed, PhoneNumberFormat::E164))
             : $this->raw;
     }
 
-    public function forDisplay(): string
+
+    private function phoneToScrambledHex(string $phone): string
     {
-        return $this->isValid()
-            ? $this->util->format($this->parsed, PhoneNumberFormat::INTERNATIONAL)
-            : $this->raw;
+        return bin2hex(strrev($phone));
     }
 }

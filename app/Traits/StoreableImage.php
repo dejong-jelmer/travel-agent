@@ -3,6 +3,7 @@
 namespace App\Traits;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Log; // Optioneel, voor logging van fouten
 use InvalidArgumentException;
 
 trait StoreableImage
@@ -10,28 +11,36 @@ trait StoreableImage
     /**
      * Store uploaded images.
      *
-     * @param  $files  \Illuminate\Http\UploadedFile|array<int, \Illuminate\Http\UploadedFile>
-     * @param  $relation  String
-     * @param  $isFeatured  bool
+     * @param  UploadedFile|array<int, UploadedFile>  $files  The file(s) to store.
+     * @param  string  $relation  The name of the Eloquent relation.
+     * @param  bool  $isFeatured  Whether the image(s) should be marked as featured.
      *
-     * @throws \InvalidArgumentException if array doesn't have instances of \Illuminate\Http\UploadedFile
+     * @throws InvalidArgumentException if a file is not an instance of UploadedFile.
      */
     public function storeImages(UploadedFile|array $files, string $relation, bool $isFeatured = false): void
     {
-        $imagePaths = [];
-        $images = is_array($files) ? $files : [$files];
-
-        foreach ($images as $image) {
+        $imageDatabaseEntries = [];
+        $imagesToProcess = is_array($files) ? $files : [$files];
+        foreach ($imagesToProcess as $image) {
             if (! $image instanceof UploadedFile) {
                 throw new InvalidArgumentException('Expected instance of Illuminate\Http\UploadedFile.');
             }
-            $imagePaths[] = [
-                'path' => $image->storeAs('', $image->getClientOriginalName(), 'public') ?: $image->getClientOriginalName(),
-                'featured' => $isFeatured,
-            ];
+            $originalFilename = $image->getClientOriginalName();
+            $storedPath = $image->storeAs(
+                'images',
+                $originalFilename,
+                'public'
+            );
+            if ($storedPath) {
+                $imageDatabaseEntries[] = [
+                    'path' => $originalFilename,
+                    'featured' => $isFeatured,
+                ];
+            }
         }
-
         $this->$relation()->forceDelete();
-        $this->$relation()->createMany($imagePaths);
+        if (!empty($imageDatabaseEntries)) {
+            $this->$relation()->createMany($imageDatabaseEntries);
+        }
     }
 }

@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use App\Helpers\Breadcrumbs;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -31,5 +32,7 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
         ]);
+
+        Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());
     }
 }

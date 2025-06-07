@@ -114,7 +114,7 @@ class ProductTest extends TestCase
             'featured' => true,
         ]);
 
-        Storage::assertExists($featuredImagePath);
+        Storage::assertExists("images/{$featuredImagePath}");
         $this->assertCount(self::RELATIONS, $product->images);
 
         foreach ($product->images as $index => $image) {
@@ -123,7 +123,7 @@ class ProductTest extends TestCase
                 'imageable_id' => $product->id,
                 'path' => $path,
             ]);
-            Storage::assertExists($path);
+            Storage::assertExists("images/{$path}");
         }
     }
 
@@ -197,7 +197,7 @@ class ProductTest extends TestCase
         ]);
 
         $featuredImagePath = $this->productData['featuredImage']->getClientOriginalName();
-        Storage::assertExists($featuredImagePath);
+        Storage::assertExists("images/{$featuredImagePath}");
         $this->assertDatabaseHas('images', [
             'imageable_id' => $product->id,
             'path' => $featuredImagePath,
@@ -212,7 +212,7 @@ class ProductTest extends TestCase
                 'path' => $path,
             ]);
 
-            Storage::assertExists($path);
+            Storage::assertExists("images/{$path}");
         }
     }
 

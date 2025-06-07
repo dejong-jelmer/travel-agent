@@ -1,6 +1,6 @@
 <script setup>
-import { Delete, Edit, View, Itinerary, Save, Add } from '@/Pages/Icons';
-import { Inertia } from '@inertiajs/inertia';
+import { Delete, Edit, View, Calendar, Save, Add } from '@/Pages/Icons';
+import { router } from '@inertiajs/vue3'
 import { shallowRef, markRaw } from 'vue';
 
 const props = defineProps({
@@ -27,7 +27,7 @@ const props = defineProps({
     type: {
         type: String,
         required: false,
-        default: 'danger',
+        default: 'info',
     }
 });
 
@@ -35,7 +35,7 @@ const icons = {
     Delete: markRaw(Delete),
     Edit: markRaw(Edit),
     View: markRaw(View),
-    Itinerary: markRaw(Itinerary),
+    Calendar: markRaw(Calendar),
     Save: markRaw(Save),
     Add: markRaw(Add),
 };
@@ -48,7 +48,10 @@ const confirmDelete = (href, showConfirm, prompt) => {
                 return;
             }
         }
-        Inertia[`${props.method}`](href);
+
+        router.visit(href, {
+            method: `${props.method}`
+        });
     }
 }
 </script>
@@ -58,17 +61,17 @@ const confirmDelete = (href, showConfirm, prompt) => {
         <button
             class="p-2 rounded-lg border"
             :class="{
-                    'bg-custom-red group-hover:bg-white border-custom-red': type === 'delete',
-                    'bg-white group-hover:bg-custom-red border group-hover:border-custom-red': type === 'danger',
-                    'bg-white group-hover:bg-custom-dark border group-hover:border-custom-dark': type === 'info'
+                    'bg-red-500 group-hover:bg-white border-red-500': type === 'delete',
+                    'bg-white group-hover:bg-red-500 border border-red-500 group-hover:border-red-500': type === 'danger',
+                    'bg-white group-hover:bg-primary-default border border-primary-default': type === 'info'
                 }"
             >
             <component :is="currentIcon"
                 class="h-5"
                 :class="{
-                        'stroke-white group-hover:stroke-custom-red': type === 'delete',
-                        'stroke-custom-red group-hover:stroke-white': type === 'danger',
-                        'stroke-custom-dark group-hover:stroke-white': type === 'info'
+                        'stroke-white group-hover:stroke-red-500': type === 'delete',
+                        'stroke-red-500 group-hover:stroke-white': type === 'danger',
+                        'stroke-primary-default group-hover:stroke-white': type === 'info'
                     }"
             />
         </button>

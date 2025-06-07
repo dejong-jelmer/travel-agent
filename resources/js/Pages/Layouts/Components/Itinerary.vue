@@ -1,14 +1,8 @@
 <script setup>
 import { Warning } from '@/Pages/Icons';
 import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
-
-const confirmDelete = (href) => {
-    if (!confirm('Weet je zeker dat je dit reisplan wilt verwijderen?')) {
-        return;
-    }
-    Inertia.delete(href);
-}
 </script>
+
 <template>
     <div class="relative bg-white rounded-2xl shadow-lg overflow-hidden"
         :class="{ 'cursor-grab': isAdmin }">

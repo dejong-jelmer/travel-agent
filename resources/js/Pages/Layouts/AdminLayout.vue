@@ -36,13 +36,14 @@ Object.entries(flash).forEach(([type, message]) => {
 });
 </script>
 
-<template>
+<template v-if="!!user.id">
+
     <Head :title="title" />
+    <Breadcrumbs :breadcrumbs="breadcrumbs" />
     <main>
-        <slot name="hero"></slot>
-        <Header />
-        <SideMenu v-if="!!user.id" />
-        <slot></slot>
-        <Footer />
+        <SideMenu />
+        <section class="my-[100px] px-6 tablet:px-8 laptop:px-14 desktop:px-18">
+            <slot></slot>
+        </section>
     </main>
 </template>

@@ -1,8 +1,7 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import Card from "./Card.vue";
 import Swiper from "./Swiper.vue";
-import { Chevron } from "@/Pages/Icons";
+import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { useMq } from "vue3-mq";
 const mq = useMq();
 
@@ -91,9 +90,9 @@ const endDrag = () => {
             <template v-if="items.length > visibleItems">
                 <button
                     @click="prevSlide"
-                    class="hidden tablet:block text-4xl font-thin text-primary-green hover:text-light-blue transition-colors rotate-180"
+                    class="hidden tablet:block text-4xl font-thin text-primary-default hover:text-light-blue transition-colors rotate-180"
                 >
-                    <Chevron class="h-12 w-12" />
+                    <ChevronRightIcon class="h-12 w-12" />
                 </button>
             </template>
             <div class="max-w-screen-desktop overflow-hidden">
@@ -120,16 +119,16 @@ const endDrag = () => {
                             width: `calc(${100 / visibleItems}% - ${'2%'})`,
                         }"
                     >
-                        <Card :product="item" />
+                        <slot :item="item" :index="index" />
                     </div>
                 </div>
             </div>
             <template v-if="items.length > visibleItems">
                 <button
                     @click="nextSlide"
-                    class="hidden tablet:block text-4xl font-thin text-primary-green hover:text-light-blue transition-colors"
+                    class="hidden tablet:block text-4xl font-thin text-primary-default hover:text-light-blue transition-colors"
                 >
-                    <Chevron class="h-12 w-12" />
+                    <ChevronRightIcon class="h-12 w-12" />
                 </button>
             </template>
         </div>

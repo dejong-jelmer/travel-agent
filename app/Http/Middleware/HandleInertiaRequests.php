@@ -47,16 +47,16 @@ class HandleInertiaRequests extends Middleware
             'settings' => Config::get('app-settings'),
             'contact' => [
                 'telephone' => function () use ($contactService) {
-                    return [
-                        'tel' => $contactService->getContact('telephone')->forTelLink(),
-                        'display' => $contactService->getContact('telephone')->forDisplay(),
-                    ];
+                    return  $contactService->getContact('telephone')->getPhoneNumber();
                 },
                 'fullAddress' => function () use ($contactService) {
                     return $contactService->fullAddress();
                 },
                 'mail' => function () use ($contactService) {
-                    return $contactService->getContact('mail');
+                    return [
+                        'link' => $contactService->getContact('mail')->forMailtoLink(),
+                        'display' => $contactService->getContact('mail')->forDisplay(),
+                    ];
                 },
                 'mapsLink' => function () use ($contactService) {
                     return $contactService->getContact('mapsLink');

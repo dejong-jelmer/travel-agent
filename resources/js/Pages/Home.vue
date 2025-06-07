@@ -2,58 +2,75 @@
 import Layout from "@/Pages/Layouts/Layout.vue";
 import Hero from "@/Pages/Layouts/Components/Hero.vue";
 import Slider from "@/Pages/Layouts/Components/Slider.vue";
+import Card from "@/Pages/Layouts/Components/Card.vue";
 import ContactForm from "@/Pages/Layouts/Components/ContactForm.vue";
 
 const props = defineProps({
     products: Array,
-    contact: Object,
+    contact: Object
 });
 </script>
+
 
 <template>
     <Layout>
         <template v-slot:hero>
-            <section class="section">
+            <section class="">
                 <Hero />
             </section>
         </template>
         <main>
-            <section class="section bg-background-gray">
-                <article class="h-auto">
-                    <Slider :items="products" />
+            <!-- Slider Section met organische achtergrond -->
+            <section class="relative overflow-hidden bg-gradient-organic organic-shape floating-elements">
+                <!-- Decoratieve elementen -->
+                <div class="absolute top-0 left-0 w-full h-2 decorative-line opacity-30"></div>
+
+                <!-- Subtiele geometrische vormen -->
+                <div class="absolute top-16 left-8 w-4 h-4 bg-secondary-sage rounded-full opacity-20"></div>
+                <div class="absolute top-32 right-24 w-2 h-2 bg-accent-gold rounded-full opacity-30"></div>
+                <div class="absolute bottom-24 left-16 w-3 h-3 bg-accent-terracotta rounded-full opacity-15"></div>
+
+                <article class="relative z-10 py-16 lg:py-24">
+                    <div class="max-w-screen-desktop mx-auto px-4">
+                        <div class="text-center mb-12">
+                            <div class="inline-flex items-center gap-3 mb-6">
+                                <span class="w-12 h-0.5 bg-accent-gold"></span>
+                                <div class="w-3 h-3 bg-accent-gold rounded-full"></div>
+                                <span class="w-12 h-0.5 bg-accent-gold"></span>
+                            </div>
+                            <h2 class="text-3xl lg:text-5xl font-bold text-primary-dark mb-4">
+                                Ontdek onze reizen
+                            </h2>
+                            <p class="text-lg text-primary-default max-w-2xl mx-auto">
+                                Duurzame avonturen die je leven verrijken
+                            </p>
+                        </div>
+                        <Slider :items="products">
+                            <template #default="{ item, index }">
+                                <Card :product="item" :key="index" />
+                            </template>
+                        </Slider>
+
+                        <!-- <Slider :items="products" /> -->
+                    </div>
                 </article>
             </section>
-            <article id="contact" class="max-w-screen-desktop scroll-mt-12 mx-auto h-auto py-24 px-1 laptop:px-8">
-                <div
-                    class="px-6 tablet:px-24 py-10 tablet:py-24 laptop:border laptop:border-primary-green laptop:rounded-xl"
-                >
-                    <div class="grid gap-y-6 tablet:gap-y-10">
-                        <h2
-                            class="font-semibold text-2xl tablet:text-4xl text-accent-earth"
-                        >
-                            Omdat we graag contact hebben
-                        </h2>
-                        <p class="text-base tablet:text-xl text-primary-green">
-                            En we u met alle plezier helpen.
-                            <br />
-                            Bel
-                            <span class="font-bold"
-                                ><a :href="`tel:${contact.telephone.tel}`">{{
-                                    contact.telephone.display
-                                }}</a></span
-                            >, stuur een mail naar <br />
-                            <span class="font-bold"
-                                ><a :href="`mailto:${contact.mail}`">{{
-                                    contact.mail
-                                }}</a></span
-                            >
-                            of gebruik het
-                            <span class="font-bold">contactformulier</span>.
-                        </p>
-                        <ContactForm />
-                    </div>
+
+            <!-- Contact Section met subtiele achtergrond -->
+            <section class="relative bg-gradient-subtle reverse-organic-shape">
+                <!-- Decoratieve natuurlijke vormen -->
+                <div class="absolute inset-0 overflow-hidden">
+                    <div class="absolute top-1/4 -left-32 w-64 h-64 bg-secondary-sage/5 rounded-full"></div>
+                    <div class="absolute bottom-1/3 -right-24 w-48 h-48 bg-accent-earth/8 rounded-full"></div>
                 </div>
-            </article>
+
+                <!-- Subtiele textuur overlay -->
+                <div class="absolute inset-0 opacity-5"
+                    style="background-image: radial-gradient(circle at 1px 1px, #A3BCCB 1px, transparent 0); background-size: 20px 20px;">
+                </div>
+
+                <ContactForm :contact="contact" />
+            </section>
         </main>
     </Layout>
 </template>
