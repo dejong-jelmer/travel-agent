@@ -10,7 +10,7 @@ import {
     MultiImageUploader
 } from './Form';
 
-const emit = defineEmits(['submit'])
+const emit = defineEmits(['submit']);
 const isDirty = ref(false);
 const props = defineProps({
     errors: Object,

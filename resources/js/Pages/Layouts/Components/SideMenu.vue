@@ -11,6 +11,7 @@ const menuItems = ref([
     { label: "Home", path: new URL(route('home'), window.location.origin).pathname },
     { label: "Dashboard", path: new URL(route('admin.dashboard'), window.location.origin).pathname },
     { label: "Producten", path: new URL(route('products.index'), window.location.origin).pathname },
+    { label: "Landen", path: new URL(route('countries.index'), window.location.origin).pathname },
     { label: "Loguit", path: new URL(route('admin.logout'), window.location.origin).pathname },
 ])
 
