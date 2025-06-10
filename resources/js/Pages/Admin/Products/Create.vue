@@ -1,7 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
 import { useForm } from "@inertiajs/vue3";
-import IconLink from "@/Pages/Layouts/Components/IconLink.vue";
 import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
 import ProductForm from "@/Pages/Layouts/Components/ProductForm.vue";
 

@@ -1,9 +1,9 @@
 <script setup>
 import { Head, usePage } from '@inertiajs/vue3';
 import SideMenu from '@/Pages/Layouts/Components/SideMenu.vue';
-import Header from '@/Pages/Layouts/Components/Header.vue';
+import TopBar from '@/Pages/Layouts/Components/TopBar.vue';
 import FlashMessage from '@/Pages/Layouts/Components/FlashMessage.vue';
-import Footer from '@/Pages/Layouts/Components/Footer.vue';
+// import Footer from '@/Pages/Layouts/Components/Footer.vue';
 import { useToastWatcher } from '@/Composables/toastWatcher.js';
 import { watchEffect, onMounted } from 'vue';
 import { emailLinks, phoneLinks } from '@/Composables/antiSpamLinks.js';
@@ -39,8 +39,9 @@ Object.entries(flash).forEach(([type, message]) => {
 <template v-if="!!user.id">
 
     <Head :title="title" />
-    <Breadcrumbs :breadcrumbs="breadcrumbs" />
     <main>
+        <TopBar />
+        <Breadcrumbs :breadcrumbs="breadcrumbs" />
         <SideMenu />
         <section class="my-[100px] px-6 tablet:px-8 laptop:px-14 desktop:px-18">
             <slot></slot>

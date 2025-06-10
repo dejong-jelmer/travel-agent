@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItineraryController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,5 +42,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     // Itinerary routes
     Route::resource('itineraries', ItineraryController::class)->only(['edit', 'destroy']);
     Route::post('/itineraries/{itinerary}', [ItineraryController::class, 'update'])->name('itineraries.update');
+
+    // Country routes
+    Route::resource('countries', CountryController::class)->except(['show', 'edit', 'update']);
+
 
 });

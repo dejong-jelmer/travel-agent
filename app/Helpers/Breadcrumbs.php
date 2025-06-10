@@ -5,12 +5,11 @@ namespace App\Helpers;
 class Breadcrumbs
 {
     const PROD_LABEL = ['label' => 'Reis producten'];
-
     const PROD_ROUTE = ['route' => 'products.index'];
-
     const DASH_LABEL = ['label' => 'Dashboard'];
-
     const DASH_ROUTE = ['route' => 'admin.dashboard'];
+    const COUNT_LABEL = ['label' => 'Landen'];
+    const COUNT_ROUTE = ['route' => 'countries.index'];
 
     public static function generate(): array
     {
@@ -45,6 +44,17 @@ class Breadcrumbs
             // Itinerary edit (losse route)
             'itineraries.edit' => self::itineraryEdit(),
             'itineraries.update' => self::itineraryEdit(),
+
+             // Countries
+            'countries.index' => [
+                [...self::DASH_LABEL, ...self::DASH_ROUTE],
+                [...self::COUNT_LABEL, 'route' => null],
+            ],
+            'countries.create' => [
+                [...self::DASH_LABEL, ...self::DASH_ROUTE],
+                [...self::COUNT_LABEL, ...self::COUNT_ROUTE],
+                ['label' => 'Land aanmaken', 'route' => null],
+            ],
 
             default => [],
         };
