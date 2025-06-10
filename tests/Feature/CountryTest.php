@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Country;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -11,6 +11,7 @@ use Tests\TestCase;
 class CountryTest extends TestCase
 {
     use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -24,7 +25,7 @@ class CountryTest extends TestCase
         $response = $this->get(route('countries.index'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Admin/Countries/Index')
+            fn (AssertableInertia $page) => $page->component('Admin/Countries/Index')
                 ->has('countries', $countries->count())
         );
 
@@ -36,7 +37,7 @@ class CountryTest extends TestCase
         $response = $this->get(route('countries.create'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Admin/Countries/Create')
+            fn (AssertableInertia $page) => $page->component('Admin/Countries/Create')
         );
         $response->assertStatus(200);
     }
