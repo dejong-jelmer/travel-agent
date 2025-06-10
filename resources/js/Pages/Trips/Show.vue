@@ -25,7 +25,7 @@ const tabs = [
             <!-- Hero Section -->
             <section class="relative overflow-hidden">
                 <!-- Background Image -->
-                <div class="h-[80vh] lg:h-[100vh] relative">
+                <div class="h-[80vh] laptop:h-[100vh] relative">
                     <div class="absolute inset-0 bg-cover bg-center"
                         :style="`background-image: url(${trip.featured_image?.path})`"></div>
                     <!-- Overlay -->
@@ -36,9 +36,9 @@ const tabs = [
                     <div class="absolute bottom-2 left-0 right-0">
                         <div class="max-w-screen-desktop mx-auto">
                             <div
-                                class="max-w-5xl p-4 lg:p-8 border border-neutral-25 rounded-3xl bg-primary-dark/30 backdrop -blur-[2px]">
+                                class="max-w-5xl p-4 mx-2 laptop:p-8 border border-neutral-25 rounded-3xl bg-primary-dark/30 backdrop -blur-[2px]">
                                 <!-- Trip Title -->
-                                <h1 class="text-3xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                                <h1 class="text-3xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
                                     {{ trip.name }}
                                 </h1>
 
@@ -78,17 +78,13 @@ const tabs = [
             </section>
 
             <!-- Main Content -->
-            <div class="max-w-screen-desktop mx-auto px-6 py-12 lg:py-16">
-                <div class="grid lg:grid-cols-3 gap-12">
+            <div class="max-w-screen-desktop mx-auto px-6 py-12 laptop:py-16">
+                <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                     <!-- Left Column - Main Content -->
-                    <div class="lg:col-span-2 space-y-12">
-                        <!-- Image Slider -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-secondary-sage/20 overflow-hidden">
-
-                        </div>
+                    <div class="laptop:col-span-2 space-y-12">
 
                         <!-- Description & Highlights -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-secondary-sage/20 p-6 lg:p-8">
+                        <div class="bg-white rounded-2xl shadow-sm border border-secondary-sage/20 p-6 laptop:p-8">
                             <div class="mb-8">
                                 <div class="flex items-center justify-center gap-3 mb-6">
                                     <span class="w-12 h-0.5 bg-accent-gold"></span>
@@ -102,7 +98,7 @@ const tabs = [
                                         </template>
                                     </Slider>
                                 </div>
-                                <h2 class="text-2xl lg:text-3xl font-bold text-primary-dark mb-6">
+                                <h2 class="text-2xl laptop:text-3xl font-bold text-primary-dark mb-6">
                                     Over deze reis
                                 </h2>
                                 <p class="text-lg text-primary-default leading-relaxed">
@@ -160,7 +156,7 @@ const tabs = [
                             </div>
 
                             <!-- Tab Content -->
-                            <div class="p-6 lg:p-8">
+                            <div class="p-6 laptop:p-8">
                                 <!-- Dag tot dag Tab -->
                                 <div v-if="activeTab === 'itinerary'" class="space-y-6">
                                     <div class="text-center py-12">
@@ -189,7 +185,7 @@ const tabs = [
                     </div>
 
                     <!-- Right Column - Booking Sidebar -->
-                    <div class="lg:col-span-1">
+                    <div class="laptop:col-span-1">
                         <div class="sticky top-6 space-y-6">
                             <!-- Booking Card -->
                             <div class="bg-white rounded-2xl shadow-lg border border-secondary-sage/20 overflow-hidden">
@@ -197,7 +193,7 @@ const tabs = [
                                     <h3 class="text-xl font-bold text-neutral-25 mb-2">
                                         Boek deze reis
                                     </h3>
-                                    <p class="text-primary-dark/80">
+                                    <p class="text-primary-dark px-4 py-2 border border-accent-terracotta rounded-md bg-accent-earth">
                                         Vanaf €{{ trip.price }},- per persoon
                                     </p>
                                 </div>
@@ -214,13 +210,6 @@ const tabs = [
                                             <span class="font-medium text-primary-dark flex items-center gap-1">
                                                 <Train class="w-4 h-4" />
                                                 Trein
-                                            </span>
-                                        </div>
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-secondary-stone">Groepsgrootte:</span>
-                                            <span class="font-medium text-primary-dark flex items-center gap-1">
-                                                <UsersIcon class="w-4 h-4" />
-                                                Max. 16 personen
                                             </span>
                                         </div>
                                     </div>
