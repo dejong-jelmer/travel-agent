@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Country;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\RedirectResponse;
 
 class CountryController extends Controller
 {
@@ -37,6 +37,7 @@ class CountryController extends Controller
             'name' => 'required|unique:countries|max:255',
         ]);
         Country::create(['name' => $validated['name']]);
+
         return redirect()->route('countries.index')->with('success', __('Land aangemaakt'));
 
     }
@@ -50,9 +51,9 @@ class CountryController extends Controller
         $feedback = [
             'status' => 'error',
             'message' => "Er zijn nog {$products} producten gekoppeld aan dit land!",
-            ];
+        ];
 
-        if(!$products) {
+        if (! $products) {
             Country::destroy($country->id);
             $feedback['status'] = 'success';
             $feedback['message'] = 'Land verwijderd';

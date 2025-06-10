@@ -1,9 +1,9 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\CountryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ItineraryController;
-use App\Http\Controllers\CountryController;
 use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -45,6 +45,5 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
 
     // Country routes
     Route::resource('countries', CountryController::class)->except(['show', 'edit', 'update']);
-
 
 });
