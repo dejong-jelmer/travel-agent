@@ -15,7 +15,7 @@ class ProductController extends Controller
 
     public function __construct()
     {
-        $this->appName = env('APP_NAME');
+        $this->appName = config('app.name');
     }
 
     /**
