@@ -1,10 +1,7 @@
 <script setup>
 import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
-// import SortableBlocks from "@/Pages/Layouts/Components/SortableBlocks.vue";
-// import Itinerary from "@/Pages/Layouts/Components/Itinerary.vue";
 import { usePage } from "@inertiajs/vue3";
 import IconLink from "@/Pages/Layouts/Components/IconLink.vue";
-// import axios from '@/axios'
 const user = usePage().props.auth?.user ?? {};
 const props = defineProps({
     product: Object,
@@ -16,7 +13,7 @@ const props = defineProps({
         <div class="">
             <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
                 <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Landen</h1>
-                <IconLink v-tippy="'Voeg een reisproduct toe'" icon="Add" type="info"
+                <IconLink v-tippy="'Voeg een land toe'" icon="Add" type="info"
                     :href="route('countries.create')" />
             </div>
             <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
