@@ -2,16 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Regular */
 @font-face {
-    font-family: 'tahu';
-    src: url('/public/fonts/Tahu!.ttf') format('truetype');
+    font-family: "Poppins";
+    src: url('/fonts/poppins/Poppins-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+/* Bold */
+@font-face {
+    font-family: "Poppins";
+    src: url('/fonts/poppins/Poppins-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: bold;
+}
+
+/* SemiBold */
+@font-face {
+    font-family: "Poppins";
+    src: url('/fonts/poppins/Poppins-SemiBold.ttf') format('truetype');
+    font-weight: 600;
+    font-style: normal;
+}
+
+/* Italic variants */
+@font-face {
+    font-family: "Poppins";
+    src: url('/fonts/poppins/Poppins-Italic.ttf') format('truetype');
+    font-weight: 400;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url('/fonts/poppins/Poppins-SemiBoldItalic.ttf') format('truetype');
+    font-weight: 600;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url('/fonts/poppins/Poppins-BoldItalic.ttf') format('truetype');
+    font-weight: 700;
+    font-style: italic;
+}
+@font-face {
+    font-family: 'Tahu';
+    src: url('/fonts/Tahu!.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
 }
 
 @font-face {
-    font-family: "Special Elite", system-ui;
-    src: url('/public/fonts/SpecialElite-Regular.ttf') format('truetype');
+    font-family: "SpecialElite";
+    src: url('/fonts/SpecialElite-Regular.ttf') format('truetype');
     font-weight: 400;
     font-style: normal;
 }

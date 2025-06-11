@@ -13,10 +13,9 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
-                tahu: ['tahu', ...defaultTheme.fontFamily.sans],
-                reenie: ['Reenie Beanie', 'cursive'],
-                elite: ['Special Elite', 'system-ui'],
+                tahu: ['Tahu', 'system-ui', ...defaultTheme.fontFamily.sans],
+                poppins: ['Poppins', 'system-ui', ...defaultTheme.fontFamily.sans],
+                elite: ['SpecialElite', 'system-ui', ...defaultTheme.fontFamily.sans],
             },
             fontSize: {
                 '2xs': '10px'
