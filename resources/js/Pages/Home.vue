@@ -15,9 +15,7 @@ const props = defineProps({
 <template>
     <Layout>
         <template v-slot:hero>
-            <section class="">
-                <Hero />
-            </section>
+            <Hero />
         </template>
         <main>
             <!-- Slider Section met organische achtergrond -->

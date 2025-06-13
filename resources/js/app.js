@@ -11,6 +11,11 @@ import "vue-toastification/dist/index.css";
 import toastOptions from './toastOptions.js';
 import screens from './screens.js';
 
+import.meta.glob([
+  '../images/**',
+  '../fonts/**',
+]);
+
 createInertiaApp({
     resolve: name => {
         const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
