@@ -116,7 +116,7 @@ const endDrag = () => {
                         :key="index"
                         class="flex-shrink-0 m-[1%]"
                         :style="{
-                            width: `calc(${100 / visibleItems}% - ${'2%'})`,
+                            width: `calc(${100 / ((items < 3) ? 50 : visibleItems )}% - ${'2%'})`,
                         }"
                     >
                         <slot :item="item" :index="index" />

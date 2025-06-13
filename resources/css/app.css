@@ -79,7 +79,7 @@ body {
 .bg-gradient-subtle {
     background: linear-gradient(180deg,
         #F2F4F3 0%,
-        rgba(175, 203, 152, 0.05) 100%
+        rgba(175, 203, 152, 0.1) 100%
     );
 }
 
@@ -122,10 +122,12 @@ body {
 
 .organic-shape {
     clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    padding: 30px;
 }
 
 .reverse-organic-shape {
     clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
+    padding: 30px;
 }
 
 @layer components {
