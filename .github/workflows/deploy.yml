@@ -64,11 +64,6 @@ jobs:
       - name: 🌐 Deploy public/ to DEFAULT/
         run: |
           rsync -avz ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
-      - name: 🛠️ Zet permissies voor Laravel
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-          chmod -R 775 /domains/omdatwereizen.nl/laravel_project/storage && \
-          chmod -R 775 /domains/omdatwereizen.nl/laravel_project/bootstrap/cache"
       - name: 🧼 Run artisan clear cache commands
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\

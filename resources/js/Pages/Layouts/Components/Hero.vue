@@ -1,5 +1,6 @@
 <script setup>
 import { useTypeWriter } from "@/Composables/typeWriter.js";
+import heroImage from '@/../images/hero-image.jpg'
 
 const title = "Omdat we";
 const subtitle = [
@@ -18,11 +19,13 @@ function getRandomNumber(min, max) {
 }
 
 const { output: typedText } = useTypeWriter(subtitle);
-// const text = subtitle[getRandomNumber(0, subtitle.length - 1)];
 </script>
 
 <template>
-    <div class="h-screen bg-cover bg-top flex text-white px-6 bg-[url('/images/hero-image.jpg')]">
+    <div class="h-screen bg-cover bg-top flex text-white px-6"
+    :style="{ backgroundImage: `url(${heroImage})` }"
+    >
+
     <div class="relative max-w-screen-desktop w-full mx-auto">
       <div class="absolute top-[35%] tablet:top-[45%] left-[10%] tablet:left-[20%]">
         <h1 class="text-4xl tablet:text-6xl font-normal leading-10 tablet:leading-[72px] font-elite select-none">
