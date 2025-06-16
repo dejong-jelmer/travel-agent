@@ -79,7 +79,7 @@ body {
 .bg-gradient-subtle {
     background: linear-gradient(180deg,
         #F2F4F3 0%,
-        rgba(175, 203, 152, 0.05) 100%
+        rgba(175, 203, 152, 0.1) 100%
     );
 }
 

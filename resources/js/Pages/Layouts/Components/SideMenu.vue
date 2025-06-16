@@ -25,7 +25,7 @@ const isCurrentPage = (path) => {
         <button
             v-show="!open"
             type="button"
-            class="fixed top-6 right-6 z-50 rounded-full bg-white p-3 text-gray-600 shadow-lg hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 sm:top-8 sm:right-8"
+            class="fixed top-6 right-6 phone:top-[50%] z-50 rounded-full bg-white p-3 text-gray-600 shadow-lg hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-200 sm:top-8 sm:right-8"
             @click="open = true"
             aria-label="Open admin menu"
         >

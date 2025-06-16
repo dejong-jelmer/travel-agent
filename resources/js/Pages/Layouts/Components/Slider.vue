@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-import Swiper from "./Swiper.vue";
+// import Swiper from "./Swiper.vue";
 import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { useMq } from "vue3-mq";
 const mq = useMq();
@@ -95,7 +95,7 @@ const endDrag = () => {
                     <ChevronRightIcon class="h-12 w-12" />
                 </button>
             </template>
-            <div class="max-w-screen-desktop overflow-hidden">
+            <div class="max-w-screen-desktop w-full overflow-hidden">
                 <div
                     ref="slider"
                     class="flex transition-transform duration-500 ease-in-out"
@@ -116,7 +116,7 @@ const endDrag = () => {
                         :key="index"
                         class="flex-shrink-0 m-[1%]"
                         :style="{
-                            width: `calc(${100 / visibleItems}% - ${'2%'})`,
+                            width: `calc(${100 / ((items < 3) ? 50 : visibleItems )}% - ${'2%'})`,
                         }"
                     >
                         <slot :item="item" :index="index" />
@@ -132,6 +132,6 @@ const endDrag = () => {
                 </button>
             </template>
         </div>
-        <Swiper :hasDragged="hasDragged" />
+        <!-- <Swiper :hasDragged="hasDragged" /> -->
     </div>
 </template>

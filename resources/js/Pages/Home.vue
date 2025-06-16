@@ -19,7 +19,7 @@ const props = defineProps({
         </template>
         <main>
             <!-- Slider Section met organische achtergrond -->
-            <section class="relative overflow-hidden bg-gradient-organic organic-shape floating-elements">
+            <section class="pb-[100px] relative overflow-hidden bg-gradient-organic organic-shape floating-elements">
                 <!-- Decoratieve elementen -->
                 <div class="absolute top-0 left-0 w-full h-2 decorative-line opacity-30"></div>
 
