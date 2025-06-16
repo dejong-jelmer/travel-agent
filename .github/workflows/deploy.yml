@@ -26,10 +26,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-      - name: 🧹 Clean public/build
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-          rm -rf /domains/omdatwereizen.nl/DEFAULT/build/assets"
       - name: 🧱 Build assets
         run: |
           npm ci
@@ -47,6 +43,10 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
+      - name: 🧹 Clean public/build
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+          rm -rf /domains/omdatwereizen.nl/DEFAULT/build/assets"
       - name: 🚚 Upload to server
         run: |
           chmod 600 ~/.ssh/id_rsa
