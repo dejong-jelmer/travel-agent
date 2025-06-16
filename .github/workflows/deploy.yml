@@ -76,6 +76,6 @@ jobs:
       - name: 🛠️ Zet permissies voor Laravel storage
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            chmod -R 775 /domains/omdatwereizen.nl/laravel_project/storage/log && \
+            chmod -R 775 /domains/omdatwereizen.nl/laravel_project/storage/logs && \
             chmod -R 775 /domains/omdatwereizen.nl/laravel_project/bootstrap/cache"
 
