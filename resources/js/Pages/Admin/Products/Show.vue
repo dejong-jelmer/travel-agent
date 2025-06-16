@@ -1,5 +1,6 @@
 <script setup>
 import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
+import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
 
 const props = defineProps({
     product: Object,
@@ -10,7 +11,10 @@ const props = defineProps({
 
 <template>
     <AdminLayout>
-        <div class="space-y-6">
+        <div class="w-full flex justify-end">
+            <IconLink icon="Edit" :href="route('products.edit', product)" v-tippy="'Bewerk reisproduct'" />
+        </div>
+        <div class="flex flex-col tablet:flex-row tablet:space-x-6 space-y-6 tablet:space-y-0">
             <div class="bg-white p-6 rounded-2xl shadow-lg grid gap-6 laptop:grid-cols-2">
                 <!-- Product details -->
                 <div class="space-y-4">
