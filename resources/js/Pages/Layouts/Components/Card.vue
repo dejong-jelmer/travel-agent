@@ -61,7 +61,7 @@ defineProps({ product: Object });
                     <div class="flex justify-end">
                         <Link :href="route('trip.show', product)">
                             <Button
-                                text="Bekijk reis"
+                                text="Bekijk&nbsp;reis"
                                 class="bg-accent-earth hover:bg-accent-terracotta text-primary-dark hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg font-medium text-sm"
                             ></Button>
                         </Link>
