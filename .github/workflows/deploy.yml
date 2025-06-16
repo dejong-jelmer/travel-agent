@@ -26,13 +26,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '22'
-
-      - name: 📦 Install NPM dependencies
-        run: npm ci
-
-      - name: 🔨 Build Vite assets
-        run: npm run build
-
+      - name: 🧹 Clean public/build
+        run: |
+          rm -rf public/build
+      - name: 🧱 Build assets
+        run: |
+          npm ci
+          npm run build
       - name: 🧠 Set production paths in index.php
         run: |
           sed -i "s|__DIR__.'/../storage/framework/maintenance.php'|__DIR__.'/../laravel_project/storage/framework/maintenance.php'|" public/index.php
