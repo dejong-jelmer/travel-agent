@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
+use Illuminate\Support\Facades\Log;
 class HomeController extends Controller
 {
     private string $appName;
@@ -53,9 +53,19 @@ class HomeController extends Controller
             telephone: $validated['telephone'],
         );
 
-        Mail::to($address)->send(
-            new ContactMail($contact)
-        );
+        try {
+            Mail::to($address)->send(
+                new ContactMail($contact)
+            );
+
+            if (Mail::failures()) {
+                Log::error('Mail failures:', Mail::failures());
+            }
+        } catch (\Exception $e) {
+            Log::error('Mail sending failed: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+        }
+
 
         return response()->json([
             'success' => true,
