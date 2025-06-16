@@ -10,6 +10,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 
 class Product extends Model
 {
@@ -75,6 +77,24 @@ class Product extends Model
     public function countries(): BelongsToMany
     {
         return $this->belongsToMany(Country::class);
+    }
+
+    /**
+     * Scope a query to only include featured products.
+     */
+     #[Scope]
+    protected function featured(Builder $query): void
+    {
+        $query->where('featured', 1);
+    }
+
+    /**
+     * Scope a query to only include active products.
+     */
+     #[Scope]
+    protected function active(Builder $query): void
+    {
+        $query->where('active', 1);
     }
 
     public function getCountriesListAttribute(): string
