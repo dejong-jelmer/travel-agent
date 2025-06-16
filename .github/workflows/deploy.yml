@@ -28,7 +28,8 @@ jobs:
           node-version: '22'
       - name: 🧹 Clean public/build
         run: |
-          rm -rf public/build
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+          rm -rf /domains/omdatwereizen.nl/DEFAULT/build/assets"
       - name: 🧱 Build assets
         run: |
           npm ci
@@ -72,3 +73,9 @@ jobs:
             php artisan config:cache && \
             php artisan route:cache && \
             php artisan view:cache"
+      - name: 🛠️ Zet permissies voor Laravel storage
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            chmod -R 775 /domains/omdatwereizen.nl/laravel_project/storage && \
+            chmod -R 775 /domains/omdatwereizen.nl/laravel_project/bootstrap/cache
+
