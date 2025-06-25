@@ -25,7 +25,7 @@ const links = {
     },
     contact: {
         label: 'Contact',
-        path: '#contact',
+        path: '/contact',
     },
     about: {
         label: 'Over ons',

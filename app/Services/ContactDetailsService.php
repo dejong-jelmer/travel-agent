@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\ContactDetails;
+use App\Services\AntiSpamEmailService;
 use InvalidArgumentException;
 
 class ContactDetailsService
@@ -41,7 +42,7 @@ class ContactDetailsService
         return $this->details->telephone;
     }
 
-    public function getSpamSafeEmail()
+    public function getSpamSafeEmail(): AntiSpamEmailService
     {
         return $this->details->mail;
     }

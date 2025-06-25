@@ -13,6 +13,8 @@ Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact');
+Route::get('/privacybeleid', [HomeController::class, 'showPrivacy'])->name('privacy');
+Route::get('/algemene-voorwaarden', [HomeController::class, 'showTerms'])->name('terms');
 Route::get('/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');
 
 // Admin routes

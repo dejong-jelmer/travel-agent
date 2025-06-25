@@ -22,6 +22,10 @@ import Logo from './Logo.vue';
 import Tree from './Tree.vue';
 import MapPin from './MapPin.vue';
 import Star from './Star.vue';
+import Globe from './Globe.vue';
+import Leaf from './Leaf.vue';
+import Heart from './Heart.vue';
+import Shield from './Shield.vue';
 
 export {
     Edit,
@@ -48,4 +52,8 @@ export {
     Tree,
     MapPin,
     Star,
+    Globe,
+    Leaf,
+    Heart,
+    Shield,
 };

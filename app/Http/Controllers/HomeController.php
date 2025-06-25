@@ -55,7 +55,7 @@ class HomeController extends Controller
 
         try {
             Mail::to($address)->send(
-                new ContactMail($contact)
+                new ContactMail($contacts, 'test')
             );
 
             if (Mail::failures()) {
@@ -77,6 +77,20 @@ class HomeController extends Controller
         return Inertia::render('Trips/Show', [
             'title' => "{$this->appName} - {$trip->name}",
             'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries']),
+        ]);
+    }
+
+    public function showPrivacy(): Response
+    {
+        return Inertia::render('Privacy', [
+            'title' => "{$this->appName} - Privacyverklaring",
+        ]);
+    }
+
+    public function showTerms(): Response
+    {
+        return Inertia::render('Terms', [
+            'title' => "{$this->appName} - Algemene Voorwaarden",
         ]);
     }
 }

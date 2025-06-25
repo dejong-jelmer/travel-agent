@@ -12,6 +12,8 @@ class ContactDetails
         public string $postal,
         public string $city,
         public string $mapsLink,
+        public string $kvk,
+        public string $btw,
         public AntiSpamEmailService $mail,
         public PhoneNumberService $telephone
     ) {}

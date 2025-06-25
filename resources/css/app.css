@@ -66,6 +66,7 @@ body {
     overflow-x: hidden;
 }
 
+/* Background */
 .bg-gradient-organic {
     background: linear-gradient(135deg,
         #F2F4F3 0%,
@@ -75,6 +76,16 @@ body {
         #F2F4F3 100%
     );
 }
+.bg-gradient-reverse {
+    background: linear-gradient(45deg,
+        #F2F4F3 0%,
+        rgba(175, 203, 152, 0.08) 25%,
+        rgba(163, 188, 203, 0.06) 50%,
+        rgba(220, 199, 170, 0.04) 75%,
+        #F2F4F3 100%
+    );
+}
+
 
 .bg-gradient-subtle {
     background: linear-gradient(180deg,
@@ -124,9 +135,16 @@ body {
     clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
 
+.middle-organic-shape {
+    clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
+}
+
 .reverse-organic-shape {
+    /* clip-path: polygon(100% 15%, 0 0, 0 85%, 100% 100%); */
+
     clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
 }
+/* end background */
 
 @layer components {
     .form-input {
@@ -146,7 +164,7 @@ body {
     }
 
     .section {
-        @apply py-10 laptop:py-40 px-2 wide:px-40;
+        @apply py-[150px] laptop:py-40 px-2 wide:px-40;
     }
 
     a.email-field>span:nth-child(4) {

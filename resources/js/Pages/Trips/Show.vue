@@ -4,6 +4,7 @@ import { UsersIcon, ChevronRightIcon, PhoneIcon, EnvelopeIcon } from '@heroicons
 import Slider from "@/Pages/Layouts/Components/Slider.vue";
 import Layout from '@/Pages/Layouts/Layout.vue';
 import { ref } from 'vue'
+import SectionHeader from "../Layouts/Components/Style/SectionHeader.vue";
 
 const activeTab = ref('itinerary')
 const props = defineProps({
@@ -86,10 +87,8 @@ const tabs = [
                         <!-- Description & Highlights -->
                         <div class="bg-white rounded-2xl shadow-sm border border-secondary-sage/20 p-6 laptop:p-8">
                             <div class="mb-8">
-                                <div class="flex items-center justify-center gap-3 mb-6">
-                                    <span class="w-12 h-0.5 bg-accent-gold"></span>
-                                    <div class="w-3 h-3 bg-accent-gold rounded-full"></div>
-                                    <span class="w-12 h-0.5 bg-accent-gold"></span>
+                                <div class="w-full text-center">
+                                    <SectionHeader>Over deze reis</SectionHeader>
                                 </div>
                                 <div class="p-6">
                                     <Slider :items="trip.images">
@@ -99,7 +98,7 @@ const tabs = [
                                     </Slider>
                                 </div>
                                 <h2 class="text-2xl laptop:text-3xl font-bold text-primary-dark mb-6">
-                                    Over deze reis
+
                                 </h2>
                                 <p class="text-lg text-primary-default leading-relaxed">
                                     {{ trip.description }}

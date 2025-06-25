@@ -7,4 +7,6 @@ return [
     'postal' => env('CONTACT_POSTAL', ''),
     'city' => env('CONTACT_CITY', ''),
     'maps' => env('CONTACT_MAPS', ''),
+    'kvk' => env('CONTACT_KVK', ''),
+    'btw' => env('CONTACT_BTW', ''),
 ];

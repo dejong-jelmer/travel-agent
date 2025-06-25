@@ -1,6 +1,7 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
 import { Logo } from "@/Pages/Icons";
+import { Link } from '@inertiajs/vue3';
 
 const page = usePage();
 const contact = page.props.contact;
@@ -11,7 +12,8 @@ const year = new Date().getFullYear();
 <template>
     <footer class="bg-primary-default">
         <div class="max-w-screen-desktop px-4 pt-16 pb-6 mx-auto tablet:px-6 laptop:pt-24">
-            <div class="grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between">
+            <div
+                class="grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between">
                 <!-- Logo + Slogan -->
                 <div class="text-center tablet:text-left">
                     <div class="flex justify-center tablet:justify-start text-light-green">
@@ -21,8 +23,40 @@ const year = new Date().getFullYear();
                         class="max-w-md mx-auto mt-6 leading-relaxed text-center tablet:mx-0 tablet:text-left text-gray-400">
                         Voor duurzame reizen met een verhaal.
                     </p>
-
-                    <!-- social icons (commented out, unchanged) -->
+                    <ul class="mt-5 space-y-4 text-sm text-left">
+                        <li>
+                            <span class="flex items-center gap-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white shrink-0"
+                                    viewBox="0 0 24 24">
+                                    <g fill="none">
+                                        <path
+                                            d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+                                        <path fill="currentColor"
+                                            d="M21 7a1 1 0 0 1 .117 1.993L21 9v10a1 1 0 0 1 .117 1.993L21 21H3a1 1 0 0 1-.117-1.993L3 19V9a1 1 0 0 1-.117-1.993L3 7zm-2 2H5v10h2v-7a1 1 0 1 1 2 0v7h2v-7a1 1 0 1 1 2 0v7h2v-7a1 1 0 1 1 2 0v7h2zm-1-5a1 1 0 1 1 0 2H6a1 1 0 0 1 0-2z" />
+                                    </g>
+                                </svg>
+                                <span class="not-italic text-white hover:underline">
+                                    KvK: {{ contact.kvk }}
+                                </span>
+                            </span>
+                        </li>
+                        <li>
+                            <span class="flex items-center gap-1.5">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white shrink-0"
+                                    viewBox="0 0 24 24">
+                                    <g fill="none" fill-rule="evenodd">
+                                        <path
+                                            d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
+                                        <path fill="currentColor"
+                                            d="M4 4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 2h16v12H4zm6.25 3.75a1.75 1.75 0 1 1-3.5 0a1.75 1.75 0 0 1 3.5 0M5 14.5A2.5 2.5 0 0 1 7.5 12h2a2.5 2.5 0 0 1 2.5 2.5v.5a1 1 0 1 1-2 0v-.5a.5.5 0 0 0-.5-.5h-2a.5.5 0 0 0-.5.5v.5a1 1 0 1 1-2 0zm8-3.5a1 1 0 0 1 1-1h2a1 1 0 1 1 0 2h-2a1 1 0 0 1-1-1m1 2a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2z" />
+                                    </g>
+                                </svg>
+                                <span class="not-italic text-white hover:underline">
+                                    BTW: {{ contact.btw }}
+                                </span>
+                            </span>
+                        </li>
+                    </ul>
                 </div>
 
                 <!-- Contactblok -->
@@ -42,7 +76,6 @@ const year = new Date().getFullYear();
                                     </span>
                                 </a>
                             </li>
-
                             <li>
                                 <span class="flex items-start gap-1.5 group">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white shrink-0"
@@ -82,13 +115,14 @@ const year = new Date().getFullYear();
                     <p class="text-sm text-gray-400">
                         <span class="block tablet:inline">Alle rechten voorbehouden.</span>
                         &nbsp;
-                        <a class="inline-block text-teal-500 underline transition hover:text-teal-500/75" href="/">
+                        <Link :href="route('terms')" class="inline-block text-teal-500 underline transition hover:text-teal-500/75">
                             Algemene voorwaarden
-                        </a>
+                        </Link>
                         &nbsp;<span>&middot;</span>&nbsp;
-                        <a class="inline-block text-teal-500 underline transition hover:text-teal-500/75" href="/">
-                            Privacybeleid
-                        </a>
+                        <Link :href="route('privacy')"
+                            class="inline-block text-teal-500 underline transition hover:text-teal-500/75">
+                        Privacybeleid
+                        </Link>
                     </p>
 
                     <p class="mt-4 text-sm text-gray-500 tablet:order-first tablet:mt-0">

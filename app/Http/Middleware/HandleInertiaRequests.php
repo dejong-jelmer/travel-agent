@@ -61,6 +61,12 @@ class HandleInertiaRequests extends Middleware
                 'mapsLink' => function () use ($contactService) {
                     return $contactService->getContact('mapsLink');
                 },
+                'kvk' => function () use ($contactService) {
+                    return $contactService->getContact('kvk');
+                },
+                'btw' => function () use ($contactService) {
+                    return $contactService->getContact('btw');
+                },
             ],
         ]);
     }
