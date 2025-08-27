@@ -16,6 +16,7 @@ Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact
 Route::get('/privacybeleid', [HomeController::class, 'showPrivacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'showTerms'])->name('terms');
 Route::get('/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');
+Route::get('/boek/{trip:slug}', [HomeController::class, 'bookTrip'])->name('trip.book');
 
 // Admin routes
 Route::get('/admin/login', function () {

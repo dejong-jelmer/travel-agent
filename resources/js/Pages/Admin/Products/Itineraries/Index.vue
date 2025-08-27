@@ -1,9 +1,5 @@
 <script setup>
-import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
-import SortableBlocks from "@/Pages/Layouts/Components/SortableBlocks.vue";
-import Itinerary from "@/Pages/Layouts/Components/Itinerary.vue";
 import { usePage } from "@inertiajs/vue3";
-import IconLink from "@/Pages/Layouts/Components/IconLink.vue";
 import axios from '@/axios'
 const user = usePage().props.auth?.user ?? {};
 const props = defineProps({
@@ -20,7 +16,7 @@ function updateOrder(orderedItinerary) {
 }
 </script>
 <template>
-    <AdminLayout>
+    <Admin>
         <div class="space-y-4">
             <div class="flex mx-auto justify-end">
                 <IconLink type="info" v-tippy="'Voeg een dag reisplan toe'" icon="Add"
@@ -32,5 +28,5 @@ function updateOrder(orderedItinerary) {
                 </template>
             </SortableBlocks>
         </div>
-    </AdminLayout>
+    </Admin>
 </template>

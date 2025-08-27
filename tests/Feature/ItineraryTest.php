@@ -6,6 +6,7 @@ use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Product;
 use App\Models\User;
+use App\Enums\Meals;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
@@ -75,10 +76,18 @@ class ItineraryTest extends TestCase
     {
         $itineraryData = [
             'title' => fake()->city().' - '.fake()->city(),
-            'subtitle' => fake()->words(4, true),
             'description' => fake()->text(500),
+            'location' => fake()->city . ', ' . fake()->country,
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
+            'meal' => fake()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 2)),
             'remark' => fake()->words(10, true),
+            $table->string('location')->nullable();
+            $table->text('description');
+            $table->string('accommodation')->nullable();
+            $table->json('activities')->nullable();
+            $table->json('meals')->nullable();
+            $table->string('transport')->nullable();
+            $table->string('remark')->nullable();
         ];
 
         $product = Product::factory()->create();

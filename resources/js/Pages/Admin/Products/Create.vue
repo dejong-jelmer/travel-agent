@@ -1,8 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
 import { useForm } from "@inertiajs/vue3";
-import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
-import ProductForm from "@/Pages/Layouts/Components/ProductForm.vue";
 
 const props = defineProps({
     errors: Object,
@@ -29,7 +27,7 @@ function submit() {
 </script>
 
 <template>
-    <AdminLayout>
+    <Admin>
         <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
             <ProductForm
                 :form="form"
@@ -38,5 +36,5 @@ function submit() {
                 @submit="submit"
             />
         </div>
-    </AdminLayout>
+    </Admin>
 </template>

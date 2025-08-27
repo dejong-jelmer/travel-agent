@@ -72,7 +72,7 @@ class HomeTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_subtmit_contact_sends_contact_email()
+    public function test_submit_contact_sends_contact_email()
     {
         $faker = app(\Faker\Generator::class);
         Mail::fake();

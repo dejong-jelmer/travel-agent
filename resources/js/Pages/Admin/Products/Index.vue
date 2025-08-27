@@ -1,8 +1,6 @@
 <script setup>
 import { reactive } from 'vue'
-import AdminLayout from '@/Pages/Layouts/AdminLayout.vue'
-import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
-import { More } from '@/Pages/Icons';
+// import { More } from '@/Icons';
 
 defineProps({
     products: Array,
@@ -11,7 +9,7 @@ const showMoreOptions = reactive({});
 
 </script>
 <template>
-    <AdminLayout>
+    <Admin>
         <div class="">
             <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
                 <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Producten</h1>
@@ -64,5 +62,5 @@ const showMoreOptions = reactive({});
                 </table>
             </div>
         </div>
-    </AdminLayout>
+    </Admin>
 </template>

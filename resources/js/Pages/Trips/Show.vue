@@ -1,23 +1,78 @@
 <script setup>
-import { Train, NightTrain, Euro, Clock, Directions, MapPin, Star, Calendar } from "@/Pages/Icons";
+import { ref, watch } from 'vue'
+import { Link } from "@inertiajs/vue3";
+// import { Train, NightTrain, Euro, Clock, Directions, MapPin, Star, Calendar } from "@/Icons";
 import { UsersIcon, ChevronRightIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
-import Slider from "@/Pages/Layouts/Components/Slider.vue";
-import Layout from '@/Pages/Layouts/Layout.vue';
-import { ref } from 'vue'
-import SectionHeader from "../Layouts/Components/Style/SectionHeader.vue";
 
-const activeTab = ref('itinerary')
 const props = defineProps({
     trip: Object,
     required: true
-
 })
+// Tabs
+const activeTab = ref('itinerary')
+// Modal
+const bookingModalOpen = ref(false)
+// LigtBox
+const lightboxRef = ref(null)
+const openLightbox = (index) => {
+    lightboxRef.value?.open(index)
+}
+// Booking data
+const booking = ref({
+    persons: { adults: 2, children: 0 },
+    selectedDate: new Date(),
+    travelers: {
+        adults: [],
+        children: []
+    },
+    contact: {
+        address: {
+            street: '',
+            number: '',
+            addition: '',
+            city: '',
+            postal: '',
+        },
+        email: ''
+    }
+})
+
+const createTraveler = () => ({
+    firstName: '',
+    lastName: '',
+    birthDate: null,
+    nationality: '',
+})
+
+watch(() => booking.value.persons.adults, (newCount) => {
+    const current = booking.value.travelers.adults.length
+    if (newCount > current) {
+        for (let i = current; i < newCount; i++) {
+            booking.value.travelers.adults.push(createTraveler())
+        }
+    } else {
+        booking.value.travelers.adults.splice(newCount)
+    }
+}, { immediate: true })
+
+watch(() => booking.value.persons.children, (newCount) => {
+    const current = booking.value.travelers.children.length
+    if (newCount > current) {
+        for (let i = current; i < newCount; i++) {
+            booking.value.travelers.children.push(createTraveler())
+        }
+    } else {
+        booking.value.travelers.children.splice(newCount)
+    }
+})
+
 const tabs = [
     { id: 'itinerary', label: 'Dag tot dag' },
     { id: 'inclusive', label: 'Inclusief & Exclusief' },
     { id: 'practical', label: 'Praktische info' },
     { id: 'extra', label: 'Extra info' }
 ]
+
 </script>
 
 <template>
@@ -93,13 +148,13 @@ const tabs = [
                                 <div class="p-6">
                                     <Slider :items="trip.images">
                                         <template #default="{ item, index }">
-                                            <img class="w-full h-[150px] rounded-md object-cover" :src="item.path" :key="index">
+                                            <img :src="item.path"
+                                                class="w-full h-[150px] rounded-md object-cover cursor-zoom-in"
+                                                :key="index" @click="openLightbox(index)" />
                                         </template>
                                     </Slider>
+                                    <LightBox ref="lightboxRef" :images="trip.images" />
                                 </div>
-                                <h2 class="text-2xl laptop:text-3xl font-bold text-primary-dark mb-6">
-
-                                </h2>
                                 <p class="text-lg text-primary-default leading-relaxed">
                                     {{ trip.description }}
                                 </p>
@@ -156,14 +211,14 @@ const tabs = [
 
                             <!-- Tab Content -->
                             <div class="p-6 laptop:p-8">
-                                <!-- Dag tot dag Tab -->
                                 <div v-if="activeTab === 'itinerary'" class="space-y-6">
-                                    <div class="text-center py-12">
-                                        <Calendar class="w-16 h-16 text-secondary-sage mx-auto mb-4" />
-                                        <h3 class="text-xl font-semibold text-primary-dark mb-2">
-                                            Dag tot dag programma
-                                        </h3>
-                                        <p class="text-secondary-stone">
+                                    <div class="text-left py-4">
+                                        <div v-if="trip.itineraries?.length" class="text-left space-y-6">
+                                            <template v-for="(itinerary, index) in trip.itineraries" :key="index">
+                                                <TripItinerary :itinerary="itinerary" />
+                                            </template>
+                                        </div>
+                                        <p v-else class="text-secondary-stone">
                                             Gedetailleerd reisprogramma wordt binnenkort toegevoegd
                                         </p>
                                     </div>
@@ -188,18 +243,21 @@ const tabs = [
                         <div class="sticky top-6 space-y-6">
                             <!-- Booking Card -->
                             <div class="bg-white rounded-2xl shadow-lg border border-secondary-sage/20 overflow-hidden">
-                                <div class=" bg-accent-gold p-6">
-                                    <h3 class="text-xl font-bold text-neutral-25 mb-2">
-                                        Boek deze reis
+                                <div class=" bg-accent-gold p-4">
+                                    <h3 class="text-xl font-bold text-neutral-25">
+                                        Reis overzicht
                                     </h3>
-                                    <p class="text-primary-dark px-4 py-2 border border-accent-terracotta rounded-md bg-accent-earth">
-                                        Vanaf €{{ trip.price }},- per persoon
-                                    </p>
+
                                 </div>
 
                                 <div class="p-6 space-y-6">
                                     <!-- Quick Facts -->
                                     <div class="space-y-4">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-secondary-stone">Vanaf:</span>
+                                            <span class="font-medium text-primary-dark"><strong> €{{ trip.price }},-
+                                                </strong> p.p.</span>
+                                        </div>
                                         <div class="flex justify-between items-center">
                                             <span class="text-secondary-stone">Duur:</span>
                                             <span class="font-medium text-primary-dark">{{ trip.duration }} dagen</span>
@@ -212,9 +270,14 @@ const tabs = [
                                             </span>
                                         </div>
                                     </div>
-
-                                    <div class="border-t border-secondary-sage/20 pt-6">
-                                        <button
+                                    <div class="border-t border-secondary-sage/20 pt-6 space-y-6">
+                                        <h3 class="text-xl font-bold text-primary-dark">
+                                            Boek deze reis
+                                        </h3>
+                                        <DatePicker v-model="booking.selectedDate" :min-date="new Date()" />
+                                        <PersonPicker v-model="booking.persons" :min-adults="1" :min-children="0"
+                                            :max-adults="6" :max-children="4" />
+                                        <button @click="bookingModalOpen = true"
                                             class="w-full bg-accent-terracotta hover:bg-accent-terracotta/90 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 group">
                                             Boek nu
                                             <ChevronRightIcon
@@ -226,13 +289,13 @@ const tabs = [
                                         </p>
 
                                         <div class="flex gap-3 mt-4">
-                                            <a href="tel:+3112345678"
-                                                class="flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
+                                            <a href="#"
+                                                class="tel-field has-icon flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
                                                 <PhoneIcon class="w-4 h-4" />
                                                 Bellen
                                             </a>
-                                            <a href="mailto:info@example.com"
-                                                class="flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
+                                            <a href="#"
+                                                class="email-field has-icon flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
                                                 <EnvelopeIcon class="w-4 h-4" />
                                                 E-mail
                                             </a>
@@ -265,4 +328,7 @@ const tabs = [
             </div>
         </div>
     </Layout>
+    <Modal :open="bookingModalOpen" @close="bookingModalOpen = false">
+        <BookingForm :trip="trip" v-model:booking="booking" />
+    </Modal>
 </template>

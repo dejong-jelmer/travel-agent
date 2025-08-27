@@ -1,19 +1,9 @@
 <script setup>
-import Layout from "@/Pages/Layouts/Layout.vue";
-import Hero from "@/Pages/Layouts/Components/Hero.vue";
-import Slider from "@/Pages/Layouts/Components/Slider.vue";
-import { SectionHeader } from "@/Pages/Layouts/Components/Style";
-import Card from "@/Pages/Layouts/Components/Card.vue";
-import ContactForm from "@/Pages/Layouts/Components/ContactForm.vue";
-import DefaultLink from "@/Pages/Layouts/Components/DefaultLink.vue";
-import USP from "@/Pages/Layouts/Components/USP.vue";
-
 const props = defineProps({
     products: Array,
     contact: Object
 });
 </script>
-
 
 <template>
     <Layout>

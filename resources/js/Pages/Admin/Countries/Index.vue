@@ -1,7 +1,5 @@
 <script setup>
-import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
 import { usePage } from "@inertiajs/vue3";
-import IconLink from "@/Pages/Layouts/Components/IconLink.vue";
 const user = usePage().props.auth?.user ?? {};
 const props = defineProps({
     product: Object,
@@ -9,7 +7,7 @@ const props = defineProps({
 });
 </script>
 <template>
-    <AdminLayout>
+    <Admin>
         <div class="">
             <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
                 <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Landen</h1>
@@ -40,5 +38,5 @@ const props = defineProps({
                 </table>
             </div>
         </div>
-    </AdminLayout>
+    </Admin>
 </template>

@@ -6,6 +6,8 @@ use App\Http\Requests\StoreItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
 use App\Models\Itinerary;
 use App\Models\Product;
+use App\Enums\Meals;
+use App\Enums\Transport;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -42,6 +44,8 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Products/Itineraries/Create', [
             'product' => $product,
+            'meals' => Meals::options(),
+            'transport' => Transport::options(),
         ]);
     }
 
@@ -70,8 +74,11 @@ class ItineraryController extends Controller
      */
     public function edit(Itinerary $itinerary): Response
     {
+        // dd(['transport' => Transport::options()]);
         return Inertia::render('Admin/Itineraries/Edit', [
             'itinerary' => $itinerary->load('image'),
+            'meals' => Meals::options(),
+            'transport' => Transport::options(),
         ]);
     }
 

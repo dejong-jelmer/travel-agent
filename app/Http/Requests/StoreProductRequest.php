@@ -23,7 +23,7 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         $maxFileSize = config('app-settings.maxFileSize');
-
+        // dd($this->files);
         return [
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
@@ -31,13 +31,12 @@ class StoreProductRequest extends FormRequest
             'price' => ['required', 'numeric', 'between:-999999.99,999999.99'],
             'duration' => ['required', 'integer', 'min:0'],
             'featuredImage' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', "max:{$maxFileSize}"],
-            'images.*' => ['image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', "max:{$maxFileSize}"],
+            'images' => ['required'],
+            'images.*' => ['required', 'image', 'mimes:jpg,jpeg,png,gif,bmp,svg,webp', "max:{$maxFileSize}"],
             'active' => ['boolean'],
             'featured' => ['boolean'],
             'published_at' => ['nullable', 'date'],
             'countries' => ['required', 'array'],
-            // 'country_id' => ['required', 'exists:countries,id'],
-            // 'category_id' => ['required', 'exists:categories,id'],
         ];
     }
 }

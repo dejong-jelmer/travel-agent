@@ -148,7 +148,7 @@ body {
 
 @layer components {
     .form-input {
-        @apply block w-full mt-2 px-3 py-4 border border-primary-default text-primary-default rounded-md shadow-sm focus:outline-none focus:ring-secondary-stone focus:border-secondary-stone text-base;
+        @apply block w-full mt-2 px-3 py-1 border border-gray-300 text-primary-default rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-base;
     }
 
     .form-label {
@@ -167,20 +167,20 @@ body {
         @apply py-[150px] laptop:py-40 px-2 wide:px-40;
     }
 
-    a.email-field>span:nth-child(4) {
+    a.email-field:not(.has-icon)>span:nth-child(4) {
         @apply hidden;
     }
 
-    a.email-field {
+    a.email-field:not(.has-icon) {
         @apply inline select-none;
     }
 
-    a.email-field>span {
+    a.email-field:not(.has-icon)>span {
         @apply pointer-events-none;
     }
 
-    a.email-field:hover,
-    a.tel-field:hover {
+    a.email-field:not(.has-icon):hover,
+    a.tel-field:not(.has-icon):hover {
         @apply underline;
     }
 }

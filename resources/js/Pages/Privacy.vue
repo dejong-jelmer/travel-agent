@@ -1,11 +1,7 @@
 <script setup>
-import Layout from "@/Pages/Layouts/Layout.vue";
-
 const props = defineProps({
     contact: Object
 });
-console.log(props.contact);
-
 </script>
 <template>
     <Layout>

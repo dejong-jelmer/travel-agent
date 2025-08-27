@@ -20,9 +20,6 @@ export default {
             fontSize: {
                 '2xs': '10px'
             },
-            height: {
-                'screen-minus-nav': 'calc(100vh - 6rem)',
-            },
             colors: {
                 primary: {
                     default: '#2F3E46',    // Donkergroengrijs
@@ -33,18 +30,18 @@ export default {
                     stone: '#A3BCCB',      // Zachtblauw - Subtiele accenten, borders
                 },
                 accent: {
-                    earth: '#DCC7AA',      // Primary CTA's (warm, uitnodigend)
-                    gold: '#D4A017',       // Highlights, belangrijke info
-                    terracotta: '#B17C65', // Culturele/historische touch
+                    earth: '#DCC7AA',
+                    gold: '#D4A017',
+                    terracotta: '#B17C65',
                 },
                 neutral: {
-                    25: '#FAFAFA',         // Een nog lichtere, bijna witte tint
-                    50: '#F2F4F3',         // Lichte achtergrond
+                    25: '#FAFAFA',
+                    50: '#F2F4F3',
                 },
                 status: {
-                    error: '#C5534A',      // Of welke rode tint je kiest
-                    success: '#6B8E5A',    // Optioneel: past bij je groene palet
-                    warning: '#D4A017',    // Je hebt al goudgeel die perfect werkt
+                    error: '#C5534A',
+                    success: '#6B8E5A',
+                    warning: '#D4A017',
                 }
             },
             // colors: {
@@ -67,7 +64,7 @@ export default {
             //         pink: '#B17C65', // Koperroze - Gedempt, elegant, warm
             //     },
             // },
-            screens: screens, // {tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
+            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
             keyframes: {
                 'slide-left-right': {
                     '0%, 100%': { transform: 'translateX(0px)' },

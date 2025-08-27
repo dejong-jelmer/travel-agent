@@ -1,10 +1,6 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useForm } from "@inertiajs/vue3";
-import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
-import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
-import { Input } from '@/Pages/Layouts/Components/Form';
-
 const emit = defineEmits(['submit']);
 const isDirty = ref(false);
 const props = defineProps({
@@ -23,7 +19,7 @@ function submit() {
 </script>
 
 <template>
-    <AdminLayout>
+    <Admin>
         <form @submit.prevent="submit" @change="isDirty = true">
 
             <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
@@ -35,5 +31,5 @@ function submit() {
                     :feedback="errors.name" />
             </div>
         </form>
-    </AdminLayout>
+    </Admin>
 </template>
