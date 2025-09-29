@@ -1,6 +1,4 @@
 <script setup>
-import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
-import IconLink from '@/Pages/Layouts/Components/IconLink.vue';
 
 const props = defineProps({
     product: Object,
@@ -10,9 +8,13 @@ const props = defineProps({
 </script>
 
 <template>
-    <AdminLayout>
-        <div class="w-full flex justify-end">
-            <IconLink icon="Edit" :href="route('products.edit', product)" v-tippy="'Bewerk reisproduct'" />
+    <Admin>
+        <div class="w-full flex justify-end space-x-2">
+            <IconLink icon="Edit" :href="route('admin.products.edit', product)" v-tippy="'Bewerk reisproduct'" />
+            <IconLink icon="Calendar" :href="product.itineraries?.length ?
+                route('admin.products.itineraries.index', product)
+                : route('admin.products.itineraries.create', product)"
+                v-tippy="'Bekijk reisplan van deze reis'" />
         </div>
         <div class="flex flex-col tablet:flex-row tablet:space-x-6 space-y-6 tablet:space-y-0">
             <div class="bg-white p-6 rounded-2xl shadow-lg grid gap-6 laptop:grid-cols-2">
@@ -53,5 +55,5 @@ const props = defineProps({
                 </div>
             </div>
         </div>
-    </AdminLayout>
+    </Admin>
 </template>

@@ -25,7 +25,7 @@ class ContactRequest extends FormRequest
             'name' => ['required', 'string', 'max:100'],
             'email' => ['required', $emailValidation, 'max:100'],
             'text' => ['required', 'string', 'min:5', 'max:2000'],
-            'telephone' => ['nullable', 'string', $phoneValidation],
+            'phone' => ['nullable', 'string', $phoneValidation],
         ];
     }
 

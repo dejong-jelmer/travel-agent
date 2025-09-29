@@ -10,6 +10,8 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import toastOptions from './toastOptions.js';
 import screens from './screens.js';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 
 import.meta.glob([
   '../images/**',
@@ -22,19 +24,35 @@ createInertiaApp({
         return pages[`./Pages/${name}.vue`]
     },
     setup({ el, App, props, plugin }) {
-        createApp({ render: () => h(App, props) })
-            .use(plugin)
-            .use(ZiggyVue)
-            .use(Vue3TouchEvents)
-            .use(Toast, toastOptions)
-            .use(Vue3Mq, {
+        const app = createApp({ render: () => h(App, props) });
+            app.use(plugin)
+            app.use(ZiggyVue)
+            app.use(Vue3TouchEvents)
+            app.use(Toast, toastOptions)
+            app.use(Vue3Mq, {
                 breakpoints: screens
-            })
-            .use(VueTippy, {
+            });
+            app.use(VueTippy, {
                 defaultProps: {
                     placement: 'right'
                 }
-            })
-            .mount(el)
+            });
+            // Register components globally
+            function registerComponents(glob) {
+                Object.entries(glob).forEach(([path, definition]) => {
+                    const name = path.split('/').pop().replace(/\.[^/.]+$/, '')
+                    app.component(name, definition.default)
+                });
+            }
+
+            const components = import.meta.glob('./Components/**/*.vue', { eager: true })
+            registerComponents(components)
+            const templates = import.meta.glob('./Templates/*.vue', { eager: true })
+            registerComponents(templates)
+            const icons = import.meta.glob('./Icons/*.vue', { eager: true })
+            registerComponents(icons)
+
+
+            app.mount(el);
     },
 })

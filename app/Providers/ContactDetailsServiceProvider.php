@@ -21,8 +21,10 @@ class ContactDetailsServiceProvider extends ServiceProvider
                 postal: config('contact.postal'),
                 city: config('contact.city'),
                 mapsLink: config('contact.maps'),
+                kvk: config('contact.kvk'),
+                btw: config('contact.btw'),
                 mail: new AntiSpamEmailService(config('contact.mail')),
-                telephone: new PhoneNumberService(config('contact.phone'))
+                phone: new PhoneNumberService(config('contact.phone'))
             );
 
             return new ContactDetailsService($details);

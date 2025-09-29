@@ -3,21 +3,24 @@
 namespace App\Models;
 
 use App\Casts\PriceCast;
-use App\Traits\StoreableImage;
+use App\Models\Traits\HasStoreableImages;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Support\Collection;
 
 class Product extends Model
 {
     use HasFactory,
         SoftDeletes,
-        StoreableImage;
+        HasStoreableImages;
 
     protected $fillable = [
         'name',
@@ -53,7 +56,7 @@ class Product extends Model
         ];
     }
 
-    protected static function booted()
+    protected static function booted(): void
     {
         parent::boot();
         static::deleting(function ($product) {
@@ -108,7 +111,7 @@ class Product extends Model
         return $countries->first() ?? '';
     }
 
-    public function itineraries()
+    public function itineraries(): HasMany
     {
         return $this->hasMany(Itinerary::class)->orderBy('order');
     }
@@ -118,12 +121,12 @@ class Product extends Model
         return (float) $this->getRawOriginal('price');
     }
 
-    public function images()
+    public function images(): MorphMany
     {
         return $this->morphMany(Image::class, 'imageable')->where('featured', false);
     }
 
-    public function featuredImage()
+    public function featuredImage(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable')->where('featured', true);
     }
@@ -131,5 +134,10 @@ class Product extends Model
     public function getImageUrlsAttribute(): Collection
     {
         return $this->images->pluck('path');
+    }
+
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
     }
 }

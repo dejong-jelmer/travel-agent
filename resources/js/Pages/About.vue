@@ -1,7 +1,3 @@
-<script setup>
-import Layout from '@/Pages/Layouts/Layout.vue';
-</script>
-
 <template>
   <Layout>
     <section class="section">

@@ -1,15 +1,11 @@
 <script setup>
-import { reactive } from 'vue'
 import { useForm } from "@inertiajs/vue3";
-import AdminLayout from "@/Pages/Layouts/AdminLayout.vue";
-import ProductForm from "@/Pages/Layouts/Components/ProductForm.vue";
 
 const props = defineProps({
-    errors: Object,
     countries: Object,
 });
 
-const form = reactive({
+const form = useForm({
     name: "",
     slug: "",
     description: "",
@@ -23,20 +19,14 @@ const form = reactive({
 });
 
 function submit() {
-    const submitForm = useForm(form);
-    submitForm.post(route("products.store"), { forceFormData: true });
+    form.post(route("admin.products.store"), { forceFormData: true });
 }
 </script>
 
 <template>
-    <AdminLayout>
+    <Admin>
         <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
-            <ProductForm
-                :form="form"
-                :errors="errors"
-                :countries="countries"
-                @submit="submit"
-            />
+            <ProductForm :form="form" :countries="countries" @submit="submit" />
         </div>
-    </AdminLayout>
+    </Admin>
 </template>

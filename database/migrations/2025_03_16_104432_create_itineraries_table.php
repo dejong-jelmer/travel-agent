@@ -15,9 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
             $table->string('title');
-            $table->string('subtitle')->nullable();
+            $table->string('location')->nullable();
             $table->text('description');
-            // $table->string('image')->nullable();
+            $table->string('accommodation')->nullable();
+            $table->json('activities')->nullable();
+            $table->json('meals')->nullable();
+            $table->json('transport')->nullable();
             $table->string('remark')->nullable();
             $table->integer('order')->default(0);
             $table->softDeletes();

@@ -1,19 +1,31 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\CountryController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\ItineraryController;
-use App\Http\Controllers\ProductController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\Admin\BookingController as AdminBookingController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ItineraryController;
+use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact');
-Route::get('/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');
+Route::get('/privacybeleid', [HomeController::class, 'showPrivacy'])->name('privacy');
+Route::get('/algemene-voorwaarden', [HomeController::class, 'showTerms'])->name('terms');
+
+// Trips
+Route::get('reizen/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');
+
+// Booking routes
+Route::post('/boekingen', [BookingController::class, 'store'])->name('bookings.store');
+Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'confirmation'])->name('bookings.confirmation');
 
 // Admin routes
 Route::get('/admin/login', function () {
@@ -21,15 +33,16 @@ Route::get('/admin/login', function () {
         'title' => 'Admin - '.env('APP_NAME'),
     ]);
 })->middleware('guest')->name('admin');
+
+Route::get('admin/', fn() => to_route('admin.login'));
 Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
 
-Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
-    Route::get('/logout', [AuthController::class, 'logout'])->name('admin.logout');
-    Route::get('/dashboard', function () {
-        return Inertia::render('Admin/Dashboard', [
-            'title' => 'Admin dashboard - '.env('APP_NAME'),
-        ]);
-    })->name('admin.dashboard');
+Route::prefix('admin')
+    ->name('admin.')
+    ->middleware('auth')
+    ->group(function () {
+        Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+        Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
 
     // Product routes
     Route::resource('/products', ProductController::class)->except(['update']);
@@ -46,4 +59,7 @@ Route::group(['prefix' => 'admin', 'middleware' => 'auth'], function () {
     // Country routes
     Route::resource('countries', CountryController::class)->except(['show', 'edit', 'update']);
 
+    // Booking routes
+    Route::resource('bookings', AdminBookingController::class)->except(['create','store']);
+    // Route::post('/bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
 });

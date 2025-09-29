@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\ContactFromData;
+use App\DTO\ContactFormData;
 use App\Http\Requests\ContactRequest;
 use App\Mail\ContactMail;
 use App\Models\Product;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-
+use Illuminate\Support\Facades\Log;
 class HomeController extends Controller
 {
     private string $appName;
@@ -46,16 +46,22 @@ class HomeController extends Controller
         $validated = $request->safe();
         $address = config('contact.mail');
 
-        $contact = new ContactFromData(
+        $contact = new ContactFormData(
             name: $validated['name'],
             email: $validated['email'],
             text: $validated['text'],
-            telephone: $validated['telephone'],
+            phone: $validated['phone'],
         );
 
-        Mail::to($address)->send(
-            new ContactMail($contact)
-        );
+        try {
+            Mail::to($address)->send(
+                new ContactMail($contact)
+            );
+        } catch (\Throwable $e) {
+            Log::error('Mail sending failed: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+        }
+
 
         return response()->json([
             'success' => true,
@@ -66,7 +72,21 @@ class HomeController extends Controller
     {
         return Inertia::render('Trips/Show', [
             'title' => "{$this->appName} - {$trip->name}",
-            'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries']),
+            'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
+        ]);
+    }
+
+    public function showPrivacy(): Response
+    {
+        return Inertia::render('Privacy', [
+            'title' => "{$this->appName} - Privacyverklaring",
+        ]);
+    }
+
+    public function showTerms(): Response
+    {
+        return Inertia::render('Terms', [
+            'title' => "{$this->appName} - Algemene Voorwaarden",
         ]);
     }
 }

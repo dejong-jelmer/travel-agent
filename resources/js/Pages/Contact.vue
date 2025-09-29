@@ -1,13 +1,14 @@
 <script setup>
-import Layout from '@/Pages/Layouts/Layout.vue';
+const props = defineProps({
+    contact: Object
+});
 </script>
 
 <template>
   <Layout>
     <section class="section">
       <article>
-        <h1>Contact</h1>
-        <p></p>
+        <ContactForm :contact="contact" />
       </article>
     </section>
   </Layout>

@@ -1,22 +1,42 @@
 <script setup>
-import { Train, NightTrain, Euro, Clock, Directions, MapPin, Star, Calendar } from "@/Pages/Icons";
+import { ref, toRef, watch } from 'vue'
 import { UsersIcon, ChevronRightIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
-import Slider from "@/Pages/Layouts/Components/Slider.vue";
-import Layout from '@/Pages/Layouts/Layout.vue';
-import { ref } from 'vue'
+import { useBooking } from '@/composables/useBooking'
 
-const activeTab = ref('itinerary')
 const props = defineProps({
     trip: Object,
     required: true
-
 })
+// Tabs
+const activeTab = ref('itinerary')
+// Modal
+const bookingModalOpen = ref(false)
+// LigtBox
+const lightboxRef = ref(null)
+const openLightbox = (index) => {
+    lightboxRef.value?.open(index)
+}
+
+// Booking data
+const { booking, validator, markTouched, markDirty } = useBooking(props.trip)
+const departure_date = toRef(booking, 'departure_date')
+const participants = toRef(booking, 'participants')
+watch(
+    () => booking.hasErrors,
+    (newValue) => {
+        if (newValue) {
+            bookingModalOpen.value = true
+        }
+    }
+)
+
 const tabs = [
     { id: 'itinerary', label: 'Dag tot dag' },
     { id: 'inclusive', label: 'Inclusief & Exclusief' },
     { id: 'practical', label: 'Praktische info' },
     { id: 'extra', label: 'Extra info' }
 ]
+
 </script>
 
 <template>
@@ -86,21 +106,19 @@ const tabs = [
                         <!-- Description & Highlights -->
                         <div class="bg-white rounded-2xl shadow-sm border border-secondary-sage/20 p-6 laptop:p-8">
                             <div class="mb-8">
-                                <div class="flex items-center justify-center gap-3 mb-6">
-                                    <span class="w-12 h-0.5 bg-accent-gold"></span>
-                                    <div class="w-3 h-3 bg-accent-gold rounded-full"></div>
-                                    <span class="w-12 h-0.5 bg-accent-gold"></span>
+                                <div class="w-full text-center">
+                                    <SectionHeader>Over deze reis</SectionHeader>
                                 </div>
                                 <div class="p-6">
                                     <Slider :items="trip.images">
                                         <template #default="{ item, index }">
-                                            <img class="w-full h-[150px] rounded-md object-cover" :src="item.path" :key="index">
+                                            <img :src="item.path"
+                                                class="w-full h-[150px] rounded-md object-cover cursor-zoom-in"
+                                                :key="index" @click="openLightbox(index)" />
                                         </template>
                                     </Slider>
+                                    <LightBox ref="lightboxRef" :images="trip.images" />
                                 </div>
-                                <h2 class="text-2xl laptop:text-3xl font-bold text-primary-dark mb-6">
-                                    Over deze reis
-                                </h2>
                                 <p class="text-lg text-primary-default leading-relaxed">
                                     {{ trip.description }}
                                 </p>
@@ -157,14 +175,14 @@ const tabs = [
 
                             <!-- Tab Content -->
                             <div class="p-6 laptop:p-8">
-                                <!-- Dag tot dag Tab -->
                                 <div v-if="activeTab === 'itinerary'" class="space-y-6">
-                                    <div class="text-center py-12">
-                                        <Calendar class="w-16 h-16 text-secondary-sage mx-auto mb-4" />
-                                        <h3 class="text-xl font-semibold text-primary-dark mb-2">
-                                            Dag tot dag programma
-                                        </h3>
-                                        <p class="text-secondary-stone">
+                                    <div class="text-left py-4">
+                                        <div v-if="trip.itineraries?.length" class="text-left space-y-6">
+                                            <template v-for="(itinerary, index) in trip.itineraries" :key="index">
+                                                <TripItinerary :itinerary="itinerary" />
+                                            </template>
+                                        </div>
+                                        <p v-else class="text-secondary-stone">
                                             Gedetailleerd reisprogramma wordt binnenkort toegevoegd
                                         </p>
                                     </div>
@@ -189,18 +207,21 @@ const tabs = [
                         <div class="sticky top-6 space-y-6">
                             <!-- Booking Card -->
                             <div class="bg-white rounded-2xl shadow-lg border border-secondary-sage/20 overflow-hidden">
-                                <div class=" bg-accent-gold p-6">
-                                    <h3 class="text-xl font-bold text-neutral-25 mb-2">
-                                        Boek deze reis
+                                <div class=" bg-accent-gold p-4">
+                                    <h3 class="text-xl font-bold text-neutral-25">
+                                        Reis overzicht
                                     </h3>
-                                    <p class="text-primary-dark px-4 py-2 border border-accent-terracotta rounded-md bg-accent-earth">
-                                        Vanaf €{{ trip.price }},- per persoon
-                                    </p>
+
                                 </div>
 
                                 <div class="p-6 space-y-6">
                                     <!-- Quick Facts -->
                                     <div class="space-y-4">
+                                        <div class="flex justify-between items-center">
+                                            <span class="text-secondary-stone">Vanaf:</span>
+                                            <span class="font-medium text-primary-dark"><strong> €{{ trip.price }},-
+                                                </strong> p.p.</span>
+                                        </div>
                                         <div class="flex justify-between items-center">
                                             <span class="text-secondary-stone">Duur:</span>
                                             <span class="font-medium text-primary-dark">{{ trip.duration }} dagen</span>
@@ -213,27 +234,31 @@ const tabs = [
                                             </span>
                                         </div>
                                     </div>
-
-                                    <div class="border-t border-secondary-sage/20 pt-6">
-                                        <button
+                                    <div class="border-t border-secondary-sage/20 pt-6 space-y-6">
+                                        <h3 class="text-xl font-bold text-primary-dark">
+                                            Boek deze reis
+                                        </h3>
+                                        <DatePicker v-model="departure_date" :min-date="new Date()" />
+                                        <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
+                                            :max-adults="6" :max-children="4" />
+                                        <button @click="bookingModalOpen = true"
                                             class="w-full bg-accent-terracotta hover:bg-accent-terracotta/90 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 group">
                                             Boek nu
                                             <ChevronRightIcon
                                                 class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                         </button>
-
                                         <p class="text-sm text-secondary-stone text-center mt-4">
                                             Of neem contact op voor meer informatie
                                         </p>
 
                                         <div class="flex gap-3 mt-4">
-                                            <a href="tel:+3112345678"
-                                                class="flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
+                                            <a href="#"
+                                                class="tel-field has-icon flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
                                                 <PhoneIcon class="w-4 h-4" />
                                                 Bellen
                                             </a>
-                                            <a href="mailto:info@example.com"
-                                                class="flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
+                                            <a href="#"
+                                                class="email-field has-icon flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
                                                 <EnvelopeIcon class="w-4 h-4" />
                                                 E-mail
                                             </a>
@@ -266,4 +291,7 @@ const tabs = [
             </div>
         </div>
     </Layout>
+    <Modal :open="bookingModalOpen" @close="bookingModalOpen = false">
+        <BookingForm v-model:booking="booking" :validator="validator" @booking-completed="bookingModalOpen = false" />
+    </Modal>
 </template>

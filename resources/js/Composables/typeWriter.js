@@ -1,4 +1,3 @@
-// typeWriter.js
 import { ref, onMounted } from 'vue';
 
 export function useTypeWriter(strings = [], speed = 100, pause = 1500) {

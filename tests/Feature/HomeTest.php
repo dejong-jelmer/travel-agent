@@ -72,7 +72,7 @@ class HomeTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_subtmit_contact_sends_contact_email()
+    public function test_submit_contact_sends_contact_email()
     {
         $faker = app(\Faker\Generator::class);
         Mail::fake();
@@ -80,7 +80,7 @@ class HomeTest extends TestCase
         $contactData = [
             'name' => fake()->name(),
             'email' => fake()->email(),
-            'telephone' => $faker->validDutchMobileNumber(),
+            'phone' => $faker->validDutchMobileNumber(),
             'text' => fake()->text(500),
         ];
 
@@ -93,7 +93,7 @@ class HomeTest extends TestCase
                    $mail->contact->name === $contactData['name'] &&
                    $mail->contact->email === $contactData['email'] &&
                    $mail->contact->text === $contactData['text'] &&
-                   $mail->contact->telephone === $contactData['telephone'];
+                   $mail->contact->phone === $contactData['phone'];
         });
     }
 }

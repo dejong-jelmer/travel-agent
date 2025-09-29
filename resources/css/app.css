@@ -47,6 +47,7 @@
     font-weight: 700;
     font-style: italic;
 }
+
 @font-face {
     font-family: 'Tahu';
     src: url('../fonts/Tahu!.ttf') format('truetype');
@@ -66,21 +67,30 @@ body {
     overflow-x: hidden;
 }
 
+/* Background */
 .bg-gradient-organic {
     background: linear-gradient(135deg,
-        #F2F4F3 0%,
-        rgba(175, 203, 152, 0.08) 25%,
-        rgba(163, 188, 203, 0.06) 50%,
-        rgba(220, 199, 170, 0.04) 75%,
-        #F2F4F3 100%
-    );
+            #F2F4F3 0%,
+            rgba(175, 203, 152, 0.08) 25%,
+            rgba(163, 188, 203, 0.06) 50%,
+            rgba(220, 199, 170, 0.04) 75%,
+            #F2F4F3 100%);
 }
+
+.bg-gradient-reverse {
+    background: linear-gradient(45deg,
+            #F2F4F3 0%,
+            rgba(175, 203, 152, 0.08) 25%,
+            rgba(163, 188, 203, 0.06) 50%,
+            rgba(220, 199, 170, 0.04) 75%,
+            #F2F4F3 100%);
+}
+
 
 .bg-gradient-subtle {
     background: linear-gradient(180deg,
-        #F2F4F3 0%,
-        rgba(175, 203, 152, 0.1) 100%
-    );
+            #F2F4F3 0%,
+            rgba(175, 203, 152, 0.1) 100%);
 }
 
 .floating-elements::before {
@@ -108,33 +118,43 @@ body {
 }
 
 @keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-20px); }
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
 }
 
 .decorative-line {
     background: linear-gradient(90deg,
-        transparent 0%,
-        #D4A017 50%,
-        transparent 100%
-    );
+            transparent 0%,
+            #D4A017 50%,
+            transparent 100%);
 }
 
 .organic-shape {
     clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
 }
 
+.middle-organic-shape {
+    clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
+}
+
 .reverse-organic-shape {
+    /* clip-path: polygon(100% 15%, 0 0, 0 85%, 100% 100%); */
+
     clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
 }
 
+/* end background */
+
 @layer components {
     .form-input {
-        @apply block w-full mt-2 px-3 py-4 border border-primary-default text-primary-default rounded-md shadow-sm focus:outline-none focus:ring-secondary-stone focus:border-secondary-stone text-base;
-    }
-
-    .form-label {
-        @apply block text-base font-bold;
+        @apply block w-full mt-2 px-3 py-1 border border-gray-300 text-primary-default rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-base;
     }
 
     .form-button {
@@ -146,23 +166,35 @@ body {
     }
 
     .section {
-        @apply py-10 laptop:py-40 px-2 wide:px-40;
+        @apply py-[150px] laptop:py-40 px-2 wide:px-40;
     }
 
-    a.email-field>span:nth-child(4) {
+    a.email-field:not(.has-icon)>span:nth-child(4) {
         @apply hidden;
     }
 
-    a.email-field {
+    a.email-field:not(.has-icon) {
         @apply inline select-none;
     }
 
-    a.email-field>span {
+    a.email-field:not(.has-icon)>span {
         @apply pointer-events-none;
     }
 
-    a.email-field:hover,
-    a.tel-field:hover {
+    a.email-field:not(.has-icon):hover,
+    a.tel-field:not(.has-icon):hover {
         @apply underline;
     }
+
+    /* Override VueDatePicker error class */
+    /* Invalid state */
+    .dp__input_invalid {
+        @apply ring-[2px] ring-status-error ring-offset-2 bg-status-error/20;
+    }
+
+    /* Valid state (optioneel, als je dat wilt gebruiken) */
+    .dp__input_valid {
+        @apply ring-[2px] ring-status-success ring-offset-2 bg-status-success/10;
+    }
+
 }

@@ -33,7 +33,7 @@ class ProductFactory extends Factory
         return [
             'name' => $city,
             'slug' => Str::slug("bijzondere-reis-naar-{$city}-{$country->name}"),
-            'description' => "Mooie reis prachtige reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
+            'description' => "Bijzondere reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
             'price' => randomPrice(),
             'duration' => $duration,
             'active' => true,

@@ -1,5 +1,5 @@
-const emailLinks = function initEmailLinks(encodedEmail) {
-    const emailElements = document.querySelectorAll('a.email-field');
+const emailLinks = function initEmailLinks(encodedEmail, selector) {
+    const emailElements = document.querySelectorAll(`a${selector}`);
     const events = ['mouseover', 'focus', 'touchstart', 'click'];
 
     const decodeEmailAddress = () => {
@@ -33,8 +33,8 @@ const emailLinks = function initEmailLinks(encodedEmail) {
     });
 }
 
-const phoneLinks = function initPhoneLinks(encodedPhone) {
-    const telElements = document.querySelectorAll('a.tel-field');
+const phoneLinks = function initPhoneLinks(encodedPhone, selector) {
+    const telElements = document.querySelectorAll(`a${selector}`);
     const events = ['mouseover', 'focus', 'touchstart', 'click'];
     const decodeEmailPhone = () => {
 
@@ -55,7 +55,9 @@ const phoneLinks = function initPhoneLinks(encodedPhone) {
 
     telElements.forEach(el => {
         const phone = decodeEmailPhone();
-        el.textContent = formatPhone(phone);
+        if(!el.classList.contains('has-icon')) {
+            el.textContent = formatPhone(phone);
+        }
     });
 
     telElements.forEach(el => {

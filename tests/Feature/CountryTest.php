@@ -21,12 +21,13 @@ class CountryTest extends TestCase
 
     public function test_admin_can_view_the_country_index_page(): void
     {
-        $countries = Country::factory(10)->create();
-        $response = $this->get(route('countries.index'));
+        Country::factory(10)->create();
+        $response = $this->get(route('admin.countries.index'));
 
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Countries/Index')
-                ->has('countries', $countries->count())
+            fn(AssertableInertia $page) => $page->component('Admin/Countries/Index')
+                ->has('countries.data', 10)
+                ->has('countries.links')
         );
 
         $response->assertStatus(200);
@@ -34,10 +35,10 @@ class CountryTest extends TestCase
 
     public function test_admin_can_view_the_country_create_page(): void
     {
-        $response = $this->get(route('countries.create'));
+        $response = $this->get(route('admin.countries.create'));
 
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Countries/Create')
+            fn(AssertableInertia $page) => $page->component('Admin/Countries/Create')
         );
         $response->assertStatus(200);
     }
@@ -45,9 +46,9 @@ class CountryTest extends TestCase
     public function test_admin_can_store_a_new_country(): void
     {
         $country = fake(locale_get_default())->unique()->country();
-        $response = $this->post(route('countries.store'), ['name' => $country]);
+        $response = $this->post(route('admin.countries.store'), ['name' => $country]);
 
-        $response->assertRedirect(route('countries.index'));
+        $response->assertRedirect(route('admin.countries.index'));
 
         $this->assertDatabaseHas('countries', ['name' => $country]);
     }

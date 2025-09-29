@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\Meals;
+use App\Enums\Transport;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,9 +19,29 @@ class ItineraryFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->city().' - '.fake()->city(),
-            'subtitle' => 'Overnachting in een hotel',
-            'description' => fake()->text(500),
+            'title' => fake()->randomElement([
+                'Aankomst in ',
+                'Verblijf in ',
+                'Vertrek uit ',
+                ]) . fake()->city,
+            'description' => fake()->paragraph(3),
+            'location' => fake()->city . ', ' . fake()->country,
+            'activities' => fake()->optional()->randomElements([
+                'Check-in hotel',
+                'Stadswandeling',
+                'Museumbezoek',
+                'Fietstocht',
+                'Boottocht',
+            ], rand(0, 4)),
+            'accommodation' => fake()->company . ' Hotel',
+            'meals' => fake()->optional()->randomElements(Meals::cases(), rand(0, 2)),
+            'transport' => fake()->optional()->randomElements(Transport::cases(), rand(0, 4)),
+            'remark' => fake()->optional()->randomElement([
+                'Museum toegang niet inbegrepen in de prijs',
+                'Lunch niet inbegrepen',
+                'Tickets moeten voor 08:00 ophaaldt worden op de locatie',
+                'Museumbezoek is optioneel',
+            ]),
         ];
     }
 }

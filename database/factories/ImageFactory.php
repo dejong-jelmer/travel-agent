@@ -10,19 +10,20 @@ use Illuminate\Database\Eloquent\Factories\Factory;
 class ImageFactory extends Factory
 {
     const PATHS = [
-        'Dag7-Flamtrein-kortetreinreisnoorwegenzomer9-500x500',
-        'Kortetreinreisschotland-1-768x488',
-        'Kortetreinreiszwitserland9-1-768x488',
-        'langetreinreiszwitserland-1-768x488',
-        'treinreisitalieoostenrijk-6-e1678025053471',
-        'langetreinreiszwitserland-12-768x488',
-        'praag-groot-768x488',
-        'Premium-Zwitserland-Gornergrat-3-50',
-        'treinreisitalieoostenrijk-6-e1678025053471',
-        'Treinreisspanjeportugal21-1-2-768x512',
-        'Treinreistoscanecinqueterre10-1-768x488',
-        'Verona-Opreisnl-Ciaotutti-768x488',
-        'Visit-Sopot-Hotel-Sofitel-Grand-Sopot-_DSC1934m1_e-1200x801-1187768066',
+        'cinque-terre-2928833_1280.jpg',
+        'dolomites-2897602_1280.jpg',
+        'hill-5324149_1280.jpg',
+        'house-4028391_1280.jpg',
+        'houses-4093227_1280.jpg',
+        'hut-9582608_1280.jpg',
+        'konigssee-7276585_1280.jpg',
+        'landscape-5104510_1280.jpg',
+        'mountainous-5942962_1280.jpg',
+        'mountains-5237939_1280.jpg',
+        'neuschwanstein-2602208_1280.jpg',
+        'river-4336788_1280.jpg',
+        'trees-7662375_1280.jpg',
+        'water-8100724_1280.jpg',
     ];
 
     /**
@@ -33,7 +34,7 @@ class ImageFactory extends Factory
     public function definition(): array
     {
         return [
-            'path' => fake()->randomElement(self::PATHS).'.jpg',
+            'path' => fake()->randomElement(self::PATHS),
             'featured' => false,
         ];
     }

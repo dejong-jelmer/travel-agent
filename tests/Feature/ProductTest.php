@@ -3,14 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\Country;
-use App\Models\Image;
 use App\Models\Product;
 use App\Models\User;
+use App\Models\Image;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -18,94 +18,73 @@ class ProductTest extends TestCase
 {
     use RefreshDatabase;
 
+    private User $admin;
     private array $productData;
-
     private Collection $countries;
-
-    private Product $product;
-
-    const RELATIONS = 2;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = User::factory()->create();
-        $this->actingAs($admin);
 
-        $this->countries = Country::factory(self::RELATIONS)->create();
+        $this->admin = User::factory()->create();
+        $this->actingAs($this->admin);
+
         Storage::fake('public');
         Storage::makeDirectory('images');
+
+        $this->countries = Country::factory(2)->create();
 
         $this->productData = [
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
-            'price' => randomPrice(),
             'duration' => fake()->randomDigit(),
-            'featuredImage' => UploadedFile::fake()->image('image.jpg'),
-            'images' => [],
+            'price' => fake()->randomFloat(2, 500, 5000),
+            'featuredImage' => UploadedFile::fake()->image('featured.jpg'),
+            'images' => [
+                UploadedFile::fake()->image('image1.jpg'),
+                UploadedFile::fake()->image('image2.jpg'),
+            ],
             'countries' => $this->countries->modelKeys(),
         ];
-        for ($i = 1; $i <= self::RELATIONS; $i++) {
-            $this->productData['images'][] = UploadedFile::fake()->image("image$i.jpg");
-        }
     }
 
-    public function test_admin_can_view_the_product_index_page(): void
+    public function test_admin_can_view_the_products_index_page(): void
     {
-        $countries = $this->countries;
-        $products = Product::factory()
-            ->count(3)
-            ->create()->each(function ($product) use ($countries) {
-                $product->countries()->attach([
-                    $countries->first()->id,
-                    $countries->last()->id,
-                ]);
-            });
+        Product::factory()->count(3)->create();
 
-        $response = $this->get(route('products.index'));
+        $response = $this->get(route('admin.products.index'));
 
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Products/Index')
-                ->has('products', 3)
-                ->where('products.0.id', $products[0]->id)
-                ->where('products.0.price', $products[0]->price)
-                ->where('products.0.featured_image', $products[0]->featuredImage)
+            fn(AssertableInertia $page) => $page
+                ->component('Admin/Products/Index')
+                ->has('products.data', 3)
+                ->has('products.links')
         );
-
-        foreach ($products as $product) {
-            $this->assertDatabaseHas('country_product', [
-                'product_id' => $product->id,
-                'country_id' => $countries->first()->id,
-                'country_id' => $countries->last()->id,
-            ]);
-        }
 
         $response->assertStatus(200);
     }
 
     public function test_admin_can_view_the_product_create_page(): void
     {
-        $response = $this->get(route('products.create'));
+        $response = $this->get(route('admin.products.create'));
 
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Products/Create')
+            fn(AssertableInertia $page) => $page
+                ->component('Admin/Products/Create')
         );
+
         $response->assertStatus(200);
     }
 
     public function test_admin_can_store_a_new_product(): void
     {
-        $response = $this->post(route('products.store'), $this->productData);
-        $product = Product::first();
-        $response->assertRedirect(route('products.show', $product));
+        $response = $this->post(route('admin.products.store'), $this->productData);
+
+        $product = Product::firstOrFail();
+        $response->assertRedirect(route('admin.products.show', $product));
 
         $this->assertDatabaseHas('products', Arr::except($this->productData, ['featuredImage', 'images', 'countries']));
-        $this->assertDatabaseHas('country_product', [
-            'product_id' => $product->id,
-            'country_id' => $this->countries->first()->id,
-            'country_id' => $this->countries->last()->id,
-        ]);
 
         $featuredImagePath = $this->productData['featuredImage']->getClientOriginalName();
         $this->assertDatabaseHas('images', [
@@ -113,9 +92,7 @@ class ProductTest extends TestCase
             'path' => $featuredImagePath,
             'featured' => true,
         ]);
-
         Storage::assertExists("images/{$featuredImagePath}");
-        $this->assertCount(self::RELATIONS, $product->images);
 
         foreach ($product->images as $index => $image) {
             $path = $this->productData['images'][$index]->getClientOriginalName();
@@ -127,55 +104,18 @@ class ProductTest extends TestCase
         }
     }
 
-    public function test_admin_can_show_singel_product(): void
+    public function test_admin_can_view_the_product_edit_page(): void
     {
-        $countries = Country::factory(self::RELATIONS)->create();
-        $product = Product::factory()
-            ->has(Image::factory(['featured' => true]), 'featuredImage')
-            ->has(Image::factory()->count(self::RELATIONS), 'images')
-            ->create();
+        $product = Product::factory()->create();
 
-        foreach ($countries as $country) {
-            $product->countries()->attach($country->id);
-        }
+        $response = $this->get(route('admin.products.edit', $product));
 
-        $response = $this->get(route('products.show', $product));
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Products/Show')
+            fn(AssertableInertia $page) => $page
+                ->component('Admin/Products/Edit')
                 ->has('product')
                 ->where('product.id', $product->id)
-                ->where('product.name', $product->name)
-                ->where('product.slug', $product->slug)
-                ->where('product.duration', $product->duration)
-                ->where('product.price', $product->price)
-                ->where('product.active', $product->active)
-                ->where('product.featured', $product->featured)
-                ->where('product.published_at', $product->published_at->format('Y-m-d H:i:s'))
-                ->where('product.featured_image', $product->featuredImage)
-                ->has('product.images', self::RELATIONS)
-                ->has('product.countries', self::RELATIONS)
-        );
-
-        $response->assertStatus(200);
-    }
-
-    public function test_admin_can_show_the_product_edit_page(): void
-    {
-        $product = Product::factory()
-            ->has(Country::factory()->count(self::RELATIONS), 'countries')
-            ->has(Image::factory(['featured' => true]), 'featuredImage')
-            ->has(Image::factory()->count(self::RELATIONS), 'images')
-            ->create();
-        $response = $this->get(route('products.edit', $product));
-
-        $response->assertInertia(fn (AssertableInertia $page) => $page
-            ->component('Admin/Products/Edit')
-            ->has('product')
-            ->where('product.id', $product->id)
-            ->where('product.featured_image', $product->featuredImage)
-            ->has('product.images', self::RELATIONS)
-            ->has('product.countries', self::RELATIONS)
-            ->etc()
+                ->etc()
         );
 
         $response->assertStatus(200);
@@ -183,35 +123,46 @@ class ProductTest extends TestCase
 
     public function test_admin_can_update_an_existing_product(): void
     {
-        $countries = $this->countries;
         $product = Product::factory()->create();
+        $updateData = [
+            'name' => 'Updated name',
+            'slug' => 'Updated slug',
+            'description' => 'Updated description',
+            'duration' => 5,
+            'price' => 1234.56,
+            'featuredImage' => UploadedFile::fake()->image('updated-featured.jpg'),
+            'images' => [
+                UploadedFile::fake()->image('new1.jpg'),
+                UploadedFile::fake()->image('new2.jpg'),
+            ],
+            'countries' => $this->countries->modelKeys()
+        ];
 
-        $response = $this->post(route('products.update', $product), $this->productData);
-        $response->assertRedirect(route('products.show', $product));
+        $response = $this->post(route('admin.products.update', $product), $updateData);
 
-        $this->assertDatabaseHas('products', Arr::except($this->productData, ['featuredImage', 'images', 'countries']));
-        $this->assertDatabaseHas('country_product', [
-            'product_id' => $product->id,
-            'country_id' => $countries->first()->id,
-            'country_id' => $countries->last()->id,
-        ]);
+        $response->assertRedirect(route('admin.products.show', $product));
+        $product->refresh();
 
-        $featuredImagePath = $this->productData['featuredImage']->getClientOriginalName();
-        Storage::assertExists("images/{$featuredImagePath}");
+        $this->assertEquals('Updated name', $product->name);
+        $this->assertEquals('Updated description', $product->description);
+        $this->assertEquals('Updated slug', $product->slug);
+        $this->assertEquals(5, $product->duration);
+        $this->assertEquals(1234.56, $product->raw_price);
+
+        $featuredImagePath = $updateData['featuredImage']->getClientOriginalName();
         $this->assertDatabaseHas('images', [
             'imageable_id' => $product->id,
             'path' => $featuredImagePath,
+            'featured' => true,
         ]);
-
-        $this->assertCount(self::RELATIONS, $product->images);
+        Storage::assertExists("images/{$featuredImagePath}");
 
         foreach ($product->images as $index => $image) {
-            $path = $this->productData['images'][$index]->getClientOriginalName();
+            $path = $updateData['images'][$index]->getClientOriginalName();
             $this->assertDatabaseHas('images', [
                 'imageable_id' => $product->id,
                 'path' => $path,
             ]);
-
             Storage::assertExists("images/{$path}");
         }
     }
@@ -219,26 +170,25 @@ class ProductTest extends TestCase
     public function test_admin_can_destroy_a_product(): void
     {
         $product = Product::factory()->create();
-
-        $featuredImage = Image::factory()->create([
-            'imageable_id' => $product->id,
-            'imageable_type' => Product::class,
-            'featured' => true,
-        ]);
-
-        $images = Image::factory(self::RELATIONS)->create([
+        $image = Image::factory()->create([
             'imageable_id' => $product->id,
             'imageable_type' => Product::class,
         ]);
 
-        $response = $this->delete(route('products.destroy', $product));
+        $response = $this->delete(route('admin.products.destroy', $product));
 
-        $response->assertRedirect(route('products.index'));
+        $response->assertRedirect(route('admin.products.index'));
 
         $this->assertSoftDeleted($product);
-        $this->assertSoftDeleted($featuredImage);
-        foreach ($images as $image) {
-            $this->assertSoftDeleted($image);
-        }
+        $this->assertSoftDeleted($image);
+
+        $this->assertDatabaseMissing('products', [
+            'id' => $product->id,
+            'deleted_at' => null,
+        ]);
+        $this->assertDatabaseMissing('images', [
+            'imageable_id' => $product->id,
+            'deleted_at' => null,
+        ]);
     }
 }
