@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Models\Product;
 use Carbon\Carbon;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
 class BookingRequest extends FormRequest
@@ -17,7 +17,7 @@ class BookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'trip.id' => ['required', Rule::exists(Product::class, 'id'),],
+            'trip.id' => ['required', Rule::exists(Product::class, 'id')],
             // Selectie datum & bevestiging
             'departure_date' => ['required', 'date', 'after_or_equal:today'],
             'confirmed' => ['accepted'],
@@ -38,7 +38,7 @@ class BookingRequest extends FormRequest
             'travelers.adults.*.birthdate' => [
                 'required',
                 'date',
-                'before_or_equal:' . now()->subYears(12)->format('Y-m-d'),
+                'before_or_equal:'.now()->subYears(12)->format('Y-m-d'),
             ],
             'travelers.adults.*.nationality' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.adults.*.full_name' => ['required', 'string', 'min:3', 'max:255'],
@@ -50,7 +50,7 @@ class BookingRequest extends FormRequest
                 // should always be a valid index for travelers.adults[]
                 function ($attribute, $value, $fail) {
                     $adults = $this->input('travelers.adults', []);
-                    if (!array_key_exists($value, $adults)) {
+                    if (! array_key_exists($value, $adults)) {
                         $fail("De gekozen {$attribute} is ongeldig.");
                     }
                     // should always be 18 years or up
@@ -72,8 +72,8 @@ class BookingRequest extends FormRequest
             'travelers.children.*.birthdate' => [
                 'required',
                 'date',
-                'after_or_equal:' . now()->subYears(12)->format('Y-m-d'),
-                'before_or_equal:' . now()->format('Y-m-d')
+                'after_or_equal:'.now()->subYears(12)->format('Y-m-d'),
+                'before_or_equal:'.now()->format('Y-m-d'),
             ],
             'travelers.children.*.nationality' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.children.*.full_name' => ['required', 'string', 'min:3', 'max:255'],

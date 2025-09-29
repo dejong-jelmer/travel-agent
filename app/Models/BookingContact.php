@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookingContact extends Model
 {
@@ -23,14 +23,15 @@ class BookingContact extends Model
         'phone',
         'country',
     ];
-     protected $appends = [
+
+    protected $appends = [
         'address',
     ];
 
     protected function address(): Attribute
     {
         return Attribute::get(
-            fn() => "{$this->street} {$this->house_number} {$this->addition}\n{$this->postal} {$this->city}"
+            fn () => "{$this->street} {$this->house_number} {$this->addition}\n{$this->postal} {$this->city}"
         );
     }
 
@@ -38,5 +39,4 @@ class BookingContact extends Model
     {
         return $this->belongsTo(Booking::class);
     }
-
 }

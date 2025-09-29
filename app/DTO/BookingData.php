@@ -19,7 +19,7 @@ class BookingData implements Arrayable
         public readonly Carbon $date,
         public readonly array $adult,
         public readonly array $child,
-        public readonly Bool $confirmed,
+        public readonly bool $confirmed,
     ) {}
 
     public static function fromRequest(BookingRequest $request): self

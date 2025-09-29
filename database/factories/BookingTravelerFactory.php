@@ -22,7 +22,7 @@ class BookingTravelerFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'birthdate' => fake()->date(),
-            'nationality' => fake()->country()
+            'nationality' => fake()->country(),
         ];
     }
 }

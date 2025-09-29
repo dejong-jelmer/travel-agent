@@ -6,7 +6,6 @@ use App\Http\Requests\StoreProductRequest;
 use App\Models\Country;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 

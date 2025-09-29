@@ -1,16 +1,15 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\HomeController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
 
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -34,7 +33,7 @@ Route::get('/admin/login', function () {
     ]);
 })->middleware('guest')->name('admin');
 
-Route::get('admin/', fn() => to_route('admin.login'));
+Route::get('admin/', fn () => to_route('admin.login'));
 Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
 
 Route::prefix('admin')
@@ -44,22 +43,22 @@ Route::prefix('admin')
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
 
-    // Product routes
-    Route::resource('/products', ProductController::class)->except(['update']);
-    Route::post('/products/update/{product}', [ProductController::class, 'update'])->name('products.update');
+        // Product routes
+        Route::resource('/products', ProductController::class)->except(['update']);
+        Route::post('/products/update/{product}', [ProductController::class, 'update'])->name('products.update');
 
-    // Product Itinerary routes
-    Route::resource('products.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
-    Route::patch('/products/{product}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('products.itineraries.order');
+        // Product Itinerary routes
+        Route::resource('products.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
+        Route::patch('/products/{product}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('products.itineraries.order');
 
-    // Itinerary routes
-    Route::resource('itineraries', ItineraryController::class)->only(['edit', 'destroy']);
-    Route::post('/itineraries/{itinerary}', [ItineraryController::class, 'update'])->name('itineraries.update');
+        // Itinerary routes
+        Route::resource('itineraries', ItineraryController::class)->only(['edit', 'destroy']);
+        Route::post('/itineraries/{itinerary}', [ItineraryController::class, 'update'])->name('itineraries.update');
 
-    // Country routes
-    Route::resource('countries', CountryController::class)->except(['show', 'edit', 'update']);
+        // Country routes
+        Route::resource('countries', CountryController::class)->except(['show', 'edit', 'update']);
 
-    // Booking routes
-    Route::resource('bookings', AdminBookingController::class)->except(['create','store']);
-    // Route::post('/bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
-});
+        // Booking routes
+        Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);
+        // Route::post('/bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
+    });

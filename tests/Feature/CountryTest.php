@@ -25,7 +25,7 @@ class CountryTest extends TestCase
         $response = $this->get(route('admin.countries.index'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Admin/Countries/Index')
+            fn (AssertableInertia $page) => $page->component('Admin/Countries/Index')
                 ->has('countries.data', 10)
                 ->has('countries.links')
         );
@@ -38,7 +38,7 @@ class CountryTest extends TestCase
         $response = $this->get(route('admin.countries.create'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Admin/Countries/Create')
+            fn (AssertableInertia $page) => $page->component('Admin/Countries/Create')
         );
         $response->assertStatus(200);
     }

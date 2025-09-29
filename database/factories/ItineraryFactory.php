@@ -23,9 +23,9 @@ class ItineraryFactory extends Factory
                 'Aankomst in ',
                 'Verblijf in ',
                 'Vertrek uit ',
-                ]) . fake()->city,
+            ]).fake()->city,
             'description' => fake()->paragraph(3),
-            'location' => fake()->city . ', ' . fake()->country,
+            'location' => fake()->city.', '.fake()->country,
             'activities' => fake()->optional()->randomElements([
                 'Check-in hotel',
                 'Stadswandeling',
@@ -33,7 +33,7 @@ class ItineraryFactory extends Factory
                 'Fietstocht',
                 'Boottocht',
             ], rand(0, 4)),
-            'accommodation' => fake()->company . ' Hotel',
+            'accommodation' => fake()->company.' Hotel',
             'meals' => fake()->optional()->randomElements(Meals::cases(), rand(0, 2)),
             'transport' => fake()->optional()->randomElements(Transport::cases(), rand(0, 4)),
             'remark' => fake()->optional()->randomElement([

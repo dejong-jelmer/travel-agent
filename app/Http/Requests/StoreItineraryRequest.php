@@ -2,10 +2,10 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Meals;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rule;
-use App\Enums\Meals;
 
 class StoreItineraryRequest extends FormRequest
 {
@@ -19,8 +19,6 @@ class StoreItineraryRequest extends FormRequest
 
     /**
      * Prepere the request for validation, default to empty array on null
-     *
-     * @return void
      */
     protected function prepareForValidation(): void
     {
