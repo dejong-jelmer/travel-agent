@@ -21,8 +21,7 @@ class BookingContactData implements Arrayable
     ) {}
 
     /**
-     * @param array<string,string> $data
-     * @return self
+     * @param  array<string,string>  $data
      */
     public static function fromArray(string $name, array $data): self
     {

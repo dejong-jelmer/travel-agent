@@ -3,14 +3,14 @@
 namespace Tests\Feature;
 
 use App\Models\Country;
+use App\Models\Image;
 use App\Models\Product;
 use App\Models\User;
-use App\Models\Image;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -19,7 +19,9 @@ class ProductTest extends TestCase
     use RefreshDatabase;
 
     private User $admin;
+
     private array $productData;
+
     private Collection $countries;
 
     protected function setUp(): void
@@ -56,7 +58,7 @@ class ProductTest extends TestCase
         $response = $this->get(route('admin.products.index'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Products/Index')
                 ->has('products.data', 3)
                 ->has('products.links')
@@ -70,7 +72,7 @@ class ProductTest extends TestCase
         $response = $this->get(route('admin.products.create'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Products/Create')
         );
 
@@ -111,7 +113,7 @@ class ProductTest extends TestCase
         $response = $this->get(route('admin.products.edit', $product));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Products/Edit')
                 ->has('product')
                 ->where('product.id', $product->id)
@@ -135,7 +137,7 @@ class ProductTest extends TestCase
                 UploadedFile::fake()->image('new1.jpg'),
                 UploadedFile::fake()->image('new2.jpg'),
             ],
-            'countries' => $this->countries->modelKeys()
+            'countries' => $this->countries->modelKeys(),
         ];
 
         $response = $this->post(route('admin.products.update', $product), $updateData);

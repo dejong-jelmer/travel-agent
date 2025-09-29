@@ -3,16 +3,16 @@
 namespace App\Models;
 
 use App\Enums\TravelerType;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Support\Str;
-use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Support\Str;
 
 class Booking extends Model
 {
@@ -39,8 +39,7 @@ class Booking extends Model
     protected function departureDateFormatted(): Attribute
     {
         return Attribute::get(
-            fn() =>
-            $this->departure_date
+            fn () => $this->departure_date
                 ? ucfirst($this->departure_date->locale('nl')->isoFormat('dddd D MMMM YYYY'))
                 : null
         );
@@ -49,8 +48,7 @@ class Booking extends Model
     protected function createdAtFormatted(): Attribute
     {
         return Attribute::get(
-            fn() =>
-            $this->created_at
+            fn () => $this->created_at
                 ? $this->created_at->isoFormat('DD-MM-YYYY')
                 : null
         );

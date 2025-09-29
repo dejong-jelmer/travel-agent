@@ -3,11 +3,9 @@
 namespace App\Listeners;
 
 use App\Events\BookingCreated;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Mail\BookingMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\BookingMail;
 
 class NotifyAdminOfNewBooking
 {
@@ -30,8 +28,8 @@ class NotifyAdminOfNewBooking
                 new BookingMail($event->booking)
             );
         } catch (\Throwable $e) {
-            Log::error('Mail sending failed: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Mail sending failed: '.$e->getMessage());
+            Log::error('Stack trace: '.$e->getTraceAsString());
         }
     }
 }

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Meals;
+use App\Enums\Transport;
 use App\Http\Requests\StoreItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
 use App\Models\Itinerary;
 use App\Models\Product;
-use App\Enums\Meals;
-use App\Enums\Transport;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;

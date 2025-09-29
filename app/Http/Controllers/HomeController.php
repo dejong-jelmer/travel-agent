@@ -6,11 +6,12 @@ use App\DTO\ContactFormData;
 use App\Http\Requests\ContactRequest;
 use App\Mail\ContactMail;
 use App\Models\Product;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
-use Illuminate\Support\Facades\Log;
+
 class HomeController extends Controller
 {
     private string $appName;
@@ -58,10 +59,9 @@ class HomeController extends Controller
                 new ContactMail($contact)
             );
         } catch (\Throwable $e) {
-            Log::error('Mail sending failed: ' . $e->getMessage());
-            Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Mail sending failed: '.$e->getMessage());
+            Log::error('Stack trace: '.$e->getTraceAsString());
         }
-
 
         return response()->json([
             'success' => true,

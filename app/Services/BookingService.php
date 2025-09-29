@@ -22,12 +22,12 @@ class BookingService
         // Create booking
         $booking = $bookingData->trip->bookings()->create([
             'departure_date' => $bookingData->date,
-            'confirmed'  => $bookingData->confirmed,
+            'confirmed' => $bookingData->confirmed,
         ]);
 
         // Create a booking regerence
         $year = now()->format('Y');
-        $booking->reference = "{$year}-" . str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+        $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
         $booking->save();
 
         // Create booking contact details
@@ -65,7 +65,7 @@ class BookingService
         $booking->save();
     }
 
-    private function createTraveler(Booking $booking, array $travelers, String $type, ?int $mainBookerIndex = null)
+    private function createTraveler(Booking $booking, array $travelers, string $type, ?int $mainBookerIndex = null)
     {
         foreach ($travelers as $index => $traveler) {
             $travelerModel = $booking->travelers()->create([
@@ -79,7 +79,7 @@ class BookingService
         }
     }
 
-    private function updateTraveler(Booking $booking, array $travelers, String $type, ?int $mainBookerIndex = null)
+    private function updateTraveler(Booking $booking, array $travelers, string $type, ?int $mainBookerIndex = null)
     {
         foreach ($travelers as $index => $traveler) {
             $this->updateChangeLog($booking->id, $booking->travelers->find($traveler['id']), $traveler, "{$type}.{$index}");
@@ -99,7 +99,7 @@ class BookingService
         ]);
     }
 
-    public function updateChangeLog(int $id, Model $model, array $data, ?String $for = null): void
+    public function updateChangeLog(int $id, Model $model, array $data, ?string $for = null): void
     {
         foreach ($data as $field => $value) {
             $old = data_get($model, $field);
@@ -107,10 +107,10 @@ class BookingService
                 $logField = $for ? "{$for}." : '';
                 BookingChange::create([
                     'booking_id' => $id,
-                    'admin_id'   => Auth::id(),
-                    'field'      => $logField . $field,
-                    'old_value'  => $old,
-                    'new_value'  => $value,
+                    'admin_id' => Auth::id(),
+                    'field' => $logField.$field,
+                    'old_value' => $old,
+                    'new_value' => $value,
                 ]);
             }
         }

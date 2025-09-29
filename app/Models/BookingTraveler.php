@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Enums\TravelerType;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class BookingTraveler extends Model
 {
@@ -18,7 +18,7 @@ class BookingTraveler extends Model
         'first_name',
         'last_name',
         'birthdate',
-        'nationality'
+        'nationality',
     ];
 
     protected $appends = [
@@ -39,18 +39,16 @@ class BookingTraveler extends Model
     protected function fullName(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->first_name . ' ' . $this->last_name,
+            get: fn () => $this->first_name.' '.$this->last_name,
         );
     }
 
     protected function birthdateFormatted(): Attribute
     {
         return Attribute::get(
-            fn() =>
-            $this->birthdate
+            fn () => $this->birthdate
                 ? $this->birthdate->isoFormat('DD-MM-YYYY')
                 : null
         );
     }
-
 }
