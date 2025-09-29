@@ -7,7 +7,7 @@ import { emailLinks, phoneLinks } from '@/Composables/antiSpamLinks.js';
 
 const props = defineProps({
     title: String,
-    telephone: Object,
+    phone: Object,
 });
 
 const user = usePage().props.auth?.user ?? {};
@@ -17,7 +17,7 @@ const breadcrumbs = usePage().props.breadcrumbs ?? {};
 
 onMounted(() => {
     const encodedMail = contact?.mail?.link;
-    const encodedPhone = contact?.telephone;
+    const encodedPhone = contact?.phone;
     emailLinks(encodedMail, '.email-field');
     phoneLinks(encodedPhone, '.tel-field');
 });

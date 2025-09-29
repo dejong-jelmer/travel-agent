@@ -32,10 +32,10 @@ class ItineraryFactory extends Factory
                 'Museumbezoek',
                 'Fietstocht',
                 'Boottocht',
-            ], rand(1, 3)),
+            ], rand(0, 4)),
             'accommodation' => fake()->company . ' Hotel',
-            'meals' => fake()->optional()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 3)),
-            'transport' => fake()->optional()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
+            'meals' => fake()->optional()->randomElements(Meals::cases(), rand(0, 2)),
+            'transport' => fake()->optional()->randomElements(Transport::cases(), rand(0, 4)),
             'remark' => fake()->optional()->randomElement([
                 'Museum toegang niet inbegrepen in de prijs',
                 'Lunch niet inbegrepen',

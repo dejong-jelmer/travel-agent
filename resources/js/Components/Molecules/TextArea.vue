@@ -1,5 +1,4 @@
 <script setup>
-import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
 
 defineProps({
     modelValue: String,
@@ -27,7 +26,7 @@ defineProps({
 </script>
 <template>
     <div>
-        <label v-if="showLabel" :for="name" class="form-label">{{ label }}</label>
+        <Label v-if="showLabel" :form-field="name">{{ label }}</Label>
         <textarea
             :id="name"
             :value="modelValue"

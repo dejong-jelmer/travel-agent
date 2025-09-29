@@ -2,16 +2,18 @@
 
 namespace Database\Seeders;
 
+use App\Models\Booking;
 use App\Models\Country;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Product;
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
+    use WithoutModelEvents;
     /**
      * Seed the application's database.
      */
@@ -25,6 +27,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Product::factory(8)
+            ->has(Booking::factory(), 'bookings')
             ->has(Image::factory()->count(3), 'images')
             ->create()->each(function ($product) use ($countries) {
                 $product->images()->inRandomOrder()->first()->update(['featured' => true]);

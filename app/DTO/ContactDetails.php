@@ -15,6 +15,6 @@ class ContactDetails
         public string $kvk,
         public string $btw,
         public AntiSpamEmailService $mail,
-        public PhoneNumberService $telephone
+        public PhoneNumberService $phone
     ) {}
 }

@@ -50,13 +50,12 @@ const icons = {
 const currentIcon = shallowRef(icons[`${props.icon}`]);
 
 const confirmDelete = (href, showConfirm, prompt) => {
-    if(href) {
-        if(showConfirm) {
-            if (!confirm(prompt)) {
-                return;
-            }
+    if(showConfirm) {
+        if (!confirm(prompt)) {
+            return;
         }
-
+    }
+    if(!!href) {
         router.visit(href, {
             method: `${props.method}`
         });

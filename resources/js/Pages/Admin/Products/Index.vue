@@ -1,20 +1,19 @@
 <script setup>
 import { reactive } from 'vue'
-// import { More } from '@/Icons';
 
 defineProps({
-    products: Array,
+    products: Object,
 })
 const showMoreOptions = reactive({});
 
 </script>
 <template>
-    <Admin>
-        <div class="">
+    <Admin :links="products.links">
+        <template v-if="products.data.length > 0">
             <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
                 <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Producten</h1>
                 <IconLink v-tippy="'Voeg een reisproduct toe'" icon="Add" type="info"
-                    :href="route('products.create')" />
+                    :href="route('admin.products.create')" />
             </div>
             <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
                 <table class="w-full border-collapse">
@@ -29,16 +28,17 @@ const showMoreOptions = reactive({});
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
-                        <tr v-for="(product, index) in products" :key="product.id" class="hover:bg-gray-100 transition">
-                            <td class="py-4 px-6 text-center">{{ index + 1 }}</td>
+                        <tr v-for="(product, index) in products.data" :key="index"
+                            class="hover:bg-gray-100 transition">
+                            <td class="py-4 px-6 text-center">{{ product.id }}</td>
                             <td class="py-4 px-6 text-center">{{ product.name }}</td>
                             <td class="py-4 px-6 text-center">{{ product.countries_list }}</td>
                             <td class="py-4 px-6 text-center">€ {{ product.price }}</td>
                             <td class="py-4 px-6 text-center">{{ product.duration }}</td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <IconLink class="mx-auto" icon="View" :href="route('products.show', { product })"
+                                <IconLink class="mx-auto" icon="View" :href="route('admin.products.show', { product })"
                                     v-tippy="'Bekijk reisproduct'" />
-                                <IconLink class="mx-auto" icon="Edit" :href="route('products.edit', product)"
+                                <IconLink class="mx-auto" icon="Edit" :href="route('admin.products.edit', product)"
                                     v-tippy="'Bewerk reisproduct'" />
                                 <div class="w-fit mx-auto" v-tippy="`Meer opties`">
                                     <button class="info-button"
@@ -48,12 +48,12 @@ const showMoreOptions = reactive({});
                                 </div>
                                 <div v-if="showMoreOptions[product.id]" class="space-y-2">
                                     <IconLink class="mx-auto" icon="Calendar" :href="product.itineraries?.length ?
-                                        route('products.itineraries.index', product)
-                                        : route('products.itineraries.create', product)"
+                                        route('admin.products.itineraries.index', product)
+                                        : route('admin.products.itineraries.create', product)"
                                         v-tippy="'Bekijk reisplan van deze reis'" />
                                     <IconLink class="mx-auto" type="delete" icon="Delete"
-                                        :href="route('products.destroy', product)" method="delete" :showConfirm="true"
-                                        prompt="Weet je zeker dat je deze reis wilt verwijderen?"
+                                        :href="route('admin.products.destroy', product)" method="delete"
+                                        :showConfirm="true" prompt="Weet je zeker dat je deze reis wilt verwijderen?"
                                         v-tippy="'Verwijder reisproduct!'" />
                                 </div>
                             </td>
@@ -61,6 +61,11 @@ const showMoreOptions = reactive({});
                     </tbody>
                 </table>
             </div>
-        </div>
+        </template>
+        <template v-else>
+            <div class="p-5">
+                <p>Er zijn nog geen reis producten.</p>
+            </div>
+        </template>
     </Admin>
 </template>

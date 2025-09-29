@@ -8,7 +8,7 @@ const props = defineProps({
 
 function updateOrder(orderedItinerary) {
     axios
-        .patch(route("products.itineraries.order", props.product), {
+        .patch(route("admin.products.itineraries.order", props.product), {
             itineraries: orderedItinerary,
         })
         .then((response) => console.log(response.data))
@@ -20,7 +20,7 @@ function updateOrder(orderedItinerary) {
         <div class="space-y-4">
             <div class="flex mx-auto justify-end">
                 <IconLink type="info" v-tippy="'Voeg een dag reisplan toe'" icon="Add"
-                    :href="route('products.itineraries.create', product)" />
+                    :href="route('admin.products.itineraries.create', product)" />
             </div>
             <SortableBlocks :blocks="product.itineraries" @update:order="updateOrder" class="grid gap-y-10">
                 <template v-slot:default="slotProps">

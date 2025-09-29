@@ -1,5 +1,4 @@
 <script setup>
-// import { Tree, Mobile, Sto, Calamiteiten, VvKR } from "@/Icons";
 import { usePage } from "@inertiajs/vue3";
 import { computed } from 'vue';
 

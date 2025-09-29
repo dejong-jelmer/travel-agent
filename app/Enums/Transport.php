@@ -6,9 +6,9 @@ use App\Enums\Traits\Selectable;
 enum Transport: string
 {
     use Selectable;
-    case TRAIN = 'Trein';
-    case BOAT = 'Boot';
-    case BUS = 'Bus';
-    case TRANSFER = 'Transfer';
-    case AIRPLANE = 'Vliegtuig';
+    case Train = 'Trein';
+    case Boat = 'Boot';
+    case Bus = 'Bus';
+    case Transfer = 'Transfer';
+    case Airplane = 'Vliegtuig';
 }

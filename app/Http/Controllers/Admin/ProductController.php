@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StoreProductRequest;
 use App\Models\Country;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -24,7 +25,7 @@ class ProductController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Products/Index', [
-            'products' => Product::with(['countries', 'itineraries', 'featuredImage'])->get(),
+            'products' => Product::with(['countries', 'itineraries', 'featuredImage'])->paginate(10),
             'title' => "Admin producten - {$this->appName}",
         ]);
     }
@@ -60,7 +61,7 @@ class ProductController extends Controller
             $product->countries()->sync($countries);
         }
 
-        return redirect()->route('products.show', $product)->with('success', __('Product aangemaakt'));
+        return redirect()->route('admin.products.show', $product)->with('success', __('Product aangemaakt'));
     }
 
     /**
@@ -104,7 +105,7 @@ class ProductController extends Controller
             $product->countries()->sync($countries);
         }
 
-        return redirect()->route('products.show', $product)
+        return redirect()->route('admin.products.show', $product)
             ->with('success', __('Product aangepast'));
     }
 
@@ -115,7 +116,7 @@ class ProductController extends Controller
     {
         Product::destroy($product->id);
 
-        return redirect()->route('products.index')
+        return redirect()->route('admin.products.index')
             ->with('success', __('Product verwijderd'));
     }
 }

@@ -1,6 +1,5 @@
 <script setup>
 import { usePage } from '@inertiajs/vue3';
-// import { Logo } from "@/Icons";
 import { Link } from '@inertiajs/vue3';
 
 const page = usePage();

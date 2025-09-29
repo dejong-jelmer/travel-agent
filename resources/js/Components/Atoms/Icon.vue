@@ -1,5 +1,4 @@
 <script setup>
-// import { Delete, Edit, View, Calendar, Save, Add } from '@/Icons';
 import { shallowRef, markRaw } from 'vue';
 
 const props = defineProps({

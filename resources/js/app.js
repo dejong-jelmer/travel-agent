@@ -10,6 +10,8 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import toastOptions from './toastOptions.js';
 import screens from './screens.js';
+import '@vuepic/vue-datepicker/dist/main.css';
+
 
 import.meta.glob([
   '../images/**',

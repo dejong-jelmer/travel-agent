@@ -1,6 +1,5 @@
 <script setup>
 import { ref, computed } from 'vue'
-// import { UserAdd } from "@/Icons";
 
 const props = defineProps({
     modelValue: {
@@ -8,9 +7,9 @@ const props = defineProps({
         default: () => ({ adults: 1, children: 0 })
     },
     minAdults: { type: Number, default: 1 },
-    maxAdults: { type: Number, default: 6 },
+    maxAdults: { type: Number, default: 8 },
     minChildren: { type: Number, default: 0 },
-    maxChildren: { type: Number, default: 2 }
+    maxChildren: { type: Number, default: 8 }
 })
 const open = ref(false)
 // Emits
@@ -65,7 +64,7 @@ const decrement = (key) => {
 
             <!-- Childeren -->
             <div class="flex items-center justify-between">
-                <label class="text-primary-dark font-medium">Kinderen</label>
+                <label class="text-primary-dark font-medium">Kinderen (tot 12 jaar)</label>
                 <div class="flex items-center gap-2">
 
                     <button @click="decrement('children')" :disabled="children.value <= minChildren"

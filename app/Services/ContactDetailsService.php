@@ -20,8 +20,8 @@ class ContactDetailsService
     /**
      * Retrieves a specific contact detail based on the provided key.
      *
-     * @param  string  $detail  The key of the desired contact detail (e.g., 'telephone', 'email', etc.).
-     * @return PhoneNumberService|AntiSpamEmailService|string Returns a `PhoneNumberService` instance for 'telephone',
+     * @param  string  $detail  The key of the desired contact detail (e.g., 'phone', 'email', etc.).
+     * @return PhoneNumberService|AntiSpamEmailService|string Returns a `PhoneNumberService` instance for 'phone',
      *                                                        or a string for other details.
      *
      * @throws InvalidArgumentException If the given detail does not exist on the `$details` object.
@@ -29,7 +29,7 @@ class ContactDetailsService
     public function getContact(string $detail): PhoneNumberService|AntiSpamEmailService|string
     {
         return match ($detail) {
-            'telephone' => $this->getTelephone(),
+            'phone' => $this->getTelephone(),
             'mail' => $this->getSpamSafeEmail(),
             default => property_exists($this->details, $detail)
                 ? $this->details->$detail
@@ -39,7 +39,7 @@ class ContactDetailsService
 
     public function getTelephone(): PhoneNumberService
     {
-        return $this->details->telephone;
+        return $this->details->phone;
     }
 
     public function getSpamSafeEmail(): AntiSpamEmailService

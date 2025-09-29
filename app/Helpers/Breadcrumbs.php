@@ -6,7 +6,7 @@ class Breadcrumbs
 {
     const PROD_LABEL = ['label' => 'Reis producten'];
 
-    const PROD_ROUTE = ['route' => 'products.index'];
+    const PROD_ROUTE = ['route' => 'admin.products.index'];
 
     const DASH_LABEL = ['label' => 'Dashboard'];
 
@@ -14,7 +14,7 @@ class Breadcrumbs
 
     const COUNT_LABEL = ['label' => 'Landen'];
 
-    const COUNT_ROUTE = ['route' => 'countries.index'];
+    const COUNT_ROUTE = ['route' => 'admin.countries.index'];
 
     public static function generate(): array
     {
@@ -22,40 +22,40 @@ class Breadcrumbs
 
         return match ($routeName) {
             // Products
-            'products.index' => [
+            'admin.products.index' => [
                 [...self::DASH_LABEL, ...self::DASH_ROUTE],
                 [...self::PROD_LABEL, 'route' => null],
             ],
 
-            'products.show' => self::productShow(),
+            'admin.products.show' => self::productShow(),
 
-            'products.create' => [
+            'admin.products.create' => [
                 [...self::PROD_LABEL, ...self::PROD_ROUTE],
                 [...self::PROD_LABEL, 'route' => null],
             ],
 
-            'products.edit' => self::productEdit(),
+            'admin.products.edit' => self::productEdit(),
 
-            'products.update' => self::productEdit(),
+            'admin.products.update' => self::productEdit(),
 
             // Itineraries (nested onder product)
-            'products.itineraries.index' => self::productItinerariesIndex(),
+            'admin.products.itineraries.index' => self::productItinerariesIndex(),
 
-            'products.itineraries.create' => [
+            'admin.products.itineraries.create' => [
                 ...self::productItinerariesIndex(),
                 ['label' => 'Nieuwe dag', 'route' => null],
             ],
 
             // Itinerary edit (losse route)
-            'itineraries.edit' => self::itineraryEdit(),
-            'itineraries.update' => self::itineraryEdit(),
+            'admin.itineraries.edit' => self::itineraryEdit(),
+            'admin.itineraries.update' => self::itineraryEdit(),
 
             // Countries
-            'countries.index' => [
+            'admin.countries.index' => [
                 [...self::DASH_LABEL, ...self::DASH_ROUTE],
                 [...self::COUNT_LABEL, 'route' => null],
             ],
-            'countries.create' => [
+            'admin.countries.create' => [
                 [...self::DASH_LABEL, ...self::DASH_ROUTE],
                 [...self::COUNT_LABEL, ...self::COUNT_ROUTE],
                 ['label' => 'Land aanmaken', 'route' => null],
@@ -94,7 +94,7 @@ class Breadcrumbs
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
             [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis product', 'route' => 'products.edit', 'params' => [$product]],
+            ['label' => $product?->name ?? 'Reis product', 'route' => 'admin.products.edit', 'params' => [$product]],
             ['label' => 'Reisdagen', 'route' => null],
         ];
     }
@@ -107,8 +107,8 @@ class Breadcrumbs
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
             [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis', 'route' => 'products.edit', 'params' => [$product]],
-            ['label' => 'Reisdagen', 'route' => 'products.itineraries.index', 'params' => [$product]],
+            ['label' => $product?->name ?? 'Reis', 'route' => 'admin.products.edit', 'params' => [$product]],
+            ['label' => 'Reisdagen', 'route' => 'admin.products.itineraries.index', 'params' => [$product]],
             ['label' => 'Bewerk reisdag', 'route' => null],
         ];
     }

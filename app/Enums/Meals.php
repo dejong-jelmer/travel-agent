@@ -6,8 +6,8 @@ use App\Enums\Traits\Selectable;
 enum Meals: string
 {
     use Selectable;
-    case BREAKFAST = 'Ontbijt';
-    case LUNCH = 'Lunch';
-    case DINNER = 'Dinner';
+    case Breakfast = 'Ontbijt';
+    case Lunch = 'Lunch';
+    case Dinner = 'Dinner';
 
 }

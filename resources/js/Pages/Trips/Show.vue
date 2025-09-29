@@ -1,8 +1,7 @@
 <script setup>
-import { ref, watch } from 'vue'
-import { Link } from "@inertiajs/vue3";
-// import { Train, NightTrain, Euro, Clock, Directions, MapPin, Star, Calendar } from "@/Icons";
+import { ref, toRef, watch } from 'vue'
 import { UsersIcon, ChevronRightIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
+import { useBooking } from '@/composables/useBooking'
 
 const props = defineProps({
     trip: Object,
@@ -17,54 +16,19 @@ const lightboxRef = ref(null)
 const openLightbox = (index) => {
     lightboxRef.value?.open(index)
 }
+
 // Booking data
-const booking = ref({
-    persons: { adults: 2, children: 0 },
-    selectedDate: new Date(),
-    travelers: {
-        adults: [],
-        children: []
-    },
-    contact: {
-        address: {
-            street: '',
-            number: '',
-            addition: '',
-            city: '',
-            postal: '',
-        },
-        email: ''
-    }
-})
-
-const createTraveler = () => ({
-    firstName: '',
-    lastName: '',
-    birthDate: null,
-    nationality: '',
-})
-
-watch(() => booking.value.persons.adults, (newCount) => {
-    const current = booking.value.travelers.adults.length
-    if (newCount > current) {
-        for (let i = current; i < newCount; i++) {
-            booking.value.travelers.adults.push(createTraveler())
+const { booking, validator, markTouched, markDirty } = useBooking(props.trip)
+const departure_date = toRef(booking, 'departure_date')
+const participants = toRef(booking, 'participants')
+watch(
+    () => booking.hasErrors,
+    (newValue) => {
+        if (newValue) {
+            bookingModalOpen.value = true
         }
-    } else {
-        booking.value.travelers.adults.splice(newCount)
     }
-}, { immediate: true })
-
-watch(() => booking.value.persons.children, (newCount) => {
-    const current = booking.value.travelers.children.length
-    if (newCount > current) {
-        for (let i = current; i < newCount; i++) {
-            booking.value.travelers.children.push(createTraveler())
-        }
-    } else {
-        booking.value.travelers.children.splice(newCount)
-    }
-})
+)
 
 const tabs = [
     { id: 'itinerary', label: 'Dag tot dag' },
@@ -274,8 +238,8 @@ const tabs = [
                                         <h3 class="text-xl font-bold text-primary-dark">
                                             Boek deze reis
                                         </h3>
-                                        <DatePicker v-model="booking.selectedDate" :min-date="new Date()" />
-                                        <PersonPicker v-model="booking.persons" :min-adults="1" :min-children="0"
+                                        <DatePicker v-model="departure_date" :min-date="new Date()" />
+                                        <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
                                             :max-adults="6" :max-children="4" />
                                         <button @click="bookingModalOpen = true"
                                             class="w-full bg-accent-terracotta hover:bg-accent-terracotta/90 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 group">
@@ -283,7 +247,6 @@ const tabs = [
                                             <ChevronRightIcon
                                                 class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                                         </button>
-
                                         <p class="text-sm text-secondary-stone text-center mt-4">
                                             Of neem contact op voor meer informatie
                                         </p>
@@ -329,6 +292,6 @@ const tabs = [
         </div>
     </Layout>
     <Modal :open="bookingModalOpen" @close="bookingModalOpen = false">
-        <BookingForm :trip="trip" v-model:booking="booking" />
+        <BookingForm v-model:booking="booking" :validator="validator" @booking-completed="bookingModalOpen = false" />
     </Modal>
 </template>

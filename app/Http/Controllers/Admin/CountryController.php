@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Models\Country;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+
 
 class CountryController extends Controller
 {
@@ -16,7 +17,7 @@ class CountryController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Countries/Index', [
-            'countries' => Country::all(),
+            'countries' => Country::paginate(15),
         ]);
     }
 
@@ -38,7 +39,7 @@ class CountryController extends Controller
         ]);
         Country::create(['name' => $validated['name']]);
 
-        return redirect()->route('countries.index')->with('success', __('Land aangemaakt'));
+        return redirect()->route('admin.countries.index')->with('success', __('Land aangemaakt'));
 
     }
 
@@ -59,6 +60,6 @@ class CountryController extends Controller
             $feedback['message'] = 'Land verwijderd';
         }
 
-        return redirect()->route('countries.index')->with($feedback['status'], __($feedback['message']));
+        return redirect()->route('admin.countries.index')->with($feedback['status'], __($feedback['message']));
     }
 }

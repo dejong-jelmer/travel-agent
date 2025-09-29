@@ -2,7 +2,6 @@
 import { useForm } from "@inertiajs/vue3";
 const props = defineProps({
     itinerary: Object,
-    errors: Object,
     meals: Object,
     transport: Object,
 });
@@ -20,16 +19,14 @@ const form = useForm({
 });
 
 function submit() {
-    console.log('Submitting form:', form);
-
-    form.post(route("itineraries.update", props.itinerary.id), { forceFormData: true });
+    form.post(route("admin.itineraries.update", props.itinerary.id), { forceFormData: true });
 }
 </script>
 
 <template>
     <Admin>
         <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
-            <ItineraryForm :form="form" :meals="meals" :transport="transport" :errors="errors" @submit="submit" />
+            <ItineraryForm :form="form" :meals="meals" :transport="transport" @submit="submit" />
         </div>
     </Admin>
 </template>

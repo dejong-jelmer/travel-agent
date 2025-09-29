@@ -71,7 +71,7 @@ const normalizedOptions = computed(() => {
 </script>
 <template>
     <div>
-        <label v-if="showLabel" :for="name" class="form-label">{{ label }}</label>
+        <Label v-if="showLabel" :form-field="name">{{ label }}</Label>
         <select
             class="form-input"
             :id="name"

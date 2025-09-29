@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount, computed } from "vue";
-// import { Swipe } from "@/Icons";
 
 const props = defineProps(['hasDragged']);
 const hasDraggedRef = computed(() => props.hasDragged);

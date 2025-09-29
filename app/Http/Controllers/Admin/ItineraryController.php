@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StoreItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
@@ -65,7 +65,7 @@ class ItineraryController extends Controller
         $itinerary->storeImages($validatedImage['image'], 'image');
 
         return redirect()
-            ->route('products.itineraries.index', $itinerary->product)
+            ->route('admin.products.itineraries.index', $itinerary->product)
             ->with('success', __('Aanmaken van het reisplan is gelukt!'));
     }
 
@@ -74,7 +74,6 @@ class ItineraryController extends Controller
      */
     public function edit(Itinerary $itinerary): Response
     {
-        // dd(['transport' => Transport::options()]);
         return Inertia::render('Admin/Itineraries/Edit', [
             'itinerary' => $itinerary->load('image'),
             'meals' => Meals::options(),
@@ -94,7 +93,7 @@ class ItineraryController extends Controller
         $itinerary->storeImages($validatedImage['image'], 'image');
 
         return redirect()
-            ->route('products.itineraries.index', $itinerary->product)
+            ->route('admin.products.itineraries.index', $itinerary->product)
             ->with('success', 'Aanpassen van het reisplan is gelukt!.');
     }
 
@@ -108,7 +107,7 @@ class ItineraryController extends Controller
         Itinerary::destroy($itinerary->id);
 
         return redirect()
-            ->route('products.itineraries.index', $product)
+            ->route('admin.products.itineraries.index', $product)
             ->with('success', "Reisplan \"{$itineraryTitle}\" is verwijderd!.");
     }
 }

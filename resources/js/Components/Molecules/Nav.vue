@@ -1,7 +1,6 @@
 <script setup>
 import { ref } from 'vue';
 import { Link } from "@inertiajs/vue3";
-// import { Logo } from "@/Icons";
 
 const props = defineProps({
     logoClass: Array,

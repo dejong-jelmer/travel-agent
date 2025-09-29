@@ -1,5 +1,4 @@
 <script setup>
-// import { Train, NightTrain, Euro, Clock, Directions } from "@/Icons";
 import { Link } from "@inertiajs/vue3";
 import Button from "@/Components/Atoms/Button.vue";
 

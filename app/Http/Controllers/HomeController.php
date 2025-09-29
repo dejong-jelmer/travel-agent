@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\ContactFromData;
+use App\DTO\ContactFormData;
 use App\Http\Requests\ContactRequest;
 use App\Mail\ContactMail;
 use App\Models\Product;
@@ -46,22 +46,18 @@ class HomeController extends Controller
         $validated = $request->safe();
         $address = config('contact.mail');
 
-        $contact = new ContactFromData(
+        $contact = new ContactFormData(
             name: $validated['name'],
             email: $validated['email'],
             text: $validated['text'],
-            telephone: $validated['telephone'],
+            phone: $validated['phone'],
         );
 
         try {
             Mail::to($address)->send(
-                new ContactMail($contact, 'test')
+                new ContactMail($contact)
             );
-
-            if (Mail::failures()) {
-                Log::error('Mail failures:', Mail::failures());
-            }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Mail sending failed: ' . $e->getMessage());
             Log::error('Stack trace: ' . $e->getTraceAsString());
         }
@@ -91,14 +87,6 @@ class HomeController extends Controller
     {
         return Inertia::render('Terms', [
             'title' => "{$this->appName} - Algemene Voorwaarden",
-        ]);
-    }
-
-     public function bookTrip(Product $trip): Response
-    {
-        return Inertia::render('Book', [
-            'title' => "{$this->appName} - Boek {$trip->name}",
-            'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
         ]);
     }
 }

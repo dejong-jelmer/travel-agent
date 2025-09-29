@@ -7,7 +7,11 @@ import { emailLinks, phoneLinks } from '@/Composables/antiSpamLinks.js';
 
 const props = defineProps({
     title: String,
-    telephone: Object,
+    phone: Object,
+    links: {
+        type: Object,
+        required: false
+    }
 });
 
 const user = usePage().props.auth?.user ?? {};
@@ -17,7 +21,7 @@ const breadcrumbs = usePage().props.breadcrumbs ?? {};
 
 onMounted(() => {
     const encodedMail = contact?.mail?.link;
-    const encodedPhone = contact?.telephone;
+    const encodedPhone = contact?.phone;
     emailLinks(encodedMail);
     phoneLinks(encodedPhone);
 });
@@ -40,6 +44,9 @@ Object.entries(flash).forEach(([type, message]) => {
         <SideMenu />
         <section class="my-[100px] px-6 tablet:px-8 laptop:px-14 desktop:px-18">
             <slot></slot>
+            <div class="my-5 w-full flex justify-center">
+                <Pagination v-if="typeof links !== 'undefined'" :links="links" />
+            </div>
         </section>
     </main>
 </template>

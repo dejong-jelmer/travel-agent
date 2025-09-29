@@ -3,7 +3,6 @@ import axios from "@/axios";
 import { reactive, ref } from "vue";
 import VueHoneypot from "vue-honeypot";
 import { useToast } from "vue-toastification";
-import TextArea from "@/Components/Atoms/TextArea.vue";
 
 const props = defineProps({
     contact: Object,
@@ -13,7 +12,7 @@ const errors = reactive({});
 const form = reactive({
     name: "",
     email: "",
-    telephone: "",
+    phone: "",
     text: "",
 });
 const honeypot = ref(null);
@@ -115,9 +114,9 @@ function submit() {
                             <Input type="email" name="email" label="Uw Emailadres" :required="false" :show-label="false"
                                 v-model="form.email" :feedback="errors?.email"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
-                            <Input type="telephone" name="telephone" label="Uw telefoonnummer (optioneel)"
-                                :required="false" :show-label="false" v-model="form.telephone"
-                                :feedback="errors?.telephone"
+                            <Input type="phone" name="phone" label="Uw telefoonnummer (optioneel)"
+                                :required="false" :show-label="false" v-model="form.phone"
+                                :feedback="errors?.phone"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
                         </div>
 

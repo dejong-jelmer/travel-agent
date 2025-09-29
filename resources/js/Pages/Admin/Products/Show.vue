@@ -10,10 +10,10 @@ const props = defineProps({
 <template>
     <Admin>
         <div class="w-full flex justify-end space-x-2">
-            <IconLink icon="Edit" :href="route('products.edit', product)" v-tippy="'Bewerk reisproduct'" />
+            <IconLink icon="Edit" :href="route('admin.products.edit', product)" v-tippy="'Bewerk reisproduct'" />
             <IconLink icon="Calendar" :href="product.itineraries?.length ?
-                route('products.itineraries.index', product)
-                : route('products.itineraries.create', product)"
+                route('admin.products.itineraries.index', product)
+                : route('admin.products.itineraries.create', product)"
                 v-tippy="'Bekijk reisplan van deze reis'" />
         </div>
         <div class="flex flex-col tablet:flex-row tablet:space-x-6 space-y-6 tablet:space-y-0">

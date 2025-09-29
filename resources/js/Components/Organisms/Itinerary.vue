@@ -1,16 +1,12 @@
-<script setup>
-// import { Warning } from '@/Icons';
-</script>
-
 <template>
     <div class="relative bg-white rounded-2xl shadow-lg overflow-hidden"
         :class="{ 'cursor-grab': isAdmin }">
 
         <!-- Admin Controls -->
         <div v-if="isAdmin" class="absolute top-2 right-2 flex flex-col gap-2">
-            <IconLink  type="delete" icon="Delete" :href="route('itineraries.destroy', itinerary)" method="delete" :showConfirm="true"
+            <IconLink  type="delete" icon="Delete" :href="route('admin.itineraries.destroy', itinerary)" method="delete" :showConfirm="true"
                 prompt="Weet je zeker dat je dit reisplan wilt verwijderen?" />
-            <IconLink icon="Edit" :href="route('itineraries.edit', itinerary)" />
+            <IconLink icon="Edit" :href="route('admin.itineraries.edit', itinerary)" />
         </div>
 
         <div class="grid grid-cols-1 tablet:grid-cols-5 gap-6 items-center ">

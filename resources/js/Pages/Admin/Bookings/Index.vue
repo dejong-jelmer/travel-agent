@@ -1,0 +1,67 @@
+<script setup>
+import { reactive } from 'vue'
+
+const props = defineProps({
+    bookings: Object
+})
+const showMoreOptions = reactive({});
+
+</script>
+<template>
+    <Admin :links="bookings.links">
+        <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
+            <template v-if="bookings.data.length > 0">
+                <table class="w-full border-collapse">
+                    <thead>
+                        <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
+                            <th class="py-4 px-6 text-center">#</th>
+                            <th class="py-4 px-6 text-center">Referentie</th>
+                            <th class="py-4 px-6 text-center">Reis</th>
+                            <th class="py-4 px-6 text-center">Vertrekdatum</th>
+                            <th class="py-4 px-6 text-center">Contact persoon</th>
+                            <th class="py-4 px-6 text-center">Deelnemers</th>
+                            <th class="py-4 px-6 text-center">Aangemaakt op</th>
+                            <th class="py-4 px-6 text-center">Acties</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
+                        <tr v-for="(booking, index) in bookings.data" :key="index" class="transition" :class="booking.new ? 'bg-secondary-sage' : 'hover:bg-gray-100'">
+                            <td class="py-4 px-6 text-center">{{ booking.id }}</td>
+                            <td class="py-4 px-6 text-center">{{ booking.reference }}</td>
+                            <td class="py-4 px-6 text-center">{{ booking.product?.name ?? '-' }}</td>
+                            <td class="py-4 px-6 text-center">{{ booking.departure_date_formatted }}</td>
+                            <td class="py-4 px-6 text-center">{{ booking.main_booker?.full_name ?? '-'}}</td>
+                            <td class="py-4 px-6 text-center">{{ booking.adults?.length }}
+                                volwasse(n) <span v-if="booking.children?.length > 0">en {{ booking.children.length }} kind(eren)</span>
+                            </td>
+                            <td class="py-4 px-6 text-center">{{ booking.created_at_formatted }}</td>
+                            <td class="py-4 px-6 text-center space-y-2">
+                                <IconLink class="mx-auto" icon="View" :href="route('admin.bookings.show', booking)"
+                                    v-tippy="'Bekijk boeking'" />
+                                <IconLink class="mx-auto" icon="Edit" :href="route('admin.bookings.edit', booking)"
+                                    v-tippy="'Bewerk boeking'" />
+                                <div class="w-fit mx-auto" v-tippy="`Meer opties`">
+                                    <button class="info-button"
+                                        @click="showMoreOptions[booking.id] = !showMoreOptions[booking.id]">
+                                        <More class="h-5" />
+                                    </button>
+                                </div>
+                                <div v-if="showMoreOptions[booking.id]" class="space-y-2">
+                                    <IconLink class="mx-auto" type="delete" icon="Delete"
+                                        :href="route('admin.bookings.destroy', booking)" method="delete"
+                                        :showConfirm="true" prompt="Weet je zeker dat je deze boeking wilt verwijderen?"
+                                        v-tippy="'Verwijder boeking!'" />
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </template>
+            <template v-else>
+                <div class="p-5">
+                    <p>Er zijn nog geen boekingen.</p>
+                </div>
+            </template>
+        </div>
+    </Admin>
+</template>

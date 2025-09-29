@@ -2,12 +2,12 @@
 
 namespace App\DTO;
 
-class ContactFromData
+class ContactFormData
 {
     public function __construct(
         public string $name,
         public string $email,
         public string $text,
-        public ?string $telephone = null
+        public ?string $phone = null
     ) {}
 }

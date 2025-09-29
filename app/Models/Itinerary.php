@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Traits\StoreableImage;
+use App\Casts\MealsCast;
+use App\Casts\TransportCast;
+use App\Models\Traits\HasStoreableImages;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use App\Enums\Meals;
-use App\Enums\Transport;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 
 
@@ -15,7 +15,7 @@ class Itinerary extends Model
 {
     use HasFactory,
         SoftDeletes,
-        StoreableImage;
+        HasStoreableImages;
 
     protected $fillable = [
         'product_id',
@@ -33,8 +33,8 @@ class Itinerary extends Model
 
     protected $casts = [
         'activities' => 'array',
-        'meals' => 'array',
-        'transport' => 'array',
+        'meals' => MealsCast::class,
+        'transport' => TransportCast::class,
     ];
 
     protected static function boot()
@@ -67,34 +67,6 @@ class Itinerary extends Model
             $itinerary->order = $order++;
             $itinerary->save();
         }
-    }
-
-    protected function meals(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => collect(json_decode($value ?? '', true))
-                ->map(fn($meal) => Meals::from($meal))
-                ->all(),
-            set: fn($value) => json_encode(
-                collect($value)
-                    ->map(fn($value) => $value instanceof Meals ? $value->value : $value)
-                    ->all()
-            )
-        );
-    }
-
-    protected function transport(): Attribute
-    {
-        return Attribute::make(
-            get: fn($value) => collect(json_decode($value ?? '', true))
-                ->map(fn($transport) => Transport::from($transport))
-                ->all(),
-            set: fn($value) => json_encode(
-                collect($value)
-                    ->map(fn($value) => $value instanceof Transport ? $value->value : $value)
-                    ->all()
-            )
-        );
     }
 
     protected function activities(): Attribute

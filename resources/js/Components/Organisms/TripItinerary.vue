@@ -1,7 +1,5 @@
 <script setup>
-// import { Directions, MapPin, Star, Bed, Cutlery, Train } from "@/Icons";
 import { Camera, AlertTriangle } from 'lucide-vue-next';
-// planeTakeoff, CarTaxiFront, Bus
 import { ref } from 'vue'
 
 // LigtBox

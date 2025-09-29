@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Traits;
+namespace App\Models\Traits;
 
 use Illuminate\Http\UploadedFile;
-// Optioneel, voor logging van fouten
 use InvalidArgumentException;
 
-trait StoreableImage
+trait HasStoreableImages
 {
     /**
      * Store uploaded images.

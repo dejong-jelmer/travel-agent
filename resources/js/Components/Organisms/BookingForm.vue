@@ -1,36 +1,105 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed, toRef, watch } from 'vue'
 
 const props = defineProps({
-    trip: {
-        type: Object,
-        required: true
-    },
-    booking: {
-        type: Object,
-        required: true,
-    }
+    booking: { type: Object, required: true },
+    validator: { type: Object, required: true }
 })
 
-const emit = defineEmits(['update:booking'])
-
-const updateField = (group, index, field, value) => {
-  const updated = { ...props.booking }
-  updated.travelers[group][index][field] = value
-  emit('update:booking', updated)
-}
-
-const activeStep = ref(0)
+const emit = defineEmits(['bookingCompleted'])
+const booking = toRef(props.booking);
 const steps = [
     { id: 'trip', label: 'Reis' },
-    { id: 'group', label: 'Reisgezelschap' },
-    { id: 'details', label: 'Contactgegevens' },
-    { id: 'book', label: 'Bekijken & bevestigen' }
+    { id: 'travelerDetails', label: 'Reisgezelschap' },
+    { id: 'contactDetails', label: 'Contactgegevens' },
+    { id: 'overview', label: 'Bekijken & bevestigen' }
 ]
 
-const error = {
-    firstName: ''
+// Errors
+const hasErrors = (value) => {
+    if (Array.isArray(value)) {
+        return value.some(v => hasErrors(v))
+    }
+    if (typeof value === 'object' && value !== null) {
+        if (
+            typeof value.hasError === 'function'
+            && typeof value.message === 'function'
+        ) {
+            return value.hasError() || !!value.message()
+        }
+        return Object.values(value).some(v => hasErrors(v))
+    }
+    return false
 }
+
+const tripErrors = () => hasErrors(props.validator.departure_date)
+const travelersDetailsErrors = () => hasErrors(props.validator.travelers.adults) || hasErrors(props.validator.travelers.children)
+const contactDetailsErrors = () => hasErrors(props.validator.contact)
+
+const bookingFormErrors = computed(() => [
+    tripErrors(),
+    travelersDetailsErrors(),
+    contactDetailsErrors()
+])
+
+// Steps
+function detectStepFromErrors(errors) {
+    if (!errors || Object.keys(errors).length === 0) {
+        return 0
+    }
+
+    const stepMap = {
+        trip: ['departure_date'],
+        travelerDetails: [
+            'main_booker',
+            'travelers.adults',
+            'travelers.children'
+        ],
+        contactDetails: [
+            'contact.street',
+            'contact.house_number',
+            'contact.addition',
+            'contact.postal',
+            'contact.city',
+            'contact.email',
+            'contact.phone',
+        ],
+        overview: ['confirmed']
+    }
+
+    const keys = Object.keys(errors)
+
+    for (const [step, fields] of Object.entries(stepMap)) {
+        if (keys.some(key => fields.some(field => key.startsWith(field)))) {
+            return steps.findIndex(s => s.id === step)
+        }
+    }
+    return 0
+}
+
+function detectInitialStep(errors) {
+    if (errors && Object.keys(errors).length > 0) {
+        return detectStepFromErrors(errors)
+    }
+
+    const params = new URLSearchParams(window.location.search)
+    const urlStep = params.get('step')
+    const index = steps.findIndex(s => s.id === urlStep)
+
+    return index !== -1 ? index : 0
+}
+
+const activeStep = ref(detectInitialStep(booking.value.errors))
+
+function updateUrl(stepId) {
+    const url = new URL(window.location.href)
+    url.searchParams.set('step', stepId)
+    window.history.replaceState({}, '', url)
+}
+
+watch(activeStep, (newIndex) => {
+    updateUrl(steps[newIndex].id)
+})
 
 function nextStep() {
     if (activeStep.value < steps.length - 1) {
@@ -43,16 +112,30 @@ function prevStep() {
         activeStep.value--
     }
 }
+
+function toStep(step) {
+    if (activeStep.value > step) {
+        activeStep.value = step
+    }
+}
+
+function submit() {
+    emit("bookingCompleted")
+    booking.value.clearErrors();
+    booking.value.post(route("bookings.store"), { forceFormData: true });
+}
+
 </script>
 
 <template>
     <div class="bg-white rounded-2xl shadow-sm border border-secondary-sage/20 overflow-hidden">
         <!-- Progress indicator -->
-        <div class="flex items-center justify-between px-6 py-4 border-b border-secondary-sage/20">
+        <div class="flex items-center justify-between px-6 pb-4 border-b border-secondary-sage/20">
             <div class="flex-1">
                 <div class="flex justify-between mb-2">
-                    <span v-for="(step, index) in steps" :key="step.id" class="text-sm font-medium"
-                        :class="index <= activeStep ? 'text-primary-dark' : 'text-secondary-stone'">
+                    <span v-for="(step, index) in steps" :key="step.id" class="text-sm font-medium pt-4 w-full"
+                        @click="toStep(index)"
+                        :class="index <= activeStep ? 'text-primary-dark cursor-pointer' : 'text-secondary-stone'">
                         {{ step.label }}
                     </span>
                 </div>
@@ -66,9 +149,9 @@ function prevStep() {
         <!-- Step content -->
         <div class="p-2 laptop:p-4">
             <div v-if="steps[activeStep].id === 'trip'" class="space-y-4">
-                <h2 class="text-xl font-bold text-primary-dark">Reis boeken - {{ trip.name }}</h2>
+                <h2 class="text-xl font-bold text-primary-dark">Reis boeken - {{ booking.name }}</h2>
                 <p>
-                    Wat leuk dat je de reis <strong>{{ trip.name }}</strong> wilt gaan boeken. We gaan een aantal
+                    Wat leuk dat je de reis <strong>{{ booking.name }}</strong> wilt gaan boeken. We gaan een aantal
                     stappen doorlopen om te zorgen dat de boeken goed door komt.
                     Bedenk wel dat het om een <strong>boekingsaanvraag</strong> gaat. Dat betekend dat we eerst zullen
                     kijken of we
@@ -78,71 +161,51 @@ function prevStep() {
                     nemen we binnen twee werkdagen contact met u op om de boeking te bevestigen.
                 </p>
                 <hr>
-                <div class="grid grid-cols-3 gap-2">
-                    <p>Reis</p>
-                    <p><strong>{{ trip.name }}</strong></p>
-                    <p class="ml-[150px]">Vanaf <strong>€ {{ trip.price }},-</strong> p.p.</p>
-                    <p>Kies een datum voor vertrek</p>
-                    <DatePicker v-model="props.booking.selectedDate" :min-date="new Date()"
-                        @update:model-value="val => emit('update:booking', { ...props.booking, selectedDate: val })" />
-                    <p></p>
-                    <p>Kies het aantal reizigers</p>
-                    <PersonPicker v-model="props.booking.persons"
-                        @update:model-value="val => emit('update:booking', { ...props.booking, persons: val })" />
-                    <span></span>
-                    <!-- <span>Totale reissom</span>
-                    <span></span>
-                    <p class="ml-[150px]"><strong>€ {{ (props.booking.persons.adults + props.booking.persons.children) * trip.price }},-</strong></p> -->
-                </div>
+                <Trip v-model:booking="booking" :validator="validator" />
             </div>
 
-            <div v-else-if="steps[activeStep].id === 'group'" class="space-y-6">
+            <div v-else-if="steps[activeStep].id === 'travelerDetails'" class="space-y-6">
                 <h2 class="text-xl font-bold text-primary-dark">Reisgezelschap</h2>
                 <hr>
-                <div v-for="(adult, index) in props.booking.travelers.adults" :key="index"
-                    class="space-y-2 p-4 border rounded-lg">
-                    <p>Volwassene {{ index+1 }}</p>
-                    <Input type="text" name="firstName[]" label="Eerste voornaam (zoals in paspoort)"
-                        :showLabel="true" :required="true" v-model="adult.firstName" :feedback="error.firstName"
-                        @input="e => updateField('adults', index, 'firstName', e.target.value)"
-                        />
-                    <Input type="text" name="lastName[]" label="Achternaam (zoals in paspoort)"
-                        :showLabel="true" :required="true" v-model="adult.lastName" :feedback="error.lastName"
-                        @input="e => updateField('adults', index, 'lastName', e.target.value)"
-                        />
-                    <DatePicker v-model="adult.birthDate"
-                        @update:model-value="val => updateField('adults', index, 'birthDate', val)" />
-                    <Input type="text" name="nationality[]" label="Nationaliteit"
-                        :showLabel="true" :required="true" v-model="adult.nationality" :feedback="error.nationality"
-                        @input="e => updateField('adults', index, 'nationality', e.target.value)"
-                        />
-                </div>
-                <div v-for="(person, key) in ['adults', 'children']" :key="key" class="gap-2">
-                </div>
+                <TravelerDetails v-model:booking="booking" :validator="validator.travelers.adults"
+                    :max-date="booking.constrains.birthdate" type="adults" label="Volwassene" />
+                <TravelerDetails v-model:booking="booking" :validator="validator.travelers.children"
+                    :min-date="booking.constrains.birthdate" :max-date="Date()" type="children" label="Kind" />
             </div>
 
-            <div v-else-if="steps[activeStep].id === 'details'" class="space-y-6">
+            <div v-else-if="steps[activeStep].id === 'contactDetails'" class="space-y-6">
                 <h2 class="text-xl font-bold text-primary-dark">Contactgegevens</h2>
-                <p>Hier voer je de persoonlijke gegevens in.</p>
+                <ContactDetails v-model:booking="booking" v-model:main_booker="booking.main_booker"
+                    :validator="validator.contact" />
             </div>
 
-            <div v-else-if="steps[activeStep].id === 'book'" class="space-y-6">
+            <div v-else-if="steps[activeStep].id === 'overview'" class="space-y-6">
                 <h2 class="text-xl font-bold text-primary-dark">Bekijken & bevestigen</h2>
-                <p>Overzicht en bevestiging van de boeking.</p>
+                <Overview :booking="booking" />
             </div>
         </div>
 
         <!-- Navigation buttons -->
         <div class="flex justify-between items-center px-6 py-4 border-t border-secondary-sage/20 bg-neutral-50">
-            <button class="px-4 py-2 rounded-xl text-primary-dark hover:bg-neutral-100 disabled:opacity-40"
-                :disabled="activeStep === 0" @click="prevStep">
+            <button class="px-4 py-2 rounded-xl text-primary-dark hover:bg-neutral-100" :disabled="activeStep === 0"
+                @click="prevStep">
                 Vorige
             </button>
-            <button
-                class="px-6 py-2 rounded-xl bg-accent-earth text-primary-dark hover:bg-accent-terracotta hover:text-neutral-25 transition disabled:opacity-40"
-                :disabled="activeStep === steps.length - 1" @click="nextStep">
-                Volgende
-            </button>
+            <template v-if="activeStep <= steps.length - 2">
+                <button
+                    class="px-6 py-2 rounded-xl bg-accent-earth text-primary-dark hover:bg-accent-terracotta hover:text-neutral-25 transition disabled:hover:text-primary-dark disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
+                    :disabled="bookingFormErrors[activeStep]" @click="nextStep">
+                    Volgende
+                </button>
+            </template>
+            <template v-else>
+                <button
+                    class="px-6 py-2 rounded-xl flex justify-center bg-accent-earth text-primary-dark hover:bg-accent-terracotta hover:text-neutral-25 transition disabled:hover:text-primary-dark disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
+                    :disabled="!booking.confirmed || booking.processing" @click="submit">
+                    <Spinner v-if="booking.processing" class="size-6 animate-spin ..." viewBox="0 0 24 24" />
+                    <span v-else>Boekingsaanvraag bevestigen</span>
+                </button>
+            </template>
         </div>
     </div>
 </template>

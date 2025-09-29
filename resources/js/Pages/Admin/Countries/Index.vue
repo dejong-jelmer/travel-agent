@@ -1,18 +1,16 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-const user = usePage().props.auth?.user ?? {};
 const props = defineProps({
-    product: Object,
-    countries: Array,
+    countries: Object,
 });
 </script>
 <template>
-    <Admin>
-        <div class="">
+    <Admin :links="countries.links">
+        <template v-if="countries.data.length > 0">
             <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
                 <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Landen</h1>
                 <IconLink v-tippy="'Voeg een land toe'" icon="Add" type="info"
-                    :href="route('countries.create')" />
+                    :href="route('admin.countries.create')" />
             </div>
             <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
                 <table class="w-full border-collapse">
@@ -24,12 +22,12 @@ const props = defineProps({
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
-                        <tr v-for="(country, index) in countries" :key="country.id" class="hover:bg-gray-100 transition">
-                            <td class="py-4 px-6 text-center">{{ index + 1 }}</td>
+                        <tr v-for="(country, index) in countries.data" :key="index" class="hover:bg-gray-100 transition">
+                            <td class="py-4 px-6 text-center">{{ country.id }}</td>
                             <td class="py-4 px-6 text-center">{{ country.name }}</td>
                              <td class="py-4 px-6 text-center space-y-2">
                                 <IconLink class="mx-auto" type="delete" icon="Delete"
-                                        :href="route('countries.destroy', country)" method="delete" :showConfirm="true"
+                                        :href="route('admin.countries.destroy', country)" method="delete" :showConfirm="true"
                                         prompt="Weet je zeker dat je dit land wilt verwijderen?"
                                         v-tippy="'Verwijder land!'" />
                             </td>
@@ -37,6 +35,11 @@ const props = defineProps({
                     </tbody>
                 </table>
             </div>
-        </div>
+        </template>
+        <template v-else>
+            <div class="p-5">
+                <p>Er zijn nog landen aangemaakt.</p>
+            </div>
+        </template>
     </Admin>
 </template>

@@ -2,7 +2,7 @@
 
 namespace App\Mail;
 
-use App\DTO\ContactFromData;
+use App\DTO\ContactFormData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
@@ -17,7 +17,7 @@ class ContactMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public ContactFromData $contact
+        public ContactFormData $contact
     ) {}
 
     /**
