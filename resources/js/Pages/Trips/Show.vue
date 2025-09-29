@@ -1,7 +1,7 @@
 <script setup>
 import { ref, toRef, watch } from 'vue'
 import { UsersIcon, ChevronRightIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
-import { useBooking } from '@/composables/useBooking'
+import { useBooking } from '@/Composables/useBooking.js'
 
 const props = defineProps({
     trip: Object,

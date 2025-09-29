@@ -63,7 +63,7 @@
 
 </template>
 <script setup>
-import { useBooking } from '@/composables/useBooking';
+import { useBooking } from '@/Composables/useBooking.js';
 
 const props = defineProps({
     db_booking: Object,
