@@ -10,10 +10,10 @@ const maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
 
 const createTraveler = () => {
     const traveler = {
-        first_name: "Test",
-        last_name: "de Tester",
-        birthdate: new Date("1950-12-01"),
-        nationality: "NL",
+        first_name: "",
+        last_name: "",
+        birthdate: null,
+        nationality: "",
         get full_name() {
             return `${this.first_name} ${this.last_name}`;
         },
