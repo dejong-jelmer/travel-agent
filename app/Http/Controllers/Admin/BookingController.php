@@ -11,7 +11,6 @@ use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class BookingController extends Controller
 {
     public function __construct(private BookingService $bookingService) {}
@@ -34,7 +33,7 @@ class BookingController extends Controller
         $this->bookingService->seen($booking);
 
         return Inertia::render('Admin/Bookings/Show', [
-            'booking' => $booking->load(['product', 'contact', 'adults', 'children', 'mainBooker'])
+            'booking' => $booking->load(['product', 'contact', 'adults', 'children', 'mainBooker']),
         ]);
     }
 
@@ -46,7 +45,7 @@ class BookingController extends Controller
         $this->bookingService->seen($booking);
 
         return Inertia::render('Admin/Bookings/Edit', [
-            'db_booking' => $booking->load(['product', 'contact', 'travelers', 'adults', 'mainBooker'])
+            'db_booking' => $booking->load(['product', 'contact', 'travelers', 'adults', 'mainBooker']),
         ]);
     }
 
@@ -68,8 +67,8 @@ class BookingController extends Controller
     {
         $this->bookingService->updateChangeLog($booking->id, $booking, ['deleted_at' => now()]);
         Booking::destroy($booking->id);
+
         return redirect()->route('admin.bookings.index')
             ->with('success', __('De boeking is  verwijderd'));
     }
-
 }

@@ -2,20 +2,20 @@
 
 namespace App\Mail;
 
-use App\Models\Product;
 use App\Models\Booking;
-use App\DTO\BookingContactData;
+use App\Models\Product;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use Throwable;
 
 class BookingMail extends Mailable
 {
     use Queueable, SerializesModels;
+
     public Product $product;
+
     /**
      * Create a new message instance.
      */

@@ -2,10 +2,10 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use App\Events\BookingCreated;
-use App\Listeners\SendBookingConfirmationMail;
 use App\Listeners\NotifyAdminOfNewBooking;
+use App\Listeners\SendBookingConfirmationMail;
+use Illuminate\Support\ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -15,6 +15,7 @@ class EventServiceProvider extends ServiceProvider
             NotifyAdminOfNewBooking::class,
         ],
     ];
+
     /**
      * Register services.
      */

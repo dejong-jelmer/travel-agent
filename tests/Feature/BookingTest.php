@@ -2,14 +2,14 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
 use App\Models\Booking;
 use App\Models\BookingTraveler;
 use App\Models\Product;
 use Carbon\Carbon;
-use Illuminate\Support\Str;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class BookingTest extends TestCase
 {
@@ -21,48 +21,48 @@ class BookingTest extends TestCase
         $date = now()->addMonth(3);
 
         $payload = [
-            "trip" => [
-                "id" => $trip->id
+            'trip' => [
+                'id' => $trip->id,
             ],
-            "confirmed" => true,
-            "departure_date" => $date,
-            "travelers" => [
-                "adults" => [
+            'confirmed' => true,
+            'departure_date' => $date,
+            'travelers' => [
+                'adults' => [
                     [
-                        "first_name" => "John",
-                        "last_name" => "Doe",
-                        "full_name" => "John Doe",
-                        "birthdate" => now()->subYears(35),
-                        "nationality" => "NL"
+                        'first_name' => 'John',
+                        'last_name' => 'Doe',
+                        'full_name' => 'John Doe',
+                        'birthdate' => now()->subYears(35),
+                        'nationality' => 'NL',
                     ],
                     [
-                        "first_name" => "Jane",
-                        "last_name" => "Doe",
-                        "full_name" => "Jane Doe",
-                        "birthdate" => now()->subYears(45),
-                        "nationality" => "NL"
-                    ]
+                        'first_name' => 'Jane',
+                        'last_name' => 'Doe',
+                        'full_name' => 'Jane Doe',
+                        'birthdate' => now()->subYears(45),
+                        'nationality' => 'NL',
+                    ],
                 ],
-                "children" => [
+                'children' => [
                     [
-                        "first_name" => "Junior",
-                        "last_name" => "Doe",
-                        "full_name" => "Junior Doe",
-                        "birthdate" => now()->subYears(8),
-                        "nationality" => "NL"
-                    ]
-                ]
+                        'first_name' => 'Junior',
+                        'last_name' => 'Doe',
+                        'full_name' => 'Junior Doe',
+                        'birthdate' => now()->subYears(8),
+                        'nationality' => 'NL',
+                    ],
+                ],
             ],
-            "main_booker" => 0,
-            "contact" => [
-                "street" => "Teststreet",
-                "house_number" => "123",
-                "addition" => "bis",
-                "postal" => "1234AB",
-                "city" => "Testcity",
-                "email" => "test@test.nl",
-                "phone" => "+31612345678"
-            ]
+            'main_booker' => 0,
+            'contact' => [
+                'street' => 'Teststreet',
+                'house_number' => '123',
+                'addition' => 'bis',
+                'postal' => '1234AB',
+                'city' => 'Testcity',
+                'email' => 'test@test.nl',
+                'phone' => '+31612345678',
+            ],
         ];
 
         $response = $this->post(route('bookings.store'), $payload);
@@ -92,14 +92,13 @@ class BookingTest extends TestCase
             ->create();
         $this->assertNotEquals($booking->reference, $otherBooking->reference);
 
-
         // Check travelers
         foreach (Arr::flatten($payload['travelers'], 1) as $traveler) {
             $this->assertDatabaseHas('booking_travelers', [
-                'booking_id'  => $booking->id,
-                'first_name'  => $traveler['first_name'],
-                'last_name'   => $traveler['last_name'],
-                'birthdate'   => Carbon::parse($traveler['birthdate'])->format('Y-m-d'),
+                'booking_id' => $booking->id,
+                'first_name' => $traveler['first_name'],
+                'last_name' => $traveler['last_name'],
+                'birthdate' => Carbon::parse($traveler['birthdate'])->format('Y-m-d'),
                 'nationality' => $traveler['nationality'],
             ]);
         }

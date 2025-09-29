@@ -2,12 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Meals;
+use App\Enums\Transport;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Product;
 use App\Models\User;
-use App\Enums\Meals;
-use App\Enums\Transport;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
@@ -19,6 +19,7 @@ class ItineraryTest extends TestCase
     use RefreshDatabase;
 
     private Product $product;
+
     private Itinerary $itinerary;
 
     protected function setUp(): void
@@ -43,7 +44,7 @@ class ItineraryTest extends TestCase
         $response = $this->get(route('admin.products.itineraries.index', $this->product));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Products/Itineraries/Index')
                 ->has('product')
                 ->has('product.itineraries', $this->product->itineraries->count())
@@ -58,7 +59,7 @@ class ItineraryTest extends TestCase
     {
         $payload = [
             'itineraries' => $this->product->itineraries
-                ->map(fn($i, $index) => ['id' => $i->id, 'order' => $index + 1])
+                ->map(fn ($i, $index) => ['id' => $i->id, 'order' => $index + 1])
                 ->toArray(),
         ];
 
@@ -74,7 +75,7 @@ class ItineraryTest extends TestCase
         $response = $this->get(route('admin.products.itineraries.create', $this->product));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page->component('Admin/Products/Itineraries/Create')
+            fn (AssertableInertia $page) => $page->component('Admin/Products/Itineraries/Create')
         );
 
         $response->assertStatus(200);
@@ -83,9 +84,9 @@ class ItineraryTest extends TestCase
     public function test_admin_can_store_a_new_itinerary(): void
     {
         $itineraryData = [
-            'title' => fake()->city() . ' - ' . fake()->city(),
+            'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
-            'location' => fake()->city . ', ' . fake()->country,
+            'location' => fake()->city.', '.fake()->country,
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
             'meals' => fake()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
@@ -106,11 +107,11 @@ class ItineraryTest extends TestCase
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
 
         // ✅ Enums
-        $expectedMeals = collect($itineraryData['meals'])->map(fn($meal) => Meals::from($meal)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn($m) => $m->value, $itinerary->meals));
+        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meals::from($meal)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
 
-        $expectedTransport = collect($itineraryData['transport'])->map(fn($t) => Transport::from($t)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn($t) => $t->value, $itinerary->transport));
+        $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
         // ✅ Image
         $storedImagePath = $itineraryData['image']->getClientOriginalName();
@@ -126,7 +127,7 @@ class ItineraryTest extends TestCase
         $response = $this->get(route('admin.itineraries.edit', $this->itinerary));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Itineraries/Edit')
                 ->has('itinerary')
                 ->where('itinerary.id', $this->itinerary->id)
@@ -140,9 +141,9 @@ class ItineraryTest extends TestCase
     public function test_admin_can_update_an_existing_itinerary(): void
     {
         $itineraryData = [
-            'title' => fake()->city() . ' - ' . fake()->city(),
+            'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
-            'location' => fake()->city . ', ' . fake()->country,
+            'location' => fake()->city.', '.fake()->country,
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
             'meals' => fake()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
@@ -161,11 +162,11 @@ class ItineraryTest extends TestCase
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
 
         // ✅ Enums
-        $expectedMeals = collect($itineraryData['meals'])->map(fn($meal) => Meals::from($meal)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn($m) => $m->value, $itinerary->meals));
+        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meals::from($meal)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
 
-        $expectedTransport = collect($itineraryData['transport'])->map(fn($t) => Transport::from($t)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn($t) => $t->value, $itinerary->transport));
+        $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
         // ✅ Images
         $storedImagePath = $itineraryData['image']->getClientOriginalName();
@@ -196,9 +197,9 @@ class ItineraryTest extends TestCase
             'deleted_at' => null,
         ]);
         $this->assertDatabaseMissing('images', [
-            'imageable_id'   => $this->itinerary->id,
+            'imageable_id' => $this->itinerary->id,
             'imageable_type' => Itinerary::class,
-            'deleted_at'     => null,
+            'deleted_at' => null,
         ]);
     }
 }

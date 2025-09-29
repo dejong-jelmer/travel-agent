@@ -2,13 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Booking;
-use App\Http\Requests\BookingRequest;
-use Illuminate\Http\RedirectResponse;
 use App\DTO\BookingData;
-use Inertia\Inertia;
 use App\Events\BookingCreated;
+use App\Http\Requests\BookingRequest;
+use App\Models\Booking;
 use App\Services\BookingService;
+use Illuminate\Http\RedirectResponse;
+use Inertia\Inertia;
 
 class BookingController extends Controller
 {
@@ -18,6 +18,7 @@ class BookingController extends Controller
         $booking = $bookingService->store($bookingData);
         event(new BookingCreated($booking));
         session()->flash('new_booking', $booking->uuid);
+
         return to_route('bookings.confirmation', ['booking' => $booking])->with('success', 'Je boeking is geslaagd');
     }
 
@@ -29,7 +30,7 @@ class BookingController extends Controller
 
         return Inertia::render('Trips/Confirmation', [
             'title' => "Boekingsbevestiging - {$booking->product->name}",
-            'booking' => $booking
+            'booking' => $booking,
         ]);
     }
 }

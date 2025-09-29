@@ -15,7 +15,7 @@ enum TravelerType: string
     public static function fromKey(string $key): self
     {
         return match (strtolower($key)) {
-            'adult'   => self::Adult,
+            'adult' => self::Adult,
             'child' => self::Child,
             default => throw new \InvalidArgumentException("Unknown traveler type: {$key}"),
         };
