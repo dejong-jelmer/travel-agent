@@ -37,14 +37,14 @@ class UpdateBookingRequest extends FormRequest
             'travelers.adults.*.birthdate' => [
                 'required',
                 'date_format:d-m-Y',
-                'before:' . now()->subYears(12)->format('d-m-Y'),
-                'after:' . now()->subYears(100)->format('d-m-Y'),
+                'before:'.now()->subYears(12)->format('d-m-Y'),
+                'after:'.now()->subYears(100)->format('d-m-Y'),
             ],
             'travelers.children.*.birthdate' => [
                 'required',
                 'date_format:d-m-Y',
-                'after_or_equal:' . now()->subYears(12)->format('d-m-Y'),
-                'before:' . now()->format('d-m-Y'),
+                'after_or_equal:'.now()->subYears(12)->format('d-m-Y'),
+                'before:'.now()->format('d-m-Y'),
             ],
             // Main booker
             'main_booker' => ['required', 'integer'],
@@ -63,6 +63,7 @@ class UpdateBookingRequest extends FormRequest
                 } catch (\Exception $e) {
                     Log::error('Birthdate parsing failed: '.$e->getMessage());
                     $validator->errors()->add("travelers.adults.$index.birthdate", 'Ongeldige geboortedatum.');
+
                     return;
                 }
                 if ($birthdate->gt(now()->subYears(12))) {
@@ -78,6 +79,7 @@ class UpdateBookingRequest extends FormRequest
                 } catch (\Exception $e) {
                     Log::error('Birthdate parsing failed: '.$e->getMessage());
                     $validator->errors()->add("travelers.children.$index.birthdate", 'Ongeldige geboortedatum.');
+
                     return;
                 }
                 if ($birthdate->lte(now()->subYears(12))) {
@@ -95,6 +97,7 @@ class UpdateBookingRequest extends FormRequest
                 } catch (\Exception $e) {
                     Log::error('Birthdate parsing failed: '.$e->getMessage());
                     $validator->errors()->add("travelers.adults.$mainBookerIndex.birthdate", 'Voor deze reiziger moet een geldige geboortedatum worden ingevuld.');
+
                     return;
                 }
                 if ($birthdate->age < 18) {

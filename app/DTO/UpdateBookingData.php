@@ -2,11 +2,8 @@
 
 namespace App\DTO;
 
-use App\DTO\BookingContactData;
-use App\DTO\BookingTravelerData;
 use App\DTO\Traits\ArrayableDTO;
 use App\DTO\Traits\BookingDataParser;
-use App\Exceptions\ModelNotFoundException;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 

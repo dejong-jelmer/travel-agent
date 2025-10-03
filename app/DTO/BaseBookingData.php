@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DTO;
 
 use App\DTO\Traits\ArrayableDTO;
@@ -11,7 +12,7 @@ abstract class BaseBookingData implements Arrayable
     use ArrayableDTO;
 
     public function __construct(
-        public readonly ?Product $_trip = null,
+        public readonly ?Product $_trip,
         public readonly int $_main_booker,
         public readonly array $_adult,
         public readonly array $_child,

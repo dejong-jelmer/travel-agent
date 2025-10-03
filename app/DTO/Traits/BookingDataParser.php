@@ -1,4 +1,5 @@
 <?php
+
 namespace App\DTO\Traits;
 
 use App\DTO\BookingContactData;
@@ -26,7 +27,7 @@ trait BookingDataParser
             'main_booker' => $mainBooker,
             'travelers' => [
                 TravelerType::Adult->value => BookingTravelerData::manyFromArray($adults),
-                TravelerType::Child->value => BookingTravelerData::manyFromArray($children)
+                TravelerType::Child->value => BookingTravelerData::manyFromArray($children),
             ],
             'contact' => BookingContactData::fromArray($mainBookerFullName, $validated['contact']),
         ];
@@ -49,15 +50,15 @@ trait BookingDataParser
      */
     protected static function findTrip(?int $tripId): Product
     {
-        if (!$tripId) {
-            Log::error("Booking attempt without trip ID");
+        if (! $tripId) {
+            Log::error('Booking attempt without trip ID');
             throw new ModelNotFoundException('Trip ID is required');
         }
 
         $trip = Product::find($tripId);
 
-        if (!$trip) {
-            Log::error("Booking attempt for non-existing product", ['trip_id' => $tripId]);
+        if (! $trip) {
+            Log::error('Booking attempt for non-existing product', ['trip_id' => $tripId]);
             throw new ModelNotFoundException('Trip not found');
         }
 
