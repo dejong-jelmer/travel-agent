@@ -1,15 +1,15 @@
 // Basic email validation (not full RFC compliance, but good enough for forms)
 export const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-// Dutch postal code: 1000 AA (with optional space, case-insensitive)
-export const postalNlRegex = /^[1-9][0-9]{3}\s?[A-Z]{2}$/i
+// Dutch postal_code code: 1000 AA (with optional space, case-insensitive)
+export const postal_codeNlRegex = /^[1-9][0-9]{3}\s?[A-Z]{2}$/i
 
-// Belgian postal code: 1000 - 9999 (exactly 4 digits, cannot start with 0)
-export const postalBeRegex = /^[1-9][0-9]{3}$/
+// Belgian postal_code code: 1000 - 9999 (exactly 4 digits, cannot start with 0)
+export const postal_codeBeRegex = /^[1-9][0-9]{3}$/
 
-// Generic postal code: supports both NL and BE
-export const postalRegex = new RegExp(
-  `(${postalNlRegex.source})|(${postalBeRegex.source})`,
+// Generic postal_code code: supports both NL and BE
+export const postalCodeRegex = new RegExp(
+  `(${postal_codeNlRegex.source})|(${postal_codeBeRegex.source})`,
   'i'
 )
 

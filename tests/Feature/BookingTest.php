@@ -24,6 +24,7 @@ class BookingTest extends TestCase
             'trip' => [
                 'id' => $trip->id,
             ],
+            'conditions' => true,
             'confirmed' => true,
             'departure_date' => $date,
             'travelers' => [
@@ -32,14 +33,14 @@ class BookingTest extends TestCase
                         'first_name' => 'John',
                         'last_name' => 'Doe',
                         'full_name' => 'John Doe',
-                        'birthdate' => now()->subYears(35),
+                        'birthdate' => now()->subYears(35)->format('d-m-Y'),
                         'nationality' => 'NL',
                     ],
                     [
                         'first_name' => 'Jane',
                         'last_name' => 'Doe',
                         'full_name' => 'Jane Doe',
-                        'birthdate' => now()->subYears(45),
+                        'birthdate' => now()->subYears(45)->format('d-m-Y'),
                         'nationality' => 'NL',
                     ],
                 ],
@@ -48,26 +49,26 @@ class BookingTest extends TestCase
                         'first_name' => 'Junior',
                         'last_name' => 'Doe',
                         'full_name' => 'Junior Doe',
-                        'birthdate' => now()->subYears(8),
+                        'birthdate' => now()->subYears(8)->format('d-m-Y'),
                         'nationality' => 'NL',
                     ],
                 ],
             ],
             'main_booker' => 0,
             'contact' => [
-                'street' => 'Teststreet',
+                'street' => 'Teststraat',
                 'house_number' => '123',
                 'addition' => 'bis',
-                'postal' => '1234AB',
-                'city' => 'Testcity',
+                'postal_code' => '1234AB',
+                'city' => 'Teststad',
                 'email' => 'test@test.nl',
                 'phone' => '+31612345678',
             ],
         ];
 
         $response = $this->post(route('bookings.store'), $payload);
-        $booking = Booking::firstOrFail();
 
+        $booking = Booking::firstOrFail();
         $this->assertEquals($payload['trip']['id'], $booking->product_id);
         $this->assertDatabaseHas('bookings', [
             'id' => $booking->id,

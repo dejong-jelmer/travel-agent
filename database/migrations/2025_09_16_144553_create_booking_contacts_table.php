@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('street');
             $table->string('house_number');
             $table->string('addition')->nullable();
-            $table->string('postal');
+            $table->string('postal_code');
             $table->string('city');
             $table->string('email');
             $table->string('phone');

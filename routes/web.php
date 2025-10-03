@@ -24,7 +24,7 @@ Route::get('reizen/{trip:slug}', [HomeController::class, 'showTrip'])->name('tri
 
 // Booking routes
 Route::post('/boekingen', [BookingController::class, 'store'])->name('bookings.store');
-Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'confirmation'])->name('bookings.confirmation');
+Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'confirmation'])->middleware('nocache')->name('bookings.confirmation');
 
 // Admin routes
 Route::get('/admin/login', function () {
@@ -60,5 +60,4 @@ Route::prefix('admin')
 
         // Booking routes
         Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);
-        // Route::post('/bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
     });

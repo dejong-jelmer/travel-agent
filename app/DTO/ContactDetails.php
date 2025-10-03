@@ -9,7 +9,7 @@ class ContactDetails
 {
     public function __construct(
         public string $address,
-        public string $postal,
+        public string $postal_code,
         public string $city,
         public string $mapsLink,
         public string $kvk,

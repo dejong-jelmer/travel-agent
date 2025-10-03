@@ -20,14 +20,7 @@ const props = defineProps({
         type: [String, Array],
         required: false,
     },
-    forceShow: { type: Boolean, default: false }
 })
-
-const touched = ref(false)
-const hideError = ref(false)
-const showError = computed(
-    () => (touched.value || props.forceShow) && !!props.feedback && !hideError.value
-)
 
 const emit = defineEmits(['update:modelValue'])
 
@@ -35,12 +28,6 @@ const model = computed({
     get: () => props.modelValue,
     set: (val) => emit('update:modelValue', val),
 })
-
-function onClosed() {
-    touched.value = true
-    if (!props.feedback) hideError.value = true
-    else hideError.value = false
-}
 
 const format = (date) =>
     new Intl.DateTimeFormat('nl-NL', {
@@ -54,12 +41,12 @@ const format = (date) =>
     <div>
         <VueDatePicker v-model="model" locale="nl" placeholder="Kies een datum" :enable-time-picker="false"
             teleport="body" :format="format" :min-date="props.minDate || null" :max-date="props.maxDate || null"
-            arrow-navigation auto-apply :state="showError ? false : null" @closed="onClosed">
+            arrow-navigation auto-apply :state="!!feedback ? false : null">
             <template #input-icon>
                 <Calendar class="ml-1 h-5 w-auto text-accent-gold" />
             </template>
         </VueDatePicker>
-        <template v-if="showError">
+        <template v-if="!!feedback">
             <FormFeedback :message="feedback" />
         </template>
     </div>

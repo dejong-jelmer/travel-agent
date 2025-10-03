@@ -18,11 +18,12 @@ const openLightbox = (index) => {
 }
 
 // Booking data
-const { booking, validator, markTouched, markDirty } = useBooking(props.trip)
-const departure_date = toRef(booking, 'departure_date')
-const participants = toRef(booking, 'participants')
+const booking = useBooking(props.trip)
+
+const departure_date = toRef(booking.booking, 'departure_date')
+const participants = toRef(booking.booking, 'participants')
 watch(
-    () => booking.hasErrors,
+    () => booking.booking.hasErrors,
     (newValue) => {
         if (newValue) {
             bookingModalOpen.value = true
@@ -292,6 +293,6 @@ const tabs = [
         </div>
     </Layout>
     <Modal :open="bookingModalOpen" @close="bookingModalOpen = false">
-        <BookingForm v-model:booking="booking" :validator="validator" @booking-completed="bookingModalOpen = false" />
+        <BookingForm :booking="booking.booking" :constraints="booking.constraints" />
     </Modal>
 </template>

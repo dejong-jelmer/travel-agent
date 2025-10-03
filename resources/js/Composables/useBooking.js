@@ -1,236 +1,171 @@
-import { onMounted, watch, computed } from "vue";
-import { emailRegex, phoneRegex, postalRegex } from "@/validators/regex.js";
+// composables/useBooking.js
+import { watch, reactive, readonly, watchEffect } from "vue";
 import { useForm } from "@inertiajs/vue3";
-import { LogOut } from "lucide-vue-next";
 
-const birthdateConstraint = new Date(
-    new Date().setFullYear(new Date().getFullYear() - 12)
-);
-const maxDate = new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+// Constants buiten state
+export const BOOKING_CONSTRAINTS = readonly({
+    maxFutureYears: 1,
 
-const createTraveler = () => {
-    const traveler = {
-        first_name: "",
-        last_name: "",
-        birthdate: null,
-        nationality: "",
+    get maxDate() {
+        const date = new Date();
+        date.setFullYear(date.getFullYear() + this.maxFutureYears);
+        return date;
+    },
+});
+
+const createTraveler = (data = {}) => {
+    return reactive({
+        first_name: data.first_name || "",
+        last_name: data.last_name || "",
+        birthdate: data.birthdate ? new Date(data.birthdate).toLocaleDateString('nl-NL') : null,
+        nationality: data.nationality || "",
         get full_name() {
-            return `${this.first_name} ${this.last_name}`;
+            return `${this.first_name} ${this.last_name}`.trim();
         },
-    };
-
-    return traveler;
+    });
 };
 
-/**
- * @typedef {Object} BookingState
- * @property {Object} trip - Instance of Product (Trip)
- * @property {Object} participants - Number of adults/children that will participate
- * @property {Date} departure_date - Selected Date
- * @property {Object} travelers - Traveler details
- * @property {Object} contact - Contact details
- * @property {Object} main_booker - The array index key of travelers.adults as the main booker
- * @property {Object|null} constrains - Constains to use in the booking process
- * @param {Object} db_booking - The booking from the database
- * @param {integer} main_booker_index - The array key index for the main booker booking.travelers.adults
- */
-
-export function useBooking(trip, db_booking, main_booker_index) {
+export function useBooking(trip, db_booking, main_booker_index = 0) {
     if (!trip) {
         console.warn("useBooking: trip parameter is required");
     }
 
-    const adults = db_booking?.travelers
-        ? db_booking.travelers.filter((tr) => tr.type == "adult")
-        : null;
-    const children = db_booking?.travelers
-        ? db_booking.travelers.filter((tr) => tr.type == "child")
-        : null;
+    // Sanitize DB data
+    const adults =
+        db_booking?.travelers
+            ?.filter((tr) => tr.type === "adult")
+            ?.map(createTraveler) ?? [];
+
+    const children =
+        db_booking?.travelers
+            ?.filter((tr) => tr.type === "child")
+            ?.map(createTraveler) ?? [];
 
     const booking = useForm({
         trip: trip || null,
         participants: {
-            adults: adults?.length ?? 1,
-            children: children?.length ?? 0,
+            adults: adults.length || 2,
+            children: children.length || 0,
         },
-        departure_date: new Date(),
+        departure_date: db_booking?.departure_date
+            ? new Date(db_booking.departure_date)
+            : null,
         travelers: {
-            adults: adults ?? [],
-            children: children ?? [],
+            adults,
+            children,
         },
-        contact: db_booking?.contact || {
-            street: "Test",
-            house_number: 20,
-            addition: "A",
-            postal: "1234AB",
-            city: "Test",
-            email: "test@test.nl",
-            phone: "+31612345678",
+        contact: {
+            street: db_booking?.contact?.street || "",
+            house_number: db_booking?.contact?.house_number || null,
+            addition: db_booking?.contact?.addition || "",
+            postal_code: db_booking?.contact?.postal_code || "",
+            city: db_booking?.contact?.city || "",
+            email: db_booking?.contact?.email || "",
+            phone: db_booking?.contact?.phone || "",
         },
-        main_booker: main_booker_index ?? 0,
-        constrains: {
-            birthdate: birthdateConstraint,
-            maxDate: maxDate,
-        },
-        confirmed: true,
+        main_booker: Math.max(
+            0,
+            Math.min(main_booker_index, adults.length - 1)
+        ),
+        confirmed: false,
+        conditions: false,
     });
 
-    function registerClearErrors(form) {
-        function walk(obj, path = []) {
-            if (obj === null || typeof obj !== "object") return;
+    // Helper: Clear alle errors voor travelers boven een bepaalde index
+    function clearErrorsAboveIndex(type, maxIndex) {
+        const prefix = `travelers.${type}.`;
+        const errorKeys = Object.keys(booking.errors).filter((key) => {
+            if (!key.startsWith(prefix)) return false;
 
-            if (Array.isArray(obj)) {
-                // Watch de hele array, zodat nieuwe items ook mee gaan
-                watch(
-                    () => obj.slice(), // shallow copy zodat Vue de verandering detecteert
-                    (newVal) => {
-                        newVal.forEach((item, index) => {
-                            walk(item, [...path, index]);
-                        });
-                    },
-                    { immediate: true, deep: true }
-                );
-            } else {
-                Object.keys(obj).forEach((key) => {
-                    const newPath = [...path, key];
-                    const value = obj[key];
-
-                    if (value !== null && typeof value === "object") {
-                        walk(value, newPath);
-                    } else {
-                        watch(
-                            () => obj[key],
-                            () => form.clearErrors(newPath.join(".")),
-                            { immediate: false }
-                        );
-                    }
-                });
+            const match = key.match(/^travelers\.(adults|children)\.(\d+)\./);
+            if (match) {
+                const index = parseInt(match[2], 10);
+                return index >= maxIndex;
             }
-        }
+            return false;
+        });
 
-        walk(form);
+        errorKeys.forEach((key) => booking.clearErrors(key));
     }
 
-    onMounted(() => {
-        registerClearErrors(booking);
-    });
+    function syncTravelers(type, targetCount) {
+        const currentList = booking.travelers[type];
+        const currentCount = currentList.length;
 
-    function syncTravelers(type) {
-        const newCount = booking.participants[type];
-        const current = booking.travelers[type].length;
-
-        if (newCount > current) {
-            for (let i = current; i < newCount; i++) {
-                booking.travelers[type].push(createTraveler());
-            }
-        } else {
-            booking.travelers[type].splice(newCount);
+        if (targetCount > currentCount) {
+            const newTravelers = Array(targetCount - currentCount)
+                .fill(null)
+                .map(() => createTraveler());
+            currentList.push(...newTravelers);
+        } else if (targetCount < currentCount) {
+            // Clear errors for travelers that are going to be removed
+            clearErrorsAboveIndex(type, targetCount);
+            // Remove travelers
+            currentList.splice(targetCount);
         }
     }
 
+    // Sync travelers when participant counts change
     watch(
-        () => booking.participants,
-        () => {
-            Object.keys(booking.participants).forEach((type) => {
-                syncTravelers(type);
-            });
+        () => [booking.participants.adults, booking.participants.children],
+        ([adultsCount, childrenCount]) => {
+            try {
+                syncTravelers("adults", adultsCount);
+                syncTravelers("children", childrenCount);
+            } catch (error) {
+                console.error("Failed to sync travelers:", error);
+            }
         },
         { immediate: true }
     );
+
+    // Adjust main_booker when adults list changes
     watch(
         () => booking.travelers.adults.length,
-        () => {
-            booking.main_booker = main_booker_index ?? 0;
-        },
-        { immediate: true }
+        (newLength) => {
+            if (newLength > 0) {
+                booking.main_booker = Math.min(
+                    booking.main_booker,
+                    newLength - 1
+                );
+            } else {
+                booking.main_booker = 0;
+            }
+        }
     );
 
-    function makeValidator(path, rule, message) {
-        return {
-            hasError: () => !!booking.errors[path],
-            message: () =>
-                booking.errors[path] ??
-                (rule() ? booking.setError(path, message).errors[path] : null),
-        };
-    }
+    // Reset confirmation on errors
+    watch(
+        () => booking.hasErrors,
+        (hasErrors) => {
+            if (hasErrors) {
+                booking.confirmed = false;
+                booking.conditions = false;
+            }
+        }
+    );
 
-    function buildTravelerValidators(type, travelers) {
-        return travelers.map((t, i) => ({
-            first_name: makeValidator(
-                `travelers.${type}.${i}.first_name`,
-                () => t.first_name.length < 3,
-                "Voornaam is verplicht."
-            ),
-            last_name: makeValidator(
-                `travelers.${type}.${i}.last_name`,
-                () => t.last_name.length < 3,
-                "Achternaam is verplicht."
-            ),
-            birthdate: makeValidator(
-                `travelers.${type}.${i}.birthdate`,
-                () => t.birthdate === null,
-                "Geboortedatum is verplicht."
-            ),
-            nationality: makeValidator(
-                `travelers.${type}.${i}.nationality`,
-                () => t.nationality.length < 2,
-                "Nationaliteit is verplicht."
-            ),
-        }));
-    }
+    // Auto-cleanup stale errors (safety net)
+    watchEffect(() => {
+        const currentErrors = Object.keys(booking.errors);
 
-    const validator = computed(() => {
-        return {
-            departure_date: makeValidator(
-                "departure_date",
-                () => booking.departure_date === null,
-                "Kies een geldige vertrekdatum."
-            ),
-            contact: {
-                street: makeValidator(
-                    "contact.street",
-                    () => booking.contact.street.length < 3,
-                    "De straatnaam is verplicht."
-                ),
-                house_number: makeValidator(
-                    "contact.house_number",
-                    () => booking.contact.house_number < 1,
-                    "Het huisnummer is verplicht."
-                ),
-                addition: makeValidator("contact.addition", () => null, null),
-                postal: makeValidator(
-                    "contact.postal",
-                    () => !postalRegex.test(booking.contact.postal),
-                    "Voer een geldige postcode in."
-                ),
-                city: makeValidator(
-                    "contact.city",
-                    () => booking.contact.city.length < 3,
-                    "Een plaatsnaam is verplicht."
-                ),
-                email: makeValidator(
-                    "contact.email",
-                    () => !emailRegex.test(booking.contact.email),
-                    "Voer een geldig e-mailadres in."
-                ),
-                phone: makeValidator(
-                    "contact.phone",
-                    () => !phoneRegex.test(booking.contact.phone),
-                    "Voer een geldig telefoonnummer in."
-                ),
-            },
-            travelers: {
-                adults: buildTravelerValidators(
-                    "adults",
-                    booking.travelers.adults
-                ),
-                children: buildTravelerValidators(
-                    "children",
-                    booking.travelers.children
-                ),
-            },
-        };
+        currentErrors.forEach(errorKey => {
+            const travelerMatch = errorKey.match(/^travelers\.(adults|children)\.(\d+)\./);
+
+            if (travelerMatch) {
+                const [, type, indexStr] = travelerMatch;
+                const index = parseInt(indexStr, 10);
+
+                // Check if this traveler still exists
+                if (!booking.travelers[type] || !booking.travelers[type][index]) {
+                    booking.clearErrors(errorKey);
+                }
+            }
+        });
     });
 
-    return { booking, validator };
+    return {
+        booking,
+        constraints: BOOKING_CONSTRAINTS,
+    };
 }

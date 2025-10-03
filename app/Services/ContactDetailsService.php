@@ -13,7 +13,7 @@ class ContactDetailsService
 
     public function fullAddress(): string
     {
-        return $this->details->address.PHP_EOL.$this->details->postal.' '.$this->details->city;
+        return $this->details->address.PHP_EOL.$this->details->postal_code.' '.$this->details->city;
     }
 
     /**

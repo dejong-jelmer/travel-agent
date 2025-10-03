@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
             $table->foreignId('main_booker_id')->cascadeOnDelete()->nullable();
             $table->date('departure_date');
+            $table->boolean('conditions')->default(false);
             $table->boolean('confirmed')->default(false);
             $table->boolean('new')->default(true);
             $table->softDeletes();

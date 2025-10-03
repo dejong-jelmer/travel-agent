@@ -1,6 +1,4 @@
 <script setup>
-// import * as exportedIcons from '@/Icons';
-// Object.entries(exportedIcons).forEach(([name, exported]) => window[name] = exported);
 import { router } from '@inertiajs/vue3'
 import { shallowRef, markRaw } from 'vue';
 

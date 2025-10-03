@@ -21,7 +21,9 @@ const props = defineProps({
                     clip-rule="evenodd" />
             </svg>
         </div>
-        <span class="block text-base font-bold">{{ label }}</span>
+        <span class="block text-base">
+            <slot></slot>
+        </span>
     </label>
     <template v-if="feedback">
         <FormFeedback :message="feedback" />
