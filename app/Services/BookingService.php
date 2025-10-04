@@ -6,11 +6,6 @@ use App\DTO\StoreBookingData;
 use App\DTO\UpdateBookingData;
 use App\Enums\TravelerType;
 use App\Models\Booking;
-use App\Models\BookingChange;
-use App\Models\BookingTraveler;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Auth;
 
 class BookingService
 {
@@ -43,15 +38,15 @@ class BookingService
         $travelersData = $bookingData->travelers;
 
         $booking->contact->update([
-                'name' =>  $bookingData->main_booker['name'],
-                'street' =>  $contactData['street'],
-                'house_number' => $contactData['house_number'],
-                'addition' =>  $contactData['addition'],
-                'postal_code' =>  $contactData['postal_code'],
-                'city' =>  $contactData['city'],
-                'email' =>  $contactData['email'],
-                'phone' =>  $contactData['phone']
-            ]);
+            'name' => $bookingData->main_booker['name'],
+            'street' => $contactData['street'],
+            'house_number' => $contactData['house_number'],
+            'addition' => $contactData['addition'],
+            'postal_code' => $contactData['postal_code'],
+            'city' => $contactData['city'],
+            'email' => $contactData['email'],
+            'phone' => $contactData['phone'],
+        ]);
 
         $this->updateTravelers($booking, $travelersData, $bookingData->main_booker['index']);
 

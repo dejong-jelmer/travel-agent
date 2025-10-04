@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DTO\BookingData;
 use App\DTO\UpdateBookingData;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
