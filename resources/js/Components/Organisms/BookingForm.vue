@@ -68,8 +68,8 @@
 </template>
 
 <script setup>
-import { computed, toRef, watch } from 'vue';
-import { useBookingSteps } from '@/composables/useBookingSteps.js';
+import { computed, toRef } from 'vue';
+import { useBookingSteps } from '@/Composables/useBookingSteps.js';
 import Trip from '@/Components/Organisms/BookingSteps/Trip.vue';
 import Travelers from '@/Components/Organisms/BookingSteps/Travelers.vue';
 import Contact from '@/Components/Organisms/BookingSteps/Contact.vue';
