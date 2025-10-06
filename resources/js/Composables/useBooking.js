@@ -1,4 +1,4 @@
-// composables/useBooking.js
+// Composables/useBooking.js
 import { watch, reactive, readonly, watchEffect } from "vue";
 import { useForm } from "@inertiajs/vue3";
 

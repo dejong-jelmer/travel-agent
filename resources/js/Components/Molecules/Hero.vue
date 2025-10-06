@@ -1,5 +1,5 @@
 <script setup>
-import { useTypeWriter } from "@/Composables/typeWriter.js";
+import { useTypeWriter } from "@/Composables/useTypeWriter.js";
 import heroImage from '@/../images/hero-image.jpg'
 
 const title = "Omdat we";
@@ -12,7 +12,7 @@ const subtitle = [
     "verbonden zijn",
     "de tijd willen nemen",
     "nieuwe ervaringen willen opdoen",
-    "blijven ontdekken",
+    "willen blijven ontdekken",
 ];
 function getRandomNumber(min, max) {
     return Math.floor(Math.random() * (max - min)) + min;

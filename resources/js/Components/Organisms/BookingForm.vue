@@ -153,24 +153,7 @@ function handleSubmit() {
         }
     });
 }
-
-// Test for development only:
-// if (import.meta.env.DEV) {
-//     watch(
-//         () => [booking.value.participants, booking.value.errors],
-//         ([participants, errors]) => {
-//             console.group('📊 Booking State');
-//             console.log('Participants:', participants);
-//             console.log('Travelers:', {
-//                 adults: booking.value.travelers.adults.length,
-//                 children: booking.value.travelers.children.length
-//             });
-//             console.log('Errors:', errors);
-//             console.groupEnd();
-//         },
-//         { deep: true }
-//     );
-// }
+s
 </script>
 
 <style scoped>

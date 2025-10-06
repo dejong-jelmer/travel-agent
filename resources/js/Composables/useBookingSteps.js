@@ -1,4 +1,4 @@
-// composables/useBookingSteps.js
+// Composables/useBookingSteps.js
 import { ref, computed, watch } from "vue";
 import { emailRegex, phoneRegex, postalCodeRegex } from "@/validators/regex.js";
 
