@@ -109,7 +109,7 @@ const currentStepComponent = computed(() => stepComponents[currentStep.value.id]
 
 // Computed property for submit button state
 const canSubmit = computed(() => {
-    return booking.value.confirmed && booking.value.conditions && !booking.value.processing && !booking.value.hasErrors;
+    return booking.value.is_confirmed && booking.value.conditions_accepted && !booking.value.processing && !booking.value.hasErrors;
 });
 
 function handleNext() {
@@ -153,7 +153,6 @@ function handleSubmit() {
         }
     });
 }
-s
 </script>
 
 <style scoped>

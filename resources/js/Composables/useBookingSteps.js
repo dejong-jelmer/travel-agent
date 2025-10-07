@@ -33,7 +33,7 @@ export function useBookingSteps(booking) {
         {
             id: BOOKING_STEPS.OVERVIEW,
             label: "Bekijken & bevestigen",
-            fields: ["confirmed", "conditions"],
+            fields: ["is_confirmed", "conditions_accepted"],
             validate: () => validateOverviewStep(booking.value),
         },
     ]);
@@ -105,12 +105,12 @@ export function useBookingSteps(booking) {
     function validateOverviewStep(bookingData) {
         const errors = {};
 
-        if (!bookingData.confirmed) {
-            errors["confirmed"] = "Je moet nog akkoord gaan.";
+        if (!bookingData.is_confirmed) {
+            errors["is_confirmed"] = "Je moet nog akkoord gaan.";
         }
 
-        if (!bookingData.conditions) {
-            errors["conditions"] =
+        if (!bookingData.conditions_accepted) {
+            errors["conditions_accepted"] =
                 "Je moet nog akkoord gaan met de algemene voorwaarden.";
         }
 

@@ -67,8 +67,8 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             0,
             Math.min(main_booker_index, adults.length - 1)
         ),
-        confirmed: false,
-        conditions: false,
+        is_confirmed: false,
+        conditions_accepted: false,
     });
 
     // Helper: Clear alle errors voor travelers boven een bepaalde index
@@ -139,8 +139,8 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         () => booking.hasErrors,
         (hasErrors) => {
             if (hasErrors) {
-                booking.confirmed = false;
-                booking.conditions = false;
+                booking.is_confirmed = false;
+                booking.conditions_accepted = false;
             }
         }
     );
