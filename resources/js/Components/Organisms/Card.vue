@@ -6,19 +6,18 @@ defineProps({ product: Object });
 </script>
 
 <template>
-    <div class="mx-auto bg-white rounded-xl shadow-sm select-none border border-neutral-200 hover:shadow-md transition-shadow duration-300">
+    <div
+        class="mx-auto bg-white rounded-xl shadow-sm select-none border border-neutral-200 hover:shadow-md transition-shadow duration-300">
         <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
             <Link :href="route('trip.show', product)">
-                <div
-                    class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 hover:scale-110"
-                    :style="`background-image: url(${product.featured_image?.path})`"
-                ></div>
-                <!-- Prijs badge op de foto -->
-                <div class="absolute top-3 right-3 bg-accent-gold text-white px-3 py-1.5 rounded-full shadow-lg">
-                    <p class="text-sm font-bold">
-                        Vanaf €{{ product.price }},-
-                    </p>
-                </div>
+            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 hover:scale-110"
+                :style="`background-image: url(${product.featured_image?.path})`"></div>
+            <!-- Prijs badge op de foto -->
+            <div class="absolute top-3 right-3 bg-accent-gold text-white px-3 py-1.5 rounded-full shadow-lg">
+                <p class="text-sm font-bold">
+                    Vanaf €{{ product.price }},-
+                </p>
+            </div>
             </Link>
         </div>
         <div class="py-5 px-8 space-y-3 text-left bg-neutral-50">
@@ -31,7 +30,8 @@ defineProps({ product: Object });
             </div>
 
             <!-- Titel -->
-            <h4 class="text-xl laptop:text-2xl leading-6 font-bold text-primary-dark line-clamp-2 min-h-0 laptop:min-h-8">
+            <h4
+                class="text-xl laptop:text-2xl leading-6 font-bold text-primary-dark line-clamp-2 min-h-0 laptop:min-h-8">
                 {{ product.name }}
             </h4>
 
@@ -59,10 +59,10 @@ defineProps({ product: Object });
                     <!-- Rechts: CTA button -->
                     <div class="flex justify-end">
                         <Link :href="route('trip.show', product)">
-                            <Button
-                                text="Bekijk&nbsp;reis"
-                                class="bg-accent-earth hover:bg-accent-terracotta text-primary-dark hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg font-medium text-sm"
-                            ></Button>
+                        <Button
+                            class="bg-accent-earth hover:bg-accent-terracotta text-primary-dark hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg font-medium text-sm">
+                            Bekijk&nbsp;reis
+                        </Button>
                         </Link>
                     </div>
                 </div>

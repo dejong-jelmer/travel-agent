@@ -1,7 +1,6 @@
 <script setup>
 import axios from "@/axios";
 import { reactive, ref } from "vue";
-import VueHoneypot from "vue-honeypot";
 import { useToast } from "vue-toastification";
 
 const props = defineProps({
@@ -24,7 +23,7 @@ function resetObject(obj) {
 
 function submit() {
     try {
-        honeypot.value?.validate();
+        honeypot.value.validate();
         resetObject(errors);
         axios
             .post(route("contact"), form)
@@ -138,7 +137,9 @@ function submit() {
 
                 <!-- Submit button -->
                 <div class="flex justify-center pt-6">
-                    <Button text="Verstuur bericht" />
+                    <Button>
+                        Verstuur bericht
+                    </Button>
                 </div>
             </form>
         </div>

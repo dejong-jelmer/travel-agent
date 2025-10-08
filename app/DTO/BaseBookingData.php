@@ -18,7 +18,7 @@ abstract class BaseBookingData implements Arrayable
         public readonly array $_child,
         public readonly BookingContactData $_contact,
         public readonly ?Carbon $_date = null,
-        public readonly ?bool $_conditions = null,
-        public readonly ?bool $_confirmed = null
+        public readonly ?bool $_conditions_accepted = null,
+        public readonly ?bool $_is_confirmed = null
     ) {}
 }

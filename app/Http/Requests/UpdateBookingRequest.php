@@ -117,8 +117,8 @@ class UpdateBookingRequest extends FormRequest
             'departure_date.required' => 'Selecteer een vertrekdatum.',
             'departure_date.date' => 'De geselecteerde datum is ongeldig.',
             'departure_date.after' => 'De vertrekdatum kan niet in het verleden liggen.',
-            'confirmed.accepted' => 'Je moet nog akkoord gaan.',
-            'conditions.accepted' => 'Je moet nog akkoord gaan met de algemene voorwaarde.',
+            'is_confirmed.accepted' => 'Je moet nog akkoord gaan.',
+            'conditions_accepted.accepted' => 'Je moet nog akkoord gaan met de algemene voorwaarde.',
 
             // Contactgegevens
             'contact.street.required' => 'Vul een straatnaam in.',

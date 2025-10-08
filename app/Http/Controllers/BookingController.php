@@ -16,7 +16,7 @@ class BookingController extends Controller
     {
         $bookingData = StoreBookingData::fromRequest($request);
         $booking = $bookingService->store($bookingData);
-        // event(new BookingCreated($booking));
+        event(new BookingCreated($booking));
         session()->flash('new_booking', $booking->uuid);
 
         return to_route('bookings.confirmation', ['booking' => $booking])->with('success', 'Je boeking is geslaagd');
@@ -25,7 +25,7 @@ class BookingController extends Controller
     public function confirmation(Booking $booking)
     {
         if (session('new_booking') !== $booking->uuid) {
-            // abort(404);
+            abort(404);
         }
 
         return Inertia::render('Trips/Confirmation', [

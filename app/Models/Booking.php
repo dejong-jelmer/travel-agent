@@ -24,7 +24,7 @@ class Booking extends Model
         'product_id',
         'main_booker_id',
         'departure_date',
-        'confirmed',
+        'is_confirmed',
     ];
 
     protected $casts = [

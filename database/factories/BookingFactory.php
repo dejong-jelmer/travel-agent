@@ -23,7 +23,7 @@ class BookingFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'departure_date' => fake()->dateTimeBetween('now', '+5 months'),
-            'confirmed' => true,
+            'is_confirmed' => true,
         ];
     }
 

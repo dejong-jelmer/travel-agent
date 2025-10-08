@@ -24,8 +24,8 @@ class BookingTest extends TestCase
             'trip' => [
                 'id' => $trip->id,
             ],
-            'conditions' => true,
-            'confirmed' => true,
+            'conditions_accepted' => true,
+            'is_confirmed' => true,
             'departure_date' => $date,
             'travelers' => [
                 'adults' => [
@@ -73,7 +73,7 @@ class BookingTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'id' => $booking->id,
             'departure_date' => $date->format('Y-m-d'),
-            'confirmed' => 1,
+            'is_confirmed' => 1,
         ]);
 
         // UUID check

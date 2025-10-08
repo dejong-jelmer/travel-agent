@@ -19,8 +19,8 @@ class StoreBookingData implements Arrayable
         public readonly array $travelers,
         public readonly BookingContactData $contact,
         public readonly Carbon $date,
-        public readonly bool $conditions,
-        public readonly bool $confirmed
+        public readonly bool $conditions_accepted,
+        public readonly bool $is_confirmed
     ) {}
 
     /**
@@ -37,8 +37,8 @@ class StoreBookingData implements Arrayable
             travelers: $parsed['travelers'],
             contact: $parsed['contact'],
             date: Carbon::parse($validated['departure_date']),
-            conditions: $validated['conditions'] ?? false,
-            confirmed: $validated['confirmed'] ?? false,
+            conditions_accepted: $validated['conditions_accepted'] ?? false,
+            is_confirmed: $validated['is_confirmed'] ?? false,
         );
     }
 }
