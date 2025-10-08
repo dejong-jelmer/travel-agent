@@ -13,13 +13,8 @@ class ContactRequest extends FormRequest
      */
     public function rules(): array
     {
-        $emailValidation = app()->environment('testing')
-        ? 'email:rfc'
-        : 'email:rfc,dns';
-
-        $phoneValidation = app()->environment('testing')
-        ? 'phone'
-        : 'phone:NL,BE,FORMAT_E164';
+        $emailValidation = config('contact.validation-rules.email');
+        $phoneValidation = config('contact.validation-rules.phone');
 
         return [
             'name' => ['required', 'string', 'max:100'],

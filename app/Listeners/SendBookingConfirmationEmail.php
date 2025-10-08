@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\BookingCreated;
 use Illuminate\Support\Facades\Log;
 
-class SendBookingConfirmationMail
+class SendBookingConfirmationEmail
 {
     /**
      * Create the event listener.

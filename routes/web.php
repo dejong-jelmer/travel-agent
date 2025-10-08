@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewsletterController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -18,6 +19,11 @@ Route::get('/contact', [HomeController::class, 'contact']);
 Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact');
 Route::get('/privacybeleid', [HomeController::class, 'showPrivacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'showTerms'])->name('terms');
+
+// Newsletter
+Route::post('/nieuwsbrief/aanmelden', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/nieuwsbrief/bevestigen/{token}', [NewsletterController::class, 'confirm'])->name('newsletter.confirm');
+Route::get('/nieuwsbrief/afmelden/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
 // Trips
 Route::get('reizen/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');

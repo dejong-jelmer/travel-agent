@@ -147,13 +147,13 @@ const formattedDate = (date, longMonth = true) => {
             <section class="grid gap-4 border-2 bg-slate-50 rounded-2xl p-6">
 
                 <!-- Bevestiging -->
-                <span @click="booking.clearErrors('confirmed')">
-                    <Checkbox v-model="booking.confirmed" :feedback="booking.errors.confirmed">
+                <span @click="booking.clearErrors('is_confirmed')">
+                    <Checkbox v-model="booking.is_confirmed" :feedback="booking.errors.is_confirmed">
                         Ik bevestig de juistheid van mijn gegevens en maak mijn boeking definitief.
                     </Checkbox>
                 </span>
-                <span @click="booking.clearErrors('conditions')">
-                    <Checkbox v-model="booking.conditions" :feedback="booking.errors.conditions">
+                <span @click="booking.clearErrors('conditions_accepted')">
+                    <Checkbox v-model="booking.conditions_accepted" :feedback="booking.errors.conditions_accepted">
                         Ik bevestig dat de
                         <a :href="route('terms')" target="_blank" rel="noopener noreferrer"
                             class="text-accent-terracotta hover:text-primary-dark font-medium underline decoration-accent-gold/30 hover:decoration-accent-gold transition-colors duration-300">

@@ -5,7 +5,8 @@ defineProps({
 </script>
 <template>
     <button
-        v-html="text"
-        class="px-2 tablet:px-4 py-3 font-semibold text-base tablet:text-lg cursor-pointer select-none text-white bg-accent-gold rounded-lg transition-all duration-300 ease hover:bg-accent-earth focus:outline-none focus:ring-2 focus:ring-secondary-stone focus:ring-offset-2">
+        class="bg-primary-default hover:bg-accent-terracotta text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-stone focus:ring-offset-2 disabled:opacity-40 disabled:cursor-not-allowed"
+        >
+        <slot></slot>
     </button>
 </template>
