@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class NewsletterSubscriber extends Model
 {
@@ -34,7 +33,7 @@ class NewsletterSubscriber extends Model
             if (empty($subscriber->token)) {
                 $subscriber->token = bin2hex(random_bytes(32));
                 $subscriber->confirmation_token = bin2hex(random_bytes(32));
-                $subscriber->unsubscribe_token  = bin2hex(random_bytes(32));
+                $subscriber->unsubscribe_token = bin2hex(random_bytes(32));
             }
         });
     }

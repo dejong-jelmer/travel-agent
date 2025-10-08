@@ -8,10 +8,8 @@ use App\Models\NewsletterSubscriber;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
 class NewsletterController extends Controller
 {
-
     public function subscribe(SubscribeNewsLetterRequest $request): void
     {
         $validated = $request->validated();
@@ -23,7 +21,7 @@ class NewsletterController extends Controller
                 'name' => $validated['name'] ?? null,
                 'unsubscribed_at' => null,
                 'subscribed_at' => now(),
-                'confirmation_expires_at' => now()->addHours($hours)
+                'confirmation_expires_at' => now()->addHours($hours),
             ]
         );
 
@@ -37,15 +35,15 @@ class NewsletterController extends Controller
             ->where('confirmation_expires_at', '>=', now())
             ->firstOrFail();
 
-        if (!$subscriber->update([
+        if (! $subscriber->update([
             'confirmation_expires_at' => null,
-            'confirmed_at' => now()
+            'confirmed_at' => now(),
         ])) {
             abort(404);
         }
 
         return Inertia::render('Newsletter/Confirmed', [
-            'title' => config('app.name') . " - Nieuwsbrief inschrijving bevestigd",
+            'title' => config('app.name').' - Nieuwsbrief inschrijving bevestigd',
         ]);
     }
 
@@ -55,15 +53,15 @@ class NewsletterController extends Controller
             ->whereNull('unsubscribed_at')
             ->firstOrFail();
 
-        if (!$subscriber->update([
+        if (! $subscriber->update([
             'confirmed_at' => null,
-            'unsubscribed_at' => now()
+            'unsubscribed_at' => now(),
         ])) {
             abort(404);
         }
 
         return Inertia::render('Newsletter/Unsubscribed', [
-            'title' => config('app.name') . " - Nieuwsbrief uitschrijving bevestigd",
+            'title' => config('app.name').' - Nieuwsbrief uitschrijving bevestigd',
         ]);
     }
 }

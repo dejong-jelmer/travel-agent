@@ -1,4 +1,5 @@
 <?php
+
 return [
-    'confirmation_expires_after' => 48
+    'confirmation_expires_after' => 48,
 ];
