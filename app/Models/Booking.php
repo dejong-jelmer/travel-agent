@@ -24,6 +24,7 @@ class Booking extends Model
         'product_id',
         'main_booker_id',
         'departure_date',
+        'conditions_accepted',
         'is_confirmed',
     ];
 
