@@ -18,6 +18,7 @@ class BookingTravelerFactory extends Factory
     public function definition(): array
     {
         $type = fake()->randomElement(TravelerType::cases(), rand(0, 1))->value;
+
         return [
             'type' => $type,
             'first_name' => fake()->firstName(),

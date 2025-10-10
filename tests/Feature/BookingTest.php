@@ -57,10 +57,10 @@ class BookingTest extends TestCase
             'departure_date' => $date,
             'travelers' => [
                 'adults' => [
-                    ...$adults
+                    ...$adults,
                 ],
                 'children' => [
-                    ...$children
+                    ...$children,
                 ],
             ],
             'main_booker' => 0,

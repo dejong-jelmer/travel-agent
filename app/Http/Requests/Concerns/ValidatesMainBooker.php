@@ -11,7 +11,7 @@ trait ValidatesMainBooker
         $adults = $this->input('travelers.adults', []);
         $mainBookerIndex = $this->input('main_booker');
 
-        if (!isset($adults[$mainBookerIndex]['birthdate'])) {
+        if (! isset($adults[$mainBookerIndex]['birthdate'])) {
             return;
         }
 
@@ -24,6 +24,7 @@ trait ValidatesMainBooker
                 "travelers.adults.$mainBookerIndex.birthdate",
                 __('validation.custom.travelers.*.*.birthdate.date_format')
             );
+
             return;
         }
 
