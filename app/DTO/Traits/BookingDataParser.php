@@ -39,7 +39,7 @@ trait BookingDataParser
     protected static function getMainBookerFullName(array $adults, ?int $mainBookerIndex): string
     {
         if ($mainBookerIndex !== null && isset($adults[$mainBookerIndex])) {
-            return $adults[$mainBookerIndex]['full_name'] ?? 'Unknown';
+            return $adults[$mainBookerIndex]['full_name'] ?? "{$adults[$mainBookerIndex]['first_name']} {$adults[$mainBookerIndex]['last_name']}" ;
         }
 
         return 'Unknown';

@@ -2,14 +2,18 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Concerns\ValidatesMainBooker;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
 
+
 class UpdateBookingRequest extends FormRequest
 {
+    use ValidatesMainBooker;
+
     public function authorize(): bool
     {
         // return Auth::user()->role === 'admin';
@@ -33,7 +37,6 @@ class UpdateBookingRequest extends FormRequest
             'travelers.*.*.first_name' => ['required', 'string', 'min:3', 'max:255'],
             'travelers.*.*.last_name' => ['required', 'string', 'min:3', 'max:255'],
             'travelers.*.*.nationality' => ['required', 'string', 'min:2', 'max:255'],
-            'travelers.*.*.full_name' => ['required', 'string', 'min:3', 'max:255'],
             'travelers.adults.*.birthdate' => [
                 'required',
                 'date_format:d-m-Y',
@@ -93,7 +96,7 @@ class UpdateBookingRequest extends FormRequest
 
             if (isset($adults[$mainBookerIndex]['birthdate'])) {
                 try {
-                    $birthdate = Carbon::parse($adults[$mainBookerIndex]['birthdate']);
+                    $birthdate = Carbon::createFromFormat('d-m-Y', $adults[$mainBookerIndex]['birthdate']);
                 } catch (\Exception $e) {
                     Log::error('Birthdate parsing failed: '.$e->getMessage());
                     $validator->errors()->add("travelers.adults.$mainBookerIndex.birthdate", 'Voor deze reiziger moet een geldige geboortedatum worden ingevuld.');
@@ -108,40 +111,5 @@ class UpdateBookingRequest extends FormRequest
                 }
             }
         });
-    }
-
-    public function messages(): array
-    {
-        return [
-            // Datum & bevestiging
-            'departure_date.required' => 'Selecteer een vertrekdatum.',
-            'departure_date.date' => 'De geselecteerde datum is ongeldig.',
-            'departure_date.after' => 'De vertrekdatum kan niet in het verleden liggen.',
-            'is_confirmed.accepted' => 'Je moet nog akkoord gaan.',
-            'conditions_accepted.accepted' => 'Je moet nog akkoord gaan met de algemene voorwaarde.',
-
-            // Contactgegevens
-            'contact.street.required' => 'Vul een straatnaam in.',
-            'contact.house_number.required' => 'Vul een huisnummer in.',
-            'contact.house_number.regex' => 'Vul een geldig huisnummer in.',
-            'contact.postal_code.required' => 'Vul een postcode in.',
-            'contact.postal_code.regex' => 'Voer een geldige postcode voor Nederlands of België in.',
-            'contact.city.required' => 'Vul een plaatsnaam in.',
-            'contact.email.required' => 'Vul een e-mailadres in.',
-            'contact.email.email' => 'Voer een geldig e-mailadres in.',
-            'contact.phone.required' => 'Vul een telefoonnummer in.',
-            'contact.phone.phone' => 'Voer een geldig Nederlands of Belgisch telefoonnummer in.',
-
-            // Reizigers volwassenen
-            'travelers.*.*.first_name.required' => 'Voor deze reiziger moet een voornaam worden ingevuld.',
-            'travelers.*.*.last_name.required' => 'Voor deze reiziger moet een achternaam worden ingevuld.',
-            'travelers.*.*.birthdate.required' => 'Voor deze reiziger moet een geboortedatum worden ingevuld.',
-            'travelers.*.*.birthdate.date_format' => 'Voor deze reiziger moet een geldige geboortedatum worden ingevuld.',
-            'travelers.*.*.nationality.required' => 'Voor deze reiziger moet een nationaliteit worden ingevuld.',
-            'travelers.adults.*.birthdate.before' => 'Volwassenen moeten minimaal 12 jaar of ouder zijn.',
-            'travelers.adults.*.birthdate.after' => 'De geboortedatum moet niet langer dan 100 jaar geleden zijn.',
-            'travelers.children.*.birthdate.after_or_equal' => 'Voor kinderen geldt een maximum leeftijd van 12 jaar, kinderen vanaf 12 jaar en ouder tellen mee als volwassenen.',
-            'travelers.children.*.birthdate.before' => 'De geboortedatum kan niet in de toekomst liggen.',
-        ];
     }
 }

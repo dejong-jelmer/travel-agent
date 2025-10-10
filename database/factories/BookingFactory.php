@@ -34,17 +34,19 @@ class BookingFactory extends Factory
             $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
 
             $adults = BookingTraveler::factory()
-                ->count(2)
+                ->count(fake()->numberBetween(1, 2))
                 ->create([
                     'booking_id' => $booking->id,
                     'type' => TravelerType::Adult,
+                    'birthdate' => fake()->dateTimeBetween('-80 years', '-18 years')->format('Y-m-d'),
                 ]);
 
             BookingTraveler::factory()
-                ->count(2)
+                ->count(fake()->numberBetween(0, 3))
                 ->create([
                     'booking_id' => $booking->id,
                     'type' => TravelerType::Child,
+                    'birthdate' => fake()->dateTimeBetween('-12 years', 'now')->format('Y-m-d'),
                 ]);
 
             $mainBooker = $adults->random();

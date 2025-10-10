@@ -18,7 +18,35 @@ class BookingTest extends TestCase
     public function test_it_can_create_a_booking_with_travelers_and_contact()
     {
         $trip = Product::factory()->create();
-        $date = now()->addMonth(3);
+        $date = fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d');
+        $adults = [];
+        $children = [];
+        $numberOfAdults = fake()->numberBetween(1, 3);
+        $numberOfChildren = fake()->numberBetween(0, 3);
+
+        for ($i = 0; $i <= $numberOfAdults; $i++) {
+            $firstName = fake()->firstName();
+            $lastName = fake()->lastName();
+            $adults[$i] = [
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'full_name' => "{$firstName} {$lastName}",
+                'birthdate' => fake()->dateTimeBetween('now -80 year', 'now -12 year')->format('d-m-Y'),
+                'nationality' => fake()->country(),
+            ];
+        }
+
+        for ($i = 0; $i <= $numberOfChildren; $i++) {
+            $firstName = fake()->firstName();
+            $lastName = fake()->lastName();
+            $children[$i] = [
+                'first_name' => $firstName,
+                'last_name' => $lastName,
+                'full_name' => "{$firstName} {$lastName}",
+                'birthdate' => fake()->dateTimeBetween('now -12 year', 'now')->format('d-m-Y'),
+                'nationality' => fake()->country(),
+            ];
+        }
 
         $payload = [
             'trip' => [
@@ -29,50 +57,34 @@ class BookingTest extends TestCase
             'departure_date' => $date,
             'travelers' => [
                 'adults' => [
-                    [
-                        'first_name' => 'John',
-                        'last_name' => 'Doe',
-                        'full_name' => 'John Doe',
-                        'birthdate' => now()->subYears(35)->format('d-m-Y'),
-                        'nationality' => 'NL',
-                    ],
-                    [
-                        'first_name' => 'Jane',
-                        'last_name' => 'Doe',
-                        'full_name' => 'Jane Doe',
-                        'birthdate' => now()->subYears(45)->format('d-m-Y'),
-                        'nationality' => 'NL',
-                    ],
+                    ...$adults
                 ],
                 'children' => [
-                    [
-                        'first_name' => 'Junior',
-                        'last_name' => 'Doe',
-                        'full_name' => 'Junior Doe',
-                        'birthdate' => now()->subYears(8)->format('d-m-Y'),
-                        'nationality' => 'NL',
-                    ],
+                    ...$children
                 ],
             ],
             'main_booker' => 0,
             'contact' => [
-                'street' => 'Teststraat',
-                'house_number' => '123',
-                'addition' => 'bis',
-                'postal_code' => '1234AB',
-                'city' => 'Teststad',
-                'email' => 'test@test.nl',
-                'phone' => '+31612345678',
+                'street' => fake()->streetname(),
+                'house_number' => fake()->randomNumber(3, false),
+                'addition' => fake()->streetSuffix(),
+                'postal_code' => fake()->postcode(),
+                'city' => fake()->city(),
+                'email' => fake()->email(),
+                'phone' => fake()->phoneNumber(),
             ],
         ];
 
         $response = $this->post(route('bookings.store'), $payload);
-
+        // if ($response->isRedirect()) {
+        //     dd($response->getTargetUrl());
+        // }
+        // dd($response->getContent());
         $booking = Booking::firstOrFail();
         $this->assertEquals($payload['trip']['id'], $booking->product_id);
         $this->assertDatabaseHas('bookings', [
             'id' => $booking->id,
-            'departure_date' => $date->format('Y-m-d'),
+            'departure_date' => $date,
             'is_confirmed' => 1,
         ]);
 

@@ -15,9 +15,10 @@ export const BOOKING_CONSTRAINTS = readonly({
 
 const createTraveler = (data = {}) => {
     return reactive({
+        ...(data.id && {id: data.id}),
         first_name: data.first_name || "",
         last_name: data.last_name || "",
-        birthdate: data.birthdate ? new Date(data.birthdate).toLocaleDateString('nl-NL') : null,
+        birthdate: data.birthdate_formatted || null,
         nationality: data.nationality || "",
         get full_name() {
             return `${this.first_name} ${this.last_name}`.trim();

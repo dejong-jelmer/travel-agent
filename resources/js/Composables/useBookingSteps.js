@@ -1,6 +1,8 @@
 // Composables/useBookingSteps.js
 import { ref, computed, watch } from "vue";
 import { emailRegex, phoneRegex, postalCodeRegex } from "@/validators/regex.js";
+import { useDateFormatter } from '@/Composables/useDateFormatter.js';
+const { isValidDate } = useDateFormatter();
 
 export const BOOKING_STEPS = {
     TRIP: "trip",
@@ -56,7 +58,7 @@ export function useBookingSteps(booking) {
                         "Achternaam ontbreekt — we hebben deze nodig voor de boeking.";
                 }
 
-                if (!traveler.birthdate) {
+                if (!isValidDate(traveler.birthdate)) {
                     errors[`${basePath}.birthdate`] =
                         "Vul een geldige geboortedatum in.";
                 }

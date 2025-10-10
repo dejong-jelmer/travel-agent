@@ -23,7 +23,7 @@ class BookingContactFactory extends Factory
             'postal_code' => fake()->postcode(),
             'city' => fake()->city(),
             'email' => fake()->email(),
-            'phone' => fake()->e164PhoneNumber(),
+            'phone' => fake()->phoneNumber(),
         ];
     }
 }
