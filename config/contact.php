@@ -13,12 +13,4 @@ return [
     'kvk' => env('CONTACT_KVK', ''),
     'btw' => env('CONTACT_BTW', ''),
 
-    'validation-rules' => [
-        'email' => env('APP_ENV', '') !== 'production'
-            ? 'email:rfc'
-            : 'email:rfc,dns',
-        'phone' => env('APP_ENV', '') !== 'production'
-            ? 'phone'
-            : 'phone:NL,BE,FORMAT_E164',
-    ],
 ];
