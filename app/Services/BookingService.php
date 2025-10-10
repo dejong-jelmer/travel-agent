@@ -23,7 +23,16 @@ class BookingService
         ]);
 
         // Create booking contact details
-        $booking->contact()->create($contactData);
+        $booking->contact()->create([
+            'name' => $contactData['name'],
+            'street' => $contactData['street'],
+            'house_number' => $contactData['house_number'],
+            'addition' => $contactData['addition'],
+            'postal_code' => $contactData['postal_code'],
+            'city' => $contactData['city'],
+            'email' => $contactData['email'],
+            'phone' => $contactData['phone'],
+        ]);
 
         // Create the travelers
         $this->storeTravelers($booking, $travelersData, $bookingData->main_booker['index']);
@@ -38,7 +47,7 @@ class BookingService
         $travelersData = $bookingData->travelers;
 
         $booking->contact->update([
-            'name' => $bookingData->main_booker['name'],
+            'name' => $contactData['name'],
             'street' => $contactData['street'],
             'house_number' => $contactData['house_number'],
             'addition' => $contactData['addition'],

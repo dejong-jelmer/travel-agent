@@ -16,7 +16,7 @@
                         v-model="traveler.birthdate" :placeholder="'DD-MM-JJJJ'"
                         :feedback="booking.errors[`travelers.${type}.${index}.birthdate`]"
                         @keyup="booking.clearErrors(`travelers.${type}.${index}.birthdate`)"
-                        @input="formatBirthDate($event, index)" maxlength="10" />
+                        @input="handleBirthdateInput($event, index)" maxlength="10" />
 
                     <Input type="text" name="nationality[]" label="Nationaliteit" :placeholder="'NL of BE'"
                         :showLabel="true" :required="true" v-model="traveler.nationality"
@@ -26,7 +26,9 @@
             </div>
 </template>
 <script setup>
-import { toRef } from 'vue'
+import { toRef, onMounted } from 'vue'
+import { useDateFormatter } from '@/Composables/useDateFormatter.js';
+const { initializeBirthdate, formatBirthDateInput } = useDateFormatter();
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -35,16 +37,16 @@ const props = defineProps({
 })
 const travelers = toRef(props.booking.travelers, props.type)
 
-const formatBirthDate = (event, index) => {
-    let value = event.target.value.replace(/[^\d]/g, '');
+onMounted(() => {
+    travelers.value.forEach((traveler) => {
+        traveler.birthdate = initializeBirthdate(traveler.birthdate);
+    });
+});
 
-    if (value.length >= 2) {
-        value = value.slice(0, 2) + '-' + value.slice(2);
-    }
-    if (value.length >= 5) {
-        value = value.slice(0, 5) + '-' + value.slice(5);
-    }
-
-    travelers.value[index].birthdate = value.slice(0, 10);
+const handleBirthdateInput = (event, index) => {
+    formatBirthDateInput(event, (formatted) => {
+        travelers.value[index].birthdate = formatted;
+    });
 };
+
 </script>
