@@ -12,7 +12,6 @@ class StoreBookingRequest extends FormRequest
 {
     use ValidatesMainBooker;
 
-
     public function authorize(): bool
     {
         return true;
@@ -27,7 +26,7 @@ class StoreBookingRequest extends FormRequest
                 'departure_date' => ['required', 'date', 'after:today'],
                 'is_confirmed' => ['accepted'],
                 'conditions_accepted' => ['accepted'],
-                'travelers.*.*.full_name' => ['required', 'string', 'min:3', 'max:255']
+                'travelers.*.*.full_name' => ['required', 'string', 'min:3', 'max:255'],
             ],
             BookingValidationRules::contact(),
             BookingValidationRules::travelers(),

@@ -20,13 +20,13 @@ class BookingController extends Controller
         event(new BookingCreated($booking));
         session()->flash('new_booking', $booking->uuid);
 
-        if(request()->is('api/*')) {
+        if (request()->is('api/*')) {
             return response()->json([
                 'message' => 'Booking created',
                 'booking' => [
                     'id' => $booking->id,
-                    'travelers' => $booking->travelers->pluck('id')
-                ]
+                    'travelers' => $booking->travelers->pluck('id'),
+                ],
             ], 200);
         }
 

@@ -116,8 +116,8 @@ class BookingTest extends TestCase
                         'last_name' => fake()->lastName(),
                         'birthdate' => $this->generateBirthdate(TravelerType::Child),
                     ],
-                ]
-            ]
+                ],
+            ],
         ];
     }
 

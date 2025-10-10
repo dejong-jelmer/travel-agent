@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Validation;
 
 class BookingValidationRules
@@ -14,7 +15,7 @@ class BookingValidationRules
             'contact.email' => ['required', 'email:rfc,filter'],
             'contact.phone' => ['required', 'string', 'min:10', 'max:20'],
         ];
-     }
+    }
 
     public static function travelers(): array
     {
@@ -35,12 +36,12 @@ class BookingValidationRules
                 'before:'.now()->format('d-m-Y'),
             ],
         ];
-     }
+    }
 
     public static function mainBooker(): array
     {
         return [
             'main_booker' => ['required', 'integer'],
         ];
-     }
+    }
 }
