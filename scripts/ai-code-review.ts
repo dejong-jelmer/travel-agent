@@ -11,11 +11,6 @@ for (const envVar of REQUIRED_ENV_VARS) {
     }
 }
 
-if (diffs.length === 0) {
-    info("No code changes to review (binary files only?)");
-    process.exit(0);
-}
-
 const MAX_DIFF_CHARS = 20000;
 const MAX_RESPONSE_TOKENS = 2500;
 const ANTHROPIC_API_VERSION = "2023-06-01";
@@ -45,6 +40,11 @@ async function main() {
         .map(f => f.patch)
         .filter(Boolean)
         .join("\n\n");
+
+    if (diffs.length === 0) {
+        info("No code changes to review (binary files only?)");
+        process.exit(0);
+    }
 
     if (!diffs.trim()) {
         info("No text diffs found (possibly all binary files). Skipping AI review.");
