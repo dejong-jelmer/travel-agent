@@ -5,6 +5,7 @@ import * as github from "@actions/github";
 const MAX_DIFF_CHARS = 20000;
 const MAX_RESPONSE_TOKENS = 2500;
 const ANTHROPIC_API_VERSION = "2023-06-01";
+const ANTHROPIC_MODEL = "claude-3-5-sonnet-20240620";
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 const { owner, repo } = github.context.repo;
@@ -51,7 +52,7 @@ ${truncatedDiff}
       "anthropic-version": ANTHROPIC_API_VERSION,
     },
     body: JSON.stringify({
-      model: "claude-3-5-sonnet-20241022",
+      model: ANTHROPIC_MODEL,
       max_tokens: MAX_RESPONSE_TOKENS,
       messages: [{ role: "user", content: prompt }],
     }),
