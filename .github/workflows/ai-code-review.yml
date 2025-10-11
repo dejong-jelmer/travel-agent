@@ -20,11 +20,14 @@ jobs:
         uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: bun add tsx @octokit/rest @actions/core @actions/github
+        working-directory: .github/actions/ai-code-review
+        run: bun install
 
       - name: Run AI Code Review
+        working-directory: .github/actions/ai-code-review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           ANTHROPIC_MODEL: claude-sonnet-4-5-20250929
-        run: bunx tsx scripts/ai-code-review.ts
+          ANTHROPIC_API_VERSION: '2023-06-01'
+        run: run review
