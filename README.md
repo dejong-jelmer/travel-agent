@@ -1,9 +1,3 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
-
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
 # 🌍 Sustainable Travel Agent
 
 A modern Laravel + Inertia.js + Vue 3 web application for a sustainable travel organization promoting **European train journeys** and **short cultural trips**.  
@@ -34,7 +28,7 @@ By offering curated, culturally rich train-based journeys, we aim to inspire tra
 
 | Layer | Technology |
 |-------|-------------|
-| **Backend** | Laravel 12 (PHP 8.3) |
+| **Backend** | Laravel 12 (PHP 8.4) |
 | **Frontend** | Inertia.js + Vue 3 |
 | **Styling** | Tailwind CSS v3.4 (with custom theme & breakpoints) |
 | **Email** | Mailjet (via `mailjet/laravel-mailjet`) |
@@ -43,39 +37,6 @@ By offering curated, culturally rich train-based journeys, we aim to inspire tra
 | **Build Tools** | Vite |
 
 ---
-
-## ⚡ Installation (Local Development)
-
-### 1. Clone the Repository
-```bash
-git clone https://github.com/your-username/travel-agent.git
-cd travel-agent
-```
-### 2. Install Dependencies
-```
-composer install
-npm install
-npm run build
-```
-### 3. Environment Setup
-```
-cp .env.example .env
-php artisan key:generate
-```
-Update your .env with the required settings:
-```
-APP_NAME="Sustainable Travel Agent"
-APP_ENV=local
-APP_URL=http://localhost
-MAIL_MAILER=mailjet
-MAILJET_APIKEY=your-mailjet-api-key
-MAILJET_APISECRET=your-mailjet-api-secret
-```
-### 4. Run Local Development Server
-```
-php artisan serve
-npm run dev
-```
 
 ## 🧩 Tailwind Theme
 Custom color palette and breakpoints:
@@ -109,7 +70,7 @@ screens: {
 * No secrets stored in the repository (all handled via GitHub Secrets)
 
 ## 🪪 License
-This project is licensed under the MIT License — see the LICENSE
+This project is licensed under the MIT License — see the [LICENSE](https://mit-license.org/)
 
 ## 💚 Built with passion for sustainable travel and webdevelopment
 “The journey matters more than the destination — especially when it’s by train.”
