@@ -126,8 +126,9 @@ async function callAnthropicWithRetry(prompt: string, apiKey: string): Promise<A
 
             if (res.status === 429) {
                 const retryAfter = res.headers.get("retry-after");
-                const delay = retryAfter
-                    ? parseInt(retryAfter, 10) * 1000
+                const retryAfterSecs = retryAfter ? parseInt(retryAfter, 10) : null;
+                const delay = (retryAfterSecs && !isNaN(retryAfterSecs))
+                    ? retryAfterSecs * 1000
                     : RETRY_DELAY_MS * Math.pow(2, attempt - 1);
                 warning(`Rate limited (429). Retrying after ${delay}ms...`);
                 await sleep(delay);
@@ -217,7 +218,16 @@ async function main() {
         return;
     }
 
+    if (filesWithPatches.length > 100) {
+        warning(`Large PR detected: ${filesWithPatches.length} files. Review may take longer.`);
+    }
+
     const { diff, truncated, filesIncluded } = truncateAtFileBoundary(filesWithPatches, MAX_DIFF_CHARS);
+
+    if (!diff || diff.trim().length === 0) {
+        warning("No diff content to review after truncation");
+        return;
+    }
 
     if (truncated) {
         warning(`Diff truncated: showing ${filesIncluded} of ${filesWithPatches.length} files (${diff.length} chars)`);
