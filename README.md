@@ -40,7 +40,7 @@ By offering curated, culturally rich train-based journeys, we aim to inspire tra
 
 ## 🧩 Tailwind Theme
 Custom color palette and breakpoints:
-```
+```js
 // tailwind.config.js
 colors: {
   primary: { default: '#2F3E46', dark: '#1B3A4B' },
@@ -68,6 +68,18 @@ screens: {
 * Expiring confirmation/unsubscribe links for newsletters
 * Environment-specific configuration separation
 * No secrets stored in the repository (all handled via GitHub Secrets)
+* CSRF protection enabled on all forms
+* Signed URLs for newsletter actions (48h expiry)
+
+## 📋 Prerequisites
+* PHP 8.2+
+* Composer 2.x
+* Node.js 18+
+* MySQL/PostgreSQL/SQLite
+
+## 🧪 Testing
+```bash
+php artisan test
 
 ## 🪪 License
 This project is licensed under the MIT License — see the [LICENSE](https://mit-license.org/)
