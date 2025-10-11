@@ -63,7 +63,7 @@ function initializeConfig(): Config {
         throw new Error("Missing or invalid PR context (owner/repo/number)");
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY! as string;
+    const apiKey = process.env.ANTHROPIC_API_KEY!;
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
     return { octokit, owner, repo, prNumber, apiKey };
