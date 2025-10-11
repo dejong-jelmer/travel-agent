@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Helpers\Breadcrumbs;
+use App\Responses\BookingResponse;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Response;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -33,6 +35,10 @@ class AppServiceProvider extends ServiceProvider
             },
         ]);
 
-        Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());
+        Inertia::share('breadcrumbs', fn() => Breadcrumbs::generate());
+
+        Response::macro('booking', function ($booking) {
+            return BookingResponse::make($booking)->toResponse();
+        });
     }
 }

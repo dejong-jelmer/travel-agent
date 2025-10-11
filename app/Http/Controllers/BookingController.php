@@ -19,18 +19,8 @@ class BookingController extends Controller
         $booking = $bookingService->store($bookingData);
         event(new BookingCreated($booking));
         session()->flash('new_booking', $booking->uuid);
-
-        if (request()->is('api/*')) {
-            return response()->json([
-                'message' => 'Booking created',
-                'booking' => [
-                    'id' => $booking->id,
-                    'travelers' => $booking->travelers->pluck('id'),
-                ],
-            ], 200);
-        }
-
-        return to_route('bookings.confirmation', ['booking' => $booking])->with('success', 'Je boeking is geslaagd');
+        // Response macro in App\Responses\BookingResponse
+        return response()->booking($booking);
     }
 
     public function confirmation(Booking $booking)
