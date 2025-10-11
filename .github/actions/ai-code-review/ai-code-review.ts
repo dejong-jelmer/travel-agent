@@ -74,9 +74,6 @@ async function sleep(ms: number): Promise<void> {
 }
 
 async function callAnthropicWithRetry(prompt: string): Promise<AnthropicResponse> {
-    if (!ALLOWED_MODELS.includes(ANTHROPIC_MODEL)) {
-        throw new Error(`Invalid model: ${ANTHROPIC_MODEL}`);
-    }
     let lastError: Error | null = null;
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
