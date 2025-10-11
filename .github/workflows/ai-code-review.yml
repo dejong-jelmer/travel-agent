@@ -1,0 +1,37 @@
+name: AI Code Review (Claude)
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+
+      - name: Install dependencies
+        working-directory: .github/actions/ai-code-review
+        run: bun install
+
+      - name: Run AI Code Review
+        working-directory: .github/actions/ai-code-review
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          ANTHROPIC_MODEL: claude-sonnet-4-5-20250929
+          ANTHROPIC_API_VERSION: '2023-06-01'
+          CUSTOM_PROMPT: |
+            You are an expert software engineer performing a code review.
+            Provide specific, concise feedback on code quality, security, maintainability, and style.
+            Be objective and constructive.
+        run: bun run review
