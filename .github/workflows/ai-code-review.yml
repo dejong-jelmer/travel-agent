@@ -20,7 +20,7 @@ jobs:
         uses: oven-sh/setup-bun@v1
 
       - name: Install dependencies
-        run: bun add tsx @octokit/rest @actions/core node-fetch
+        run: bun add tsx @octokit/rest @actions/core @actions/github node-fetch
 
       - name: Run AI Code Review
         env:
