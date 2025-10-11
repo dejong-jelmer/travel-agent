@@ -14,7 +14,7 @@ for (const envVar of REQUIRED_ENV_VARS) {
 const MAX_DIFF_CHARS = 20000;
 const MAX_RESPONSE_TOKENS = 2500;
 const ANTHROPIC_API_VERSION = "2023-06-01";
-const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4.1';
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514';
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 const { owner, repo } = github.context.repo;
@@ -22,7 +22,6 @@ const prNumber = github.context.payload.pull_request?.number;
 
 if (!owner || !repo || !prNumber) {
     setFailed("Missing PR context (owner/repo/number)");
-    process.exit(1);
 }
 
 async function main() {
@@ -41,14 +40,8 @@ async function main() {
         .filter(Boolean)
         .join("\n\n");
 
-    if (diffs.length === 0) {
-        info("No code changes to review (binary files only?)");
-        process.exit(0);
-    }
-
-    if (!diffs.trim()) {
-        info("No text diffs found (possibly all binary files). Skipping AI review.");
-        return;
+    if (diffs.length === 0 || !diffs.trim()) {
+        setFailed("No text diffs found (possibly all binary files). Skipping AI review.");
     }
 
     if (diffs.length > MAX_DIFF_CHARS) {
@@ -67,11 +60,6 @@ Be objective and constructive.
 ${truncatedDiff}
 --- DIFF END ---
 `;
-
-    if (!process.env.ANTHROPIC_API_KEY) {
-        setFailed("ANTHROPIC_API_KEY is not set");
-        process.exit(1);
-    }
 
     const res = await fetch("https://api.anthropic.com/v1/messages", {
         method: "POST",
