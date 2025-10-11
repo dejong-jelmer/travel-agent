@@ -7,7 +7,6 @@ const REQUIRED_ENV_VARS = ["GITHUB_TOKEN", "ANTHROPIC_API_KEY"];
 for (const envVar of REQUIRED_ENV_VARS) {
     if (!process.env[envVar]) {
         setFailed(`${envVar} is required but not set`);
-        process.exit(1);
     }
 }
 
@@ -15,6 +14,8 @@ const MAX_DIFF_CHARS = 20000;
 const MAX_RESPONSE_TOKENS = 2500;
 const ANTHROPIC_API_VERSION = process.env.ANTHROPIC_API_VERSION || "2023-06-01";
 const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5-20250929";
+const PROMPT = process.env.PROMPT;
+const API_KEY = process.env.ANTHROPIC_API_KEY!;
 const API_TIMEOUT_MS = 60000; // 60 seconds
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 1000;
@@ -25,17 +26,15 @@ const prNumber = github.context.payload.pull_request?.number;
 
 if (!owner || !repo || !prNumber || typeof prNumber !== "number") {
     setFailed("Missing or invalid PR context (owner/repo/number)");
-    process.exit(1);
 }
 
-interface AnthropicContent {
-    type: string;
-    text?: string;
+interface AnthropicTextContent {
+    type: "text";
+    text: string;
 }
 
 interface AnthropicResponse {
-    content?: AnthropicContent[];
-    type?: string;
+    content?: AnthropicTextContent[];
 }
 
 function log(message: string) {
@@ -48,7 +47,7 @@ function extractReview(resp: AnthropicResponse): string {
         return "⚠️ No feedback received.";
     }
     const first = resp.content[0];
-    if (!first?.text || typeof first.text !== "string") {
+    if (!first || first.type !== "text" || !first.text) {
         return "⚠️ No feedback received.";
     }
     return first.text;
@@ -86,7 +85,7 @@ async function callAnthropicWithRetry(prompt: string): Promise<AnthropicResponse
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "x-api-key": process.env.ANTHROPIC_API_KEY!,
+                        "x-api-key": API_KEY,
                         "anthropic-version": ANTHROPIC_API_VERSION,
                     },
                     body: JSON.stringify({
@@ -107,8 +106,7 @@ async function callAnthropicWithRetry(prompt: string): Promise<AnthropicResponse
             }
 
             if (!res.ok) {
-                const raw = await res.text();
-                throw new Error(`Anthropic API error: ${res.status} ${raw.slice(0, 200)}`);
+                throw new Error(`Anthropic API error: ${res.status}`);
             }
 
             return await res.json();
@@ -179,9 +177,9 @@ async function main() {
         per_page: 100,
     });
 
-    log(`Found ${files.length} files in PR`);
-
     const filesWithPatches = files.filter(f => f.patch);
+
+    log(`Found ${files.length} files in PR (${filesWithPatches.length} with diffs)`);
 
     if (filesWithPatches.length === 0) {
         warning("No text diffs found (possibly all binary files). Skipping AI review.");
@@ -196,11 +194,9 @@ async function main() {
 
     log(`Sending ${diff.length} characters of diff to Anthropic (model: ${ANTHROPIC_MODEL})...`);
 
-    const prompt = `
-You are an expert software engineer performing a code review.
-Provide specific, concise feedback on code quality, security, maintainability, and style.
-Be objective and constructive.
-
+    const prompt =
+        PROMPT +
+        `
 --- DIFF START ---
 ${diff}
 --- DIFF END ---
@@ -208,6 +204,8 @@ ${diff}
 
     const response = await callAnthropicWithRetry(prompt);
     const review = extractReview(response);
+
+    log(`Review completed. Estimated tokens used: ~${Math.ceil(diff.length / 4)} input + ${MAX_RESPONSE_TOKENS} output (max)`);
 
     log("Posting review comment to PR...");
 
