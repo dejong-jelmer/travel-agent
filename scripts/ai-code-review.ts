@@ -1,13 +1,14 @@
 import { Octokit } from "@octokit/rest";
 import { info, warning, setFailed } from "@actions/core";
+import * as github from "@actions/github";
 
 const MAX_DIFF_CHARS = 20000;
 const MAX_RESPONSE_TOKENS = 2500;
 const ANTHROPIC_API_VERSION = "2023-06-01";
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
-const [owner, repo] = process.env.GITHUB_REPOSITORY?.split("/") ?? [];
-const prNumber = process.env.PR_NUMBER || process.env.GITHUB_REF?.split("/").pop();
+const { owner, repo } = github.context.repo;
+const prNumber = github.context.payload.pull_request?.number;
 
 if (!owner || !repo || !prNumber) {
   setFailed("Missing PR context (owner/repo/number)");
