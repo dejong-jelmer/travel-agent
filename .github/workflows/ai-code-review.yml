@@ -1,8 +1,8 @@
-# .github/workflows/ai-code-review.yml (essentieel gedeelte)
 name: AI Code Review (Claude)
+
 on:
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize]
 
 permissions:
   pull-requests: write
@@ -11,99 +11,19 @@ permissions:
 jobs:
   review:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Bun
+      - name: Set up Bun
         uses: oven-sh/setup-bun@v1
 
-      - name: Install deps
-        run: bun install @actions/core @actions/github node-fetch
+      - name: Install dependencies
+        run: bun install
 
       - name: Run AI Code Review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-        run: |
-          bunx tsx <<'EOF'
-          import { context, getOctokit } from "@actions/github";
-          import fetch from "node-fetch";
-
-          const octokit = getOctokit(process.env.GITHUB_TOKEN);
-          const { repo, payload } = context;
-          const pr = payload.pull_request;
-          if (!pr) {
-            console.log("No PR context, skipping");
-            process.exit(0);
-          }
-
-          const filesResp = await octokit.rest.pulls.listFiles({
-            owner: repo.owner,
-            repo: repo.repo,
-            pull_number: pr.number,
-            per_page: 100
-          });
-
-          let combined = filesResp.data
-            .map(f => `--- ${f.filename}\n${f.patch ?? "[binary or no patch]"}\n`)
-            .join("\n\n");
-
-          // fallback naar pr.diff_url als combined leeg is
-          if (!combined || combined.length < 10) {
-            console.log("No per-file patches found, fetching full diff_url...");
-            combined = await fetch(pr.diff_url, {
-              headers: { Authorization: `token ${process.env.GITHUB_TOKEN}` }
-            }).then(r => r.text());
-          }
-
-          const MAX_CHARS = 20000;
-          let diffToSend = combined;
-          let truncatedNotice = "";
-          if (combined.length > MAX_CHARS) {
-            diffToSend = combined.slice(0, MAX_CHARS);
-            truncatedNotice = "\n\n---DIFF TRUNCATED (too long)---\n";
-          }
-
-          // Build prompt
-          const systemPrompt = "You are an experienced senior software engineer. Provide concise, constructive code review comments about correctness, security, performance, style and maintainability. Use bullet points and code suggestions where relevant.";
-          const userPrompt = `Please perform a code review on this diff (only reply with review comments):\n\n${diffToSend}${truncatedNotice}`;
-
-          // Call Anthropic Messages API (note 'anthropic-version' header required)
-          const res = await fetch("https://api.anthropic.com/v1/messages", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              "x-api-key": process.env.ANTHROPIC_API_KEY,
-              "anthropic-version": "2023-06-01"
-            },
-            body: JSON.stringify({
-              model: "claude-sonnet-4-5-20250929",
-              max_tokens: 1500,
-              system: systemPrompt,
-              messages: [{ role: "user", content: userPrompt }]
-            })
-          });
-
-          const raw = await res.text();
-          console.log("Anthropic HTTP status:", res.status);
-          console.log("Anthropic raw body (truncated 4000 chars):", raw.slice(0,4000));
-
-          let reviewText = "No feedback received.";
-          try {
-            const json = JSON.parse(raw);
-            reviewText = json?.content?.[0]?.text ?? JSON.stringify(json).slice(0,3000);
-          } catch (e) {
-            reviewText = raw || reviewText;
-          }
-
-          // Post comment on PR
-          await octokit.rest.issues.createComment({
-            owner: repo.owner,
-            repo: repo.repo,
-            issue_number: pr.number,
-            body: `🤖 **AI Code Review (Claude)**\n\n${reviewText}`
-          });
-
-          console.log("Done");
-          EOF
+        run: bun run scripts/ai-code-review.ts
