@@ -18,18 +18,10 @@ jobs:
 
       - name: Set up Bun
         uses: oven-sh/setup-bun@v1
-      - name: Cache Bun dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            ~/.bun
-            ./bun.lockb
-          key: bun-deps-${{ hashFiles('bun.lockb') }}
-          restore-keys: |
-            bun-deps-
 
       - name: Install dependencies
-        run: bun install
+        run: bun add tsx @octokit/rest @actions/core node-fetch
+
       - name: Run AI Code Review
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
