@@ -1,66 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🌍 Sustainable Travel Agent
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A modern Laravel + Inertia.js + Vue 3 web application for a sustainable travel organization promoting **European train journeys** and **short cultural trips**.  
+Built for performance, maintainability, and a great user experience — powered by a fully automated CI/CD pipeline via **GitHub Actions** and **SFTP deployment**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Project Vision
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Our mission is to make **slow travel** the new standard for short trips within Europe.  
+By offering curated, culturally rich train-based journeys, we aim to inspire travelers to explore Europe responsibly — with minimal carbon footprint and maximum authenticity.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🧭 Key Features
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- 🧳 **Travel Packages** — Browse curated European train journeys with highlights, duration, and sustainability details.  
+- 💌 **Newsletter System** — Subscribe, confirm, or unsubscribe via secure expiring links.  
+- 🚆 **Eco-friendly Focus** — All trips are designed around train travel and local culture.  
+- 🧾 **Booking Forms with Validation** — Dynamic form handling powered by Inertia.js and Vue 3.  
+- 🪄 **Fully Responsive UI** — Tailwind CSS styling with a custom color palette and breakpoints.  
+- ⚙️ **Automated Deployment** — GitHub Actions build & deploy pipeline via SFTP (no composer/npm required on server).  
+- 📬 **Mailjet Integration** — Transactional and marketing email delivery via Mailjet API.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## 🧱 Tech Stack
 
-## Laravel Sponsors
+| Layer | Technology |
+|-------|-------------|
+| **Backend** | Laravel 12 (PHP 8.4) |
+| **Frontend** | Inertia.js + Vue 3 |
+| **Styling** | Tailwind CSS v3.4 (with custom theme & breakpoints) |
+| **Email** | Mailjet (via `mailjet/laravel-mailjet`) |
+| **CI/CD** | GitHub Actions |
+| **Deployment** | SFTP (bare-minimum Debian server, no Composer/NPM installed) |
+| **Build Tools** | Vite |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+---
 
-### Premium Partners
+## 🧩 Tailwind Theme
+Custom color palette and breakpoints:
+```js
+// tailwind.config.js
+colors: {
+  primary: { default: '#2F3E46', dark: '#1B3A4B' },
+  secondary: { sage: '#AFCB98', stone: '#A3BCCB' },
+  accent: { earth: '#DCC7AA', gold: '#D4A017', terracotta: '#B17C65' },
+  neutral: { 50: '#F2F4F3' },
+  status: { error: '#C5534A', success: '#6B8E5A', warning: '#D4A017' },
+},
+screens: {
+  phone: '0px',
+  tablet: '600px',
+  laptop: '900px',
+  desktop: '1200px',
+  wide: '1800px'
+}
+```
+## 🧠 Architecture Highlights
+* Inertia.js Bridge: Seamlessly connects Laravel routes with Vue 3 components.
+* Form Requests & DTOs: Typed validation and clean data transformation using Carbon dates.
+* Reusable Components: Cards, Buttons, and Layouts follow Tailwind utility patterns.
+* Email Templates: Clean HTML templates with inline logos and responsive headers.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+## 🔒 Security & Best Practices
+* Secure form validation on both client and server sides
+* Expiring confirmation/unsubscribe links for newsletters
+* Environment-specific configuration separation
+* No secrets stored in the repository (all handled via GitHub Secrets)
+* CSRF protection enabled on all forms
+* Signed URLs for newsletter actions (48h expiry)
 
-## Contributing
+## 📋 Prerequisites
+* PHP 8.2+
+* Composer 2.x
+* Node.js 18+
+* MySQL/PostgreSQL/SQLite
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## 🧪 Testing
+```bash
+php artisan test
+```
 
-## Code of Conduct
+## 🪪 License
+This project is licensed under the MIT License — see the [LICENSE](https://mit-license.org/)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 💚 Built with passion for sustainable travel and webdevelopment
+“The journey matters more than the destination — especially when it’s by train.”
