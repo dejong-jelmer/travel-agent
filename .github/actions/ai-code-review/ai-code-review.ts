@@ -63,7 +63,7 @@ function initializeConfig(): Config {
         throw new Error("Missing or invalid PR context (owner/repo/number)");
     }
 
-    const apiKey = process.env.ANTHROPIC_API_KEY as string;
+    const apiKey = process.env.ANTHROPIC_API_KEY! as string;
     const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 
     return { octokit, owner, repo, prNumber, apiKey };
@@ -142,7 +142,7 @@ async function callAnthropicWithRetry(prompt: string, apiKey: string): Promise<A
 
             return await res.json();
         } catch (err) {
-            lastError = err as Error;
+            lastError = err instanceof Error ? err : new Error(String(err));
 
             if (err instanceof Error && err.name === "AbortError") {
                 warning(`Request timeout on attempt ${attempt}`);
@@ -235,12 +235,7 @@ async function main() {
 
     log(`Sending ${diff.length} characters of diff to Anthropic (model: ${ANTHROPIC_MODEL})...`);
 
-    const prompt = `${CUSTOM_PROMPT}
-
---- DIFF START ---
-${diff}
---- DIFF END ---
-`;
+    const prompt = `${CUSTOM_PROMPT} --- DIFF START --- ${diff} --- DIFF END ---`;
 
     const response = await callAnthropicWithRetry(prompt, apiKey);
     const review = extractReview(response);
