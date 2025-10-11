@@ -3,7 +3,7 @@ import { Octokit } from "@octokit/rest";
 import { info, warning, setFailed } from "@actions/core";
 import * as github from "@actions/github";
 
-const REQUIRED_ENV_VARS = ['GITHUB_TOKEN', 'ANTHROPIC_API_KEY'];
+const REQUIRED_ENV_VARS = ["GITHUB_TOKEN", "ANTHROPIC_API_KEY"];
 for (const envVar of REQUIRED_ENV_VARS) {
     if (!process.env[envVar]) {
         setFailed(`${envVar} is required but not set`);
@@ -13,8 +13,8 @@ for (const envVar of REQUIRED_ENV_VARS) {
 
 const MAX_DIFF_CHARS = 20000;
 const MAX_RESPONSE_TOKENS = 2500;
-const ANTHROPIC_API_VERSION = "2023-06-01";
-const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
+const ANTHROPIC_API_VERSION = process.env.ANTHROPIC_API_VERSION || "2023-06-01";
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5-20250929";
 const API_TIMEOUT_MS = 60000; // 60 seconds
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 1000;
@@ -23,9 +23,19 @@ const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 const { owner, repo } = github.context.repo;
 const prNumber = github.context.payload.pull_request?.number;
 
-if (!owner || !repo || !prNumber || typeof prNumber !== 'number') {
+if (!owner || !repo || !prNumber || typeof prNumber !== "number") {
     setFailed("Missing or invalid PR context (owner/repo/number)");
     process.exit(1);
+}
+
+interface AnthropicContent {
+    type: string;
+    text?: string;
+}
+
+interface AnthropicResponse {
+    content?: AnthropicContent[];
+    type?: string;
 }
 
 function log(message: string) {
@@ -33,12 +43,12 @@ function log(message: string) {
     info(`[${timestamp}] ${message}`);
 }
 
-function extractReview(resp: any): string {
-    if (!resp || !resp.content || !Array.isArray(resp.content)) {
+function extractReview(resp: AnthropicResponse): string {
+    if (!resp?.content || !Array.isArray(resp.content)) {
         return "⚠️ No feedback received.";
     }
     const first = resp.content[0];
-    if (!first || typeof first.text !== "string") {
+    if (!first?.text || typeof first.text !== "string") {
         return "⚠️ No feedback received.";
     }
     return first.text;
@@ -63,7 +73,7 @@ async function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function callAnthropicWithRetry(prompt: string): Promise<any> {
+async function callAnthropicWithRetry(prompt: string): Promise<AnthropicResponse> {
     let lastError: Error | null = null;
 
     for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
@@ -88,6 +98,14 @@ async function callAnthropicWithRetry(prompt: string): Promise<any> {
                 API_TIMEOUT_MS
             );
 
+            if (res.status === 429) {
+                const retryAfter = res.headers.get("retry-after");
+                const delay = retryAfter ? parseInt(retryAfter) * 1000 : RETRY_DELAY_MS * Math.pow(2, attempt - 1);
+                warning(`Rate limited (429). Retrying after ${delay}ms...`);
+                await sleep(delay);
+                continue;
+            }
+
             if (!res.ok) {
                 const raw = await res.text();
                 throw new Error(`Anthropic API error: ${res.status} ${raw.slice(0, 200)}`);
@@ -97,14 +115,14 @@ async function callAnthropicWithRetry(prompt: string): Promise<any> {
         } catch (err) {
             lastError = err as Error;
 
-            if (err instanceof Error && err.name === 'AbortError') {
+            if (err instanceof Error && err.name === "AbortError") {
                 warning(`Request timeout on attempt ${attempt}`);
             } else {
                 warning(`API call failed on attempt ${attempt}: ${err}`);
             }
 
             if (attempt < MAX_RETRIES) {
-                const delay = RETRY_DELAY_MS * attempt;
+                const delay = RETRY_DELAY_MS * Math.pow(2, attempt - 1);
                 log(`Retrying in ${delay}ms...`);
                 await sleep(delay);
             }
@@ -112,6 +130,43 @@ async function callAnthropicWithRetry(prompt: string): Promise<any> {
     }
 
     throw new Error(`Failed after ${MAX_RETRIES} attempts. Last error: ${lastError?.message}`);
+}
+
+interface FileWithDiff {
+    filename: string;
+    patch?: string;
+}
+
+function truncateAtFileBoundary(files: FileWithDiff[], maxChars: number): { diff: string; truncated: boolean; filesIncluded: number } {
+    let totalLength = 0;
+    let filesIncluded = 0;
+    const includedDiffs: string[] = [];
+
+    for (const file of files) {
+        if (!file.patch) continue;
+
+        const fileHeader = `\n--- ${file.filename} ---\n`;
+        const fileDiff = fileHeader + file.patch;
+        const newLength = totalLength + fileDiff.length;
+
+        if (newLength > maxChars && filesIncluded > 0) {
+            break;
+        }
+
+        includedDiffs.push(fileDiff);
+        totalLength = newLength;
+        filesIncluded++;
+
+        if (totalLength >= maxChars) {
+            break;
+        }
+    }
+
+    return {
+        diff: includedDiffs.join("\n"),
+        truncated: filesIncluded < files.filter(f => f.patch).length,
+        filesIncluded
+    };
 }
 
 async function main() {
@@ -126,22 +181,20 @@ async function main() {
 
     log(`Found ${files.length} files in PR`);
 
-    const diffs = files
-        .map(f => f.patch)
-        .filter(Boolean)
-        .join("\n\n");
+    const filesWithPatches = files.filter(f => f.patch);
 
-    if (diffs.length === 0 || !diffs.trim()) {
+    if (filesWithPatches.length === 0) {
         warning("No text diffs found (possibly all binary files). Skipping AI review.");
         return;
     }
 
-    if (diffs.length > MAX_DIFF_CHARS) {
-        warning(`Diff truncated from ${diffs.length} to ${MAX_DIFF_CHARS} chars`);
+    const { diff, truncated, filesIncluded } = truncateAtFileBoundary(filesWithPatches, MAX_DIFF_CHARS);
+
+    if (truncated) {
+        warning(`Diff truncated: showing ${filesIncluded} of ${filesWithPatches.length} files (${diff.length} chars)`);
     }
 
-    const truncatedDiff = diffs.slice(0, MAX_DIFF_CHARS);
-    log(`Sending ${truncatedDiff.length} characters of diff to Anthropic (model: ${ANTHROPIC_MODEL})...`);
+    log(`Sending ${diff.length} characters of diff to Anthropic (model: ${ANTHROPIC_MODEL})...`);
 
     const prompt = `
 You are an expert software engineer performing a code review.
@@ -149,7 +202,7 @@ Provide specific, concise feedback on code quality, security, maintainability, a
 Be objective and constructive.
 
 --- DIFF START ---
-${truncatedDiff}
+${diff}
 --- DIFF END ---
 `;
 
@@ -158,11 +211,15 @@ ${truncatedDiff}
 
     log("Posting review comment to PR...");
 
+    const truncationNote = truncated
+        ? `\n\n> ⚠️ **Note**: This review covers ${filesIncluded} of ${filesWithPatches.length} changed files due to size limits.\n`
+        : "";
+
     await octokit.rest.issues.createComment({
         owner,
         repo,
         issue_number: prNumber,
-        body: `🤖 **AI Code Review by Claude**\n\n${review}`,
+        body: `🤖 **AI Code Review by Claude**${truncationNote}\n${review}`,
     });
 
     log("✅ Review posted successfully!");
