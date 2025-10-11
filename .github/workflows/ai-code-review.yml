@@ -26,5 +26,5 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL: claude-sonnet-4-20250514
+          ANTHROPIC_MODEL: claude-sonnet-4-5-20250929
         run: bunx tsx scripts/ai-code-review.ts

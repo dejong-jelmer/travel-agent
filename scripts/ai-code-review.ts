@@ -14,18 +14,108 @@ for (const envVar of REQUIRED_ENV_VARS) {
 const MAX_DIFF_CHARS = 20000;
 const MAX_RESPONSE_TOKENS = 2500;
 const ANTHROPIC_API_VERSION = "2023-06-01";
-const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-20250514';
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || 'claude-sonnet-4-5-20250929';
+const API_TIMEOUT_MS = 60000; // 60 seconds
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 1000;
 
 const octokit = new Octokit({ auth: process.env.GITHUB_TOKEN });
 const { owner, repo } = github.context.repo;
 const prNumber = github.context.payload.pull_request?.number;
 
-if (!owner || !repo || !prNumber) {
-    setFailed("Missing PR context (owner/repo/number)");
+if (!owner || !repo || !prNumber || typeof prNumber !== 'number') {
+    setFailed("Missing or invalid PR context (owner/repo/number)");
+    process.exit(1);
+}
+
+function log(message: string) {
+    const timestamp = new Date().toISOString();
+    info(`[${timestamp}] ${message}`);
+}
+
+function extractReview(resp: any): string {
+    if (!resp || !resp.content || !Array.isArray(resp.content)) {
+        return "⚠️ No feedback received.";
+    }
+    const first = resp.content[0];
+    if (!first || typeof first.text !== "string") {
+        return "⚠️ No feedback received.";
+    }
+    return first.text;
+}
+
+async function fetchWithTimeout(url: string, options: RequestInit, timeoutMs: number): Promise<Response> {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), timeoutMs);
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+        });
+        return response;
+    } finally {
+        clearTimeout(timeout);
+    }
+}
+
+async function sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function callAnthropicWithRetry(prompt: string): Promise<any> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+        try {
+            log(`Anthropic API call attempt ${attempt}/${MAX_RETRIES}`);
+
+            const res = await fetchWithTimeout(
+                "https://api.anthropic.com/v1/messages",
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "x-api-key": process.env.ANTHROPIC_API_KEY!,
+                        "anthropic-version": ANTHROPIC_API_VERSION,
+                    },
+                    body: JSON.stringify({
+                        model: ANTHROPIC_MODEL,
+                        max_tokens: MAX_RESPONSE_TOKENS,
+                        messages: [{ role: "user", content: prompt }],
+                    }),
+                },
+                API_TIMEOUT_MS
+            );
+
+            if (!res.ok) {
+                const raw = await res.text();
+                throw new Error(`Anthropic API error: ${res.status} ${raw.slice(0, 200)}`);
+            }
+
+            return await res.json();
+        } catch (err) {
+            lastError = err as Error;
+
+            if (err instanceof Error && err.name === 'AbortError') {
+                warning(`Request timeout on attempt ${attempt}`);
+            } else {
+                warning(`API call failed on attempt ${attempt}: ${err}`);
+            }
+
+            if (attempt < MAX_RETRIES) {
+                const delay = RETRY_DELAY_MS * attempt;
+                log(`Retrying in ${delay}ms...`);
+                await sleep(delay);
+            }
+        }
+    }
+
+    throw new Error(`Failed after ${MAX_RETRIES} attempts. Last error: ${lastError?.message}`);
 }
 
 async function main() {
-    info(`Fetching PR #${prNumber} from ${owner}/${repo}`);
+    log(`Fetching PR #${prNumber} from ${owner}/${repo}`);
 
     const files = await octokit.paginate(octokit.rest.pulls.listFiles, {
         owner,
@@ -34,6 +124,7 @@ async function main() {
         per_page: 100,
     });
 
+    log(`Found ${files.length} files in PR`);
 
     const diffs = files
         .map(f => f.patch)
@@ -41,7 +132,8 @@ async function main() {
         .join("\n\n");
 
     if (diffs.length === 0 || !diffs.trim()) {
-        setFailed("No text diffs found (possibly all binary files). Skipping AI review.");
+        warning("No text diffs found (possibly all binary files). Skipping AI review.");
+        return;
     }
 
     if (diffs.length > MAX_DIFF_CHARS) {
@@ -49,7 +141,7 @@ async function main() {
     }
 
     const truncatedDiff = diffs.slice(0, MAX_DIFF_CHARS);
-    info(`Sending ${truncatedDiff.length} characters of diff to Anthropic...`);
+    log(`Sending ${truncatedDiff.length} characters of diff to Anthropic (model: ${ANTHROPIC_MODEL})...`);
 
     const prompt = `
 You are an expert software engineer performing a code review.
@@ -61,45 +153,19 @@ ${truncatedDiff}
 --- DIFF END ---
 `;
 
-    const res = await fetch("https://api.anthropic.com/v1/messages", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "x-api-key": process.env.ANTHROPIC_API_KEY,
-            "anthropic-version": ANTHROPIC_API_VERSION,
-        },
-        body: JSON.stringify({
-            model: ANTHROPIC_MODEL,
-            max_tokens: MAX_RESPONSE_TOKENS,
-            messages: [{ role: "user", content: prompt }],
-        }),
-    });
-
-    if (!res.ok) {
-        const raw = await res.text();
-        throw new Error(`Anthropic API error: ${res.status} ${raw.slice(0, 200)}`);
-    }
-
-    const response = await res.json();
-    function extractReview(resp: any): string {
-        if (!resp || !resp.content || !Array.isArray(resp.content)) return "⚠️ No feedback received.";
-        const first = resp.content[0];
-        if (!first || typeof first.text !== "string") return "⚠️ No feedback received.";
-        return first.text;
-    }
-
+    const response = await callAnthropicWithRetry(prompt);
     const review = extractReview(response);
 
-    info("Posting review comment to PR...");
+    log("Posting review comment to PR...");
 
     await octokit.rest.issues.createComment({
         owner,
         repo,
-        issue_number: Number(prNumber),
+        issue_number: prNumber,
         body: `🤖 **AI Code Review by Claude**\n\n${review}`,
     });
 
-    info("✅ Review posted successfully!");
+    log("✅ Review posted successfully!");
 }
 
 main().catch(err => {
