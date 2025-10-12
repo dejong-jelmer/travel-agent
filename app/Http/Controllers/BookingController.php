@@ -20,6 +20,7 @@ class BookingController extends Controller
         $booking = $bookingService->store($bookingData);
         event(new BookingCreated($booking));
         session()->flash('new_booking', $booking->uuid);
+
         // Response macro in App\Responses\BookingResponse
         return response()->booking($booking, BookingAction::Stored);
     }
