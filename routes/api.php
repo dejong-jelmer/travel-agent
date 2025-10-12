@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\BookingController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\Auth\AuthController;
 
-Route::post('/boekingen', [BookingController::class, 'store'])->name('api.bookings.store');
-Route::put('/boekingen/{booking}', [AdminBookingController::class, 'update'])->name('api.bookings.update');
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/user', [AuthController::class, 'user'])->middleware('auth:sanctum');
