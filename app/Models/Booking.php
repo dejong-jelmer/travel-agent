@@ -29,8 +29,10 @@ class Booking extends Model
     ];
 
     protected $casts = [
+        'conditions_accepted' => 'boolean',
+        'is_confirmed' => 'boolean',
+        'new' => 'boolean',
         'departure_date' => 'datetime',
-        'created_at' => 'datetime',
     ];
 
     protected $appends = [
@@ -42,7 +44,7 @@ class Booking extends Model
     {
         static::created(function ($booking) {
             $year = now()->format('Y');
-            $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->reference = "{$year}-" . str_pad($booking->id, 6, '0', STR_PAD_LEFT);
             $booking->saveQuietly();
         });
 
@@ -79,7 +81,7 @@ class Booking extends Model
     protected function departureDateFormatted(): Attribute
     {
         return Attribute::get(
-            fn () => $this->departure_date
+            fn() => $this->departure_date
                 ? ucfirst($this->departure_date->locale('nl')->isoFormat('dddd D MMMM YYYY'))
                 : null
         );
@@ -88,7 +90,7 @@ class Booking extends Model
     protected function createdAtFormatted(): Attribute
     {
         return Attribute::get(
-            fn () => $this->created_at
+            fn() => $this->created_at
                 ? $this->created_at->isoFormat('DD-MM-YYYY')
                 : null
         );
