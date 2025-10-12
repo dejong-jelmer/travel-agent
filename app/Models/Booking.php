@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
 class Booking extends Model
@@ -23,18 +24,61 @@ class Booking extends Model
         'product_id',
         'main_booker_id',
         'departure_date',
-        'confirmed',
+        'conditions_accepted',
+        'is_confirmed',
     ];
 
     protected $casts = [
+        'conditions_accepted' => 'boolean',
+        'is_confirmed' => 'boolean',
+        'new' => 'boolean',
         'departure_date' => 'datetime',
         'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     protected $appends = [
         'departure_date_formatted',
         'created_at_formatted',
     ];
+
+    protected static function booted()
+    {
+        static::created(function ($booking) {
+            $year = now()->format('Y');
+            $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->saveQuietly();
+        });
+
+        static::updated(function ($booking) {
+            $changes = $booking->getChanges();
+            $original = $booking->getOriginal();
+            unset($changes['updated_at'], $changes['created_at']);
+            foreach ($changes as $field => $newValue) {
+                BookingChange::create([
+                    'booking_id' => $booking->id,
+                    'user_id' => Auth::user()->id ?? null,
+                    'model_type' => self::class,
+                    'model_id' => $booking->id,
+                    'field' => $field,
+                    'old_value' => $original[$field] ?? null,
+                    'new_value' => $newValue,
+                ]);
+            }
+        });
+
+        static::deleted(function ($booking) {
+            BookingChange::create([
+                'booking_id' => $booking->id,
+                'admin_id' => Auth::user()->id ?? null,
+                'model_type' => self::class,
+                'model_id' => $booking->id,
+                'field' => 'deleted',
+                'old_value' => json_encode($booking->getOriginal()),
+                'new_value' => null,
+            ]);
+        });
+    }
 
     protected function departureDateFormatted(): Attribute
     {

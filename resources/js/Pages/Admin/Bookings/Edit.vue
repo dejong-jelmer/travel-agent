@@ -38,24 +38,19 @@
 
 
             <!-- Reisgezelschap & Contact -->
-            <div class="grid gap-8 tablet:grid-cols-2">
+            <div class="grid gap-6 tablet:grid-cols-2">
 
                 <!-- Reisgezelschap -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
                     <h2 class="text-2xl font-bold text-primary-dark">Reisgezelschap</h2>
-
-                    <TravelerDetails v-model:booking="booking" :validator="validator.travelers.adults"
-                        :max-date="booking.constrains.birthdate" type="adults" label="Volwassene" />
-
-                    <TravelerDetails v-model:booking="booking" :validator="validator.travelers.children"
-                        :min-date="booking.constrains.birthdate" :max-date="Date()" type="children" label="Kind" />
+                    <Traveler :booking="booking" type="adults" label="Volwassene" />
+                    <Traveler :booking="booking" type="children" label="Kind" />
                 </div>
 
                 <!-- Contactgegevens -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
                     <h2 class="text-2xl font-bold text-primary-dark">Contactgegevens</h2>
-                    <ContactDetails v-model:booking="booking" v-model:main_booker="booking.main_booker"
-                        :validator="validator.contact" />
+                    <Contact :booking="booking" />
                 </div>
             </div>
         </div>
@@ -72,7 +67,7 @@ const props = defineProps({
 
 const mainBookerIndex = props.db_booking.adults.findIndex((adult) => adult.id === props.db_booking.main_booker?.id)
 
-const { booking, validator } = useBooking(
+const { booking } = useBooking(
     props.db_booking.product,
     props.db_booking,
     mainBookerIndex,

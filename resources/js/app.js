@@ -10,6 +10,7 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import toastOptions from './toastOptions.js';
 import screens from './screens.js';
+import VueHoneypot from 'vue-honeypot'
 import '@vuepic/vue-datepicker/dist/main.css';
 
 
@@ -29,6 +30,7 @@ createInertiaApp({
             app.use(ZiggyVue)
             app.use(Vue3TouchEvents)
             app.use(Toast, toastOptions)
+            app.use(VueHoneypot)
             app.use(Vue3Mq, {
                 breakpoints: screens
             });

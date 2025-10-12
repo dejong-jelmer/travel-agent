@@ -40,7 +40,7 @@ const usps = [
             <SectionHeader>
                 Waarom kiezen voor ons
             </SectionHeader>
-            <p class="text-primary-default text-lg laptop:text-xl max-w-2xl mx-auto leading-relaxed">
+            <p class="text-primary-default text-lg mt-2 laptop:text-xl max-w-2xl mx-auto leading-relaxed">
                 Onze unieke aanpak combineert comfort, cultuur en duurzaamheid voor een reiservaring die verder gaat dan
                 toerisme.
             </p>
@@ -48,16 +48,17 @@ const usps = [
 
         <!-- USP Cards met staggered layout -->
         <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
-            <div v-for="(usp, index) in usps" :key="usp.title"
-                class="group relative bg-white rounded-2xl shadow-sm border border-neutral-200 p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 ease-out">
+            <div v-for="(usp, index) in usps" :key="index"
+                class="group relative bg-neutral-25 rounded-2xl shadow-sm border border-secondary-stone/20 p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 ease-out">
+
                 <!-- Accent dot in corner -->
                 <div class="absolute top-6 right-6 w-3 h-3 rounded-full" :class="usp.accentColor"></div>
 
                 <!-- Icon met gradient background -->
                 <div class="relative mb-6">
-                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
-                        :class="usp.accentColor">
-                        <component :is="usp.icon" class="h-8 w-8 text-white" />
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
+                        :class="usp.bgColor">
+                        <component :is="usp.icon" class="h-8 w-8" :class="usp.iconColor" />
                     </div>
                 </div>
 
@@ -66,20 +67,20 @@ const usps = [
                     class="text-xl font-bold text-primary-dark mb-3 group-hover:text-accent-terracotta transition-colors duration-300">
                     {{ usp.title }}
                 </h3>
-                <p class="text-primary-default leading-relaxed mb-4">
+                <p class="text-primary-default/80 leading-relaxed mb-4">
                     {{ usp.description }}
                 </p>
 
                 <!-- Feature highlight -->
                 <div class="flex items-center gap-2 text-sm">
                     <div class="w-2 h-2 rounded-full bg-secondary-sage"></div>
-                    <span class="text-secondary-stone font-medium">{{ usp.highlight }}</span>
+                    <span class="text-primary-default/70 font-medium">{{ usp.highlight }}</span>
                 </div>
             </div>
         </div>
 
         <!-- Bottom CTA -->
-        <div class="text-center mt-12">
+        <!-- <div class="text-center mt-12">
             <div
                 class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-secondary-sage/20">
                 <span class="text-primary-dark font-medium">Klaar voor jouw volgende avontuur?</span>
@@ -88,6 +89,6 @@ const usps = [
                     Ontdek alle reizen →
                 </DefaultLink>
             </div>
-        </div>
+        </div> -->
     </div>
 </template>

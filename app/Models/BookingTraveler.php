@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Support\Facades\Auth;
 
 class BookingTraveler extends Model
 {
@@ -30,6 +31,28 @@ class BookingTraveler extends Model
         'type' => TravelerType::class,
         'birthdate' => 'date',
     ];
+
+    protected static function booted()
+    {
+        static::updated(function ($traveler) {
+            $changes = $traveler->getChanges();
+            $original = $traveler->getOriginal();
+
+            unset($changes['updated_at'], $changes['created_at']);
+
+            foreach ($changes as $field => $newValue) {
+                BookingChange::create([
+                    'booking_id' => $traveler->booking_id,
+                    'user_id' => Auth::user()->id ?? null,
+                    'model_type' => self::class,
+                    'model_id' => $traveler->id,
+                    'field' => $field,
+                    'old_value' => $original[$field] ?? null,
+                    'new_value' => $newValue,
+                ]);
+            }
+        });
+    }
 
     public function booking(): BelongsTo
     {

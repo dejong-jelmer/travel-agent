@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\NewsletterController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -19,12 +20,17 @@ Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact
 Route::get('/privacybeleid', [HomeController::class, 'showPrivacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'showTerms'])->name('terms');
 
+// Newsletter
+Route::post('/nieuwsbrief/aanmelden', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::get('/nieuwsbrief/bevestigen/{token}', [NewsletterController::class, 'confirm'])->name('newsletter.confirm');
+Route::get('/nieuwsbrief/afmelden/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+
 // Trips
 Route::get('reizen/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');
 
 // Booking routes
 Route::post('/boekingen', [BookingController::class, 'store'])->name('bookings.store');
-Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'confirmation'])->name('bookings.confirmation');
+Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'confirmation'])->middleware('nocache')->name('bookings.confirmation');
 
 // Admin routes
 Route::get('/admin/login', function () {
@@ -60,5 +66,4 @@ Route::prefix('admin')
 
         // Booking routes
         Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);
-        // Route::post('/bookings/{booking}', [AdminBookingController::class, 'update'])->name('bookings.update');
     });

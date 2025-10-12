@@ -14,7 +14,7 @@ class BookingTravelerData implements Arrayable
         public readonly ?int $id,
         public readonly string $first_name,
         public readonly string $last_name,
-        public readonly string $full_name,
+        public readonly ?string $full_name,
         public readonly Carbon $birthdate,
         public readonly string $nationality,
     ) {}
@@ -29,8 +29,8 @@ class BookingTravelerData implements Arrayable
             $data['id'] ?? null,
             $data['first_name'],
             $data['last_name'],
-            $data['full_name'],
-            Carbon::parse($data['birthdate']),
+            $data['full_name'] ?? null,
+            Carbon::createFromFormat('d-m-Y', $data['birthdate']),
             $data['nationality']
         );
 
@@ -45,8 +45,8 @@ class BookingTravelerData implements Arrayable
      * @param  array<int,array<string,mixed>>  $travelers
      * @return array<int,self>
      */
-    public static function manyFromArray(array $travelers): array
+    public static function manyFromArray(array $travelers, $toArray = true): array
     {
-        return array_map(fn ($tr) => self::fromArray($tr), $travelers);
+        return array_map(fn ($tr) => self::fromArray($tr, $toArray), $travelers);
     }
 }

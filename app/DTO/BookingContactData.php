@@ -14,7 +14,7 @@ class BookingContactData implements Arrayable
         public readonly string $street,
         public readonly string $house_number,
         public readonly ?string $addition,
-        public readonly string $postal,
+        public readonly string $postal_code,
         public readonly string $city,
         public readonly string $email,
         public readonly string $phone
@@ -30,7 +30,7 @@ class BookingContactData implements Arrayable
             $data['street'],
             $data['house_number'],
             $data['addition'],
-            $data['postal'],
+            $data['postal_code'],
             $data['city'],
             $data['email'],
             $data['phone'],

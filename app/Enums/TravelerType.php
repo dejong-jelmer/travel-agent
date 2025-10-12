@@ -2,6 +2,8 @@
 
 namespace App\Enums;
 
+use Illuminate\Support\Str;
+
 enum TravelerType: string
 {
     case Adult = 'adult';
@@ -18,6 +20,14 @@ enum TravelerType: string
             'adult' => self::Adult,
             'child' => self::Child,
             default => throw new \InvalidArgumentException("Unknown traveler type: {$key}"),
+        };
+    }
+
+    public function relationName(): string
+    {
+        return match ($this) {
+            self::Child => 'children',
+            default => Str::plural($this->value),
         };
     }
 }

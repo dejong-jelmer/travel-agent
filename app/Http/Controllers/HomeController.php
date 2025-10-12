@@ -44,7 +44,7 @@ class HomeController extends Controller
 
     public function submitContact(ContactRequest $request): HttpResponse
     {
-        $validated = $request->safe();
+        $validated = $request->validated();
         $address = config('contact.mail');
 
         $contact = new ContactFormData(

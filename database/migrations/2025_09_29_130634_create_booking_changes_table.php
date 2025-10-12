@@ -14,11 +14,14 @@ return new class extends Migration
         Schema::create('booking_changes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('booking_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('admin_id')->nullable()->constrained('users');
+            $table->foreignId('user_id')->nullable()->constrained('users');
+            $table->string('model_type');
+            $table->unsignedBigInteger('model_id');
             $table->string('field');
             $table->text('old_value')->nullable();
             $table->text('new_value')->nullable();
             $table->timestamps();
+            $table->index(['model_type', 'model_id']);
         });
     }
 

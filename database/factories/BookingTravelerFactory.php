@@ -17,11 +17,15 @@ class BookingTravelerFactory extends Factory
      */
     public function definition(): array
     {
+        $type = fake()->randomElement(TravelerType::cases(), rand(0, 1))->value;
+
         return [
-            'type' => fake()->randomElement(TravelerType::cases(), rand(0, 1))->value,
+            'type' => $type,
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
-            'birthdate' => fake()->date(),
+            'birthdate' => $type === TravelerType::Adult->value
+                ? fake()->dateTimeBetween('-80 years', '-18 years')->format('Y-m-d')
+                : fake()->dateTimeBetween('-12 years', 'now')->format('Y-m-d'),
             'nationality' => fake()->country(),
         ];
     }

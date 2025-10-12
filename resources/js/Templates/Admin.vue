@@ -1,8 +1,8 @@
 <script setup>
 import { Head, usePage } from '@inertiajs/vue3';
-import { useToastWatcher } from '@/Composables/toastWatcher.js';
+import { useToastWatcher } from '@/Composables/useToastWatcher.js';
 import { watchEffect, onMounted } from 'vue';
-import { emailLinks, phoneLinks } from '@/Composables/antiSpamLinks.js';
+import { emailLinks, phoneLinks } from '@/Composables/useAntiSpamLinks.js';
 
 
 const props = defineProps({

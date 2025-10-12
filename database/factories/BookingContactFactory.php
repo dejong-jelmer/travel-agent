@@ -20,10 +20,10 @@ class BookingContactFactory extends Factory
             'street' => fake()->streetname(),
             'house_number' => fake()->randomNumber(3, false),
             'addition' => fake()->streetSuffix(),
-            'postal' => fake()->postcode(),
+            'postal_code' => fake()->postcode(),
             'city' => fake()->city(),
             'email' => fake()->email(),
-            'phone' => fake()->e164PhoneNumber(),
+            'phone' => fake()->phoneNumber(),
         ];
     }
 }

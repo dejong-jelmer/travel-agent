@@ -13,19 +13,11 @@ class ContactRequest extends FormRequest
      */
     public function rules(): array
     {
-        $emailValidation = app()->environment('testing')
-        ? 'email:rfc'
-        : 'email:rfc,dns';
-
-        $phoneValidation = app()->environment('testing')
-        ? 'phone'
-        : 'phone:NL,BE,FORMAT_E164';
-
         return [
             'name' => ['required', 'string', 'max:100'],
-            'email' => ['required', $emailValidation, 'max:100'],
+            'email' => ['required', 'email:rfc,filter', 'max:100'],
             'text' => ['required', 'string', 'min:5', 'max:2000'],
-            'phone' => ['nullable', 'string', $phoneValidation],
+            'phone' => ['nullable', 'string', 'min:10', 'max:20'],
         ];
     }
 

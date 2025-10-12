@@ -1,3 +1,4 @@
+// Composables/useAntiSpamLinks.js
 const emailLinks = function initEmailLinks(encodedEmail, selector) {
     const emailElements = document.querySelectorAll(`a${selector}`);
     const events = ['mouseover', 'focus', 'touchstart', 'click'];
