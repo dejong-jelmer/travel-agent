@@ -14,8 +14,7 @@ class UpdateBookingRequest extends FormRequest
 
     public function authorize(): bool
     {
-        // return Auth::user()->role === 'admin';
-        return true;
+        return Auth::user()?->role === 'admin' || false;
     }
 
     public function rules(): array

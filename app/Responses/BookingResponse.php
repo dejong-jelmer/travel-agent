@@ -2,31 +2,45 @@
 
 namespace App\Responses;
 
+use App\Enums\BookingAction;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Booking;
+use InvalidArgumentException;
 
 class BookingResponse
 {
-    protected Booking $booking;
 
-    public function __construct(Booking $booking)
-    {
-        $this->booking = $booking;
-    }
+    public function __construct(protected Booking $booking, private array $options = [])
+    {}
 
-    public function toResponse(): RedirectResponse|JsonResponse
+    /**
+     * Undocumented function
+     *
+     * @param BookingAction $action
+     * @return RedirectResponse|JsonResponse
+     * @throws InvalidArgumentException
+     */
+    public function toResponse(BookingAction $action): RedirectResponse|JsonResponse
     {
-        if (request()->expectsJson() || request()->is('api/*')) {
+        if (request()->expectsJson() && request()->is('api/*')) {
             return new JsonResponse([
-                'message' => 'Success: Booking created',
+                'message' => "Success: Booking {$action->value}",
                 'booking' => $this->booking->load(['travelers', 'contact']),
             ], 200);
         }
 
         // Web redirect
-        return to_route('bookings.confirmation', ['booking' => $this->booking])
-            ->with('success', __('booking.confirmed'));
+        return match($action) {
+            BookingAction::Stored => redirect()
+                ->route('bookings.confirmation', ['booking' => $this->booking])
+                ->with('success', __('booking.confirmed')),
+            BookingAction::Updated => redirect()
+                ->route('admin.bookings.index')
+                ->with('success', __('booking.updated', ['reference' => $this->booking->reference])),
+            default => throw new InvalidArgumentException("Unknown action: {$action->value}")
+        };
+
     }
 
     public static function make(Booking $booking): static
