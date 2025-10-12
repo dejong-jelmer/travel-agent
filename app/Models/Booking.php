@@ -33,6 +33,8 @@ class Booking extends Model
         'is_confirmed' => 'boolean',
         'new' => 'boolean',
         'departure_date' => 'datetime',
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
     ];
 
     protected $appends = [

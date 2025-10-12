@@ -18,10 +18,10 @@ const toggleMenu = () => {
 };
 
 const links = {
-    blog: {
-        label: 'Blog',
-        path: '#',
-    },
+    // blog: {
+    //     label: 'Blog',
+    //     path: '#',
+    // },
     contact: {
         label: 'Contact',
         path: '/contact',

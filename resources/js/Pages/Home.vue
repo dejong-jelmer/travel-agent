@@ -1,6 +1,5 @@
 <script setup>
 import teaserImage from '@/../images/pexels-sonny-vermeer-505472791-17476670.jpg'
-import { useForm } from '@inertiajs/inertia-vue3';
 
 const props = defineProps({
     products: Array,
@@ -66,7 +65,7 @@ const props = defineProps({
                         </div>
                     </div>
                 </article>
-                <Newsletter :form="useForm({email:''})" />
+                <Newsletter />
 
                 <article class="relative py-8 desktop:py-24">
                     <div class="max-w-screen-desktop mx-auto px-4">
