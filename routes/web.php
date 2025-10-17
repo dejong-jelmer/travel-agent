@@ -35,11 +35,11 @@ Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, '
 // Admin routes
 Route::get('/admin/login', function () {
     return Inertia::render('Auth/Login', [
-        'title' => 'Admin - ' . env('APP_NAME'),
+        'title' => 'Admin - '.env('APP_NAME'),
     ]);
 })->middleware('guest')->name('admin');
 
-Route::get('admin/', fn() => to_route('admin.login'));
+Route::get('admin/', fn () => to_route('admin.login'));
 Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
 
 Route::prefix('admin')
@@ -70,5 +70,8 @@ Route::prefix('admin')
 
 // Test production health check
 Route::get('/health', function () {
-    return response()->json(['status' => 'ok']);
+    return response()->json([
+        'status' => 'ok',
+        'timestamp' => now()->toIso8601String()
+    ]);
 });
