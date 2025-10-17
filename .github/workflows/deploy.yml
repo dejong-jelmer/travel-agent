@@ -13,15 +13,6 @@ jobs:
       - name: 🛒 Checkout code
         uses: actions/checkout@v3
 
-      - name: 🧰 Setup PHP & Composer
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.4
-          extensions: mbstring, bcmath, intl, pdo, openssl
-
-      - name: 📦 Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
-
       - name: 🧶 Setup Node.js
         uses: actions/setup-node@v3
         with:
@@ -45,42 +36,79 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: 🧹 Clean public/build
+      - name: 🔧 Enable maintenance mode
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-          rm -rf /domains/omdatwereizen.nl/DEFAULT/build/assets"
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            php artisan down --retry=60 --render='errors::503'" || true
 
-      - name: 🚚 Upload to server
+      - name: 🚚 Upload application files to server
         run: |
           rsync -avz --delete \
             --exclude=node_modules \
             --exclude=.git \
             --exclude=.env \
+            --exclude=vendor \
+            --exclude=public/build \
             --exclude=storage/app/public \
             --exclude=storage/logs \
             --exclude=storage/framework/sessions \
             --exclude=storage/framework/cache \
+            --exclude=storage/framework/views \
             -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
             ./ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/laravel_project
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/${{ secrets.DOMAIN }}/laravel_project
 
-      - name: 🌐 Deploy public/ to DEFAULT/
-        run: |
-          rsync -avz ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
-
-      - name: 🧼 Run artisan clear cache commands
+      - name: 📦 Install Composer dependencies on server
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            cd /domains/omdatwereizen.nl/laravel_project &&
-            php artisan config:clear && \
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            composer install --no-dev --optimize-autoloader --no-interaction"
+
+      - name: 🗄️ Run database migrations
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            php artisan migrate --force"
+
+      - name: 🧹 Clean public/build before deploying new assets
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            rm -rf /domains/${{ secrets.DOMAIN }}/DEFAULT/build"
+
+      - name: 🌐 Deploy public files to DEFAULT
+        run: |
+          rsync -avz \
+            --exclude=.htaccess \
+            --exclude=storage \
+            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            ./public/ \
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/${{ secrets.DOMAIN }}/DEFAULT/
+
+      - name: 🧼 Optimize application
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
             php artisan config:cache && \
             php artisan route:cache && \
-            php artisan view:cache"
+            php artisan view:cache && \
+            php artisan event:cache"
 
       - name: 🔐 Set permissions
         run: |
           ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            find /domains/omdatwereizen.nl/laravel_project/storage \
-              -path '/domains/omdatwereizen.nl/laravel_project/storage/app/public/images' -prune -o \
-              -exec chmod 775 {} \; && \
-            chmod -R 775 /domains/omdatwereizen.nl/laravel_project/bootstrap/cache"
+            chmod -R 775 /domains/${{ secrets.DOMAIN }}/laravel_project/storage && \
+            chmod -R 775 /domains/${{ secrets.DOMAIN }}/laravel_project/bootstrap/cache"
+
+      - name: ✅ Disable maintenance mode
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            php artisan up"
+        if: always()
+
+      - name: 🧪 Verify deployment
+        run: |
+          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            php artisan --version"
