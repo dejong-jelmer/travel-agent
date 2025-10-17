@@ -104,9 +104,12 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             cd $PROJECT_PATH && \
-            php artisan backup:run" || {
-            echo "⚠️ Database backup command failed or not configured"
-            echo "If using spatie/laravel-backup, ensure it is installed and configured"
+            php artisan backup:run --only-db 2>&1" || {
+            echo "⚠️ Database backup command failed"
+            echo "Checking if spatie/laravel-backup is installed..."
+            ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
+              cd $PROJECT_PATH && \
+              php artisan list | grep backup"
             echo "Continuing deployment without database backup..."
           }
 
