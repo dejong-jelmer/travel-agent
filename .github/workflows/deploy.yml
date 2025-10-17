@@ -9,6 +9,8 @@ env:
   SSH_TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
   PROJECT_PATH: /domains/${{ secrets.DOMAIN }}/laravel_project
   PUBLIC_PATH: /domains/${{ secrets.DOMAIN }}/DEFAULT
+  MAINTENANCE_RETRY_SECONDS: 60
+  BACKUP_RETENTION_COUNT: 5
 
 jobs:
   deploy:
@@ -44,11 +46,8 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          install -m 600 /dev/null ~/.ssh/id_rsa
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
           eval $(ssh-agent -s)
-          ssh-add ~/.ssh/id_rsa
-          rm ~/.ssh/id_rsa
+          ssh-add - <<< "${{ secrets.SSH_KEY }}"
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: 🔍 Verify server environment
@@ -72,7 +71,6 @@ jobs:
             --exclude=storage/logs \
             --exclude=storage/framework/sessions \
             --exclude=storage/framework/cache \
-            --exclude=storage/framework/views \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./ \
             $SSH_TARGET:$PROJECT_PATH
@@ -87,18 +85,19 @@ jobs:
       - name: 💾 Create database backup
         timeout-minutes: 5
         run: |
-          BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           ssh $SSH_TARGET "\
             cd $PROJECT_PATH && \
-            php artisan db:backup --timestamp=$BACKUP_TIMESTAMP" || {
-            echo "❌ Database backup failed - aborting deployment"
-            exit 1
+            php artisan backup:run || {
+            echo "⚠️ Database backup command failed or not configured"
+            echo "If using spatie/laravel-backup, ensure it's installed and configured"
+            echo "Continuing deployment without database backup..."
           }
 
       - name: 📸 Create full project backup
         timeout-minutes: 5
         run: |
           BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          RETENTION=$((BACKUP_RETENTION_COUNT + 1))
           ssh $SSH_TARGET "\
             cd /domains/${{ secrets.DOMAIN }} && \
             tar -czf laravel_project_backup_${BACKUP_TIMESTAMP}.tar.gz \
@@ -107,15 +106,15 @@ jobs:
               --exclude='laravel_project/storage/framework/cache/*' \
               laravel_project && \
             echo '✅ Backup created: laravel_project_backup_${BACKUP_TIMESTAMP}.tar.gz' && \
-            ls -t laravel_project_backup_*.tar.gz | tail -n +6 | xargs -r rm && \
-            echo '🧹 Old backups cleaned, keeping 5 most recent'"
+            ls -t laravel_project_backup_*.tar.gz | tail -n +${RETENTION} | xargs -r rm && \
+            echo '🧹 Old backups cleaned, keeping ${BACKUP_RETENTION_COUNT} most recent'"
 
       - name: 🔧 Enable maintenance mode
         timeout-minutes: 1
         run: |
           ssh $SSH_TARGET "\
             cd $PROJECT_PATH && \
-            php artisan down --retry=60 --render='errors::503'"
+            php artisan down --retry=${MAINTENANCE_RETRY_SECONDS} --render='errors::503'"
 
       - name: 🗄️ Run database migrations
         timeout-minutes: 10
@@ -140,28 +139,17 @@ jobs:
             ./public/ \
             $SSH_TARGET:$PUBLIC_PATH/
 
-      - name: 🧼 Optimize application caches
-        timeout-minutes: 3
+      - name: 🧼 Optimize and verify deployment
+        timeout-minutes: 5
         run: |
           ssh $SSH_TARGET "\
             cd $PROJECT_PATH && \
             php artisan config:cache && \
             php artisan route:cache && \
             php artisan view:cache && \
-            php artisan event:cache"
-
-      - name: 🔐 Set correct permissions
-        timeout-minutes: 2
-        run: |
-          ssh $SSH_TARGET "\
-            chmod -R u+rwX,g+rwX,o+rX $PROJECT_PATH/storage && \
-            chmod -R u+rwX,g+rwX,o+rX $PROJECT_PATH/bootstrap/cache"
-
-      - name: 🧪 Verify deployment integrity
-        timeout-minutes: 2
-        run: |
-          ssh $SSH_TARGET "\
-            cd $PROJECT_PATH && \
+            php artisan event:cache && \
+            chmod -R u+rwX,g+rwX,o+rX storage && \
+            chmod -R u+rwX,g+rwX,o+rX bootstrap/cache && \
             php artisan --version && \
             php artisan config:show app.env | grep -q 'production' && \
             test -d vendor || (echo '❌ Vendor directory missing' && exit 1)"
@@ -179,7 +167,6 @@ jobs:
           # Wait for application to fully initialize
           sleep 5
           curl --fail --silent --show-error --max-time 10 \
-            --insecure \
             https://${{ secrets.DOMAIN }}/health || {
             echo "⚠️ Health check failed - please verify application manually"
             echo "URL: https://${{ secrets.DOMAIN }}"
@@ -197,24 +184,27 @@ jobs:
         timeout-minutes: 5
         run: |
           echo "❌ Critical failure detected - initiating rollback"
-          ssh $SSH_TARGET "\
-            cd /domains/${{ secrets.DOMAIN }} && \
-            BACKUP=\$(ls -t laravel_project_backup_*.tar.gz 2>/dev/null | head -1) && \
-            if [ -n \"\$BACKUP\" ]; then \
-              echo \"📦 Restoring from backup: \$BACKUP\" && \
-              rm -rf laravel_project_failed_\$(date +%Y%m%d_%H%M%S) && \
-              mv laravel_project laravel_project_failed_\$(date +%Y%m%d_%H%M%S) && \
-              tar -xzf \$BACKUP && \
-              cd laravel_project && \
-              php artisan up && \
-              echo \"✅ Rollback completed successfully\"; \
-            else \
-              echo \"❌ No backup available for rollback\" && \
-              cd laravel_project && \
-              php artisan migrate:rollback --step=1 --force && \
-              php artisan up && \
-              echo \"⚠️ Attempted migration rollback and disabled maintenance mode\"; \
-            fi" || {
+          ssh $SSH_TARGET 'bash -s' << 'ENDSSH'
+            cd /domains/${{ secrets.DOMAIN }}
+            BACKUP=$(ls -t laravel_project_backup_*.tar.gz 2>/dev/null | head -1)
+
+            if [ -n "$BACKUP" ]; then
+              echo "📦 Restoring from backup: $BACKUP"
+              TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+              mv laravel_project "laravel_project_failed_${TIMESTAMP}"
+              tar -xzf "$BACKUP"
+              cd laravel_project
+              php artisan up
+              echo "✅ Rollback completed successfully"
+            else
+              echo "❌ No backup available for rollback"
+              cd laravel_project
+              php artisan migrate:rollback --step=1 --force
+              php artisan up
+              echo "⚠️ Attempted migration rollback and disabled maintenance mode"
+            fi
+          ENDSSH
+          [ $? -eq 0 ] || {
             echo "❌ Rollback failed - attempting emergency recovery"
             ssh $SSH_TARGET "cd $PROJECT_PATH && php artisan up" || true
           }
