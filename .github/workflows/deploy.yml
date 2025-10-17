@@ -56,7 +56,7 @@ jobs:
             php -v | head -n 1 && \
             composer --version && \
             cd $PROJECT_PATH && \
-            test -f .env || (echo '❌ .env file missing on server' && exit 1)"
+            test -f ../.env || (echo '❌ .env file missing on server' && exit 1)"
 
       - name: 🚚 Upload application files to server
         timeout-minutes: 10
@@ -219,7 +219,7 @@ jobs:
           echo "⚠️ Non-critical failure - disabling maintenance mode"
           ssh $SSH_TARGET "cd $PROJECT_PATH && php artisan up" || {
             echo "❌ Failed to disable maintenance mode - manual intervention required"
-            echo "Run: ssh $SSH_TARGET 'cd $PROJECT_PATH && php artisan up'"
+            echo "Run: php artisan up'"
           }
           exit 1
 
