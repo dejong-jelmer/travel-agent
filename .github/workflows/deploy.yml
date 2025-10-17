@@ -35,20 +35,20 @@ jobs:
           npm ci
           npm run build
 
-      - name: 🧠 Set production paths in index.php
+      - name: 🧠 Prepare production index.php
         run: |
-          sed -i "s|__DIR__.'/../storage/framework/maintenance.php'|__DIR__.'/../laravel_project/storage/framework/maintenance.php'|" public/index.php
-          sed -i "s|__DIR__.'/../vendor/autoload.php'|__DIR__.'/../laravel_project/vendor/autoload.php'|" public/index.php
-          sed -i "s|__DIR__.'/../bootstrap/app.php'|__DIR__.'/../laravel_project/bootstrap/app.php'|" public/index.php
+            cp public/index.production.php public/index.php
 
       - name: 🔑 Setup SSH authentication
         timeout-minutes: 2
         run: |
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
+          set +x
           eval $(ssh-agent -s)
           ssh-add - <<< "${{ secrets.SSH_KEY }}"
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          set -x
 
       - name: 🔍 Verify server environment
         timeout-minutes: 2
@@ -165,7 +165,10 @@ jobs:
         if: success()
         run: |
           # Wait for application to fully initialize
-          sleep 5
+          for i in {1..12}; do
+            curl --fail ... && break
+            sleep 5
+          done
           curl --fail --silent --show-error --max-time 10 \
             https://${{ secrets.DOMAIN }}/health || {
             echo "⚠️ Health check failed - please verify application manually"
@@ -184,7 +187,7 @@ jobs:
         timeout-minutes: 5
         run: |
           echo "❌ Critical failure detected - initiating rollback"
-          ssh $SSH_TARGET 'bash -s' << 'ENDSSH'
+          ssh $SSH_TARGET 'bash -s' << ENDSSH
             cd /domains/${{ secrets.DOMAIN }}
             BACKUP=$(ls -t laravel_project_backup_*.tar.gz 2>/dev/null | head -1)
 
