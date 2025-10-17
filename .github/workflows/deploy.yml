@@ -48,7 +48,6 @@ jobs:
           eval $(ssh-agent -s)
           ssh-add - <<< "${{ secrets.SSH_KEY }}"
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
-          set -x
 
       - name: 🔍 Verify server environment
         timeout-minutes: 2
@@ -133,7 +132,6 @@ jobs:
         timeout-minutes: 5
         run: |
           rsync -avz \
-            --exclude=.htaccess \
             --exclude=storage \
             -e "ssh -o StrictHostKeyChecking=no" \
             ./public/ \
