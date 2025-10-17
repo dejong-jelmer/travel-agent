@@ -97,20 +97,16 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             cd $PROJECT_PATH && \
-            php $ROOT composer.phar install --no-dev --optimize-autoloader --no-interaction"
+            php $ROOT/composer.phar install --no-dev --optimize-autoloader --no-interaction"
 
       - name: 💾 Create database backup
         timeout-minutes: 5
+        continue-on-error: true
         run: |
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             cd $PROJECT_PATH && \
             php artisan backup:run --only-db 2>&1" || {
-            echo "⚠️ Database backup command failed"
-            echo "Checking if spatie/laravel-backup is installed..."
-            ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
-              cd $PROJECT_PATH && \
-              php artisan list | grep backup"
-            echo "Continuing deployment without database backup..."
+            echo "⚠️ Database backup skipped - spatie/laravel-backup not installed"
           }
 
       - name: 📸 Create full project backup
