@@ -27,6 +27,8 @@
         "laravel/sail": "^1.26",
         "mockery/mockery": "^1.6",
         "nunomaduro/collision": "^8.1",
+        "nunomaduro/larastan": "^3.7",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^11.0.1"
     },
     "autoload": {
@@ -74,6 +76,7 @@
     },
     "config": {
         "optimize-autoloader": true,
+        "classmap-authoritative": true,
         "preferred-install": "dist",
         "sort-packages": true,
         "allow-plugins": {
