@@ -3,6 +3,8 @@ name: AI Code Review (Claude)
 on:
   pull_request:
     types: [opened, synchronize]
+    branches-ignore:
+      - production
 
 permissions:
   pull-requests: write

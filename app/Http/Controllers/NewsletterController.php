@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewsletterSubscriptionRequested;
-use App\Http\Requests\SubscribeNewsLetterRequest;
+use App\Http\Requests\SubscribeNewsletterRequest;
 use App\Models\NewsletterSubscriber;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class NewsletterController extends Controller
 {
-    public function subscribe(SubscribeNewsLetterRequest $request): void
+    public function subscribe(SubscribeNewsletterRequest $request): void
     {
         $validated = $request->validated();
         $hours = config('newsletter.confirmation_expires_after');
