@@ -7,6 +7,8 @@ on:
 
 env:
   SSH_TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+  ROOT: /domains/
+  DOMAIN_PATH: /domains/${{ secrets.DOMAIN }}
   PROJECT_PATH: /domains/${{ secrets.DOMAIN }}/laravel_project
   PUBLIC_PATH: /domains/${{ secrets.DOMAIN }}/DEFAULT
   MAINTENANCE_RETRY_SECONDS: 60
@@ -70,9 +72,9 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             php -v | head -n 1 && \
-            composer --version && \
+            php $ROOT composer.phar --version && \
             cd $PROJECT_PATH && \
-            test -f .env || (echo '❌ .env file missing on server' && exit 1)"
+            test -f $DOMAIN_PATH .env || (echo '❌ .env file missing on server' && exit 1)"
 
       - name: 🚚 Upload application files to server
         timeout-minutes: 10
