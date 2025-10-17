@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: 📊 Start deployment
+        run: echo "🚀 Deployment started at $(date)"
+
       - name: 🛒 Checkout code
         uses: actions/checkout@v3
 
@@ -29,18 +32,42 @@ jobs:
           sed -i "s|__DIR__.'/../vendor/autoload.php'|__DIR__.'/../laravel_project/vendor/autoload.php'|" public/index.php
           sed -i "s|__DIR__.'/../bootstrap/app.php'|__DIR__.'/../laravel_project/bootstrap/app.php'|" public/index.php
 
-      - name: 🔑 Setup SSH key for authentication
+      - name: 🔑 Setup SSH authentication
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          eval $(ssh-agent -s)
+          echo "${{ secrets.SSH_KEY }}" | ssh-add -
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+
+      - name: 💾 Backup database
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            php artisan db:backup --timestamp=$(date +%Y%m%d_%H%M%S)" || {
+            echo "⚠️ Database backup failed or not configured - continuing deployment"
+          }
 
       - name: 🔧 Enable maintenance mode
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
-            php artisan down --retry=60 --render='errors::503'" || true
+            php artisan down --retry=60 --render='errors::503'" || {
+            echo "❌ Failed to enable maintenance mode"
+            exit 1
+          }
+
+      - name: 📸 Create deployment backup
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }} && \
+            tar -czf laravel_project_backup_$(date +%Y%m%d_%H%M%S).tar.gz \
+              --exclude='laravel_project/storage/logs/*' \
+              --exclude='laravel_project/storage/framework/sessions/*' \
+              --exclude='laravel_project/storage/framework/cache/*' \
+              laravel_project && \
+            ls -lht laravel_project_backup_*.tar.gz | head -n 5 | tail -n +6 | awk '{print \$9}' | xargs -r rm" || {
+            echo "⚠️ Backup creation failed - continuing deployment"
+          }
 
       - name: 🚚 Upload application files to server
         run: |
@@ -55,60 +82,119 @@ jobs:
             --exclude=storage/framework/sessions \
             --exclude=storage/framework/cache \
             --exclude=storage/framework/views \
-            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            -e "ssh -o StrictHostKeyChecking=no" \
             ./ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/${{ secrets.DOMAIN }}/laravel_project
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/${{ secrets.DOMAIN }}/laravel_project || {
+            echo "❌ File upload failed"
+            ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /domains/${{ secrets.DOMAIN }}/laravel_project && php artisan up"
+            exit 1
+          }
 
       - name: 📦 Install Composer dependencies on server
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
-            composer install --no-dev --optimize-autoloader --no-interaction"
+            composer install --no-dev --optimize-autoloader --no-interaction" || {
+            echo "❌ Composer install failed"
+            ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /domains/${{ secrets.DOMAIN }}/laravel_project && php artisan up"
+            exit 1
+          }
 
       - name: 🗄️ Run database migrations
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
-            php artisan migrate --force"
+            php artisan migrate --force" || {
+            echo "❌ Database migration failed"
+            echo "⚠️ Manual intervention required - check database state"
+            ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "cd /domains/${{ secrets.DOMAIN }}/laravel_project && php artisan up"
+            exit 1
+          }
 
       - name: 🧹 Clean public/build before deploying new assets
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            rm -rf /domains/${{ secrets.DOMAIN }}/DEFAULT/build"
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            rm -rf /domains/${{ secrets.DOMAIN }}/DEFAULT/build" || {
+            echo "❌ Failed to clean build directory"
+            exit 1
+          }
 
       - name: 🌐 Deploy public files to DEFAULT
         run: |
           rsync -avz \
             --exclude=.htaccess \
             --exclude=storage \
-            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            -e "ssh -o StrictHostKeyChecking=no" \
             ./public/ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/${{ secrets.DOMAIN }}/DEFAULT/
+            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/${{ secrets.DOMAIN }}/DEFAULT/ || {
+            echo "❌ Public files deployment failed"
+            exit 1
+          }
 
       - name: 🧼 Optimize application
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
             php artisan config:cache && \
             php artisan route:cache && \
             php artisan view:cache && \
-            php artisan event:cache"
+            php artisan event:cache" || {
+            echo "❌ Cache optimization failed"
+            exit 1
+          }
 
       - name: 🔐 Set permissions
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            chmod -R 775 /domains/${{ secrets.DOMAIN }}/laravel_project/storage && \
-            chmod -R 775 /domains/${{ secrets.DOMAIN }}/laravel_project/bootstrap/cache"
-
-      - name: ✅ Disable maintenance mode
-        run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
-            php artisan up"
-        if: always()
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            find /domains/${{ secrets.DOMAIN }}/laravel_project/storage -type f -exec chmod 644 {} \; && \
+            find /domains/${{ secrets.DOMAIN }}/laravel_project/storage -type d -exec chmod 755 {} \; && \
+            find /domains/${{ secrets.DOMAIN }}/laravel_project/bootstrap/cache -type f -exec chmod 644 {} \; && \
+            find /domains/${{ secrets.DOMAIN }}/laravel_project/bootstrap/cache -type d -exec chmod 755 {} \;" || {
+            echo "⚠️ Permission setting failed - application may still work"
+          }
 
       - name: 🧪 Verify deployment
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
             cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
-            php artisan --version"
+            php artisan --version && \
+            php artisan config:show app.env" || {
+            echo "❌ Deployment verification failed"
+            exit 1
+          }
+
+      - name: 🏥 Health check
+        run: |
+          sleep 5
+          if command -v curl &> /dev/null; then
+            curl --fail --silent --show-error https://${{ secrets.DOMAIN }}/health || {
+              echo "⚠️ Health check endpoint not available - skipping"
+            }
+          else
+            echo "⚠️ curl not available - skipping health check"
+          fi
+
+      - name: ✅ Disable maintenance mode
+        if: success()
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            php artisan up" || {
+            echo "❌ Failed to disable maintenance mode"
+            exit 1
+          }
+
+      - name: 📊 Deployment complete
+        if: success()
+        run: echo "✅ Deployment completed successfully at $(date)"
+
+      - name: 🚨 Deployment failed - Emergency cleanup
+        if: failure()
+        run: |
+          echo "❌ Deployment failed - attempting to restore service"
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
+            cd /domains/${{ secrets.DOMAIN }}/laravel_project && \
+            php artisan up" || true
+          echo "⚠️ Please check the application status manually"
+          echo "💾 A backup was created before deployment - check laravel_project_backup_*.tar.gz"
+          exit 1
