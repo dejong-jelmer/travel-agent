@@ -105,10 +105,10 @@ jobs:
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             cd $PROJECT_PATH && \
             php artisan backup:run || {
-            echo "⚠️ Database backup command failed or not configured"
-            echo "If using spatie/laravel-backup, ensure it's installed and configured"
-            echo "Continuing deployment without database backup..."
-          }
+              echo "⚠️ Database backup command failed or not configured"
+              echo "If using spatie/laravel-backup, ensure it's installed and configured"
+              echo "Continuing deployment without database backup..."
+            }
 
       - name: 📸 Create full project backup
         timeout-minutes: 5
@@ -116,7 +116,7 @@ jobs:
           BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           RETENTION=$((BACKUP_RETENTION_COUNT + 1))
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
-            cd /domains/${{ secrets.DOMAIN }} && \
+            cd $DOMAIN_PATH && \
             tar -czf laravel_project_backup_${BACKUP_TIMESTAMP}.tar.gz \
               --exclude='laravel_project/storage/logs/*' \
               --exclude='laravel_project/storage/framework/sessions/*' \
