@@ -74,7 +74,7 @@ jobs:
             php -v | head -n 1 && \
             php $ROOT composer.phar --version && \
             cd $PROJECT_PATH && \
-            test -f $DOMAIN_PATH .env || (echo '❌ .env file missing on server' && exit 1)"
+            test -f $DOMAIN_PATH/.env || (echo '❌ .env file missing on server' && exit 1)"
 
       - name: 🚚 Upload application files to server
         timeout-minutes: 10
@@ -97,7 +97,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             cd $PROJECT_PATH && \
-            composer install --no-dev --optimize-autoloader --no-interaction"
+            php $ROOT composer.phar install --no-dev --optimize-autoloader --no-interaction"
 
       - name: 💾 Create database backup
         timeout-minutes: 5
