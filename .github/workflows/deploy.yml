@@ -5,82 +5,224 @@ on:
     branches:
       - production
 
+env:
+  SSH_TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
+  PROJECT_PATH: /domains/${{ secrets.DOMAIN }}/laravel_project
+  PUBLIC_PATH: /domains/${{ secrets.DOMAIN }}/DEFAULT
+  MAINTENANCE_RETRY_SECONDS: 60
+  BACKUP_RETENTION_COUNT: 5
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
+      - name: 📊 Start deployment
+        run: echo "🚀 Deployment started at $(date)"
+
       - name: 🛒 Checkout code
         uses: actions/checkout@v3
-
-      - name: 🧰 Setup PHP & Composer
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: 8.4
-          extensions: mbstring, bcmath, intl, pdo, openssl
-
-      - name: 📦 Install Composer dependencies
-        run: composer install --no-dev --optimize-autoloader
 
       - name: 🧶 Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '22'
+          cache: 'npm'
 
       - name: 🧱 Build assets
         run: |
           npm ci
           npm run build
 
-      - name: 🧠 Set production paths in index.php
+      - name: 🧠 Prepare production index.php
         run: |
-          sed -i "s|__DIR__.'/../storage/framework/maintenance.php'|__DIR__.'/../laravel_project/storage/framework/maintenance.php'|" public/index.php
-          sed -i "s|__DIR__.'/../vendor/autoload.php'|__DIR__.'/../laravel_project/vendor/autoload.php'|" public/index.php
-          sed -i "s|__DIR__.'/../bootstrap/app.php'|__DIR__.'/../laravel_project/bootstrap/app.php'|" public/index.php
+            cp public/index.production.php public/index.php
 
-      - name: 🔑 Setup SSH key for authentication
+      - name: 🔑 Setup SSH authentication
+        timeout-minutes: 2
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          chmod 700 ~/.ssh
+          set +x
+          eval $(ssh-agent -s)
+          ssh-add - <<< "${{ secrets.SSH_KEY }}"
           ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: 🧹 Clean public/build
+      - name: 🔍 Verify server environment
+        timeout-minutes: 2
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-          rm -rf /domains/omdatwereizen.nl/DEFAULT/build/assets"
+          ssh $SSH_TARGET "\
+            php -v | head -n 1 && \
+            composer --version && \
+            cd $PROJECT_PATH && \
+            test -f .env || (echo '❌ .env file missing on server' && exit 1)"
 
-      - name: 🚚 Upload to server
+      - name: 🚚 Upload application files to server
+        timeout-minutes: 10
         run: |
           rsync -avz --delete \
             --exclude=node_modules \
             --exclude=.git \
             --exclude=.env \
+            --exclude=vendor \
             --exclude=storage/app/public \
             --exclude=storage/logs \
             --exclude=storage/framework/sessions \
             --exclude=storage/framework/cache \
-            -e "ssh -i ~/.ssh/id_rsa -o StrictHostKeyChecking=no" \
+            -e "ssh -o StrictHostKeyChecking=no" \
             ./ \
-            ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/laravel_project
+            $SSH_TARGET:$PROJECT_PATH
 
-      - name: 🌐 Deploy public/ to DEFAULT/
+      - name: 📦 Install Composer dependencies on server
+        timeout-minutes: 5
         run: |
-          rsync -avz ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/domains/omdatwereizen.nl/DEFAULT
+          ssh $SSH_TARGET "\
+            cd $PROJECT_PATH && \
+            composer install --no-dev --optimize-autoloader --no-interaction"
 
-      - name: 🧼 Run artisan clear cache commands
+      - name: 💾 Create database backup
+        timeout-minutes: 5
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            cd /domains/omdatwereizen.nl/laravel_project &&
-            php artisan config:clear && \
+          ssh $SSH_TARGET "\
+            cd $PROJECT_PATH && \
+            php artisan backup:run || {
+            echo "⚠️ Database backup command failed or not configured"
+            echo "If using spatie/laravel-backup, ensure it's installed and configured"
+            echo "Continuing deployment without database backup..."
+          }
+
+      - name: 📸 Create full project backup
+        timeout-minutes: 5
+        run: |
+          BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+          RETENTION=$((BACKUP_RETENTION_COUNT + 1))
+          ssh $SSH_TARGET "\
+            cd /domains/${{ secrets.DOMAIN }} && \
+            tar -czf laravel_project_backup_${BACKUP_TIMESTAMP}.tar.gz \
+              --exclude='laravel_project/storage/logs/*' \
+              --exclude='laravel_project/storage/framework/sessions/*' \
+              --exclude='laravel_project/storage/framework/cache/*' \
+              laravel_project && \
+            echo '✅ Backup created: laravel_project_backup_${BACKUP_TIMESTAMP}.tar.gz' && \
+            ls -t laravel_project_backup_*.tar.gz | tail -n +${RETENTION} | xargs -r rm && \
+            echo '🧹 Old backups cleaned, keeping ${BACKUP_RETENTION_COUNT} most recent'"
+
+      - name: 🔧 Enable maintenance mode
+        timeout-minutes: 1
+        run: |
+          ssh $SSH_TARGET "\
+            cd $PROJECT_PATH && \
+            php artisan down --retry=${MAINTENANCE_RETRY_SECONDS} --render='errors::503'"
+
+      - name: 🗄️ Run database migrations
+        timeout-minutes: 10
+        id: migrations
+        run: |
+          ssh $SSH_TARGET "\
+            cd $PROJECT_PATH && \
+            php artisan migrate --force"
+
+      - name: 🧹 Clean public/build directory
+        timeout-minutes: 1
+        run: |
+          ssh $SSH_TARGET "rm -rf $PUBLIC_PATH/build"
+
+      - name: 🌐 Deploy public files to DEFAULT
+        timeout-minutes: 5
+        run: |
+          rsync -avz \
+            --exclude=storage \
+            -e "ssh -o StrictHostKeyChecking=no" \
+            ./public/ \
+            $SSH_TARGET:$PUBLIC_PATH/
+
+      - name: 🧼 Optimize and verify deployment
+        timeout-minutes: 5
+        run: |
+          ssh $SSH_TARGET "\
+            cd $PROJECT_PATH && \
             php artisan config:cache && \
             php artisan route:cache && \
-            php artisan view:cache"
+            php artisan view:cache && \
+            php artisan event:cache && \
+            chmod -R u+rwX,g+rwX,o+rX storage && \
+            chmod -R u+rwX,g+rwX,o+rX bootstrap/cache && \
+            php artisan --version && \
+            php artisan config:show app.env | grep -q 'production' && \
+            test -d vendor || (echo '❌ Vendor directory missing' && exit 1)"
 
-      - name: 🔐 Set permissions
+      - name: ✅ Disable maintenance mode
+        timeout-minutes: 1
+        if: success()
         run: |
-          ssh -i ~/.ssh/id_rsa ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "\
-            find /domains/omdatwereizen.nl/laravel_project/storage \
-              -path '/domains/omdatwereizen.nl/laravel_project/storage/app/public/images' -prune -o \
-              -exec chmod 775 {} \; && \
-            chmod -R 775 /domains/omdatwereizen.nl/laravel_project/bootstrap/cache"
+          ssh $SSH_TARGET "cd $PROJECT_PATH && php artisan up"
+
+      - name: 🏥 Health check
+        timeout-minutes: 1
+        if: success()
+        run: |
+          # Wait for application to fully initialize
+          for i in {1..12}; do
+            curl --fail ... && break
+            sleep 5
+          done
+          curl --fail --silent --show-error --max-time 10 \
+            https://${{ secrets.DOMAIN }}/health || {
+            echo "⚠️ Health check failed - please verify application manually"
+            echo "URL: https://${{ secrets.DOMAIN }}"
+            exit 0
+          }
+
+      - name: 📊 Deployment completed successfully
+        if: success()
+        run: |
+          echo "✅ Deployment completed successfully at $(date)"
+          echo "🌐 Application: https://${{ secrets.DOMAIN }}"
+
+      - name: 🚨 Rollback deployment on failure
+        if: failure() && steps.migrations.outcome == 'failure'
+        timeout-minutes: 5
+        run: |
+          echo "❌ Critical failure detected - initiating rollback"
+          ssh $SSH_TARGET 'bash -s' << ENDSSH
+            cd /domains/${{ secrets.DOMAIN }}
+            BACKUP=$(ls -t laravel_project_backup_*.tar.gz 2>/dev/null | head -1)
+
+            if [ -n "$BACKUP" ]; then
+              echo "📦 Restoring from backup: $BACKUP"
+              TIMESTAMP=$(date +%Y%m%d_%H%M%S)
+              mv laravel_project "laravel_project_failed_${TIMESTAMP}"
+              tar -xzf "$BACKUP"
+              cd laravel_project
+              php artisan up
+              echo "✅ Rollback completed successfully"
+            else
+              echo "❌ No backup available for rollback"
+              cd laravel_project
+              php artisan migrate:rollback --step=1 --force
+              php artisan up
+              echo "⚠️ Attempted migration rollback and disabled maintenance mode"
+            fi
+          ENDSSH
+          [ $? -eq 0 ] || {
+            echo "❌ Rollback failed - attempting emergency recovery"
+            ssh $SSH_TARGET "cd $PROJECT_PATH && php artisan up" || true
+          }
+          echo "💾 Server backups available at: /domains/${{ secrets.DOMAIN }}/laravel_project_backup_*.tar.gz"
+          exit 1
+
+      - name: '🚨 Emergency: Disable maintenance mode'
+        if: failure() && steps.migrations.outcome != 'failure'
+        timeout-minutes: 1
+        run: |
+          echo "⚠️ Non-critical failure - disabling maintenance mode"
+          ssh $SSH_TARGET "cd $PROJECT_PATH && php artisan up" || {
+            echo "❌ Failed to disable maintenance mode - manual intervention required"
+            echo "Run: ssh $SSH_TARGET 'cd $PROJECT_PATH && php artisan up'"
+          }
+          exit 1
+
+      - name: 🧹 Cleanup SSH agent
+        if: always()
+        run: ssh-add -D 2>/dev/null || true
