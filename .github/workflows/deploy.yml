@@ -7,8 +7,6 @@ on:
 
 env:
   SSH_TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
-  ROOT: /domains/
-  DOMAIN_PATH: /domains/${{ secrets.DOMAIN }}
   PROJECT_PATH: /domains/${{ secrets.DOMAIN }}/laravel_project
   PUBLIC_PATH: /domains/${{ secrets.DOMAIN }}/DEFAULT
   MAINTENANCE_RETRY_SECONDS: 60
@@ -72,9 +70,9 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             php -v | head -n 1 && \
-            php $ROOT composer.phar --version && \
+            composer --version && \
             cd $PROJECT_PATH && \
-            test -f $DOMAIN_PATH/.env || (echo '❌ .env file missing on server' && exit 1)"
+            test -f .env || (echo '❌ .env file missing on server' && exit 1)"
 
       - name: 🚚 Upload application files to server
         timeout-minutes: 10
@@ -97,7 +95,7 @@ jobs:
         run: |
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             cd $PROJECT_PATH && \
-            php $ROOT composer.phar install --no-dev --optimize-autoloader --no-interaction"
+            composer install --no-dev --optimize-autoloader --no-interaction"
 
       - name: 💾 Create database backup
         timeout-minutes: 5
@@ -116,7 +114,7 @@ jobs:
           BACKUP_TIMESTAMP=$(date +%Y%m%d_%H%M%S)
           RETENTION=$((BACKUP_RETENTION_COUNT + 1))
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
-            cd $DOMAIN_PATH && \
+            cd /domains/${{ secrets.DOMAIN }} && \
             tar -czf laravel_project_backup_${BACKUP_TIMESTAMP}.tar.gz \
               --exclude='laravel_project/storage/logs/*' \
               --exclude='laravel_project/storage/framework/sessions/*' \
@@ -165,8 +163,10 @@ jobs:
             php artisan route:cache && \
             php artisan view:cache && \
             php artisan event:cache && \
-            chmod -R u+rwX,g+rwX,o+rX storage && \
-            chmod -R u+rwX,g+rwX,o+rX bootstrap/cache && \
+            find storage -path storage/app/public -prune -o -type f -exec chmod 644 {} \; && \
+            find storage -path storage/app/public -prune -o -type d -exec chmod 755 {} \; && \
+            find bootstrap/cache -type f -exec chmod 644 {} \; && \
+            find bootstrap/cache -type d -exec chmod 755 {} \; && \
             php artisan --version && \
             php artisan config:show app.env | grep -q 'production' && \
             test -d vendor || (echo '❌ Vendor directory missing' && exit 1)"
@@ -220,7 +220,7 @@ jobs:
               php artisan up
               echo "⚠️ Attempted migration rollback and disabled maintenance mode"
             fi
-          ENDSSH
+            ENDSSH
           [ $? -eq 0 ] || {
             echo "❌ Rollback failed - attempting emergency recovery"
             ssh -i ~/.ssh/id_rsa $SSH_TARGET "cd $PROJECT_PATH && php artisan up" || true
