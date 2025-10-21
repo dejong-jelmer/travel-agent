@@ -8,7 +8,6 @@ on:
 env:
   SSH_TARGET: ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}
   ROOT: /domains/
-  DOMAIN_PATH: /domains/${{ secrets.DOMAIN }}
   PROJECT_PATH: /domains/${{ secrets.DOMAIN }}/laravel_project
   PUBLIC_PATH: /domains/${{ secrets.DOMAIN }}/DEFAULT
   MAINTENANCE_RETRY_SECONDS: 60

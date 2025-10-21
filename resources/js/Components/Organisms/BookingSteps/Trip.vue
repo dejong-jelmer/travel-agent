@@ -48,12 +48,10 @@
                                     {{ booking.travelers.adults.length === 1 ? 'volwassene' : 'volwassenen' }}
                                 </span>
                             </p>
-                            <transition name="fade">
-                                <p v-if="booking.travelers.children.length">
-                                    {{ booking.travelers.children.length }}
-                                    {{ booking.travelers.children.length === 1 ? 'kind' : 'kinderen' }}
-                                </p>
-                            </transition>
+                            <p v-if="booking.travelers.children.length">
+                                {{ booking.travelers.children.length }}
+                                {{ booking.travelers.children.length === 1 ? 'kind' : 'kinderen' }}
+                            </p>
                         </div>
                     </transition>
                 </div>
