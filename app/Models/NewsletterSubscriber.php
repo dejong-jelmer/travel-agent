@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class NewsletterSubscriber extends Model
 {
+    use HasFactory;
+
     protected $fillable = [
         'email',
         'name',
@@ -30,11 +33,9 @@ class NewsletterSubscriber extends Model
         parent::boot();
 
         static::creating(function ($subscriber) {
-            if (empty($subscriber->token)) {
-                $subscriber->token = bin2hex(random_bytes(32));
-                $subscriber->confirmation_token = bin2hex(random_bytes(32));
-                $subscriber->unsubscribe_token = bin2hex(random_bytes(32));
-            }
+            $subscriber->token = bin2hex(random_bytes(32));
+            $subscriber->confirmation_token = bin2hex(random_bytes(32));
+            $subscriber->unsubscribe_token = bin2hex(random_bytes(32));
         });
     }
 }
