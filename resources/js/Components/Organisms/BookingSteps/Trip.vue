@@ -51,7 +51,7 @@
 
 <script setup>
 import { toRef, computed } from 'vue'
-import { useDateFormatter } from '@/composables/useDateFormatter.js'
+import { useDateFormatter } from '@/Composables/useDateFormatter.js'
 const { formattedDate } = useDateFormatter();
 
 const props = defineProps({

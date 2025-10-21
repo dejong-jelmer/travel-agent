@@ -158,7 +158,7 @@
 </template>
 <script setup>
 import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
-import { useDateFormatter } from '@/composables/useDateFormatter.js'
+import { useDateFormatter } from '@/Composables/useDateFormatter.js'
 const { formattedDate } = useDateFormatter();
 
 const props = defineProps({
