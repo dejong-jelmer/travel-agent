@@ -22,19 +22,42 @@
 
         <hr class="border-secondary-sage/20">
 
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-3 gap-2 items-center">
             <p>Reis</p>
-            <p><strong>{{ booking.trip.name }}</strong></p>
-            <p class="ml-[150px]">Vanaf <strong>€ {{ booking.trip.price }},-</strong> p.p.</p>
+            <p class="text-center"><strong>{{ booking.trip.name }}</strong></p>
+            <p class="text-right">Vanaf <strong>€ {{ booking.trip.price }},-</strong> p.p.</p>
 
-            <p>Kies een datum voor vertrek</p>
+            <p>Kies een <strong>datum</strong> voor vertrek</p>
             <DatePicker v-model="departure_date" :min-date="new Date()" :feedback="booking.errors['departure_date']"
                 @mouseup="booking.clearErrors('departure_date')" />
-            <p></p>
+            <p class="text-right">{{ formattedDate(booking.departure_date) }}</p>
 
-            <p>Kies het aantal reizigers</p>
+            <p>Kies het <strong>aantal</strong> reizigers</p>
             <PersonPicker v-model="participants" />
-            <span></span>
+            <div class="text-right">
+                <p>Deelnemers:</p>
+                <div style="min-height: 3em;">
+                    <transition name="fade" mode="out-in">
+                        <div :key="booking.travelers.children.length > 0 ? 'with-children' : 'without-children'">
+                            <p>
+                                {{ booking.travelers.adults.length }}
+                                <span v-if="!booking.travelers.children.length">
+                                    {{ booking.travelers.adults.length === 1 ? 'persoon' : 'personen' }}
+                                </span>
+                                <span v-if="booking.travelers.children.length">
+                                    {{ booking.travelers.adults.length === 1 ? 'volwassene' : 'volwassenen' }}
+                                </span>
+                            </p>
+                            <transition name="fade">
+                                <p v-if="booking.travelers.children.length">
+                                    {{ booking.travelers.children.length }}
+                                    {{ booking.travelers.children.length === 1 ? 'kind' : 'kinderen' }}
+                                </p>
+                            </transition>
+                        </div>
+                    </transition>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -42,6 +65,8 @@
 
 <script setup>
 import { toRef } from 'vue'
+import { useDateFormatter } from '@/composables/useDateFormatter.js'
+const { formattedDate } = useDateFormatter();
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -52,3 +77,14 @@ const departure_date = toRef(props.booking, 'departure_date')
 const participants = toRef(props.booking, 'participants')
 
 </script>
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+    opacity: 0;
+}
+</style>

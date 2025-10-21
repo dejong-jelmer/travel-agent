@@ -1,23 +1,3 @@
-<script setup>
-import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
-
-const props = defineProps({
-    booking: {
-        type: Object,
-        required: true
-    }
-})
-
-const formattedDate = (date, longMonth = true) => {
-    if (!date) return '-'
-    return new Date(date).toLocaleDateString('nl-NL', {
-        day: 'numeric',
-        month: longMonth ? 'long' : 'numeric',
-        year: 'numeric'
-    })
-}
-</script>
-
 <template>
     <div key="overview" class="space-y-6">
         <h2 class="text-xl font-bold text-primary-dark">Bekijken & bevestigen</h2>
@@ -175,5 +155,16 @@ const formattedDate = (date, longMonth = true) => {
             </ul>
         </div>
     </div>
-
 </template>
+<script setup>
+import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
+import { useDateFormatter } from '@/composables/useDateFormatter.js'
+const { formattedDate } = useDateFormatter();
+
+const props = defineProps({
+    booking: {
+        type: Object,
+        required: true
+    }
+})
+</script>
