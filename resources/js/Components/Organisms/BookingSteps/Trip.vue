@@ -30,7 +30,7 @@
             <p>Kies een <strong>datum</strong> voor vertrek</p>
             <DatePicker v-model="departure_date" :min-date="new Date()" :feedback="booking.errors['departure_date']"
                 @mouseup="booking.clearErrors('departure_date')" />
-            <p class="text-right">{{ formattedDate(booking.departure_date) ?? 'Geen datum gekozen' }}</p>
+            <p class="text-right">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</p>
 
             <p>Kies het <strong>aantal</strong> reizigers</p>
             <PersonPicker v-model="participants" />
@@ -63,8 +63,8 @@ const departure_date = toRef(props.booking, 'departure_date')
 const participants = toRef(props.booking, 'participants')
 
 const participantSummary = computed(() => {
-    const adults = props.booking.travelers?.adults?.length ?? 0;
-    const children = props.booking.travelers?.children?.length ?? 0;
+    const adults = props.booking.participants?.adults || 0;
+    const children = props.booking.participants?.children || 0;
     return {
         adults,
         children,

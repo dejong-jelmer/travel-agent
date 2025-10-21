@@ -42,7 +42,7 @@
                         <span class="flex-1 flex items-center gap-2">
                             <span>Vertrek datum</span>
                             <span class="flex-1 border-b-2 border-dotted border-secondary-stone/60"></span>
-                            <span class="font-bold">{{ formattedDate(booking.departure_date) ?? 'Geen datum gekozen' }}</span>
+                            <span class="font-bold">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</span>
                         </span>
                     </div>
                 </div>
