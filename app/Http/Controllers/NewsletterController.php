@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Events\NewsletterSubscriptionRequested;
 use App\Http\Requests\SubscribeNewsletterRequest;
 use App\Models\NewsletterSubscriber;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -35,10 +36,10 @@ class NewsletterController extends Controller
             ->where('confirmation_expires_at', '>=', now())
             ->firstOrFail();
 
-        $subscriber->update([
+        DB::transaction(fn() => $subscriber->update([
             'confirmation_expires_at' => null,
             'confirmed_at' => now(),
-        ]);
+        ]));
 
         return Inertia::render('Newsletter/Confirmed', [
             'title' => config('app.name').' - Nieuwsbrief inschrijving bevestigd',
@@ -51,10 +52,10 @@ class NewsletterController extends Controller
             ->whereNull('unsubscribed_at')
             ->firstOrFail();
 
-        $subscriber->update([
+        DB::transaction(fn() => $subscriber->update([
             'confirmed_at' => null,
             'unsubscribed_at' => now(),
-        ]);
+        ]));
 
         return Inertia::render('Newsletter/Unsubscribed', [
             'title' => config('app.name').' - Nieuwsbrief uitschrijving bevestigd',
