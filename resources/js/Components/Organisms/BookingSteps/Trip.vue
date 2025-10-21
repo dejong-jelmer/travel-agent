@@ -36,24 +36,12 @@
             <PersonPicker v-model="participants" />
             <div class="text-right">
                 <p>Deelnemers:</p>
-                <div style="min-height: 3em;">
-                    <transition name="fade" mode="out-in">
-                        <div :key="booking.travelers.children.length > 0 ? 'with-children' : 'without-children'">
-                            <p>
-                                {{ booking.travelers.adults.length }}
-                                <span v-if="!booking.travelers.children.length">
-                                    {{ booking.travelers.adults.length === 1 ? 'persoon' : 'personen' }}
-                                </span>
-                                <span v-if="booking.travelers.children.length">
-                                    {{ booking.travelers.adults.length === 1 ? 'volwassene' : 'volwassenen' }}
-                                </span>
-                            </p>
-                            <p v-if="booking.travelers.children.length">
-                                {{ booking.travelers.children.length }}
-                                {{ booking.travelers.children.length === 1 ? 'kind' : 'kinderen' }}
-                            </p>
-                        </div>
-                    </transition>
+                <div class="min-h-[3em]">
+                    <div>
+                        <p>{{ participantSummary.adults }} {{ participantSummary.adultLabel }}</p>
+                        <p v-if="participantSummary.children">{{ participantSummary.children }} {{
+                            participantSummary.childLabel }}</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -62,7 +50,7 @@
 </template>
 
 <script setup>
-import { toRef } from 'vue'
+import { toRef, computed } from 'vue'
 import { useDateFormatter } from '@/composables/useDateFormatter.js'
 const { formattedDate } = useDateFormatter();
 
@@ -74,15 +62,17 @@ const props = defineProps({
 const departure_date = toRef(props.booking, 'departure_date')
 const participants = toRef(props.booking, 'participants')
 
-</script>
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.3s ease;
-}
+const participantSummary = computed(() => {
+    const adults = props.booking.travelers.adults.length;
+    const children = props.booking.travelers.children.length;
+    return {
+        adults,
+        children,
+        adultLabel: children > 0
+            ? (adults === 1 ? 'volwassene' : 'volwassenen')
+            : (adults === 1 ? 'persoon' : 'personen'),
+        childLabel: children === 1 ? 'kind' : 'kinderen'
+    };
+});
 
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-</style>
+</script>
