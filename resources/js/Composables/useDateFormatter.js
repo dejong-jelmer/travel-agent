@@ -69,9 +69,10 @@ export const useDateFormatter = () => {
     const formattedDate = (date, options = {}) => {
         const { longMonth = true, longDay = true, locale = "nl-NL" } = options;
 
-        if (!date) return "";
+        if (!date) return null;
         const parsedDate = new Date(date);
-        if (isNaN(parsedDate)) return "";
+
+        if (isNaN(parsedDate)) return null;
         return parsedDate.toLocaleDateString(locale, {
             ...(longDay && { weekday: "long" }),
             day: "numeric",

@@ -72,7 +72,7 @@ jobs:
           ssh -i ~/.ssh/id_rsa $SSH_TARGET "\
             php -v | head -n 1 && \
             php $ROOT composer.phar --version && \
-            cd $PROJECT_PATH || (echo '❌ Cannot access project path' && exit 1) && \
+            cd $PROJECT_PATH || (echo '❌ Cannot access project path' && exit 1) \
             test -f .env || (echo '❌ .env file missing on server' && exit 1)"
 
       - name: 🚚 Upload application files to server
