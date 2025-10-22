@@ -13,22 +13,18 @@ class NewsletterTest extends TestCase
 {
     use RefreshDatabase;
 
-    const EMAIL = [
-        'email' => 'test@example.com',
-    ];
-    const NAME = [
-        'name' => 'Test User',
-    ];
-    private array $subscriber;
+    const EMAIL = 'test@example.com';
+
+    const NAME = 'Test User';
+
+    const CONFIRMATION_EXPIRES_AFTER = 48;
 
     protected function setUp(): void
     {
         parent::setUp();
-        Event::fake([NewsletterSubscriptionRequested::class]);
-        config(['newsletter.confirmation_expires_after' => 48]);
         $this->freezeTime();
-        $this->subscriber = array_merge(self::EMAIL, self::NAME);
-
+        config(['newsletter.confirmation_expires_after' => self::CONFIRMATION_EXPIRES_AFTER]);
+        Event::fake([NewsletterSubscriptionRequested::class]);
     }
 
     public function test_it_can_create_a_new_newsletter_subscription(): void
@@ -37,7 +33,10 @@ class NewsletterTest extends TestCase
 
         $response->assertStatus(200);
 
-        $this->assertDatabaseHas('newsletter_subscribers', $this->subscriber);
+        $this->assertDatabaseHas('newsletter_subscribers', [
+            'email' => self::EMAIL,
+            'name' => self::NAME,
+        ]);
 
         $subscriber = $this->getTestSubscriber();
 
@@ -49,28 +48,28 @@ class NewsletterTest extends TestCase
         Event::assertDispatched(NewsletterSubscriptionRequested::class);
     }
 
-    public function test_it_can_subscribe_without_a_name(): void
+    public function test_newsletter_subscriber_can_subscribe_without_a_name(): void
     {
         $this->post(route('newsletter.subscribe'), [
-            'email' => 'test@example.com',
+            'email' => self::EMAIL,
         ]);
 
         $this->assertDatabaseHas('newsletter_subscribers', [
-            'email' => 'test@example.com',
+            'email' => self::EMAIL,
             'name' => null,
         ]);
     }
 
-    public function test_it_dispatches_event_on_subscription(): void
+    public function test_newsletter_subscription_dispatches_event_on_subscription(): void
     {
         $this->createNewTestSubscriber();
 
         Event::assertDispatched(NewsletterSubscriptionRequested::class, function ($event) {
-            return $event->subscriber->email === self::EMAIL['email'];
+            return $event->subscriber->email === self::EMAIL;
         });
     }
 
-    public function test_it_can_confirm_a_newsletter_subscription(): void
+    public function test_newsletter_subscription_can_be_confirmed_with_valid_token(): void
     {
         $this->createNewTestSubscriber();
 
@@ -84,7 +83,7 @@ class NewsletterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('Newsletter/Confirmed')
                 ->has('title')
         );
@@ -94,14 +93,14 @@ class NewsletterTest extends TestCase
         $this->assertNull($subscriber->confirmation_expires_at);
     }
 
-    public function test_it_cannot_confirm_with_invalid_token(): void
+    public function test_newsletter_subscription_cannot_be_confirmed_with_invalid_token(): void
     {
         $response = $this->get(route('newsletter.confirm', 'ongeldige-token'));
 
         $response->assertStatus(404);
     }
 
-    public function test_it_cannot_confirm_with_expired_token(): void
+    public function test_newsletter_subscription_cannot_be_confirmed_with_expired_token(): void
     {
         $this->createNewTestSubscriber();
         $subscriber = $this->getTestSubscriber();
@@ -114,7 +113,7 @@ class NewsletterTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_it_cannot_confirm_if_already_confirmed(): void
+    public function test_newsletter_subscription_cannot_be_confirmed_if_already_confirmed(): void
     {
         $this->createNewTestSubscriber();
         $subscriber = $this->getTestSubscriber();
@@ -127,7 +126,7 @@ class NewsletterTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_it_can_unsubscribe_from_newsletter(): void
+    public function test_newsletter_subscriber_can_unsubscribe_from_newsletter(): void
     {
         $this->createNewTestSubscriber();
         $subscriber = $this->getTestSubscriber();
@@ -136,7 +135,7 @@ class NewsletterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('Newsletter/Unsubscribed')
                 ->has('title')
         );
@@ -147,14 +146,14 @@ class NewsletterTest extends TestCase
         $this->assertNull($subscriber->confirmed_at);
     }
 
-    public function test_it_cannot_unsubscribe_with_invalid_token(): void
+    public function test_newsletter_subscriber_cannot_unsubscribe_with_invalid_token(): void
     {
         $response = $this->get(route('newsletter.unsubscribe', 'ongeldige-token'));
 
         $response->assertStatus(404);
     }
 
-    public function test_it_cannot_unsubscribe_if_already_unsubscribed(): void
+    public function test_newsletter_subscriber_cannot_unsubscribe_if_already_unsubscribed(): void
     {
         $this->createNewTestSubscriber();
         $subscriber = $this->getTestSubscriber();
@@ -169,13 +168,13 @@ class NewsletterTest extends TestCase
         $response->assertStatus(404);
     }
 
-    public function test_it_sets_correct_expiry_date_on_subscription(): void
+    public function test_newsletter_subscription_sets_correct_expiry_date(): void
     {
         $this->createNewTestSubscriber();
 
         $subscriber = $this->getTestSubscriber();
 
-        $expectedExpiry = now()->addHours(48);
+        $expectedExpiry = now()->addHours(self::CONFIRMATION_EXPIRES_AFTER);
 
         $this->assertEquals(
             $expectedExpiry->timestamp,
@@ -185,7 +184,10 @@ class NewsletterTest extends TestCase
 
     private function createNewTestSubscriber(): TestResponse
     {
-        return $this->post(route('newsletter.subscribe'), $this->subscriber);
+        return $this->post(route('newsletter.subscribe'), [
+            'email' => self::EMAIL,
+            'name' => self::NAME,
+        ]);
     }
 
     private function getTestSubscriber(): NewsletterSubscriber
