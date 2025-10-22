@@ -13,18 +13,19 @@ class NewsletterTest extends TestCase
 {
     use RefreshDatabase;
 
-    private const EMAIL = 'test@example.com';
+    private string $email;
 
-    private const NAME = 'Test User';
+    private string $name;
 
     private const CONFIRMATION_EXPIRES_AFTER = 48;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->freezeTime();
         config(['newsletter.confirmation_expires_after' => self::CONFIRMATION_EXPIRES_AFTER]);
         Event::fake([NewsletterSubscriptionRequested::class]);
+        $this->email = fake()->email();
+        $this->name = fake()->name();
     }
 
     public function test_user_can_create_a_new_newsletter_subscription(): void
@@ -34,8 +35,8 @@ class NewsletterTest extends TestCase
         $response->assertStatus(200);
 
         $this->assertDatabaseHas('newsletter_subscribers', [
-            'email' => self::EMAIL,
-            'name' => self::NAME,
+            'email' => $this->email,
+            'name' => $this->name,
         ]);
 
         $subscriber = $this->getTestSubscriber();
@@ -59,11 +60,11 @@ class NewsletterTest extends TestCase
     public function test_newsletter_subscriber_can_subscribe_without_a_name(): void
     {
         $this->post(route('newsletter.subscribe'), [
-            'email' => self::EMAIL,
+            'email' => $this->email,
         ]);
 
         $this->assertDatabaseHas('newsletter_subscribers', [
-            'email' => self::EMAIL,
+            'email' => $this->email,
             'name' => null,
         ]);
     }
@@ -73,7 +74,7 @@ class NewsletterTest extends TestCase
         $this->createNewTestSubscriber();
 
         Event::assertDispatched(NewsletterSubscriptionRequested::class, function ($event) {
-            return $event->subscriber->email === self::EMAIL;
+            return $event->subscriber->email === $this->email;
         });
     }
 
@@ -91,7 +92,7 @@ class NewsletterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('Newsletter/Confirmed')
                 ->has('title')
         );
@@ -143,7 +144,7 @@ class NewsletterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn($page) => $page
+            fn ($page) => $page
                 ->component('Newsletter/Unsubscribed')
                 ->has('title')
         );
@@ -169,7 +170,7 @@ class NewsletterTest extends TestCase
         $subscriber->unsubscribed_at = now();
         $subscriber->save();
 
-        $subscriber = NewsletterSubscriber::where('email', self::EMAIL)->first();
+        $subscriber = NewsletterSubscriber::where('email', $this->email)->first();
 
         $response = $this->get(route('newsletter.unsubscribe', $subscriber->unsubscribe_token));
 
@@ -178,28 +179,29 @@ class NewsletterTest extends TestCase
 
     public function test_newsletter_subscription_sets_correct_expiry_date(): void
     {
-        $this->createNewTestSubscriber();
 
-        $subscriber = $this->getTestSubscriber();
+        $this->freezeTime(function () {
+            $expectedExpiry = now()->addHours(self::CONFIRMATION_EXPIRES_AFTER);
+            $this->createNewTestSubscriber();
+            $subscriber = $this->getTestSubscriber();
 
-        $expectedExpiry = now()->addHours(self::CONFIRMATION_EXPIRES_AFTER);
-
-        $this->assertTrue(
-            $subscriber->confirmation_expires_at->isSameSecond($expectedExpiry),
-            "Expected {$expectedExpiry}, got {$subscriber->confirmation_expires_at}"
-        );
+            $this->assertTrue(
+                $subscriber->confirmation_expires_at->isSameSecond($expectedExpiry),
+                "Expected {$expectedExpiry}, got {$subscriber->confirmation_expires_at}"
+            );
+        });
     }
 
     private function createNewTestSubscriber(): TestResponse
     {
         return $this->post(route('newsletter.subscribe'), [
-            'email' => self::EMAIL,
-            'name' => self::NAME,
+            'email' => $this->email,
+            'name' => $this->name,
         ]);
     }
 
     private function getTestSubscriber(): NewsletterSubscriber
     {
-        return NewsletterSubscriber::where('email', self::EMAIL)->first();
+        return NewsletterSubscriber::where('email', $this->email)->first();
     }
 }
