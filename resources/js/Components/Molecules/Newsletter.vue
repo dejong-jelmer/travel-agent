@@ -35,7 +35,6 @@
 import { ref } from "vue";
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
-import { nextTick } from 'vue'
 
 const honeypot = ref(null);
 const toast = useToast();
