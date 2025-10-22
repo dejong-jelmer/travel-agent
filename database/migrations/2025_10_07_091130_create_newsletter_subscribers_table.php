@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('email')->unique();
             $table->string('name')->nullable();
-            $table->string('token')->unique()->nullable();
-            $table->string('confirmation_token')->unique()->nullable();
+            $table->string('token', 64)->unique()->nullable();
+            $table->string('confirmation_token', 64)->unique()->nullable();
             $table->dateTime('confirmed_at')->nullable();
             $table->dateTime('confirmation_expires_at')->nullable();
-            $table->string('unsubscribe_token')->unique()->nullable();
+            $table->string('unsubscribe_token', 64)->unique()->nullable();
             $table->dateTime('subscribed_at');
             $table->dateTime('unsubscribed_at')->nullable();
             $table->timestamps();

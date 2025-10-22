@@ -45,7 +45,7 @@ const form = useForm({
     email: '',
 })
 
-function submit() {
+    function submit() {
     form.clearErrors()
     try {
         honeypot.value.validate()
@@ -58,9 +58,6 @@ function submit() {
                 nextTick(() => {
                     toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${email}.`)
                 })
-            },
-            onError: (errors) => {
-                console.error('Form errors:', errors)
             }
         })
     } catch (error) { }
