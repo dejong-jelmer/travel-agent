@@ -91,7 +91,7 @@ class NewsletterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn ($page) => $page
+            fn($page) => $page
                 ->component('Newsletter/Confirmed')
                 ->has('title')
         );
@@ -143,7 +143,7 @@ class NewsletterTest extends TestCase
 
         $response->assertStatus(200);
         $response->assertInertia(
-            fn ($page) => $page
+            fn($page) => $page
                 ->component('Newsletter/Unsubscribed')
                 ->has('title')
         );
@@ -184,9 +184,9 @@ class NewsletterTest extends TestCase
 
         $expectedExpiry = now()->addHours(self::CONFIRMATION_EXPIRES_AFTER);
 
-        $this->assertEquals(
-            $expectedExpiry->timestamp,
-            $subscriber->confirmation_expires_at->timestamp
+        $this->assertTrue(
+            $subscriber->confirmation_expires_at->isSameSecond($expectedExpiry),
+            "Expected {$expectedExpiry}, got {$subscriber->confirmation_expires_at}"
         );
     }
 

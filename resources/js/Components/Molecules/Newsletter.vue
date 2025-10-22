@@ -45,7 +45,7 @@ const form = useForm({
     email: '',
 })
 
-    function submit() {
+function submit() {
     form.clearErrors()
     try {
         honeypot.value.validate()
