@@ -13,11 +13,11 @@ class NewsletterTest extends TestCase
 {
     use RefreshDatabase;
 
-    const EMAIL = 'test@example.com';
+    private const EMAIL = 'test@example.com';
 
-    const NAME = 'Test User';
+    private const NAME = 'Test User';
 
-    const CONFIRMATION_EXPIRES_AFTER = 48;
+    private const CONFIRMATION_EXPIRES_AFTER = 48;
 
     protected function setUp(): void
     {
@@ -60,7 +60,7 @@ class NewsletterTest extends TestCase
         ]);
     }
 
-    public function test_newsletter_subscription_dispatches_event_on_subscription(): void
+    public function test_newsletter_subscription_dispatches_event(): void
     {
         $this->createNewTestSubscriber();
 

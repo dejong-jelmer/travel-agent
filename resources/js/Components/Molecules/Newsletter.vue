@@ -53,14 +53,14 @@ function submit() {
             preserveScroll: true,
             timeout: 10000,
             onSuccess: () => {
+                const email = form.email
                 form.reset()
                 nextTick(() => {
-                    toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${form.email}.`)
-                    form.reset()
+                    toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${email}.`)
                 })
             },
             onError: (errors) => {
-                // console.error('Form errors:', errors)
+                console.error('Form errors:', errors)
             }
         })
     } catch (error) { }
