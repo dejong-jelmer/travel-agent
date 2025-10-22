@@ -9,12 +9,12 @@ const showMoreOptions = reactive({});
 </script>
 <template>
     <Admin :links="products.links">
+        <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
+            <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Producten</h1>
+            <IconLink v-tippy="'Voeg een reisproduct toe'" icon="Add" type="info"
+                :href="route('admin.products.create')" />
+        </div>
         <template v-if="products.data.length > 0">
-            <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
-                <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Producten</h1>
-                <IconLink v-tippy="'Voeg een reisproduct toe'" icon="Add" type="info"
-                    :href="route('admin.products.create')" />
-            </div>
             <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
                 <table class="w-full border-collapse">
                     <thead>
@@ -28,8 +28,7 @@ const showMoreOptions = reactive({});
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
-                        <tr v-for="(product, index) in products.data" :key="index"
-                            class="hover:bg-gray-100 transition">
+                        <tr v-for="(product, index) in products.data" :key="index" class="hover:bg-gray-100 transition">
                             <td class="py-4 px-6 text-center">{{ product.id }}</td>
                             <td class="py-4 px-6 text-center">{{ product.name }}</td>
                             <td class="py-4 px-6 text-center">{{ product.countries_list }}</td>
@@ -64,7 +63,8 @@ const showMoreOptions = reactive({});
         </template>
         <template v-else>
             <div class="p-5">
-                <p>Er zijn nog geen reis producten.</p>
+                <p>Er zijn nog geen reis producten klik <DefaultLink :href="route('admin.products.create')">hier</DefaultLink> om een product toe te voegen.
+                </p>
             </div>
         </template>
     </Admin>
