@@ -55,9 +55,7 @@ function submit() {
             onSuccess: () => {
                 const email = form.email
                 form.reset()
-                nextTick(() => {
-                    toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${email}.`)
-                })
+                toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${email}.`)
             }
         })
     } catch (error) { }
