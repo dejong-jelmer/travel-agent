@@ -5,14 +5,12 @@ namespace App\Http\Controllers;
 use App\Events\NewsletterSubscriptionRequested;
 use App\Http\Requests\SubscribeNewsletterRequest;
 use App\Models\NewsletterSubscriber;
-use Exception;
-use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class NewsletterController extends Controller
 {
-    public function subscribe(SubscribeNewsletterRequest $request)
+    public function subscribe(SubscribeNewsletterRequest $request): void
     {
         $validated = $request->validated();
         $hours = config('newsletter.confirmation_expires_after');
@@ -37,21 +35,13 @@ class NewsletterController extends Controller
             ->where('confirmation_expires_at', '>=', now())
             ->firstOrFail();
 
-        try {
-            $subscriber->update([
-                'confirmation_expires_at' => null,
-                'confirmed_at' => now(),
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Newsletter confirmation failed', [
-                'subscriber_id' => $subscriber->id,
-                'error' => $e->getMessage()
-            ]);
-            abort(500, 'Unable to confirm newsletter subscription');
-        }
+        $subscriber->update([
+            'confirmation_expires_at' => null,
+            'confirmed_at' => now(),
+        ]);
 
         return Inertia::render('Newsletter/Confirmed', [
-            'title' => config('app.name') . ' - Nieuwsbrief inschrijving bevestigd',
+            'title' => config('app.name').' - Nieuwsbrief inschrijving bevestigd',
         ]);
     }
 
@@ -60,21 +50,13 @@ class NewsletterController extends Controller
         $subscriber = NewsletterSubscriber::where('unsubscribe_token', $token)
             ->whereNull('unsubscribed_at')
             ->firstOrFail();
-        try {
-            $subscriber->update([
-                'confirmed_at' => null,
-                'unsubscribed_at' => now(),
-            ]);
-        } catch (\Exception $e) {
-            Log::error('Newsletter unsubscribe failed', [
-                'subscriber_id' => $subscriber->id,
-                'error' => $e->getMessage()
-            ]);
-            abort(500, 'Unable to unsubscribe from newsletter subscription');
-        }
+        $subscriber->update([
+            'confirmed_at' => null,
+            'unsubscribed_at' => now(),
+        ]);
 
         return Inertia::render('Newsletter/Unsubscribed', [
-            'title' => config('app.name') . ' - Nieuwsbrief uitschrijving bevestigd',
+            'title' => config('app.name').' - Nieuwsbrief uitschrijving bevestigd',
         ]);
     }
 }

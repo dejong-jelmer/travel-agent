@@ -2,9 +2,12 @@
 
 use App\Http\Middleware\HandleInertiaRequests;
 use App\Http\Middleware\NoCache;
+use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\RateLimiter;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -21,6 +24,11 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'nocache' => NoCache::class,
         ]);
+    })
+    ->booted(function () {
+        RateLimiter::for('frontend-form-actions', function (Request $request) {
+            return Limit::perMinute(5)->by($request->ip());
+        });
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //

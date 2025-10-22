@@ -27,7 +27,7 @@ class NewsletterTest extends TestCase
         Event::fake([NewsletterSubscriptionRequested::class]);
     }
 
-    public function test_it_can_create_a_new_newsletter_subscription(): void
+    public function test_user_can_create_a_new_newsletter_subscription(): void
     {
         $response = $this->createNewTestSubscriber();
 
@@ -46,6 +46,14 @@ class NewsletterTest extends TestCase
         $this->assertNull($subscriber->unsubscribed_at);
 
         Event::assertDispatched(NewsletterSubscriptionRequested::class);
+    }
+
+    public function test_user_cannot_create_a_duplicate_newsletter_subscription(): void
+    {
+        $this->createNewTestSubscriber();
+        $response = $this->createNewTestSubscriber();
+
+        $response->assertStatus(302);
     }
 
     public function test_newsletter_subscriber_can_subscribe_without_a_name(): void
