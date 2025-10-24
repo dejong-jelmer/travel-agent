@@ -4,11 +4,10 @@ namespace App\Listeners;
 
 use App\Events\BookingCreated;
 use App\Mail\BookingConfirmationMail;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class SendBookingConfirmationEmail implements ShouldQueue
+class SendBookingConfirmationEmail
 {
     /**
      * Create the event listener.
@@ -37,9 +36,6 @@ class SendBookingConfirmationEmail implements ShouldQueue
                 'contact_email' => $event->booking->contact->email,
             ]);
             Log::error('Stack trace: '.$e->getTraceAsString());
-
-            // Re-throw to trigger queue failure handling
-            throw $e;
         }
     }
 

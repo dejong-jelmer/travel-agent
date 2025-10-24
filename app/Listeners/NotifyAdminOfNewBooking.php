@@ -4,11 +4,10 @@ namespace App\Listeners;
 
 use App\Events\BookingCreated;
 use App\Mail\AdminBookingNotificationMail;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class NotifyAdminOfNewBooking implements ShouldQueue
+class NotifyAdminOfNewBooking
 {
     /**
      * Create the event listener.
@@ -39,9 +38,6 @@ class NotifyAdminOfNewBooking implements ShouldQueue
                 'admin_email' => $address,
             ]);
             Log::error('Stack trace: '.$e->getTraceAsString());
-
-            // Re-throw to trigger queue failure handling
-            throw $e;
         }
     }
 
