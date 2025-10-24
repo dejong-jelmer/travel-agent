@@ -2,14 +2,14 @@
 
 namespace App\Mail;
 
-use App\DTO\ContactFormData;
+use App\Models\Booking;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ContactMail extends Mailable
+class AdminBookingNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,7 +17,7 @@ class ContactMail extends Mailable
      * Create a new message instance.
      */
     public function __construct(
-        public ContactFormData $contact
+        public Booking $booking
     ) {}
 
     /**
@@ -26,7 +26,7 @@ class ContactMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Contact Formulier',
+            subject: "🔔 Nieuwe Boeking: {$this->booking->product->name} - {$this->booking->reference}",
         );
     }
 
@@ -36,8 +36,7 @@ class ContactMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact',
-            with: ['contact' => $this->contact]
+            view: 'emails.admin.booking-notification'
         );
     }
 

@@ -2,28 +2,23 @@
 
 namespace App\Mail;
 
-use App\Models\Booking;
-use App\Models\Product;
+use App\DTO\ContactFormData;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class BookingMail extends Mailable
+class AdminContactFormNotificationMail extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public Product $product;
 
     /**
      * Create a new message instance.
      */
     public function __construct(
-        public Booking $booking
-    ) {
-        $this->product = $booking->product;
-    }
+        public ContactFormData $contact
+    ) {}
 
     /**
      * Get the message envelope.
@@ -31,7 +26,7 @@ class BookingMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Boeking: {$this->product->name}",
+            subject: '📧 Nieuw Contact Formulier Bericht',
         );
     }
 
@@ -41,7 +36,8 @@ class BookingMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.booking'
+            view: 'emails.admin.contact-form-notification',
+            with: ['contact' => $this->contact]
         );
     }
 
