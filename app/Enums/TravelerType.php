@@ -30,4 +30,12 @@ enum TravelerType: string
             default => Str::plural($this->value),
         };
     }
+
+    public function label(): string
+    {
+        return match ($this) {
+            self::Adult => 'Volwassene',
+            self::Child => 'Kind',
+        };
+    }
 }
