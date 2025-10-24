@@ -46,7 +46,7 @@
                 </p>
                 @if($booking->product->countries->isNotEmpty())
                 <p style="margin:0;font-size:14px;color:#6B8E7A;">
-                    📍 {{ $booking->product->countries->pluck('name')->join(', ') }}
+                    📍 {{ $booking->product->countriesList }}
                 </p>
                 @endif
             </td>
