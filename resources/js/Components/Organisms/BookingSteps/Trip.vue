@@ -22,26 +22,37 @@
 
         <hr class="border-secondary-sage/20">
 
-        <div class="grid grid-cols-3 gap-2">
+        <div class="grid grid-cols-3 gap-2 items-center">
             <p>Reis</p>
-            <p><strong>{{ booking.trip.name }}</strong></p>
-            <p class="ml-[150px]">Vanaf <strong>€ {{ booking.trip.price }},-</strong> p.p.</p>
+            <p class="text-center"><strong>{{ booking.trip.name }}</strong></p>
+            <p class="text-right">Vanaf <strong>€ {{ booking.trip.price }},-</strong> p.p.</p>
 
-            <p>Kies een datum voor vertrek</p>
+            <p>Kies een <strong>datum</strong> voor vertrek</p>
             <DatePicker v-model="departure_date" :min-date="new Date()" :feedback="booking.errors['departure_date']"
                 @mouseup="booking.clearErrors('departure_date')" />
-            <p></p>
+            <p class="text-right">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</p>
 
-            <p>Kies het aantal reizigers</p>
+            <p>Kies het <strong>aantal</strong> reizigers</p>
             <PersonPicker v-model="participants" />
-            <span></span>
+            <div class="text-right">
+                <p>Deelnemers:</p>
+                <div class="min-h-[3em]">
+                    <div>
+                        <p>{{ participantSummary.adults }} {{ participantSummary.adultLabel }}</p>
+                        <p v-if="participantSummary.children">{{ participantSummary.children }} {{
+                            participantSummary.childLabel }}</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
 </template>
 
 <script setup>
-import { toRef } from 'vue'
+import { toRef, computed } from 'vue'
+import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+const { formattedDate } = useDateFormatter();
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -50,5 +61,18 @@ const props = defineProps({
 
 const departure_date = toRef(props.booking, 'departure_date')
 const participants = toRef(props.booking, 'participants')
+
+const participantSummary = computed(() => {
+    const adults = props.booking.participants?.adults || 0;
+    const children = props.booking.participants?.children || 0;
+    return {
+        adults,
+        children,
+        adultLabel: children > 0
+            ? (adults === 1 ? 'volwassene' : 'volwassenen')
+            : (adults === 1 ? 'persoon' : 'personen'),
+        childLabel: children === 1 ? 'kind' : 'kinderen'
+    };
+});
 
 </script>

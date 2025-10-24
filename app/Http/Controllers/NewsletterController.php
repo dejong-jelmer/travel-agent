@@ -35,12 +35,10 @@ class NewsletterController extends Controller
             ->where('confirmation_expires_at', '>=', now())
             ->firstOrFail();
 
-        if (! $subscriber->update([
+        $subscriber->update([
             'confirmation_expires_at' => null,
             'confirmed_at' => now(),
-        ])) {
-            abort(404);
-        }
+        ]);
 
         return Inertia::render('Newsletter/Confirmed', [
             'title' => config('app.name').' - Nieuwsbrief inschrijving bevestigd',
@@ -52,13 +50,10 @@ class NewsletterController extends Controller
         $subscriber = NewsletterSubscriber::where('unsubscribe_token', $token)
             ->whereNull('unsubscribed_at')
             ->firstOrFail();
-
-        if (! $subscriber->update([
+        $subscriber->update([
             'confirmed_at' => null,
             'unsubscribed_at' => now(),
-        ])) {
-            abort(404);
-        }
+        ]);
 
         return Inertia::render('Newsletter/Unsubscribed', [
             'title' => config('app.name').' - Nieuwsbrief uitschrijving bevestigd',

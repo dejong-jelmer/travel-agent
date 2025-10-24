@@ -3,7 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\NewsletterSubscriptionRequested;
-use App\Mail\Newsletter\Confirmation;
+use App\Mail\NewsletterConfirmation;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -27,7 +27,7 @@ class SendNewsletterConfirmationEmail
 
         try {
             Mail::to($address)->send(
-                new Confirmation($subscriber)
+                new NewsletterConfirmation($subscriber)
             );
         } catch (\Throwable $e) {
             Log::error('Mail sending failed: '.$e->getMessage());

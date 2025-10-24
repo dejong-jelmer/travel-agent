@@ -17,12 +17,18 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact']);
-Route::post('/contact', [HomeController::class, 'submitContact'])->name('contact');
 Route::get('/privacybeleid', [HomeController::class, 'showPrivacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'showTerms'])->name('terms');
 
+// contact form
+Route::post('/contact', [HomeController::class, 'submitContact'])
+    ->middleware('throttle:frontend-form-actions')
+    ->name('contact');
+
 // Newsletter
-Route::post('/nieuwsbrief/aanmelden', [NewsletterController::class, 'subscribe'])->name('newsletter.subscribe');
+Route::post('/nieuwsbrief/aanmelden', [NewsletterController::class, 'subscribe'])
+    ->middleware('throttle:frontend-form-actions')
+    ->name('newsletter.subscribe');
 Route::get('/nieuwsbrief/bevestigen/{token}', [NewsletterController::class, 'confirm'])->name('newsletter.confirm');
 Route::get('/nieuwsbrief/afmelden/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
 
@@ -30,7 +36,9 @@ Route::get('/nieuwsbrief/afmelden/{token}', [NewsletterController::class, 'unsub
 Route::get('reizen/{trip:slug}', [HomeController::class, 'showTrip'])->name('trip.show');
 
 // Booking routes
-Route::post('/boekingen', [BookingController::class, 'store'])->name('bookings.store');
+Route::post('/boekingen', [BookingController::class, 'store'])
+    ->middleware('throttle:frontend-form-actions')
+    ->name('bookings.store');
 Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'confirmation'])->middleware('nocache')->name('bookings.confirmation');
 
 // Admin routes

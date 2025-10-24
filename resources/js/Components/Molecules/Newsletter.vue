@@ -35,7 +35,6 @@
 import { ref } from "vue";
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification";
-import { nextTick } from 'vue'
 
 const honeypot = ref(null);
 const toast = useToast();
@@ -53,14 +52,9 @@ function submit() {
             preserveScroll: true,
             timeout: 10000,
             onSuccess: () => {
+                const email = form.email
                 form.reset()
-                nextTick(() => {
-                    toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${form.email}.`)
-                    form.reset()
-                })
-            },
-            onError: (errors) => {
-                // console.error('Form errors:', errors)
+                toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${email}.`)
             }
         })
     } catch (error) { }

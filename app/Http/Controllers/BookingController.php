@@ -33,7 +33,13 @@ class BookingController extends Controller
 
         return Inertia::render('Trips/Confirmation', [
             'title' => "Boekingsbevestiging - {$booking->product->name}",
-            'booking' => $booking,
+            'booking' => $booking->load([
+                'product.countries',
+                'product.featuredImage',
+                'travelers',
+                'contact',
+                'mainBooker',
+            ]),
         ]);
     }
 }
