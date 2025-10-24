@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\DTO\ContactFormData;
 use App\Http\Requests\ContactRequest;
-use App\Mail\ContactMail;
+use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Product;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -56,10 +56,14 @@ class HomeController extends Controller
 
         try {
             Mail::to($address)->send(
-                new ContactMail($contact)
+                new AdminContactFormNotificationMail($contact)
             );
         } catch (\Throwable $e) {
-            Log::error('Mail sending failed: '.$e->getMessage());
+            Log::error('Contact form notification mail failed: '.$e->getMessage(), [
+                'contact_name' => $contact->name,
+                'contact_email' => $contact->email,
+                'admin_email' => $address,
+            ]);
             Log::error('Stack trace: '.$e->getTraceAsString());
         }
 

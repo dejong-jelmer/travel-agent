@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\Newsletter;
+namespace App\Mail;
 
 use App\Models\NewsletterSubscriber;
 use Illuminate\Bus\Queueable;
@@ -9,7 +9,7 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class Confirmation extends Mailable
+class NewsletterConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -37,7 +37,7 @@ class Confirmation extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.newsletter.confirmation',
+            view: 'emails.newsletter-confirmation',
         );
     }
 

@@ -1,6 +1,6 @@
 <script setup>
 import { ref, toRef, watch } from 'vue'
-import { UsersIcon, ChevronRightIcon, PhoneIcon, EnvelopeIcon } from '@heroicons/vue/24/outline'
+import { UsersIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { useBooking } from '@/Composables/useBooking.js'
 
 const props = defineProps({
@@ -251,18 +251,9 @@ const tabs = [
                                         <p class="text-sm text-secondary-stone text-center mt-4">
                                             Of neem contact op voor meer informatie
                                         </p>
-
                                         <div class="flex gap-3 mt-4">
-                                            <a href="#"
-                                                class="tel-field has-icon flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
-                                                <PhoneIcon class="w-4 h-4" />
-                                                Bellen
-                                            </a>
-                                            <a href="#"
-                                                class="email-field has-icon flex-1 bg-secondary-sage/10 hover:bg-secondary-sage/20 text-primary-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
-                                                <EnvelopeIcon class="w-4 h-4" />
-                                                E-mail
-                                            </a>
+                                            <CallButton />
+                                            <MailButton />
                                         </div>
                                     </div>
                                 </div>

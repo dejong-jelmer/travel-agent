@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Mail\ContactMail;
+use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Country;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -88,7 +88,7 @@ class HomeTest extends TestCase
         $response->assertStatus(200);
         $toAddress = config('contact.mail');
 
-        Mail::assertSent(ContactMail::class, function ($mail) use ($toAddress, $contactData) {
+        Mail::assertSent(AdminContactFormNotificationMail::class, function ($mail) use ($toAddress, $contactData) {
             return $mail->hasTo($toAddress) &&
                    $mail->contact->name === $contactData['name'] &&
                    $mail->contact->email === $contactData['email'] &&
