@@ -1,3 +1,31 @@
+<script setup>
+import { toRef, computed } from 'vue'
+import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+const { formattedDate } = useDateFormatter();
+
+const props = defineProps({
+    booking: { type: Object, required: true },
+    constraints: Object
+})
+
+const departure_date = toRef(props.booking, 'departure_date')
+const participants = toRef(props.booking, 'participants')
+
+const participantSummary = computed(() => {
+    const adults = props.booking.participants?.adults || 0;
+    const children = props.booking.participants?.children || 0;
+    return {
+        adults,
+        children,
+        adultLabel: children > 0
+            ? (adults === 1 ? 'volwassene' : 'volwassenen')
+            : (adults === 1 ? 'persoon' : 'personen'),
+        childLabel: children === 1 ? 'kind' : 'kinderen'
+    };
+});
+
+</script>
+
 <template>
     <div key="trip" class="space-y-4">
         <div class="space-y-2">
@@ -48,31 +76,3 @@
     </div>
 
 </template>
-
-<script setup>
-import { toRef, computed } from 'vue'
-import { useDateFormatter } from '@/Composables/useDateFormatter.js'
-const { formattedDate } = useDateFormatter();
-
-const props = defineProps({
-    booking: { type: Object, required: true },
-    constraints: Object
-})
-
-const departure_date = toRef(props.booking, 'departure_date')
-const participants = toRef(props.booking, 'participants')
-
-const participantSummary = computed(() => {
-    const adults = props.booking.participants?.adults || 0;
-    const children = props.booking.participants?.children || 0;
-    return {
-        adults,
-        children,
-        adultLabel: children > 0
-            ? (adults === 1 ? 'volwassene' : 'volwassenen')
-            : (adults === 1 ? 'persoon' : 'personen'),
-        childLabel: children === 1 ? 'kind' : 'kinderen'
-    };
-});
-
-</script>

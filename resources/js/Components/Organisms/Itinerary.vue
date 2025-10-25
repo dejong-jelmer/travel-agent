@@ -1,3 +1,18 @@
+<script>
+
+export default {
+    props: {
+        itinerary: {
+            type: Object
+        },
+        isAdmin: {
+            type: Boolean,
+            default: false
+        }
+    }
+}
+</script>
+
 <template>
     <div class="relative bg-white rounded-2xl shadow-lg overflow-hidden"
         :class="{ 'cursor-grab': isAdmin }">
@@ -42,18 +57,3 @@
         </div>
     </div>
 </template>
-
-<script>
-
-export default {
-    props: {
-        itinerary: {
-            type: Object
-        },
-        isAdmin: {
-            type: Boolean,
-            default: false
-        }
-    }
-}
-</script>

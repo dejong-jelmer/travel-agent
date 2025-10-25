@@ -1,3 +1,34 @@
+<script setup>
+import { ref } from "vue";
+import { useForm } from '@inertiajs/vue3'
+import { useToast } from "vue-toastification";
+
+const honeypot = ref(null);
+const toast = useToast();
+
+const form = useForm({
+    name: '',
+    email: '',
+})
+
+function submit() {
+    form.clearErrors()
+    try {
+        honeypot.value.validate()
+        form.post(route('newsletter.subscribe'), {
+            preserveScroll: true,
+            timeout: 10000,
+            onSuccess: () => {
+                const email = form.email
+                form.reset()
+                toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${email}.`)
+            }
+        })
+    } catch (error) { }
+}
+
+</script>
+
 <template>
     <div class="max-w-4xl mx-auto px-4 py-12 phone:px-6 laptop:px-8">
         <div class="bg-neutral-50 rounded-lg p-8 phone:p-10 laptop:p-12 border border-secondary-stone/20">
@@ -31,33 +62,3 @@
         </div>
     </div>
 </template>
-<script setup>
-import { ref } from "vue";
-import { useForm } from '@inertiajs/vue3'
-import { useToast } from "vue-toastification";
-
-const honeypot = ref(null);
-const toast = useToast();
-
-const form = useForm({
-    name: '',
-    email: '',
-})
-
-function submit() {
-    form.clearErrors()
-    try {
-        honeypot.value.validate()
-        form.post(route('newsletter.subscribe'), {
-            preserveScroll: true,
-            timeout: 10000,
-            onSuccess: () => {
-                const email = form.email
-                form.reset()
-                toast.success(`Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar ${email}.`)
-            }
-        })
-    } catch (error) { }
-}
-
-</script>

@@ -1,6 +1,4 @@
 <script setup>
-import Nav from '@/Components/Molecules/Nav.vue';
-import Topbar from '@/Components/Molecules/Topbar.vue';
 import { ref, onMounted, onUnmounted, computed } from 'vue'
 import { usePage } from "@inertiajs/vue3";
 

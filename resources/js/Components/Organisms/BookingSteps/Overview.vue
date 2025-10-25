@@ -1,3 +1,16 @@
+<script setup>
+import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
+import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+const { formattedDate } = useDateFormatter();
+
+const props = defineProps({
+    booking: {
+        type: Object,
+        required: true
+    }
+})
+</script>
+
 <template>
     <div key="overview" class="space-y-6">
         <h2 class="text-xl font-bold text-primary-dark">Bekijken & bevestigen</h2>
@@ -156,15 +169,3 @@
         </div>
     </div>
 </template>
-<script setup>
-import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
-import { useDateFormatter } from '@/Composables/useDateFormatter.js'
-const { formattedDate } = useDateFormatter();
-
-const props = defineProps({
-    booking: {
-        type: Object,
-        required: true
-    }
-})
-</script>

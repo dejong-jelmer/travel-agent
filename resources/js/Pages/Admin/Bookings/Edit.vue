@@ -1,3 +1,24 @@
+<script setup>
+import { useBooking } from '@/Composables/useBooking.js';
+
+const props = defineProps({
+    db_booking: Object,
+    required: true
+})
+
+const mainBookerIndex = props.db_booking.adults.findIndex((adult) => adult.id === props.db_booking.main_booker?.id)
+
+const { booking } = useBooking(
+    props.db_booking.product,
+    props.db_booking,
+    mainBookerIndex,
+)
+
+function submit() {
+    booking.put(route("admin.bookings.update", props.db_booking));
+}
+</script>
+
 <template>
     <Admin>
         <div class="max-w-7xl mx-auto grid gap-8">
@@ -57,23 +78,3 @@
     </Admin>
 
 </template>
-<script setup>
-import { useBooking } from '@/Composables/useBooking.js';
-
-const props = defineProps({
-    db_booking: Object,
-    required: true
-})
-
-const mainBookerIndex = props.db_booking.adults.findIndex((adult) => adult.id === props.db_booking.main_booker?.id)
-
-const { booking } = useBooking(
-    props.db_booking.product,
-    props.db_booking,
-    mainBookerIndex,
-)
-
-function submit() {
-    booking.put(route("admin.bookings.update", props.db_booking));
-}
-</script>

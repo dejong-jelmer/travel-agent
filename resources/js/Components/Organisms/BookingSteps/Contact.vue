@@ -1,3 +1,43 @@
+<script setup>
+import { User } from "lucide-vue-next";
+import { computed, toRef } from 'vue'
+
+const props = defineProps({
+    booking: { type: Object, required: true },
+})
+
+const contact = toRef(props.booking, 'contact')
+
+const formatBookerDetails = (booker) => {
+    return `${booker?.full_name} (${formatToDutchDate(parseDutchDate(booker?.birthdate))})`
+}
+
+const parseDutchDate = (dateString) => {
+
+    const [day, month, year] = dateString.split('-');
+    return new Date(year, month - 1, day);
+};
+
+const formatToDutchDate = (date) => {
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+};
+
+
+
+const bookerOptions = computed(() => {
+    if (!props.booking?.travelers?.adults) return []
+    return props.booking.travelers.adults.map((adult, index) => ({
+        label: formatBookerDetails(adult),
+        value: adult
+    }))
+})
+
+
+</script>
+
 <template>
     <div key="contact" class="space-y-6">
         <h2 class="text-xl font-bold text-primary-dark">Contactgegevens</h2>
@@ -49,43 +89,3 @@
     </div>
 
 </template>
-
-<script setup>
-import { User } from "lucide-vue-next";
-import { computed, toRef } from 'vue'
-
-const props = defineProps({
-    booking: { type: Object, required: true },
-})
-
-const contact = toRef(props.booking, 'contact')
-
-const formatBookerDetails = (booker) => {
-    return `${booker?.full_name} (${formatToDutchDate(parseDutchDate(booker?.birthdate))})`
-}
-
-const parseDutchDate = (dateString) => {
-
-    const [day, month, year] = dateString.split('-');
-    return new Date(year, month - 1, day);
-};
-
-const formatToDutchDate = (date) => {
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
-};
-
-
-
-const bookerOptions = computed(() => {
-    if (!props.booking?.travelers?.adults) return []
-    return props.booking.travelers.adults.map((adult, index) => ({
-        label: formatBookerDetails(adult),
-        value: adult
-    }))
-})
-
-
-</script>
