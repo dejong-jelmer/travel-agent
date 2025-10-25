@@ -1,14 +1,3 @@
-<template>
-    <div
-        class="bg-accent-gold text-white px-3 py-1.5 rounded-full shadow-lg"
-        :class="sizeClasses"
-    >
-        <p class="font-bold" :class="textSizeClass">
-            {{ prefix }} €{{ price }},-
-        </p>
-    </div>
-</template>
-
 <script setup>
 import { computed } from 'vue';
 
@@ -46,3 +35,14 @@ const textSizeClass = computed(() => {
     return textSizes[props.size];
 });
 </script>
+
+<template>
+    <div
+        class="bg-accent-gold text-white px-3 py-1.5 rounded-full shadow-lg"
+        :class="sizeClasses"
+    >
+        <p class="font-bold" :class="textSizeClass">
+            {{ prefix }} €{{ price }},-
+        </p>
+    </div>
+</template>

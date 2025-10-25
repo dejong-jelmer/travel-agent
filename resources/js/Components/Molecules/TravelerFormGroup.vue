@@ -1,3 +1,41 @@
+<script setup>
+import { onMounted } from 'vue';
+import { useDateFormatter } from '@/Composables/useDateFormatter.js';
+
+const { initializeBirthdate, formatBirthDateInput } = useDateFormatter();
+
+const props = defineProps({
+    traveler: {
+        type: Object,
+        required: true
+    },
+    index: {
+        type: Number,
+        required: true
+    },
+    label: {
+        type: String,
+        required: true
+    },
+    feedback: {
+        type: Object,
+        default: () => ({})
+    }
+});
+
+const emit = defineEmits(['clearError']);
+
+onMounted(() => {
+    props.traveler.birthdate = initializeBirthdate(props.traveler.birthdate);
+});
+
+const handleBirthdateInput = (event) => {
+    formatBirthDateInput(event, (formatted) => {
+        props.traveler.birthdate = formatted;
+    });
+};
+</script>
+
 <template>
     <div class="space-y-2 p-4 border rounded-lg">
         <p class="font-bold text-primary-default">{{ label }} {{ index + 1 }}</p>
@@ -54,41 +92,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { onMounted } from 'vue';
-import { useDateFormatter } from '@/Composables/useDateFormatter.js';
-
-const { initializeBirthdate, formatBirthDateInput } = useDateFormatter();
-
-const props = defineProps({
-    traveler: {
-        type: Object,
-        required: true
-    },
-    index: {
-        type: Number,
-        required: true
-    },
-    label: {
-        type: String,
-        required: true
-    },
-    feedback: {
-        type: Object,
-        default: () => ({})
-    }
-});
-
-const emit = defineEmits(['clearError']);
-
-onMounted(() => {
-    props.traveler.birthdate = initializeBirthdate(props.traveler.birthdate);
-});
-
-const handleBirthdateInput = (event) => {
-    formatBirthDateInput(event, (formatted) => {
-        props.traveler.birthdate = formatted;
-    });
-};
-</script>

@@ -1,3 +1,29 @@
+<script setup>
+import { ref } from 'vue';
+
+const props = defineProps({
+    title: {
+        type: String,
+        required: false
+    },
+    initiallyOpen: {
+        type: Boolean,
+        default: false
+    }
+});
+
+const isOpen = ref(props.initiallyOpen);
+
+const toggle = () => {
+    isOpen.value = !isOpen.value;
+};
+
+defineExpose({
+    toggle,
+    isOpen
+});
+</script>
+
 <template>
     <div class="border-b py-2">
         <button class="flex justify-between items-center w-full text-left" @click="toggle">
@@ -24,29 +50,3 @@
         </div>
     </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-
-const props = defineProps({
-    title: {
-        type: String,
-        required: false
-    },
-    initiallyOpen: {
-        type: Boolean,
-        default: false
-    }
-});
-
-const isOpen = ref(props.initiallyOpen);
-
-const toggle = () => {
-    isOpen.value = !isOpen.value;
-};
-
-defineExpose({
-    toggle,
-    isOpen
-});
-</script>

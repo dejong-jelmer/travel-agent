@@ -1,13 +1,3 @@
-<template>
-    <Link
-        :href="href"
-        :class="[linkClass, variant === 'desktop' ? desktopClasses : mobileClasses]"
-        @click="handleClick"
-    >
-        <slot>{{ label }}</slot>
-    </Link>
-</template>
-
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import { computed } from 'vue';
@@ -46,3 +36,13 @@ const handleClick = (event) => {
     emit('click', event);
 };
 </script>
+
+<template>
+    <Link
+        :href="href"
+        :class="[linkClass, variant === 'desktop' ? desktopClasses : mobileClasses]"
+        @click="handleClick"
+    >
+        <slot>{{ label }}</slot>
+    </Link>
+</template>

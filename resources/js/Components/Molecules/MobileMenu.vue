@@ -1,3 +1,29 @@
+<script setup>
+import { ref } from 'vue';
+
+const props = defineProps({
+    isScrolled: {
+        type: Boolean,
+        default: false
+    }
+});
+
+const isOpen = ref(false);
+
+const toggleMenu = () => {
+    isOpen.value = !isOpen.value;
+};
+
+const closeMenu = () => {
+    isOpen.value = false;
+};
+
+defineExpose({
+    isOpen,
+    closeMenu
+});
+</script>
+
 <template>
     <div>
         <!-- Mobile Menu Button -->
@@ -39,32 +65,6 @@
         </Transition>
     </div>
 </template>
-
-<script setup>
-import { ref } from 'vue';
-
-const props = defineProps({
-    isScrolled: {
-        type: Boolean,
-        default: false
-    }
-});
-
-const isOpen = ref(false);
-
-const toggleMenu = () => {
-    isOpen.value = !isOpen.value;
-};
-
-const closeMenu = () => {
-    isOpen.value = false;
-};
-
-defineExpose({
-    isOpen,
-    closeMenu
-});
-</script>
 
 <style scoped>
 .slide-down-enter-active {

@@ -1,11 +1,3 @@
-<template>
-    <div ref="sortableContainer">
-        <div v-for="block in localBlocks" :key="block.id" :data-id="block.id">
-            <slot :block="block" />
-        </div>
-    </div>
-</template>
-
 <script>
 import { ref, onMounted, watch } from "vue";
 import Sortable from "sortablejs";
@@ -54,3 +46,11 @@ export default {
     },
 };
 </script>
+
+<template>
+    <div ref="sortableContainer">
+        <div v-for="block in localBlocks" :key="block.id" :data-id="block.id">
+            <slot :block="block" />
+        </div>
+    </div>
+</template>
