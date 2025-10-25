@@ -12,13 +12,13 @@
                         :feedback="booking.errors[`travelers.${type}.${index}.last_name`]"
                         @keyup="booking.clearErrors(`travelers.${type}.${index}.last_name`)" />
 
-                    <Input type="text" name="birthdate[]" label="Geboorte datum" :showLabel="true" :required="true"
+                    <Input type="text" name="birthdate[]" label="Geboortedatum" :showLabel="true" :required="true"
                         v-model="traveler.birthdate" :placeholder="'DD-MM-JJJJ'"
                         :feedback="booking.errors[`travelers.${type}.${index}.birthdate`]"
                         @keyup="booking.clearErrors(`travelers.${type}.${index}.birthdate`)"
                         @input="handleBirthdateInput($event, index)" maxlength="10" />
 
-                    <Input type="text" name="nationality[]" label="Nationaliteit" :placeholder="'NL of BE'"
+                    <Input type="text" name="nationality[]" label="Nationaliteit" :placeholder="'Nationaliteit'"
                         :showLabel="true" :required="true" v-model="traveler.nationality"
                         :feedback="booking.errors[`travelers.${type}.${index}.nationality`]"
                         @keyup="booking.clearErrors(`travelers.${type}.${index}.nationality`)" />

@@ -6,8 +6,8 @@
         <div class="space-y-2 p-4 border rounded-lg">
             <div v-if="bookerOptions.length > 1" class="mb-5">
                 <div class="grid grid-cols-2 gap-6">
-                    <h2 class="text-base font-bold text-primary-dark">Wie wordt de hoofboeker?</h2>
-                    <h2 class="text-base font-bold text-primary-dark">Gekozen hoofboeker:</h2>
+                    <h2 class="text-base font-bold text-primary-dark">Wie wordt de hoofdboeker?</h2>
+                    <h2 class="text-base font-bold text-primary-dark">Gekozen hoofdboeker:</h2>
                     <RadioGroup v-model="booking.main_booker" name="main_booker" :options="bookerOptions" />
                     <p class="font-bold flex items-center border rounded-2xl p-6 bg-slate-50">
                         <User class="w-4 h-4 mr-2 text-secondary-stone" />
@@ -41,8 +41,8 @@
                     v-model="contact.phone" :feedback="booking.errors['contact.phone']" :placeholder="'Telefoonnummer'"
                     @keyup="booking.clearErrors('contact.phone')" />
 
-                <Input type="text" name="email" label="e-mail" :showLabel="true" :required="true"
-                    v-model="contact.email" :feedback="booking.errors['contact.email']" :placeholder="'@ e-mail adres'"
+                <Input type="text" name="email" label="E-mail" :showLabel="true" :required="true"
+                    v-model="contact.email" :feedback="booking.errors['contact.email']" :placeholder="'@ e-mailadres'"
                     @keyup="booking.clearErrors('contact.email')" />
             </div>
         </div>

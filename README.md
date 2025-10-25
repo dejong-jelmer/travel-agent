@@ -33,7 +33,6 @@ By offering curated, culturally rich train-based journeys, we aim to inspire tra
 | **Styling** | Tailwind CSS v3.4 (with custom theme & breakpoints) |
 | **Email** | Mailjet (via `mailjet/laravel-mailjet`) |
 | **CI/CD** | GitHub Actions |
-| **Deployment** | SFTP (bare-minimum Debian server, no Composer/NPM installed) |
 | **Build Tools** | Vite |
 
 ---
