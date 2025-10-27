@@ -1,20 +1,14 @@
 <script setup>
-import { useTypeWriter } from "@/Composables/useTypeWriter.js";
-import heroImage from '@/../images/hero-image.jpg'
+import heroImage from '@/../images/hero-image.jpg';
 
 const title = "Omdat we";
-const subtitle = [
+const subtitles = [
     "nooit uitgeleerd zijn",
     "altijd nieuwsgierig blijven",
     "ook oog hebben voor de toekomst",
     "verbonden zijn",
     "willen blijven ontdekken",
 ];
-function getRandomNumber(min, max) {
-    return Math.floor(Math.random() * (max - min)) + min;
-}
-
-const { output: typedText } = useTypeWriter(subtitle);
 </script>
 
 <template>
@@ -25,7 +19,7 @@ const { output: typedText } = useTypeWriter(subtitle);
                     class="text-4xl tablet:text-6xl font-normal leading-10 tablet:leading-[72px] font-elite select-none">
                     {{ title }}
                     <br>
-                    {{ typedText }}
+                    <TypewriterText :texts="subtitles" />
                 </h1>
             </div>
         </div>

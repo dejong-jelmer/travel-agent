@@ -36,7 +36,14 @@ onBeforeUnmount(() => {
 });
 </script>
 <template>
-    <transition name="fade">
+    <Transition
+        enter-active-class="transition-opacity duration-1000 ease-in-out"
+        leave-active-class="transition-opacity duration-1000 ease-in-out"
+        enter-from-class="opacity-0"
+        leave-to-class="opacity-0"
+        enter-to-class="opacity-50"
+        leave-from-class="opacity-50"
+    >
         <div
             ref="iconRef"
             v-if="!hasDraggedRef && showIcon"
@@ -44,22 +51,5 @@ onBeforeUnmount(() => {
         >
             <Swipe class="h-24 w-24 animate-wiggle-x" />
         </div>
-    </transition>
+    </Transition>
 </template>
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition-property: opacity;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 150ms;
-    transition-duration: 1000ms;
-}
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
-}
-.fade-enter-to,
-.fade-leave-from {
-    opacity: 0.5;
-}
-</style>

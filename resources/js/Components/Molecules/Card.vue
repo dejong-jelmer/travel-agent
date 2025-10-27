@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import Button from "@/Components/Atoms/Button.vue";
+import placehold from '@/../images/placehold.png';
 
 defineProps({ product: Object });
 </script>
@@ -10,14 +10,12 @@ defineProps({ product: Object });
         class="mx-auto bg-white rounded-xl shadow-sm select-none border border-neutral-200 hover:shadow-md transition-shadow duration-300">
         <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
             <Link :href="route('trip.show', product)">
-            <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 hover:scale-110"
-                :style="`background-image: url(${product.featured_image?.path})`"></div>
-            <!-- Prijs badge op de foto -->
-            <div class="absolute top-3 right-3 bg-accent-gold text-white px-3 py-1.5 rounded-full shadow-lg">
-                <p class="text-sm font-bold">
-                    Vanaf €{{ product.price }},-
-                </p>
-            </div>
+                <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 hover:scale-110"
+                    :style="`background-image: url(${product.featured_image?.path || placehold})`"></div>
+                <!-- Prijs badge op de foto -->
+                <div class="absolute top-3 right-3">
+                    <PriceBadge :price="product.price" />
+                </div>
             </Link>
         </div>
         <div class="py-5 px-8 space-y-3 text-left bg-neutral-50">

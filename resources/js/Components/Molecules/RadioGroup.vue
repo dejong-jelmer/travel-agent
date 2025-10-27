@@ -1,3 +1,22 @@
+<script setup>
+const props = defineProps({
+  modelValue: {
+    type: [String, Number, Boolean, Object],
+    required: true,
+  },
+  name: { type: String, required: true },
+  options: { type: Array, required: true },
+})
+
+const emit = defineEmits(["update:modelValue"])
+
+const isChecked = (val) => props.modelValue === val
+
+const updateValue = (val) => {
+  emit("update:modelValue", val)
+}
+</script>
+
 <template>
   <div class="flex flex-col gap-2">
     <label
@@ -31,22 +50,3 @@
     </label>
   </div>
 </template>
-
-<script setup>
-const props = defineProps({
-  modelValue: {
-    type: [String, Number, Boolean, Object],
-    required: true,
-  },
-  name: { type: String, required: true },
-  options: { type: Array, required: true },
-})
-
-const emit = defineEmits(["update:modelValue"])
-
-const isChecked = (val) => props.modelValue === val
-
-const updateValue = (val) => {
-  emit("update:modelValue", val)
-}
-</script>
