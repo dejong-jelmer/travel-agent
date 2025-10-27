@@ -36,7 +36,6 @@ defineExpose({
     <div>
         <!-- Mobile Menu Button -->
         <button @click="toggleMenu" aria-label="Toggle mobile menu" :aria-expanded="isOpen" aria-controls="mobile-menu"
-            class="tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10 flex items-center justify-center"
             :class="buttonClasses">
             <!-- Hamburger Icon -->
             <div class="w-6 h-6 relative flex items-center justify-center">

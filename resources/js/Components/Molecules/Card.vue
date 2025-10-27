@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import Button from "@/Components/Atoms/Button.vue";
+import palceholder from '@/../images/placehold.png';
 
 defineProps({ product: Object });
 </script>
@@ -11,7 +11,7 @@ defineProps({ product: Object });
         <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
             <Link :href="route('trip.show', product)">
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 hover:scale-110"
-                    :style="`background-image: url(${product.featured_image?.path})`"></div>
+                    :style="`background-image: url(${product.featured_image?.path || palceholder})`"></div>
                 <!-- Prijs badge op de foto -->
                 <div class="absolute top-3 right-3">
                     <PriceBadge :price="product.price" />
