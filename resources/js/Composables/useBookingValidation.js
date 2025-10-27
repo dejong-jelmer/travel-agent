@@ -1,26 +1,31 @@
 // Composables/useBookingValidation.js
+import { ref } from 'vue';
 import { useDateFormatter } from "@/Composables/useDateFormatter.js";
 import { emailRegex, phoneRegex, postalCodeRegex } from "@/validators/regex.js";
 const { isValidDate } = useDateFormatter();
 
-export const useBookingValidation = () => {
-    const validateTravelersStep = (bookingData) => {
+const DEFAULT_MIN_STRING_LENGTH = 3;
+const MIN_NATIONALITY_LENGTH = 2;
+
+export function useBookingValidation() {
+
+    function validateTravelersStep(bookingData) {
         const errors = {};
 
         if (!bookingData?.travelers) {
-            return { error: "No traveler data!" };
+            return errors;
         }
 
         for (const [type, travelers] of Object.entries(bookingData.travelers)) {
             travelers.forEach((traveler, index) => {
                 const basePath = `travelers.${type}.${index}`;
 
-                if ((traveler.first_name?.length || 0) < 3) {
+                if ((traveler.first_name?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
                     errors[`${basePath}.first_name`] =
                         "Voornaam is verplicht — anders kunnen we je ticket niet opmaken.";
                 }
 
-                if ((traveler.last_name?.length || 0) < 2) {
+                if ((traveler.last_name?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
                     errors[`${basePath}.last_name`] =
                         "Achternaam ontbreekt — we hebben deze nodig voor de boeking.";
                 }
@@ -30,7 +35,7 @@ export const useBookingValidation = () => {
                         "Vul een geldige geboortedatum in.";
                 }
 
-                if ((traveler.nationality?.length || 0) < 2) {
+                if ((traveler.nationality?.length || 0) < MIN_NATIONALITY_LENGTH) {
                     errors[`${basePath}.nationality`] =
                         "De nationaliteit ontbreekt — we hebben deze nodig voor de boeking.";
                 }
@@ -42,9 +47,13 @@ export const useBookingValidation = () => {
 
     function validateContactStep(bookingData) {
         const errors = {};
+
+        if (!bookingData?.contact) {
+            return errors;
+        }
         const { contact } = bookingData;
 
-        if ((contact.street?.length || 0) < 3) {
+        if ((contact.street?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
             errors["contact.street"] = "Vul een geldige straatnaam in.";
         }
 
@@ -56,7 +65,7 @@ export const useBookingValidation = () => {
             errors["contact.postal_code"] = "Vul een correcte postcode in.";
         }
 
-        if ((contact.city?.length || 0) < 3) {
+        if ((contact.city?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
             errors["contact.city"] = "Een plaatsnaam ontbreekt.";
         }
 
@@ -74,6 +83,10 @@ export const useBookingValidation = () => {
     function validateOverviewStep(bookingData) {
         const errors = {};
 
+        if (!bookingData) {
+            return errors;
+        }
+
         if (!bookingData.is_confirmed) {
             errors["is_confirmed"] = "Je moet nog akkoord gaan.";
         }
@@ -89,6 +102,10 @@ export const useBookingValidation = () => {
     function validateTripStep(bookingData) {
         const errors = {};
 
+        if (!bookingData) {
+            return errors;
+        }
+
         if (!bookingData.departure_date) {
             errors["departure_date"] = "Selecteer een vertrekdatum.";
         }
@@ -100,6 +117,6 @@ export const useBookingValidation = () => {
         validateTravelersStep,
         validateContactStep,
         validateOverviewStep,
-        validateTripStep
+        validateTripStep,
     };
-};
+}

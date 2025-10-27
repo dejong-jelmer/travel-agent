@@ -215,7 +215,7 @@ export function useBookingSteps(booking) {
         return true;
     }
 
-    // Computed: wich steps are clickable
+    // Computed: which steps are clickable
     const stepStates = computed(() => {
         const maxAllowed = getMaxAllowedStep();
 
