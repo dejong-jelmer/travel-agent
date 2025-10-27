@@ -114,7 +114,9 @@ function handleSubmit() {
             </div>
         </div>
         <div class="p-2 laptop:p-4 min-h-[400px]">
-            <Transition name="fade" mode="out-in">
+            <Transition mode="out-in" enter-active-class="transition duration-200 ease"
+                leave-active-class="transition duration-200 ease" enter-from-class="opacity-0 translate-x-[10px]"
+                leave-to-class="opacity-0 -translate-x-[10px]">
                 <component :is="currentStepComponent" :booking="booking" :constraints="constraints"
                     v-bind="currentStep.props" />
             </Transition>
@@ -132,8 +134,7 @@ function handleSubmit() {
                 Volgende
             </button>
 
-            <button v-else type="button"
-                v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
+            <button v-else type="button" v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
                 class="px-6 py-2 rounded-xl flex items-center gap-2 bg-accent-earth text-primary-dark font-medium hover:bg-accent-terracotta hover:text-neutral-25 transition-all disabled:hover:text-primary-dark disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
                 <Spinner v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
@@ -142,20 +143,3 @@ function handleSubmit() {
         </div>
     </div>
 </template>
-
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
-
-.fade-enter-from {
-    opacity: 0;
-    transform: translateX(10px);
-}
-
-.fade-leave-to {
-    opacity: 0;
-    transform: translateX(-10px);
-}
-</style>
