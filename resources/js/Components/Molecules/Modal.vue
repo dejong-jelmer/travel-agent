@@ -16,8 +16,8 @@ const emitClose = () => {
 <template>
     <Transition
         name="modal-fade"
-        enter-active-class="transition duration-250"
-        leave-active-class="transition duration-250"
+        enter-active-class="transition duration-200"
+        leave-active-class="transition duration-200"
         enter-from-class="opacity-0"
         leave-from-class="opacity-0"
         >
@@ -28,8 +28,8 @@ const emitClose = () => {
 
             <Transition
                 name="modal-scale"
-                enter-active-class="transition duration-250"
-                leave-active-class="transition duration-250"
+                enter-active-class="transition duration-200"
+                leave-active-class="transition duration-200"
                 enter-from-class="opacity-0 scale-95"
                 leave-from-class="opacity-0 scale-95"
                 >

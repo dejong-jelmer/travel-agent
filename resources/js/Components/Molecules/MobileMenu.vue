@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
     isScrolled: {
@@ -18,6 +18,14 @@ const closeMenu = () => {
     isOpen.value = false;
 };
 
+const buttonClasses = computed(() => [
+    'tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10',
+    props.isScrolled
+        ? 'border-accent-gold text-white hover:bg-accent-gold/20'
+        : 'border-white text-white hover:bg-white/20 backdrop-blur-sm',
+    { 'bg-accent-gold/20': isOpen.value }
+]);
+
 defineExpose({
     isOpen,
     closeMenu
@@ -29,12 +37,7 @@ defineExpose({
         <!-- Mobile Menu Button -->
         <button @click="toggleMenu"
             class="tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10 flex items-center justify-center"
-            :class="[
-                isScrolled
-                    ? 'border-accent-gold text-white hover:bg-accent-gold/20'
-                    : 'border-white text-white hover:bg-white/20 backdrop-blur-sm',
-                { 'bg-accent-gold/20': isOpen }
-            ]">
+            :class="buttonClasses">
             <!-- Hamburger Icon -->
             <div class="w-6 h-6 relative flex items-center justify-center">
                 <span class="absolute w-5 h-0.5 bg-current transition-all duration-300 transform origin-center"
