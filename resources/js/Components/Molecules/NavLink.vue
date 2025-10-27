@@ -9,7 +9,7 @@ const props = defineProps({
     },
     label: {
         type: String,
-        required: false
+        required: true
     },
     variant: {
         type: String,

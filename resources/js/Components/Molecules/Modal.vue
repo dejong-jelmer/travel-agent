@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted, onUnmounted } from 'vue';
 
 const props = defineProps({
     open: {
@@ -6,6 +7,15 @@ const props = defineProps({
         required: true,
     },
 });
+
+const handleEscape = (e) => {
+    if (e.key === 'Escape' && props.open) {
+        emitClose();
+    }
+};
+
+onMounted(() => document.addEventListener('keydown', handleEscape));
+onUnmounted(() => document.removeEventListener('keydown', handleEscape));
 
 const emit = defineEmits(["close"]);
 
@@ -19,7 +29,7 @@ const emitClose = () => {
         enter-active-class="transition duration-200"
         leave-active-class="transition duration-200"
         enter-from-class="opacity-0"
-        leave-from-class="opacity-0"
+        leave-to-class="opacity-0"
         >
         <div v-if="open" class="fixed inset-0 z-50 flex items-center justify-center p-4">
 
@@ -31,7 +41,7 @@ const emitClose = () => {
                 enter-active-class="transition duration-200"
                 leave-active-class="transition duration-200"
                 enter-from-class="opacity-0 scale-95"
-                leave-from-class="opacity-0 scale-95"
+                leave-to-class="opacity-0 scale-95"
                 >
                 <div v-if="open"
                     class="relative w-full max-w-5xl max-h-[90vh] bg-white shadow-xl rounded-2xl p-8 overflow-y-auto">

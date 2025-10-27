@@ -37,9 +37,7 @@ defineExpose({
                 <DownLine
                     :class="isOpen ? 'rotate-180' : ''"
                     class="w-4 h-4 transform transition-transform"
-                >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                </DownLine>
+                 />
             </span>
         </button>
 
