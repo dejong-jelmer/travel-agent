@@ -23,12 +23,11 @@ const props = defineProps({
 });
 
 const variants = {
-    desktop: 'px-4 py-2 text-sm laptop:text-base font-semibold...',
-    mobile: 'block px-6 py-3 text-primary-dark...'
+    desktop: 'px-4 py-2 text-sm laptop:text-base font-semibold text-center rounded-lg border-2 border-transparent hover:border-accent-gold transform hover:scale-105 transition-all duration-300 ease-out shadow-sm hover:shadow-md',
+    mobile: 'block px-6 py-3 text-primary-dark hover:bg-secondary-sage hover:text-white transition-colors duration-200 font-medium'
 };
 
 const baseClass = computed(() => variants[props.variant]);
-
 
 const emit = defineEmits(['click']);
 
