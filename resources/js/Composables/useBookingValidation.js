@@ -1,5 +1,4 @@
 // Composables/useBookingValidation.js
-import { ref } from 'vue';
 import { useDateFormatter } from "@/Composables/useDateFormatter.js";
 import { emailRegex, phoneRegex, postalCodeRegex } from "@/validators/regex.js";
 const { isValidDate } = useDateFormatter();
@@ -8,36 +7,44 @@ const DEFAULT_MIN_STRING_LENGTH = 3;
 const MIN_NATIONALITY_LENGTH = 2;
 
 export function useBookingValidation() {
-
     function validateTravelersStep(bookingData) {
         const errors = {};
 
         if (!bookingData?.travelers) {
-            return errors;
+            return { errors: "Reizigersgegevens ontbreken" };
         }
 
         for (const [type, travelers] of Object.entries(bookingData.travelers)) {
             travelers.forEach((traveler, index) => {
                 const basePath = `travelers.${type}.${index}`;
 
-                if ((traveler.first_name?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
+                if (!traveler.first_name || traveler.first_name.trim() === "") {
                     errors[`${basePath}.first_name`] =
-                        "Voornaam is verplicht — anders kunnen we je ticket niet opmaken.";
+                        "Voornaam ontbreekt — anders kunnen we je ticket niet opmaken.";
+                } else if (traveler.first_name.length < DEFAULT_MIN_STRING_LENGTH) {
+                    errors[`${basePath}.first_name`] =
+                        `Voornaam is te kort — vul minimaal ${DEFAULT_MIN_STRING_LENGTH} tekens in.`;
                 }
 
-                if ((traveler.last_name?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
+                if (!traveler.last_name || traveler.last_name.trim() === "") {
                     errors[`${basePath}.last_name`] =
                         "Achternaam ontbreekt — we hebben deze nodig voor de boeking.";
+                } else if (traveler.last_name.length < DEFAULT_MIN_STRING_LENGTH) {
+                    errors[`${basePath}.last_name`] =
+                        `Achternaam is te kort — vul minimaal ${DEFAULT_MIN_STRING_LENGTH} tekens in.`;
                 }
 
-                if (!isValidDate(traveler.birthdate)) {
+                if (!traveler.birthdate || !isValidDate(traveler.birthdate)) {
                     errors[`${basePath}.birthdate`] =
                         "Vul een geldige geboortedatum in.";
                 }
 
-                if ((traveler.nationality?.length || 0) < MIN_NATIONALITY_LENGTH) {
+                if (!traveler.nationality || traveler.nationality.trim() === "") {
                     errors[`${basePath}.nationality`] =
                         "De nationaliteit ontbreekt — we hebben deze nodig voor de boeking.";
+                } else if (traveler.nationality.length < MIN_NATIONALITY_LENGTH) {
+                    errors[`${basePath}.nationality`] =
+                        `Nationaliteit is te kort — vul minimaal ${MIN_NATIONALITY_LENGTH} tekens in.`;
                 }
             });
         }
@@ -49,32 +56,46 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData?.contact) {
-            return errors;
+            return { errors: "Contactgegevens ontbreken" };
         }
+
         const { contact } = bookingData;
+        const houseNumber = Number(contact.house_number);
 
-        if ((contact.street?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
-            errors["contact.street"] = "Vul een geldige straatnaam in.";
+        if (!contact.street || contact.street.trim() === "") {
+            errors["contact.street"] = "Straatnaam ontbreekt.";
+        } else if (contact.street.length < DEFAULT_MIN_STRING_LENGTH) {
+            errors["contact.street"] = `Straatnaam is te kort — vul minimaal ${DEFAULT_MIN_STRING_LENGTH} tekens in.`;
         }
 
-        if ((contact.house_number || 0) <= 0) {
+        if (!contact.house_number || contact.house_number.toString().trim() === "") {
             errors["contact.house_number"] = "Huisnummer ontbreekt.";
+        } else if (!houseNumber || houseNumber <= 0) {
+            errors["contact.house_number"] = "Huisnummer moet groter zijn dan 0.";
         }
 
-        if (!postalCodeRegex.test(contact.postal_code)) {
-            errors["contact.postal_code"] = "Vul een correcte postcode in.";
+        if (!contact.postal_code || contact.postal_code.trim() === "") {
+            errors["contact.postal_code"] = "Postcode ontbreekt.";
+        } else if (!postalCodeRegex.test(contact.postal_code)) {
+            errors["contact.postal_code"] = "Postcode is ongeldig — gebruik het formaat 1234AB.";
         }
 
-        if ((contact.city?.length || 0) < DEFAULT_MIN_STRING_LENGTH) {
-            errors["contact.city"] = "Een plaatsnaam ontbreekt.";
+        if (!contact.city || contact.city.trim() === "") {
+            errors["contact.city"] = "Plaatsnaam ontbreekt.";
+        } else if (contact.city.length < DEFAULT_MIN_STRING_LENGTH) {
+            errors["contact.city"] = `Plaatsnaam is te kort — vul minimaal ${DEFAULT_MIN_STRING_LENGTH} tekens in.`;
         }
 
-        if (!emailRegex.test(contact.email)) {
-            errors["contact.email"] = "Vul een geldig e-mailadres in.";
+        if (!contact.email || contact.email.trim() === "") {
+            errors["contact.email"] = "E-mailadres ontbreekt.";
+        } else if (!emailRegex.test(contact.email)) {
+            errors["contact.email"] = "E-mailadres is ongeldig.";
         }
 
-        if (!phoneRegex.test(contact.phone)) {
-            errors["contact.phone"] = "Vul een geldig telefoonnummer in.";
+        if (!contact.phone || contact.phone.trim() === "") {
+            errors["contact.phone"] = "Telefoonnummer ontbreekt.";
+        } else if (!phoneRegex.test(contact.phone)) {
+            errors["contact.phone"] = "Telefoonnummer is ongeldig.";
         }
 
         return errors;
@@ -84,7 +105,7 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData) {
-            return errors;
+            return { errors: "Booking data ontbreekt" };
         }
 
         if (!bookingData.is_confirmed) {
@@ -103,7 +124,7 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData) {
-            return errors;
+            return { errors: "Boeking data ontbreekt" };
         }
 
         if (!bookingData.departure_date) {
