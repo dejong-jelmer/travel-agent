@@ -14,19 +14,8 @@ const handleEscape = (e) => {
     }
 };
 
-onMounted(() => {
-    if (!isListenerAttached) {
-        document.addEventListener('keydown', handleEscape);
-        isListenerAttached = true;
-    }
-});
-
-onUnmounted(() => {
-    if (isListenerAttached) {
-        document.removeEventListener('keydown', handleEscape);
-        isListenerAttached = false;
-    }
-});
+onMounted(() => document.addEventListener('keydown', handleEscape));
+onUnmounted(() => document.removeEventListener('keydown', handleEscape));
 
 const emit = defineEmits(["close"]);
 
