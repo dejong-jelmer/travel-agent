@@ -36,14 +36,15 @@ const ERROR_MESSAGES = {
     MISSING_DEPARTURE_DATE: "Kies een vertrekdatum.",
     MISSING_CONFIRMATION: "Je moet nog akkoord gaan.",
     MISSING_ACCEPTED_CONDITIONS:
-        "Je moet nog akkoord gaan met de algemene voorwaarden.",
+    "Je moet nog akkoord gaan met de algemene voorwaarden.",
     TOO_SHORT: "{field} is te kort — vul minimaal {min} tekens in.",
     TOO_LONG: `{field} is te lang vul maximaal {max} tekens in.`,
     INVALID: "{field} is ongeldig - voer een geldige waarde in.",
     INVALID_POSTAL_CODE: "{field} is ongeldig — gebruik het formaat 1234AB.",
     INVALID_BIRTHDATE: "Vul een geldige geboortedatum in.",
     INVALID_HOUSE_NUMBER:
-        "Het huisnummer moet een geldig getal groter dan 0 zijn.",
+    "Het huisnummer moet een geldig getal groter dan 0 zijn.",
+    INVALID_TRAVELER_DATA: "Reizigersgegevens zijn ongeldig.",
 };
 
 /**
@@ -98,6 +99,10 @@ export function useBookingValidation() {
         for (const [type, travelers] of Object.entries(bookingData.travelers)) {
             travelers.forEach((traveler, index) => {
                 const basePath = `travelers.${type}.${index}`;
+                if (!traveler || typeof traveler !== 'object') {
+                    errors[`${basePath}`] = ERROR_MESSAGES.INVALID_TRAVELER_DATA;
+                    return;
+                }
                 const firstNameError = validateStringField(
                     traveler.first_name,
                     FIELD_NAMES.FIRST_NAME,
