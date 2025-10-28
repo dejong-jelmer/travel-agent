@@ -20,56 +20,47 @@ const DEFAULT_MIN_STRING_LENGTH = 3;
 /** Minimum length for nationality field (2-letter country codes) */
 const MIN_NATIONALITY_LENGTH = 2;
 
-/**
- * Array of random reasons shown when traveler fields are missing.
- * Adds variety to error messages to make the form feel more human.
- * @constant {string[]}
- */
-const MISSING_REASONS_TRAVELER = [
-    "anders kunnen we je ticket niet opmaken",
-    "deze hebben we nodig voor je boeking",
-    "dit veld is verplicht voor de reservering",
-    "zonder deze informatie kunnen we niet verder",
-    "deze gegevens zijn noodzakelijk",
-];
-
-/**
- * Returns a random reason from MISSING_REASONS_TRAVELER array.
- * Used to generate varied error messages for missing traveler fields.
- *
- * @returns {string} A random missing field reason
- */
-function getRandomMissingReason() {
-    const randomIndex = Math.floor(
-        Math.random() * MISSING_REASONS_TRAVELER.length
-    );
-    return MISSING_REASONS_TRAVELER[randomIndex];
-}
+/** Maximum length for most string fields */
+const DEFAULT_MAX_STRING_LENGTH = 255;
 
 /**
  * Error message templates for traveler validation.
- * MISSING is a function to generate random messages on each call.
  *
  * @constant {Object}
- * @property {Function} MISSING - Returns error message with random reason
- * @property {string} TOO_SHORT - Template for too short field errors
  */
-const ERROR_MESSAGES_TRAVELER = {
-    MISSING: () => `{field} ontbreekt — ${getRandomMissingReason()}.`,
+const ERROR_MESSAGES = {
+    MISSING: "{field} ontbreekt — deze hebben we nodig voor je boeking.",
+    MISSING_TRAVELER_DATA: "Reizigersgegevens ontbreken.",
+    MISSING_CONTACT_DATA: "Contactgegevens ontbreken.",
+    MISSING_BOOKING_DATA: "Boekinggegevens ontbreken.",
+    MISSING_DEPARTURE_DATE: "Kies een vertrekdatum.",
+    MISSING_CONFIRMATION: "Je moet nog akkoord gaan.",
+    MISSING_ACCEPTED_CONDITIONS:
+        "Je moet nog akkoord gaan met de algemene voorwaarden.",
     TOO_SHORT: "{field} is te kort — vul minimaal {min} tekens in.",
+    TOO_LONG: `{field} is te lang vul maximaal {max} tekens in.`,
+    INVALID: "{field} is ongeldig - voer een geldige waarde in.",
+    INVALID_POSTAL_CODE: "{field} is ongeldig — gebruik het formaat 1234AB.",
+    INVALID_BIRTHDATE: "Vul een geldige geboortedatum in.",
+    INVALID_HOUSE_NUMBER:
+        "Het huisnummer moet een geldig getal groter dan 0 zijn.",
 };
 
 /**
- * Error message templates for contact validation.
- * Uses simpler messages without random variations.
+ * Fieldnames templates.
  *
  * @constant {Object}
- * @property {string} MISSING - Template for missing field errors
- * @property {string} TOO_SHORT - Template for too short field errors
  */
-const ERROR_MESSAGES_CONTACT = {
-    MISSING: "{field} ontbreekt.",
-    TOO_SHORT: "{field} is te kort — vul minimaal {min} tekens in.",
+const FIELD_NAMES = {
+    FIRST_NAME: "Voornaam",
+    LAST_NAME: "Achternaam",
+    NATIONALITY: "Nationaliteit",
+    STREET_NAME: "Straatnaam",
+    HOUSE_NUMBER: "Huisnummer",
+    POSTAL_CODE: "Postcode",
+    CITY: "Plaatsnaam",
+    EMAIL: "E-mail adres",
+    PHONE: "Telefoonnummer",
 };
 
 /**
@@ -93,23 +84,15 @@ export function useBookingValidation() {
      *
      * Checks first name, last name, birthdate, and nationality for each traveler.
      * Travelers are grouped by type (e.g., adults, children) and validated individually.
-     * Uses random error messages for missing fields to create a more engaging UX.
      *
      * @param {Object} bookingData - The booking data object
-     * @param {Object} bookingData.travelers - Travelers grouped by type (e.g., {adults: [...], children: [...]})
-     * @param {Array} bookingData.travelers[type] - Array of traveler objects for each type
-     * @param {string} bookingData.travelers[type][].first_name - Traveler's first name
-     * @param {string} bookingData.travelers[type][].last_name - Traveler's last name
-     * @param {string} bookingData.travelers[type][].birthdate - Traveler's birthdate (validated via isValidDate)
-     * @param {string} bookingData.travelers[type][].nationality - Traveler's nationality (min 2 chars)
-     *
      * @returns {Object} Errors object with field paths as keys (e.g., "travelers.adults.0.first_name") and error messages as values
      */
     function validateTravelersStep(bookingData) {
         const errors = {};
 
         if (!bookingData?.travelers) {
-            return { errors: "Reizigersgegevens ontbreken" };
+            return { travelers: ERROR_MESSAGES.MISSING_TRAVELER_DATA };
         }
 
         for (const [type, travelers] of Object.entries(bookingData.travelers)) {
@@ -117,35 +100,35 @@ export function useBookingValidation() {
                 const basePath = `travelers.${type}.${index}`;
                 const firstNameError = validateStringField(
                     traveler.first_name,
-                    "Voornaam",
+                    FIELD_NAMES.FIRST_NAME,
                     DEFAULT_MIN_STRING_LENGTH,
-                    ERROR_MESSAGES_TRAVELER.MISSING(),
-                    ERROR_MESSAGES_TRAVELER.TOO_SHORT
+                    ERROR_MESSAGES.MISSING,
+                    ERROR_MESSAGES.TOO_SHORT
                 );
                 if (firstNameError)
                     errors[`${basePath}.first_name`] = firstNameError;
 
                 const lastNameError = validateStringField(
                     traveler.last_name,
-                    "Achternaam",
+                    FIELD_NAMES.LAST_NAME,
                     DEFAULT_MIN_STRING_LENGTH,
-                    ERROR_MESSAGES_TRAVELER.MISSING(),
-                    ERROR_MESSAGES_TRAVELER.TOO_SHORT
+                    ERROR_MESSAGES.MISSING,
+                    ERROR_MESSAGES.TOO_SHORT
                 );
                 if (lastNameError)
                     errors[`${basePath}.last_name`] = lastNameError;
 
                 if (!traveler.birthdate || !isValidDate(traveler.birthdate)) {
                     errors[`${basePath}.birthdate`] =
-                        "Vul een geldige geboortedatum in.";
+                        ERROR_MESSAGES.INVALID_BIRTHDATE;
                 }
 
                 const nationalityError = validateStringField(
                     traveler.nationality,
-                    "Nationaliteit",
+                    FIELD_NAMES.NATIONALITY,
                     MIN_NATIONALITY_LENGTH,
-                    ERROR_MESSAGES_TRAVELER.MISSING(),
-                    ERROR_MESSAGES_TRAVELER.TOO_SHORT
+                    ERROR_MESSAGES.MISSING,
+                    ERROR_MESSAGES.TOO_SHORT
                 );
                 if (nationalityError)
                     errors[`${basePath}.nationality`] = nationalityError;
@@ -158,26 +141,16 @@ export function useBookingValidation() {
     /**
      * Validates contact information for the booking.
      *
-     * Validates all required contact fields including street address, house number,
-     * postal code, city, email, and phone number. Uses regex patterns for
-     * postal code, email, and phone validation.
+     * Validates all required contact fields including street address, house number
      *
      * @param {Object} bookingData - The booking data object
-     * @param {Object} bookingData.contact - Contact information object
-     * @param {string} bookingData.contact.street - Street name (min 3 chars)
-     * @param {string|number} bookingData.contact.house_number - House number (must be > 0)
-     * @param {string} bookingData.contact.postal_code - Postal code (format: 1234AB)
-     * @param {string} bookingData.contact.city - City name (min 3 chars)
-     * @param {string} bookingData.contact.email - Email address (validated via regex)
-     * @param {string} bookingData.contact.phone - Phone number (validated via regex)
-     *
      * @returns {Object} Errors object with field paths as keys (e.g., "contact.email") and error messages as values
      */
     function validateContactStep(bookingData) {
         const errors = {};
 
         if (!bookingData?.contact) {
-            return { errors: "Contactgegevens ontbreken" };
+            return { contact: ERROR_MESSAGES.MISSING_CONTACT_DATA };
         }
 
         const { contact } = bookingData;
@@ -185,46 +158,57 @@ export function useBookingValidation() {
 
         const streetError = validateStringField(
             contact.street,
-            "Straatnaam",
+            FIELD_NAMES.STREET_NAME,
             DEFAULT_MIN_STRING_LENGTH,
-            ERROR_MESSAGES_CONTACT.MISSING,
-            ERROR_MESSAGES_CONTACT.TOO_SHORT
+            ERROR_MESSAGES.MISSING,
+            ERROR_MESSAGES.TOO_SHORT
         );
         if (streetError) errors["contact.street"] = streetError;
 
         if (isNaN(houseNumber) || houseNumber <= 0) {
             errors["contact.house_number"] =
-                "Het huisnummer moet een geldig getal groter dan 0 zijn.";
+                ERROR_MESSAGES.INVALID_HOUSE_NUMBER;
         }
 
-        if (!contact.postal_code || contact.postal_code.trim() === "") {
-            errors["contact.postal_code"] = "Postcode ontbreekt.";
-        } else if (!postalCodeRegex.test(contact.postal_code)) {
-            errors["contact.postal_code"] =
-                "Postcode is ongeldig — gebruik het formaat 1234AB.";
-        }
+        const postalCodeError = validateRegexField(
+            contact.postal_code,
+            FIELD_NAMES.POSTAL_CODE,
+            postalCodeRegex,
+            ERROR_MESSAGES.MISSING,
+            ERROR_MESSAGES.INVALID_POSTAL_CODE
+        );
+
+        if (postalCodeError) errors["contact.postal_code"] = postalCodeError;
 
         const cityError = validateStringField(
             contact.city,
-            "Plaatsnaam",
+            FIELD_NAMES.CITY,
             DEFAULT_MIN_STRING_LENGTH,
-            ERROR_MESSAGES_CONTACT.MISSING,
-            ERROR_MESSAGES_CONTACT.TOO_SHORT
+            ERROR_MESSAGES.MISSING,
+            ERROR_MESSAGES.TOO_SHORT
         );
 
         if (cityError) errors["contact.city"] = cityError;
 
-        if (!contact.email || contact.email.trim() === "") {
-            errors["contact.email"] = "E-mailadres ontbreekt.";
-        } else if (!emailRegex.test(contact.email)) {
-            errors["contact.email"] = "E-mailadres is ongeldig.";
-        }
+        const emailError = validateRegexField(
+            contact.email,
+            FIELD_NAMES.EMAIL,
+            emailRegex,
+            ERROR_MESSAGES.MISSING,
+            ERROR_MESSAGES.INVALID
+        );
 
-        if (!contact.phone || contact.phone.trim() === "") {
-            errors["contact.phone"] = "Telefoonnummer ontbreekt.";
-        } else if (!phoneRegex.test(contact.phone)) {
-            errors["contact.phone"] = "Telefoonnummer is ongeldig.";
-        }
+        if (emailError) errors["contact.email"] = emailError;
+
+        const phoneError = validateRegexField(
+            contact.phone,
+            FIELD_NAMES.PHONE,
+            phoneRegex,
+            ERROR_MESSAGES.MISSING,
+            ERROR_MESSAGES.INVALID
+        );
+
+        if (phoneError) errors["contact.phone"] = phoneError;
 
         return errors;
     }
@@ -236,25 +220,22 @@ export function useBookingValidation() {
      * the terms and conditions before submission.
      *
      * @param {Object} bookingData - The booking data object
-     * @param {boolean} bookingData.is_confirmed - Whether user confirmed booking details
-     * @param {boolean} bookingData.conditions_accepted - Whether user accepted terms and conditions
-     *
      * @returns {Object} Errors object with field names as keys and error messages as values
      */
     function validateOverviewStep(bookingData) {
         const errors = {};
 
         if (!bookingData) {
-            return { errors: "Booking data ontbreekt" };
+            return { overview: ERROR_MESSAGES.MISSING_BOOKING_DATA };
         }
 
         if (!bookingData.is_confirmed) {
-            errors["is_confirmed"] = "Je moet nog akkoord gaan.";
+            errors["is_confirmed"] = ERROR_MESSAGES.MISSING_CONFIRMATION;
         }
 
         if (!bookingData.conditions_accepted) {
             errors["conditions_accepted"] =
-                "Je moet nog akkoord gaan met de algemene voorwaarden.";
+                ERROR_MESSAGES.MISSING_ACCEPTED_CONDITIONS;
         }
 
         return errors;
@@ -266,37 +247,30 @@ export function useBookingValidation() {
      * Ensures a departure date has been selected for the trip.
      *
      * @param {Object} bookingData - The booking data object
-     * @param {string} bookingData.departure_date - The selected departure date
-     *
      * @returns {Object} Errors object with field names as keys and error messages as values
      */
     function validateTripStep(bookingData) {
         const errors = {};
 
         if (!bookingData) {
-            return { errors: "Boeking data ontbreekt" };
+            return { trip: ERROR_MESSAGES.MISSING_BOOKING_DATA };
         }
 
         if (!bookingData.departure_date) {
-            errors["departure_date"] = "Selecteer een vertrekdatum.";
+            errors["departure_date"] = ERROR_MESSAGES.MISSING_DEPARTURE_DATE;
         }
 
         return errors;
     }
 
     /**
-     * Generic string field validator with customizable error messages.
-     *
      * Validates that a string field is not empty and meets minimum length requirements.
-     * Supports template replacement for {field} and {min} placeholders in error messages.
      *
-     * @private
      * @param {string} value - The field value to validate
-     * @param {string} fieldName - Display name of the field (used in error messages)
-     * @param {number} minLength - Minimum required length for the field
-     * @param {string} emptyMessage - Error message template when field is empty (use {field} placeholder)
-     * @param {string} tooShortMessage - Error message template when field is too short (use {field} and {min} placeholders)
-     *
+     * @param {string} fieldName - Display name of the field
+     * @param {number} minLength - Minimum required length
+     * @param {string} emptyMessage - Error message when empty (use {field} placeholder)
+     * @param {string} tooShortMessage - Error message when too short (use {field} and {min} placeholders)
      * @returns {string|null} Error message if validation fails, null if valid
      */
     function validateStringField(
@@ -307,14 +281,54 @@ export function useBookingValidation() {
         tooShortMessage
     ) {
         const trimmed = value?.trim() || "";
+
         if (trimmed === "") {
             return emptyMessage.replace("{field}", fieldName);
         }
+
         if (trimmed.length < minLength) {
             return tooShortMessage
                 .replace("{field}", fieldName)
                 .replace("{min}", minLength);
         }
+
+        if (trimmed.length > DEFAULT_MAX_STRING_LENGTH) {
+            return ERROR_MESSAGES.TOO_LONG.replace(
+                "{field}",
+                fieldName
+            ).replace("{max}", DEFAULT_MAX_STRING_LENGTH);
+        }
+
+        return null;
+    }
+
+    /**
+     * Validates that a string field matches a regex pattern.
+     *
+     * @param {string} value - The field value to validate
+     * @param {string} fieldName - Display name of the field
+     * @param {RegExp} regex - Regular expression to test against
+     * @param {string} emptyMessage - Error message when empty (use {field} placeholder)
+     * @param {string} invalidMessage - Error message when invalid format (use {field} placeholder)
+     * @returns {string|null} Error message if validation fails, null if valid
+     */
+    function validateRegexField(
+        value,
+        fieldName,
+        regex,
+        emptyMessage,
+        invalidMessage
+    ) {
+        const trimmed = value?.trim() || "";
+
+        if (trimmed === "") {
+            return emptyMessage.replace("{field}", fieldName);
+        }
+
+        if (!regex.test(trimmed)) {
+            return invalidMessage.replace("{field}", fieldName);
+        }
+
         return null;
     }
 
