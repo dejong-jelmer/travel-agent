@@ -1,8 +1,8 @@
 // Composables/useDateFormatter.js
 import { nextTick } from "vue";
 
-export const useDateFormatter = () => {
-    const normalizeDateFormat = (dateString) => {
+export function useDateFormatter() {
+    function normalizeDateFormat(dateString) {
         if (!dateString) return "";
 
         const digitsOnly = dateString.replace(/[^\d]/g, "");
@@ -22,11 +22,11 @@ export const useDateFormatter = () => {
         return formatted;
     };
 
-    const initializeBirthdate = (dateString) => {
+    function initializeBirthdate(dateString) {
         return normalizeDateFormat(dateString);
     };
 
-    const formatBirthDateInput = (event, callback) => {
+    function formatBirthDateInput(event, callback) {
         const input = event.target;
         const cursorPosition = input.selectionStart;
         const oldValue = input.value;
@@ -66,7 +66,7 @@ export const useDateFormatter = () => {
         });
     };
 
-    const formattedDate = (date, options = {}) => {
+    function formattedDate(date, options = {}) {
         const { longMonth = true, longDay = true, locale = "nl-NL" } = options;
 
         if (!date) return null;
@@ -81,7 +81,7 @@ export const useDateFormatter = () => {
         });
     };
 
-    const isValidDate = (dateString) => {
+    function isValidDate(dateString) {
         if (!dateString || dateString.length !== 10) return false;
         const thisYear = new Date().getFullYear();
 
