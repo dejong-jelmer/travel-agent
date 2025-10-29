@@ -9,8 +9,11 @@ use PDOException;
 
 class SystemHealthService
 {
-    private const QUEUE_WARNING_THRESHOLD = 100;
-
+    private int $threshold = 0;
+    public function __config()
+    {
+        $this->threshold = config('queue_warning_threshold');
+    }
     /**
      * Check database connection health
      */
@@ -90,7 +93,7 @@ class SystemHealthService
             }
 
             // Determine status based on queue size
-            if ($pendingJobs > self::QUEUE_WARNING_THRESHOLD) {
+            if ($pendingJobs > $this->threshold) {
                 $status = 'warning';
                 $message = __('health.queue.pending', ['jobs' => $pendingJobs]);
             } elseif ($pendingJobs > 0) {

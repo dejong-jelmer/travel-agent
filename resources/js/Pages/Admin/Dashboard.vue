@@ -109,7 +109,7 @@ const stats = computed(() => [
     {
         id: 2,
         name: 'Komende vertrekken',
-        value: props.bookings.comingMonth,
+        value: props.bookings.upcomingMonth,
         description: 'Vertrek volgende maand',
         icon: CalendarDaysIcon,
         iconColor: 'text-nature-sage',
