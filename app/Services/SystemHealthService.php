@@ -24,7 +24,7 @@ class SystemHealthService
             return [
                 'status' => 'healthy',
                 'responseTime' => $responseTime,
-                'message' => 'Verbonden met database',
+                'message' => __('health.database.connected'),
             ];
         } catch (PDOException $e) {
             Log::error('Database health check failed', ['error' => $e->getMessage()]);
@@ -32,7 +32,7 @@ class SystemHealthService
             return [
                 'status' => 'error',
                 'responseTime' => null,
-                'message' => 'Database niet bereikbaar',
+                'message' => __('health.database.disconnected'),
             ];
         }
     }
@@ -54,7 +54,7 @@ class SystemHealthService
                     'status' => 'healthy',
                     'configured' => true,
                     'provider' => 'Mailjet',
-                    'message' => 'Email service geconfigureerd',
+                    'message' => __('health.email.configured'),
                 ];
             }
 
@@ -62,7 +62,7 @@ class SystemHealthService
                 'status' => 'warning',
                 'configured' => false,
                 'provider' => 'Mailjet',
-                'message' => 'Email service niet beschikbaar',
+                'message' => __('health.email.not_configured'),
             ];
         } catch (Exception $e) {
             Log::error('Email health check failed', ['error' => $e->getMessage()]);
@@ -70,7 +70,7 @@ class SystemHealthService
             return [
                 'status' => 'error',
                 'configured' => false,
-                'message' => 'Email service check failed',
+                'message' => __('health.email.failed'),
             ];
         }
     }
@@ -92,13 +92,13 @@ class SystemHealthService
             // Determine status based on queue size
             if ($pendingJobs > self::QUEUE_WARNING_THRESHOLD) {
                 $status = 'warning';
-                $message = "{$pendingJobs} jobs wachten (hoge belasting)";
+                $message = __('health.queue.pending', ['jobs' => $pendingJobs]);
             } elseif ($pendingJobs > 0) {
                 $status = 'healthy';
-                $message = "{$pendingJobs} jobs in wachtrij";
+                $message = __('health.queue.pending', ['jobs' => $pendingJobs]);
             } else {
                 $status = 'healthy';
-                $message = 'Queue is leeg';
+                $message = __('health.queue.empty');
             }
 
             return [
@@ -113,7 +113,7 @@ class SystemHealthService
             return [
                 'status' => 'error',
                 'pendingJobs' => null,
-                'message' => 'Queue niet bereikbaar',
+                'message' => __('health.queue.unavailable'),
             ];
         }
     }

@@ -12,12 +12,14 @@ import {
     GlobeAltIcon,
     MapPinIcon,
     CalendarDaysIcon,
-    ArrowRightOnRectangleIcon,
-    UserCircleIcon
+    ArrowRightStartOnRectangleIcon
 } from '@heroicons/vue/24/outline'
 
 const open = ref(false)
 const page = usePage()
+const user = page.props.auth?.user ?? {};
+const adminStats = page.props.adminStats ?? {};
+
 
 // Collapsible state voor menu groepen
 const collapsedSections = ref({
@@ -80,7 +82,7 @@ const menuGroups = ref([
             {
                 label: 'Uitloggen',
                 path: new URL(route('admin.logout'), window.location.origin).pathname,
-                icon: ArrowRightOnRectangleIcon,
+                icon: ArrowRightStartOnRectangleIcon,
             },
         ]
     },
@@ -95,8 +97,8 @@ const toggleSection = (sectionId) => {
 }
 
 // User gegevens ophalen uit shared Inertia data
-const authUser = computed(() => page.props.auth?.user)
-const adminStats = computed(() => page.props.adminStats)
+const authUser = computed(() => user)
+const stats = computed(() => adminStats)
 
 // User initialen voor avatar
 const userInitials = computed(() => {
@@ -248,14 +250,14 @@ const userInitials = computed(() => {
 
                                                                 <!-- Badge (voor notifications) -->
                                                                 <span
-                                                                    v-if="item.badge && adminStats?.newBookingsCount > 0"
+                                                                    v-if="item.badge && stats?.newBookingsCount > 0"
                                                                     class="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                                                                     :class="{
                                                                         'bg-brand-primary text-white': isCurrentPage(item.path),
                                                                         'bg-nature-terracotta text-white': !isCurrentPage(item.path)
                                                                     }"
                                                                 >
-                                                                    {{ adminStats.newBookingsCount }}
+                                                                    {{ stats.newBookingsCount }}
                                                                 </span>
 
                                                                 <!-- Active Indicator -->

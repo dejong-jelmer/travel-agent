@@ -8,8 +8,6 @@ import {
     SparklesIcon,
     ArrowTrendingUpIcon,
     UserGroupIcon,
-    ExclamationTriangleIcon,
-    XCircleIcon
 } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
@@ -33,19 +31,6 @@ const getStatusColor = (status) => {
             return 'bg-status-error'
         default:
             return 'bg-gray-400'
-    }
-}
-
-const getStatusIcon = (status) => {
-    switch (status) {
-        case 'healthy':
-            return CheckCircleIcon
-        case 'warning':
-            return ExclamationTriangleIcon
-        case 'error':
-            return XCircleIcon
-        default:
-            return ClockIcon
     }
 }
 

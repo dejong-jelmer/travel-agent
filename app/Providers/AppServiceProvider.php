@@ -40,27 +40,14 @@ class AppServiceProvider extends ServiceProvider
                     'error' => Session::get('error'),
                 ];
             },
-            'auth' => function () {
-                $user = Auth::user();
-
-                return [
-                    'user' => $user ? [
-                        'id' => $user->id(),
-                        'name' => $user->user()->name,
-                        'email' => $user->user()->email,
-                    ] : null,
-                ];
-            },
             'adminStats' => function () {
-                if (! request()->routeIs('admin.*') && ! Auth::check()) {
+                if (! request()->routeIs('admin.*') || ! Auth::check()) {
                     return null;
                 }
 
-                return Cache::remember('admin.stats.new_bookings', 300, function () {
-                    return [
-                        'newBookingsCount' => Booking::where('created_at', '>=', now()->subDays(7))->count(),
-                    ];
-                });
+                return [
+                    'newBookingsCount' => Booking::where('created_at', '>=', now()->subDays(7))->count(),
+                ];
             },
         ]);
 
