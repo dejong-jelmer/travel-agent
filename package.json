@@ -41,8 +41,5 @@
         "vue3-mq": "^4.0.2",
         "vue3-touch-events": "^5.0.13",
         "ziggy-js": "^2.5.2"
-    },
-    "optionalDependencies": {
-        "@rollup/rollup-linux-x64-gnu": "^4.52.5"
     }
 }

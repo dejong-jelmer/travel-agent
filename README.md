@@ -163,7 +163,7 @@ php artisan ide-helper:meta      # Generate PhpStorm meta file
 ```bash
 php artisan migrate           # Run migrations
 php artisan migrate:fresh     # Drop all tables and re-migrate
-php artisan db:seed          # Seed database
+php artisan db:seed           # Seed database
 ```
 
 ---
