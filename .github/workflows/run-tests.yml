@@ -70,6 +70,12 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -uuser -ppassword -e "SHOW DATABASES;"
 
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+
       - name: Install NPM dependencies
         run: npm ci
 
@@ -83,5 +89,5 @@ jobs:
         run: php artisan test
 
       - name: Run JavaScript/Vue tests
-        run: npx vitest run --reporter=verbose
+        run: npx vitest run --reporter=dot
 
