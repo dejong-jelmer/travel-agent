@@ -10,10 +10,12 @@ use PDOException;
 class SystemHealthService
 {
     private int $threshold = 0;
+
     public function __config()
     {
         $this->threshold = config('queue_warning_threshold');
     }
+
     /**
      * Check database connection health
      */
