@@ -82,5 +82,9 @@ jobs:
       - name: Run PHP tests
         run: php artisan test
 
+      - name: Install npm dependencies
+        run: npm ci
+
       - name: Run JavaScript/Vue tests
-        run: npm test -- --run --reporter=verbose
+        run: npx vitest run --reporter=verbose
+
