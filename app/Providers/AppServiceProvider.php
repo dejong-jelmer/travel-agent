@@ -45,7 +45,7 @@ class AppServiceProvider extends ServiceProvider
                 }
 
                 return [
-                    'newBookingsCount' => Booking::where('created_at', '>=', now()->subDays(7))->count(),
+                    'newBookingsCount' => Booking::new()->count(),
                 ];
             },
         ]);

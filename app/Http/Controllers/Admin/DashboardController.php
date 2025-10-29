@@ -12,12 +12,13 @@ class DashboardController extends Controller
     public function showDashboard(SystemHealthService $healthService)
     {
         return Inertia::render('Admin/Dashboard', [
-            'title' => 'Admin dashboard - '.env('APP_NAME'),
-            'newBookingsCount' => Booking::where('created_at', '>=', now()->subDays(7))->count(),
+            'title' => 'Admin dashboard - '.config('app.name'),
             'bookings' => [
+                'all' => Booking::count(),
                 'new' => Booking::new()->count(),
-                'future' => Booking::future()->count(),
-                'departDueNextMonth' => Booking::departDueNextMonth()->count(),
+                'new' => Booking::new()->count(),
+                'upcoming' => Booking::upcoming()->count(),
+                'comingMonth' => Booking::comingMonth()->count(),
             ],
             'systemHealth' => $healthService->getAllChecks(),
         ]);

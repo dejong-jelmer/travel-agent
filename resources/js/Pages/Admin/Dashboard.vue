@@ -15,11 +15,6 @@ const props = defineProps({
     systemHealth: Object
 })
 
-// Bereken totaal aantal boekingen
-const totalBookings = computed(() => {
-    return props.bookings.new + props.bookings.future
-})
-
 // Helper functies voor system health
 const getStatusColor = (status) => {
     switch (status) {
@@ -102,9 +97,9 @@ const lastCheckedTime = computed(() => {
 const stats = computed(() => [
     {
         id: 1,
-        name: 'Nieuwe Boekingen',
+        name: 'Nieuw',
         value: props.bookings.new,
-        description: 'Laatste 7 dagen',
+        description: 'Alle nieuw binengekomen boekingen',
         icon: SparklesIcon,
         iconColor: 'text-ui-gold',
         bgColor: 'bg-ui-gold/10',
@@ -113,9 +108,9 @@ const stats = computed(() => [
     },
     {
         id: 2,
-        name: 'Komende Vertrekken',
-        value: props.bookings.departDueNextMonth,
-        description: 'Volgende maand',
+        name: 'Komende vertrekken',
+        value: props.bookings.comingMonth,
+        description: 'Vertrek volgende maand',
         icon: CalendarDaysIcon,
         iconColor: 'text-nature-sage',
         bgColor: 'bg-nature-sage/10',
@@ -125,8 +120,8 @@ const stats = computed(() => [
     {
         id: 3,
         name: 'Toekomstige Reizen',
-        value: props.bookings.future,
-        description: 'Geplande boekingen',
+        value: props.bookings.upcoming,
+        description: 'Aankomende vertrekken',
         icon: ClockIcon,
         iconColor: 'text-nature-terracotta',
         bgColor: 'bg-nature-terracotta/10',
@@ -136,8 +131,8 @@ const stats = computed(() => [
     {
         id: 4,
         name: 'Totaal Boekingen',
-        value: totalBookings.value,
-        description: 'Alle actieve boekingen',
+        value: props.bookings.all,
+        description: 'Alle boekingen',
         icon: UserGroupIcon,
         iconColor: 'text-brand-primary',
         bgColor: 'bg-brand-primary/10',
