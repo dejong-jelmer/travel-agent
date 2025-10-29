@@ -1,88 +1,460 @@
-# 🌍 Sustainable Travel Agent
+# Sustainable Travel Agent
 
-A modern Laravel + Inertia.js + Vue 3 web application for a sustainable travel organization promoting **European train journeys** and **short cultural trips**.  
-Built for performance, maintainability, and a great user experience — powered by a fully automated CI/CD pipeline via **GitHub Actions** and **SFTP deployment**.
+A Laravel 12 + Inertia.js + Vue 3 application promoting sustainable European train travel. Built with modern development practices, comprehensive testing, and automated CI/CD deployment.
 
----
-
-## ✨ Project Vision
-
-Our mission is to make **slow travel** the new standard for short trips within Europe.  
-By offering curated, culturally rich train-based journeys, we aim to inspire travelers to explore Europe responsibly — with minimal carbon footprint and maximum authenticity.
+> **Mission**: Making slow travel the standard for European trips through curated, culturally rich train-based journeys with minimal carbon footprint.
 
 ---
 
-## 🧭 Key Features
+## Table of Contents
 
-- 🧳 **Travel Packages** — Browse curated European train journeys with highlights, duration, and sustainability details.  
-- 💌 **Newsletter System** — Subscribe, confirm, or unsubscribe via secure expiring links.  
-- 🚆 **Eco-friendly Focus** — All trips are designed around train travel and local culture.  
-- 🧾 **Booking Forms with Validation** — Dynamic form handling powered by Inertia.js and Vue 3.  
-- 🪄 **Fully Responsive UI** — Tailwind CSS styling with a custom color palette and breakpoints.  
-- ⚙️ **Automated Deployment** — GitHub Actions build & deploy pipeline via SFTP (no composer/npm required on server).  
-- 📬 **Mailjet Integration** — Transactional and marketing email delivery via Mailjet API.
-
----
-
-## 🧱 Tech Stack
-
-| Layer | Technology |
-|-------|-------------|
-| **Backend** | Laravel 12 (PHP 8.4) |
-| **Frontend** | Inertia.js + Vue 3 |
-| **Styling** | Tailwind CSS v3.4 (with custom theme & breakpoints) |
-| **Email** | Mailjet (via `mailjet/laravel-mailjet`) |
-| **CI/CD** | GitHub Actions |
-| **Build Tools** | Vite |
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Development](#development)
+- [Testing](#testing)
+- [Architecture](#architecture)
+- [Security](#security)
+- [Deployment](#deployment)
+- [License](#license)
 
 ---
 
-## 🧩 Tailwind Theme
-Custom color palette and breakpoints:
-```js
-// tailwind.config.js
-colors: {
-  primary: { default: '#2F3E46', dark: '#1B3A4B' },
-  secondary: { sage: '#AFCB98', stone: '#A3BCCB' },
-  accent: { earth: '#DCC7AA', gold: '#D4A017', terracotta: '#B17C65' },
-  neutral: { 50: '#F2F4F3' },
-  status: { error: '#C5534A', success: '#6B8E5A', warning: '#D4A017' },
-},
-screens: {
-  phone: '0px',
-  tablet: '600px',
-  laptop: '900px',
-  desktop: '1200px',
-  wide: '1800px'
-}
+## Tech Stack
+
+| Layer | Technology | Version |
+|-------|------------|---------|
+| **Backend** | Laravel | 12 |
+| **Language** | PHP | 8.4 |
+| **Frontend Framework** | Vue.js | 3 |
+| **SPA Bridge** | Inertia.js | Latest |
+| **Styling** | Tailwind CSS | 3.4 |
+| **Build Tool** | Vite | Latest |
+| **Testing** | PHPUnit / Vitest | Latest |
+| **Email Service** | Mailjet API | Latest |
+| **CI/CD** | GitHub Actions | - |
+
+**Key Dependencies:**
+- `propaganistas/laravel-phone` - Phone number validation
+- `@vuepic/vue-datepicker` - Date picker component
+- `@headlessui/vue` - Accessible UI components
+- `laravel-vite-plugin` - Vite integration
+- `happy-dom` - DOM environment for testing
+
+---
+
+## Features
+
+### Core Functionality
+- **Travel Package Browsing** - Curated European train journeys with detailed itineraries
+- **Multi-step Booking System** - Dynamic form with real-time validation
+- **Newsletter Management** - Token-based subscriptions with 48h expiry links
+- **Email Notifications** - Event-driven transactional emails via Mailjet
+- **Responsive Design** - Mobile-first UI with custom breakpoints
+
+### Technical Features
+- Server-side and client-side validation with DTOs
+- Event-driven architecture for async operations
+- Rate limiting (25 requests/min on public forms)
+- Honeypot spam protection
+- CSRF protection on all forms
+- Signed URLs for sensitive actions
+
+---
+
+## Prerequisites
+
+### Required
+- **PHP** 8.4 or higher
+- **Composer** 2.x
+- **Node.js** 18+ (with npm)
+- **MySQL** 8.0+ (or compatible database)
+
+### PHP Extensions
 ```
-## 🧠 Architecture Highlights
-* Inertia.js Bridge: Seamlessly connects Laravel routes with Vue 3 components.
-* Form Requests & DTOs: Typed validation and clean data transformation using Carbon dates.
-* Reusable Components: Cards, Buttons, and Layouts follow Tailwind utility patterns.
-* Email Templates: Clean HTML templates with inline logos and responsive headers.
+bcmath, ctype, curl, dom, fileinfo, json, mbstring,
+openssl, pcre, pdo, pdo_mysql, tokenizer, xml
+```
 
-## 🔒 Security & Best Practices
-* Secure form validation on both client and server sides
-* Expiring confirmation/unsubscribe links for newsletters
-* Environment-specific configuration separation
-* No secrets stored in the repository (all handled via GitHub Secrets)
-* CSRF protection enabled on all forms
-* Signed URLs for newsletter actions (48h expiry)
+### Development Tools (Optional)
+- Laravel Pint (code formatting)
+- PHPStan (static analysis, level 5)
+- Laravel IDE Helper
 
-## 📋 Prerequisites
-* PHP 8.2+
-* Composer 2.x
-* Node.js 18+
-* MySQL/PostgreSQL/SQLite
+---
 
-## 🧪 Testing
+## Installation
+
+### 1. Clone the Repository
 ```bash
-php artisan test
+git clone <repository-url>
+cd travel-agent
 ```
 
-## 🪪 License
-This project is licensed under the MIT License — see the [LICENSE](https://mit-license.org/)
+### 2. Install Dependencies
+```bash
+composer install
+npm install
+```
 
-## 💚 Built with passion for sustainable travel and webdevelopment
-“The journey matters more than the destination — especially when it’s by train.”
+### 3. Environment Configuration
+```bash
+cp .env.example .env
+php artisan key:generate
+```
+
+Configure your `.env` file with:
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database
+DB_USERNAME=your_username
+DB_PASSWORD=your_password
+
+MAILJET_APIKEY=your_api_key
+MAILJET_APISECRET=your_api_secret
+```
+
+### 4. Database Setup
+```bash
+php artisan migrate
+php artisan db:seed
+```
+
+### 5. Build Assets
+```bash
+npm run build
+```
+
+---
+
+## Development
+
+### Start Development Environment
+```bash
+composer dev
+```
+
+This runs concurrently:
+- `php artisan serve` - Laravel development server
+- `php artisan queue:listen --tries=1` - Queue worker
+- `npm run dev` - Vite HMR server
+
+### Available Commands
+
+#### Build Commands
+```bash
+npm run dev          # Start Vite dev server with HMR
+npm run build        # Build production assets
+```
+
+#### Code Quality
+```bash
+./vendor/bin/pint              # Format code (Laravel Pint)
+./vendor/bin/phpstan analyse   # Static analysis (PHPStan level 5)
+
+php artisan ide-helper:generate  # Generate IDE helper files
+php artisan ide-helper:meta      # Generate PhpStorm meta file
+```
+
+#### Database
+```bash
+php artisan migrate           # Run migrations
+php artisan migrate:fresh     # Drop all tables and re-migrate
+php artisan db:seed          # Seed database
+```
+
+---
+
+## Testing
+
+### PHP Tests (PHPUnit)
+```bash
+# Run all tests
+php artisan test
+
+# Run specific test suite
+php artisan test --testsuite=Feature
+php artisan test --testsuite=Unit
+
+# Run single test file
+php artisan test tests/Feature/BookingTest.php
+
+# With coverage
+php artisan test --coverage
+```
+
+### JavaScript/Vue Tests (Vitest)
+```bash
+# Run all tests
+npx vitest run
+
+# Watch mode
+npx vitest
+
+# With coverage
+npx vitest run --coverage
+
+# UI mode
+npx vitest --ui
+```
+
+### Test Configuration
+- **PHP**: Uses in-memory SQLite database for fast tests
+- **JavaScript**: Uses `happy-dom` environment with `vmThreads` pool
+- **CI**: Automated tests run on pull requests and pushes to `main`
+
+---
+
+## Architecture
+
+### Request Flow Pattern
+```
+HTTP Request
+  → FormRequest (validation)
+  → DTO (type-safe data)
+  → Service (business logic)
+  → Model (persistence)
+  → ResponseMacro (formatted response)
+```
+
+**Example Flow:**
+```php
+StoreBookingRequest
+  → StoreBookingData::fromRequest()
+  → BookingService::store()
+  → Booking::create()
+  → response()->booking($booking, BookingAction::Stored)
+```
+
+### Key Architectural Patterns
+
+#### Data Transfer Objects (DTOs)
+Located in `app/DTO/`:
+- `StoreBookingData` / `UpdateBookingData` - Main booking operations
+- `BookingContactData` / `BookingTravelerData` - Nested structures
+- Uses `ArrayableDTO` trait for serialization
+- Uses `BookingDataParser` trait for parsing validated data
+
+#### Service Layer
+Located in `app/Services/`:
+- `BookingService` - Create/update bookings with travelers
+- `ContactDetailsService` - Format contact information
+- `PhoneNumberService` - Phone validation/formatting
+- `AntiSpamEmailService` - Spam detection logic
+
+#### Event-Driven Email System
+```
+BookingCreated Event
+  → SendBookingConfirmationEmail Listener
+  → NotifyAdminOfNewBooking Listener
+
+NewsletterSubscriptionRequested Event
+  → SendNewsletterConfirmationEmail Listener
+```
+
+#### Response Macros
+Custom response macro in `AppServiceProvider`:
+```php
+Response::macro('booking', function (Booking $booking, BookingAction $action) {
+    return BookingResponse::make($booking)->toResponse($action);
+});
+
+// Usage
+return response()->booking($booking, BookingAction::Stored);
+```
+
+### Component Architecture (Atomic Design)
+
+```
+resources/js/
+├── Components/
+│   ├── Atoms/          # Button, Label, Icon
+│   ├── Molecules/      # Input, Select, DatePicker, Newsletter
+│   └── Organisms/      # BookingForm, Header, Footer, TripItinerary
+├── Pages/              # Inertia page components
+├── Templates/          # Page layouts
+└── Composables/        # Reusable Vue composition functions
+    ├── useBookingValidation.js  # Multi-step form validation
+    └── useAntiSpamLinks.js      # Email/phone obfuscation
+```
+
+### Inertia.js Integration
+
+**Global Shared Data** (configured in `AppServiceProvider`):
+- Flash messages (`success`, `error`)
+- Auto-generated breadcrumbs via `Breadcrumbs::generate()`
+
+**Auto-registered Components:**
+All components in `Components/`, `Templates/`, and `Icons/` are globally available.
+
+### Custom Configuration
+
+**Tailwind Breakpoints** (`resources/js/screens.js`):
+```js
+{ phone: '0px', tablet: '600px', laptop: '900px', desktop: '1200px', wide: '1800px' }
+```
+
+**Custom Color Palette** (see `tailwind.config.js`):
+- `primary.default` / `primary.dark` - Brand colors
+- `secondary.sage` / `secondary.stone` - Nature accents
+- `accent.earth` / `accent.gold` / `accent.terracotta` - Warm tones
+- `status.error` / `status.success` / `status.warning` - Feedback
+
+**Rate Limiting:**
+Custom `frontend-form-actions` limiter: 25 requests/min per IP
+Applied to: booking forms, contact forms, newsletter subscriptions
+
+---
+
+## Security
+
+### Authentication & Authorization
+- CSRF protection on all state-changing requests
+- Signed URLs for newsletter actions (48h expiry)
+- Token-based newsletter confirmation system
+
+### Input Validation
+- Server-side validation via Form Requests
+- Client-side validation via Vue composables
+- Phone number validation with country-specific rules
+- Email validation with domain checks
+
+### Rate Limiting
+- Public form endpoints: 25 requests/minute per IP
+- Configured via `frontend-form-actions` rate limiter
+- Protects booking, contact, and newsletter endpoints
+
+### Anti-Spam Measures
+- **Vue Honeypot** - Invisible form field traps for bot detection
+- **AntiSpamEmailService** - Server-side suspicious pattern detection
+- **Email/Phone Obfuscation** - Contact links protected via `useAntiSpamLinks` composable
+- **Rate Limiting** - 25 requests/min on all public forms
+
+**How Email/Phone Obfuscation Works:**
+```js
+// useAntiSpamLinks.js
+emailLinks(encodedEmail, selector)   // Decodes on user interaction
+phoneLinks(encodedPhone, selector)   // Decodes on user interaction
+```
+
+Contact information is:
+1. **Encoded** - Hex-encoded and reversed in HTML source
+2. **Decoded on interaction** - Only decoded when user hovers/clicks/touches
+3. **Bot-proof** - Prevents email/phone harvesting by scrapers
+
+Example encoding:
+- `info@example.com` → stored as hex-reversed string → decoded on `mouseover/focus/touchstart/click`
+- Removes event listeners after first decode for performance
+
+### Data Protection
+- Environment variables for sensitive credentials
+- No secrets committed to repository
+- GitHub Secrets for CI/CD credentials
+- Secure password hashing (bcrypt)
+
+---
+
+## Deployment
+
+### CI/CD Pipeline (GitHub Actions)
+
+**Automated Testing** (`.github/workflows/run-tests.yml`)
+- Runs on pull requests and pushes to `main`
+- PHP tests with MySQL service container
+- JavaScript/Vue tests with Vitest
+- Automated builds to verify assets compile
+
+**Automated Deployment** (`.github/workflows/deploy.yml`)
+- Triggers on push to `production` branch
+- Builds assets with `npm run build`
+- Deploys via SFTP (all dependencies bundled)
+- Zero-downtime deployment strategy
+
+**Important Notes:**
+- Production server has no Composer/NPM installed
+- All dependencies must be bundled in deployment
+- Use `composer install --no-dev --optimize-autoloader` for production
+
+### Manual Deployment
+```bash
+# Build production assets
+npm run build
+
+# Optimize Laravel
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# Deploy via SFTP/rsync
+# (ensure vendor/ and node_modules/ are excluded, use built assets)
+```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+**Vite HMR not working:**
+```bash
+# Clear Vite cache
+rm -rf node_modules/.vite
+
+# Rebuild node_modules
+npm install
+```
+
+**Tests failing in CI:**
+```bash
+# Ensure .env.ci exists with correct test database credentials
+# Check that migrations run successfully
+php artisan migrate --env=testing --force
+```
+
+**Queue jobs not processing:**
+```bash
+# Start queue worker
+php artisan queue:work
+
+# Or use supervisor in production
+```
+
+**Assets not loading:**
+```bash
+# Rebuild assets
+npm run build
+
+# Clear Laravel caches
+php artisan cache:clear
+php artisan view:clear
+```
+
+---
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Run tests: `php artisan test && npx vitest run`
+4. Run code quality checks: `./vendor/bin/pint && ./vendor/bin/phpstan analyse`
+5. Commit changes using conventional commits
+6. Push to your branch and open a Pull Request
+
+**Code Standards:**
+- PSR-12 coding standard (enforced via Laravel Pint)
+- PHPStan level 5 static analysis
+- Vue 3 Composition API preferred
+- Comprehensive test coverage for new features
+
+---
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](https://mit-license.org/) for details.
+
+---
+
+**Built with dedication to sustainable travel and modern web development practices.**
