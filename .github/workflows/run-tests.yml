@@ -79,5 +79,8 @@ jobs:
       - name: Run database migrations
         run: php artisan migrate --env=testing --force
 
-      - name: Run tests
+      - name: Run PHP tests
         run: php artisan test
+
+      - name: Run JavaScript/Vue tests
+        run: npm test -- --run --reporter=verbose
