@@ -163,13 +163,13 @@ class Booking extends Model
     }
 
     /**
-     * Scope a query to only include bookings with a departure date in the coming month.
+     * Scope a query to only include bookings with a departure date in the upcoming month.
      */
     #[Scope]
     protected function upcomingMonth(Builder $query): void
     {
         $query->whereBetween('departure_date', [
-            now()->addDay()->startOfDay(),
+            now()->startOfDay(),
             now()->addMonth()->endOfDay(),
         ]);
     }
