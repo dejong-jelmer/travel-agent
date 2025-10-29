@@ -6,6 +6,7 @@ use App\Enums\BookingAction;
 use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Responses\BookingResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
@@ -36,6 +37,24 @@ class AppServiceProvider extends ServiceProvider
                 return [
                     'success' => Session::get('success'),
                     'error' => Session::get('error'),
+                ];
+            },
+            'auth' => function () {
+                return [
+                    'user' => Auth::user() ? [
+                        'id' => Auth::id(),
+                        'name' => Auth::user()->name,
+                        'email' => Auth::user()->email,
+                    ] : null,
+                ];
+            },
+            'adminStats' => function () {
+                if (!Auth::check()) {
+                    return null;
+                }
+
+                return [
+                    'newBookingsCount' => Booking::where('created_at', '>=', now()->subDays(7))->count(),
                 ];
             },
         ]);
