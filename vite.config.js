@@ -3,22 +3,30 @@ import vue from "@vitejs/plugin-vue";
 import laravel from "laravel-vite-plugin";
 import path from "path";
 
-export default defineConfig({
-    plugins: [
-        laravel({
-            input: ["resources/js/app.js"],
-            refresh: true,
-        }),
-        vue(),
-    ],
-    test: {
-        globals: true,
-        environment: "happy-dom",
-        pool: "vmThreads",
-    },
-    resolve: {
-        alias: {
-            "@": path.resolve(__dirname, "resources/js"),
+export default defineConfig(({ mode }) => {
+    const plugins = [vue()];
+
+    // Only load Laravel plugin when not in test mode
+    if (mode !== "test") {
+        plugins.unshift(
+            laravel({
+                input: ["resources/js/app.js"],
+                refresh: true,
+            })
+        );
+    }
+
+    return {
+        plugins,
+        test: {
+            globals: true,
+            environment: "happy-dom",
+            pool: "vmThreads",
         },
-    },
+        resolve: {
+            alias: {
+                "@": path.resolve(__dirname, "resources/js"),
+            },
+        },
+    };
 });

@@ -71,7 +71,7 @@ jobs:
           mysql -h 127.0.0.1 -uuser -ppassword -e "SHOW DATABASES;"
 
       - name: Install NPM dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Vite assets
         run: npm run build
@@ -81,9 +81,6 @@ jobs:
 
       - name: Run PHP tests
         run: php artisan test
-
-      - name: Install npm dependencies
-        run: npm ci
 
       - name: Run JavaScript/Vue tests
         run: npx vitest run --reporter=verbose
