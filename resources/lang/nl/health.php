@@ -1,4 +1,5 @@
 <?php
+
 return [
     'database' => [
         'connected' => 'Verbonden met de database',
@@ -14,6 +15,6 @@ return [
         'empty' => 'Queue is leeg',
         'pending' => 'Queue heeft :jobs in wachtrij',
         'unavailable' => 'Queue niet bereikbaar',
-    ]
+    ],
 
 ];

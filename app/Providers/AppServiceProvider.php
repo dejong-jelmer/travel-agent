@@ -7,7 +7,6 @@ use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Responses\BookingResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
