@@ -9,11 +9,9 @@ use PDOException;
 
 class SystemHealthService
 {
-    private int $threshold = 0;
-
-    public function __config()
+    public function __construct(private int $threshold)
     {
-        $this->threshold = config('queue_warning_threshold');
+        $this->threshold = config('health.queue_warning_threshold', 100);
     }
 
     /**
@@ -125,8 +123,10 @@ class SystemHealthService
 
     /**
      * Get all system health checks
+     *
+     * @return array {database: array, email: array, queue: array, lastChecked: string}
      */
-    public function getAllChecks(): array
+    public function getAllChecks(): array|string
     {
         return [
             'database' => $this->checkDatabase(),

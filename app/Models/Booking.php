@@ -169,7 +169,7 @@ class Booking extends Model
     protected function upcomingMonth(Builder $query): void
     {
         $query->whereBetween('departure_date', [
-            now()->startOfDay(),
+            now()->addDay()->startOfDay(),
             now()->addMonth()->endOfDay(),
         ]);
     }

@@ -39,15 +39,9 @@ class AppServiceProvider extends ServiceProvider
                     'error' => Session::get('error'),
                 ];
             },
-            'adminStats' => function () {
-                if (! request()->routeIs('admin.*') || ! Auth::check()) {
-                    return null;
-                }
-
-                return [
-                    'newBookingsCount' => Booking::new()->count(),
-                ];
-            },
+            'adminStats' => fn () => request()->routeIs('admin.*') && Auth::check()
+                ? ['newBookingsCount' => Booking::new()->count()]
+                : null,
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());
