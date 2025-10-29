@@ -87,7 +87,8 @@ function handleSubmit() {
         <div class="px-6 pb-4 border-b border-secondary-sage/20">
             <div class="flex justify-between mb-2 pt-4">
                 <button v-for="(step, index) in stepStates" :key="step.id" type="button" @click="goToStep(index)"
-                    :disabled="step.isLocked" class="text-sm font-medium transition-all relative group" :class="[
+                    :disabled="step.isLocked" :data-testid="`step-button-${step.id}`"
+                    class="text-sm font-medium transition-all relative group" :class="[
                         step.isActive && 'text-primary-dark font-bold scale-105',
                         step.isCompleted && 'text-accent-earth',
                         step.isAccessible && !step.isActive && !step.isCompleted && 'text-secondary-stone hover:text-primary-dark cursor-pointer',
@@ -97,7 +98,8 @@ function handleSubmit() {
                     {{ step.label }}
 
                     <!-- Tooltip on hover -->
-                    <span v-if="step.isLocked" class="absolute top-full left-1/2 translate-x-[-50%] mt-2
+                    <span v-if="step.isLocked" data-testid="step-tooltip"
+                        class="absolute top-full left-1/2 translate-x-[-50%] mt-2
                         px-2 py-1 bg-gray-900 text-white text-xs rounded
                         opacity-0 group-hover:opacity-100 transition-opacity
                         whitespace-nowrap pointer-events-none z-50">
@@ -110,6 +112,7 @@ function handleSubmit() {
 
             <div class="h-2 bg-neutral-50 rounded-full overflow-hidden">
                 <div class="h-full bg-accent-earth transition-all duration-500 ease-out"
+                    data-testid="progress-bar"
                     :style="{ width: progress + '%' }"></div>
             </div>
         </div>
@@ -122,19 +125,20 @@ function handleSubmit() {
             </Transition>
         </div>
         <div class="flex justify-between items-center px-6 py-4 border-t border-secondary-sage/20 bg-neutral-50">
-            <button type="button"
+            <button type="button" data-testid="prev-button"
                 class="px-4 py-2 rounded-xl text-primary-dark hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="isFirstStep" @click="prevStep">
                 Vorige
             </button>
 
-            <button v-if="!isLastStep" type="button"
+            <button v-if="!isLastStep" type="button" data-testid="next-button"
                 class="px-6 py-2 rounded-xl bg-accent-earth text-primary-dark font-medium hover:bg-accent-terracotta hover:text-neutral-25 transition-all disabled:hover:text-primary-dark disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="booking.processing" @click="handleNext">
                 Volgende
             </button>
 
-            <button v-else type="button" v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
+            <button v-else type="button" data-testid="submit-button"
+                v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
                 class="px-6 py-2 rounded-xl flex items-center gap-2 bg-accent-earth text-primary-dark font-medium hover:bg-accent-terracotta hover:text-neutral-25 transition-all disabled:hover:text-primary-dark disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
                 <Spinner v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />

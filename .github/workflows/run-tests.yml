@@ -70,8 +70,16 @@ jobs:
         run: |
           mysql -h 127.0.0.1 -uuser -ppassword -e "SHOW DATABASES;"
 
+      - name: Cache NPM dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install NPM dependencies
-        run: npm install
+        run: npm ci
 
       - name: Build Vite assets
         run: npm run build
@@ -79,5 +87,9 @@ jobs:
       - name: Run database migrations
         run: php artisan migrate --env=testing --force
 
-      - name: Run tests
+      - name: Run PHP tests
         run: php artisan test
+
+      - name: Run JavaScript/Vue tests
+        run: npx vitest run --reporter=dot
+
