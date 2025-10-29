@@ -40,7 +40,7 @@ const decrement = (key) => {
     <div class="relative space-y-2" >
         <div class="relative" @click="open = !open">
             <span class="absolute inset-y-0 left-0 flex items-center text-gray-400">
-                <UserAdd class="ml-1 h-5 w-auto text-accent-gold" />
+                <UserAdd class="ml-1 h-5 w-auto text-ui-gold" />
             </span>
             <input readonly :value="`${modelValue.adults} volwassenen - ${modelValue.children} kinderen`" type="text"
                 class="w-full pl-10 pr-3 py-2 pt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer" />
@@ -48,15 +48,15 @@ const decrement = (key) => {
         <div v-if="open" class="space-y-2">
             <!-- Adults -->
             <div class="flex items-center justify-between">
-                <label class="text-primary-dark font-medium">Volwassenen</label>
+                <label class="text-brand-dark font-medium">Volwassenen</label>
                 <div class="flex items-center gap-2">
                     <button @click="decrement('adults')" :disabled="adults.value <= minAdults"
-                        class="w-8 h-8 flex items-center justify-center rounded-full border border-primary-dark text-primary-dark disabled:opacity-40">
+                        class="w-8 h-8 flex items-center justify-center rounded-full border border-brand-dark text-brand-dark disabled:opacity-40">
                         −
                     </button>
                     <span class="w-6 text-center text-lg font-semibold">{{ adults }}</span>
                     <button @click="increment('adults')" :disabled="adults.value >= maxAdults"
-                        class="w-8 h-8 flex items-center justify-center rounded-full border border-primary-dark text-primary-dark disabled:opacity-40">
+                        class="w-8 h-8 flex items-center justify-center rounded-full border border-brand-dark text-brand-dark disabled:opacity-40">
                         +
                     </button>
                 </div>
@@ -64,16 +64,16 @@ const decrement = (key) => {
 
             <!-- Childeren -->
             <div class="flex items-center justify-between">
-                <label class="text-primary-dark font-medium">Kinderen (tot 12 jaar)</label>
+                <label class="text-brand-dark font-medium">Kinderen (tot 12 jaar)</label>
                 <div class="flex items-center gap-2">
 
                     <button @click="decrement('children')" :disabled="children.value <= minChildren"
-                        class="w-8 h-8 flex items-center justify-center rounded-full border border-primary-dark text-primary-dark disabled:opacity-40">
+                        class="w-8 h-8 flex items-center justify-center rounded-full border border-brand-dark text-brand-dark disabled:opacity-40">
                         −
                     </button>
                     <span class="w-6 text-center text-lg font-semibold">{{ children }}</span>
                     <button @click="increment('children')"
-                        class="w-8 h-8 flex items-center justify-center rounded-full border border-primary-dark text-primary-dark disabled:opacity-40">
+                        class="w-8 h-8 flex items-center justify-center rounded-full border border-brand-dark text-brand-dark disabled:opacity-40">
                         +
                     </button>
                 </div>

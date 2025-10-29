@@ -24,7 +24,7 @@ const toggle = (index) => {
         <div class="max-w-7xl mx-auto grid gap-8 tablet:grid-cols-3">
             <div class="tablet:col-span-2 bg-white p-8 rounded-2xl shadow-lg space-y-6">
                 <div class="space-y-3">
-                    <h2 class="text-2xl font-bold text-primary-dark">
+                    <h2 class="text-2xl font-bold text-brand-dark">
                         Boekingsgegevens
                     </h2>
                     <div class="grid grid-cols-2 gap-4">

@@ -35,12 +35,12 @@ const updateValue = (val) => {
 
       <!-- Circle -->
       <div
-        class="w-5 h-5 flex items-center justify-center border-2 border-primary-dark rounded-full transition-all"
-        :class="{ 'border-primary-dark': isChecked(index) }"
+        class="w-5 h-5 flex items-center justify-center border-2 border-brand-dark rounded-full transition-all"
+        :class="{ 'border-brand-dark': isChecked(index) }"
       >
         <!-- Binnenste bolletje -->
         <div
-          class="w-2.5 h-2.5 rounded-full bg-primary-dark transition-transform"
+          class="w-2.5 h-2.5 rounded-full bg-brand-dark transition-transform"
           :class="isChecked(index) ? 'scale-100' : 'scale-0'"
         ></div>
       </div>

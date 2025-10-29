@@ -16,15 +16,15 @@ const topbarClasses = computed(() => {
   return [
     'w-full transition-all duration-500',
     props.isScrolled
-      ? 'bg-secondary-sage border-b border-accent-gold/30'
-      : 'bg-secondary-sage/95 backdrop-blur-sm border-b-2 border-accent-gold'
+      ? 'bg-nature-sage border-b border-ui-gold/30'
+      : 'bg-nature-sage/95 backdrop-blur-sm border-b-2 border-ui-gold'
   ]
 });
 
 const textClasses = computed(() => {
   return [
     'transition-colors duration-300',
-    props.isScrolled ? 'text-white' : 'text-primary-dark'
+    props.isScrolled ? 'text-white' : 'text-brand-dark'
   ]
 });
 </script>
@@ -34,13 +34,13 @@ const textClasses = computed(() => {
         <div class="max-w-screen-desktop mx-auto px-6 py-2 flex justify-between items-center">
             <div class="flex gap-x-3 laptop:gap-x-8 items-center">
                 <div class="flex items-center gap-x-2 laptop:gap-x-3">
-                    <Tree class="h-5 laptop:h-6 text-accent-gold drop-shadow-sm"></Tree>
+                    <Tree class="h-5 laptop:h-6 text-ui-gold drop-shadow-sm"></Tree>
                     <p class="text-xs laptop:text-sm font-medium" :class="textClasses">
                         Ga duurzaam op reis
                     </p>
                 </div>
                 <div class="hidden laptop:flex items-center gap-x-2 laptop:gap-x-3">
-                    <Mobile class="h-5 laptop:h-6 text-accent-gold drop-shadow-sm"></Mobile>
+                    <Mobile class="h-5 laptop:h-6 text-ui-gold drop-shadow-sm"></Mobile>
                     <a class="text-xs laptop:text-sm font-medium tel-field" :class="textClasses"></a>
                 </div>
             </div>
@@ -48,7 +48,7 @@ const textClasses = computed(() => {
             <!-- Certificering badges -->
             <div class="flex gap-x-2 laptop:gap-x-4 items-center">
                 <div class="flex items-center gap-x-1">
-                    <!-- <span class="w-2 h-2 bg-accent-gold rounded-full animate-pulse"></span> -->
+                    <!-- <span class="w-2 h-2 bg-ui-gold rounded-full animate-pulse"></span> -->
                     <!-- Uncomment indien badges beschikbaar zijn -->
                     <!-- <Sto class="h-6 laptop:h-8 opacity-80 hover:opacity-100 transition-opacity" /> -->
                     <!-- <Calamiteiten class="h-6 laptop:h-8 opacity-80 hover:opacity-100 transition-opacity" /> -->

@@ -11,7 +11,10 @@ const props = defineProps({
 
 </script>
 <template>
-    <Link :href="href" :class="$attrs.class + ' text-accent-terracotta hover:text-primary-dark font-medium underline decoration-accent-gold/30 hover:decoration-accent-gold transition-colors duration-300'">
+    <Link :href="href" :class="[
+        $attrs.class,
+        'text-nature-terracotta hover:text-brand-dark font-medium underline decoration-ui-gold/30 hover:decoration-ui-gold transition-colors duration-300'
+        ]">
         <slot></slot>
     </Link>
 </template>

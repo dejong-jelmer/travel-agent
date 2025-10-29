@@ -9,11 +9,11 @@ const props = defineProps({
     title: String,
     phone: Object,
 });
-
-const user = usePage().props.auth?.user ?? {};
-const flash = usePage().props.flash ?? {};
-const contact = usePage().props.contact ?? {};
-const breadcrumbs = usePage().props.breadcrumbs ?? {};
+const page = usePage()
+const user = page.props.auth?.user ?? {};
+const flash = page.props.flash ?? {};
+const contact = page.props.contact ?? {};
+const breadcrumbs = page.props.breadcrumbs ?? {};
 
 onMounted(() => {
     const encodedMail = contact?.mail?.link;

@@ -31,12 +31,12 @@ function submit() {
 
 <template>
     <div class="max-w-4xl mx-auto px-4 py-12 phone:px-6 laptop:px-8">
-        <div class="bg-neutral-50 rounded-lg p-8 phone:p-10 laptop:p-12 border border-secondary-stone/20">
+        <div class="bg-neutral-50 rounded-lg p-8 phone:p-10 laptop:p-12 border border-ui-blue/20">
             <div class="text-center mb-8">
-                <h2 class="text-2xl phone:text-3xl laptop:text-4xl font-semibold text-primary-default mb-4">
+                <h2 class="text-2xl phone:text-3xl laptop:text-4xl font-semibold text-brand-primary mb-4">
                     Blijf op de hoogte
                 </h2>
-                <p class="text-base phone:text-lg text-primary-default/70 leading-relaxed">
+                <p class="text-base phone:text-lg text-brand-primary/70 leading-relaxed">
                     Schrijf je in voor onze nieuwsbrief en ontvang alle nieuwste updates over onze reizen.
                 </p>
             </div>
@@ -55,7 +55,7 @@ function submit() {
                         <span>{{ form.processing ? 'Bezig met verzenden...' : 'Inschrijven' }}</span>
                     </span>
                 </Button>
-                <p class="text-sm text-primary-default/60 text-center mt-4">
+                <p class="text-sm text-brand-primary/60 text-center mt-4">
                     We respecteren uw privacy. U kunt zich op elk moment uitschrijven.
                 </p>
             </form>

@@ -21,9 +21,9 @@ const closeMenu = () => {
 const buttonClasses = computed(() => [
     'tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10',
     props.isScrolled
-        ? 'border-accent-gold text-white hover:bg-accent-gold/20'
+        ? 'border-ui-gold text-white hover:bg-ui-gold/20'
         : 'border-white text-white hover:bg-white/20 backdrop-blur-sm',
-    { 'bg-accent-gold/20': isOpen.value }
+    { 'bg-ui-gold/20': isOpen.value }
 ]);
 
 defineExpose({

@@ -25,7 +25,7 @@ const showMoreOptions = reactive({});
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
-                        <tr v-for="(booking, index) in bookings.data" :key="index" class="transition" :class="booking.new ? 'bg-secondary-sage' : 'hover:bg-gray-100'">
+                        <tr v-for="(booking, index) in bookings.data" :key="index" class="transition" :class="booking.new ? 'bg-nature-sage' : 'hover:bg-gray-100'">
                             <td class="py-4 px-6 text-center">{{ booking.id }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.reference }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.product?.name ?? '-' }}</td>

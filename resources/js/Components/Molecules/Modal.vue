@@ -57,7 +57,7 @@ const emitClose = () => {
                    10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
                         </svg>
                     </button>
-                    <div class="mt-2 text-primary-default">
+                    <div class="mt-2 text-brand-primary">
                         <slot />
                     </div>
                 </div>

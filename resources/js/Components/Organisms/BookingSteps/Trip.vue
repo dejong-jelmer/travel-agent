@@ -29,16 +29,16 @@ const participantSummary = computed(() => {
 <template>
     <div key="trip" class="space-y-4">
         <div class="space-y-2">
-            <h2 class="text-xl font-bold text-primary-dark">
+            <h2 class="text-xl font-bold text-brand-dark">
                 Reis boeken - {{ booking.trip?.name }}
             </h2>
-            <p class="text-primary-default leading-relaxed">
-                Wat leuk dat je de reis <strong class="text-primary-dark">{{ booking.trip?.name }}</strong>
+            <p class="text-brand-primary leading-relaxed">
+                Wat leuk dat je de reis <strong class="text-brand-dark">{{ booking.trip?.name }}</strong>
                 wilt gaan boeken.
                 We gaan een aantal stappen doorlopen om te zorgen dat de boeking goed doorkomt.
             </p>
             <div class="bg-accent-sand/20 border border-accent-sand rounded-lg p-4">
-                <p class="text-sm text-primary-dark">
+                <p class="text-sm text-brand-dark">
                     <strong>Let op:</strong> Dit is een <strong>boekingsaanvraag</strong>. We kijken eerst
                     of we aan
                     alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen
@@ -48,7 +48,7 @@ const participantSummary = computed(() => {
             </div>
         </div>
 
-        <hr class="border-secondary-sage/20">
+        <hr class="border-nature-sage/20">
 
         <div class="grid grid-cols-3 gap-2 items-center">
             <p>Reis</p>

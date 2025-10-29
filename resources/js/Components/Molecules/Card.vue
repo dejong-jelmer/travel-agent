@@ -21,20 +21,20 @@ defineProps({ product: Object });
         <div class="py-5 px-8 space-y-3 text-left bg-neutral-50">
             <!-- Landen met sage green accent -->
             <div class="inline-flex items-center gap-2">
-                <span class="w-2 h-2 bg-secondary-sage rounded-full"></span>
-                <h3 class="text-sm text-secondary-stone font-medium line-clamp-1">
+                <span class="w-2 h-2 bg-nature-sage rounded-full"></span>
+                <h3 class="text-sm text-ui-blue font-medium line-clamp-1">
                     {{ product.countries_list }}
                 </h3>
             </div>
 
             <!-- Titel -->
             <h4
-                class="text-xl laptop:text-2xl leading-6 font-bold text-primary-dark line-clamp-2 min-h-0 laptop:min-h-8">
+                class="text-xl laptop:text-2xl leading-6 font-bold text-brand-dark line-clamp-2 min-h-0 laptop:min-h-8">
                 {{ product.name }}
             </h4>
 
             <!-- Beschrijving -->
-            <p class="text-sm text-primary-default line-clamp-3 leading-relaxed">{{ product.description }}</p>
+            <p class="text-sm text-brand-primary line-clamp-3 leading-relaxed">{{ product.description }}</p>
 
             <!-- Details sectie -->
             <div class="pt-2 border-t border-neutral-200">
@@ -42,23 +42,22 @@ defineProps({ product: Object });
                     <!-- Links: reis details -->
                     <div class="flex flex-col space-y-2">
                         <div class="inline-flex gap-x-2 items-center">
-                            <Clock class="h-5 w-5 text-accent-gold"></Clock>
-                            <p class="text-sm text-primary-dark">
+                            <Clock class="h-5 w-5 text-ui-gold"></Clock>
+                            <p class="text-sm text-brand-dark">
                                 {{ product.duration }} dagen
                             </p>
                         </div>
                         <div class="inline-flex gap-x-2 items-center">
-                            <Directions class="h-5 w-5 text-accent-gold"></Directions>
-                            <Train class="h-5 w-5 text-secondary-stone" />
-                            <p class="text-xs text-secondary-stone">Duurzaam reizen</p>
+                            <Directions class="h-5 w-5 text-ui-gold"></Directions>
+                            <Train class="h-5 w-5 text-ui-blue" />
+                            <p class="text-xs text-ui-blue">Duurzaam reizen</p>
                         </div>
                     </div>
 
                     <!-- Rechts: CTA button -->
                     <div class="flex justify-end">
                         <Link :href="route('trip.show', product)">
-                        <Button
-                            class="bg-accent-earth hover:bg-accent-terracotta text-primary-dark hover:text-white transition-colors duration-200 px-4 py-2 rounded-lg font-medium text-sm">
+                        <Button>
                             Bekijk&nbsp;reis
                         </Button>
                         </Link>

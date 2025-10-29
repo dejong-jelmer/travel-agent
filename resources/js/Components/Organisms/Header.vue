@@ -23,7 +23,7 @@ const navbarClasses = computed(() => {
   return [
     'transition-all duration-500 ease-in-out',
     scrolledPast.value || (homeRoute !== currentRoute)
-      ? 'bg-primary-default shadow-lg'
+      ? 'bg-brand-primary shadow-lg'
       : 'bg-gradient-to-b from-black/20 to-transparent'
   ]
 })
@@ -39,8 +39,8 @@ const menuItemClasses = computed(() => {
   return [
     'transition-all duration-300',
     scrolledPast.value || (homeRoute !== currentRoute)
-      ? 'bg-accent-earth text-primary-dark hover:bg-accent-terracotta hover:text-white'
-      : 'bg-white/90 backdrop-blur-sm text-primary-dark hover:bg-accent-gold hover:text-white'
+      ? 'bg-nature-earth text-brand-dark hover:bg-nature-terracotta hover:text-white'
+      : 'bg-white/90 backdrop-blur-sm text-brand-dark hover:bg-ui-gold hover:text-white'
   ]
 })
 </script>

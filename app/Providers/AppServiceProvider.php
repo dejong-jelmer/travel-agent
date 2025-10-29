@@ -6,6 +6,7 @@ use App\Enums\BookingAction;
 use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Responses\BookingResponse;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
@@ -38,6 +39,9 @@ class AppServiceProvider extends ServiceProvider
                     'error' => Session::get('error'),
                 ];
             },
+            'adminStats' => fn () => request()->routeIs('admin.*') && Auth::check()
+                ? ['newBookingsCount' => Booking::new()->count()]
+                : null,
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());

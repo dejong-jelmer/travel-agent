@@ -15,12 +15,12 @@
                     </div>
 
                     <!-- Heading -->
-                    <h1 class="text-2xl font-bold text-primary-dark mb-4">
+                    <h1 class="text-2xl font-bold text-brand-dark mb-4">
                         Je bent uitgeschreven 📨
                     </h1>
 
                     <!-- Confirmation Message -->
-                    <p class="text-lg text-primary-default mb-8 leading-relaxed">
+                    <p class="text-lg text-brand-primary mb-8 leading-relaxed">
                         Je hebt je succesvol afgemeld voor onze nieuwsbrief. Je ontvangt geen
                         verdere e-mails meer, maar je kunt altijd opnieuw inschrijven als je
                         op de hoogte wilt blijven van ons nieuwste reisaanbod.
@@ -28,26 +28,26 @@
 
                     <!-- What's Next Box -->
                     <div
-                        class="bg-neutral-50 border border-secondary-stone/30 rounded-2xl p-8 mb-8 text-left shadow-sm">
-                        <h2 class="text-xl font-semibold text-primary-dark mb-4">
+                        class="bg-neutral-50 border border-ui-blue/30 rounded-2xl p-8 mb-8 text-left shadow-sm">
+                        <h2 class="text-xl font-semibold text-brand-dark mb-4">
                             Wat nu?
                         </h2>
                         <ul class="space-y-3">
                             <li class="flex items-start">
                                 <span class="text-status-warning font-bold mr-2">⚠</span>
-                                <span class="text-primary-default">
+                                <span class="text-brand-primary">
                                     Je ontvangt geen nieuwsbrieven meer van ons
                                 </span>
                             </li>
                             <li class="flex items-start">
                                 <span class="text-status-warning font-bold mr-2">⚠</span>
-                                <span class="text-primary-default">
+                                <span class="text-brand-primary">
                                     Je kunt je altijd opnieuw inschrijven op een later moment
                                 </span>
                             </li>
                             <li class="flex items-start">
                                 <span class="text-status-warning font-bold mr-2">⚠</span>
-                                <span class="text-primary-default">
+                                <span class="text-brand-primary">
                                     Voor vragen kun je contact met ons opnemen
                                 </span>
                             </li>
@@ -62,7 +62,7 @@
                     </a>
 
                     <!-- Footer Note -->
-                    <p class="mt-8 text-sm text-secondary-stone">
+                    <p class="mt-8 text-sm text-ui-blue">
                         Heb je vragen?
                         <DefaultLink href="/contact">
                             Neem contact met ons op
