@@ -9,10 +9,8 @@ use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    public function showDashboard()
+    public function showDashboard(SystemHealthService $healthService)
     {
-        $healthService = new SystemHealthService();
-
         return Inertia::render('Admin/Dashboard', [
             'title' => 'Admin dashboard - '.env('APP_NAME'),
             'bookings' => [

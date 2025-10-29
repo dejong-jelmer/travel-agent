@@ -2,13 +2,15 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Queue;
-use Illuminate\Support\Facades\Config;
 use Exception;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use PDOException;
 
 class SystemHealthService
 {
+    private const QUEUE_WARNING_THRESHOLD = 100;
+
     /**
      * Check database connection health
      */
@@ -24,7 +26,9 @@ class SystemHealthService
                 'responseTime' => $responseTime,
                 'message' => 'Verbonden met database',
             ];
-        } catch (Exception $e) {
+        } catch (PDOException $e) {
+            Log::error('Database health check failed', ['error' => $e->getMessage()]);
+
             return [
                 'status' => 'error',
                 'responseTime' => null,
@@ -40,17 +44,17 @@ class SystemHealthService
     {
         try {
             // Check for Mailjet API credentials in environment
-            $mailjetKey = env('MAILJET_API_KEY');
-            $mailjetSecret = env('MAILJET_API_SECRET');
+            $mailjetKey = config('services.mailjet.key');
+            $mailjetSecret = config('services.mailjet.secret');
 
-            $configured = !empty($mailjetKey) && !empty($mailjetSecret);
+            $configured = ! empty($mailjetKey) && ! empty($mailjetSecret);
 
             if ($configured) {
                 return [
                     'status' => 'healthy',
                     'configured' => true,
                     'provider' => 'Mailjet',
-                    'message' => 'Mailjet API geconfigureerd',
+                    'message' => 'Email service geconfigureerd',
                 ];
             }
 
@@ -58,9 +62,11 @@ class SystemHealthService
                 'status' => 'warning',
                 'configured' => false,
                 'provider' => 'Mailjet',
-                'message' => 'Mailjet API credentials ontbreken',
+                'message' => 'Email service niet beschikbaar',
             ];
         } catch (Exception $e) {
+            Log::error('Email health check failed', ['error' => $e->getMessage()]);
+
             return [
                 'status' => 'error',
                 'configured' => false,
@@ -75,7 +81,7 @@ class SystemHealthService
     public function checkQueue(): array
     {
         try {
-            $connection = Config::get('queue.default');
+            $connection = config('queue.default');
             $pendingJobs = 0;
 
             // Count pending jobs for database queue
@@ -84,7 +90,7 @@ class SystemHealthService
             }
 
             // Determine status based on queue size
-            if ($pendingJobs > 100) {
+            if ($pendingJobs > self::QUEUE_WARNING_THRESHOLD) {
                 $status = 'warning';
                 $message = "{$pendingJobs} jobs wachten (hoge belasting)";
             } elseif ($pendingJobs > 0) {
@@ -102,6 +108,8 @@ class SystemHealthService
                 'message' => $message,
             ];
         } catch (Exception $e) {
+            Log::error('Queue health check failed', ['error' => $e->getMessage()]);
+
             return [
                 'status' => 'error',
                 'pendingJobs' => null,

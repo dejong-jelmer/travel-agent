@@ -7,6 +7,7 @@ use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Responses\BookingResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
@@ -40,22 +41,26 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
             'auth' => function () {
+                $user = Auth::user();
+
                 return [
-                    'user' => Auth::user() ? [
-                        'id' => Auth::id(),
-                        'name' => Auth::user()->name,
-                        'email' => Auth::user()->email,
+                    'user' => $user ? [
+                        'id' => $user->id(),
+                        'name' => $user->user()->name,
+                        'email' => $user->user()->email,
                     ] : null,
                 ];
             },
             'adminStats' => function () {
-                if (!Auth::check()) {
+                if (! request()->routeIs('admin.*') && ! Auth::check()) {
                     return null;
                 }
 
-                return [
-                    'newBookingsCount' => Booking::where('created_at', '>=', now()->subDays(7))->count(),
-                ];
+                return Cache::remember('admin.stats.new_bookings', 300, function () {
+                    return [
+                        'newBookingsCount' => Booking::where('created_at', '>=', now()->subDays(7))->count(),
+                    ];
+                });
             },
         ]);
 
