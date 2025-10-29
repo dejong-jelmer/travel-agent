@@ -16,7 +16,6 @@ class DashboardController extends Controller
             'bookings' => [
                 'all' => Booking::count(),
                 'new' => Booking::new()->count(),
-                'new' => Booking::new()->count(),
                 'upcoming' => Booking::upcoming()->count(),
                 'comingMonth' => Booking::comingMonth()->count(),
             ],
