@@ -21,49 +21,40 @@ export default {
                 '2xs': '10px'
             },
             colors: {
-                primary: {
-                    default: '#2F3E46',    // Donkergroengrijs
-                    dark: '#1B3A4B',       // Donkerbluaw variant voor tekst/contrast
+                // Brand identity colors
+                brand: {
+                    primary: '#2F3E46',    // Main brand color - Donkergroengrijs
+                    dark: '#1B3A4B',       // Dark variant for text/contrast
                 },
-                secondary: {
-                    sage: '#AFCB98',       // Saliegroen - Duurzaamheid/natuur accent
-                    stone: '#A3BCCB',      // Zachtblauw - Subtiele accenten, borders
+
+                // Nature/sustainability theme colors
+                nature: {
+                    sage: '#AFCB98',       // Sage green - Sustainability accent
+                    earth: '#DCC7AA',      // Earth/sand tone
+                    terracotta: '#B17C65', // Terracotta - Warm accent
                 },
-                accent: {
-                    earth: '#DCC7AA',
-                    gold: '#D4A017',
-                    terracotta: '#B17C65',
+
+                // UI accent colors
+                ui: {
+                    blue: '#A3BCCB',       // Soft blue - Borders, subtle accents
+                    gold: '#D4A017',       // Gold - Highlights, premium feel
                 },
-                neutral: {
-                    25: '#FAFAFA',
-                    50: '#F2F4F3',
-                },
+
+                // Status feedback colors
                 status: {
-                    error: '#C5534A',
-                    success: '#6B8E5A',
-                    warning: '#D4A017',
+                    error: '#C5534A',      // Red for errors
+                    success: '#6B8E5A',    // Green for success
+                    warning: '#D4A017',    // Gold for warnings (shared with ui.gold)
+                },
+
+                // Neutral backgrounds
+                neutral: {
+                    25: '#FAFAFA',         // Lightest background
+                    50: '#F2F4F3',         // Light background
+                    100: '#E5E7E6',        // Border gray
+                    200: '#CBD0CE',        // Subtle dividers
                 }
             },
-            // colors: {
-            //     primary: {
-            //         green: '#2F3E46', // Bosgroen - Duurzaamheid, natuur, stabiliteit
-            //     },
-            //     secondary: {
-            //         blue: '#A3BCCB', // Zachtblauw - Betrouwbaarheid, rust
-            //     },
-            //     accent: {
-            //         earth: '#DCC7AA', // Warm zand - Aards, avontuurlijk maar kalm
-            //         yellow: '#D4A017', // Goudgeel - Warme, rijke gele diepe, maar gedempte uitstraling
-            //     },
-            //     background: {
-            //         gray: '#F2F4F3', //	Mistgrijs -	Licht, schoon, neutraal
-            //         green: '#AFCB98', // Zachtgroen - Zachte, gedempte groentint. Kalm en natuurlijk.
-            //     },
-            //     contrast: {
-            //         blue: '#1B3A4B', // Nachtblauw	- Diepte, betrouwbaarheid
-            //         pink: '#B17C65', // Koperroze - Gedempt, elegant, warm
-            //     },
-            // },
             screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
             keyframes: {
                 'slide-left-right': {

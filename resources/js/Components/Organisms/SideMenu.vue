@@ -113,7 +113,7 @@ const userInitials = computed(() => {
         <button
             v-show="!open"
             type="button"
-            class="fixed top-6 right-6 phone:top-[50%] z-50 rounded-full bg-white p-3 text-gray-600 shadow-lg hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-default focus:ring-offset-2 transition-all duration-200 sm:top-8 sm:right-8"
+            class="fixed top-6 right-6 phone:top-[50%] z-50 rounded-full bg-white p-3 text-gray-600 shadow-lg hover:bg-gray-50 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:ring-offset-2 transition-all duration-200 sm:top-8 sm:right-8"
             @click="open = true"
             aria-label="Open admin menu"
         >
@@ -152,7 +152,7 @@ const userInitials = computed(() => {
                                     <div class="absolute top-6 right-4 z-20">
                                         <button
                                             type="button"
-                                            class="rounded-full bg-white/10 p-2 text-gray-400 hover:bg-white/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-primary-default shadow-sm backdrop-blur-sm transition-colors"
+                                            class="rounded-full bg-white/10 p-2 text-gray-400 hover:bg-white/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-primary shadow-sm backdrop-blur-sm transition-colors"
                                             @click="open = false"
                                             aria-label="Close admin menu"
                                         >
@@ -161,7 +161,7 @@ const userInitials = computed(() => {
                                     </div>
 
                                     <!-- Menu content -->
-                                    <div class="flex h-full flex-col overflow-y-auto bg-gradient-to-b from-primary-default to-primary-dark shadow-2xl">
+                                    <div class="flex h-full flex-col overflow-y-auto bg-gradient-to-b from-brand-primary to-brand-dark shadow-2xl">
                                         <!-- Header met User Profile -->
                                         <div class="px-6 py-8 border-b border-white/10">
                                             <DialogTitle class="text-lg font-semibold text-white/90 mb-6">
@@ -172,7 +172,7 @@ const userInitials = computed(() => {
                                             <div v-if="authUser" class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 backdrop-blur-sm">
                                                 <!-- Avatar -->
                                                 <div class="flex-shrink-0">
-                                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br from-accent-gold to-accent-terracotta flex items-center justify-center text-white font-semibold text-sm shadow-lg">
+                                                    <div class="h-12 w-12 rounded-full bg-gradient-to-br from-ui-gold to-nature-terracotta flex items-center justify-center text-white font-semibold text-sm shadow-lg">
                                                         {{ userInitials }}
                                                     </div>
                                                 </div>
@@ -227,7 +227,7 @@ const userInitials = computed(() => {
                                                                 :href="item.path"
                                                                 class="group flex items-center rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200"
                                                                 :class="{
-                                                                    'bg-white text-primary-default shadow-lg shadow-white/20': isCurrentPage(item.path),
+                                                                    'bg-white text-brand-primary shadow-lg shadow-white/20': isCurrentPage(item.path),
                                                                     'text-white/80 hover:bg-white/10 hover:text-white': !isCurrentPage(item.path)
                                                                 }"
                                                                 @click="open = false"
@@ -237,7 +237,7 @@ const userInitials = computed(() => {
                                                                     :is="item.icon"
                                                                     class="mr-3 h-5 w-5 flex-shrink-0"
                                                                     :class="{
-                                                                        'text-primary-default': isCurrentPage(item.path),
+                                                                        'text-brand-primary': isCurrentPage(item.path),
                                                                         'text-white/60 group-hover:text-white': !isCurrentPage(item.path)
                                                                     }"
                                                                     aria-hidden="true"
@@ -251,8 +251,8 @@ const userInitials = computed(() => {
                                                                     v-if="item.badge && adminStats?.newBookingsCount > 0"
                                                                     class="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                                                                     :class="{
-                                                                        'bg-primary-default text-white': isCurrentPage(item.path),
-                                                                        'bg-accent-terracotta text-white': !isCurrentPage(item.path)
+                                                                        'bg-brand-primary text-white': isCurrentPage(item.path),
+                                                                        'bg-nature-terracotta text-white': !isCurrentPage(item.path)
                                                                     }"
                                                                 >
                                                                     {{ adminStats.newBookingsCount }}
@@ -261,7 +261,7 @@ const userInitials = computed(() => {
                                                                 <!-- Active Indicator -->
                                                                 <ChevronRightIcon
                                                                     v-if="isCurrentPage(item.path)"
-                                                                    class="ml-2 h-4 w-4 text-primary-default"
+                                                                    class="ml-2 h-4 w-4 text-brand-primary"
                                                                     aria-hidden="true"
                                                                 />
                                                             </Link>

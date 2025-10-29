@@ -28,8 +28,8 @@ function submit() {
                     prompt="Weet je zeker dat je deze boeking wilt aanpassen?" />
             </div>
             <!-- Trip details -->
-            <div class="bg-white p-6 tablet:p-8 rounded-2xl shadow-lg border border-secondary-stone/40">
-                <h2 class="text-2xl font-bold text-primary-dark">
+            <div class="bg-white p-6 tablet:p-8 rounded-2xl shadow-lg border border-ui-blue/40">
+                <h2 class="text-2xl font-bold text-brand-dark">
                     Boekingsgegevens
                 </h2>
                 <div class="grid grid-cols-2">
@@ -63,14 +63,14 @@ function submit() {
 
                 <!-- Reisgezelschap -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
-                    <h2 class="text-2xl font-bold text-primary-dark">Reisgezelschap</h2>
+                    <h2 class="text-2xl font-bold text-brand-dark">Reisgezelschap</h2>
                     <Traveler :booking="booking" type="adults" label="Volwassene" />
                     <Traveler :booking="booking" type="children" label="Kind" />
                 </div>
 
                 <!-- Contactgegevens -->
                 <div class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
-                    <h2 class="text-2xl font-bold text-primary-dark">Contactgegevens</h2>
+                    <h2 class="text-2xl font-bold text-brand-dark">Contactgegevens</h2>
                     <Contact :booking="booking" />
                 </div>
             </div>

@@ -29,7 +29,7 @@ defineExpose({
     <div class="border-b py-2">
         <button class="flex justify-between items-center w-full text-left" @click="toggle">
             <slot name="trigger" :isOpen="isOpen">
-                <span class="text-primary-dark">
+                <span class="text-brand-dark">
                     {{ title }}
                 </span>
             </slot>

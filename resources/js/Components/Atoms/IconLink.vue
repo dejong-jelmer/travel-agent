@@ -68,7 +68,7 @@ const confirmDelete = (href, showConfirm, prompt) => {
             :class="{
                     'bg-red-500 group-hover:bg-white border-red-500': type === 'delete',
                     'bg-white group-hover:bg-red-500 border border-red-500 group-hover:border-red-500': type === 'danger',
-                    'bg-white group-hover:bg-primary-default border border-primary-default': type === 'info'
+                    'bg-white group-hover:bg-brand-primary border border-brand-primary': type === 'info'
                 }"
             >
             <component :is="currentIcon"
@@ -76,7 +76,7 @@ const confirmDelete = (href, showConfirm, prompt) => {
                 :class="{
                         'stroke-white group-hover:stroke-red-500': type === 'delete',
                         'stroke-red-500 group-hover:stroke-white': type === 'danger',
-                        'stroke-primary-default group-hover:stroke-white': type === 'info'
+                        'stroke-brand-primary group-hover:stroke-white': type === 'info'
                     }"
             />
         </button>

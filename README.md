@@ -298,10 +298,32 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 ```
 
 **Custom Color Palette** (see `tailwind.config.js`):
-- `primary.default` / `primary.dark` - Brand colors
-- `secondary.sage` / `secondary.stone` - Nature accents
-- `accent.earth` / `accent.gold` / `accent.terracotta` - Warm tones
-- `status.error` / `status.success` / `status.warning` - Feedback
+
+*Semantic color system for better maintainability:*
+
+- **Brand Identity**
+  - `brand.primary` (#2F3E46) - Main brand color
+  - `brand.dark` (#1B3A4B) - Dark variant for text/contrast
+
+- **Nature Theme** (Sustainability focus)
+  - `nature.sage` (#AFCB98) - Sage green accent
+  - `nature.earth` (#DCC7AA) - Earth/sand tone
+  - `nature.terracotta` (#B17C65) - Warm terracotta
+
+- **UI Accents**
+  - `ui.blue` (#A3BCCB) - Soft blue for borders/subtle accents
+  - `ui.gold` (#D4A017) - Gold for highlights/premium feel
+
+- **Status Feedback**
+  - `status.error` (#C5534A) - Error states
+  - `status.success` (#6B8E5A) - Success states
+  - `status.warning` (#D4A017) - Warning states
+
+- **Neutral Backgrounds**
+  - `neutral.25` / `neutral.50` / `neutral.100` / `neutral.200`
+
+*Legacy aliases available for backward compatibility (deprecated):*
+- `primary.*`, `secondary.*`, `accent.*` → Use semantic names above
 
 **Rate Limiting:**
 Custom `frontend-form-actions` limiter: 25 requests/min per IP

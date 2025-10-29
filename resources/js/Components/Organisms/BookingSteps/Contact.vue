@@ -40,17 +40,17 @@ const bookerOptions = computed(() => {
 
 <template>
     <div key="contact" class="space-y-6">
-        <h2 class="text-xl font-bold text-primary-dark">Contactgegevens</h2>
-        <hr class="border-secondary-sage/20">
+        <h2 class="text-xl font-bold text-brand-dark">Contactgegevens</h2>
+        <hr class="border-nature-sage/20">
 
         <div class="space-y-2 p-4 border rounded-lg">
             <div v-if="bookerOptions.length > 1" class="mb-5">
                 <div class="grid grid-cols-2 gap-6">
-                    <h2 class="text-base font-bold text-primary-dark">Wie wordt de hoofdboeker?</h2>
-                    <h2 class="text-base font-bold text-primary-dark">Gekozen hoofdboeker:</h2>
+                    <h2 class="text-base font-bold text-brand-dark">Wie wordt de hoofdboeker?</h2>
+                    <h2 class="text-base font-bold text-brand-dark">Gekozen hoofdboeker:</h2>
                     <RadioGroup v-model="booking.main_booker" name="main_booker" :options="bookerOptions" />
                     <p class="font-bold flex items-center border rounded-2xl p-6 bg-slate-50">
-                        <User class="w-4 h-4 mr-2 text-secondary-stone" />
+                        <User class="w-4 h-4 mr-2 text-ui-blue" />
                         {{ formatBookerDetails(props.booking.travelers.adults[props.booking.main_booker]) }}</p>
                 </div>
             </div>

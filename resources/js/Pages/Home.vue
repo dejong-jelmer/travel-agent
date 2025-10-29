@@ -16,9 +16,9 @@ const props = defineProps({
             <section class="relative overflow-hidden floating-elements">
                 <div class="absolute top-0 left-0 w-full h-2 decorative-line"></div>
                 <!-- Geometrische vormen -->
-                <div class="absolute top-16 left-8 w-4 h-4 bg-secondary-sage/20 rounded-full"></div>
-                <div class="absolute top-32 right-24 w-2 h-2 bg-accent-gold/30 rounded-full"></div>
-                <div class="absolute bottom-24 left-16 w-3 h-3 bg-accent-terracotta/15 rounded-full"></div>
+                <div class="absolute top-16 left-8 w-4 h-4 bg-nature-sage/20 rounded-full"></div>
+                <div class="absolute top-32 right-24 w-2 h-2 bg-ui-gold/30 rounded-full"></div>
+                <div class="absolute bottom-24 left-16 w-3 h-3 bg-nature-terracotta/15 rounded-full"></div>
                 <article class="relative py-8 desktop:py-24">
                     <div class="max-w-screen-desktop mx-auto px-4">
                         <div class="text-center">
@@ -28,14 +28,14 @@ const props = defineProps({
                             <div class="max-w-4xl mx-auto px-4 pt-6 sm:px-6 desktop:px-8 grid gap-4 desktop:gap-6">
                                 <div class="grid grid-cols-1 desktop:grid-cols-2 gap-4 desktop:gap-6 ">
                                     <div class="text-left space-y-6">
-                                        <p class="text-lg sm:text-xl desktop:text-xl text-primary-default leading-relaxed">
+                                        <p class="text-lg sm:text-xl desktop:text-xl text-brand-primary leading-relaxed">
                                             Elke reis vertelt een verhaal. Het verhaal van plekken waar geschiedenis tot
                                             leven komt
                                             — van mensen, culturen en sporen uit het verleden die nog altijd voelbaar
                                             zijn.
                                         </p>
 
-                                        <p class="text-base sm:text-lg desktop:text-xl text-primary-default leading-relaxed">
+                                        <p class="text-base sm:text-lg desktop:text-xl text-brand-primary leading-relaxed">
                                             Binnenkort gaan we van start. <strong
                                                 class="font-semibold">Blijf
                                                 dichtbij, reis verder.</strong> Laat je meenemen op een reis met
@@ -51,7 +51,7 @@ const props = defineProps({
                                     </div>
                                 </div>
                                 <div>
-                                    <p class="text-base sm:text-lg desktop:text-xl text-primary-default leading-relaxed">
+                                    <p class="text-base sm:text-lg desktop:text-xl text-brand-primary leading-relaxed">
                                             Wij geloven dat reizen meer mag zijn dan alleen verplaatsen. Het mag raken,
                                             inspireren
                                             en verbinden. Daarom creëren we <strong
@@ -74,9 +74,9 @@ const props = defineProps({
                         </div>
                         <template v-if="products.length <= 0">
                             <div class="max-w-screen-laptop mx-auto px-4">
-                                <div class="text-primary-default max-w-4xl mx-auto px-4 pt-6 sm:px-6 desktop:px-8">
+                                <div class="text-brand-primary max-w-4xl mx-auto px-4 pt-6 sm:px-6 desktop:px-8">
                                     <div class="text-center">
-                                        <p class="text-base sm:text-lg desktop:text-xl text-primary-default leading-relaxed">
+                                        <p class="text-base sm:text-lg desktop:text-xl text-brand-primary leading-relaxed">
                                             Omdat we hard aan het werk zijn om onze eerste reizen op te zetten, kunt u
                                             momenteel nog geen reizen boeken. Kijk op onze <DefaultLink :href="'/blog'">
                                                 blog</DefaultLink>, voor informatie over recente activiteiten of bekijk
@@ -101,21 +101,21 @@ const props = defineProps({
             <section class="section relative px-4 laptop:px-16">
                 <div class="absolute top-0 left-0 w-full h-2 decorative-line"></div>
                 <!-- Geometrische vormen -->
-                <div class="absolute top-16 left-8 w-4 h-4 bg-secondary-sage/20 rounded-full"></div>
-                <div class="absolute top-0 right-24 w-2 h-2 bg-accent-gold/30 rounded-full"></div>
-                <div class="absolute bottom-24 left-16 w-3 h-3 bg-accent-terracotta/15 rounded-full"></div>
+                <div class="absolute top-16 left-8 w-4 h-4 bg-nature-sage/20 rounded-full"></div>
+                <div class="absolute top-0 right-24 w-2 h-2 bg-ui-gold/30 rounded-full"></div>
+                <div class="absolute bottom-24 left-16 w-3 h-3 bg-nature-terracotta/15 rounded-full"></div>
                 <USP></USP>
             </section>
             <section class="relative bg-gradient-reverse">
                 <div class="absolute top-0 left-0 w-full h-2 decorative-line"></div>
                 <!-- Subtiele geometrische vormen -->
-                <div class="absolute top-16 left-8 w-4 h-4 bg-secondary-sage/20 rounded-full"></div>
-                <div class="absolute top-32 right-24 w-2 h-2 bg-accent-gold/30 rounded-full"></div>
-                <div class="absolute bottom-24 left-16 w-3 h-3 bg-accent-terracotta/15 rounded-full"></div>
+                <div class="absolute top-16 left-8 w-4 h-4 bg-nature-sage/20 rounded-full"></div>
+                <div class="absolute top-32 right-24 w-2 h-2 bg-ui-gold/30 rounded-full"></div>
+                <div class="absolute bottom-24 left-16 w-3 h-3 bg-nature-terracotta/15 rounded-full"></div>
                 <!-- Decoratieve natuurlijke vormen -->
                 <div class="absolute inset-0 overflow-hidden">
-                    <div class="absolute top-1/4 -left-32 w-64 h-64 bg-secondary-sage/20 rounded-full"></div>
-                    <div class="absolute bottom-1/3 -right-24 w-48 h-48 bg-accent-earth/20 rounded-full"></div>
+                    <div class="absolute top-1/4 -left-32 w-64 h-64 bg-nature-sage/20 rounded-full"></div>
+                    <div class="absolute bottom-1/3 -right-24 w-48 h-48 bg-nature-earth/20 rounded-full"></div>
                 </div>
 
                 <!-- Subtiele textuur overlay -->

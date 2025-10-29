@@ -43,7 +43,7 @@ const format = (date) =>
             teleport="body" :format="format" :min-date="props.minDate || null" :max-date="props.maxDate || null"
             arrow-navigation auto-apply :state="!!feedback ? false : null">
             <template #input-icon>
-                <Calendar class="ml-1 h-5 w-auto text-accent-gold" />
+                <Calendar class="ml-1 h-5 w-auto text-ui-gold" />
             </template>
         </VueDatePicker>
         <template v-if="!!feedback">

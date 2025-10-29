@@ -154,15 +154,15 @@ body {
 
 @layer components {
     .form-input {
-        @apply block w-full mt-2 px-3 py-1 border border-gray-300 text-primary-default rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-base;
+        @apply block w-full mt-2 px-3 py-1 border border-gray-300 text-brand-primary rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-base;
     }
 
     .form-button {
-        @apply px-6 py-3 font-semibold cursor-pointer select-none border border-primary-default text-primary-default bg-white rounded-lg transition-all duration-300 ease-out hover:bg-primary-default hover:text-white;
+        @apply px-6 py-3 font-semibold cursor-pointer select-none border border-brand-primary text-brand-primary bg-white rounded-lg transition-all duration-300 ease-out hover:bg-brand-primary hover:text-white;
     }
 
     .info-button {
-        @apply bg-transparent p-2 rounded-lg border border-primary-default hover:bg-gray-300;
+        @apply bg-transparent p-2 rounded-lg border border-brand-primary hover:bg-gray-300;
     }
 
     .section {

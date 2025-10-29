@@ -15,38 +15,38 @@
                     </div>
 
                     <!-- Heading -->
-                    <h1 class="text-2xl font-bold text-primary-dark mb-4">
+                    <h1 class="text-2xl font-bold text-brand-dark mb-4">
                         Je bent ingeschreven! 🎉
                     </h1>
 
                     <!-- Confirmation Message -->
-                    <p class="text-lg text-primary-default mb-8 leading-relaxed">
+                    <p class="text-lg text-brand-primary mb-8 leading-relaxed">
                         Bedankt voor het bevestigen van je aanmelding. Je ontvangt vanaf nu
                         onze nieuwsbrief met de laatste updates, tips en exclusieve content.
                     </p>
 
                     <!-- What's Next Box -->
                     <div
-                        class="bg-neutral-50 border border-secondary-stone/30 rounded-2xl p-8 mb-8 text-left shadow-sm">
-                        <h2 class="text-xl font-semibold text-primary-dark mb-4">
+                        class="bg-neutral-50 border border-ui-blue/30 rounded-2xl p-8 mb-8 text-left shadow-sm">
+                        <h2 class="text-xl font-semibold text-brand-dark mb-4">
                             Wat kun je verwachten?
                         </h2>
                         <ul class="space-y-3">
                             <li class="flex items-start">
                                 <span class="text-status-success font-bold mr-2">✓</span>
-                                <span class="text-primary-default">
+                                <span class="text-brand-primary">
                                     Regelmatige updates over ons nieuwste reisaanbod
                                 </span>
                             </li>
                             <li class="flex items-start">
                                 <span class="text-status-success font-bold mr-2">✓</span>
-                                <span class="text-primary-default">
+                                <span class="text-brand-primary">
                                     Exclusieve content en verhalen
                                 </span>
                             </li>
                             <li class="flex items-start">
                                 <span class="text-status-success font-bold mr-2">✓</span>
-                                <span class="text-primary-default">
+                                <span class="text-brand-primary">
                                     Je kunt je altijd weer uitschrijven
                                 </span>
                             </li>
@@ -61,7 +61,7 @@
                     </a>
 
                     <!-- Footer Note -->
-                    <p class="mt-8 text-sm text-secondary-stone">
+                    <p class="mt-8 text-sm text-ui-blue">
                         Heb je vragen?
                         <DefaultLink href="/contact">
                             Neem contact met ons op

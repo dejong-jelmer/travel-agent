@@ -9,7 +9,7 @@ const year = new Date().getFullYear();
 
 </script>
 <template>
-    <footer class="bg-primary-default">
+    <footer class="bg-brand-primary">
         <div class="max-w-screen-desktop px-4 pt-16 pb-6 mx-auto tablet:px-6 laptop:pt-24">
             <div
                 class="grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between">
