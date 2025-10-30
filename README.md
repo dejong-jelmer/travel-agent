@@ -1,4 +1,6 @@
 # Sustainable Travel Agent
+---
+[![run-tests](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml)
 
 A Laravel 12 + Inertia.js + Vue 3 application promoting sustainable European train travel. Built with modern development practices, comprehensive testing, and automated CI/CD deployment.
 
