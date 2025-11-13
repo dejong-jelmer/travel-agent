@@ -71,7 +71,6 @@ class BookingController extends Controller
         dd($booking);
         Booking::destroy($booking->id);
 
-
         return redirect()->route('admin.bookings.index')
             ->with('success', __('booking.destroyed'));
     }
