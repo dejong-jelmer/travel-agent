@@ -36,21 +36,23 @@ class ItineraryValidationRules
 
     public static function imageCreate(): array
     {
-        $maxFileSize = config('app-settings.maxFileSize');
-        $mimes = config('app-settings.mimes');
-
         return [
-            'image' => ['required', 'image', "mimes:{$mimes}", "max:{$maxFileSize}"],
+            'image' => ['nullable', ...self::baseImage()],
         ];
     }
 
     public static function imageUpdate(): array
     {
+        return [
+            'image' => ['nullable', ...self::baseImage()],
+        ];
+    }
+
+    private static function baseImage(): array
+    {
         $maxFileSize = config('app-settings.maxFileSize');
         $mimes = config('app-settings.mimes');
 
-        return [
-            'image' => ['required', 'image', "mimes:{$mimes}", "max:{$maxFileSize}"],
-        ];
+        return ['image', "mimes:{$mimes}", "max:{$maxFileSize}"];
     }
 }

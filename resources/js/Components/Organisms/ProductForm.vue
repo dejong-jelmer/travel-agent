@@ -175,7 +175,7 @@ const imageErrors = computed(() =>
                     Alles opgeslagen
                 </span>
             </p>
-            <FormSubmit :form="form" label="Product Opslaan" @submit="submit" />
+            <FormSubmit :form="form" label="Product Opslaan" @submit="emit('submit')" />
         </div>
     </form>
 </template>

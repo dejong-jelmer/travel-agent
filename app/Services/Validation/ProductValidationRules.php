@@ -39,43 +39,40 @@ class ProductValidationRules
 
     public static function featuredImageStore(): array
     {
-        $maxFileSize = config('app-settings.maxFileSize');
-        $mimes = config('app-settings.mimes');
 
         return [
-            'featuredImage' => ['required', 'image', "mimes:{$mimes}", "max:{$maxFileSize}"],
+            'featuredImage' => ['required', ...self::baseImage()],
         ];
     }
 
     public static function featuredImageUpdate(): array
     {
-        $maxFileSize = config('app-settings.maxFileSize');
-        $mimes = config('app-settings.mimes');
-
         return [
-            'featuredImage' => ['required', 'image', "mimes:{$mimes}", "max:{$maxFileSize}"],
+            'featuredImage' => ['nullable', ...self::baseImage()],
         ];
     }
 
     public static function imagesStore(): array
     {
-        $maxFileSize = config('app-settings.maxFileSize');
-        $mimes = config('app-settings.mimes');
-
         return [
             'images' => ['required'],
-            'images.*' => ['required', 'image', "mimes:{$mimes}", "max:{$maxFileSize}"],
+            'images.*' => ['required', 'image', ...self::baseImage()],
         ];
     }
 
     public static function imagesUpdate(): array
     {
+        return [
+            'images' => ['required'],
+            'images.*' => ['required', ...self::baseImage()],
+        ];
+    }
+
+    private static function baseImage(): array
+    {
         $maxFileSize = config('app-settings.maxFileSize');
         $mimes = config('app-settings.mimes');
 
-        return [
-            'images' => ['required'],
-            'images.*' => ['required', 'image', "mimes:{$mimes}", "max:{$maxFileSize}"],
-        ];
+        return ['image', "mimes:{$mimes}", "max:{$maxFileSize}"];
     }
 }

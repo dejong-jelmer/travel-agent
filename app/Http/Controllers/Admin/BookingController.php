@@ -68,7 +68,6 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        dd($booking);
         Booking::destroy($booking->id);
 
         return redirect()->route('admin.bookings.index')
