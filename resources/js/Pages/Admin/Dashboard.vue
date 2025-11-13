@@ -101,8 +101,8 @@ const stats = computed(() => [
         value: props.bookings.new,
         description: 'Alle nieuw binengekomen boekingen',
         icon: SparklesIcon,
-        iconColor: 'text-ui-gold',
-        bgColor: 'bg-ui-gold/10',
+        iconColor: 'text-accent-primary',
+        bgColor: 'bg-accent-primary/10',
         link: route('admin.bookings.index'),
         change: null,
     },
@@ -112,8 +112,8 @@ const stats = computed(() => [
         value: props.bookings.upcomingMonth,
         description: 'Vertrek volgende maand',
         icon: CalendarDaysIcon,
-        iconColor: 'text-nature-sage',
-        bgColor: 'bg-nature-sage/10',
+        iconColor: 'text-accent-sage',
+        bgColor: 'bg-accent-sage/10',
         link: route('admin.bookings.index'),
         change: null,
     },
@@ -123,8 +123,8 @@ const stats = computed(() => [
         value: props.bookings.upcoming,
         description: 'Aankomende vertrekken',
         icon: ClockIcon,
-        iconColor: 'text-nature-terracotta',
-        bgColor: 'bg-nature-terracotta/10',
+        iconColor: 'text-accent-link',
+        bgColor: 'bg-accent-link/10',
         link: route('admin.bookings.index'),
         change: null,
     },
@@ -147,7 +147,7 @@ const stats = computed(() => [
         <!-- Header -->
         <div class="mb-8">
             <h1 class="text-3xl font-bold text-brand-primary mb-2">Dashboard</h1>
-            <p class="text-ui-blue">Welkom terug! Hier is een overzicht van je reisorganisatie.</p>
+            <p class="text-brand-light">Welkom terug! Hier is een overzicht van je reisorganisatie.</p>
         </div>
 
         <!-- Stats Grid -->
@@ -172,17 +172,11 @@ const stats = computed(() => [
                                 aria-hidden="true"
                             />
                         </div>
-
-                        <!-- Optional trend indicator -->
-                        <div v-if="stat.change" class="flex items-center text-sm font-medium text-status-success">
-                            <ArrowTrendingUpIcon class="h-4 w-4 mr-1" />
-                            <span>{{ stat.change }}</span>
-                        </div>
                     </div>
 
                     <!-- Value -->
                     <div class="mb-2">
-                        <p class="text-4xl font-bold text-brand-primary group-hover:text-brand-dark transition-colors">
+                        <p class="text-4xl font-bold text-brand-primary group-hover:text-brand-primary transition-colors">
                             {{ stat.value }}
                         </p>
                     </div>
@@ -192,7 +186,7 @@ const stats = computed(() => [
                         <p class="text-sm font-semibold text-gray-900 mb-1">
                             {{ stat.name }}
                         </p>
-                        <p class="text-xs text-ui-blue">
+                        <p class="text-xs text-brand-light">
                             {{ stat.description }}
                         </p>
                     </div>
@@ -204,7 +198,7 @@ const stats = computed(() => [
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <!-- Recent Activity Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="bg-gradient-to-r from-brand-primary to-brand-dark px-6 py-4">
+                <div class="bg-gradient-to-r from-brand-primary to-brand-primary px-6 py-4">
                     <h3 class="text-lg font-semibold text-white flex items-center">
                         <ClockIcon class="h-5 w-5 mr-2" />
                         Snelle Acties
@@ -216,8 +210,8 @@ const stats = computed(() => [
                         class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors group"
                     >
                         <div class="flex items-center">
-                            <div class="bg-ui-gold/10 rounded-lg p-2 mr-3">
-                                <CalendarDaysIcon class="h-5 w-5 text-ui-gold" />
+                            <div class="bg-accent-primary/10 rounded-lg p-2 mr-3">
+                                <CalendarDaysIcon class="h-5 w-5 text-accent-primary" />
                             </div>
                             <span class="font-medium text-gray-900 group-hover:text-brand-primary transition-colors">
                                 Bekijk alle boekingen
@@ -233,8 +227,8 @@ const stats = computed(() => [
                         class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors group"
                     >
                         <div class="flex items-center">
-                            <div class="bg-nature-sage/10 rounded-lg p-2 mr-3">
-                                <svg class="h-5 w-5 text-nature-sage" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="bg-accent-sage/10 rounded-lg p-2 mr-3">
+                                <svg class="h-5 w-5 text-accent-sage" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                                 </svg>
                             </div>
@@ -252,8 +246,8 @@ const stats = computed(() => [
                         class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors group"
                     >
                         <div class="flex items-center">
-                            <div class="bg-nature-terracotta/10 rounded-lg p-2 mr-3">
-                                <svg class="h-5 w-5 text-nature-terracotta" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <div class="bg-accent-link/10 rounded-lg p-2 mr-3">
+                                <svg class="h-5 w-5 text-accent-link" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
@@ -271,7 +265,7 @@ const stats = computed(() => [
 
             <!-- System Info Card -->
             <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="bg-nature-sage  px-6 py-4">
+                <div class="bg-accent-sage  px-6 py-4">
                     <h3 class="text-lg font-semibold text-white flex items-center">
                         <CheckCircleIcon class="h-5 w-5 mr-2" />
                         Systeemstatus
@@ -333,7 +327,7 @@ const stats = computed(() => [
 
                     <!-- Info message -->
                     <div class="mt-6 pt-4 border-t border-gray-100">
-                        <p class="text-xs text-ui-blue leading-relaxed">
+                        <p class="text-xs text-brand-light leading-relaxed">
                             <span v-if="lastCheckedTime">
                                 Laatste check: {{ lastCheckedTime }}
                             </span>

@@ -2,7 +2,7 @@
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
-    countries: Object,
+   countries: Object,
 });
 
 const form = useForm({
@@ -18,6 +18,7 @@ const form = useForm({
     featured: false,
 });
 
+
 function submit() {
     form.post(route("admin.products.store"), { forceFormData: true });
 }
@@ -25,8 +26,6 @@ function submit() {
 
 <template>
     <Admin>
-        <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
-            <ProductForm :form="form" :countries="countries" @submit="submit" />
-        </div>
+        <ProductForm :form="form" :countries="countries" @submit="submit" />
     </Admin>
 </template>

@@ -15,19 +15,17 @@ const props = defineProps({
         type: String,
         default: 'desktop',
         validator: (value) => ['desktop', 'mobile'].includes(value)
-    },
-    customClass: {
-        type: [String, Array, Object],
-        default: ''
     }
 });
 
+const defaultClass = 'relative transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent-primary after:transition-all after:duration-300 hover:after:w-full';
+
 const variants = {
-    desktop: 'px-4 py-2 text-sm laptop:text-base font-semibold text-center rounded-lg border-2 border-transparent hover:border-ui-gold transform hover:scale-105 transition-all duration-300 ease-out shadow-sm hover:shadow-md',
-    mobile: 'block px-6 py-3 text-brand-dark hover:bg-nature-sage hover:text-white transition-colors duration-200 font-medium'
+    desktop: 'text-brand-primary text-sm laptop:text-base',
+    mobile: 'block px-4 py-3 text-brand-primary text-base font-medium rounded-lg mx-auto my-1.5 max-w-[140px] text-center'
 };
 
-const baseClass = computed(() => variants[props.variant]);
+const variantClass = computed(() => variants[props.variant]);
 
 const emit = defineEmits(['click']);
 
@@ -39,7 +37,7 @@ const handleClick = (event) => {
 <template>
     <Link
         :href="href"
-        :class="[baseClass, customClass]"
+        :class="[defaultClass, variantClass]"
         @click="handleClick"
     >
         <slot>{{ label }}</slot>

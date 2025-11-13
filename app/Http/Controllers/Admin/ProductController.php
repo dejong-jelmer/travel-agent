@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
 use App\Models\Country;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -89,7 +91,7 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(StoreProductRequest $request, Product $product): RedirectResponse
+    public function update(UpdateProductRequest $request, Product $product): RedirectResponse
     {
         $validatedFiles = $request->safe()->only(['featuredImage', 'images']);
         $validatedFields = $request->safe()->except(['featuredImage', 'images', 'countries']);
@@ -97,8 +99,19 @@ class ProductController extends Controller
 
         $product->fill($validatedFields);
         $product->save();
-        $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
-        $product->storeImages($validatedFiles['images'], 'images');
+
+        // Only store featuredImage if it's a new upload (UploadedFile instance)
+        if (isset($validatedFiles['featuredImage']) && $validatedFiles['featuredImage'] instanceof UploadedFile) {
+            $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
+        }
+
+        // Only store images if they are new uploads (UploadedFile instances)
+        if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
+            $newImages = array_filter($validatedFiles['images'], fn ($image) => $image instanceof UploadedFile);
+            if (! empty($newImages)) {
+                $product->storeImages($newImages, 'images');
+            }
+        }
 
         if (count($countries)) {
             $product->countries()->sync($countries);

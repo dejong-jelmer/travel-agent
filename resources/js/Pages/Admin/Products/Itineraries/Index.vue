@@ -19,7 +19,7 @@ function updateOrder(orderedItinerary) {
     <Admin>
         <div class="space-y-4">
             <div class="flex mx-auto justify-end">
-                <IconLink type="info" v-tippy="'Voeg een dag reisplan toe'" icon="Add"
+                <IconLink type="info" v-tippy="'Voeg een dag reisplan toe'" icon="Plus"
                     :href="route('admin.products.itineraries.create', product)" />
             </div>
             <SortableBlocks :blocks="product.itineraries" @update:order="updateOrder" class="grid gap-y-10">

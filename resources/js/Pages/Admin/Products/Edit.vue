@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue';
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -7,27 +8,33 @@ const props = defineProps({
 });
 
 const form = useForm({
-    name: props.product.name,
-    description: props.product.description,
-    slug: props.product.slug,
-    price: props.product.raw_price,
-    duration: props.product.duration,
-    countries: props.product.countries?.map(country => country.id),
-    featuredImage: props.product.featured_image?.path,
-    images: props.product.image_urls,
-    active: props.product.active,
-    featured: props.product.featured,
-})
+    ...props.product,
+    countries: props.product.countries?.map(country => country.id) ?? [],
+    featuredImage: props.product.featured_image?.path ?? null,
+    images: props.product.image_urls ?? [],
+});
+
+// Counter for image uploader initialization (featuredImage + images = 2)
+const initCounter = ref(2);
+
+function handleImageInitialized() {
+    initCounter.value--;
+    if (initCounter.value === 0) {
+        // All uploaders have finished initialization
+        form.defaults({
+            ...form.data(),
+        });
+    }
+}
 
 function submit() {
     form.post(route("admin.products.update", props.product), { forceFormData: true });
 }
+
 </script>
 
 <template>
     <Admin>
-        <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
-            <ProductForm :form="form" :countries="countries" @submit="submit" />
-        </div>
+        <ProductForm :form="form" :countries="countries" @submit="submit" @initialized="handleImageInitialized" />
     </Admin>
 </template>

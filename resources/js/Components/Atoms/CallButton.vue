@@ -1,11 +1,11 @@
 <script setup>
-    import { PhoneIcon } from '@heroicons/vue/24/outline'
+    import { Phone } from 'lucide-vue-next';
 </script>
 
 <template>
     <a href="#"
-        class="tel-field has-icon flex-1 bg-nature-sage/10 hover:bg-nature-sage/20 text-brand-dark font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2">
-        <PhoneIcon class="w-4 h-4" />
+        class="tel-field has-icon contact-button">
+        <Phone class="w-5 h-5" />
         Bellen
     </a>
 </template>

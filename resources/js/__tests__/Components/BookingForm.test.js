@@ -555,7 +555,7 @@ describe("BookingForm - Complete Test Suite", () => {
                 '[data-testid="step-button-trip"]'
             );
 
-            expect(activeButton.classes()).toContain("text-brand-dark");
+            expect(activeButton.classes()).toContain("text-brand-primary");
         });
 
         it("should show tooltip on locked steps", () => {

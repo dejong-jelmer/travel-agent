@@ -8,10 +8,13 @@ defineProps({
 </script>
 <template>
     <template v-if="message">
-        <p class="text-sm mx-4 mt-2">
-            <span class="text-red-500">
-                {{ !Array.isArray(message) ? message : message[0] }}
-            </span>
-        </p>
+        <div class="text-sm mx-4 mt-2">
+            <template v-if="!Array.isArray(message)">
+                <span class="text-status-error">{{ message }}</span>
+            </template>
+            <ul v-else class="list-disc list-inside text-status-error space-y-1">
+                <li v-for="(error, index) in message" :key="index">{{ error }}</li>
+            </ul>
+        </div>
     </template>
 </template>

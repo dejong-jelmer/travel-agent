@@ -10,7 +10,7 @@ defineProps({
     },
     rows: {
         type: Number,
-        default: 10,
+        default: 5,
     },
     required: {
         type: Boolean,
@@ -25,7 +25,7 @@ defineProps({
 });
 </script>
 <template>
-    <div>
+    <div class="grid gap-1">
         <Label v-if="showLabel" :form-field="name">{{ label }}</Label>
         <textarea
             :id="name"

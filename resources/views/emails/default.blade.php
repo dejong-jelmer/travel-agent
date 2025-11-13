@@ -6,10 +6,10 @@
     <title>{{ $subject ?? config('app.name') }}</title>
 </head>
 
-<body style="background:#FAFAFA;margin:0;font-family:Arial,sans-serif;color:#1B3A4B;">
+<body style="background:#fbfbf7;margin:0;font-family:Arial,sans-serif;color:#2F3E46;">
 
     <table align="center" width="600" cellpadding="0" cellspacing="0"
-        style="margin:30px auto;background:#FAFAFA;border-radius:8px;overflow:hidden;">
+        style="margin:30px auto;background:#fbfbf7;border-radius:8px;overflow:hidden;">
         <tr>
             <td align="center" style="text-align:left; background:#FFFFFF;padding:20px;border-bottom:3px solid #AFCB98;">
                 {{-- embed via $message als beschikbaar (robust) --}}
@@ -22,7 +22,7 @@
                         style="max-height:60px;display:block;margin:0 auto;">
                 @else
                     {{-- eenvoudige tekst fallback --}}
-                    <h1 style="margin:0;font-size:24px;color:#1B3A4B;">{{ config('app.name') }}</h1>
+                    <h1 style="margin:0;font-size:24px;color:#2F3E46;">{{ config('app.name') }}</h1>
                 @endif
             </td>
         </tr>
@@ -34,7 +34,7 @@
         </tr>
 
         <tr>
-            <td align="center" style="background:#F2F4F3;padding:20px;font-size:12px;color:#B17C65;">
+            <td align="center" style="background:#fbfbf7;padding:20px;font-size:12px;color:#82b2ca;">
                 © {{ date('Y') }} {{ config('app.name') }}. Alle rechten voorbehouden.
             </td>
         </tr>

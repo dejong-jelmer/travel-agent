@@ -13,48 +13,48 @@ const props = defineProps({
 
 <template>
     <div key="overview" class="space-y-6">
-        <h2 class="text-xl font-bold text-brand-dark">Bekijken & bevestigen</h2>
-        <hr class="border-nature-sage/20">
+        <h2 class="text-xl font-bold text-brand-primary">Bekijken & bevestigen</h2>
+        <hr class="border-accent-sage/20">
 
-        <div class="p-6 bg-neutral-50 rounded-2xl shadow-md space-y-6">
+        <div class="p-6 bg-white rounded-2xl shadow-md space-y-6">
             <!-- Reis -->
             <section class="w-[80%]">
-                <h2 class="text-xl font-semibold text-brand-dark mb-3 flex items-center gap-2">
+                <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
                     Een samenvatting van je reis
                 </h2>
                 <div class="grid gap-1 ml-4">
                     <div class="flex items-center">
-                        <Briefcase class="inline w-4 h-4 mr-2 text-ui-blue" />
+                        <Briefcase class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Reis</span>
-                            <span class="flex-1 border-b border-dotted border-ui-blue/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <strong>{{ booking.trip.name }}</strong>
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <Euro class="inline w-4 h-4 mr-2 text-ui-blue" />
+                        <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Totale reissom</span>
-                            <span class="flex-1 border-b border-dotted border-ui-blue/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <span class="font-bold">€ {{ booking.trip.price }}</span>
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <Calendar class="inline w-4 h-4 mr-2 text-ui-blue" />
+                        <Calendar class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Totale reisduur</span>
-                            <span class="flex-1 border-b border-dotted border-ui-blue/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <span class="font-bold">{{ booking.trip.duration }} dagen</span>
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <Train class="inline w-4 h-4 mr-2 text-ui-blue" />
+                        <Train class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Vertrek datum</span>
-                            <span class="flex-1 border-b-2 border-dotted border-ui-blue/60"></span>
+                            <span class="flex-1 border-b-2 border-dotted border-brand-light/60"></span>
                             <span class="font-bold">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</span>
                         </span>
                     </div>
@@ -64,13 +64,13 @@ const props = defineProps({
 
             <!-- Reizigers -->
             <section>
-                <h2 class="text-xl font-semibold text-brand-dark mb-3 flex items-center gap-2">
-                    <Users class="w-5 h-5 text-ui-blue" /> Reizigers
+                <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
+                    <Users class="w-5 h-5 text-brand-light" /> Reizigers
                 </h2>
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-3 ml-4">
                     <!-- Volwassenen -->
                     <div v-if="booking.travelers.adults.length">
-                        <h3 class="font-medium text-ui-blue">
+                        <h3 class="font-medium text-brand-light">
                             Volwassenen ({{ booking.participants.adults }})
                         </h3>
                         <ul class="ml-4 mt-1 space-y-0.5 list-disc">
@@ -83,7 +83,7 @@ const props = defineProps({
 
                     <!-- Kinderen -->
                     <div v-if="booking.travelers.children.length">
-                        <h3 class="font-medium text-ui-blue">
+                        <h3 class="font-medium text-brand-light">
                             Kinderen ({{ booking.participants.children }})
                         </h3>
                         <ul class="ml-4 mt-1 space-y-0.5 list-disc">
@@ -103,15 +103,15 @@ const props = defineProps({
 
             <!-- Contact -->
             <section>
-                <h2 class="text-xl font-semibold text-brand-dark mb-3 flex items-center gap-2">
-                    <Mail class="w-5 h-5 text-ui-blue" /> Contact informatie
+                <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
+                    <Mail class="w-5 h-5 text-brand-light" /> Contact informatie
                 </h2>
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-2 ml-4">
 
                     <!-- Hoofdboeker -->
                     <address class="not-italic">
                         <p class="flex items-center">
-                            <User class="w-4 h-4 mr-2 text-ui-blue" /> {{
+                            <User class="w-4 h-4 mr-2 text-brand-light" /> {{
                                 booking.travelers.adults?.[booking.main_booker]?.full_name }}
                         </p>
                         <p class="ml-6">
@@ -125,13 +125,13 @@ const props = defineProps({
                     <div>
                         <!-- Telefoon -->
                         <p class="flex items-center">
-                            <Phone class="w-4 h-4 mr-2 text-ui-blue" />
+                            <Phone class="w-4 h-4 mr-2 text-brand-light" />
                             {{ booking.contact.phone }}
                         </p>
 
                         <!-- Email -->
                         <p class="flex items-center">
-                            <AtSign class="w-4 h-4 mr-2 text-ui-blue" />
+                            <AtSign class="w-4 h-4 mr-2 text-brand-light" />
                             {{ booking.contact.email }}
                         </p>
                     </div>
@@ -149,7 +149,7 @@ const props = defineProps({
                     <Checkbox v-model="booking.conditions_accepted" :feedback="booking.errors.conditions_accepted">
                         Ik bevestig dat de
                         <a :href="route('terms')" target="_blank" rel="noopener noreferrer"
-                            class="text-nature-terracotta hover:text-brand-dark font-medium underline decoration-ui-gold/30 hover:decoration-ui-gold transition-colors duration-300">
+                            class="default-link">
                             algemene voorwaarden
                         </a>
                         van toepassing zijn op deze reis.

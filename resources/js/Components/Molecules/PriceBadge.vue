@@ -38,10 +38,10 @@ const textSizeClass = computed(() => {
 
 <template>
     <div
-        class="bg-ui-gold text-white rounded-full shadow-lg"
+        class="bg-accent-primary text-white rounded-full shadow-lg"
         :class="sizeClasses"
     >
-        <p class="font-bold" :class="textSizeClass">
+        <p class="font-semibold" :class="textSizeClass">
             {{ prefix }} €{{ price }},-
         </p>
     </div>

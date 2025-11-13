@@ -25,7 +25,7 @@ const showMoreOptions = reactive({});
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
-                        <tr v-for="(booking, index) in bookings.data" :key="index" class="transition" :class="booking.new ? 'bg-nature-sage' : 'hover:bg-gray-100'">
+                        <tr v-for="(booking, index) in bookings.data" :key="index" class="transition hover:bg-gray-100">
                             <td class="py-4 px-6 text-center">{{ booking.id }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.reference }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.product?.name ?? '-' }}</td>
@@ -36,9 +36,9 @@ const showMoreOptions = reactive({});
                             </td>
                             <td class="py-4 px-6 text-center">{{ booking.created_at_formatted }}</td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <IconLink class="mx-auto" icon="View" :href="route('admin.bookings.show', booking)"
+                                <IconLink class="mx-auto" icon="Eye" :href="route('admin.bookings.show', booking)"
                                     v-tippy="'Bekijk boeking'" />
-                                <IconLink class="mx-auto" icon="Edit" :href="route('admin.bookings.edit', booking)"
+                                <IconLink class="mx-auto" icon="Pencil" :href="route('admin.bookings.edit', booking)"
                                     v-tippy="'Bewerk boeking'" />
                                 <div class="w-fit mx-auto" v-tippy="`Meer opties`">
                                     <button class="info-button"
@@ -47,7 +47,7 @@ const showMoreOptions = reactive({});
                                     </button>
                                 </div>
                                 <div v-if="showMoreOptions[booking.id]" class="space-y-2">
-                                    <IconLink class="mx-auto" type="delete" icon="Delete"
+                                    <IconLink class="mx-auto" type="delete" icon="Trash2"
                                         :href="route('admin.bookings.destroy', booking)" method="delete"
                                         :showConfirm="true" prompt="Weet je zeker dat je deze boeking wilt verwijderen?"
                                         v-tippy="'Verwijder boeking!'" />

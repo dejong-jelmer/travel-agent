@@ -48,7 +48,7 @@ Route::get('/admin/login', function () {
     ]);
 })->middleware('guest')->name('admin');
 
-Route::get('admin/', fn () => to_route('admin.login'));
+Route::get('admin/', fn () => Auth::check() ? to_route('admin.dashboard') : to_route('admin.login'));
 Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
 
 Route::prefix('admin')

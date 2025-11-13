@@ -1,80 +1,134 @@
 <script setup>
-import { ref } from 'vue'
-
 const props = defineProps({
-    booking: Object
-})
-
-
-const openIndex = ref(null)
-
-const toggle = (index) => {
-    openIndex.value = openIndex.value === index ? null : index
-}
-
+    booking: Object,
+    required: true,
+});
 </script>
 
 <template>
     <Admin>
-        <div class="w-full flex justify-end mb-6">
-            <div class="flex space-x-3">
-                <IconLink icon="Edit" :href="route('admin.bookings.edit', booking)" v-tippy="'Bewerk boeking'" />
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto grid gap-8 tablet:grid-cols-3">
-            <div class="tablet:col-span-2 bg-white p-8 rounded-2xl shadow-lg space-y-6">
-                <div class="space-y-3">
-                    <h2 class="text-2xl font-bold text-brand-dark">
-                        Boekingsgegevens
-                    </h2>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="grid">
-                            <div class="flex gap-2 justify-between">
-                                <span class="font-semibold">Boekingsreferentie:</span>
-                                <span class="">{{ booking.reference }}</span>
-                            </div>
-                            <div class="flex gap-2 justify-between">
-                                <span class="font-semibold">Reis:</span>
-                                <DefaultLink :href="route('admin.products.show', booking.product)">
-                                    {{ booking.product?.name }}
-                                </DefaultLink>
-                            </div>
-                            <div class="flex gap-2 justify-between">
-                                <span class="font-semibold">Vertrek:</span>
-                                <span class="">{{ booking.departure_date_formatted }}</span>
-                            </div>
+        <div class="max-w-wide mx-auto">
+            <div class="grid grid-cols-1 laptop:grid-cols-3 gap-8">
+                <!-- Header Section -->
+                <div class="laptop:col-span-3 bg-white py-10">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-700">
+                                Boeking {{ booking.reference }}
+                            </h1>
+                            <p class="mt-1 text-sm text-gray-700/50">
+                                {{ booking.product?.name }}
+                            </p>
                         </div>
-                        <div class="flex justify-end gap-2">
-                            <div class="grid">
-                                <span class="font-semibold">Contact gegevens:</span>
-                                <span class="">{{ booking.contact?.name }}</span>
-                                <span class="whitespace-pre-line">{{ booking.contact?.address }}</span>
-                            </div>
+                        <div class="flex space-x-2">
+                            <IconLink type="info" icon="Pencil" :href="route('admin.bookings.edit', booking)"
+                                v-tippy="'Bewerk boeking'" />
+                            <IconLink type="delete" icon="Trash2" :href="route('admin.bookings.destroy', booking)"
+                                method="delete" :showConfirm="true"
+                                prompt="Weet je zeker dat je deze boeking wilt verwijderen?"
+                                v-tippy="'Verwijder boeking'" />
                         </div>
                     </div>
                 </div>
-                <div class="grid gap-8 laptop:grid-cols-2">
-                    <div>
-                        <p class="font-semibold text-gray-700">Volwassenen</p>
-                        <div class="mt-2 space-y-2">
-                            <div v-for="(adult, index) in booking.adults" :key="index">
-                                <Booker :booker="adult" :index="index" />
+
+                <!-- Linkerkolom: Boekingsgegevens + Reizigers -->
+                <div class="laptop:col-span-2 space-y-8">
+                    <!-- Boekingsgegevens Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Boekingsgegevens</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Informatie over de boeking</p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Boekingsreferentie</label>
+                                        <p class="mt-1 text-gray-900">{{ booking.reference }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Reis</label>
+                                        <DefaultLink :href="route('admin.products.show', booking.product)"
+                                            class="mt-1 block text-gray-900 hover:text-accent-link">
+                                            {{ booking.product?.name }}
+                                        </DefaultLink>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Vertrekdatum</label>
+                                        <p class="mt-1 text-gray-900">{{ booking.departure_date_formatted }}</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Contactpersoon</label>
+                                        <p class="mt-1 text-gray-900">{{ booking.contact?.name }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Adres</label>
+                                        <p class="mt-1 text-gray-900 whitespace-pre-line">{{ booking.contact?.address }}
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div>
-                        <p class="font-semibold text-gray-700">Kinderen</p>
-                        <div class="mt-2 space-y-2">
-                            <div v-for="(child, index) in booking.children" :key="index">
-                                <Booker :booker="child" />
+                    </section>
+
+                    <!-- Reizigers Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Reizigers</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Overzicht van alle reizigers</p>
+                        </div>
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
+                                <div v-if="booking.adults?.length">
+                                    <h3 class="text-sm font-medium text-gray-700 mb-3">Volwassenen</h3>
+                                    <div class="space-y-2">
+                                        <Booker v-for="(adult, index) in booking.adults" :key="index" :booker="adult"
+                                            :index="index" />
+                                    </div>
+                                </div>
+                                <div v-if="booking.children?.length">
+                                    <h3 class="text-sm font-medium text-gray-700 mb-3">Kinderen</h3>
+                                    <div class="space-y-2">
+                                        <Booker v-for="(child, index) in booking.children" :key="index" :booker="child" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </section>
                 </div>
-            </div>
-            <div class="bg-white p-8 rounded-2xl shadow-lg space-y-4">
-                <h3 class="text-xl font-semibold text-gray-800">Acties</h3>
-                <p class="text-gray-600">Nog wat handige details of extra controls...</p>
+
+                <!-- Rechterkolom: Status -->
+                <div class="laptop:col-start-3 space-y-8">
+                    <!-- Status Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Status</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Boekingsstatus</p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">Aantal reizigers</span>
+                                <Pill type="info">
+                                    {{ (booking.adults?.length || 0) + (booking.children?.length || 0) }}
+                                </Pill>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">Volwassenen</span>
+                                <Pill type="success">
+                                    {{ booking.adults?.length || 0 }}
+                                </Pill>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">Kinderen</span>
+                                <Pill type="link">
+                                    {{ booking.children?.length || 0 }}
+                                </Pill>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
     </Admin>

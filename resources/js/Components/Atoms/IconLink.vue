@@ -2,17 +2,13 @@
 import { router } from '@inertiajs/vue3'
 import { shallowRef, markRaw } from 'vue';
 
-import Delete from '@/Icons/Delete.vue';
-import Edit from '@/Icons/Edit.vue';
-import View from '@/Icons/View.vue';
-import Calendar from '@/Icons/Calendar.vue';
-import Save from '@/Icons/Save.vue';
-import Add from '@/Icons/Add.vue';
+import {Trash2, Pencil, Eye, Route, Save, Plus } from 'lucide-vue-next';
 
 const props = defineProps({
     icon: {
         type: String,
         required: true,
+        validator: (value) => ['Trash2', 'Pencil', 'Eye', 'Route', 'Save', 'Plus'].includes(value)
     },
     href: {
         type: String,
@@ -34,50 +30,49 @@ const props = defineProps({
         type: String,
         required: false,
         default: 'info',
+        validator: (value) => ['delete', 'info'].includes(value)
     }
 });
 
 const icons = {
-    Delete: markRaw(Delete),
-    Edit: markRaw(Edit),
-    View: markRaw(View),
-    Calendar: markRaw(Calendar),
+    Trash2: markRaw(Trash2),
+    Pencil: markRaw(Pencil),
+    Eye: markRaw(Eye),
+    Route: markRaw(Route),
     Save: markRaw(Save),
-    Add: markRaw(Add),
+    Plus: markRaw(Plus),
 };
 const currentIcon = shallowRef(icons[`${props.icon}`]);
 
-const confirmDelete = (href, showConfirm, prompt) => {
-    if(showConfirm) {
+const handleClick = (href, showConfirm, prompt) => {
+    if (showConfirm) {
         if (!confirm(prompt)) {
             return;
         }
     }
-    if(!!href) {
+    if (href) {
         router.visit(href, {
-            method: `${props.method}`
+            method: props.method
         });
     }
 }
 </script>
 
 <template>
-    <div class="group w-fit" @click="confirmDelete(href, showConfirm, prompt)">
+    <div class="group/iconlink w-fit" @click="handleClick(href, showConfirm, prompt)">
         <button
             class="p-2 rounded-lg border"
             :class="{
-                    'bg-red-500 group-hover:bg-white border-red-500': type === 'delete',
-                    'bg-white group-hover:bg-red-500 border border-red-500 group-hover:border-red-500': type === 'danger',
-                    'bg-white group-hover:bg-brand-primary border border-brand-primary': type === 'info'
-                }"
-            >
+                'bg-white group-hover/iconlink:bg-status-error border-status-error': type === 'delete',
+                'bg-white group-hover/iconlink:bg-slate-700 border-slate-700': type === 'info'
+            }"
+        >
             <component :is="currentIcon"
                 class="h-5"
                 :class="{
-                        'stroke-white group-hover:stroke-red-500': type === 'delete',
-                        'stroke-red-500 group-hover:stroke-white': type === 'danger',
-                        'stroke-brand-primary group-hover:stroke-white': type === 'info'
-                    }"
+                    'stroke-status-error group-hover/iconlink:stroke-white': type === 'delete',
+                    'stroke-slate-700 group-hover/iconlink:stroke-white': type === 'info'
+                }"
             />
         </button>
     </div>

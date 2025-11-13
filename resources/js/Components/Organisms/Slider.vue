@@ -95,7 +95,7 @@ const endDrag = () => {
                     <ChevronRightIcon class="h-12 w-12" />
                 </button>
             </template>
-            <div class="max-w-screen-desktop w-full overflow-hidden">
+            <div class="max-w-screen-wide laptop:max-w-screen-desktop w-full overflow-hidden">
                 <div
                     ref="slider"
                     class="flex transition-transform duration-500 ease-in-out"
