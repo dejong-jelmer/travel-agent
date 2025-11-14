@@ -63,7 +63,7 @@ class ProductValidationRules
     public static function imagesUpdate(): array
     {
         return [
-            'images' => ['nullable'],
+            'images' => ['nullable', 'array'],
             'images.*' => self::baseImage(),
         ];
     }
