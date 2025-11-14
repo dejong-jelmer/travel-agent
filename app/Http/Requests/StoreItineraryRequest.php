@@ -17,7 +17,7 @@ class StoreItineraryRequest extends FormRequest
     }
 
     /**
-     * Prepere the request for validation, default to empty array on null
+     * Prepare the request for validation, default to empty array on null
      */
     protected function prepareForValidation(): void
     {
