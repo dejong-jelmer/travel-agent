@@ -3,7 +3,7 @@ const props = defineProps({
     type: {
         type: String,
         default: 'primary',
-        validator: (value) => ['primary', 'accent', 'sage', 'success', 'error', 'warning', 'link'].includes(value)
+        validator: (value) => ['primary', 'accent', 'sage', 'success', 'error', 'warning', 'info'].includes(value)
     },
     variant: {
         type: String,
@@ -19,7 +19,7 @@ const divClass = {
         success: 'bg-status-success',
         error: 'bg-status-error',
         warning: 'bg-status-warning',
-        link: 'bg-accent-link/20',
+        info: 'bg-status-info',
     },
     transparent: {
         primary: 'border border-brand-primary',
@@ -28,7 +28,7 @@ const divClass = {
         success: 'border border-status-success',
         error: 'border border-status-error',
         warning: 'border border-status-warning',
-        link: 'border border-accent-link',
+        info: 'border border-status-info',
     }
 }
 const spanClass = {
@@ -39,7 +39,7 @@ const spanClass = {
         success: 'text-white',
         error: 'text-white',
         warning: 'text-white',
-        link: 'text-accent-link',
+        info: 'text-white',
     },
     transparent: {
         primary: 'text-brand-primary',
@@ -48,7 +48,7 @@ const spanClass = {
         success: 'text-status-success',
         error: 'text-status-error',
         warning: 'text-status-warning',
-        link: 'text-accent-link',
+        info: 'text-status-info',
     }
 }
 </script>

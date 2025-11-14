@@ -21,14 +21,11 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['submit']);
-
 </script>
 <template>
     <button
         :type="type"
-        @click="emit('submit')"
-        class="inline-flex items-center px-6 py-3 bg-status-warning text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+        class="inline-flex items-center px-6 py-3 bg-status-info text-white font-semibold rounded-lg hover:bg-opacity-60 transition-all duration-200 shadow-md hover:shadow-lg"
         :disabled="form.processing"
     >
         <span v-if="!form.processing">{{ label }}</span>

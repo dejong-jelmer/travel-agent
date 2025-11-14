@@ -112,7 +112,7 @@ const props = defineProps({
                                 <span class="text-sm font-medium text-gray-700">Uitgelicht</span>
                                 <Pill
                                     class="px-3 py-1 rounded-full text-xs font-semibold"
-                                    :type="product.featured ? 'success' : 'link'"
+                                    :type="product.featured ? 'success' : 'info'"
                                 >
                                     {{ product.featured ? "Ja" : "Nee" }}
                                 </Pill>

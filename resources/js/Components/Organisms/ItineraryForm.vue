@@ -5,7 +5,7 @@ const props = defineProps({
     transport: Object,
 });
 
-const emit = defineEmits(['submit', 'initialized']);
+const emit = defineEmits(['submit']);
 </script>
 
 <template>
@@ -96,17 +96,6 @@ const emit = defineEmits(['submit', 'initialized']);
         </div>
 
         <!-- Footer Actions -->
-        <div
-            class="laptop:col-span-2 flex items-center justify-between border-t border-gray-200 bg-white rounded-lg mt-6 p-6 shadow-sm">
-            <p class="text-sm text-gray-700/30">
-                <span v-if="form.isDirty" class="text-status-warning font-medium">
-                    Er zijn niet opgeslagen wijzigingen
-                </span>
-                <span v-else class="text-status-success">
-                    Alles opgeslagen
-                </span>
-            </p>
-            <FormSubmit :form="form" label="Reisplan Opslaan" @submit="emit('submit')" />
-        </div>
+        <FormFooter :form="form" label="Reisplan Opslaan" @submit="emit('submit')" />
     </form>
 </template>

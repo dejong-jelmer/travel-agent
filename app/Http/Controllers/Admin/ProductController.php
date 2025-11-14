@@ -100,17 +100,14 @@ class ProductController extends Controller
         $product->fill($validatedFields);
         $product->save();
 
-        // Only store featuredImage if it's a new upload (UploadedFile instance)
-        if (isset($validatedFiles['featuredImage']) && $validatedFiles['featuredImage'] instanceof UploadedFile) {
-            $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
+        // Sync featuredImage (handles both existing paths and new uploads)
+        if (isset($validatedFiles['featuredImage'])) {
+            $product->syncImages($validatedFiles['featuredImage'], 'featuredImage', true);
         }
 
-        // Only store images if they are new uploads (UploadedFile instances)
+        // Sync images array (handles mix of existing paths and new uploads)
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
-            $newImages = array_filter($validatedFiles['images'], fn ($image) => $image instanceof UploadedFile);
-            if (! empty($newImages)) {
-                $product->storeImages($newImages, 'images');
-            }
+            $product->syncImages($validatedFiles['images'], 'images');
         }
 
         if (count($countries)) {

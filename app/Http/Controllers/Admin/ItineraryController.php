@@ -93,9 +93,9 @@ class ItineraryController extends Controller
 
         $itinerary->update($validatedFields);
 
-        // Only store image if it's a new upload (UploadedFile instance)
-        if (isset($validatedImage['image']) && $validatedImage['image'] instanceof UploadedFile) {
-            $itinerary->storeImages($validatedImage['image'], 'image');
+        // Sync image (handles both existing path and new upload)
+        if (isset($validatedImage['image'])) {
+            $itinerary->syncImages($validatedImage['image'], 'image');
         }
 
         return redirect()

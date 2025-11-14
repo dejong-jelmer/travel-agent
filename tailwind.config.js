@@ -45,9 +45,10 @@ export default {
                 },
                 // Status feedback colors
                 status: {
-                    error: "#e63946",
-                    success: "#06a77d",
-                    warning: "#f4a261"
+                    error: "#dc3545",
+                    success: "#198754",
+                    warning: "#ffc107",
+                    info: "#0d6efd"
                 },
             },
             screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
