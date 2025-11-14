@@ -83,16 +83,16 @@ function handleSubmit() {
 </script>
 
 <template>
-    <div class="bg-white rounded-2xl shadow-sm border border-nature-sage/20 overflow-hidden">
-        <div class="px-6 pb-4 border-b border-nature-sage/20">
+    <div class="bg-white rounded-2xl shadow-sm border border-accent-sage/20 overflow-hidden">
+        <div class="px-6 pb-4 border-b border-accent-sage/20">
             <div class="flex justify-between mb-2 pt-4">
                 <button v-for="(step, index) in stepStates" :key="step.id" type="button" @click="goToStep(index)"
                     :disabled="step.isLocked" :data-testid="`step-button-${step.id}`"
                     class="text-sm font-medium transition-all relative group" :class="[
-                        step.isActive && 'text-brand-dark font-bold scale-105',
-                        step.isCompleted && 'text-nature-earth',
-                        step.isAccessible && !step.isActive && !step.isCompleted && 'text-ui-blue hover:text-brand-dark cursor-pointer',
-                        step.isLocked && 'text-ui-blue/30 cursor-not-allowed'
+                        step.isActive && 'text-brand-primary font-bold scale-105',
+                        step.isCompleted && 'text-accent-primary font-bold',
+                        step.isAccessible && !step.isActive && !step.isCompleted && 'text-brand-light hover:text-brand-primary cursor-pointer',
+                        step.isLocked && 'text-brand-light/30 cursor-not-allowed'
                     ]">
 
                     {{ step.label }}
@@ -110,8 +110,8 @@ function handleSubmit() {
                 </button>
             </div>
 
-            <div class="h-2 bg-neutral-50 rounded-full overflow-hidden">
-                <div class="h-full bg-nature-earth transition-all duration-500 ease-out"
+            <div class="h-2 bg-white rounded-full overflow-hidden">
+                <div class="h-full bg-status-success transition-all duration-500 ease-out"
                     data-testid="progress-bar"
                     :style="{ width: progress + '%' }"></div>
             </div>
@@ -124,22 +124,22 @@ function handleSubmit() {
                     v-bind="currentStep.props" />
             </Transition>
         </div>
-        <div class="flex justify-between items-center px-6 py-4 border-t border-nature-sage/20 bg-neutral-50">
+        <div class="flex justify-between items-center px-6 py-4 border-t border-accent-sage/20 bg-white">
             <button type="button" data-testid="prev-button"
-                class="px-4 py-2 rounded-xl text-brand-dark hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                class="px-4 py-2 rounded-xl text-brand-primary hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="isFirstStep" @click="prevStep">
                 Vorige
             </button>
 
             <button v-if="!isLastStep" type="button" data-testid="next-button"
-                class="px-6 py-2 rounded-xl bg-nature-earth text-brand-dark font-medium hover:bg-nature-terracotta hover:text-neutral-25 transition-all disabled:hover:text-brand-dark disabled:hover:bg-nature-earth disabled:opacity-40 disabled:cursor-not-allowed"
+                class="px-6 py-2 rounded-xl bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:hover:text-brand-primary disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="booking.processing" @click="handleNext">
                 Volgende
             </button>
 
             <button v-else type="button" data-testid="submit-button"
                 v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
-                class="px-6 py-2 rounded-xl flex items-center gap-2 bg-nature-earth text-brand-dark font-medium hover:bg-nature-terracotta hover:text-neutral-25 transition-all disabled:hover:text-brand-dark disabled:hover:bg-nature-earth disabled:opacity-40 disabled:cursor-not-allowed"
+                class="px-6 py-2 rounded-xl bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:hover:text-brand-primary disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
                 <Spinner v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
                 <span>{{ booking.processing ? 'Bezig met verzenden...' : 'Nu boeken' }}</span>

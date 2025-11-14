@@ -7,11 +7,11 @@ import teaserImage from '@/../images/pexels-sonny-vermeer-505472791-17476670.jpg
         <section class="section relative overflow-hidden floating-elements">
             <div class="absolute top-0 left-0 w-full h-2 decorative-line"></div>
             <!-- Geometrische vormen -->
-            <div class="absolute top-16 left-8 w-4 h-4 bg-nature-sage/20 rounded-full"></div>
-            <div class="absolute top-32 right-24 w-2 h-2 bg-ui-gold/30 rounded-full"></div>
-            <div class="absolute bottom-24 left-16 w-3 h-3 bg-nature-terracotta/15 rounded-full"></div>
+            <div class="absolute top-16 left-8 w-4 h-4 bg-accent-sage/20 rounded-full"></div>
+            <div class="absolute top-32 right-24 w-2 h-2 bg-accent-primary/30 rounded-full"></div>
+            <div class="absolute bottom-24 left-16 w-3 h-3 bg-accent-terracotta/15 rounded-full"></div>
             <article class="relative py-8 desktop:py-24">
-                <div class="max-w-screen-desktop mx-auto px-4">
+                <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
                     <div class="text-center">
                         <SectionHeader>Over ons</SectionHeader>
                     </div>

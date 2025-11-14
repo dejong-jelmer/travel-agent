@@ -62,9 +62,12 @@
     font-style: normal;
 }
 
-html,
+html {
+    overflow-x: clip;
+}
+
 body {
-    overflow-x: hidden;
+    overflow-x: visible;
 }
 
 /* Background */
@@ -132,7 +135,7 @@ body {
 .decorative-line {
     background: linear-gradient(90deg,
             transparent 0%,
-            #D4A017 50%,
+            #eb9928 50%,
             transparent 100%);
 }
 
@@ -154,11 +157,7 @@ body {
 
 @layer components {
     .form-input {
-        @apply block w-full mt-2 px-3 py-1 border border-gray-300 text-brand-primary rounded-md shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none text-base;
-    }
-
-    .form-button {
-        @apply px-6 py-3 font-semibold cursor-pointer select-none border border-brand-primary text-brand-primary bg-white rounded-lg transition-all duration-300 ease-out hover:bg-brand-primary hover:text-white;
+        @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-accent-link focus:border-accent-link;
     }
 
     .info-button {
@@ -186,13 +185,21 @@ body {
         @apply underline;
     }
 
+    .default-link {
+        @apply text-accent-link font-medium underline-offset-4 hover:underline;
+    }
+
+    .contact-button {
+        @apply flex-1 bg-white text-accent-link hover:bg-brand-secondary border border-accent-link font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2;
+    }
+
     /* Override VueDatePicker error class */
     /* Invalid state */
     .dp__input_invalid {
         @apply ring-[2px] ring-status-error ring-offset-2 bg-status-error/20;
     }
 
-    /* Valid state (optioneel, als je dat wilt gebruiken) */
+    /* Valid state */
     .dp__input_valid {
         @apply ring-[2px] ring-status-success ring-offset-2 bg-status-success/10;
     }

@@ -32,11 +32,13 @@ Object.entries(flash).forEach(([type, message]) => {
 </script>
 
 <template>
+
     <Head :title="title" />
     <main>
+        <Topbar class="z-50" />
+        <Nav class="z-50 sticky top-0 inset-x-0" />
+        <!-- Spacer for fixed Nav -->
         <slot name="hero"></slot>
-        <Header />
-        <SideMenu v-if="!!user.id" />
         <slot></slot>
         <Footer />
     </main>

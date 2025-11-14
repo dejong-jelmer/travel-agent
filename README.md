@@ -301,31 +301,26 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 
 **Custom Color Palette** (see `tailwind.config.js`):
 
-*Semantic color system for better maintainability:*
+*Semantic color system for sustainable travel aesthetic:*
 
 - **Brand Identity**
-  - `brand.primary` (#2F3E46) - Main brand color
-  - `brand.dark` (#1B3A4B) - Dark variant for text/contrast
+  - `brand.primary` (#2F3E46) - Primary dark blue-gray for text and headings
+  - `brand.secondary` (#fbfbf7) - Off-white/cream for backgrounds
+  - `brand.tertiary` (#ccf6ff) - Light cyan accent
+  - `brand.light` (#A3BCCB) - Soft blue for subtle text and borders
+  - `brand.link` (#82b2ca) - Blue for links and interactive elements
 
-- **Nature Theme** (Sustainability focus)
-  - `nature.sage` (#AFCB98) - Sage green accent
-  - `nature.earth` (#DCC7AA) - Earth/sand tone
-  - `nature.terracotta` (#B17C65) - Warm terracotta
-
-- **UI Accents**
-  - `ui.blue` (#A3BCCB) - Soft blue for borders/subtle accents
-  - `ui.gold` (#D4A017) - Gold for highlights/premium feel
+- **Accent Colors** (Nature/Sustainability focus)
+  - `accent.primary` (#f0972d) - Warm orange for primary CTAs and highlights
+  - `accent.sage` (#AFCB98) - Sage green for success and eco-friendly elements
+  - `accent.earth` (#DCC7AA) - Earth/sand tone for warmth
+  - `accent.terracotta` (#B17C65) - Terracotta for contrast and emphasis
+  - `accent.blue` (#A3BCCB) - Soft blue for subtle accents
 
 - **Status Feedback**
-  - `status.error` (#C5534A) - Error states
-  - `status.success` (#6B8E5A) - Success states
-  - `status.warning` (#D4A017) - Warning states
-
-- **Neutral Backgrounds**
-  - `neutral.25` / `neutral.50` / `neutral.100` / `neutral.200`
-
-*Legacy aliases available for backward compatibility (deprecated):*
-- `primary.*`, `secondary.*`, `accent.*` → Use semantic names above
+  - `status.error` (#e63946) - Error states and validation failures
+  - `status.success` (#06a77d) - Success states and confirmations
+  - `status.warning` (#f4a261) - Warning states and alerts
 
 **Rate Limiting:**
 Custom `frontend-form-actions` limiter: 25 requests/min per IP

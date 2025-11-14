@@ -8,7 +8,7 @@ const props = defineProps({
         <template v-if="countries.data.length > 0">
             <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
                 <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Landen</h1>
-                <IconLink v-tippy="'Voeg een land toe'" icon="Add" type="info"
+                <IconLink v-tippy="'Voeg een land toe'" icon="Plus" type="info"
                     :href="route('admin.countries.create')" />
             </div>
             <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
@@ -25,7 +25,7 @@ const props = defineProps({
                             <td class="py-4 px-6 text-center">{{ country.id }}</td>
                             <td class="py-4 px-6 text-center">{{ country.name }}</td>
                              <td class="py-4 px-6 text-center space-y-2">
-                                <IconLink class="mx-auto" type="delete" icon="Delete"
+                                <IconLink class="mx-auto" type="delete" icon="Trash2"
                                         :href="route('admin.countries.destroy', country)" method="delete" :showConfirm="true"
                                         prompt="Weet je zeker dat je dit land wilt verwijderen?"
                                         v-tippy="'Verwijder land!'" />

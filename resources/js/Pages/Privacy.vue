@@ -10,7 +10,7 @@ const props = defineProps({
                 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <!-- Header -->
-                        <header class="bg-ui-blue text-white px-6 py-8">
+                        <header class="bg-brand-light text-white px-6 py-8">
                             <h1 class="text-3xl font-bold mb-2">Privacyverklaring</h1>
                             <p class="text-sm text-gray-600 mb-8">Versie: 1.1 | Laatste update: juni 2025</p>
                         </header>

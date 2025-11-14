@@ -68,7 +68,6 @@ class BookingController extends Controller
      */
     public function destroy(Booking $booking)
     {
-        // $this->bookingService->updateChangeLog($booking->id, $booking, ['deleted_at' => now()]);
         Booking::destroy($booking->id);
 
         return redirect()->route('admin.bookings.index')

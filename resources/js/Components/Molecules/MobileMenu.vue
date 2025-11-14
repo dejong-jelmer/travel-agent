@@ -1,13 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue';
 
-const props = defineProps({
-    isScrolled: {
-        type: Boolean,
-        default: false
-    }
-});
-
 const isOpen = ref(false);
 
 const toggleMenu = () => {
@@ -19,11 +12,8 @@ const closeMenu = () => {
 };
 
 const buttonClasses = computed(() => [
-    'tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10',
-    props.isScrolled
-        ? 'border-ui-gold text-white hover:bg-ui-gold/20'
-        : 'border-white text-white hover:bg-white/20 backdrop-blur-sm',
-    { 'bg-ui-gold/20': isOpen.value }
+    'tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10 border-brand-primary text-brand-primary hover:bg-brand-secondary backdrop-blur-sm',
+    { 'bg-brand-secondary': isOpen.value }
 ]);
 
 defineExpose({
@@ -53,7 +43,7 @@ defineExpose({
             leave-active-class="transition-all duration-200 ease-in" enter-from-class="-translate-y-[10px] opacity-0"
             leave-to-class="-translate-y-[10px] opacity-0">
             <div v-if="isOpen"
-                class="absolute top-full right-6 tablet:hidden bg-neutral-25 rounded-xl shadow-xl border border-neutral-200 overflow-hidden z-10 min-w-[200px]">
+                class="absolute top-full right-6 tablet:hidden bg-white rounded-xl shadow-xl border border-neutral-200 overflow-hidden z-10 min-w-[200px]">
                 <div class="py-2">
                     <slot :closeMenu="closeMenu"></slot>
                 </div>

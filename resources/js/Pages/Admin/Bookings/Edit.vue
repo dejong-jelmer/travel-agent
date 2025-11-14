@@ -21,60 +21,113 @@ function submit() {
 
 <template>
     <Admin>
-        <div class="max-w-7xl mx-auto grid gap-8">
-            <div class="w-full flex justify-end">
-                <IconLink icon="Save" @click="submit()" v-tippy="'Sla wijzigingen in deze boeking op'" class="mx-0"
-                    :class="{ 'animate-bounce': booking.isDirty }" :showConfirm="true"
-                    prompt="Weet je zeker dat je deze boeking wilt aanpassen?" />
-            </div>
-            <!-- Trip details -->
-            <div class="bg-white p-6 tablet:p-8 rounded-2xl shadow-lg border border-ui-blue/40">
-                <h2 class="text-2xl font-bold text-brand-dark">
-                    Boekingsgegevens
-                </h2>
-                <div class="grid grid-cols-2">
-                    <div class="grid">
-                        <div class="flex items-center gap-2">
-                            <span class="font-semibold">Boekingsreferentie:</span>
-                            <span class="">{{ props.db_booking.reference }}</span>
+        <div class="max-w-wide mx-auto">
+            <div class="grid grid-cols-1 laptop:grid-cols-3 gap-8">
+                <!-- Header Section -->
+                <div class="laptop:col-span-3 bg-white py-10">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-3xl font-bold text-gray-700">
+                                Boeking {{ db_booking.reference }} bewerken
+                            </h1>
+                            <p class="mt-1 text-sm text-gray-700/50">
+                                {{ db_booking.product?.name }}
+                            </p>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-semibold">Reis:</span>
-                            <span class="">{{ props.db_booking.product?.name }}</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <span class="font-semibold">Vertrekdatum:</span>
-                            <span class="">{{ props.db_booking.departure_date_formatted }}</span>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <div class="grid">
-                            <span class="font-semibold">Contact gegevens:</span>
-                            <span class="">{{ props.db_booking.contact?.name }}</span>
-                            <span class="whitespace-pre-line">{{ props.db_booking.contact?.address }}</span>
+                        <div class="flex space-x-2">
+                            <IconLink type="delete" icon="Trash2" v-tippy="'Verwijder boeking!'"
+                                :href="route('admin.bookings.destroy', db_booking.id)"
+                                :showConfirm="true" prompt="Weet je zeker dat je deze boeking wilt verwijderen?" />
                         </div>
                     </div>
                 </div>
+
+                <!-- Linkerkolom: Boekingsgegevens + Reisgezelschap -->
+                <div class="laptop:col-span-2 space-y-8">
+                    <!-- Boekingsgegevens Section (Read-only) -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Boekingsgegevens</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Informatie over de boeking</p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Boekingsreferentie</label>
+                                        <p class="mt-1 text-gray-900">{{ db_booking.reference }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Reis</label>
+                                        <p class="mt-1 text-gray-900">{{ db_booking.product?.name }}</p>
+                                    </div>
+                                </div>
+                                <div class="space-y-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Vertrekdatum</label>
+                                        <p class="mt-1 text-gray-900">{{ db_booking.departure_date_formatted }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Reisgezelschap Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Reisgezelschap</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Beheer reizigers</p>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <Traveler :booking="booking" type="adults" label="Volwassene" />
+                            <Traveler :booking="booking" type="children" label="Kind" />
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Rechterkolom: Contactgegevens -->
+                <div class="laptop:col-start-3 space-y-8">
+                    <!-- Contactgegevens Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Contactgegevens</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Beheer contactpersoon</p>
+                        </div>
+                        <div class="p-6">
+                            <Contact :booking="booking" />
+                        </div>
+                    </section>
+                </div>
             </div>
 
-
-            <!-- Reisgezelschap & Contact -->
-            <div class="grid gap-6 tablet:grid-cols-2">
-
-                <!-- Reisgezelschap -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
-                    <h2 class="text-2xl font-bold text-brand-dark">Reisgezelschap</h2>
-                    <Traveler :booking="booking" type="adults" label="Volwassene" />
-                    <Traveler :booking="booking" type="children" label="Kind" />
-                </div>
-
-                <!-- Contactgegevens -->
-                <div class="bg-white p-8 rounded-2xl shadow-lg space-y-6">
-                    <h2 class="text-2xl font-bold text-brand-dark">Contactgegevens</h2>
-                    <Contact :booking="booking" />
-                </div>
+            <!-- Footer Actions -->
+            <div
+                class="laptop:col-span-3 flex items-center justify-between border-t border-gray-200 bg-white rounded-lg mt-6 p-6 shadow-sm">
+                <p class="text-sm text-gray-700/30">
+                    <span v-if="booking.isDirty" class="text-status-warning font-medium">
+                        Er zijn niet opgeslagen wijzigingen
+                    </span>
+                    <span v-else class="text-status-success">
+                        Alles opgeslagen
+                    </span>
+                </p>
+                <button type="button" @click="submit()"
+                    class="inline-flex items-center px-6 py-3 bg-status-warning text-white font-semibold rounded-lg hover:bg-opacity-90 transition-all duration-200 shadow-md hover:shadow-lg"
+                    :disabled="booking.processing">
+                    <span v-if="!booking.processing">Boeking Opslaan</span>
+                    <span v-else class="flex items-center">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                            fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
+                            </circle>
+                            <path class="opacity-75" fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                            </path>
+                        </svg>
+                        Bezig met opslaan...
+                    </span>
+                </button>
             </div>
         </div>
     </Admin>
-
 </template>

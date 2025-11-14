@@ -1,6 +1,6 @@
 <script setup>
 import { ref, toRef, watch } from 'vue'
-import { UsersIcon, ChevronRightIcon } from '@heroicons/vue/24/outline'
+import { Clock, TrainFront, MapPinned, ChevronRight } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
 
 const props = defineProps({
@@ -42,11 +42,11 @@ const tabs = [
 
 <template>
     <Layout>
-        <div class="min-h-screen bg-gradient-to-br from-neutral-50 to-nature-sage/10">
+        <template v-slot:hero>
             <!-- Hero Section -->
             <section class="relative overflow-hidden">
                 <!-- Background Image -->
-                <div class="h-[80vh] laptop:h-[100vh] relative">
+                <div class="h-[80vh] laptop:h-[90vh] relative">
                     <div class="absolute inset-0 bg-cover bg-center"
                         :style="`background-image: url(${trip.featured_image?.path})`"></div>
                     <!-- Overlay -->
@@ -55,19 +55,19 @@ const tabs = [
 
                     <!-- Hero Content -->
                     <div class="absolute bottom-2 left-0 right-0">
-                        <div class="max-w-screen-desktop mx-auto">
+                        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
                             <div
-                                class="max-w-5xl p-4 mx-2 laptop:p-8 border border-neutral-25 rounded-3xl bg-brand-dark/30 backdrop -blur-[2px]">
+                                class="max-w-5xl p-4 mx-2 laptop:p-8 border border-white rounded-3xl bg-brand-primary/30 backdrop -blur-[2px]">
                                 <!-- Trip Title -->
                                 <h1 class="text-3xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
                                     {{ trip.name }}
                                 </h1>
 
                                 <!-- Trip Meta Info -->
-                                <div class="flex flex-wrap gap-6 text-neutral-25">
+                                <div class="flex flex-wrap gap-6 text-white">
                                     <!-- Price -->
                                     <div
-                                        class="flex items-center gap-2 bg-ui-gold px-4 py-2 rounded-full font-bold">
+                                        class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full font-bold">
                                         <span class="text-lg">Vanaf €{{ trip.price }},-</span>
                                     </div>
 
@@ -81,14 +81,14 @@ const tabs = [
                                     <!-- Transport -->
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                                        <Train class="w-5 h-5" />
+                                        <TrainFront class="w-5 h-5" />
                                         <span class="font-medium">Duurzaam reizen</span>
                                     </div>
 
                                     <!-- Countries -->
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
-                                        <MapPin class="w-5 h-5" />
+                                        <MapPinned class="w-5 h-5" />
                                         <span class="font-medium">{{ trip.countries_list }}</span>
                                     </div>
                                 </div>
@@ -97,186 +97,187 @@ const tabs = [
                     </div>
                 </div>
             </section>
+        </template>
+        <DecorativeLine />
+        <!-- Main Content -->
+        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 py-12 laptop:py-16">
+            <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
+                <!-- Left Column - Main Content -->
+                <div class="laptop:col-span-2 space-y-12">
 
-            <!-- Main Content -->
-            <div class="max-w-screen-desktop mx-auto px-6 py-12 laptop:py-16">
-                <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
-                    <!-- Left Column - Main Content -->
-                    <div class="laptop:col-span-2 space-y-12">
-
-                        <!-- Description & Highlights -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-nature-sage/20 p-6 laptop:p-8">
-                            <div class="mb-8">
-                                <div class="w-full text-center">
-                                    <SectionHeader>Over deze reis</SectionHeader>
-                                </div>
-                                <div class="p-6">
-                                    <Slider :items="trip.images">
-                                        <template #default="{ item, index }">
-                                            <img :src="item.path"
-                                                class="w-full h-[150px] rounded-md object-cover cursor-zoom-in"
-                                                :key="index" @click="openLightbox(index)" />
-                                        </template>
-                                    </Slider>
-                                    <LightBox ref="lightboxRef" :images="trip.images" />
-                                </div>
-                                <p class="text-lg text-brand-primary leading-relaxed">
-                                    {{ trip.description }}
-                                </p>
+                    <!-- Description & Highlights -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
+                        <div class="mb-8">
+                            <div class="w-full text-center">
+                                <SectionHeader>Over deze reis</SectionHeader>
                             </div>
-
-                            <!-- Highlights -->
-                            <div class="border-t border-nature-sage/20 pt-8">
-                                <ul class="space-y-4">
-                                    <li class="flex items-start gap-3">
-                                        <span class="w-2 h-2 bg-nature-sage rounded-full mt-2 flex-shrink-0"></span>
-                                        <span class="text-brand-primary">Romantische treinrit door de Alpen met
-                                            adembenemende
-                                            uitzichten</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="w-2 h-2 bg-nature-sage rounded-full mt-2 flex-shrink-0"></span>
-                                        <span class="text-brand-primary">Bezoek aan historische kastelen en UNESCO
-                                            werelderfgoed
-                                            locaties</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="w-2 h-2 bg-nature-sage rounded-full mt-2 flex-shrink-0"></span>
-                                        <span class="text-brand-primary">Lokale culinaire ervaringen en
-                                            wijnproeverijen</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="w-2 h-2 bg-nature-sage rounded-full mt-2 flex-shrink-0"></span>
-                                        <span class="text-brand-primary">Kleinschalige groepen voor een persoonlijke
-                                            ervaring</span>
-                                    </li>
-                                    <li class="flex items-start gap-3">
-                                        <span class="w-2 h-2 bg-nature-sage rounded-full mt-2 flex-shrink-0"></span>
-                                        <span class="text-brand-primary">Duurzaam reizen zonder vliegtuig</span>
-                                    </li>
-                                </ul>
+                            <div class="p-6">
+                                <Slider :items="trip.images">
+                                    <template #default="{ item, index }">
+                                        <img :src="item.path"
+                                            class="w-full h-[150px] rounded-md object-cover cursor-zoom-in" :key="index"
+                                            @click="openLightbox(index)" />
+                                    </template>
+                                </Slider>
+                                <LightBox ref="lightboxRef" :images="trip.images" />
                             </div>
+                            <p class="text-lg text-brand-primary leading-relaxed">
+                                {{ trip.description }}
+                            </p>
                         </div>
 
-                        <!-- Tabs Section -->
-                        <div class="bg-white rounded-2xl shadow-sm border border-nature-sage/20 overflow-hidden">
-                            <!-- Tab Headers -->
-                            <div class="border-b border-nature-sage/20">
-                                <nav class="flex overflow-x-auto">
-                                    <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
-                                        'flex-1 px-6 py-4 text-center font-medium whitespace-nowrap transition-colors',
-                                        activeTab === tab.id
-                                            ? 'text-brand-dark bg-nature-earth/10 border-b-2 border-ui-gold'
-                                            : 'text-ui-blue hover:text-brand-dark hover:bg-neutral-50'
-                                    ]">
-                                        {{ tab.label }}
-                                    </button>
-                                </nav>
-                            </div>
-
-                            <!-- Tab Content -->
-                            <div class="p-6 laptop:p-8">
-                                <div v-if="activeTab === 'itinerary'" class="space-y-6">
-                                    <div class="text-left py-4">
-                                        <div v-if="trip.itineraries?.length" class="text-left space-y-6">
-                                            <template v-for="(itinerary, index) in trip.itineraries" :key="index">
-                                                <TripItinerary :itinerary="itinerary" />
-                                            </template>
-                                        </div>
-                                        <p v-else class="text-ui-blue">
-                                            Gedetailleerd reisprogramma wordt binnenkort toegevoegd
-                                        </p>
-                                    </div>
-                                </div>
-                                <div v-else-if="activeTab === 'inclusive'" class="space-y-6">
-                                    <p>Inbegrepen en niet inbegrepen informatie komt hier.</p>
-                                </div>
-
-                                <div v-else-if="activeTab === 'practical'" class="space-y-6">
-                                    <p>Praktische informatie over de reis komt hier.</p>
-                                </div>
-
-                                <div v-else-if="activeTab === 'extra'" class="space-y-6">
-                                    <p>Extra informatie over deze reis komt hier.</p>
-                                </div>
-                            </div>
+                        <!-- Highlights -->
+                        <div class="border-t border-accent-primary/20 pt-8">
+                            <ul class="space-y-4">
+                                <li class="flex items-start gap-3">
+                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="text-brand-primary">Romantische treinrit door de Alpen met
+                                        adembenemende
+                                        uitzichten</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="text-brand-primary">Bezoek aan historische kastelen en UNESCO
+                                        werelderfgoed
+                                        locaties</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="text-brand-primary">Lokale culinaire ervaringen en
+                                        wijnproeverijen</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="text-brand-primary">Kleinschalige groepen voor een persoonlijke
+                                        ervaring</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="text-brand-primary">Duurzaam reizen zonder vliegtuig</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
 
-                    <!-- Right Column - Booking Sidebar -->
-                    <div class="laptop:col-span-1">
-                        <div class="sticky top-6 space-y-6">
-                            <!-- Booking Card -->
-                            <div class="bg-white rounded-2xl shadow-lg border border-nature-sage/20 overflow-hidden">
-                                <div class=" bg-ui-gold p-4">
-                                    <h3 class="text-xl font-bold text-neutral-25">
-                                        Reis overzicht
+                    <!-- Tabs Section -->
+                    <div class="bg-white rounded-2xl shadow-sm border border-accent-primary/20 overflow-hidden">
+                        <!-- Tab Headers -->
+                        <div class="border-b border-accent-primary/20">
+                            <nav class="flex overflow-x-auto">
+                                <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
+                                    'flex-1 px-6 py-4 text-center font-medium whitespace-nowrap transition-colors',
+                                    activeTab === tab.id
+                                        ? 'text-brand-primary bg-accent-earth/10 border-b-2 border-accent-primary'
+                                        : 'text-brand-light hover:text-brand-primary hover:bg-white'
+                                ]">
+                                    {{ tab.label }}
+                                </button>
+                            </nav>
+                        </div>
+
+                        <!-- Tab Content -->
+                        <div class="p-6 laptop:p-8">
+                            <div v-if="activeTab === 'itinerary'" class="space-y-6">
+                                <div class="text-left py-4">
+                                    <div v-if="trip.itineraries?.length" class="text-left space-y-6">
+                                        <template v-for="(itinerary, index) in trip.itineraries" :key="index">
+                                            <TripItinerary :itinerary="itinerary" />
+                                        </template>
+                                    </div>
+                                    <p v-else class="text-brand-light">
+                                        Gedetailleerd reisprogramma wordt binnenkort toegevoegd
+                                    </p>
+                                </div>
+                            </div>
+                            <div v-else-if="activeTab === 'inclusive'" class="space-y-6">
+                                <p>Inbegrepen en niet inbegrepen informatie komt hier.</p>
+                            </div>
+
+                            <div v-else-if="activeTab === 'practical'" class="space-y-6">
+                                <p>Praktische informatie over de reis komt hier.</p>
+                            </div>
+
+                            <div v-else-if="activeTab === 'extra'" class="space-y-6">
+                                <p>Extra informatie over deze reis komt hier.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column - Booking Sidebar -->
+                <div class="laptop:col-span-1">
+                    <div class="sticky top-6 space-y-6">
+                        <!-- Booking Card -->
+                        <div class="bg-white rounded-2xl shadow-lg border border-accent-primary/20 overflow-hidden">
+                            <div class=" bg-accent-primary p-4">
+                                <h3 class="text-xl font-bold text-white">
+                                    Reis overzicht
+                                </h3>
+
+                            </div>
+
+                            <div class="p-6 space-y-6">
+                                <!-- Quick Facts -->
+                                <div class="space-y-4">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-brand-light">Vanaf:</span>
+                                        <span class="font-medium text-brand-primary"><strong> €{{ trip.price }},-
+                                            </strong> p.p.</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-brand-light">Duur:</span>
+                                        <span class="font-medium text-brand-primary">{{ trip.duration }}
+                                            dagen</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-brand-light">Vervoer:</span>
+                                        <span class="font-medium text-brand-primary flex items-center gap-1">
+                                            <TrainFront class="w-5 h-5" />
+                                            Trein
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="border-t border-accent-primary/20 pt-6 space-y-6">
+                                    <h3 class="text-xl font-bold text-brand-primary">
+                                        Boek deze reis
                                     </h3>
-
-                                </div>
-
-                                <div class="p-6 space-y-6">
-                                    <!-- Quick Facts -->
-                                    <div class="space-y-4">
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-ui-blue">Vanaf:</span>
-                                            <span class="font-medium text-brand-dark"><strong> €{{ trip.price }},-
-                                                </strong> p.p.</span>
-                                        </div>
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-ui-blue">Duur:</span>
-                                            <span class="font-medium text-brand-dark">{{ trip.duration }} dagen</span>
-                                        </div>
-                                        <div class="flex justify-between items-center">
-                                            <span class="text-ui-blue">Vervoer:</span>
-                                            <span class="font-medium text-brand-dark flex items-center gap-1">
-                                                <Train class="w-4 h-4" />
-                                                Trein
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div class="border-t border-nature-sage/20 pt-6 space-y-6">
-                                        <h3 class="text-xl font-bold text-brand-dark">
-                                            Boek deze reis
-                                        </h3>
-                                        <DatePicker v-model="departure_date" :min-date="new Date()" />
-                                        <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
-                                            :max-adults="6" :max-children="4" />
-                                        <button @click="bookingModalOpen = true"
-                                            class="w-full bg-nature-terracotta hover:bg-nature-terracotta/90 text-white font-semibold py-4 px-6 rounded-xl transition-colors duration-300 flex items-center justify-center gap-2 group">
-                                            Boek nu
-                                            <ChevronRightIcon
-                                                class="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                                        </button>
-                                        <p class="text-sm text-ui-blue text-center mt-4">
-                                            Of neem contact op voor meer informatie
-                                        </p>
-                                        <div class="flex gap-3 mt-4">
-                                            <CallButton />
-                                            <MailButton />
-                                        </div>
+                                    <DatePicker v-model="departure_date" :min-date="new Date()" />
+                                    <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
+                                        :max-adults="6" :max-children="4" />
+                                    <Button @click="bookingModalOpen = true"
+                                        class="w-full flex justify-center items-center group">
+                                        Boek nu
+                                        <ChevronRight
+                                            class=" group-hover:translate-x-2 transition-transform duration-300" />
+                                    </Button>
+                                    <p class="text-sm text-brand-light text-center mt-4">
+                                        Of neem contact op voor meer informatie
+                                    </p>
+                                    <div class="flex gap-3 mt-4">
+                                        <CallButton />
+                                        <MailButton />
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Trust Indicators -->
-                            <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-nature-sage/20">
-                                <h4 class="font-semibold text-brand-dark mb-4">Waarom kiezen voor ons?</h4>
-                                <ul class="space-y-3 text-sm">
-                                    <li class="flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-ui-gold rounded-full"></span>
-                                        <span class="text-brand-primary">25+ jaar reiservaring</span>
-                                    </li>
-                                    <li class="flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-ui-gold rounded-full"></span>
-                                        <span class="text-brand-primary">100% duurzaam reizen</span>
-                                    </li>
-                                    <li class="flex items-center gap-2">
-                                        <span class="w-2 h-2 bg-ui-gold rounded-full"></span>
-                                        <span class="text-brand-primary">Kleinschalig & persoonlijk</span>
-                                    </li>
-                                </ul>
-                            </div>
+                        <!-- Trust Indicators -->
+                        <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-accent-primary/20">
+                            <h4 class="font-semibold text-brand-primary mb-4">Waarom kiezen voor ons?</h4>
+                            <ul class="space-y-3 text-sm">
+                                <li class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
+                                    <span class="text-brand-primary">Duurzaam reizen</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
+                                    <span class="text-brand-primary">Kleinschalig & persoonlijk</span>
+                                </li>
+                                <li class="flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
+                                    <span class="text-brand-primary">Zorgeloos op reis</span>
+                                </li>
+                            </ul>
                         </div>
                     </div>
                 </div>

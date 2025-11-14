@@ -128,7 +128,7 @@ class ItineraryTest extends TestCase
 
         $response->assertInertia(
             fn (AssertableInertia $page) => $page
-                ->component('Admin/Itineraries/Edit')
+                ->component('Admin/Products/Itineraries/Edit')
                 ->has('itinerary')
                 ->where('itinerary.id', $this->itinerary->id)
                 ->where('itinerary.title', $this->itinerary->title)

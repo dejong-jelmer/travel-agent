@@ -26,7 +26,7 @@ class AdminContactFormNotificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: '📧 Nieuw Contact Formulier Bericht',
+            subject: 'Nieuw Contact Formulier Bericht',
         );
     }
 

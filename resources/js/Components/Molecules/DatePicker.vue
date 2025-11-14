@@ -43,7 +43,7 @@ const format = (date) =>
             teleport="body" :format="format" :min-date="props.minDate || null" :max-date="props.maxDate || null"
             arrow-navigation auto-apply :state="!!feedback ? false : null">
             <template #input-icon>
-                <Calendar class="ml-1 h-5 w-auto text-ui-gold" />
+                <Calendar class="ml-1 h-5 w-auto text-accent-primary" />
             </template>
         </VueDatePicker>
         <template v-if="!!feedback">
@@ -51,13 +51,3 @@ const format = (date) =>
         </template>
     </div>
 </template>
-<style>
-.dp__input_invalid {
-    @apply ring-[2px] ring-status-error ring-offset-2 bg-status-error/20;
-}
-
-/* Valid state (optioneel, als je dat wilt gebruiken) */
-.dp__input_valid {
-    @apply ring-[2px] ring-status-success ring-offset-2;
-}
-</style>

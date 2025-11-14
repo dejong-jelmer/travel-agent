@@ -70,7 +70,7 @@ const normalizedOptions = computed(() => {
 });
 </script>
 <template>
-    <div>
+    <div class="grid gap-1">
         <Label v-if="showLabel" :form-field="name">{{ label }}</Label>
         <select
             class="form-input"

@@ -13,7 +13,7 @@ const props = defineProps({
 <template>
     <Link :href="href" :class="[
         $attrs.class,
-        'text-nature-terracotta hover:text-brand-dark font-medium underline decoration-ui-gold/30 hover:decoration-ui-gold transition-colors duration-300'
+        'default-link'
         ]">
         <slot></slot>
     </Link>

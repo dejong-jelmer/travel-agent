@@ -1,8 +1,5 @@
 <script setup>
-import Train from '@/Icons/Train.vue';
-import Heart from '@/Icons/Heart.vue';
-import Shield from '@/Icons/Shield.vue';
-
+import { Leaf, Castle, Handshake } from 'lucide-vue-next';
 
 
 // import * as exportedIcons from '@/Icons';
@@ -10,36 +7,31 @@ import Shield from '@/Icons/Shield.vue';
 
 const usps = [
     {
-        icon: Train,
-        title: '100% treinreizen',
+        icon: Leaf,
+        title: 'Duurzaam',
         description: 'Reis comfortabel en ontspannen door Europa\'s mooiste landschappen. Geen stress van vliegvelden, wel het plezier van de reis zelf.',
-        highlight: 'Gemiddeld 75% minder CO₂',
-        accentColor: 'bg-nature-sage'
+        highlight: 'Gemiddeld 75% minder CO₂'
     },
     {
-        icon: Heart,
-        title: 'Lokale beleving',
-        description: 'Ontmoet locals, proef authentieke gerechten en ontdek verborgen pareltjes die alleen insiders kennen.',
-        highlight: 'Partnerships met 200+ lokale gidsen',
-        accentColor: 'bg-nature-terracotta'
+        icon: Castle,
+        title: 'Met een verhaal',
+        description: 'Ontdek de fascinerende verhalen achter elke bestemming. Onze reizen brengen geschiedenis tot leven met verhalen en bijzondere achtergronden bij elke bestemming.',
+        highlight: 'Unieke achtergronden bij elke reis'
     },
     {
-        icon: Shield,
-        title: 'Zorgeloos reizen',
+        icon: Handshake,
+        title: 'Zorgeloos',
         description: 'Wij regelen alles van A tot Z. Jij hoeft alleen maar te genieten van je duurzame avontuur door Europa.',
-        highlight: '24/7 Nederlandse reisondersteuning',
-        accentColor: 'bg-ui-gold'
+        highlight: '24/7 Nederlandse reisondersteuning'
     }
 ];
 </script>
 <template>
     <div class="max-w-6xl mx-auto">
-        <!-- Header met subtiele accent lijn -->
-
         <div class="text-center mb-12">
-            <SectionHeader>
-                Waarom kiezen voor ons
-            </SectionHeader>
+            <div class="text-center">
+                <SectionHeader>kiezen voor ons</SectionHeader>
+            </div>
             <p class="text-brand-primary text-lg mt-2 laptop:text-xl max-w-2xl mx-auto leading-relaxed">
                 Onze unieke aanpak combineert comfort, cultuur en duurzaamheid voor een reiservaring die verder gaat dan
                 toerisme.
@@ -47,44 +39,44 @@ const usps = [
         </div>
 
         <!-- USP Cards met staggered layout -->
+
         <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
-            <div v-for="(usp, index) in usps" :key="index"
-                class="group relative bg-neutral-25 rounded-2xl shadow-sm border border-ui-blue/20 p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-500 ease-out">
-
-                <!-- Accent dot in corner -->
-                <div class="absolute top-6 right-6 w-3 h-3 rounded-full" :class="usp.accentColor"></div>
-
-                <!-- Icon met gradient background -->
+            <Card v-for="(usp, index) in usps" :key="index" class="p-8 relative overflow-hidden">
                 <div class="relative mb-6">
-                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300"
-                        :class="usp.bgColor">
-                        <component :is="usp.icon" class="h-8 w-8" :class="usp.iconColor" />
+                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center border border-brand-primary/20">
+                        <component :is="usp.icon"
+                            class="h-8 w-8 text-brand-primary group-hover:text-accent-primary transition-colors duration-300" />
+                    </div>
+                    <div
+                        class="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-primary rounded-full border-2 border-brand-secondary">
                     </div>
                 </div>
-
-                <!-- Content -->
                 <h3
-                    class="text-xl font-bold text-brand-dark mb-3 group-hover:text-nature-terracotta transition-colors duration-300">
+                    class="text-xl font-bold text-brand-primary mb-3 group-hover:text-accent-primary transition-colors duration-300 relative">
                     {{ usp.title }}
                 </h3>
-                <p class="text-brand-primary/80 leading-relaxed mb-4">
+
+                <p class="text-brand-primary leading-relaxed min-h-[130px] mb-6 relative">
                     {{ usp.description }}
                 </p>
-
-                <!-- Feature highlight -->
-                <div class="flex items-center gap-2 text-sm">
-                    <div class="w-2 h-2 rounded-full bg-nature-sage"></div>
-                    <span class="text-brand-primary/70 font-medium">{{ usp.highlight }}</span>
+                <div class="flex items-center gap-2.5 pt-4 border-t border-brand-primary/20 relative">
+                    <div
+                        class="w-1.5 h-1.5 rounded-full bg-accent-primary group-hover:scale-125 transition-transform duration-300">
+                    </div>
+                    <span
+                        class="text-sm text-[#2f4858]/60 font-medium group-hover:text-accent-primary transition-colors duration-300">
+                        {{ usp.highlight }}
+                    </span>
                 </div>
-            </div>
+            </Card>
         </div>
 
         <!-- Bottom CTA -->
         <!-- <div class="text-center mt-12">
             <div
-                class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-nature-sage/20">
-                <span class="text-brand-dark font-medium">Klaar voor jouw volgende avontuur?</span>
-                <div class="w-px h-4 bg-nature-sage/30"></div>
+                class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-accent-sage/20">
+                <span class="text-brand-primary font-medium">Klaar voor jouw volgende avontuur?</span>
+                <div class="w-px h-4 bg-accent-sage/30"></div>
                 <DefaultLink>
                     Ontdek alle reizen →
                 </DefaultLink>

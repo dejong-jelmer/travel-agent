@@ -12,6 +12,7 @@ const form = useForm({
 })
 
 function submit() {
+    if(!form.isDirty) return;
     form.clearErrors()
     try {
         honeypot.value.validate()
@@ -30,18 +31,18 @@ function submit() {
 </script>
 
 <template>
-    <div class="max-w-4xl mx-auto px-4 py-12 phone:px-6 laptop:px-8">
-        <div class="bg-neutral-50 rounded-lg p-8 phone:p-10 laptop:p-12 border border-ui-blue/20">
+    <div class="max-w-6xl mx-auto px-4 py-12 phone:px-6 laptop:px-8">
+        <div class="bg-white rounded-lg p-8 phone:p-10 laptop:p-12 border border-brand-primary">
             <div class="text-center mb-8">
                 <h2 class="text-2xl phone:text-3xl laptop:text-4xl font-semibold text-brand-primary mb-4">
                     Blijf op de hoogte
                 </h2>
-                <p class="text-base phone:text-lg text-brand-primary/70 leading-relaxed">
+                <p class="text-base phone:text-lg text-black leading-relaxed">
                     Schrijf je in voor onze nieuwsbrief en ontvang alle nieuwste updates over onze reizen.
                 </p>
             </div>
             <form @submit.prevent="submit" class="space-y-4">
-                <div class="grid grid-cols-2 gap-x-6">
+                <div class="grid grid-cols-1 tablet:grid-cols-2 gap-x-6">
                     <Input v-model="form.name" type="text" name="name" placeholder="Uw voornaam (optioneel)"
                         :feedback="form.errors.name" @change="form.clearErrors('name')" />
                     <Input v-model="form.email" type="email" name="email" placeholder="uw.email@voorbeeld.nl"
@@ -49,13 +50,13 @@ function submit() {
                     <!-- Setup the honeypot -->
                     <vue-honeypot ref="honeypot" />
                 </div>
-                <Button :disabled="form.processing" class="w-full">
+                <Button :disabled="form.processing" class="w-full" color="primary">
                     <span class="flex justify-center space-x-2">
                         <Spinner v-if="form.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
                         <span>{{ form.processing ? 'Bezig met verzenden...' : 'Inschrijven' }}</span>
                     </span>
                 </Button>
-                <p class="text-sm text-brand-primary/60 text-center mt-4">
+                <p class="text-sm text-brand-primary text-center mt-4">
                     We respecteren uw privacy. U kunt zich op elk moment uitschrijven.
                 </p>
             </form>
