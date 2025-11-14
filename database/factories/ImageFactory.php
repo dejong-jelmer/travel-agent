@@ -29,13 +29,21 @@ class ImageFactory extends Factory
     /**
      * Define the model's default state.
      *
+     * Uses predefined seed images from PATHS const.
+     * New uploads via UI will get hash filenames (handled by ManagesImages trait).
+     *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
+        $filename = fake()->randomElement(self::PATHS);
+
         return [
-            'path' => fake()->randomElement(self::PATHS),
+            'path' => $filename,
+            'original_name' => $filename,
             'featured' => false,
+            'mime_type' => 'image/jpeg',
+            'size' => fake()->randomNumber(5, true),
         ];
     }
 }

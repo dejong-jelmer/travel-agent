@@ -113,13 +113,12 @@ class ItineraryTest extends TestCase
         $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
         $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
-        // ✅ Image
-        $storedImagePath = $itineraryData['image']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $itinerary->id,
-            'path' => $storedImagePath,
-        ]);
-        Storage::assertExists("images/{$storedImagePath}");
+        // ✅ Image with hash-based storage
+        $image = $itinerary->image;
+        $this->assertNotNull($image);
+        $this->assertEquals($itineraryData['image']->getClientOriginalName(), $image->original_name);
+        $this->assertEquals('image/jpeg', $image->mime_type);
+        Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
     }
 
     public function test_admin_can_show_the_itinerary_edit_page(): void
@@ -168,13 +167,12 @@ class ItineraryTest extends TestCase
         $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
         $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
-        // ✅ Images
-        $storedImagePath = $itineraryData['image']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $itinerary->id,
-            'path' => $storedImagePath,
-        ]);
-        Storage::assertExists("images/{$storedImagePath}");
+        // ✅ Image with hash-based storage
+        $image = $itinerary->image;
+        $this->assertNotNull($image);
+        $this->assertEquals($itineraryData['image']->getClientOriginalName(), $image->original_name);
+        $this->assertEquals('image/jpeg', $image->mime_type);
+        Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
     }
 
     public function test_admin_can_destroy_an_itinerary(): void

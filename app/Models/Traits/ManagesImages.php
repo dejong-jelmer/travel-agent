@@ -9,6 +9,8 @@ use InvalidArgumentException;
 
 trait ManagesImages
 {
+    private const STORAGE_DISK = 'public';
+
     private const IMAGE_DIRECTORY = 'images';
 
     /**
@@ -29,20 +31,22 @@ trait ManagesImages
             if (! $image instanceof UploadedFile) {
                 throw new InvalidArgumentException('Expected instance of Illuminate\Http\UploadedFile.');
             }
-            $originalFilename = $image->getClientOriginalName();
-            $storedPath = $image->storeAs(
-                self::IMAGE_DIRECTORY,
-                $originalFilename,
-                'public'
-            );
+            // Store with Laravel hash in public/images directory
+            $fullPath = $image->store(self::IMAGE_DIRECTORY, self::STORAGE_DISK);
 
-            if (!$storedPath) {
-                throw new \RuntimeException("Failed to store image: {$originalFilename}");
+            if (! $fullPath) {
+                throw new \RuntimeException("Failed to store image: {$image->getClientOriginalName()}");
             }
 
+            // Extract hash filename only (without "images/" prefix) for database
+            $hashFilename = basename($fullPath);
+
             $imageDatabaseEntries[] = [
-                'path' => $originalFilename,
+                'path' => $hashFilename,
+                'original_name' => $image->getClientOriginalName(),
                 'featured' => $isFeatured,
+                'mime_type' => $image->getClientMimeType(),
+                'size' => $image->getSize(),
             ];
         }
 
@@ -97,20 +101,25 @@ trait ManagesImages
 
         try {
             foreach ($newUploads as $upload) {
-                $originalFilename = $upload->getClientOriginalName();
-                $storedPath = $upload->storeAs(
-                    self::IMAGE_DIRECTORY,
-                    $originalFilename,
-                    'public'
-                );
+                // Store with Laravel hash in public/images directory
+                $fullPath = $upload->store(self::IMAGE_DIRECTORY, self::STORAGE_DISK);
 
-                if ($storedPath) {
-                    $uploadedFiles[] = $originalFilename;
+                if ($fullPath) {
+                    // Extract hash filename only (without "images/" prefix) for database
+                    $hashFilename = basename($fullPath);
+
+                    $uploadedFiles[] = [
+                        'path' => $hashFilename,
+                        'original_name' => $upload->getClientOriginalName(),
+                        'featured' => $isFeatured,
+                        'mime_type' => $upload->getClientMimeType(),
+                        'size' => $upload->getSize(),
+                    ];
                 }
             }
 
             // Step 2: DB transaction for atomic database operations
-            DB::transaction(function () use ($relation, $existingImages, $pathsToDelete, $uploadedFiles, $isFeatured) {
+            DB::transaction(function () use ($relation, $existingImages, $pathsToDelete, $uploadedFiles) {
                 // Delete old database records (files deleted after commit)
                 foreach ($pathsToDelete as $pathToDelete) {
                     $imageToDelete = $existingImages->firstWhere('path', $pathToDelete);
@@ -120,23 +129,27 @@ trait ManagesImages
                 }
 
                 // Create new database records for uploaded files
-                foreach ($uploadedFiles as $filename) {
+                foreach ($uploadedFiles as $file) {
                     $this->$relation()->create([
-                        'path' => $filename,
-                        'featured' => $isFeatured,
+                        'path' => $file['path'],
+                        'original_name' => $file['original_name'],
+                        'featured' => $file['featured'],
+                        'mime_type' => $file['mime_type'],
+                        'size' => $file['size'],
                     ]);
                 }
             });
 
             // Step 3: After successful commit, delete old storage files
             foreach ($pathsToDelete as $pathToDelete) {
-                Storage::disk('public')->delete(self::IMAGE_DIRECTORY.'/'.basename($pathToDelete));
+                // $pathToDelete is hash filename only (e.g., "Ab3Cd5Ef7.jpg")
+                Storage::disk(self::STORAGE_DISK)->delete(self::IMAGE_DIRECTORY.'/'.$pathToDelete);
             }
-
         } catch (\Exception $e) {
             // Step 4: Cleanup uploaded files on failure
-            foreach ($uploadedFiles as $filename) {
-                Storage::disk('public')->delete(self::IMAGE_DIRECTORY.'/'.$filename);
+            foreach ($uploadedFiles as $file) {
+                // $file is array with 'path' key containing hash filename
+                Storage::disk(self::STORAGE_DISK)->delete(self::IMAGE_DIRECTORY.'/'.$file['path']);
             }
 
             // Re-throw exception for proper error handling

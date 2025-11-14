@@ -4,8 +4,6 @@ namespace App\Services\Validation;
 
 use App\Enums\Meals;
 use Illuminate\Validation\Rule;
-use App\Services\Validation\ImageValidationRules;
-
 
 class ItineraryValidationRules
 {

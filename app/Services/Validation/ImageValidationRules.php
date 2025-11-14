@@ -32,7 +32,7 @@ class ImageValidationRules
      * - String paths: Checks file existence and extension
      * - UploadedFile: Checks file type, mime type, and size
      *
-     * @return array<int, \Closure> Array containing validation closure
+     * @return array<int, string|Closure> Array containing validation closure
      */
     public static function baseImageOrString(): array
     {
@@ -43,14 +43,18 @@ class ImageValidationRules
             function (string $attribute, mixed $value, Closure $fail) use ($maxFileSize, $mimes) {
                 // Accept string paths for existing images
                 if (is_string($value)) {
-                    // Verify file exists in storage
-                    if (! Storage::disk('public')->exists('images/'.basename($value))) {
+                    // Handle both hash filenames and full paths
+                    $filename = basename($value);
+
+                    // Verify file exists in storage (check "images/{hash}" path)
+                    if (! Storage::disk('public')->exists('images/'.$filename)) {
                         $fail("The {$attribute} references a non-existent image.");
 
                         return;
                     }
-                    // Validate it's a valid image filename
-                    $extension = strtolower(pathinfo($value, PATHINFO_EXTENSION));
+
+                    // Validate extension (works for both hash and original filenames)
+                    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
                     $allowedExtensions = explode(',', $mimes);
                     if (! in_array($extension, $allowedExtensions)) {
                         $fail("The {$attribute} must be a valid image file.");

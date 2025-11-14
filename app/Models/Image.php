@@ -12,7 +12,13 @@ class Image extends Model
     use HasFactory,
         SoftDeletes;
 
-    protected $fillable = ['path', 'featured'];
+    protected $fillable = [
+        'path',
+        'featured',
+        'original_name',
+        'mime_type',
+        'size'
+    ];
 
     protected $casts = [
         'path' => PathCast::class,

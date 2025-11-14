@@ -2,8 +2,6 @@
 
 namespace App\Services\Validation;
 
-use App\Services\Validation\ImageValidationRules;
-
 class ProductValidationRules
 {
     public static function basic(): array
@@ -66,7 +64,7 @@ class ProductValidationRules
     {
         return [
             'images' => ['nullable', 'array'],
-            'images.*' => ImageValidationRules::baseImageOrString(),
+            'images.*' => [...ImageValidationRules::baseImageOrString()],
         ];
     }
 }

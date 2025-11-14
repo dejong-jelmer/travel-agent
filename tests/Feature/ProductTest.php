@@ -88,21 +88,22 @@ class ProductTest extends TestCase
 
         $this->assertDatabaseHas('products', Arr::except($this->productData, ['featuredImage', 'images', 'countries']));
 
-        $featuredImagePath = $this->productData['featuredImage']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $product->id,
-            'path' => $featuredImagePath,
-            'featured' => true,
-        ]);
-        Storage::assertExists("images/{$featuredImagePath}");
+        // Assert featured image with hash-based storage
+        $featuredImage = $product->featuredImage;
+        $this->assertNotNull($featuredImage);
+        $this->assertEquals($this->productData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
+        $this->assertEquals('image/jpeg', $featuredImage->mime_type);
+        $this->assertTrue($featuredImage->featured);
+        Storage::disk('public')->assertExists("images/{$featuredImage->getRawOriginal('path')}");
 
+        // Assert gallery images with hash-based storage
+        $this->assertCount(2, $product->images);
         foreach ($product->images as $index => $image) {
-            $path = $this->productData['images'][$index]->getClientOriginalName();
-            $this->assertDatabaseHas('images', [
-                'imageable_id' => $product->id,
-                'path' => $path,
-            ]);
-            Storage::assertExists("images/{$path}");
+            $originalFile = $this->productData['images'][$index];
+            $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
+            $this->assertEquals('image/jpeg', $image->mime_type);
+            $this->assertFalse($image->featured);
+            Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
         }
     }
 
@@ -151,21 +152,22 @@ class ProductTest extends TestCase
         $this->assertEquals(5, $product->duration);
         $this->assertEquals(1234.56, $product->raw_price);
 
-        $featuredImagePath = $updateData['featuredImage']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $product->id,
-            'path' => $featuredImagePath,
-            'featured' => true,
-        ]);
-        Storage::assertExists("images/{$featuredImagePath}");
+        // Assert featured image with hash-based storage
+        $featuredImage = $product->featuredImage;
+        $this->assertNotNull($featuredImage);
+        $this->assertEquals($updateData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
+        $this->assertEquals('image/jpeg', $featuredImage->mime_type);
+        $this->assertTrue($featuredImage->featured);
+        Storage::disk('public')->assertExists("images/{$featuredImage->getRawOriginal('path')}");
 
+        // Assert gallery images with hash-based storage
+        $this->assertCount(2, $product->images);
         foreach ($product->images as $index => $image) {
-            $path = $updateData['images'][$index]->getClientOriginalName();
-            $this->assertDatabaseHas('images', [
-                'imageable_id' => $product->id,
-                'path' => $path,
-            ]);
-            Storage::assertExists("images/{$path}");
+            $originalFile = $updateData['images'][$index];
+            $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
+            $this->assertEquals('image/jpeg', $image->mime_type);
+            $this->assertFalse($image->featured);
+            Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
         }
     }
 
