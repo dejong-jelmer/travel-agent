@@ -64,7 +64,7 @@ class ProductValidationRules
     {
         return [
             'images' => ['required'],
-            'images.*' => ['required', ...self::baseImage()],
+            'images.*' => self::baseImage(),
         ];
     }
 
