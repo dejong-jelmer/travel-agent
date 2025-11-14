@@ -10,7 +10,6 @@ use App\Http\Requests\UpdateItineraryRequest;
 use App\Models\Itinerary;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
