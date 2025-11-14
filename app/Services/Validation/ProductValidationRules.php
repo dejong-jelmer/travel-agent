@@ -55,15 +55,15 @@ class ProductValidationRules
     public static function imagesStore(): array
     {
         return [
-            'images' => ['required'],
-            'images.*' => ['required', 'image', ...self::baseImage()],
+            'images' => ['required', 'array'],
+            'images.*' => ['required', ...self::baseImage()],
         ];
     }
 
     public static function imagesUpdate(): array
     {
         return [
-            'images' => ['required'],
+            'images' => ['nullable'],
             'images.*' => self::baseImage(),
         ];
     }
