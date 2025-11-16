@@ -5,14 +5,11 @@ namespace App\Models\Traits;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 trait ManagesImages
 {
-    private const STORAGE_DISK = 'public';
-
-    private const IMAGE_DIRECTORY = 'images';
-
     /**
      * Sync images - intelligently add new, keep existing, and remove deleted images.
      *
@@ -54,17 +51,16 @@ trait ManagesImages
             $diffPaths = array_diff($existingPaths, $incomingPaths);
             $pathsToDelete = Arr::map($diffPaths, fn (string $value, string $key) => basename($value));
 
-            // Step 1: Upload new files FIRST (before transaction)
+            // Upload new files
             // Track uploaded files for cleanup on failure
             $uploadedFiles = [];
 
             try {
                 foreach ($newUploads as $upload) {
-                    // Store with Laravel hash in public/images directory
-                    $fullPath = $upload->store(self::IMAGE_DIRECTORY, self::STORAGE_DISK);
+                    $fullPath = $upload->store(config('images.disk'), config('images.directory'));
 
                     if ($fullPath) {
-                        // Extract hash filename only (without "images/" prefix) for database
+                        // Extract hash filename only for database
                         $hashFilename = basename($fullPath);
 
                         $uploadedFiles[] = [
@@ -77,45 +73,42 @@ trait ManagesImages
                     }
                 }
 
-                // Step 2: DB transaction for atomic database operations
-                DB::transaction(function () use ($relation, $existingImages, $pathsToDelete, $uploadedFiles) {
-                    // Delete old database records (files deleted after commit)
-                    foreach ($pathsToDelete as $pathToDelete) {
-                        $imageToDelete = $existingImages->firstWhere('path', $pathToDelete);
-                        if ($imageToDelete) {
-                            $imageToDelete->forceDelete();
-                        }
-                    }
-
-                    // Create new database records for uploaded files
-                    foreach ($uploadedFiles as $file) {
-                        $this->$relation()->create([
-                            'path' => $file['path'],
-                            'original_name' => $file['original_name'],
-                            'featured' => $file['featured'],
-                            'mime_type' => $file['mime_type'],
-                            'size' => $file['size'],
-                        ]);
-                    }
-                });
-
-                // Step 3: After successful commit, delete old storage files
                 foreach ($pathsToDelete as $pathToDelete) {
-                    // $pathToDelete is hash filename only (e.g., "Ab3Cd5Ef7.jpg")
-                    Storage::disk(self::STORAGE_DISK)->delete(self::IMAGE_DIRECTORY.'/'.basename($pathToDelete));
+                    $imageToDelete = $existingImages->firstWhere('path', $pathToDelete);
+                    if ($imageToDelete) {
+                        $imageToDelete->forceDelete();
+                    }
+                }
+
+                // Create new database records for uploaded files
+                foreach ($uploadedFiles as $file) {
+                    $this->$relation()->create([
+                        'path' => $file['path'],
+                        'original_name' => $file['original_name'],
+                        'featured' => $file['featured'],
+                        'mime_type' => $file['mime_type'],
+                        'size' => $file['size'],
+                    ]);
+                }
+
+                // Delete old storage files
+                foreach ($pathsToDelete as $pathToDelete) {
+                    Storage::disk(config('images.directory'))->delete(config('images.disk').'/'.$pathToDelete);
                 }
             } catch (\Exception $e) {
                 // Step 4: Cleanup uploaded files on failure
                 foreach ($uploadedFiles as $file) {
                     // $file is array with 'path' key containing hash filename
-                    Storage::disk(self::STORAGE_DISK)->delete(self::IMAGE_DIRECTORY.'/'.$file['path']);
+                    Storage::disk(config('images.directory'))->delete(config('images.disk').'/'.$file['path']);
                 }
-
-                // Re-throw exception for proper error handling
+                // Log & Re-throw exception for proper error handling
+                Log::error('Image sync failed', [
+                    'model' => get_class($this),
+                    'id' => $this->id,
+                    'error' => $e->getMessage(),
+                ]);
                 throw $e;
             }
         });
-
-        // Existing images (paths in $incomingPaths) are automatically kept - no action needed
     }
 }
