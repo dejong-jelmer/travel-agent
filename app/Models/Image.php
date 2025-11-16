@@ -25,8 +25,17 @@ class Image extends Model
         'featured' => 'boolean',
     ];
 
+    protected $appends = [
+        'raw_path',
+    ];
+
     public function imageable()
     {
         return $this->morphTo();
+    }
+
+    public function getRawPathAttribute(): string
+    {
+        return $this->getRawOriginal('path');
     }
 }

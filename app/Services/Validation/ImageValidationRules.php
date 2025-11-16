@@ -45,6 +45,12 @@ final class ImageValidationRules
                 if (is_string($value)) {
                     // Handle both hash filenames and full paths
                     $filename = basename($value);
+
+                    if (str_contains($filename, '..') || str_contains($filename, '/')) {
+                        $fail("The {$attribute} contains invalid characters.");
+                        return;
+                    }
+
                     $pregMimes = implode('|', $mimes);
 
                     if (! preg_match("/^[a-zA-Z0-9_\-]+\.({$pregMimes})$/i", $filename)) {
@@ -53,8 +59,8 @@ final class ImageValidationRules
                         return;
                     }
 
-                    // Verify file exists in storage (check "images/{hash}" path)
-                    if (! Storage::disk('public')->exists('images/'.$filename)) {
+                    // Verify file exists in storage
+                    if (! Storage::disk(config('images.disk'))->exists(config('images.directory') . '/' . $filename)) {
                         $fail("The {$attribute} references a non-existent image.");
 
                         return;
