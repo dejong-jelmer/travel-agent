@@ -17,7 +17,7 @@ class Image extends Model
         'featured',
         'original_name',
         'mime_type',
-        'size'
+        'size',
     ];
 
     protected $casts = [

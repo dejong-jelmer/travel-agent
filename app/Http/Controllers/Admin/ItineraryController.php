@@ -63,7 +63,7 @@ class ItineraryController extends Controller
         $itinerary->product()->associate($product);
         $itinerary->order = $product->itineraries->count() + 1;
         $itinerary->save();
-        $itinerary->storeImages($validatedImage['image'], 'image');
+        $itinerary->syncImages($validatedImage['image'], 'image');
 
         return redirect()
             ->route('admin.products.itineraries.index', $itinerary->product)

@@ -54,8 +54,8 @@ class ProductController extends Controller
 
         $product->fill($validatedFields);
         $product->save();
-        $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
-        $product->storeImages($validatedFiles['images'], 'images');
+        $product->syncImages($validatedFiles['featuredImage'], 'featuredImage', true);
+        $product->syncImages($validatedFiles['images'], 'images');
 
         if (count($countries)) {
             $product->countries()->sync($countries);
@@ -100,9 +100,9 @@ class ProductController extends Controller
         $product->save();
 
         // Sync featuredImage (handles both existing paths and new uploads)
-        if (isset($validatedFiles['featuredImage'])) {
-            $product->syncImages($validatedFiles['featuredImage'], 'featuredImage', true);
-        }
+        // if (isset($validatedFiles['featuredImage'])) {
+        //     $product->syncImages($validatedFiles['featuredImage'], 'featuredImage', true);
+        // }
 
         // Sync images array (handles mix of existing paths and new uploads)
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {

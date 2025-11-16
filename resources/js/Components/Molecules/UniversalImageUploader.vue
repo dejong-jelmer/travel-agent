@@ -85,7 +85,7 @@ import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
                             Bestandsgrootte: {{ formatBytes(singleImageFile.size) }}
                         </p>
                         <p v-if="sizeExceedsMax(singleImageFile.size)" class="text-status-error">
-                            Maximale bestandsgrootte is {{ formatBytes(settings.maxFileSize, true) }}
+                            Maximale bestandsgrootte is {{ formatBytes(images.max_size, true) }}
                         </p>
                         <p>Bestandstype: {{ singleImageFile.type }}</p>
                     </div>
@@ -192,7 +192,7 @@ export default {
     computed: {
         settings() {
             const page = usePage();
-            return page.props.settings || {};
+            return page.props.images || {};
         },
         hasImages() {
             return this.uploadedImages.length > 0;
@@ -506,7 +506,7 @@ export default {
             return parseFloat((bytes / Math.pow(1024, i)).toFixed(decimals)) + " " + sizes[i];
         },
         sizeExceedsMax(bytes) {
-            const maxBytes = (this.settings?.maxFileSize || 5000) * 1000; // Default 5MB
+            const maxBytes = (this.images?.max_size || 5000) * 1000;
             return bytes > maxBytes;
         }
     },
