@@ -62,7 +62,7 @@ class ImageFactory extends Factory
         $extension = pathinfo($filename, PATHINFO_EXTENSION);
         $hashName = Str::random(40) . '.' . $extension;
 
-        Storage::disk('public')->copy(
+        Storage::disk(config('images.disk'))->copy(
             '/seed/' . basename($filename),
             $dir . '/' . $hashName
         );
