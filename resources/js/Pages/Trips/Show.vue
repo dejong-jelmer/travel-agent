@@ -48,7 +48,7 @@ const tabs = [
                 <!-- Background Image -->
                 <div class="h-[80vh] laptop:h-[90vh] relative">
                     <div class="absolute inset-0 bg-cover bg-center"
-                        :style="`background-image: url(${trip.featured_image?.path})`"></div>
+                        :style="`background-image: url(${trip.featured_image?.full_path})`"></div>
                     <!-- Overlay -->
                     <div class="absolute inset-0 ">
                     </div>
@@ -114,7 +114,7 @@ const tabs = [
                             <div class="p-6">
                                 <Slider :items="trip.images">
                                     <template #default="{ item, index }">
-                                        <img :src="item.path"
+                                        <img :src="item.full_path"
                                             class="w-full h-[150px] rounded-md object-cover cursor-zoom-in" :key="index"
                                             @click="openLightbox(index)" />
                                     </template>

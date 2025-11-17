@@ -10,7 +10,7 @@ const props = defineProps({
 const form = useForm({
     ...props.product,
     countries: props.product.countries?.map(country => country.id) ?? [],
-    featuredImage: props.product.featured_image?.path ?? null,
+    featuredImage: props.product.featured_image?.full_path ?? null,
     images: props.product.image_urls ?? [],
 });
 

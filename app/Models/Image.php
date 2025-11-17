@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
-use App\Casts\PathCast;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Image extends Model
 {
@@ -21,12 +21,11 @@ class Image extends Model
     ];
 
     protected $casts = [
-        'path' => PathCast::class,
         'featured' => 'boolean',
     ];
 
     protected $appends = [
-        'raw_path',
+        'full_path',
     ];
 
     public function imageable()
@@ -34,8 +33,10 @@ class Image extends Model
         return $this->morphTo();
     }
 
-    public function getRawPathAttribute(): string
+    public function getFullPathAttribute(): string
     {
-        return $this->getRawOriginal('path');
+        $dir = config('images.directory');
+
+        return Storage::url("{$dir}/{$this->path}");
     }
 }

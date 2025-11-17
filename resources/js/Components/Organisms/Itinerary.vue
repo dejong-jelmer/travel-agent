@@ -55,7 +55,7 @@ export default {
 
             <!-- Image -->
             <div class="tablet:col-span-2 order-1 tablet:order-2 h-full">
-                <img :src="itinerary.image?.path" alt="Reisbeschrijving"
+                <img :src="itinerary.image?.full_path" alt="Reisbeschrijving"
                     class="w-full h-full object-cover rounded-r-xl shadow-md">
             </div>
         </div>

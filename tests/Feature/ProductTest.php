@@ -31,8 +31,8 @@ class ProductTest extends TestCase
         $this->admin = User::factory()->create();
         $this->actingAs($this->admin);
 
-        Storage::fake('public');
-        Storage::makeDirectory('images');
+        Storage::fake(config('images.disk'));
+        Storage::makeDirectory(config('images.directory'));
 
         $this->countries = Country::factory(2)->create();
 
@@ -94,7 +94,7 @@ class ProductTest extends TestCase
         $this->assertEquals($this->productData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
         $this->assertEquals('image/jpeg', $featuredImage->mime_type);
         $this->assertTrue($featuredImage->featured);
-        Storage::disk('public')->assertExists("images/{$featuredImage->getRawOriginal('path')}");
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$featuredImage->path}");
 
         // Assert gallery images with hash-based storage
         $this->assertCount(2, $product->images);
@@ -103,7 +103,7 @@ class ProductTest extends TestCase
             $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
             $this->assertEquals('image/jpeg', $image->mime_type);
             $this->assertFalse($image->featured);
-            Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
+            Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
         }
     }
 
@@ -158,7 +158,7 @@ class ProductTest extends TestCase
         $this->assertEquals($updateData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
         $this->assertEquals('image/jpeg', $featuredImage->mime_type);
         $this->assertTrue($featuredImage->featured);
-        Storage::disk('public')->assertExists("images/{$featuredImage->getRawOriginal('path')}");
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$featuredImage->path}");
 
         // Assert gallery images with hash-based storage
         $this->assertCount(2, $product->images);
@@ -167,7 +167,7 @@ class ProductTest extends TestCase
             $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
             $this->assertEquals('image/jpeg', $image->mime_type);
             $this->assertFalse($image->featured);
-            Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
+            Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
         }
     }
 

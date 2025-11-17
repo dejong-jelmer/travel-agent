@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
-import placehold from '@/../images/placehold.png';
+import placeholder from '@/../images/placeholder.png';
 import { Clock, Route } from 'lucide-vue-next';
 
 defineProps({ product: Object });
@@ -10,7 +10,7 @@ defineProps({ product: Object });
         <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
             <Link :href="route('trip.show', product)">
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
-                :style="`background-image: url(${product.featured_image?.path || placehold})`"></div>
+                :style="`background-image: url(${product.featured_image?.full_path || placeholder})`"></div>
             <!-- Prijs badge op de foto -->
             <div class="absolute top-3 right-3">
                 <PriceBadge :price="product.price" />

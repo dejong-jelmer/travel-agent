@@ -122,25 +122,19 @@ trait ManagesImages
         $storagePathsToDelete = [];
 
         DB::transaction(function () use ($incomingPaths, $uploadedFiles, $relation, &$storagePathsToDelete) {
-            $model = $relation->value;
 
-            if (! method_exists($this, $model)) {
-                throw new BadMethodCallException("Relation {$model} does not exist on ".get_class($this));
-            }
-
-            $existingImages = $this->$model()->lockForUpdate()->get();
-            $existingPaths = $existingImages->map->getRawOriginal('path')->toArray();
-
+            $model = $relation->getRelation($this);
+            $existingPaths = $model->pluck('path')->toArray();
             $pathsToDelete = array_diff($existingPaths, $incomingPaths);
 
             if (! empty($pathsToDelete)) {
-                $this->$model()->whereIn('path', $pathsToDelete)->forceDelete();
+                $model->whereIn('path', $pathsToDelete)->forceDelete();
             }
 
             $storagePathsToDelete = $pathsToDelete;
 
             foreach ($uploadedFiles as $file) {
-                $this->$model()->create([
+                $model->create([
                     'path' => $file['path'],
                     'original_name' => $file['original_name'],
                     'featured' => $file['featured'],

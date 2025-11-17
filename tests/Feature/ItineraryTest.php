@@ -29,8 +29,8 @@ class ItineraryTest extends TestCase
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        Storage::fake('public');
-        Storage::makeDirectory('images');
+        Storage::fake(config('images.disk'));
+        Storage::makeDirectory(config('images.directory'));
 
         $this->product = Product::factory()
             ->has(Itinerary::factory()->count(8), 'itineraries')
@@ -118,7 +118,7 @@ class ItineraryTest extends TestCase
         $this->assertNotNull($image);
         $this->assertEquals($itineraryData['image']->getClientOriginalName(), $image->original_name);
         $this->assertEquals('image/jpeg', $image->mime_type);
-        Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
     }
 
     public function test_admin_can_show_the_itinerary_edit_page(): void
@@ -172,7 +172,7 @@ class ItineraryTest extends TestCase
         $this->assertNotNull($image);
         $this->assertEquals($itineraryData['image']->getClientOriginalName(), $image->original_name);
         $this->assertEquals('image/jpeg', $image->mime_type);
-        Storage::disk('public')->assertExists("images/{$image->getRawOriginal('path')}");
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
     }
 
     public function test_admin_can_destroy_an_itinerary(): void

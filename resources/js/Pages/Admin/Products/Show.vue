@@ -67,7 +67,7 @@ const props = defineProps({
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
                                     Featured Afbeelding
                                 </label>
-                                <img :src="product.featured_image.path" alt="Featured image"
+                                <img :src="product.featured_image.full_path" alt="Featured image"
                                     class="max-w-full h-auto rounded-lg shadow-md" />
                             </div>
 
@@ -76,7 +76,7 @@ const props = defineProps({
                                     Galerij Afbeeldingen
                                 </label>
                                 <div class="flex flex-wrap gap-4">
-                                    <img v-for="(image, index) in product.images" :key="index" :src="image.path"
+                                    <img v-for="(image, index) in product.images" :key="index" :src="image.full_path"
                                         :alt="`Product image ${index}`"
                                         class="w-24 h-24 object-cover rounded-lg shadow-md" />
                                 </div>
