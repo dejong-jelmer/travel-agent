@@ -33,10 +33,11 @@ class Image extends Model
         return $this->morphTo();
     }
 
+    /**
+     * Get the full public URL for the image.
+     */
     public function getFullPathAttribute(): string
     {
-        $dir = config('images.directory');
-
-        return Storage::url("{$dir}/{$this->path}");
+        return Storage::url(config('images.directory').'/'.$this->path);
     }
 }
