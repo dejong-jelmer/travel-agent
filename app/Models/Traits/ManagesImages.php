@@ -3,10 +3,13 @@
 namespace App\Models\Traits;
 
 use App\Enums\ImageRelation;
+use BadMethodCallException;
+use Exception;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use RuntimeException;
 
 trait ManagesImages
 {
@@ -23,7 +26,7 @@ trait ManagesImages
      * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
      * @param  bool  $isFeatured  Whether the image(s) should be marked as featured.
      *
-     * @throws \Exception If any operation fails
+     * @throws Exception If any operation fails
      */
     public function syncImages(string|UploadedFile|array $data, ImageRelation $relation, bool $isFeatured = false): void
     {
@@ -51,15 +54,21 @@ trait ManagesImages
             // PHASE 3: Delete old storage files after successful transaction
             $this->deleteStorageFiles($storagePathsToDelete);
         } catch (\Exception $e) {
-            // Cleanup: Delete newly uploaded files if anything failed
-            $this->deleteStorageFiles(array_column($uploadedFiles, 'path'));
-
-            Log::error('Image sync failed', [
-                'model' => get_class($this),
-                'id' => $this->id,
-                'error' => $e->getMessage(),
-            ]);
-
+            try {
+                Log::error('Image sync failed', [
+                    'model' => get_class($this),
+                    'id' => $this->id,
+                    'error' => $e->getMessage(),
+                ]);
+                // Cleanup: Delete newly uploaded files if anything failed
+                $this->deleteStorageFiles(array_column($uploadedFiles, 'path'));
+            } catch (\Exception $cleanupException) {
+                Log::error('Failed to cleanup uploaded files', [
+                    'original_error' => $e->getMessage(),
+                    'cleanup_error' => $cleanupException->getMessage(),
+                ]);
+            }
+            // Throw original error
             throw $e;
         }
     }
@@ -71,7 +80,7 @@ trait ManagesImages
      * @param  bool  $isFeatured  Whether images should be marked as featured.
      * @return array<int, array{path: string, original_name: string, featured: bool, mime_type: string, size: int}>
      *
-     * @throws \RuntimeException If any operation fails
+     * @throws RuntimeException If any operation fails
      */
     private function uploadNewImages(array $uploads, bool $isFeatured): array
     {
@@ -81,7 +90,7 @@ trait ManagesImages
             $fullPath = $upload->store(config('images.directory'), config('images.disk'));
 
             if (! $fullPath) {
-                throw new \RuntimeException("Failed to upload image: {$upload->getClientOriginalName()}");
+                throw new RuntimeException("Failed to upload image: {$upload->getClientOriginalName()}");
             }
 
             $uploadedFiles[] = [
@@ -89,7 +98,7 @@ trait ManagesImages
                 'original_name' => $upload->getClientOriginalName(),
                 'featured' => $isFeatured,
                 'mime_type' => $upload->getClientMimeType(),
-                'size' => $upload->getSize(),
+                'size' => $upload->getSize() ?? 0,
             ];
         }
 
@@ -105,6 +114,8 @@ trait ManagesImages
      * @param  array<int, array>  $uploadedFiles  Array of newly uploaded file data.
      * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
      * @return array<int, string> Array of storage paths that should be deleted.
+     *
+     * @throws BadMethodCallException If the images relation doesn't exists on the model.
      */
     private function updateImageRecordsInTransaction(array $incomingPaths, array $uploadedFiles, ImageRelation $relation): array
     {
@@ -113,8 +124,12 @@ trait ManagesImages
         DB::transaction(function () use ($incomingPaths, $uploadedFiles, $relation, &$storagePathsToDelete) {
             $model = $relation->value;
 
+            if (! method_exists($this, $model)) {
+                throw new BadMethodCallException("Relation {$model} does not exist on ".get_class($this));
+            }
+
             $existingImages = $this->$model()->lockForUpdate()->get();
-            $existingPaths = $existingImages->pluck('raw_path')->toArray();
+            $existingPaths = $existingImages->map->getRawOriginal('path')->toArray();
 
             $pathsToDelete = array_diff($existingPaths, $incomingPaths);
 
