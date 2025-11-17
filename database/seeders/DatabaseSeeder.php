@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Remove old images
+        $disk = Storage::disk(config('images.disk'));
+        $dir = config('images.directory');
+        $files = $disk->allFiles($dir);
+        if (! empty($files)) {
+            $disk->delete($files);
+        }
+
         $countries = Country::factory(10)->create();
 
         User::factory()->create([

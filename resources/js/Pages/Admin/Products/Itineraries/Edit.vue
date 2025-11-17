@@ -10,7 +10,7 @@ const props = defineProps({
 
 const form = useForm({
     ...props.itinerary,
-    image: props.itinerary.image?.path ?? null,
+    image: props.itinerary.image?.full_path ?? null,
 });
 
 // Counter for image uploader initialization (only 1 image uploader)

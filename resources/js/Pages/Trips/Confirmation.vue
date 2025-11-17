@@ -43,7 +43,7 @@ const props = defineProps({
                             <!-- Trip Image Header -->
                             <div v-if="booking.product.featured_image"
                                 class="h-48 laptop:h-64 bg-cover bg-center relative"
-                                :style="`background-image: url(${booking.product.featured_image.path})`">
+                                :style="`background-image: url(${booking.product.featured_image.full_path})`">
                                 <div class="absolute inset-0 bg-gradient-to-t from-brand-primary/50 to-transparent">
                                 </div>
                                 <div class="absolute bottom-4 left-4 right-4">

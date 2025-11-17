@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Enums\Meals;
+use App\Enums\ImageRelation;
+use App\Enums\Meal;
 use App\Enums\Transport;
 use App\Http\Requests\StoreItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
@@ -10,7 +11,6 @@ use App\Http\Requests\UpdateItineraryRequest;
 use App\Models\Itinerary;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
@@ -46,7 +46,7 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Products/Itineraries/Create', [
             'product' => $product,
-            'meals' => Meals::options(),
+            'meals' => Meal::options(),
             'transport' => Transport::options(),
         ]);
     }
@@ -64,7 +64,7 @@ class ItineraryController extends Controller
         $itinerary->product()->associate($product);
         $itinerary->order = $product->itineraries->count() + 1;
         $itinerary->save();
-        $itinerary->storeImages($validatedImage['image'], 'image');
+        $itinerary->syncImages($validatedImage['image'], ImageRelation::Image);
 
         return redirect()
             ->route('admin.products.itineraries.index', $itinerary->product)
@@ -78,7 +78,7 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Products/Itineraries/Edit', [
             'itinerary' => $itinerary->load('image'),
-            'meals' => Meals::options(),
+            'meals' => Meal::options(),
             'transport' => Transport::options(),
         ]);
     }
@@ -93,9 +93,9 @@ class ItineraryController extends Controller
 
         $itinerary->update($validatedFields);
 
-        // Only store image if it's a new upload (UploadedFile instance)
-        if (isset($validatedImage['image']) && $validatedImage['image'] instanceof UploadedFile) {
-            $itinerary->storeImages($validatedImage['image'], 'image');
+        // Sync image (handles both existing path and new upload)
+        if (isset($validatedImage['image'])) {
+            $itinerary->syncImages($validatedImage['image'], ImageRelation::Image);
         }
 
         return redirect()

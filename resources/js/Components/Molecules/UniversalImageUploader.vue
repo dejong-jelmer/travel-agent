@@ -85,7 +85,7 @@ import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
                             Bestandsgrootte: {{ formatBytes(singleImageFile.size) }}
                         </p>
                         <p v-if="sizeExceedsMax(singleImageFile.size)" class="text-status-error">
-                            Maximale bestandsgrootte is {{ formatBytes(settings.maxFileSize, true) }}
+                            Maximale bestandsgrootte is {{ formatBytes(images.max_size, true) }}
                         </p>
                         <p>Bestandstype: {{ singleImageFile.type }}</p>
                     </div>
@@ -168,10 +168,10 @@ export default {
             required: false
         }
     },
-    emits: ['update:modelValue', 'change', 'initialized'],
+    emits: ['update:modelValue', 'change'],
     data() {
         return {
-            uploadedImages: [],
+            uploadedImages: [], // Can contain File objects or string paths
             imageStates: [],
             errorMessage: '',
             imageLoadError: null,
@@ -192,7 +192,7 @@ export default {
     computed: {
         settings() {
             const page = usePage();
-            return page.props.settings || {};
+            return page.props.images || {};
         },
         hasImages() {
             return this.uploadedImages.length > 0;
@@ -202,12 +202,17 @@ export default {
             if (this.uploadedImages.length !== this.originalFileCount) {
                 return true;
             }
-            // Check if files changed (by name)
-            const currentNames = this.uploadedImages.map(f => f.name);
+            // Check if files changed (by name/path)
+            const currentNames = this.uploadedImages.map(item =>
+                typeof item === 'string' ? item : item.name
+            );
             return !this.arraysEqual(currentNames, this.originalFileNames);
         },
         singleImageFile() {
-            return this.multiple ? null : this.uploadedImages[0];
+            if (this.multiple) return null;
+            const item = this.uploadedImages[0];
+            // Only return File objects (not string paths) for file info display
+            return item instanceof File ? item : null;
         },
         singleImageData() {
             if (this.multiple || !this.uploadedImages[0]) return { url: null, error: false, loading: false };
@@ -229,20 +234,31 @@ export default {
         }
     },
     methods: {
-        getOrCreateObjectURL(file) {
-            if (!(file instanceof File)) {
+        getOrCreateObjectURL(item) {
+            // Handle string paths (existing images)
+            if (typeof item === 'string') {
+                // If already a full path (from PathCast), return as-is
+                if (item.startsWith('/storage/') || item.startsWith('http')) {
+                    return item;
+                }
+                // Otherwise convert filename to full path
+                return `/storage/images/${item}`;
+            }
+
+            // Handle File objects (new uploads)
+            if (!(item instanceof File)) {
                 return null;
             }
 
             // Return cached URL if it exists
-            if (this.cachedObjectUrls.has(file)) {
-                return this.cachedObjectUrls.get(file);
+            if (this.cachedObjectUrls.has(item)) {
+                return this.cachedObjectUrls.get(item);
             }
 
             // Create new URL and cache it
             try {
-                const url = URL.createObjectURL(file);
-                this.cachedObjectUrls.set(file, url);
+                const url = URL.createObjectURL(item);
+                this.cachedObjectUrls.set(item, url);
                 return url;
             } catch (error) {
                 console.warn('Kon preview URL niet maken:', error);
@@ -269,19 +285,19 @@ export default {
             this.isInitializing = true;
 
             if (this.multiple) {
-                // Multiple mode: modelValue should be array
-                const imageUrls = Array.isArray(this.modelValue) ?
-                    this.modelValue.filter(url => typeof url === 'string') :
-                    [];
-                if (imageUrls.length > 0) {
-                    await this.convertImageUrlsToFiles(imageUrls);
+                // Multiple mode: modelValue should be array of strings (paths) or Files
+                const images = Array.isArray(this.modelValue) ? this.modelValue : [];
+                if (images.length > 0) {
+                    // Accept both strings (existing image paths) and Files (new uploads)
+                    this.uploadedImages = [...images];
+                    // Initialize states for all images
+                    this.imageStates = images.map(() => ({ loading: false, error: false }));
                 }
             } else {
-                // Single mode: modelValue can be string or File
-                if (typeof this.modelValue === 'string') {
-                    await this.convertImageUrlToFile(this.modelValue);
-                } else if (this.modelValue instanceof File) {
-                    this.handleFileChange(this.modelValue);
+                // Single mode: modelValue can be string (path) or File
+                if (typeof this.modelValue === 'string' || this.modelValue instanceof File) {
+                    this.uploadedImages = [this.modelValue];
+                    this.imageStates = [{ loading: false, error: false }];
                 }
             }
 
@@ -291,15 +307,17 @@ export default {
             // Clear initialization flag
             this.isInitializing = false;
 
-            // Emit the converted Files to parent
+            // Emit the data to parent (no conversion needed)
             this.emitUpdate();
 
             // Notify parent that initialization is complete
-            this.$emit('initialized');
+            // this.$emit('initialized');
         },
         setOriginalState() {
             this.originalFileCount = this.uploadedImages.length;
-            this.originalFileNames = this.uploadedImages.map(f => f.name);
+            this.originalFileNames = this.uploadedImages.map(item =>
+                typeof item === 'string' ? item : item.name
+            );
         },
         triggerFileInput() {
             this.$refs.fileInput.click();
@@ -387,8 +405,8 @@ export default {
         },
         handleFileChange(file) {
             try {
-                // Cleanup old file's object URL if it exists
-                if (this.uploadedImages[0]) {
+                // Cleanup old file's object URL if it exists (only for File objects)
+                if (this.uploadedImages[0] instanceof File) {
                     this.revokeObjectURL(this.uploadedImages[0]);
                 }
 
@@ -403,94 +421,12 @@ export default {
                 this.imageStates = [];
             }
         },
-        async convertImageUrlToFile(imageUrl) {
-            try {
-                this.imageLoadError = null;
-                this.errorMessage = '';
-
-                this.setImageState(0, { loading: true, error: false });
-
-                const response = await fetch(imageUrl);
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                const blob = await response.blob();
-
-                if (!blob.type.startsWith('image/')) {
-                    throw new Error('Het bestand is geen geldige afbeelding');
-                }
-
-                const fileName = imageUrl.split('/').pop() || 'unknown.jpg';
-                const file = new File([blob], fileName, { type: blob.type });
-
-                this.uploadedImages = [file];
-                this.setImageState(0, { loading: false, error: false });
-                this.emitUpdate();
-
-            } catch (error) {
-                console.warn('Kon afbeelding niet laden:', error.message);
-                this.imageLoadError = error.message;
-                this.uploadedImages = [];
-                this.imageStates = [];
-                this.emitUpdate();
-            }
-        },
-        async convertImageUrlsToFiles(imageUrls) {
-            try {
-                this.errorMessage = '';
-                let newFiles = [];
-
-                for (let i = 0; i < imageUrls.length; i++) {
-                    const imageUrl = imageUrls[i];
-
-                    this.setImageState(this.uploadedImages.length + newFiles.length, { loading: true, error: false });
-
-                    try {
-                        const response = await fetch(imageUrl);
-                        if (!response.ok) {
-                            throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                        }
-
-                        const blob = await response.blob();
-
-                        if (!blob.type.startsWith('image/')) {
-                            throw new Error('Het bestand is geen geldige afbeelding');
-                        }
-
-                        const fileName = imageUrl.split('/').pop() || `image-${Date.now()}.jpg`;
-                        const file = new File([blob], fileName, { type: blob.type });
-
-                        newFiles.push(file);
-                        this.setImageState(this.uploadedImages.length + newFiles.length - 1, { loading: false, error: false });
-
-                    } catch (error) {
-                        console.warn(`Kon afbeelding niet laden: ${imageUrl}`, error.message);
-
-                        const fileName = imageUrl.split('/').pop() || 'unknown.jpg';
-                        const placeholderFile = new File([new Blob()], fileName, { type: 'image/jpeg' });
-                        newFiles.push(placeholderFile);
-
-                        this.setImageState(this.uploadedImages.length + newFiles.length - 1, { loading: false, error: true });
-                    }
-                }
-
-                if (newFiles.length > 0) {
-                    this.uploadedImages.push(...newFiles);
-                    this.emitUpdate();
-                }
-
-            } catch (error) {
-                console.error("Algemene fout bij het converteren van URLs:", error);
-                this.errorMessage = 'Er is een fout opgetreden bij het laden van de afbeeldingen.';
-            }
-        },
         removeImage(index) {
             try {
-                // Cleanup object URL to prevent memory leaks
-                const file = this.uploadedImages[index];
-                if (file) {
-                    this.revokeObjectURL(file);
+                // Cleanup object URL to prevent memory leaks (only for File objects)
+                const item = this.uploadedImages[index];
+                if (item instanceof File) {
+                    this.revokeObjectURL(item);
                 }
 
                 this.uploadedImages.splice(index, 1);
@@ -570,7 +506,7 @@ export default {
             return parseFloat((bytes / Math.pow(1024, i)).toFixed(decimals)) + " " + sizes[i];
         },
         sizeExceedsMax(bytes) {
-            const maxBytes = (this.settings?.maxFileSize || 5000) * 1000; // Default 5MB
+            const maxBytes = (this.images?.max_size || 5000) * 1000;
             return bytes > maxBytes;
         }
     },

@@ -2,11 +2,11 @@
 
 namespace App\Casts;
 
-use App\Enums\Meals;
+use App\Enums\Meal;
 use Illuminate\Contracts\Database\Eloquent\CastsAttributes;
 use Illuminate\Database\Eloquent\Model;
 
-class MealsCast implements CastsAttributes
+class MealCast implements CastsAttributes
 {
     /**
      * Cast the given value.
@@ -16,7 +16,7 @@ class MealsCast implements CastsAttributes
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         return collect(json_decode($value ?? '[]', true))
-            ->map(fn ($meal) => Meals::from($meal))
+            ->map(fn ($meal) => Meal::from($meal))
             ->all();
     }
 

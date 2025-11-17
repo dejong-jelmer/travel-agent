@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-const emit = defineEmits(['submit', 'initialized']);
+const emit = defineEmits(['submit']);
 const props = defineProps({
     countries: Object,
     form: Object,
@@ -165,17 +165,7 @@ const imageErrors = computed(() =>
 
         </div>
         <!-- Footer Actions -->
-        <div
-            class="laptop:col-span-2 flex items-center justify-between border-t border-gray-200 bg-white rounded-lg mt-6 p-6 shadow-sm">
-            <p class="text-sm text-gray-700/30">
-                <span v-if="form.isDirty" class="text-status-warning font-medium">
-                    Er zijn niet opgeslagen wijzigingen
-                </span>
-                <span v-else class="text-status-success">
-                    Alles opgeslagen
-                </span>
-            </p>
-            <FormSubmit :form="form" label="Product Opslaan" @submit="emit('submit')" />
-        </div>
+        <FormFooter :form="form" label="Reisproduct opslaan" @submit="emit('submit')" />
+
     </form>
 </template>

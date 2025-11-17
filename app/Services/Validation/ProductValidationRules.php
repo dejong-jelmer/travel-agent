@@ -41,14 +41,14 @@ class ProductValidationRules
     {
 
         return [
-            'featuredImage' => ['required', ...self::baseImage()],
+            'featuredImage' => ['required', ...ImageValidationRules::baseImage()],
         ];
     }
 
     public static function featuredImageUpdate(): array
     {
         return [
-            'featuredImage' => ['nullable', ...self::baseImage()],
+            'featuredImage' => ['nullable', ...ImageValidationRules::baseImageOrString()],
         ];
     }
 
@@ -56,7 +56,7 @@ class ProductValidationRules
     {
         return [
             'images' => ['required', 'array'],
-            'images.*' => ['required', ...self::baseImage()],
+            'images.*' => ['required', ...ImageValidationRules::baseImage()],
         ];
     }
 
@@ -64,15 +64,7 @@ class ProductValidationRules
     {
         return [
             'images' => ['nullable', 'array'],
-            'images.*' => self::baseImage(),
+            'images.*' => ImageValidationRules::baseImageOrString(),
         ];
-    }
-
-    private static function baseImage(): array
-    {
-        $maxFileSize = config('app-settings.maxFileSize');
-        $mimes = config('app-settings.mimes');
-
-        return ['image', "mimes:{$mimes}", "max:{$maxFileSize}"];
     }
 }

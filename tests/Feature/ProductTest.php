@@ -31,8 +31,8 @@ class ProductTest extends TestCase
         $this->admin = User::factory()->create();
         $this->actingAs($this->admin);
 
-        Storage::fake('public');
-        Storage::makeDirectory('images');
+        Storage::fake(config('images.disk'));
+        Storage::makeDirectory(config('images.directory'));
 
         $this->countries = Country::factory(2)->create();
 
@@ -88,21 +88,22 @@ class ProductTest extends TestCase
 
         $this->assertDatabaseHas('products', Arr::except($this->productData, ['featuredImage', 'images', 'countries']));
 
-        $featuredImagePath = $this->productData['featuredImage']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $product->id,
-            'path' => $featuredImagePath,
-            'featured' => true,
-        ]);
-        Storage::assertExists("images/{$featuredImagePath}");
+        // Assert featured image with hash-based storage
+        $featuredImage = $product->featuredImage;
+        $this->assertNotNull($featuredImage);
+        $this->assertEquals($this->productData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
+        $this->assertEquals('image/jpeg', $featuredImage->mime_type);
+        $this->assertTrue($featuredImage->featured);
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$featuredImage->path}");
 
+        // Assert gallery images with hash-based storage
+        $this->assertCount(2, $product->images);
         foreach ($product->images as $index => $image) {
-            $path = $this->productData['images'][$index]->getClientOriginalName();
-            $this->assertDatabaseHas('images', [
-                'imageable_id' => $product->id,
-                'path' => $path,
-            ]);
-            Storage::assertExists("images/{$path}");
+            $originalFile = $this->productData['images'][$index];
+            $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
+            $this->assertEquals('image/jpeg', $image->mime_type);
+            $this->assertFalse($image->featured);
+            Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
         }
     }
 
@@ -151,21 +152,22 @@ class ProductTest extends TestCase
         $this->assertEquals(5, $product->duration);
         $this->assertEquals(1234.56, $product->raw_price);
 
-        $featuredImagePath = $updateData['featuredImage']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $product->id,
-            'path' => $featuredImagePath,
-            'featured' => true,
-        ]);
-        Storage::assertExists("images/{$featuredImagePath}");
+        // Assert featured image with hash-based storage
+        $featuredImage = $product->featuredImage;
+        $this->assertNotNull($featuredImage);
+        $this->assertEquals($updateData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
+        $this->assertEquals('image/jpeg', $featuredImage->mime_type);
+        $this->assertTrue($featuredImage->featured);
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$featuredImage->path}");
 
+        // Assert gallery images with hash-based storage
+        $this->assertCount(2, $product->images);
         foreach ($product->images as $index => $image) {
-            $path = $updateData['images'][$index]->getClientOriginalName();
-            $this->assertDatabaseHas('images', [
-                'imageable_id' => $product->id,
-                'path' => $path,
-            ]);
-            Storage::assertExists("images/{$path}");
+            $originalFile = $updateData['images'][$index];
+            $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
+            $this->assertEquals('image/jpeg', $image->mime_type);
+            $this->assertFalse($image->featured);
+            Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
         }
     }
 

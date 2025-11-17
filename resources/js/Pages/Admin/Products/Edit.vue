@@ -10,22 +10,9 @@ const props = defineProps({
 const form = useForm({
     ...props.product,
     countries: props.product.countries?.map(country => country.id) ?? [],
-    featuredImage: props.product.featured_image?.path ?? null,
+    featuredImage: props.product.featured_image?.full_path ?? null,
     images: props.product.image_urls ?? [],
 });
-
-// Counter for image uploader initialization (featuredImage + images = 2)
-const initCounter = ref(2);
-
-function handleImageInitialized() {
-    initCounter.value--;
-    if (initCounter.value === 0) {
-        // All uploaders have finished initialization
-        form.defaults({
-            ...form.data(),
-        });
-    }
-}
 
 function submit() {
     form.post(route("admin.products.update", props.product), { forceFormData: true });
@@ -35,6 +22,6 @@ function submit() {
 
 <template>
     <Admin>
-        <ProductForm :form="form" :countries="countries" @submit="submit" @initialized="handleImageInitialized" />
+        <ProductForm :form="form" :countries="countries" @submit="submit" />
     </Admin>
 </template>

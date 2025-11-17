@@ -4,7 +4,7 @@ namespace App\Enums;
 
 use App\Enums\Traits\Selectable;
 
-enum Meals: string
+enum Meal: string
 {
     use Selectable;
     case Breakfast = 'Ontbijt';

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\ImageRelation;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Models\Country;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -55,8 +55,8 @@ class ProductController extends Controller
 
         $product->fill($validatedFields);
         $product->save();
-        $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
-        $product->storeImages($validatedFiles['images'], 'images');
+        $product->syncImages($validatedFiles['featuredImage'], ImageRelation::FeaturedImage, true);
+        $product->syncImages($validatedFiles['images'], ImageRelation::Images);
 
         if (count($countries)) {
             $product->countries()->sync($countries);
@@ -100,17 +100,14 @@ class ProductController extends Controller
         $product->fill($validatedFields);
         $product->save();
 
-        // Only store featuredImage if it's a new upload (UploadedFile instance)
-        if (isset($validatedFiles['featuredImage']) && $validatedFiles['featuredImage'] instanceof UploadedFile) {
-            $product->storeImages($validatedFiles['featuredImage'], 'featuredImage', true);
+        // Sync featuredImage (handles both existing paths and new uploads)
+        if (isset($validatedFiles['featuredImage'])) {
+            $product->syncImages($validatedFiles['featuredImage'], ImageRelation::FeaturedImage, true);
         }
 
-        // Only store images if they are new uploads (UploadedFile instances)
+        // Sync images array (handles mix of existing paths and new uploads)
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
-            $newImages = array_filter($validatedFiles['images'], fn ($image) => $image instanceof UploadedFile);
-            if (! empty($newImages)) {
-                $product->storeImages($newImages, 'images');
-            }
+            $product->syncImages($validatedFiles['images'], ImageRelation::Images);
         }
 
         if (count($countries)) {

@@ -2,7 +2,7 @@
 
 namespace App\Services\Validation;
 
-use App\Enums\Meals;
+use App\Enums\Meal;
 use Illuminate\Validation\Rule;
 
 class ItineraryValidationRules
@@ -29,7 +29,7 @@ class ItineraryValidationRules
     {
         return [
             'meals' => ['nullable', 'array'],
-            'meals.*' => [Rule::in(array_column(Meals::cases(), 'value'))],
+            'meals.*' => [Rule::in(array_column(Meal::cases(), 'value'))],
             'transport' => ['array'],
         ];
     }
@@ -37,22 +37,14 @@ class ItineraryValidationRules
     public static function imageCreate(): array
     {
         return [
-            'image' => ['required', ...self::baseImage()],
+            'image' => ['required', ...ImageValidationRules::baseImage()],
         ];
     }
 
     public static function imageUpdate(): array
     {
         return [
-            'image' => ['nullable', ...self::baseImage()],
+            'image' => ['nullable', ...ImageValidationRules::baseImageOrString()],
         ];
-    }
-
-    private static function baseImage(): array
-    {
-        $maxFileSize = config('app-settings.maxFileSize');
-        $mimes = config('app-settings.mimes');
-
-        return ['image', "mimes:{$mimes}", "max:{$maxFileSize}"];
     }
 }

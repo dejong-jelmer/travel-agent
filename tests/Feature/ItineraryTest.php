@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\Meals;
+use App\Enums\Meal;
 use App\Enums\Transport;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -29,8 +29,8 @@ class ItineraryTest extends TestCase
         $admin = User::factory()->create();
         $this->actingAs($admin);
 
-        Storage::fake('public');
-        Storage::makeDirectory('images');
+        Storage::fake(config('images.disk'));
+        Storage::makeDirectory(config('images.directory'));
 
         $this->product = Product::factory()
             ->has(Itinerary::factory()->count(8), 'itineraries')
@@ -88,7 +88,7 @@ class ItineraryTest extends TestCase
             'description' => fake()->text(500),
             'location' => fake()->city.', '.fake()->country,
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
-            'meals' => fake()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 2)),
+            'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
             'remark' => fake()->words(10, true),
         ];
@@ -107,19 +107,18 @@ class ItineraryTest extends TestCase
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
 
         // ✅ Enums
-        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meals::from($meal)->value)->all();
+        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meal::from($meal)->value)->all();
         $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
 
         $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
         $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
-        // ✅ Image
-        $storedImagePath = $itineraryData['image']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $itinerary->id,
-            'path' => $storedImagePath,
-        ]);
-        Storage::assertExists("images/{$storedImagePath}");
+        // ✅ Image with hash-based storage
+        $image = $itinerary->image;
+        $this->assertNotNull($image);
+        $this->assertEquals($itineraryData['image']->getClientOriginalName(), $image->original_name);
+        $this->assertEquals('image/jpeg', $image->mime_type);
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
     }
 
     public function test_admin_can_show_the_itinerary_edit_page(): void
@@ -145,7 +144,7 @@ class ItineraryTest extends TestCase
             'description' => fake()->text(500),
             'location' => fake()->city.', '.fake()->country,
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
-            'meals' => fake()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 2)),
+            'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
             'remark' => fake()->words(10, true),
         ];
@@ -162,19 +161,18 @@ class ItineraryTest extends TestCase
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
 
         // ✅ Enums
-        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meals::from($meal)->value)->all();
+        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meal::from($meal)->value)->all();
         $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
 
         $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
         $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
-        // ✅ Images
-        $storedImagePath = $itineraryData['image']->getClientOriginalName();
-        $this->assertDatabaseHas('images', [
-            'imageable_id' => $itinerary->id,
-            'path' => $storedImagePath,
-        ]);
-        Storage::assertExists("images/{$storedImagePath}");
+        // ✅ Image with hash-based storage
+        $image = $itinerary->image;
+        $this->assertNotNull($image);
+        $this->assertEquals($itineraryData['image']->getClientOriginalName(), $image->original_name);
+        $this->assertEquals('image/jpeg', $image->mime_type);
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
     }
 
     public function test_admin_can_destroy_an_itinerary(): void
