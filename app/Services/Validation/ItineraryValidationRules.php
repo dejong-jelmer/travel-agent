@@ -2,7 +2,7 @@
 
 namespace App\Services\Validation;
 
-use App\Enums\Meals;
+use App\Enums\Meal;
 use Illuminate\Validation\Rule;
 
 class ItineraryValidationRules
@@ -29,7 +29,7 @@ class ItineraryValidationRules
     {
         return [
             'meals' => ['nullable', 'array'],
-            'meals.*' => [Rule::in(array_column(Meals::cases(), 'value'))],
+            'meals.*' => [Rule::in(array_column(Meal::cases(), 'value'))],
             'transport' => ['array'],
         ];
     }

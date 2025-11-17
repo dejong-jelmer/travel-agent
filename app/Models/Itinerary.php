@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\MealsCast;
+use App\Casts\MealCast;
 use App\Casts\TransportCast;
 use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -32,7 +32,7 @@ class Itinerary extends Model
 
     protected $casts = [
         'activities' => 'array',
-        'meals' => MealsCast::class,
+        'meals' => MealCast::class,
         'transport' => TransportCast::class,
     ];
 

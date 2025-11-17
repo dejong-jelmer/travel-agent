@@ -2,6 +2,7 @@
 
 namespace App\Models\Traits;
 
+use App\Enums\ImageRelation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -19,12 +20,12 @@ trait ManagesImages
      * 4. On failure: cleanup new uploads and rollback
      *
      * @param  string|UploadedFile|array<int, string|UploadedFile>  $data  Mixed array of paths (strings) and new uploads (UploadedFile).
-     * @param  string  $relation  The name of the Eloquent relation.
+     * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
      * @param  bool  $isFeatured  Whether the image(s) should be marked as featured.
      *
      * @throws \Exception If any operation fails
      */
-    public function syncImages(string|UploadedFile|array $data, string $relation, bool $isFeatured = false): void
+    public function syncImages(string|UploadedFile|array $data, ImageRelation $relation, bool $isFeatured = false): void
     {
         $incomingData = is_array($data) ? $data : [$data];
 
@@ -69,6 +70,8 @@ trait ManagesImages
      * @param  array<int, UploadedFile>  $uploads  Array of uploaded files.
      * @param  bool  $isFeatured  Whether images should be marked as featured.
      * @return array<int, array{path: string, original_name: string, featured: bool, mime_type: string, size: int}>
+     *
+     * @throws \RuntimeException If any operation fails
      */
     private function uploadNewImages(array $uploads, bool $isFeatured): array
     {
@@ -77,15 +80,17 @@ trait ManagesImages
         foreach ($uploads as $upload) {
             $fullPath = $upload->store(config('images.directory'), config('images.disk'));
 
-            if ($fullPath) {
-                $uploadedFiles[] = [
-                    'path' => basename($fullPath),
-                    'original_name' => $upload->getClientOriginalName(),
-                    'featured' => $isFeatured,
-                    'mime_type' => $upload->getClientMimeType(),
-                    'size' => $upload->getSize(),
-                ];
+            if (! $fullPath) {
+                throw new \RuntimeException("Failed to upload image: {$upload->getClientOriginalName()}");
             }
+
+            $uploadedFiles[] = [
+                'path' => basename($fullPath),
+                'original_name' => $upload->getClientOriginalName(),
+                'featured' => $isFeatured,
+                'mime_type' => $upload->getClientMimeType(),
+                'size' => $upload->getSize(),
+            ];
         }
 
         return $uploadedFiles;
@@ -98,29 +103,29 @@ trait ManagesImages
      *
      * @param  array<int, string>  $incomingPaths  Array of existing image paths to keep.
      * @param  array<int, array>  $uploadedFiles  Array of newly uploaded file data.
-     * @param  string  $relation  The name of the Eloquent relation.
+     * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
      * @return array<int, string> Array of storage paths that should be deleted.
      */
-    private function updateImageRecordsInTransaction(array $incomingPaths, array $uploadedFiles, string $relation): array
+    private function updateImageRecordsInTransaction(array $incomingPaths, array $uploadedFiles, ImageRelation $relation): array
     {
         $storagePathsToDelete = [];
 
         DB::transaction(function () use ($incomingPaths, $uploadedFiles, $relation, &$storagePathsToDelete) {
-            $this->lockForUpdate();
+            $model = $relation->value;
 
-            $existingImages = $this->$relation()->lockForUpdate()->get();
+            $existingImages = $this->$model()->lockForUpdate()->get();
             $existingPaths = $existingImages->pluck('raw_path')->toArray();
 
             $pathsToDelete = array_diff($existingPaths, $incomingPaths);
 
             if (! empty($pathsToDelete)) {
-                $this->$relation()->whereIn('path', $pathsToDelete)->forceDelete();
+                $this->$model()->whereIn('path', $pathsToDelete)->forceDelete();
             }
 
             $storagePathsToDelete = $pathsToDelete;
 
             foreach ($uploadedFiles as $file) {
-                $this->$relation()->create([
+                $this->$model()->create([
                     'path' => $file['path'],
                     'original_name' => $file['original_name'],
                     'featured' => $file['featured'],

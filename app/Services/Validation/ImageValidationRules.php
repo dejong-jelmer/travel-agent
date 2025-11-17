@@ -3,7 +3,8 @@
 namespace App\Services\Validation;
 
 use Closure;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Http\UploadedFile;
+use Validator;
 
 /**
  * Shared validation rules for image uploads.
@@ -29,7 +30,7 @@ final class ImageValidationRules
      * Image validation rules that accept both existing paths and new uploads.
      *
      * Validates:
-     * - String paths: Checks file existence and extension
+     * - String paths: Accepted as-is (assumed to be existing database values)
      * - UploadedFile: Checks file type, mime type, and size
      *
      * @return array<int, string|Closure> Array containing validation closure
@@ -41,45 +42,16 @@ final class ImageValidationRules
 
         return [
             function (string $attribute, mixed $value, Closure $fail) use ($maxFileSize, $mimes) {
-                // Accept string paths for existing images
+                // Accept string paths for existing images (no validation needed)
                 if (is_string($value)) {
-                    // Handle both hash filenames and full paths
-                    $filename = basename($value);
-
-                    if (str_contains($filename, '..') || str_contains($filename, '/')) {
-                        $fail("The {$attribute} contains invalid characters.");
-                        return;
-                    }
-
-                    $pregMimes = implode('|', $mimes);
-
-                    if (! preg_match("/^[a-zA-Z0-9_\-]+\.({$pregMimes})$/i", $filename)) {
-                        $fail("The {$attribute} contains invalid characters.");
-
-                        return;
-                    }
-
-                    // Verify file exists in storage
-                    if (! Storage::disk(config('images.disk'))->exists(config('images.directory') . '/' . $filename)) {
-                        $fail("The {$attribute} references a non-existent image.");
-
-                        return;
-                    }
-
-                    // Validate extension (works for both hash and original filenames)
-                    $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
-                    if (! in_array($extension, $mimes)) {
-                        $fail("The {$attribute} must be a valid image file.");
-                    }
-
                     return;
                 }
 
                 // Accept UploadedFile for new uploads
-                if ($value instanceof \Illuminate\Http\UploadedFile) {
-                    $allowedMimes = implode(',', config('images.allowed_mimes'));
+                if ($value instanceof UploadedFile) {
+                    $allowedMimes = implode(',', $mimes);
                     // Validate as image
-                    $validator = \Validator::make(
+                    $validator = Validator::make(
                         [$attribute => $value],
                         [$attribute => ['image', "mimes:{$allowedMimes}", "max:{$maxFileSize}"]]
                     );

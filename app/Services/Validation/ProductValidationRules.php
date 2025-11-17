@@ -64,7 +64,7 @@ class ProductValidationRules
     {
         return [
             'images' => ['nullable', 'array'],
-            'images.*' => ['required', ...ImageValidationRules::baseImageOrString()],
+            'images.*' => ImageValidationRules::baseImageOrString(),
         ];
     }
 }

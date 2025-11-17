@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Enums\Meals;
+use App\Enums\Meal;
 use App\Enums\Transport;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -88,7 +88,7 @@ class ItineraryTest extends TestCase
             'description' => fake()->text(500),
             'location' => fake()->city.', '.fake()->country,
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
-            'meals' => fake()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 2)),
+            'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
             'remark' => fake()->words(10, true),
         ];
@@ -107,7 +107,7 @@ class ItineraryTest extends TestCase
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
 
         // ✅ Enums
-        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meals::from($meal)->value)->all();
+        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meal::from($meal)->value)->all();
         $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
 
         $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
@@ -144,7 +144,7 @@ class ItineraryTest extends TestCase
             'description' => fake()->text(500),
             'location' => fake()->city.', '.fake()->country,
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
-            'meals' => fake()->randomElements(array_column(Meals::cases(), 'value'), rand(1, 2)),
+            'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
             'remark' => fake()->words(10, true),
         ];
@@ -161,7 +161,7 @@ class ItineraryTest extends TestCase
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
 
         // ✅ Enums
-        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meals::from($meal)->value)->all();
+        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meal::from($meal)->value)->all();
         $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
 
         $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
