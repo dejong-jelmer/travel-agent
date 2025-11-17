@@ -124,7 +124,7 @@ trait ManagesImages
         DB::transaction(function () use ($incomingPaths, $uploadedFiles, $relation, &$storagePathsToDelete) {
 
             $model = $relation->getRelation($this);
-            $existingPaths = $model->pluck('path')->toArray();
+            $existingPaths = $model->lockForUpdate()->pluck('path')->toArray();
             $pathsToDelete = array_diff($existingPaths, $incomingPaths);
 
             if (! empty($pathsToDelete)) {
