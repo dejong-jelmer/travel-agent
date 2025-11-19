@@ -129,7 +129,7 @@ class BookingTest extends TestCase
         return array_merge([
             'trip' => ['id' => $this->trip->id],
             'conditions_accepted' => true,
-            'is_confirmed' => true,
+            'has_confirmed' => true,
             'departure_date' => fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
             'travelers' => [
                 'adults' => $this->generateTravelers($numberOfAdults, TravelerType::Adult),
@@ -197,7 +197,7 @@ class BookingTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'id' => $booking->id,
             'departure_date' => $payload['departure_date'],
-            'is_confirmed' => 1,
+            'has_confirmed' => 1,
             'conditions_accepted' => 1,
         ]);
     }

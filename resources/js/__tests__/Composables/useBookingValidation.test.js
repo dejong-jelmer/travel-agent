@@ -783,35 +783,35 @@ describe("useBookingValidation", () => {
     });
 
     describe("validateOverviewStep", () => {
-        describe("is_confirmed validation", () => {
-            it("should return error when is_confirmed is false", () => {
+        describe("has_confirmed validation", () => {
+            it("should return error when has_confirmed is false", () => {
                 const bookingData = {
-                    is_confirmed: false,
+                    has_confirmed: false,
                     conditions_accepted: true,
                 };
 
                 const errors = validator.validateOverviewStep(bookingData);
 
-                expect(errors).toHaveProperty("is_confirmed");
-                expect(errors.is_confirmed).toBe("Je moet nog akkoord gaan.");
+                expect(errors).toHaveProperty("has_confirmed");
+                expect(errors.has_confirmed).toBe("Je moet nog akkoord gaan.");
             });
 
-            it("should accept when is_confirmed is true", () => {
+            it("should accept when has_confirmed is true", () => {
                 const bookingData = {
-                    is_confirmed: true,
+                    has_confirmed: true,
                     conditions_accepted: true,
                 };
 
                 const errors = validator.validateOverviewStep(bookingData);
 
-                expect(errors).not.toHaveProperty("is_confirmed");
+                expect(errors).not.toHaveProperty("has_confirmed");
             });
         });
 
         describe("conditions_accepted validation", () => {
             it("should return error when conditions_accepted is false", () => {
                 const bookingData = {
-                    is_confirmed: true,
+                    has_confirmed: true,
                     conditions_accepted: false,
                 };
 
@@ -825,7 +825,7 @@ describe("useBookingValidation", () => {
 
             it("should accept when conditions_accepted is true", () => {
                 const bookingData = {
-                    is_confirmed: true,
+                    has_confirmed: true,
                     conditions_accepted: true,
                 };
 
@@ -838,20 +838,20 @@ describe("useBookingValidation", () => {
         describe("combined validation", () => {
             it("should return multiple errors when both are false", () => {
                 const bookingData = {
-                    is_confirmed: false,
+                    has_confirmed: false,
                     conditions_accepted: false,
                 };
 
                 const errors = validator.validateOverviewStep(bookingData);
 
-                expect(errors).toHaveProperty("is_confirmed");
+                expect(errors).toHaveProperty("has_confirmed");
                 expect(errors).toHaveProperty("conditions_accepted");
                 expect(Object.keys(errors).length).toBe(2);
             });
 
             it("should return empty errors when both are accepted", () => {
                 const bookingData = {
-                    is_confirmed: true,
+                    has_confirmed: true,
                     conditions_accepted: true,
                 };
 

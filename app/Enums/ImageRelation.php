@@ -2,10 +2,10 @@
 
 namespace App\Enums;
 
+use BadMethodCallException;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Symfony\Component\Validator\Exception\BadMethodCallException;
 
 enum ImageRelation: string
 {

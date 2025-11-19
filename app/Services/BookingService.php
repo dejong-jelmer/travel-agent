@@ -19,7 +19,7 @@ class BookingService
         $booking = $bookingData->trip->bookings()->create([
             'departure_date' => $bookingData->date,
             'conditions_accepted' => $bookingData->conditions_accepted,
-            'is_confirmed' => $bookingData->is_confirmed,
+            'has_confirmed' => $bookingData->has_confirmed,
         ]);
 
         // Create booking contact details

@@ -84,7 +84,7 @@ vi.mock("@/Composables/useBookingSteps.js", () => ({
             {
                 id: "overview",
                 label: "Bekijken & bevestigen",
-                fields: ["is_confirmed", "conditions_accepted"],
+                fields: ["has_confirmed", "conditions_accepted"],
                 validate: () => ({}),
             },
         ]),
@@ -192,7 +192,7 @@ describe("BookingForm - Complete Test Suite", () => {
             email: "",
             phone: "",
         },
-        is_confirmed: false,
+        has_confirmed: false,
         conditions_accepted: false,
         processing: false,
         hasErrors: false,
@@ -403,7 +403,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: false,
+                has_confirmed: false,
                 conditions_accepted: true,
             });
 
@@ -415,7 +415,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
             });
 
@@ -428,7 +428,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(true);
 
             wrapper = mountComponent({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
             });
 
@@ -443,12 +443,12 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(true);
 
             const mockBooking = createMockBooking({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
             });
 
             wrapper = mountComponent({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
             });
 
@@ -469,7 +469,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(false);
 
             wrapper = mountComponent({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
             });
 
@@ -483,7 +483,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
                 processing: true,
             });
@@ -496,7 +496,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
                 processing: true,
             });
@@ -578,7 +578,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
                 hasErrors: true,
                 errors: { departure_date: "Required" },
@@ -619,7 +619,7 @@ describe("BookingForm - Complete Test Suite", () => {
             // Mock booking.post to trigger onError callback
             const onErrorCallback = vi.fn();
             const mockBooking = createMockBooking({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
             });
 
@@ -649,7 +649,7 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(true);
 
             const mockBooking = createMockBooking({
-                is_confirmed: true,
+                has_confirmed: true,
                 conditions_accepted: true,
             });
 

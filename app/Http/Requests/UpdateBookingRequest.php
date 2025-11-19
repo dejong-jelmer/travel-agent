@@ -26,12 +26,12 @@ class UpdateBookingRequest extends FormRequest
                 'status' => [
                     'required',
                     'string',
-                    Rule::in(array_column(Status::cases(), 'value')),
+                    Rule::in(Status::values()),
                 ],
                 'payment_status' => [
                     'required',
                     'string',
-                    Rule::in(array_column(PaymentStatus::cases(), 'value')),
+                    Rule::in(PaymentStatus::values()),
                 ],
             ],
             [

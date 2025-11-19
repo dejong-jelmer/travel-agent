@@ -140,8 +140,8 @@ const props = defineProps({
             <section class="grid gap-4 border-2 bg-slate-50 rounded-2xl p-6">
 
                 <!-- Bevestiging -->
-                <span @click="booking.clearErrors('is_confirmed')">
-                    <Checkbox v-model="booking.is_confirmed" :feedback="booking.errors.is_confirmed">
+                <span @click="booking.clearErrors('has_confirmed')">
+                    <Checkbox v-model="booking.has_confirmed" :feedback="booking.errors.has_confirmed">
                         Ik bevestig de juistheid van mijn gegevens en maak mijn boeking definitief.
                     </Checkbox>
                 </span>

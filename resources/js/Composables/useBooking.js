@@ -70,7 +70,7 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             0,
             Math.min(main_booker_index, adults.length - 1)
         ),
-        is_confirmed: false,
+        has_confirmed: false,
         conditions_accepted: false,
     });
 
@@ -142,7 +142,7 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         () => booking.hasErrors,
         (hasErrors) => {
             if (hasErrors) {
-                booking.is_confirmed = false;
+                booking.has_confirmed = false;
                 booking.conditions_accepted = false;
             }
         }

@@ -21,9 +21,9 @@ return new class extends Migration
             $table->foreignId('main_booker_id')->cascadeOnDelete()->nullable();
             $table->date('departure_date');
             $table->boolean('conditions_accepted')->default(false);
-            $table->boolean('is_confirmed')->default(false);
-            $table->string('status', 50)->default(Status::New);
-            $table->string('payment_status', 50)->default(PaymentStatus::Pending);
+            $table->boolean('has_confirmed')->default(false);
+            $table->string('status', 20)->default(Status::New);
+            $table->string('payment_status', 20)->default(PaymentStatus::Pending);
             $table->softDeletes();
             $table->timestamps();
         });

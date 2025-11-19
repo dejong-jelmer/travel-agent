@@ -30,9 +30,17 @@ class ItineraryValidationRules
     {
         return [
             'meals' => ['nullable', 'array'],
-            'meals.*' => [Rule::in(array_column(Meal::cases(), 'value'))],
+            'meals.*' => [
+                'required',
+                'string',
+                Rule::in(Meal::values()),
+            ],
             'transport' => ['nullable', 'array'],
-            'transport.*' => [Rule::in(array_column(Transport::cases(), 'value'))],
+            'transport.*' => [
+                'required',
+                'string',
+                Rule::in(Transport::values()),
+            ],
         ];
     }
 
