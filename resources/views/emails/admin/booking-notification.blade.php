@@ -231,7 +231,7 @@
                             <strong style="color:#2F3E46;">Voorwaarden geaccepteerd:</strong>
                         </td>
                         <td width="50%" style="font-size:14px;">
-                            @if ($booking->conditions_accepted)
+                            @if ($booking->has_accepted_conditions)
                                 <span
                                     style="background:#AFCB98;color:#FFFFFF;padding:4px 12px;border-radius:12px;font-weight:700;font-size:12px;">
                                     JA

@@ -25,7 +25,7 @@ class BookingFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'departure_date' => fake()->dateTimeBetween('now', '+5 months'),
-            'conditions_accepted' => true,
+            'has_accepted_conditions' => true,
             'has_confirmed' => true,
             'status' => Status::New,
             'payment_status' => PaymentStatus::Pending,

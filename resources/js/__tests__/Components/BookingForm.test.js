@@ -84,7 +84,7 @@ vi.mock("@/Composables/useBookingSteps.js", () => ({
             {
                 id: "overview",
                 label: "Bekijken & bevestigen",
-                fields: ["has_confirmed", "conditions_accepted"],
+                fields: ["has_confirmed", "has_accepted_conditions"],
                 validate: () => ({}),
             },
         ]),
@@ -193,7 +193,7 @@ describe("BookingForm - Complete Test Suite", () => {
             phone: "",
         },
         has_confirmed: false,
-        conditions_accepted: false,
+        has_accepted_conditions: false,
         processing: false,
         hasErrors: false,
         errors: {},
@@ -404,7 +404,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             wrapper = mountComponent({
                 has_confirmed: false,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -416,7 +416,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             wrapper = mountComponent({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -429,7 +429,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             wrapper = mountComponent({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -444,12 +444,12 @@ describe("BookingForm - Complete Test Suite", () => {
 
             const mockBooking = createMockBooking({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             wrapper = mountComponent({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -470,7 +470,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             wrapper = mountComponent({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -484,7 +484,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             wrapper = mountComponent({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
                 processing: true,
             });
 
@@ -497,7 +497,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             wrapper = mountComponent({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
                 processing: true,
             });
 
@@ -579,7 +579,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             wrapper = mountComponent({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
                 hasErrors: true,
                 errors: { departure_date: "Required" },
             });
@@ -620,7 +620,7 @@ describe("BookingForm - Complete Test Suite", () => {
             const onErrorCallback = vi.fn();
             const mockBooking = createMockBooking({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             mockBooking.post = vi.fn((url, options) => {
@@ -650,7 +650,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             const mockBooking = createMockBooking({
                 has_confirmed: true,
-                conditions_accepted: true,
+                has_accepted_conditions: true,
             });
 
             mockBooking.post = vi.fn((url, options) => {

@@ -25,7 +25,7 @@ class StoreBookingRequest extends FormRequest
                 // Selectie datum & bevestiging
                 'departure_date' => ['required', 'date', 'after:today'],
                 'has_confirmed' => ['accepted'],
-                'conditions_accepted' => ['accepted'],
+                'has_accepted_conditions' => ['accepted'],
                 'travelers.*.*.full_name' => ['required', 'string', 'min:3', 'max:255'],
             ],
             BookingValidationRules::contact(),

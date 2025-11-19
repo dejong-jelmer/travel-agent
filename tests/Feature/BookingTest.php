@@ -129,7 +129,7 @@ class BookingTest extends TestCase
 
         return array_merge([
             'trip' => ['id' => $this->trip->id],
-            'conditions_accepted' => true,
+            'has_accepted_conditions' => true,
             'has_confirmed' => true,
             'departure_date' => fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
             'travelers' => [
@@ -199,7 +199,7 @@ class BookingTest extends TestCase
             'id' => $booking->id,
             'departure_date' => $payload['departure_date'],
             'has_confirmed' => 1,
-            'conditions_accepted' => 1,
+            'has_accepted_conditions' => 1,
         ]);
     }
 

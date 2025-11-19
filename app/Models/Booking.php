@@ -26,14 +26,14 @@ class Booking extends Model
         'product_id',
         'main_booker_id',
         'departure_date',
-        'conditions_accepted',
+        'has_accepted_conditions',
         'has_confirmed',
         'status',
         'payment_status',
     ];
 
     protected $casts = [
-        'conditions_accepted' => 'boolean',
+        'has_accepted_conditions' => 'boolean',
         'has_confirmed' => 'boolean',
         'departure_date' => 'datetime',
         'created_at' => 'datetime',

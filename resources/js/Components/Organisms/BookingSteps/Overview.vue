@@ -145,8 +145,8 @@ const props = defineProps({
                         Ik bevestig de juistheid van mijn gegevens en maak mijn boeking definitief.
                     </Checkbox>
                 </span>
-                <span @click="booking.clearErrors('conditions_accepted')">
-                    <Checkbox v-model="booking.conditions_accepted" :feedback="booking.errors.conditions_accepted">
+                <span @click="booking.clearErrors('has_accepted_conditions')">
+                    <Checkbox v-model="booking.has_accepted_conditions" :feedback="booking.errors.has_accepted_conditions">
                         Ik bevestig dat de
                         <a :href="route('terms')" target="_blank" rel="noopener noreferrer"
                             class="default-link">

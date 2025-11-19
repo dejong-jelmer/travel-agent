@@ -238,8 +238,8 @@ export function useBookingValidation() {
             errors["has_confirmed"] = ERROR_MESSAGES.MISSING_CONFIRMATION;
         }
 
-        if (!bookingData.conditions_accepted) {
-            errors["conditions_accepted"] =
+        if (!bookingData.has_accepted_conditions) {
+            errors["has_accepted_conditions"] =
                 ERROR_MESSAGES.MISSING_ACCEPTED_CONDITIONS;
         }
 

@@ -39,7 +39,7 @@ const stepComponents = {
 const currentStepComponent = computed(() => stepComponents[currentStep.value.id]);
 
 const canSubmit = computed(() => {
-    return booking.value.has_confirmed && booking.value.conditions_accepted && !booking.value.processing && !booking.value.hasErrors;
+    return booking.value.has_confirmed && booking.value.has_accepted_conditions && !booking.value.processing && !booking.value.hasErrors;
 });
 
 function handleNext() {
