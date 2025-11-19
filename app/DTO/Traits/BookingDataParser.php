@@ -4,12 +4,9 @@ namespace App\DTO\Traits;
 
 use App\DTO\BookingContactData;
 use App\DTO\BookingTravelerData;
-use App\Enums\Booking\PaymentStatus;
-use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 
 trait BookingDataParser
@@ -19,8 +16,6 @@ trait BookingDataParser
      */
     protected static function parseValidatedData(array $validated): array
     {
-        $status = self::setStatusEnumValue($validated, 'status');
-        $paymentStatus = self::setStatusEnumValue($validated, 'payment_status');
         $travelers = $validated['travelers'] ?? [];
         $adults = $travelers['adults'] ?? [];
         $children = $travelers['children'] ?? [];
@@ -29,8 +24,6 @@ trait BookingDataParser
         $mainBooker = ['name' => $mainBookerFullName, 'index' => $mainBookerIndex];
 
         return [
-            'status' => $status,
-            'payment_status' => $paymentStatus,
             'main_booker' => $mainBooker,
             'travelers' => [
                 TravelerType::Adult->value => BookingTravelerData::manyFromArray($adults),
@@ -70,18 +63,5 @@ trait BookingDataParser
         }
 
         return $trip;
-    }
-
-    private static function setStatusEnumValue(array $validated, string $status): mixed
-    {
-        if (Arr::exists($validated, $status) && isset($validated[$status])) {
-            return match ($status) {
-                'status' => Status::from($validated['status']),
-                'payment_status' => PaymentStatus::from($validated['payment_status']),
-                default => null,
-            };
-        }
-
-        return null;
     }
 }

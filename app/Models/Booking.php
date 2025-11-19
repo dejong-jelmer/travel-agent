@@ -47,6 +47,11 @@ class Booking extends Model
         'created_at_formatted',
     ];
 
+    protected $attributes = [
+        'status' => Status::New->value,
+        'payment_status' => PaymentStatus::Pending->value,
+    ];
+
     protected static function booted()
     {
         static::created(function ($booking) {

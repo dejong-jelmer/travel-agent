@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingTraveler;
@@ -55,7 +57,6 @@ class BookingTest extends TestCase
         $updatedPayload = $this->generateUpdatePayload($booking, $overrides);
 
         $response = $this->put(route('admin.bookings.update', $booking), $updatedPayload);
-
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
 
@@ -293,6 +294,8 @@ class BookingTest extends TestCase
         // Create the base payload
         $payload = [
             'trip' => ['id' => $booking->product_id],
+            'status' => Status::New->value,
+            'payment_status' => PaymentStatus::Pending->value,
             'travelers' => [
                 'adults' => $adults,
                 'children' => $children,

@@ -1,7 +1,5 @@
 <?php
 
-use App\Enums\Booking\PaymentStatus;
-use App\Enums\Booking\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -22,8 +20,8 @@ return new class extends Migration
             $table->date('departure_date');
             $table->boolean('conditions_accepted')->default(false);
             $table->boolean('has_confirmed')->default(false);
-            $table->string('status', 20)->default(Status::New);
-            $table->string('payment_status', 20)->default(PaymentStatus::Pending);
+            $table->string('status', 20)->index();
+            $table->string('payment_status', 20)->index();
             $table->softDeletes();
             $table->timestamps();
         });

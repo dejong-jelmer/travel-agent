@@ -30,8 +30,8 @@ class UpdateBookingData implements Arrayable
         $parsed = self::parseValidatedData($validated);
 
         return new self(
-            status: $parsed['status'],
-            payment_status: $parsed['payment_status'],
+            status: Status::from($validated['status']),
+            payment_status: PaymentStatus::from($validated['payment_status']),
             main_booker: $parsed['main_booker'],
             travelers: $parsed['travelers'],
             contact: $parsed['contact'],
