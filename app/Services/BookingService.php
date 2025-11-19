@@ -42,6 +42,11 @@ class BookingService
 
     public function update(Booking $booking, UpdateBookingData $bookingData): Booking
     {
+        // Update booking
+        $booking->update([
+            'status' => $bookingData->status,
+            'payment_status' => $bookingData->payment_status,
+        ]);
         // Get data from DTO
         $contactData = $bookingData->contact->toArray();
         $travelersData = $bookingData->travelers;
@@ -101,12 +106,5 @@ class BookingService
                 }
             }
         }
-    }
-
-    public function seen(Booking $booking): void
-    {
-        $booking->timestamps = false;
-        $booking->new = false;
-        $booking->saveQuietly();
     }
 }

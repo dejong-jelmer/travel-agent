@@ -2,7 +2,7 @@
 
 namespace App\Providers;
 
-use App\Enums\BookingAction;
+use App\Enums\ModelAction;
 use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Responses\BookingResponse;
@@ -13,7 +13,7 @@ use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 
 /**
- * @method static \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse booking(\App\Models\Booking $booking, \App\Enums\BookingAction $action)
+ * @method static \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse booking(\App\Models\Booking $booking, \App\Enums\ModelAction $action)
  * */
 class AppServiceProvider extends ServiceProvider
 {
@@ -46,7 +46,7 @@ class AppServiceProvider extends ServiceProvider
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());
 
-        Response::macro('booking', function (Booking $booking, BookingAction $action) {
+        Response::macro('booking', function (Booking $booking, ModelAction $action) {
             return BookingResponse::make($booking)->toResponse($action);
         });
     }

@@ -237,7 +237,7 @@ export default {
         getOrCreateObjectURL(item) {
             // Handle string paths (existing images)
             if (typeof item === 'string') {
-                // If already a full path (from PathCast), return as-is
+                // If already a full path, return as-is
                 if (item.startsWith('/storage/') || item.startsWith('http')) {
                     return item;
                 }

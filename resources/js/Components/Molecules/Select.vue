@@ -6,7 +6,7 @@ const props = defineProps({
     name: String,
     label: String,
     modelValue: {
-        type: Array,
+        type: [ String, Array ],
         required: true,
     },
     options: {
@@ -42,7 +42,9 @@ const handleChange = (event) => {
         event.target.selectedOptions,
         (option) => option.value
     );
-    emit("update:modelValue", selectedValues);
+
+    const value = props.multiple ? selectedValues : (selectedValues[0] ?? null);
+    emit("update:modelValue", value);
 };
 
 const normalizedOptions = computed(() => {
@@ -68,6 +70,14 @@ const normalizedOptions = computed(() => {
 
   return [];
 });
+
+const isSelected = (value) => {
+    if (!props.modelValue) return false;
+    return Array.isArray(props.modelValue)
+        ? props.modelValue.includes(value)
+        : props.modelValue === value;
+};
+
 </script>
 <template>
     <div class="grid gap-1">
@@ -82,7 +92,7 @@ const normalizedOptions = computed(() => {
             <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
             <option
                 v-for="(option, index) in normalizedOptions"
-                :selected="modelValue.includes(option['value'])"
+                :selected="isSelected(option['value'])"
                 :key="index"
                 :value="option.value"
             >

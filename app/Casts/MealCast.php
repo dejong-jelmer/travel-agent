@@ -28,7 +28,7 @@ class MealCast implements CastsAttributes
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         return json_encode(collect($value)
-            ->map(fn ($meal) => $meal instanceof Meals ? $meal->value : $meal)
+            ->map(fn ($meal) => $meal instanceof Meal ? $meal->value : $meal)
             ->all());
     }
 }

@@ -44,6 +44,8 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
 
     const booking = useForm({
         trip: trip || null,
+        status: db_booking?.status || null,
+        payment_status: db_booking?.payment_status || null,
         participants: {
             adults: adults.length || 2,
             children: children.length || 0,

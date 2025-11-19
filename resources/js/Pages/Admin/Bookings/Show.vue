@@ -31,7 +31,7 @@ const props = defineProps({
                     </div>
                 </div>
 
-                <!-- Linkerkolom: Boekingsgegevens + Reizigers -->
+                <!-- Linkerkolom: Boekingsgegevens + Contactgegevens + Reizigers -->
                 <div class="laptop:col-span-2 space-y-8">
                     <!-- Boekingsgegevens Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
@@ -40,35 +40,46 @@ const props = defineProps({
                             <p class="mt-1 text-sm text-gray-700/30">Informatie over de boeking</p>
                         </div>
                         <div class="p-6 space-y-4">
-                            <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-700">Boekingsreferentie</label>
-                                        <p class="mt-1 text-gray-900">{{ booking.reference }}</p>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-700">Reis</label>
-                                        <DefaultLink :href="route('admin.products.show', booking.product)"
-                                            class="mt-1 block text-gray-900 hover:text-accent-link">
-                                            {{ booking.product?.name }}
-                                        </DefaultLink>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-700">Vertrekdatum</label>
-                                        <p class="mt-1 text-gray-900">{{ booking.departure_date_formatted }}</p>
-                                    </div>
-                                </div>
-                                <div class="space-y-4">
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-700">Contactpersoon</label>
-                                        <p class="mt-1 text-gray-900">{{ booking.contact?.name }}</p>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-700">Adres</label>
-                                        <p class="mt-1 text-gray-900 whitespace-pre-line">{{ booking.contact?.address }}
-                                        </p>
-                                    </div>
-                                </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Boekingsreferentie</label>
+                                <p class="mt-1 text-gray-900">{{ booking.reference }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Reis</label>
+                                <DefaultLink :href="route('admin.products.show', booking.product)"
+                                    class="mt-1 block text-gray-900 hover:text-accent-link">
+                                    {{ booking.product?.name }}
+                                </DefaultLink>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Vertrekdatum</label>
+                                <p class="mt-1 text-gray-900">{{ booking.departure_date_formatted }}</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Contactgegevens Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">Contactgegevens</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Contactpersoon informatie</p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Naam</label>
+                                <p class="mt-1 text-gray-900">{{ booking.contact?.name }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">E-mail</label>
+                                <p class="mt-1 text-gray-900">{{ booking.contact?.email }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Telefoon</label>
+                                <p class="mt-1 text-gray-900">{{ booking.contact?.phone }}</p>
+                            </div>
+                            <div>
+                                <label class="text-sm font-medium text-gray-700">Adres</label>
+                                <p class="mt-1 text-gray-900 whitespace-pre-line">{{ booking.contact?.address }}</p>
                             </div>
                         </div>
                     </section>
@@ -109,22 +120,13 @@ const props = defineProps({
                         </div>
                         <div class="p-6 space-y-4">
                             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">Aantal reizigers</span>
-                                <Pill type="info">
-                                    {{ (booking.adults?.length || 0) + (booking.children?.length || 0) }}
-                                </Pill>
+                                <span class="text-sm font-medium text-gray-700">Boeking</span>
+                                <StatusBadge :status="booking.status">{{ booking.status }}</StatusBadge>
                             </div>
+
                             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">Volwassenen</span>
-                                <Pill type="success">
-                                    {{ booking.adults?.length || 0 }}
-                                </Pill>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">Kinderen</span>
-                                <Pill type="link">
-                                    {{ booking.children?.length || 0 }}
-                                </Pill>
+                                <span class="text-sm font-medium text-gray-700">Betaling</span>
+                                <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status }}</PaymentStatusBadge>
                             </div>
                         </div>
                     </section>

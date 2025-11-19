@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -26,15 +28,18 @@ class Booking extends Model
         'departure_date',
         'conditions_accepted',
         'is_confirmed',
+        'status',
+        'payment_status',
     ];
 
     protected $casts = [
         'conditions_accepted' => 'boolean',
         'is_confirmed' => 'boolean',
-        'new' => 'boolean',
         'departure_date' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'status' => Status::class,
+        'payment_status' => PaymentStatus::class,
     ];
 
     protected $appends = [
@@ -150,7 +155,7 @@ class Booking extends Model
     #[Scope]
     protected function new(Builder $query): void
     {
-        $query->where('new', 1);
+        $query->where('status', Status::New);
     }
 
     /**

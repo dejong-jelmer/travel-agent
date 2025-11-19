@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Http\Requests\Concerns\ValidatesMainBooker;
 use App\Services\Validation\BookingValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
@@ -20,6 +22,18 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
+            [
+                'status' => [
+                    'required',
+                    'string',
+                    Rule::in(array_column(Status::cases(), 'value')),
+                ],
+                'payment_status' => [
+                    'required',
+                    'string',
+                    Rule::in(array_column(PaymentStatus::cases(), 'value')),
+                ],
+            ],
             [
                 'travelers.*.*.id' => ['required', 'integer', Rule::in($this->booking?->travelers?->modelKeys() ?? [])],
             ],

@@ -39,7 +39,7 @@ class ItineraryFactory extends Factory
             'remark' => fake()->optional()->randomElement([
                 'Museum toegang niet inbegrepen in de prijs',
                 'Lunch niet inbegrepen',
-                'Tickets moeten voor 08:00 ophaaldt worden op de locatie',
+                'Tickets moeten voor 08:00 ophaald worden op de locatie',
                 'Museumbezoek is optioneel',
             ]),
         ];

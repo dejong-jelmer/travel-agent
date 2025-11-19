@@ -4,6 +4,8 @@ namespace App\DTO\Traits;
 
 use App\DTO\BookingContactData;
 use App\DTO\BookingTravelerData;
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use App\Models\Product;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -16,6 +18,8 @@ trait BookingDataParser
      */
     protected static function parseValidatedData(array $validated): array
     {
+        $status = Status::from($validated['status']);
+        $paymentStatus = PaymentStatus::from($validated['payment_status']);
         $travelers = $validated['travelers'] ?? [];
         $adults = $travelers['adults'] ?? [];
         $children = $travelers['children'] ?? [];
@@ -24,6 +28,8 @@ trait BookingDataParser
         $mainBooker = ['name' => $mainBookerFullName, 'index' => $mainBookerIndex];
 
         return [
+            'status' => $status,
+            'payment_status' => $paymentStatus,
             'main_booker' => $mainBooker,
             'travelers' => [
                 TravelerType::Adult->value => BookingTravelerData::manyFromArray($adults),
