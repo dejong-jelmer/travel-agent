@@ -31,8 +31,8 @@ class BookingController extends Controller
             abort(404);
         }
 
-        return Inertia::render('Trips/Confirmation', [
-            'title' => "Boekingsbevestiging - {$booking->product->name}",
+        return Inertia::render('Booking/Received', [
+            'title' => "Boeking ontvangen - {$booking->product->name}",
             'booking' => $booking->load([
                 'product.countries',
                 'product.featuredImage',

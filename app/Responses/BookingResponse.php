@@ -30,7 +30,7 @@ class BookingResponse
         return match ($action) {
             ModelAction::Created => redirect()
                 ->route('bookings.confirmation', ['booking' => $this->booking])
-                ->with('success', __('booking.stored')),
+                ->with('success', __('booking.created')),
             ModelAction::Updated => redirect()
                 ->route('admin.bookings.index')
                 ->with('success', __('booking.updated', ['reference' => $this->booking->reference])),
