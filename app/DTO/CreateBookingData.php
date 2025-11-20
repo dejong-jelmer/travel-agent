@@ -9,7 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
 
-class StoreBookingData implements Arrayable
+class CreateBookingData implements Arrayable
 {
     use ArrayableDTO, BookingDataParser;
 

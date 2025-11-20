@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\DTO\StoreBookingData;
+use App\DTO\CreateBookingData;
 use App\Enums\ModelAction;
 use App\Events\BookingCreated;
-use App\Http\Requests\StoreBookingRequest;
+use App\Http\Requests\CreateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
 use Illuminate\Http\JsonResponse;
@@ -14,15 +14,15 @@ use Inertia\Inertia;
 
 class BookingController extends Controller
 {
-    public function store(StoreBookingRequest $request, BookingService $bookingService): RedirectResponse|JsonResponse
+    public function store(CreateBookingRequest $request, BookingService $bookingService): RedirectResponse|JsonResponse
     {
-        $bookingData = StoreBookingData::fromRequest($request);
-        $booking = $bookingService->store($bookingData);
+        $bookingData = CreateBookingData::fromRequest($request);
+        $booking = $bookingService->create($bookingData);
         event(new BookingCreated($booking));
         session()->flash('new_booking', $booking->uuid);
 
         // Response macro in App\Responses\BookingResponse
-        return response()->booking($booking, ModelAction::Stored);
+        return response()->booking($booking, ModelAction::Created);
     }
 
     public function confirmation(Booking $booking)

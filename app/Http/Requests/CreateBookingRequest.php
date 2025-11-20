@@ -8,7 +8,7 @@ use App\Services\Validation\BookingValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreBookingRequest extends FormRequest
+class CreateBookingRequest extends FormRequest
 {
     use ValidatesMainBooker;
 

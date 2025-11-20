@@ -28,7 +28,7 @@ class BookingResponse
 
         // Web redirect
         return match ($action) {
-            ModelAction::Stored => redirect()
+            ModelAction::Created => redirect()
                 ->route('bookings.confirmation', ['booking' => $this->booking])
                 ->with('success', __('booking.stored')),
             ModelAction::Updated => redirect()

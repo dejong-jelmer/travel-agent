@@ -139,7 +139,7 @@ function handleSubmit() {
 
             <button v-else type="button" data-testid="submit-button"
                 v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
-                class="px-6 py-2 rounded-xl bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:hover:text-brand-primary disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
+                class="px-6 py-2 rounded-xl inline-flex gap-2 items-center bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:opacity-40 disabled:hover:bg-accent-primary disabled:hover:text-white disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
                 <Spinner v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
                 <span>{{ booking.processing ? 'Bezig met verzenden...' : 'Nu boeken' }}</span>
