@@ -10,6 +10,6 @@ enum Status: string
     case New = 'new';
     case Pending = 'pending';
     case Confirmed = 'confirmed';
-    case Canceled = 'cancelled';
+    case Canceled = 'canceled';
     case Completed = 'completed';
 }
