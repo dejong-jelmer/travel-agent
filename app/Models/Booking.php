@@ -23,7 +23,7 @@ class Booking extends Model
         SoftDeletes;
 
     protected $fillable = [
-        'product_id',
+        'trip_id',
         'main_booker_id',
         'departure_date',
         'has_accepted_conditions',
@@ -118,9 +118,9 @@ class Booking extends Model
         });
     }
 
-    public function product(): BelongsTo
+    public function trip(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Trip::class);
     }
 
     public function travelers(): HasMany

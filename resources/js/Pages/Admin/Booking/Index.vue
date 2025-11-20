@@ -28,7 +28,7 @@ const showActions = reactive({});
                         <tr v-for="(booking, index) in bookings.data" :key="index" class="transition hover:bg-gray-100">
                             <td class="py-4 px-6 text-center">{{ booking.id }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.reference }}</td>
-                            <td class="py-4 px-6 text-center">{{ booking.product?.name ?? '-' }}</td>
+                            <td class="py-4 px-6 text-center">{{ booking.trip?.name ?? '-' }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.departure_date_formatted }}</td>
                             <td class="py-4 px-6 text-center">
                                 <StatusBadge :status="booking.status">{{ booking.status }}</StatusBadge>

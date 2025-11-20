@@ -2,11 +2,11 @@
 
 namespace App\Http\Requests;
 
-use App\Services\Validation\ProductValidationRules;
+use App\Services\Validation\TripValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
-class StoreProductRequest extends FormRequest
+class UpdateTripRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,12 @@ class StoreProductRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
-            ProductValidationRules::basic(),
-            ProductValidationRules::pricing(),
-            ProductValidationRules::settings(),
-            ProductValidationRules::countries(),
-            ProductValidationRules::featuredImageStore(),
-            ProductValidationRules::imagesStore(),
+            TripValidationRules::basic(),
+            TripValidationRules::pricing(),
+            TripValidationRules::settings(),
+            TripValidationRules::countries(),
+            TripValidationRules::featuredImageUpdate(),
+            TripValidationRules::imagesUpdate(),
         );
     }
 }

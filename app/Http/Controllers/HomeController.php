@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\DTO\ContactFormData;
 use App\Http\Requests\ContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
-use App\Models\Product;
+use App\Models\Trip;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -24,7 +24,7 @@ class HomeController extends Controller
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'products' => Product::with(['countries', 'featuredImage'])->active()->featured()->get(),
+            'trips' => Trip::with(['countries', 'featuredImage'])->active()->featured()->get(),
         ]);
     }
 
@@ -72,7 +72,7 @@ class HomeController extends Controller
         ], 200);
     }
 
-    public function showTrip(Product $trip): Response
+    public function showTrip(Trip $trip): Response
     {
         return Inertia::render('Trip/Show', [
             'title' => "{$this->appName} - {$trip->name}",

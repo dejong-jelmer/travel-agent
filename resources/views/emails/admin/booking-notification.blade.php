@@ -39,11 +39,11 @@
                     Gekozen Reis
                 </p>
                 <p style="margin:0 0 15px 0;font-size:22px;font-weight:700;color:#2F3E46;">
-                    {{ $booking->product->name }}
+                    {{ $booking->trip->name }}
                 </p>
-                @if ($booking->product->countries->isNotEmpty())
+                @if ($booking->trip->countries->isNotEmpty())
                     <p style="margin:0;font-size:14px;color:#A3BCCB;">
-                        {{ $booking->product->countriesList }}
+                        {{ $booking->trip->countriesList }}
                     </p>
                 @endif
             </td>
@@ -74,10 +74,10 @@
                         Duur
                     </p>
                     <p style="margin:0;font-size:18px;font-weight:700;color:#2F3E46;">
-                        {{ $booking->product->duration }} dagen
+                        {{ $booking->trip->duration }} dagen
                     </p>
                     <p style="margin:5px 0 0 0;font-size:13px;color:#A3BCCB;">
-                        {{ $booking->product->duration - 1 }} nachten
+                        {{ $booking->trip->duration - 1 }} nachten
                     </p>
                 </div>
             </td>

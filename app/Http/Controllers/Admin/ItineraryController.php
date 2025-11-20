@@ -5,11 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\ImageRelation;
 use App\Enums\Meal;
 use App\Enums\Transport;
-use App\Http\Requests\StoreItineraryRequest;
+use App\Http\Requests\CreateItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
 use App\Http\Requests\UpdateItineraryRequest;
 use App\Models\Itinerary;
-use App\Models\Product;
+use App\Models\Trip;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -18,20 +18,20 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class ItineraryController extends Controller
 {
     /**
-     * Display a listing of a product's itinerary.
+     * Display a listing of a trip's itinerary.
      */
-    public function index(Product $product): Response
+    public function index(Trip $trip): Response
     {
-        return Inertia::render('Admin/Products/Itineraries/Index', [
-            'product' => $product->load('itineraries.image'),
+        return Inertia::render('Admin/Trip/Itinerary/Index', [
+            'trip' => $trip->load('itineraries.image'),
         ]);
     }
 
-    public function updateOrder(UpdateItineraryOrderRequest $request, Product $product): HttpResponse
+    public function updateOrder(UpdateItineraryOrderRequest $request, Trip $trip): HttpResponse
     {
         $validated = $request->safe();
         foreach ($validated['itineraries'] as $itinerary) {
-            $product->itineraries()->where('id', $itinerary['id'])->update(['order' => $itinerary['order']]);
+            $trip->itineraries()->where('id', $itinerary['id'])->update(['order' => $itinerary['order']]);
         }
 
         return response()->json([
@@ -40,43 +40,43 @@ class ItineraryController extends Controller
     }
 
     /**
-     * Show the form for creating a new itinerary block for the product.
+     * Show the form for creating a new itinerary block for the trip.
      */
-    public function create(Product $product): Response
+    public function create(Trip $trip): Response
     {
-        return Inertia::render('Admin/Products/Itineraries/Create', [
-            'product' => $product,
+        return Inertia::render('Admin/Trip/Itinerary/Create', [
+            'trip' => $trip,
             'meals' => Meal::options(),
             'transport' => Transport::options(),
         ]);
     }
 
     /**
-     * Store a newly created itinerary block for the product.
+     * Store a newly created itinerary block for the trip.
      */
-    public function store(StoreItineraryRequest $request, Product $product): RedirectResponse
+    public function store(CreateItineraryRequest $request, Trip $trip): RedirectResponse
     {
         $itinerary = new Itinerary;
         $validatedFields = $request->safe()->except('image');
         $validatedImage = $request->safe()->only('image');
 
         $itinerary->fill($validatedFields);
-        $itinerary->product()->associate($product);
-        $itinerary->order = $product->itineraries->count() + 1;
+        $itinerary->trip()->associate($trip);
+        $itinerary->order = $trip->itineraries->count() + 1;
         $itinerary->save();
         $itinerary->syncImages($validatedImage['image'], ImageRelation::Image);
 
         return redirect()
-            ->route('admin.products.itineraries.index', $itinerary->product)
+            ->route('admin.trips.itineraries.index', $itinerary->trip)
             ->with('success', __('Aanmaken van het reisplan is gelukt!'));
     }
 
     /**
-     * Show the form for editing an itinerary block for the product.
+     * Show the form for editing an itinerary block for the trip.
      */
     public function edit(Itinerary $itinerary): Response
     {
-        return Inertia::render('Admin/Products/Itineraries/Edit', [
+        return Inertia::render('Admin/Trip/Itinerary/Edit', [
             'itinerary' => $itinerary->load('image'),
             'meals' => Meal::options(),
             'transport' => Transport::options(),
@@ -99,7 +99,7 @@ class ItineraryController extends Controller
         }
 
         return redirect()
-            ->route('admin.products.itineraries.index', $itinerary->product)
+            ->route('admin.trips.itineraries.index', $itinerary->trip)
             ->with('success', 'Aanpassen van het reisplan is gelukt!.');
     }
 
@@ -108,12 +108,12 @@ class ItineraryController extends Controller
      */
     public function destroy(Itinerary $itinerary): RedirectResponse
     {
-        $product = $itinerary->product;
+        $trip = $itinerary->trip;
         $itineraryTitle = $itinerary->title;
         Itinerary::destroy($itinerary->id);
 
         return redirect()
-            ->route('admin.products.itineraries.index', $product)
+            ->route('admin.trips.itineraries.index', $trip)
             ->with('success', "Reisplan \"{$itineraryTitle}\" is verwijderd!.");
     }
 }

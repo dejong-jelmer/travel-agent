@@ -17,7 +17,7 @@ const props = defineProps({
                                 Boeking {{ booking.reference }}
                             </h1>
                             <p class="mt-1 text-sm text-gray-700/50">
-                                {{ booking.product?.name }}
+                                {{ booking.trip?.name }}
                             </p>
                         </div>
                         <div class="flex space-x-2">
@@ -46,9 +46,9 @@ const props = defineProps({
                             </div>
                             <div>
                                 <label class="text-sm font-medium text-gray-700">Reis</label>
-                                <DefaultLink :href="route('admin.products.show', booking.product)"
+                                <DefaultLink :href="route('admin.trips.show', booking.trip)"
                                     class="mt-1 block text-gray-900 hover:text-accent-link">
-                                    {{ booking.product?.name }}
+                                    {{ booking.trip?.name }}
                                 </DefaultLink>
                             </div>
                             <div>

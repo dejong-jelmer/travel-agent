@@ -4,7 +4,7 @@ namespace App\DTO;
 
 use App\DTO\Traits\ArrayableDTO;
 use App\DTO\Traits\BookingDataParser;
-use App\Models\Product;
+use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Http\Request;
@@ -14,7 +14,7 @@ class CreateBookingData implements Arrayable
     use ArrayableDTO, BookingDataParser;
 
     public function __construct(
-        public readonly Product $trip,
+        public readonly Trip $trip,
         public readonly array $main_booker,
         public readonly array $travelers,
         public readonly BookingContactData $contact,

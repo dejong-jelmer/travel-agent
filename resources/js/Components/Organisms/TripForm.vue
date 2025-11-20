@@ -22,26 +22,25 @@ const imageErrors = computed(() =>
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-3xl font-bold text-gray-700">
-                            {{ form.id ? 'Bewerk Product' : 'Nieuw Product' }}
+                            {{ form.id ? 'Bewerk Reis' : 'Nieuwe Reis' }}
                         </h1>
                         <p class="mt-1 text-sm text-gray-700/50">
-                            Beheer de details van uw reisproduct
+                            Beheer de details van uw reis
                         </p>
                     </div>
                 </div>
             </div>
 
-            <!-- Middenkolom: Product Details + Media -->
             <div class="laptop:col-span-2 space-y-8">
-                <!-- Product Details Section -->
+                <!-- Trip Details Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">Product Details</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">Basis informatie over het reisproduct</p>
+                        <h2 class="text-lg font-semibold text-gray-700">Reis Details</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">Basis informatie over de reis</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
-                            <Input type="text" name="name" label="Productnaam" :required="true" v-model="form.name"
+                            <Input type="text" name="name" label="Naam van de reis" :required="true" v-model="form.name"
                                 :feedback="form.errors.name" placeholder="Bijv. Venetië Express Treinreis" />
                             <Input type="text" name="slug" label="URL Slug" :required="true" v-model="form.slug"
                                 :feedback="form.errors.slug" placeholder="venetie-express-treinreis" />
@@ -56,7 +55,7 @@ const imageErrors = computed(() =>
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
                         <h2 class="text-lg font-semibold text-gray-700">Media</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">Upload afbeeldingen voor het product</p>
+                        <p class="mt-1 text-sm text-gray-700/30">Upload afbeeldingen voor de reis</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
@@ -81,7 +80,7 @@ const imageErrors = computed(() =>
                                 @initialized="emit('initialized')" />
 
                             <p class="mt-2 text-xs text-gray-700/30">
-                                Upload meerdere afbeeldingen voor de productgalerij
+                                Upload meerdere afbeeldingen voor de reisgalerij
                             </p>
                         </div>
                     </div>
@@ -103,7 +102,7 @@ const imageErrors = computed(() =>
                                     <Checkbox v-model="form.active" name="active" class="flex-1">
                                         <span class="font-medium text-gray-700">Actief</span>
                                         <span class="block text-xs text-gray-700/30 mt-1">
-                                            Product is zichtbaar op de website
+                                            Reis is zichtbaar op de website
                                         </span>
                                     </Checkbox>
                                 </div>
@@ -111,7 +110,7 @@ const imageErrors = computed(() =>
                                     <Checkbox v-model="form.featured" name="featured" class="flex-1">
                                         <span class="font-medium text-gray-700">Uitgelicht</span>
                                         <span class="block text-xs text-gray-700/30 mt-1">
-                                            Toon op homepage als featured product
+                                            Toon op homepage als featured reis
                                         </span>
                                     </Checkbox>
                                 </div>
@@ -165,7 +164,7 @@ const imageErrors = computed(() =>
 
         </div>
         <!-- Footer Actions -->
-        <FormFooter :form="form" label="Reisproduct opslaan" @submit="emit('submit')" />
+        <FormFooter :form="form" label="Reis opslaan" @submit="emit('submit')" />
 
     </form>
 </template>

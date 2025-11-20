@@ -11,7 +11,7 @@ const props = defineProps({
 const mainBookerIndex = props.db_booking.adults.findIndex((adult) => adult.id === props.db_booking.main_booker?.id)
 
 const { booking } = useBooking(
-    props.db_booking.product,
+    props.db_booking.trip,
     props.db_booking,
     mainBookerIndex,
 )
@@ -33,7 +33,7 @@ function submit() {
                                 Boeking {{ db_booking.reference }} bewerken
                             </h1>
                             <p class="mt-1 text-sm text-gray-700/50">
-                                {{ db_booking.product?.name }}
+                                {{ db_booking.trip?.name }}
                             </p>
                         </div>
                         <div class="flex space-x-2">
@@ -59,7 +59,7 @@ function submit() {
                             </div>
                             <div>
                                 <label class="text-sm font-medium text-gray-700">Reis</label>
-                                <p class="mt-1 text-gray-900">{{ db_booking.product?.name }}</p>
+                                <p class="mt-1 text-gray-900">{{ db_booking.trip?.name }}</p>
                             </div>
                             <div>
                                 <label class="text-sm font-medium text-gray-700">Vertrekdatum</label>

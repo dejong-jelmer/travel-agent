@@ -4,9 +4,9 @@ namespace App\Helpers;
 
 class Breadcrumbs
 {
-    const PROD_LABEL = ['label' => 'Reis producten'];
+    const TRIP_LABEL = ['label' => 'Reizen'];
 
-    const PROD_ROUTE = ['route' => 'admin.products.index'];
+    const TRIP_ROUTE = ['route' => 'admin.trips.index'];
 
     const DASH_LABEL = ['label' => 'Dashboard'];
 
@@ -21,28 +21,28 @@ class Breadcrumbs
         $routeName = request()->route()?->getName();
 
         return match ($routeName) {
-            // Products
-            'admin.products.index' => [
+            // Trips
+            'admin.trips.index' => [
                 [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::PROD_LABEL, 'route' => null],
+                [...self::TRIP_LABEL, 'route' => null],
             ],
 
-            'admin.products.show' => self::productShow(),
+            'admin.trips.show' => self::tripShow(),
 
-            'admin.products.create' => [
-                [...self::PROD_LABEL, ...self::PROD_ROUTE],
-                [...self::PROD_LABEL, 'route' => null],
+            'admin.trips.create' => [
+                [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
+                [...self::TRIP_LABEL, 'route' => null],
             ],
 
-            'admin.products.edit' => self::productEdit(),
+            'admin.trips.edit' => self::tripEdit(),
 
-            'admin.products.update' => self::productEdit(),
+            'admin.trips.update' => self::tripEdit(),
 
-            // Itineraries (nested onder product)
-            'admin.products.itineraries.index' => self::productItinerariesIndex(),
+            // Itineraries (nested under trip)
+            'admin.trips.itineraries.index' => self::tripItinerariesIndex(),
 
-            'admin.products.itineraries.create' => [
-                ...self::productItinerariesIndex(),
+            'admin.trips.itineraries.create' => [
+                ...self::tripItinerariesIndex(),
                 ['label' => 'Nieuwe dag', 'route' => null],
             ],
 
@@ -65,36 +65,36 @@ class Breadcrumbs
         };
     }
 
-    protected static function productShow(): array
+    protected static function tripShow(): array
     {
-        $product = request()->route('product');
+        $trip = request()->route('trip');
 
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis product', 'route' => null],
+            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? 'Reis', 'route' => null],
         ];
     }
 
-    protected static function productEdit(): array
+    protected static function tripEdit(): array
     {
-        $product = request()->route('product');
+        $trip = request()->route('trip');
 
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Bewerken', 'route' => null],
+            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? 'Bewerken', 'route' => null],
         ];
     }
 
-    protected static function productItinerariesIndex(): array
+    protected static function tripItinerariesIndex(): array
     {
-        $product = request()->route('product');
+        $trip = request()->route('trip');
 
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis product', 'route' => 'admin.products.edit', 'params' => [$product]],
+            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? 'Reis', 'route' => 'admin.trips.edit', 'params' => [$trip]],
             ['label' => 'Reisdagen', 'route' => null],
         ];
     }
@@ -102,13 +102,13 @@ class Breadcrumbs
     protected static function itineraryEdit(): array
     {
         $itinerary = request()->route('itinerary');
-        $product = $itinerary?->product;
+        $trip = $itinerary?->trip;
 
         return [
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis', 'route' => 'admin.products.edit', 'params' => [$product]],
-            ['label' => 'Reisdagen', 'route' => 'admin.products.itineraries.index', 'params' => [$product]],
+            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? 'Reis', 'route' => 'admin.trips.edit', 'params' => [$trip]],
+            ['label' => 'Reisdagen', 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
             ['label' => 'Bewerk reisdag', 'route' => null],
         ];
     }

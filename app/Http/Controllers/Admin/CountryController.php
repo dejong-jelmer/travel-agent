@@ -15,7 +15,7 @@ class CountryController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Countries/Index', [
+        return Inertia::render('Admin/Country/Index', [
             'countries' => Country::paginate(15),
         ]);
     }
@@ -25,7 +25,7 @@ class CountryController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Admin/Countries/Create');
+        return Inertia::render('Admin/Country/Create');
     }
 
     /**
@@ -47,13 +47,13 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        $products = $country->products->count();
+        $trips = $country->trips->count();
         $feedback = [
             'status' => 'error',
-            'message' => "Er zijn nog {$products} producten gekoppeld aan dit land!",
+            'message' => "Er zijn nog {$trips} reizen gekoppeld aan dit land!",
         ];
 
-        if (! $products) {
+        if (! $trips) {
             Country::destroy($country->id);
             $feedback['status'] = 'success';
             $feedback['message'] = 'Land verwijderd';

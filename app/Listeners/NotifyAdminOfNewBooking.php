@@ -25,7 +25,7 @@ class NotifyAdminOfNewBooking
         $address = config('booking.mail');
 
         // Load relationships needed for the email
-        $event->booking->load(['product.countries', 'mainBooker', 'travelers', 'contact']);
+        $event->booking->load(['trip.countries', 'mainBooker', 'travelers', 'contact']);
 
         try {
             Mail::to($address)->send(

@@ -32,10 +32,10 @@ class BookingController extends Controller
         }
 
         return Inertia::render('Booking/Received', [
-            'title' => "Boeking ontvangen - {$booking->product->name}",
+            'title' => "Boeking ontvangen - {$booking->trip->name}",
             'booking' => $booking->load([
-                'product.countries',
-                'product.featuredImage',
+                'trip.countries',
+                'trip.featuredImage',
                 'travelers',
                 'contact',
                 'mainBooker',
