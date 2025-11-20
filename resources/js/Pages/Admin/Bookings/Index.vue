@@ -1,10 +1,11 @@
 <script setup>
 import { reactive } from 'vue'
+import { EllipsisVertical } from 'lucide-vue-next'
 
 const props = defineProps({
     bookings: Object
 })
-const showMoreOptions = reactive({});
+const showActions = reactive({});
 
 </script>
 <template>
@@ -18,9 +19,8 @@ const showMoreOptions = reactive({});
                             <th class="py-4 px-6 text-center">Referentie</th>
                             <th class="py-4 px-6 text-center">Reis</th>
                             <th class="py-4 px-6 text-center">Vertrekdatum</th>
-                            <th class="py-4 px-6 text-center">Contact persoon</th>
-                            <th class="py-4 px-6 text-center">Deelnemers</th>
-                            <th class="py-4 px-6 text-center">Aangemaakt op</th>
+                            <th class="py-4 px-6 text-center">Status</th>
+                            <th class="py-4 px-6 text-center">Betaling</th>
                             <th class="py-4 px-6 text-center">Acties</th>
                         </tr>
                     </thead>
@@ -30,23 +30,24 @@ const showMoreOptions = reactive({});
                             <td class="py-4 px-6 text-center">{{ booking.reference }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.product?.name ?? '-' }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.departure_date_formatted }}</td>
-                            <td class="py-4 px-6 text-center">{{ booking.main_booker?.full_name ?? '-'}}</td>
-                            <td class="py-4 px-6 text-center">{{ booking.adults?.length }}
-                                volwasse(n) <span v-if="booking.children?.length > 0">en {{ booking.children.length }} kind(eren)</span>
+                            <td class="py-4 px-6 text-center">
+                                <StatusBadge :status="booking.status">{{ booking.status }}</StatusBadge>
                             </td>
-                            <td class="py-4 px-6 text-center">{{ booking.created_at_formatted }}</td>
+                            <td class="py-4 px-6 text-center">
+                                <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status }}</PaymentStatusBadge>
+                            </td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <IconLink class="mx-auto" icon="Eye" :href="route('admin.bookings.show', booking)"
-                                    v-tippy="'Bekijk boeking'" />
-                                <IconLink class="mx-auto" icon="Pencil" :href="route('admin.bookings.edit', booking)"
-                                    v-tippy="'Bewerk boeking'" />
                                 <div class="w-fit mx-auto" v-tippy="`Meer opties`">
                                     <button class="info-button"
-                                        @click="showMoreOptions[booking.id] = !showMoreOptions[booking.id]">
-                                        <More class="h-5" />
+                                        @click="showActions[booking.id] = !showActions[booking.id]">
+                                        <EllipsisVertical class="h-5" />
                                     </button>
                                 </div>
-                                <div v-if="showMoreOptions[booking.id]" class="space-y-2">
+                                <div v-if="showActions[booking.id]" class="space-y-2">
+                                    <IconLink class="mx-auto" icon="Eye" :href="route('admin.bookings.show', booking)"
+                                        v-tippy="'Bekijk boeking'" />
+                                    <IconLink class="mx-auto" icon="Pencil"
+                                        :href="route('admin.bookings.edit', booking)" v-tippy="'Bewerk boeking'" />
                                     <IconLink class="mx-auto" type="delete" icon="Trash2"
                                         :href="route('admin.bookings.destroy', booking)" method="delete"
                                         :showConfirm="true" prompt="Weet je zeker dat je deze boeking wilt verwijderen?"

@@ -3,6 +3,7 @@
 namespace App\Services\Validation;
 
 use App\Enums\Meal;
+use App\Enums\Transport;
 use Illuminate\Validation\Rule;
 
 class ItineraryValidationRules
@@ -29,8 +30,17 @@ class ItineraryValidationRules
     {
         return [
             'meals' => ['nullable', 'array'],
-            'meals.*' => [Rule::in(array_column(Meal::cases(), 'value'))],
-            'transport' => ['array'],
+            'meals.*' => [
+                'required',
+                'string',
+                Rule::in(Meal::values()),
+            ],
+            'transport' => ['nullable', 'array'],
+            'transport.*' => [
+                'required',
+                'string',
+                Rule::in(Transport::values()),
+            ],
         ];
     }
 

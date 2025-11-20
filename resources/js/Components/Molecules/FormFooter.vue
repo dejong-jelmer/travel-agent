@@ -1,4 +1,6 @@
 <script setup>
+import { TriangleAlert } from 'lucide-vue-next';
+
     const props =  defineProps({
         form: {
             type: Object,
@@ -17,8 +19,8 @@ const emit = defineEmits(['submit']);
     <div
         class="laptop:col-span-2 flex items-center justify-between bg-white rounded-lg mt-6 p-6">
         <p class="text-sm text-gray-700/30">
-            <span v-if="form.isDirty" class="text-status-warning font-medium">
-                Er zijn niet opgeslagen wijzigingen.
+            <span v-if="form.isDirty" class="flex text-status-warning font-medium">
+                <TriangleAlert class="h-5 w-5 mr-3" /> Er zijn niet opgeslagen wijzigingen.
             </span>
             <span v-else class="text-status-success">
                 Er zijn geen wijzigingen.

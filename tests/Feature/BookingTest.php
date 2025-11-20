@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingTraveler;
@@ -55,7 +57,6 @@ class BookingTest extends TestCase
         $updatedPayload = $this->generateUpdatePayload($booking, $overrides);
 
         $response = $this->put(route('admin.bookings.update', $booking), $updatedPayload);
-
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
 
@@ -128,8 +129,8 @@ class BookingTest extends TestCase
 
         return array_merge([
             'trip' => ['id' => $this->trip->id],
-            'conditions_accepted' => true,
-            'is_confirmed' => true,
+            'has_accepted_conditions' => true,
+            'has_confirmed' => true,
             'departure_date' => fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
             'travelers' => [
                 'adults' => $this->generateTravelers($numberOfAdults, TravelerType::Adult),
@@ -197,8 +198,8 @@ class BookingTest extends TestCase
         $this->assertDatabaseHas('bookings', [
             'id' => $booking->id,
             'departure_date' => $payload['departure_date'],
-            'is_confirmed' => 1,
-            'conditions_accepted' => 1,
+            'has_confirmed' => 1,
+            'has_accepted_conditions' => 1,
         ]);
     }
 
@@ -293,6 +294,8 @@ class BookingTest extends TestCase
         // Create the base payload
         $payload = [
             'trip' => ['id' => $booking->product_id],
+            'status' => Status::New->value,
+            'payment_status' => PaymentStatus::Pending->value,
             'travelers' => [
                 'adults' => $adults,
                 'children' => $children,

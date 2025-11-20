@@ -22,13 +22,13 @@ const divClass = {
         info: 'bg-status-info',
     },
     transparent: {
-        primary: 'border border-brand-primary',
-        accent: 'border border-accent-primary',
-        sage: 'border border-accent-sage',
-        success: 'border border-status-success',
-        error: 'border border-status-error',
-        warning: 'border border-status-warning',
-        info: 'border border-status-info',
+        primary: 'border border-brand-primary bg-brand-primary/10',
+        accent: 'border border-accent-primary bg-accent-primary/10',
+        sage: 'border border-accent-sage bg-accent-sage/10',
+        success: 'border border-status-success bg-status-success/10',
+        error: 'border border-status-error bg-status-error/10',
+        warning: 'border border-status-warning bg-status-warning/10',
+        info: 'border border-status-info bg-status-info/10',
     }
 }
 const spanClass = {
@@ -53,8 +53,9 @@ const spanClass = {
 }
 </script>
 <template>
-    <div :class="['flex px-3 py-1 rounded-full min-w-fit items-center', divClass[props.variant][props.type]]">
-        <span :class="['text-xs font-medium inline-flex mx-auto', spanClass[props.variant][props.type]]">
+    <div :class="['flex px-4 py-1 rounded-full min-w-fit items-center', divClass[props.variant][props.type]]">
+        <span
+            :class="['text-xs w-full font-medium flex items-center', spanClass[props.variant][props.type]]">
             <slot></slot>
         </span>
     </div>

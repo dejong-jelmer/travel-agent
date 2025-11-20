@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\DTO\UpdateBookingData;
-use App\Enums\BookingAction;
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
+use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
@@ -32,8 +34,6 @@ class BookingController extends Controller
      */
     public function show(Booking $booking): Response
     {
-        $this->bookingService->seen($booking);
-
         return Inertia::render('Admin/Bookings/Show', [
             'booking' => $booking->load(['product', 'contact', 'adults', 'children', 'mainBooker']),
         ]);
@@ -44,10 +44,10 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking): Response
     {
-        $this->bookingService->seen($booking);
-
         return Inertia::render('Admin/Bookings/Edit', [
             'db_booking' => $booking->load(['product', 'contact', 'travelers', 'adults', 'mainBooker']),
+            'statusOptions' => Status::options(),
+            'paymentStatusOptions' => PaymentStatus::options(),
         ]);
     }
 
@@ -60,7 +60,7 @@ class BookingController extends Controller
         $booking = $this->bookingService->update($booking, $bookingData);
 
         // Response macro in App\Responses\BookingResponse
-        return response()->booking($booking, BookingAction::Updated);
+        return response()->booking($booking, ModelAction::Updated);
     }
 
     /**

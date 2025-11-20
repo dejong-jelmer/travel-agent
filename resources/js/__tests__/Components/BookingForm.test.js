@@ -84,7 +84,7 @@ vi.mock("@/Composables/useBookingSteps.js", () => ({
             {
                 id: "overview",
                 label: "Bekijken & bevestigen",
-                fields: ["is_confirmed", "conditions_accepted"],
+                fields: ["has_confirmed", "has_accepted_conditions"],
                 validate: () => ({}),
             },
         ]),
@@ -192,8 +192,8 @@ describe("BookingForm - Complete Test Suite", () => {
             email: "",
             phone: "",
         },
-        is_confirmed: false,
-        conditions_accepted: false,
+        has_confirmed: false,
+        has_accepted_conditions: false,
         processing: false,
         hasErrors: false,
         errors: {},
@@ -403,8 +403,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: false,
-                conditions_accepted: true,
+                has_confirmed: false,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -415,8 +415,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -428,8 +428,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(true);
 
             wrapper = mountComponent({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -443,13 +443,13 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(true);
 
             const mockBooking = createMockBooking({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
             });
 
             wrapper = mountComponent({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -469,8 +469,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(false);
 
             wrapper = mountComponent({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
@@ -483,8 +483,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
                 processing: true,
             });
 
@@ -496,8 +496,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
                 processing: true,
             });
 
@@ -578,8 +578,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockStepsData.isLastStep.value = true;
 
             wrapper = mountComponent({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
                 hasErrors: true,
                 errors: { departure_date: "Required" },
             });
@@ -619,8 +619,8 @@ describe("BookingForm - Complete Test Suite", () => {
             // Mock booking.post to trigger onError callback
             const onErrorCallback = vi.fn();
             const mockBooking = createMockBooking({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
             });
 
             mockBooking.post = vi.fn((url, options) => {
@@ -649,8 +649,8 @@ describe("BookingForm - Complete Test Suite", () => {
             mockValidateAllSteps.mockReturnValue(true);
 
             const mockBooking = createMockBooking({
-                is_confirmed: true,
-                conditions_accepted: true,
+                has_confirmed: true,
+                has_accepted_conditions: true,
             });
 
             mockBooking.post = vi.fn((url, options) => {

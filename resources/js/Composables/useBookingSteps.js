@@ -40,7 +40,7 @@ export function useBookingSteps(booking) {
         {
             id: BOOKING_STEPS.OVERVIEW,
             label: "Bekijken & bevestigen",
-            fields: ["is_confirmed", "conditions_accepted"],
+            fields: ["has_confirmed", "has_accepted_conditions"],
             validate: () => validateOverviewStep(booking.value),
         },
     ]);

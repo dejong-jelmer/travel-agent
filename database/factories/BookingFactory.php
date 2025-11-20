@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingContact;
@@ -23,7 +25,10 @@ class BookingFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'departure_date' => fake()->dateTimeBetween('now', '+5 months'),
-            'is_confirmed' => true,
+            'has_accepted_conditions' => true,
+            'has_confirmed' => true,
+            'status' => Status::New,
+            'payment_status' => PaymentStatus::Pending,
         ];
     }
 

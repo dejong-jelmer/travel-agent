@@ -228,7 +228,7 @@ StoreBookingRequest
   → StoreBookingData::fromRequest()
   → BookingService::store()
   → Booking::create()
-  → response()->booking($booking, BookingAction::Stored)
+  → response()->booking($booking, ModelAction::Stored)
 ```
 
 ### Key Architectural Patterns
@@ -260,12 +260,12 @@ NewsletterSubscriptionRequested Event
 #### Response Macros
 Custom response macro in `AppServiceProvider`:
 ```php
-Response::macro('booking', function (Booking $booking, BookingAction $action) {
+Response::macro('booking', function (Booking $booking, ModelAction $action) {
     return BookingResponse::make($booking)->toResponse($action);
 });
 
 // Usage
-return response()->booking($booking, BookingAction::Stored);
+return response()->booking($booking, ModelAction::Stored);
 ```
 
 ### Component Architecture (Atomic Design)

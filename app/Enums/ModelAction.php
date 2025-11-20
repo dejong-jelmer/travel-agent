@@ -2,8 +2,9 @@
 
 namespace App\Enums;
 
-enum BookingAction: string
+enum ModelAction: string
 {
     case Stored = 'stored';
     case Updated = 'updated';
+    case Deleted = 'deleted';
 }

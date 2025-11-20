@@ -24,8 +24,8 @@ class StoreBookingRequest extends FormRequest
                 'trip.id' => ['required', Rule::exists(Product::class, 'id')],
                 // Selectie datum & bevestiging
                 'departure_date' => ['required', 'date', 'after:today'],
-                'is_confirmed' => ['accepted'],
-                'conditions_accepted' => ['accepted'],
+                'has_confirmed' => ['accepted'],
+                'has_accepted_conditions' => ['accepted'],
                 'travelers.*.*.full_name' => ['required', 'string', 'min:3', 'max:255'],
             ],
             BookingValidationRules::contact(),

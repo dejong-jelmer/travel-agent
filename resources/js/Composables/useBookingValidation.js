@@ -234,12 +234,12 @@ export function useBookingValidation() {
             return { overview: ERROR_MESSAGES.MISSING_BOOKING_DATA };
         }
 
-        if (!bookingData.is_confirmed) {
-            errors["is_confirmed"] = ERROR_MESSAGES.MISSING_CONFIRMATION;
+        if (!bookingData.has_confirmed) {
+            errors["has_confirmed"] = ERROR_MESSAGES.MISSING_CONFIRMATION;
         }
 
-        if (!bookingData.conditions_accepted) {
-            errors["conditions_accepted"] =
+        if (!bookingData.has_accepted_conditions) {
+            errors["has_accepted_conditions"] =
                 ERROR_MESSAGES.MISSING_ACCEPTED_CONDITIONS;
         }
 

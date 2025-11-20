@@ -44,6 +44,8 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
 
     const booking = useForm({
         trip: trip || null,
+        status: db_booking?.status || null,
+        payment_status: db_booking?.payment_status || null,
         participants: {
             adults: adults.length || 2,
             children: children.length || 0,
@@ -68,8 +70,8 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             0,
             Math.min(main_booker_index, adults.length - 1)
         ),
-        is_confirmed: false,
-        conditions_accepted: false,
+        has_confirmed: false,
+        has_accepted_conditions: false,
     });
 
     // Helper: Clear alle errors voor travelers boven een bepaalde index
@@ -140,8 +142,8 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         () => booking.hasErrors,
         (hasErrors) => {
             if (hasErrors) {
-                booking.is_confirmed = false;
-                booking.conditions_accepted = false;
+                booking.has_confirmed = false;
+                booking.has_accepted_conditions = false;
             }
         }
     );
