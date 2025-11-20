@@ -74,7 +74,7 @@ class HomeController extends Controller
 
     public function showTrip(Product $trip): Response
     {
-        return Inertia::render('Trips/Show', [
+        return Inertia::render('Trip/Show', [
             'title' => "{$this->appName} - {$trip->name}",
             'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
         ]);

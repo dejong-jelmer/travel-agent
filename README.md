@@ -224,11 +224,11 @@ HTTP Request
 
 **Example Flow:**
 ```php
-StoreBookingRequest
+CreateBookingRequest
   → StoreBookingData::fromRequest()
   → BookingService::store()
   → Booking::create()
-  → response()->booking($booking, ModelAction::Stored)
+  → response()->booking($booking, ModelAction::Created)
 ```
 
 ### Key Architectural Patterns
@@ -265,7 +265,7 @@ Response::macro('booking', function (Booking $booking, ModelAction $action) {
 });
 
 // Usage
-return response()->booking($booking, ModelAction::Stored);
+return response()->booking($booking, ModelAction::Created);
 ```
 
 ### Component Architecture (Atomic Design)

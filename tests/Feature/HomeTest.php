@@ -53,7 +53,7 @@ class HomeTest extends TestCase
 
         $response = $this->get(route('trip.show', $trip));
 
-        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Trips/Show')
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Trip/Show')
             ->has('trip')
             ->where('trip.id', $trip->id)
             ->where('trip.name', $trip->name)

@@ -2,14 +2,14 @@
 
 namespace App\Services;
 
-use App\DTO\StoreBookingData;
+use App\DTO\CreateBookingData;
 use App\DTO\UpdateBookingData;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 
 class BookingService
 {
-    public function store(StoreBookingData $bookingData): Booking
+    public function create(CreateBookingData $bookingData): Booking
     {
         // Get Data from DTO
         $contactData = $bookingData->contact->toArray();

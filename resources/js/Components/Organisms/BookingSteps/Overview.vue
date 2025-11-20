@@ -54,7 +54,7 @@ const props = defineProps({
                         <Train class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Vertrek datum</span>
-                            <span class="flex-1 border-b-2 border-dotted border-brand-light/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <span class="font-bold">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</span>
                         </span>
                     </div>

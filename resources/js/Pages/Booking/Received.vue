@@ -23,7 +23,7 @@ const props = defineProps({
                         </div>
                         <h1
                             class="text-2xl laptop:text-4xl desktop:text-5xl font-bold text-brand-primary mb-3 laptop:mb-4">
-                            Boeking bevestigd!
+                            Boeking ontvangen!
                         </h1>
                     </div>
                     <p
