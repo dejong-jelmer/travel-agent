@@ -10,7 +10,7 @@ class Breadcrumbs
 
     public const TRIP_ROUTE = ['route' => 'admin.trips.index'];
 
-    public const DASH_LABEL = ['label' => 'Dashboard'];
+    public const DASH_LABEL = ['label' => 'dashboard.title'];
 
     public const DASH_ROUTE = ['route' => 'admin.dashboard'];
 
@@ -29,15 +29,15 @@ class Breadcrumbs
         return match ($routeName) {
             // Trips
             'admin.trips.index' => [
-                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                self::dashboardCrumb(),
                 [...self::translateLabel(self::TRIP_LABEL), 'route' => null],
             ],
 
             'admin.trips.show' => self::tripShow(),
 
             'admin.trips.create' => [
-                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
-                [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+                self::dashboardCrumb(),
+                self::tripCrumb(),
                 ['label' => __('trip.title_create'), 'route' => null],
             ],
 
@@ -56,7 +56,7 @@ class Breadcrumbs
 
             // Booking
             'admin.bookings.index' => [
-                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                self::dashboardCrumb(),
                 [...self::translateLabel(self::BOOKING_LABEL), 'route' => null],
             ],
 
@@ -65,11 +65,11 @@ class Breadcrumbs
 
             // Countries
             'admin.countries.index' => [
-                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                self::dashboardCrumb(),
                 [...self::translateLabel(self::COUNT_LABEL), 'route' => null],
             ],
             'admin.countries.create' => [
-                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                self::dashboardCrumb(),
                 [...self::translateLabel(self::COUNT_LABEL), ...self::COUNT_ROUTE],
                 ['label' => __('country.title_create'), 'route' => null],
             ],
@@ -83,8 +83,8 @@ class Breadcrumbs
         $trip = request()->route('trip');
 
         return [
-            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
-            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            self::dashboardCrumb(),
+            self::tripCrumb(),
             ['label' => $trip?->name ?? __('trip.title_show'), 'route' => null],
         ];
     }
@@ -94,8 +94,8 @@ class Breadcrumbs
         $trip = request()->route('trip');
 
         return [
-            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
-            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            self::dashboardCrumb(),
+            self::tripCrumb(),
             ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('trip.title_edit'), 'route' => null],
         ];
@@ -104,7 +104,7 @@ class Breadcrumbs
     protected static function bookingShow(): array
     {
         return [
-            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            self::dashboardCrumb(),
             [...self::translateLabel(self::BOOKING_LABEL), ...self::BOOKING_ROUTE],
             ['label' => __('booking.title_show'), 'route' => null],
         ];
@@ -115,7 +115,7 @@ class Breadcrumbs
         $booking = request()->route('booking');
 
         return [
-            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            self::dashboardCrumb(),
             [...self::translateLabel(self::BOOKING_LABEL), ...self::BOOKING_ROUTE],
             ['label' => __('booking.title_show'), 'route' => 'admin.bookings.show', 'params' => [$booking]],
             ['label' => __('booking.title_edit'), 'route' => null],
@@ -127,8 +127,8 @@ class Breadcrumbs
         $trip = request()->route('trip');
 
         return [
-            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
-            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            self::dashboardCrumb(),
+            self::tripCrumb(),
             ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('itinerary.title_index'), 'route' => null],
         ];
@@ -140,12 +140,22 @@ class Breadcrumbs
         $trip = $itinerary?->trip;
 
         return [
-            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
-            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            self::dashboardCrumb(),
+            self::tripCrumb(),
             ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('itinerary.title_index'), 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
             ['label' => __('itinerary.title_edit'), 'route' => null],
         ];
+    }
+
+    private static function dashboardCrumb(): array
+    {
+        return [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE];
+    }
+
+    private static function tripCrumb(): array
+    {
+        return [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE];
     }
 
     private static function translateLabel(array $label): array

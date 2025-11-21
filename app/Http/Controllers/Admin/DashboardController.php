@@ -15,7 +15,7 @@ class DashboardController extends Controller
     public function showDashboard(SystemHealthService $healthService)
     {
         return Inertia::render('Admin/Dashboard', [
-            'title' => $this->pageTitle('Dashboard'),
+            'title' => $this->pageTitle('dashboard.title'),
             'bookings' => [
                 'all' => Booking::count(),
                 'new' => Booking::new()->count(),
