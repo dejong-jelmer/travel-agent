@@ -117,8 +117,8 @@ class Breadcrumbs
         return [
             [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
             [...self::translateLabel(self::BOOKING_LABEL), ...self::BOOKING_ROUTE],
-            ['label' =>  __('booking.title_show'), 'route' => 'admin.bookings.show', 'params' => [$booking]],
-            ['label' =>  __('booking.title_edit'), 'route' => null],
+            ['label' => __('booking.title_show'), 'route' => 'admin.bookings.show', 'params' => [$booking]],
+            ['label' => __('booking.title_edit'), 'route' => null],
         ];
     }
 
@@ -150,9 +150,10 @@ class Breadcrumbs
 
     private static function translateLabel(array $label): array
     {
-        if(isset($label['label'])) {
+        if (isset($label['label'])) {
             $label['label'] = __($label['label']);
         }
+
         return $label;
     }
 }

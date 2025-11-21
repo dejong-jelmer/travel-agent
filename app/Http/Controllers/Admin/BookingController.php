@@ -10,7 +10,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageTitle;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
-use App\Services\BookingService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;

@@ -86,7 +86,7 @@ class HomeController extends Controller
     public function showTerms(): Response
     {
         return Inertia::render('Terms', [
-            'title' =>  $this->pageTitle('home.conditions'),
+            'title' => $this->pageTitle('home.conditions'),
         ]);
     }
 }

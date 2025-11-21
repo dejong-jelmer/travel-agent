@@ -9,8 +9,6 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
-
-
 class CountryController extends Controller
 {
     use HasPageTitle;
