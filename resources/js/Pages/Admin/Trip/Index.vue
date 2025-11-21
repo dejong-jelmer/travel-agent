@@ -4,7 +4,7 @@ import { reactive } from 'vue'
 defineProps({
     trips: Object,
 })
-const showMoreOptions = reactive({});
+const showActions = reactive({});
 
 </script>
 <template>
@@ -30,24 +30,24 @@ const showMoreOptions = reactive({});
                             <td class="py-4 px-6 text-center">€ {{ trip.price }}</td>
                             <td class="py-4 px-6 text-center">{{ trip.duration }}</td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <IconLink class="mx-auto" icon="Eye" :href="route('admin.trips.show', { trip })"
-                                    v-tippy="'Bekijk reis'" />
-                                <IconLink class="mx-auto" icon="Pencil" :href="route('admin.trips.edit', trip)"
-                                    v-tippy="'Bewerk reis'" />
                                 <div class="w-fit mx-auto" v-tippy="`Meer opties`">
                                     <button class="info-button"
-                                        @click="showMoreOptions[trip.id] = !showMoreOptions[trip.id]">
+                                        @click="showActions[trip.id] = !showActions[trip.id]">
                                         <More class="h-5" />
                                     </button>
                                 </div>
-                                <div v-if="showMoreOptions[trip.id]" class="space-y-2">
+                                <div v-if="showActions[trip.id]" class="space-y-2">
+                                    <IconLink class="mx-auto" icon="Eye" :href="route('admin.trips.show', { trip })"
+                                        v-tippy="'Bekijk reis'" />
+                                    <IconLink class="mx-auto" icon="Pencil" :href="route('admin.trips.edit', trip)"
+                                        v-tippy="'Bewerk reis'" />
                                     <IconLink class="mx-auto" icon="Route" :href="trip.itineraries?.length ?
                                         route('admin.trips.itineraries.index', trip)
                                         : route('admin.trips.itineraries.create', trip)"
                                         v-tippy="'Bekijk reisplan van deze reis'" />
                                     <IconLink class="mx-auto" type="delete" icon="Trash2"
-                                        :href="route('admin.trips.destroy', trip)" method="delete"
-                                        :showConfirm="true" prompt="Weet je zeker dat je deze reis wilt verwijderen?"
+                                        :href="route('admin.trips.destroy', trip)" method="delete" :showConfirm="true"
+                                        prompt="Weet je zeker dat je deze reis wilt verwijderen?"
                                         v-tippy="'Verwijder reis!'" />
                                 </div>
                             </td>
@@ -58,7 +58,8 @@ const showMoreOptions = reactive({});
         </template>
         <template v-else>
             <div class="p-5">
-                <p>Er zijn nog geen reizen klik <DefaultLink :href="route('admin.trips.create')">hier</DefaultLink> om een reis toe te voegen.
+                <p>Er zijn nog geen reizen klik <DefaultLink :href="route('admin.trips.create')">hier</DefaultLink> om
+                    een reis toe te voegen.
                 </p>
             </div>
         </template>

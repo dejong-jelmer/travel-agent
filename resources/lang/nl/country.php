@@ -3,7 +3,7 @@
 return [
     // Page titles
     'title_index' => 'Landen',
-    'title_create' => 'Nieuw land',
+    'title_create' => 'Land aanmaken',
 
     // Flash messages
     'created' => 'Land is aangemaakt',

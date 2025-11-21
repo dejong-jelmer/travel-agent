@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTO\ContactFormData;
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
@@ -14,12 +15,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller
 {
-    private string $appName;
-
-    public function __construct()
-    {
-        $this->appName = config('app.name');
-    }
+    use HasPageTitle;
 
     public function home(): Response
     {
@@ -31,14 +27,14 @@ class HomeController extends Controller
     public function about(): Response
     {
         return Inertia::render('About', [
-            'title' => "Over mij - {$this->appName}",
+            'title' => $this->pageTitle('home.about'),
         ]);
     }
 
     public function contact(): Response
     {
         return Inertia::render('Contact', [
-            'title' => "Contact - {$this->appName}",
+            'title' => $this->pageTitle('home.contact'),
         ]);
     }
 
@@ -75,7 +71,7 @@ class HomeController extends Controller
     public function showTrip(Trip $trip): Response
     {
         return Inertia::render('Trip/Show', [
-            'title' => "{$this->appName} - {$trip->name}",
+            'title' => $this->pageTitle($trip->name),
             'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
         ]);
     }
@@ -83,14 +79,14 @@ class HomeController extends Controller
     public function showPrivacy(): Response
     {
         return Inertia::render('Privacy', [
-            'title' => "{$this->appName} - Privacyverklaring",
+            'title' => $this->pageTitle('home.privacy_statement'),
         ]);
     }
 
     public function showTerms(): Response
     {
         return Inertia::render('Terms', [
-            'title' => "{$this->appName} - Algemene Voorwaarden",
+            'title' =>  $this->pageTitle('home.conditions'),
         ]);
     }
 }

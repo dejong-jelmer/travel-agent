@@ -7,6 +7,7 @@ use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
@@ -17,12 +18,7 @@ use Inertia\Response;
 
 class BookingController extends Controller
 {
-    private string $appName;
-
-    public function __construct(private BookingService $bookingService)
-    {
-        $this->appName = config('app.name');
-    }
+    use HasPageTitle;
 
     /**
      * Display a listing of the resource.
@@ -31,7 +27,7 @@ class BookingController extends Controller
     {
         return Inertia::render('Admin/Booking/Index', [
             'bookings' => Booking::with(['trip', 'adults', 'children', 'mainBooker'])->paginate(),
-            'title' => __('booking.title_index').' - '.$this->appName,
+            'title' => $this->pageTitle('booking.title_index'),
         ]);
     }
 
@@ -42,7 +38,7 @@ class BookingController extends Controller
     {
         return Inertia::render('Admin/Booking/Show', [
             'booking' => $booking->load(['trip', 'contact', 'adults', 'children', 'mainBooker']),
-            'title' => __('booking.title_show').' - '.$this->appName,
+            'title' => $this->pageTitle('booking.title_show'),
         ]);
     }
 
@@ -55,7 +51,7 @@ class BookingController extends Controller
             'db_booking' => $booking->load(['trip', 'contact', 'travelers', 'adults', 'mainBooker']),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
-            'title' => __('booking.title_edit').' - '.$this->appName,
+            'title' => $this->pageTitle('booking.title_edit'),
         ]);
     }
 

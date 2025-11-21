@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\UpdateTripRequest;
 use App\Models\Country;
@@ -13,12 +14,7 @@ use Inertia\Response;
 
 class TripController extends Controller
 {
-    private string $appName;
-
-    public function __construct()
-    {
-        $this->appName = config('app.name');
-    }
+    use HasPageTitle;
 
     /**
      * Display a listing of the resource.
@@ -27,7 +23,7 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Index', [
             'trips' => Trip::with(['countries', 'itineraries', 'featuredImage'])->paginate(),
-            'title' => __('trip.title_index').' - '.$this->appName,
+            'title' => $this->pageTitle('trip.title_index'),
         ]);
     }
 
@@ -38,7 +34,7 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Create', [
             'countries' => Country::all(),
-            'title' => __('trip.title_create').' - '.$this->appName,
+            'title' => $this->pageTitle('trip.title_create'),
         ]);
     }
 
@@ -72,7 +68,7 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Show', [
             'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries']),
-            'title' => __('trip.title_show').' - '.$this->appName,
+            'title' => $this->pageTitle('trip.title_show'),
         ]);
     }
 
@@ -84,7 +80,7 @@ class TripController extends Controller
         return Inertia::render('Admin/Trip/Edit', [
             'trip' => $trip->load(['featuredImage', 'images', 'countries']),
             'countries' => Country::all(),
-            'title' => __('trip.title_edit').' - '.$this->appName,
+            'title' => $this->pageTitle('trip.title_edit'),
         ]);
     }
 

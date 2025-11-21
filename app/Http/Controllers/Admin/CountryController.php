@@ -2,20 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Models\Country;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
+
+
 class CountryController extends Controller
 {
-    private string $appName;
-
-    public function __construct()
-    {
-        $this->appName = config('app.name');
-    }
+    use HasPageTitle;
 
     /**
      * Display a listing of the resource.
@@ -24,7 +22,7 @@ class CountryController extends Controller
     {
         return Inertia::render('Admin/Country/Index', [
             'countries' => Country::paginate(),
-            'title' => __('country.title_index').' - '.$this->appName,
+            'title' => $this->pageTitle('country.title_index'),
         ]);
     }
 
@@ -34,7 +32,7 @@ class CountryController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Country/Create', [
-            'title' => __('country.title_create').' - '.$this->appName,
+            'title' => $this->pageTitle('country.title_create'),
         ]);
     }
 
@@ -60,7 +58,7 @@ class CountryController extends Controller
         $trips = $country->trips->count();
         $feedback = [
             'status' => 'error',
-            'message' => trans_choice('country.delete_failed', $trips, ['trips' => $trips, 'trips' => $trips]),
+            'message' => trans_choice('country.delete_failed', $trips, ['trips' => $trips]),
         ];
 
         if (! $trips) {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\ImageRelation;
 use App\Enums\Meal;
 use App\Enums\Transport;
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Http\Requests\CreateItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
 use App\Http\Requests\UpdateItineraryRequest;
@@ -17,12 +18,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ItineraryController extends Controller
 {
-    private string $appName;
-
-    public function __construct()
-    {
-        $this->appName = config('app.name');
-    }
+    use HasPageTitle;
 
     /**
      * Display a listing of a trip's itinerary.
@@ -31,7 +27,7 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Trip/Itinerary/Index', [
             'trip' => $trip->load('itineraries.image'),
-            'title' => __('itinerary.title_index').' - '.$this->appName,
+            'title' => $this->pageTitle('itinerary.title_index'),
         ]);
     }
 
@@ -56,7 +52,7 @@ class ItineraryController extends Controller
             'trip' => $trip,
             'meals' => Meal::options(),
             'transport' => Transport::options(),
-            'title' => __('itinerary.title_create').' - '.$this->appName,
+            'title' => $this->pageTitle('itinerary.title_create'),
         ]);
     }
 
@@ -89,7 +85,7 @@ class ItineraryController extends Controller
             'itinerary' => $itinerary->load('image'),
             'meals' => Meal::options(),
             'transport' => Transport::options(),
-            'title' => __('itinerary.title_edit').' - '.$this->appName,
+            'title' => $this->pageTitle('itinerary.title_edit'),
         ]);
     }
 

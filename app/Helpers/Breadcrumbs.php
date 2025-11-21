@@ -2,23 +2,25 @@
 
 namespace App\Helpers;
 
+use App\Models\Itinerary;
+
 class Breadcrumbs
 {
-    const TRIP_LABEL = ['label' => 'Reizen'];
+    public const TRIP_LABEL = ['label' => 'trip.title_index'];
 
-    const TRIP_ROUTE = ['route' => 'admin.trips.index'];
+    public const TRIP_ROUTE = ['route' => 'admin.trips.index'];
 
-    const DASH_LABEL = ['label' => 'Dashboard'];
+    public const DASH_LABEL = ['label' => 'Dashboard'];
 
-    const DASH_ROUTE = ['route' => 'admin.dashboard'];
+    public const DASH_ROUTE = ['route' => 'admin.dashboard'];
 
-    const COUNT_LABEL = ['label' => 'Landen'];
+    public const COUNT_LABEL = ['label' => 'country.title_index'];
 
-    const COUNT_ROUTE = ['route' => 'admin.countries.index'];
+    public const COUNT_ROUTE = ['route' => 'admin.countries.index'];
 
-    const BOOKING_LABEL = ['label' => 'Boekingen'];
+    public const BOOKING_LABEL = ['label' => 'booking.title_index'];
 
-    const BOOKING_ROUTE = ['route' => 'admin.bookings.index'];
+    public const BOOKING_ROUTE = ['route' => 'admin.bookings.index'];
 
     public static function generate(): array
     {
@@ -27,16 +29,16 @@ class Breadcrumbs
         return match ($routeName) {
             // Trips
             'admin.trips.index' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::TRIP_LABEL, 'route' => null],
+                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                [...self::translateLabel(self::TRIP_LABEL), 'route' => null],
             ],
 
             'admin.trips.show' => self::tripShow(),
 
             'admin.trips.create' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
-                ['label' => 'Nieuwe reis aanmaken', 'route' => null],
+                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+                ['label' => __('trip.title_create'), 'route' => null],
             ],
 
             'admin.trips.edit' => self::tripEdit(),
@@ -46,7 +48,7 @@ class Breadcrumbs
 
             'admin.trips.itineraries.create' => [
                 ...self::tripItinerariesIndex(),
-                ['label' => 'Nieuwe dag', 'route' => null],
+                ['label' => __('itinerary.title_create'), 'route' => null],
             ],
 
             // Itinerary edit (unnested route)
@@ -54,8 +56,8 @@ class Breadcrumbs
 
             // Booking
             'admin.bookings.index' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::BOOKING_LABEL, 'route' => null],
+                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                [...self::translateLabel(self::BOOKING_LABEL), 'route' => null],
             ],
 
             'admin.bookings.show' => self::bookingShow(),
@@ -63,13 +65,13 @@ class Breadcrumbs
 
             // Countries
             'admin.countries.index' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::COUNT_LABEL, 'route' => null],
+                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                [...self::translateLabel(self::COUNT_LABEL), 'route' => null],
             ],
             'admin.countries.create' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::COUNT_LABEL, ...self::COUNT_ROUTE],
-                ['label' => 'Land aanmaken', 'route' => null],
+                [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+                [...self::translateLabel(self::COUNT_LABEL), ...self::COUNT_ROUTE],
+                ['label' => __('country.title_create'), 'route' => null],
             ],
 
             default => [],
@@ -81,9 +83,9 @@ class Breadcrumbs
         $trip = request()->route('trip');
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
-            ['label' => $trip?->name ?? 'Reis', 'route' => null],
+            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => null],
         ];
     }
 
@@ -92,20 +94,19 @@ class Breadcrumbs
         $trip = request()->route('trip');
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
-            ['label' => $trip?->name ?? 'Bewerken', 'route' => null],
+            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => __('trip.title_edit'), 'route' => null],
         ];
     }
 
     protected static function bookingShow(): array
     {
-        $booking = request()->route('booking');
-
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::BOOKING_LABEL, ...self::BOOKING_ROUTE],
-            ['label' => $booking?->reference ?? 'Boeking', 'route' => null],
+            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            [...self::translateLabel(self::BOOKING_LABEL), ...self::BOOKING_ROUTE],
+            ['label' => __('booking.title_show'), 'route' => null],
         ];
     }
 
@@ -114,9 +115,10 @@ class Breadcrumbs
         $booking = request()->route('booking');
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::BOOKING_LABEL, ...self::BOOKING_ROUTE],
-            ['label' => $booking?->reference.' bewerken' ?? 'Boeking bewerken', 'route' => null],
+            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            [...self::translateLabel(self::BOOKING_LABEL), ...self::BOOKING_ROUTE],
+            ['label' =>  __('booking.title_show'), 'route' => 'admin.bookings.show', 'params' => [$booking]],
+            ['label' =>  __('booking.title_edit'), 'route' => null],
         ];
     }
 
@@ -125,10 +127,10 @@ class Breadcrumbs
         $trip = request()->route('trip');
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
-            ['label' => $trip?->name ?? 'Reis', 'route' => 'admin.trips.edit', 'params' => [$trip]],
-            ['label' => 'Reisdagen', 'route' => null],
+            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => __('itinerary.title_index'), 'route' => null],
         ];
     }
 
@@ -138,11 +140,19 @@ class Breadcrumbs
         $trip = $itinerary?->trip;
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
-            ['label' => $trip?->name ?? 'Reis', 'route' => 'admin.trips.edit', 'params' => [$trip]],
-            ['label' => 'Reisdagen', 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
-            ['label' => 'Bewerk reisdag', 'route' => null],
+            [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE],
+            [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE],
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => __('itinerary.title_index'), 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
+            ['label' => __('itinerary.title_edit'), 'route' => null],
         ];
+    }
+
+    private static function translateLabel(array $label): array
+    {
+        if(isset($label['label'])) {
+            $label['label'] = __($label['label']);
+        }
+        return $label;
     }
 }

@@ -2,7 +2,7 @@
 
 return [
     // Page titles
-    'title_index' => 'Reisdagen',
+    'title_index' => 'Reisschema',
     'title_create' => 'Nieuwe reisdag',
     'title_edit' => 'Reisdag bewerken',
 
