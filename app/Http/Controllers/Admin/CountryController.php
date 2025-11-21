@@ -51,7 +51,7 @@ class CountryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Country $country)
+    public function destroy(Country $country): RedirectResponse
     {
         $trips = $country->trips->count();
         $feedback = [

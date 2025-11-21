@@ -2,8 +2,6 @@
 
 namespace App\Helpers;
 
-use App\Models\Itinerary;
-
 class Breadcrumbs
 {
     public const TRIP_LABEL = ['label' => 'trip.title_index'];
