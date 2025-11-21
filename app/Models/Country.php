@@ -10,6 +10,8 @@ class Country extends Model
 {
     use HasFactory;
 
+    protected $perPage = 10;
+
     protected $fillable = ['name'];
 
     public $timestamps = false;

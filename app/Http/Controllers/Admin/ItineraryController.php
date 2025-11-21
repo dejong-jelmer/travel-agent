@@ -17,6 +17,13 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ItineraryController extends Controller
 {
+    private string $appName;
+
+    public function __construct()
+    {
+        $this->appName = config('app.name');
+    }
+
     /**
      * Display a listing of a trip's itinerary.
      */
@@ -24,6 +31,7 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Trip/Itinerary/Index', [
             'trip' => $trip->load('itineraries.image'),
+            'title' => __('itinerary.title_index').' - '.$this->appName,
         ]);
     }
 
@@ -48,6 +56,7 @@ class ItineraryController extends Controller
             'trip' => $trip,
             'meals' => Meal::options(),
             'transport' => Transport::options(),
+            'title' => __('itinerary.title_create').' - '.$this->appName,
         ]);
     }
 
@@ -68,7 +77,7 @@ class ItineraryController extends Controller
 
         return redirect()
             ->route('admin.trips.itineraries.index', $itinerary->trip)
-            ->with('success', __('Aanmaken van het reisplan is gelukt!'));
+            ->with('success', __('itinerary.created'));
     }
 
     /**
@@ -80,6 +89,7 @@ class ItineraryController extends Controller
             'itinerary' => $itinerary->load('image'),
             'meals' => Meal::options(),
             'transport' => Transport::options(),
+            'title' => __('itinerary.title_edit').' - '.$this->appName,
         ]);
     }
 
@@ -100,7 +110,7 @@ class ItineraryController extends Controller
 
         return redirect()
             ->route('admin.trips.itineraries.index', $itinerary->trip)
-            ->with('success', 'Aanpassen van het reisplan is gelukt!.');
+            ->with('success', __('itinerary.updated'));
     }
 
     /**
@@ -114,6 +124,6 @@ class ItineraryController extends Controller
 
         return redirect()
             ->route('admin.trips.itineraries.index', $trip)
-            ->with('success', "Reisplan \"{$itineraryTitle}\" is verwijderd!.");
+            ->with('success', __('itinerary.deleted'));
     }
 }

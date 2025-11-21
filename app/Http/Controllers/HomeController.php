@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTO\ContactFormData;
-use App\Http\Requests\ContactRequest;
+use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
 use Illuminate\Support\Facades\Log;
@@ -42,7 +42,7 @@ class HomeController extends Controller
         ]);
     }
 
-    public function submitContact(ContactRequest $request): HttpResponse
+    public function submitContact(SubmitContactRequest $request): HttpResponse
     {
         $validated = $request->validated();
         $address = config('contact.mail');

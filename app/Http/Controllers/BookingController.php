@@ -14,6 +14,13 @@ use Inertia\Inertia;
 
 class BookingController extends Controller
 {
+    private string $appName;
+
+    public function __construct()
+    {
+        $this->appName = config('app.name');
+    }
+
     public function store(CreateBookingRequest $request, BookingService $bookingService): RedirectResponse|JsonResponse
     {
         $bookingData = CreateBookingData::fromRequest($request);
@@ -32,7 +39,7 @@ class BookingController extends Controller
         }
 
         return Inertia::render('Booking/Received', [
-            'title' => "Boeking ontvangen - {$booking->trip->name}",
+            'title' => __('booking.title_received').' - '.$booking->trip->name.' - '.$this->appName,
             'booking' => $booking->load([
                 'trip.countries',
                 'trip.featuredImage',

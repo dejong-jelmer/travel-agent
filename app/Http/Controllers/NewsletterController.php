@@ -3,14 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewsletterSubscriptionRequested;
-use App\Http\Requests\CreateNewsletterSubscriptionRequest;
+use App\Http\Requests\SubscribeNewsletterRequest;
 use App\Models\NewsletterSubscriber;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class NewsletterController extends Controller
 {
-    public function subscribe(CreateNewsletterSubscriptionRequest $request): void
+    private string $appName;
+
+    public function __construct()
+    {
+        $this->appName = config('app.name');
+    }
+
+    public function subscribe(SubscribeNewsletterRequest $request): void
     {
         $validated = $request->validated();
         $hours = config('newsletter.confirmation_expires_after');
@@ -41,7 +48,7 @@ class NewsletterController extends Controller
         ]);
 
         return Inertia::render('Newsletter/Confirmed', [
-            'title' => config('app.name').' - Nieuwsbrief inschrijving bevestigd',
+            'title' => __('newsletter.title_confirmed').' - '.$this->appName,
         ]);
     }
 
@@ -56,7 +63,7 @@ class NewsletterController extends Controller
         ]);
 
         return Inertia::render('Newsletter/Unsubscribed', [
-            'title' => config('app.name').' - Nieuwsbrief uitschrijving bevestigd',
+            'title' => __('newsletter.title_unsubscribed').' - '.$this->appName,
         ]);
     }
 }

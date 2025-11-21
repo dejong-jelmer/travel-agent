@@ -44,7 +44,7 @@ Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, '
 // Admin routes
 Route::get('/admin/login', function () {
     return Inertia::render('Auth/Login', [
-        'title' => 'Admin - '.env('APP_NAME'),
+        'title' => __('auth.title_login').' - '.config('app.name'),
     ]);
 })->middleware('guest')->name('admin');
 

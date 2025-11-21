@@ -26,8 +26,8 @@ class TripController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Trip/Index', [
-            'trips' => Trip::with(['countries', 'itineraries', 'featuredImage'])->paginate(10),
-            'title' => "Admin reizen - {$this->appName}",
+            'trips' => Trip::with(['countries', 'itineraries', 'featuredImage'])->paginate(),
+            'title' => __('trip.title_index').' - '.$this->appName,
         ]);
     }
 
@@ -38,7 +38,7 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Create', [
             'countries' => Country::all(),
-            'title' => "Admin reis aanmaken - {$this->appName}",
+            'title' => __('trip.title_create').' - '.$this->appName,
         ]);
     }
 
@@ -62,7 +62,7 @@ class TripController extends Controller
             $trip->countries()->sync($countries);
         }
 
-        return redirect()->route('admin.trips.show', $trip)->with('success', __('Trip aangemaakt'));
+        return redirect()->route('admin.trips.show', $trip)->with('success', __('trip.created'));
     }
 
     /**
@@ -72,7 +72,7 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Show', [
             'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries']),
-            'title' => "Admin trip - {$this->appName}",
+            'title' => __('trip.title_show').' - '.$this->appName,
         ]);
     }
 
@@ -84,7 +84,7 @@ class TripController extends Controller
         return Inertia::render('Admin/Trip/Edit', [
             'trip' => $trip->load(['featuredImage', 'images', 'countries']),
             'countries' => Country::all(),
-            'title' => "Admin reis bewerken - {$this->appName}",
+            'title' => __('trip.title_edit').' - '.$this->appName,
         ]);
     }
 
@@ -115,7 +115,7 @@ class TripController extends Controller
         }
 
         return redirect()->route('admin.trips.show', $trip)
-            ->with('success', __('Reis aangepast'));
+            ->with('success', __('trip.updated'));
     }
 
     /**
@@ -126,6 +126,6 @@ class TripController extends Controller
         Trip::destroy($trip->id);
 
         return redirect()->route('admin.trips.index')
-            ->with('success', __('Trip verwijderd'));
+            ->with('success', __('trip.deleted'));
     }
 }

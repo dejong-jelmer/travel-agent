@@ -16,6 +16,10 @@ class Breadcrumbs
 
     const COUNT_ROUTE = ['route' => 'admin.countries.index'];
 
+    const BOOKING_LABEL = ['label' => 'Boekingen'];
+
+    const BOOKING_ROUTE = ['route' => 'admin.bookings.index'];
+
     public static function generate(): array
     {
         $routeName = request()->route()?->getName();
@@ -30,13 +34,12 @@ class Breadcrumbs
             'admin.trips.show' => self::tripShow(),
 
             'admin.trips.create' => [
+                [...self::DASH_LABEL, ...self::DASH_ROUTE],
                 [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
-                [...self::TRIP_LABEL, 'route' => null],
+                ['label' => 'Nieuwe reis aanmaken', 'route' => null],
             ],
 
             'admin.trips.edit' => self::tripEdit(),
-
-            'admin.trips.update' => self::tripEdit(),
 
             // Itineraries (nested under trip)
             'admin.trips.itineraries.index' => self::tripItinerariesIndex(),
@@ -46,9 +49,17 @@ class Breadcrumbs
                 ['label' => 'Nieuwe dag', 'route' => null],
             ],
 
-            // Itinerary edit (losse route)
+            // Itinerary edit (unnested route)
             'admin.itineraries.edit' => self::itineraryEdit(),
-            'admin.itineraries.update' => self::itineraryEdit(),
+
+            // Booking
+            'admin.bookings.index' => [
+                [...self::DASH_LABEL, ...self::DASH_ROUTE],
+                [...self::BOOKING_LABEL, 'route' => null],
+            ],
+
+            'admin.bookings.show' => self::bookingShow(),
+            'admin.bookings.edit' => self::bookingEdit(),
 
             // Countries
             'admin.countries.index' => [
@@ -84,6 +95,28 @@ class Breadcrumbs
             [...self::DASH_LABEL, ...self::DASH_ROUTE],
             [...self::TRIP_LABEL, ...self::TRIP_ROUTE],
             ['label' => $trip?->name ?? 'Bewerken', 'route' => null],
+        ];
+    }
+
+    protected static function bookingShow(): array
+    {
+        $booking = request()->route('booking');
+
+        return [
+            [...self::DASH_LABEL, ...self::DASH_ROUTE],
+            [...self::BOOKING_LABEL, ...self::BOOKING_ROUTE],
+            ['label' => $booking?->reference ?? 'Boeking', 'route' => null],
+        ];
+    }
+
+    protected static function bookingEdit(): array
+    {
+        $booking = request()->route('booking');
+
+        return [
+            [...self::DASH_LABEL, ...self::DASH_ROUTE],
+            [...self::BOOKING_LABEL, ...self::BOOKING_ROUTE],
+            ['label' => $booking?->reference.' bewerken' ?? 'Boeking bewerken', 'route' => null],
         ];
     }
 

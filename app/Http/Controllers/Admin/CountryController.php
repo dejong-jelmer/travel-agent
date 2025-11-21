@@ -10,22 +10,32 @@ use Inertia\Response;
 
 class CountryController extends Controller
 {
+    private string $appName;
+
+    public function __construct()
+    {
+        $this->appName = config('app.name');
+    }
+
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
         return Inertia::render('Admin/Country/Index', [
-            'countries' => Country::paginate(15),
+            'countries' => Country::paginate(),
+            'title' => __('country.title_index').' - '.$this->appName,
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        return Inertia::render('Admin/Country/Create');
+        return Inertia::render('Admin/Country/Create', [
+            'title' => __('country.title_create').' - '.$this->appName,
+        ]);
     }
 
     /**
@@ -38,7 +48,7 @@ class CountryController extends Controller
         ]);
         Country::create(['name' => $validated['name']]);
 
-        return redirect()->route('admin.countries.index')->with('success', __('Land aangemaakt'));
+        return redirect()->route('admin.countries.index')->with('success', __('country.created'));
 
     }
 
@@ -50,15 +60,15 @@ class CountryController extends Controller
         $trips = $country->trips->count();
         $feedback = [
             'status' => 'error',
-            'message' => "Er zijn nog {$trips} reizen gekoppeld aan dit land!",
+            'message' => trans_choice('country.delete_failed', $trips, ['trips' => $trips, 'trips' => $trips]),
         ];
 
         if (! $trips) {
             Country::destroy($country->id);
             $feedback['status'] = 'success';
-            $feedback['message'] = 'Land verwijderd';
+            $feedback['message'] = __('country.deleted');
         }
 
-        return redirect()->route('admin.countries.index')->with($feedback['status'], __($feedback['message']));
+        return redirect()->route('admin.countries.index')->with($feedback['status'], $feedback['message']);
     }
 }

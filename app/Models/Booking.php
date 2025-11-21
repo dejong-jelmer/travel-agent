@@ -22,6 +22,8 @@ class Booking extends Model
     use HasFactory,
         SoftDeletes;
 
+    protected $perPage = 10;
+
     protected $fillable = [
         'trip_id',
         'main_booker_id',

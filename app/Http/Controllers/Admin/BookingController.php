@@ -17,7 +17,12 @@ use Inertia\Response;
 
 class BookingController extends Controller
 {
-    public function __construct(private BookingService $bookingService) {}
+    private string $appName;
+
+    public function __construct(private BookingService $bookingService)
+    {
+        $this->appName = config('app.name');
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,7 +30,8 @@ class BookingController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Booking/Index', [
-            'bookings' => Booking::with(['trip', 'adults', 'children', 'mainBooker'])->paginate(10),
+            'bookings' => Booking::with(['trip', 'adults', 'children', 'mainBooker'])->paginate(),
+            'title' => __('booking.title_index').' - '.$this->appName,
         ]);
     }
 
@@ -36,6 +42,7 @@ class BookingController extends Controller
     {
         return Inertia::render('Admin/Booking/Show', [
             'booking' => $booking->load(['trip', 'contact', 'adults', 'children', 'mainBooker']),
+            'title' => __('booking.title_show').' - '.$this->appName,
         ]);
     }
 
@@ -48,6 +55,7 @@ class BookingController extends Controller
             'db_booking' => $booking->load(['trip', 'contact', 'travelers', 'adults', 'mainBooker']),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
+            'title' => __('booking.title_edit').' - '.$this->appName,
         ]);
     }
 
@@ -71,6 +79,6 @@ class BookingController extends Controller
         Booking::destroy($booking->id);
 
         return redirect()->route('admin.bookings.index')
-            ->with('success', __('booking.destroyed'));
+            ->with('success', __('booking.deleted', ['reference' => $booking->reference]));
     }
 }
