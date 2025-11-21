@@ -5,7 +5,7 @@ namespace App\DTO\Traits;
 use App\DTO\BookingContactData;
 use App\DTO\BookingTravelerData;
 use App\Enums\TravelerType;
-use App\Models\Product;
+use App\Models\Trip;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Log;
 
@@ -48,17 +48,17 @@ trait BookingDataParser
     /**
      * Find trip by ID with error handling
      */
-    protected static function findTrip(?int $tripId): Product
+    protected static function findTrip(?int $tripId): Trip
     {
         if (! $tripId) {
             Log::error('Booking attempt without trip ID');
             throw new ModelNotFoundException('Trip ID is required');
         }
 
-        $trip = Product::find($tripId);
+        $trip = Trip::find($tripId);
 
         if (! $trip) {
-            Log::error('Booking attempt for non-existing product', ['trip_id' => $tripId]);
+            Log::error('Booking attempt for non-existing trip', ['trip_id' => $tripId]);
             throw new ModelNotFoundException('Trip not found');
         }
 

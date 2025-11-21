@@ -3,17 +3,17 @@ import { Link } from "@inertiajs/vue3";
 import placeholder from '@/../images/placeholder.png';
 import { Clock, Route } from 'lucide-vue-next';
 
-defineProps({ product: Object });
+defineProps({ trip: Object });
 </script>
 <template>
     <Card>
         <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
-            <Link :href="route('trip.show', product)">
+            <Link :href="route('trip.show', trip)">
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
-                :style="`background-image: url(${product.featured_image?.full_path || placeholder})`"></div>
+                :style="`background-image: url(${trip.featured_image?.full_path || placeholder})`"></div>
             <!-- Prijs badge op de foto -->
             <div class="absolute top-3 right-3">
-                <PriceBadge :price="product.price" />
+                <PriceBadge :price="trip.price" />
             </div>
             </Link>
         </div>
@@ -22,18 +22,18 @@ defineProps({ product: Object });
             <div class="inline-flex items-center gap-2">
                 <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
                 <h3 class="text-sm text-brand-light font-medium line-clamp-1">
-                    {{ product.countries_list }}
+                    {{ trip.countries_list }}
                 </h3>
             </div>
 
             <!-- Titel -->
             <h4
                 class="text-xl laptop:text-2xl leading-6 font-bold text-brand-primary line-clamp-2 min-h-0 laptop:min-h-8">
-                {{ product.name }}
+                {{ trip.name }}
             </h4>
 
             <!-- Beschrijving -->
-            <p class="text-sm text-brand-primary line-clamp-3 leading-relaxed">{{ product.description }}</p>
+            <p class="text-sm text-brand-primary line-clamp-3 leading-relaxed">{{ trip.description }}</p>
 
             <!-- Details sectie -->
             <div class="pt-2 border-t border-neutral-200">
@@ -43,7 +43,7 @@ defineProps({ product: Object });
                         <div class="inline-flex gap-x-2 items-center">
                             <Clock class="h-5 w-5 text-accent-primary"></Clock>
                             <p class="text-sm text-brand-primary">
-                                {{ product.duration }} dagen
+                                {{ trip.duration }} dagen
                             </p>
                         </div>
                         <div class="inline-flex gap-x-2 items-center">
@@ -54,7 +54,7 @@ defineProps({ product: Object });
 
                     <!-- Rechts: CTA button -->
                     <div class="flex justify-end">
-                        <Link :href="route('trip.show', product)">
+                        <Link :href="route('trip.show', trip)">
                         <Button>
                             Bekijk&nbsp;reis
                         </Button>

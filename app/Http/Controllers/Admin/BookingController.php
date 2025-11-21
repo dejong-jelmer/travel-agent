@@ -7,6 +7,7 @@ use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
@@ -17,6 +18,8 @@ use Inertia\Response;
 
 class BookingController extends Controller
 {
+    use HasPageTitle;
+
     public function __construct(private BookingService $bookingService) {}
 
     /**
@@ -24,8 +27,9 @@ class BookingController extends Controller
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Bookings/Index', [
-            'bookings' => Booking::with(['product', 'adults', 'children', 'mainBooker'])->paginate(10),
+        return Inertia::render('Admin/Booking/Index', [
+            'bookings' => Booking::with(['trip', 'adults', 'children', 'mainBooker'])->paginate(),
+            'title' => $this->pageTitle('booking.title_index'),
         ]);
     }
 
@@ -34,8 +38,9 @@ class BookingController extends Controller
      */
     public function show(Booking $booking): Response
     {
-        return Inertia::render('Admin/Bookings/Show', [
-            'booking' => $booking->load(['product', 'contact', 'adults', 'children', 'mainBooker']),
+        return Inertia::render('Admin/Booking/Show', [
+            'booking' => $booking->load(['trip', 'contact', 'adults', 'children', 'mainBooker']),
+            'title' => $this->pageTitle('booking.title_show'),
         ]);
     }
 
@@ -44,10 +49,11 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking): Response
     {
-        return Inertia::render('Admin/Bookings/Edit', [
-            'db_booking' => $booking->load(['product', 'contact', 'travelers', 'adults', 'mainBooker']),
+        return Inertia::render('Admin/Booking/Edit', [
+            'db_booking' => $booking->load(['trip', 'contact', 'travelers', 'adults', 'mainBooker']),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
+            'title' => $this->pageTitle('booking.title_edit'),
         ]);
     }
 
@@ -71,6 +77,6 @@ class BookingController extends Controller
         Booking::destroy($booking->id);
 
         return redirect()->route('admin.bookings.index')
-            ->with('success', __('booking.destroyed'));
+            ->with('success', __('booking.deleted', ['reference' => $booking->reference]));
     }
 }

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DTO\ContactFormData;
-use App\Http\Requests\ContactRequest;
+use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
-use App\Models\Product;
+use App\Models\Trip;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -14,35 +15,30 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller
 {
-    private string $appName;
-
-    public function __construct()
-    {
-        $this->appName = config('app.name');
-    }
+    use HasPageTitle;
 
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'products' => Product::with(['countries', 'featuredImage'])->active()->featured()->get(),
+            'trips' => Trip::with(['countries', 'featuredImage'])->active()->featured()->get(),
         ]);
     }
 
     public function about(): Response
     {
         return Inertia::render('About', [
-            'title' => "Over mij - {$this->appName}",
+            'title' => $this->pageTitle('home.about'),
         ]);
     }
 
     public function contact(): Response
     {
         return Inertia::render('Contact', [
-            'title' => "Contact - {$this->appName}",
+            'title' => $this->pageTitle('home.contact'),
         ]);
     }
 
-    public function submitContact(ContactRequest $request): HttpResponse
+    public function submitContact(SubmitContactRequest $request): HttpResponse
     {
         $validated = $request->validated();
         $address = config('contact.mail');
@@ -72,10 +68,10 @@ class HomeController extends Controller
         ], 200);
     }
 
-    public function showTrip(Product $trip): Response
+    public function showTrip(Trip $trip): Response
     {
         return Inertia::render('Trip/Show', [
-            'title' => "{$this->appName} - {$trip->name}",
+            'title' => $this->pageTitle($trip->name),
             'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
         ]);
     }
@@ -83,14 +79,14 @@ class HomeController extends Controller
     public function showPrivacy(): Response
     {
         return Inertia::render('Privacy', [
-            'title' => "{$this->appName} - Privacyverklaring",
+            'title' => $this->pageTitle('home.privacy_statement'),
         ]);
     }
 
     public function showTerms(): Response
     {
         return Inertia::render('Terms', [
-            'title' => "{$this->appName} - Algemene Voorwaarden",
+            'title' => $this->pageTitle('home.conditions'),
         ]);
     }
 }

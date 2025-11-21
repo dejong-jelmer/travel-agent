@@ -26,7 +26,7 @@ class AdminBookingNotificationMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Nieuwe Boeking: {$this->booking->product->name} - {$this->booking->reference}",
+            subject: "Nieuwe Boeking: {$this->booking->trip->name} - {$this->booking->reference}",
         );
     }
 

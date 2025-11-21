@@ -40,7 +40,7 @@
                     Reis
                 </p>
                 <p style="margin:0;font-size:18px;font-weight:600;color:#2F3E46;">
-                    {{ $booking->product->name }}
+                    {{ $booking->trip->name }}
                 </p>
             </td>
         </tr>
@@ -58,7 +58,7 @@
                     Duur
                 </p>
                 <p style="margin:0;font-size:16px;font-weight:600;color:#2F3E46;">
-                    {{ $booking->product->duration }} dagen
+                    {{ $booking->trip->duration }} dagen
                 </p>
             </td>
         </tr>

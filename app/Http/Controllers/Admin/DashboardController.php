@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Models\Booking;
 use App\Services\SystemHealthService;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
+    use HasPageTitle;
+
     public function showDashboard(SystemHealthService $healthService)
     {
         return Inertia::render('Admin/Dashboard', [
-            'title' => 'Admin dashboard - '.config('app.name'),
+            'title' => $this->pageTitle('dashboard.title'),
             'bookings' => [
                 'all' => Booking::count(),
                 'new' => Booking::new()->count(),

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
@@ -16,11 +15,13 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Collection;
 
-class Product extends Model
+class Trip extends Model
 {
     use HasFactory,
         ManagesImages,
         SoftDeletes;
+
+    protected $perPage = 10;
 
     protected $fillable = [
         'name',
@@ -59,22 +60,17 @@ class Product extends Model
     protected static function booted(): void
     {
         parent::boot();
-        static::deleting(function ($product) {
-            $product->images()->delete();
-            $product->featuredImage()->delete();
-            $product->itineraries()->delete();
+        static::deleting(function ($trip) {
+            $trip->images()->delete();
+            $trip->featuredImage()->delete();
+            $trip->itineraries()->delete();
         });
 
-        static::restoring(function ($product) {
-            $product->images()->withTrashed()->restore();
-            $product->featuredImage()->withTrashed()->restore();
-            $product->itineraries()->withTrashed()->restore();
+        static::restoring(function ($trip) {
+            $trip->images()->withTrashed()->restore();
+            $trip->featuredImage()->withTrashed()->restore();
+            $trip->itineraries()->withTrashed()->restore();
         });
-    }
-
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
     }
 
     public function countries(): BelongsToMany
@@ -83,7 +79,7 @@ class Product extends Model
     }
 
     /**
-     * Scope a query to only include featured products.
+     * Scope a query to only include featured trips.
      */
     #[Scope]
     protected function featured(Builder $query): void
@@ -92,7 +88,7 @@ class Product extends Model
     }
 
     /**
-     * Scope a query to only include active products.
+     * Scope a query to only include active trips.
      */
     #[Scope]
     protected function active(Builder $query): void

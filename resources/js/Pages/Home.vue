@@ -2,7 +2,7 @@
 import teaserImage from '@/../images/pexels-sonny-vermeer-505472791-17476670.jpg'
 
 const props = defineProps({
-    products: Array,
+    trips: Array,
     contact: Object
 });
 </script>
@@ -25,7 +25,7 @@ const props = defineProps({
                         <div class="text-center">
                             <SectionHeader>Onze reizen</SectionHeader>
                         </div>
-                        <template v-if="products.length <= 0">
+                        <template v-if="trips.length <= 0">
                             <div class="max-w-screen-laptop mx-auto px-4">
                                 <div class="text-brand-primary max-w-4xl mx-auto px-4 pt-6 sm:px-6 desktop:px-8">
                                     <div class="text-center">
@@ -43,9 +43,9 @@ const props = defineProps({
                             </div>
                         </template>
                         <template v-else>
-                            <Slider :items="products">
+                            <Slider :items="trips">
                                 <template #default="{ item, index }">
-                                    <TripCard :product="item" :key="index" />
+                                    <TripCard :trip="item" :key="index" />
                                 </template>
                             </Slider>
                         </template>

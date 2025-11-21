@@ -23,7 +23,7 @@ class SendBookingConfirmationEmail
     public function handle(BookingCreated $event): void
     {
         // Load relationships needed for the email
-        $event->booking->load(['product', 'mainBooker', 'travelers', 'contact']);
+        $event->booking->load(['trip', 'mainBooker', 'travelers', 'contact']);
 
         try {
             // Send confirmation email to the main booker

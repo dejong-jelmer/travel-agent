@@ -20,12 +20,12 @@ const form = useForm({
 
 
 function submit() {
-    form.post(route("admin.products.store"), { forceFormData: true });
+    form.post(route("admin.trips.store"), { forceFormData: true });
 }
 </script>
 
 <template>
     <Admin>
-        <ProductForm :form="form" :countries="countries" @submit="submit" />
+        <TripForm :form="form" :countries="countries" @submit="submit" />
     </Admin>
 </template>

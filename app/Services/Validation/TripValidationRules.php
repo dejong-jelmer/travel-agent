@@ -2,7 +2,7 @@
 
 namespace App\Services\Validation;
 
-class ProductValidationRules
+class TripValidationRules
 {
     public static function basic(): array
     {

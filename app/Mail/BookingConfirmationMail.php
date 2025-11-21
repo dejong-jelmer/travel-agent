@@ -28,7 +28,7 @@ class BookingConfirmationMail extends Mailable
     {
         return new Envelope(
             from: new Address(config('booking.mail'), config('app.name')),
-            subject: "Bevestiging boeking: {$this->booking->product->name}",
+            subject: "Bevestiging boeking: {$this->booking->trip->name}",
         );
     }
 

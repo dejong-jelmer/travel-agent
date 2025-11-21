@@ -6,7 +6,7 @@ use App\Models\Booking;
 use App\Models\Country;
 use App\Models\Image;
 use App\Models\Itinerary;
-use App\Models\Product;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -36,19 +36,19 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@mail.com',
         ]);
 
-        Product::factory(8)
+        Trip::factory(8)
             ->has(Booking::factory(), 'bookings')
             ->has(Image::factory()->count(3), 'images')
-            ->create()->each(function ($product) use ($countries) {
-                $product->images()->inRandomOrder()->first()->update(['featured' => true]);
-                $product->countries()->attach(
+            ->create()->each(function ($trip) use ($countries) {
+                $trip->images()->inRandomOrder()->first()->update(['featured' => true]);
+                $trip->countries()->attach(
                     $countries->random(rand(1, 3))->modelKeys()
                 );
-                for ($i = 1; $i <= $product->duration; $i++) {
+                for ($i = 1; $i <= $trip->duration; $i++) {
                     Itinerary::factory()
                         ->has(Image::factory(), 'image')
                         ->create([
-                            'product_id' => $product->id,
+                            'trip_id' => $trip->id,
                             'order' => $i,
                         ]);
                 }

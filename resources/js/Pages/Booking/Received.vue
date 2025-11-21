@@ -41,18 +41,18 @@ const props = defineProps({
                         <!-- Trip Details Card -->
                         <div class="bg-white rounded-xl shadow-sm border border-brand-primary/20 overflow-hidden">
                             <!-- Trip Image Header -->
-                            <div v-if="booking.product.featured_image"
+                            <div v-if="booking.trip.featured_image"
                                 class="h-48 laptop:h-64 bg-cover bg-center relative"
-                                :style="`background-image: url(${booking.product.featured_image.full_path})`">
+                                :style="`background-image: url(${booking.trip.featured_image.full_path})`">
                                 <div class="absolute inset-0 bg-gradient-to-t from-brand-primary/50 to-transparent">
                                 </div>
                                 <div class="absolute bottom-4 left-4 right-4">
                                     <h2 class="text-xl laptop:text-2xl font-bold text-white mb-1">
-                                        {{ booking.product.name }}
+                                        {{ booking.trip.name }}
                                     </h2>
                                     <div class="flex items-center gap-2 text-white/90">
                                         <MapPin class="w-4 h-4" />
-                                        <span class="text-sm">{{ booking.product.countries_list }}</span>
+                                        <span class="text-sm">{{ booking.trip.countries_list }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@ const props = defineProps({
                                                 class="text-xs text-brand-light font-medium uppercase tracking-wide mb-1">
                                                 Duur</p>
                                             <p class="text-base laptop:text-lg font-semibold text-brand-primary">
-                                                {{ booking.product.duration }} dagen
+                                                {{ booking.trip.duration }} dagen
                                             </p>
                                         </div>
                                     </div>

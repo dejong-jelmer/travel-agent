@@ -22,12 +22,12 @@ class UpdateItineraryOrderRequest extends FormRequest
      */
     public function rules(): array
     {
-        $product = $this->route('product');
+        $trip = $this->route('trip');
 
         return [
             'itineraries' => 'required|array',
             'itineraries.*.id' => 'exists:itineraries,id',
-            'itineraries.*.order' => "integer|between:0,{$product->itineraries()->count()}",
+            'itineraries.*.order' => "integer|between:0,{$trip->itineraries()->count()}",
         ];
     }
 }

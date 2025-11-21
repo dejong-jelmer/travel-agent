@@ -2,7 +2,7 @@
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
-    product: Object,
+    trip: Object,
     meals: Object,
     transport: Object,
 });
@@ -20,7 +20,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(route("admin.products.itineraries.store", props.product.id), {
+    form.post(route("admin.trips.itineraries.store", props.trip.id), {
         forceFormData: true,
     });
 }

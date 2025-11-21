@@ -2,114 +2,168 @@
 
 namespace App\Helpers;
 
+use App\Models\Itinerary;
+
 class Breadcrumbs
 {
-    const PROD_LABEL = ['label' => 'Reis producten'];
+    public const TRIP_LABEL = ['label' => 'trip.title_index'];
 
-    const PROD_ROUTE = ['route' => 'admin.products.index'];
+    public const TRIP_ROUTE = ['route' => 'admin.trips.index'];
 
-    const DASH_LABEL = ['label' => 'Dashboard'];
+    public const DASH_LABEL = ['label' => 'dashboard.title'];
 
-    const DASH_ROUTE = ['route' => 'admin.dashboard'];
+    public const DASH_ROUTE = ['route' => 'admin.dashboard'];
 
-    const COUNT_LABEL = ['label' => 'Landen'];
+    public const COUNT_LABEL = ['label' => 'country.title_index'];
 
-    const COUNT_ROUTE = ['route' => 'admin.countries.index'];
+    public const COUNT_ROUTE = ['route' => 'admin.countries.index'];
+
+    public const BOOKING_LABEL = ['label' => 'booking.title_index'];
+
+    public const BOOKING_ROUTE = ['route' => 'admin.bookings.index'];
 
     public static function generate(): array
     {
         $routeName = request()->route()?->getName();
 
         return match ($routeName) {
-            // Products
-            'admin.products.index' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::PROD_LABEL, 'route' => null],
+            // Trips
+            'admin.trips.index' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::TRIP_LABEL), 'route' => null],
             ],
 
-            'admin.products.show' => self::productShow(),
+            'admin.trips.show' => self::tripShow(),
 
-            'admin.products.create' => [
-                [...self::PROD_LABEL, ...self::PROD_ROUTE],
-                [...self::PROD_LABEL, 'route' => null],
+            'admin.trips.create' => [
+                self::dashboardCrumb(),
+                self::tripCrumb(),
+                ['label' => __('trip.title_create'), 'route' => null],
             ],
 
-            'admin.products.edit' => self::productEdit(),
+            'admin.trips.edit' => self::tripEdit(),
 
-            'admin.products.update' => self::productEdit(),
+            // Itineraries (nested under trip)
+            'admin.trips.itineraries.index' => self::tripItinerariesIndex(),
 
-            // Itineraries (nested onder product)
-            'admin.products.itineraries.index' => self::productItinerariesIndex(),
-
-            'admin.products.itineraries.create' => [
-                ...self::productItinerariesIndex(),
-                ['label' => 'Nieuwe dag', 'route' => null],
+            'admin.trips.itineraries.create' => [
+                ...self::tripItinerariesIndex(),
+                ['label' => __('itinerary.title_create'), 'route' => null],
             ],
 
-            // Itinerary edit (losse route)
+            // Itinerary edit (unnested route)
             'admin.itineraries.edit' => self::itineraryEdit(),
-            'admin.itineraries.update' => self::itineraryEdit(),
+
+            // Booking
+            'admin.bookings.index' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::BOOKING_LABEL), 'route' => null],
+            ],
+
+            'admin.bookings.show' => self::bookingShow(),
+            'admin.bookings.edit' => self::bookingEdit(),
 
             // Countries
             'admin.countries.index' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::COUNT_LABEL, 'route' => null],
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::COUNT_LABEL), 'route' => null],
             ],
             'admin.countries.create' => [
-                [...self::DASH_LABEL, ...self::DASH_ROUTE],
-                [...self::COUNT_LABEL, ...self::COUNT_ROUTE],
-                ['label' => 'Land aanmaken', 'route' => null],
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::COUNT_LABEL), ...self::COUNT_ROUTE],
+                ['label' => __('country.title_create'), 'route' => null],
             ],
 
             default => [],
         };
     }
 
-    protected static function productShow(): array
+    protected static function tripShow(): array
     {
-        $product = request()->route('product');
+        $trip = request()->route('trip');
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis product', 'route' => null],
+            self::dashboardCrumb(),
+            self::tripCrumb(),
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => null],
         ];
     }
 
-    protected static function productEdit(): array
+    protected static function tripEdit(): array
     {
-        $product = request()->route('product');
+        $trip = request()->route('trip');
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Bewerken', 'route' => null],
+            self::dashboardCrumb(),
+            self::tripCrumb(),
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => __('trip.title_edit'), 'route' => null],
         ];
     }
 
-    protected static function productItinerariesIndex(): array
+    protected static function bookingShow(): array
     {
-        $product = request()->route('product');
+        return [
+            self::dashboardCrumb(),
+            [...self::translateLabel(self::BOOKING_LABEL), ...self::BOOKING_ROUTE],
+            ['label' => __('booking.title_show'), 'route' => null],
+        ];
+    }
+
+    protected static function bookingEdit(): array
+    {
+        $booking = request()->route('booking');
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis product', 'route' => 'admin.products.edit', 'params' => [$product]],
-            ['label' => 'Reisdagen', 'route' => null],
+            self::dashboardCrumb(),
+            [...self::translateLabel(self::BOOKING_LABEL), ...self::BOOKING_ROUTE],
+            ['label' => __('booking.title_show'), 'route' => 'admin.bookings.show', 'params' => [$booking]],
+            ['label' => __('booking.title_edit'), 'route' => null],
+        ];
+    }
+
+    protected static function tripItinerariesIndex(): array
+    {
+        $trip = request()->route('trip');
+
+        return [
+            self::dashboardCrumb(),
+            self::tripCrumb(),
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => __('itinerary.title_index'), 'route' => null],
         ];
     }
 
     protected static function itineraryEdit(): array
     {
         $itinerary = request()->route('itinerary');
-        $product = $itinerary?->product;
+        $trip = $itinerary?->trip;
 
         return [
-            [...self::DASH_LABEL, ...self::DASH_ROUTE],
-            [...self::PROD_LABEL, ...self::PROD_ROUTE],
-            ['label' => $product?->name ?? 'Reis', 'route' => 'admin.products.edit', 'params' => [$product]],
-            ['label' => 'Reisdagen', 'route' => 'admin.products.itineraries.index', 'params' => [$product]],
-            ['label' => 'Bewerk reisdag', 'route' => null],
+            self::dashboardCrumb(),
+            self::tripCrumb(),
+            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => __('itinerary.title_index'), 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
+            ['label' => __('itinerary.title_edit'), 'route' => null],
         ];
+    }
+
+    private static function dashboardCrumb(): array
+    {
+        return [...self::translateLabel(self::DASH_LABEL), ...self::DASH_ROUTE];
+    }
+
+    private static function tripCrumb(): array
+    {
+        return [...self::translateLabel(self::TRIP_LABEL), ...self::TRIP_ROUTE];
+    }
+
+    private static function translateLabel(array $label): array
+    {
+        if (isset($label['label'])) {
+            $label['label'] = __($label['label']);
+        }
+
+        return $label;
     }
 }

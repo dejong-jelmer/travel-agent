@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('trips', function (Blueprint $table) {
             $table->id();
             $table->string('slug');
             $table->string('name');
@@ -21,10 +21,6 @@ return new class extends Migration
             $table->boolean('active')->default(true);
             $table->boolean('featured')->default(false);
             $table->timestamp('published_at')->nullable();
-            // $table->foreignId('itinerary_id')
-            //     ->constrained()
-            //     ->onDelete('cascade');
-            // $table->foreignId('category_id')->constrained();
             $table->softDeletes();
 
             $table->timestamps();
@@ -36,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('trips');
     }
 };

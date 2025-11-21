@@ -30,7 +30,7 @@ const collapsedSections = ref({
 
 // Collapsible state voor items met sub-items
 const collapsedItems = ref({
-    products: false,
+    trips: false,
     countries: false,
 })
 
@@ -52,18 +52,18 @@ const menuGroups = ref([
         label: 'Content Management',
         items: [
             {
-                id: 'products',
-                label: 'Producten',
+                id: 'trips',
+                label: 'Reizen',
                 icon: LayoutPanelTop,
                 children: [
                     {
-                        label: 'Alle Producten',
-                        path: new URL(route('admin.products.index'), window.location.origin).pathname,
+                        label: 'Alle Reizen',
+                        path: new URL(route('admin.trips.index'), window.location.origin).pathname,
                         icon: GlobeAltIcon,
                     },
                     {
-                        label: 'Nieuw Product',
-                        path: new URL(route('admin.products.create'), window.location.origin).pathname,
+                        label: 'Nieuw Reis',
+                        path: new URL(route('admin.trips.create'), window.location.origin).pathname,
                         icon: PlusIcon,
                     },
                 ]
@@ -95,7 +95,7 @@ const menuGroups = ref([
                 label: 'Boekingen',
                 path: new URL(route('admin.bookings.index'), window.location.origin).pathname,
                 icon: CalendarDaysIcon,
-                badge: true, // Badge wordt getoond via adminStats
+                badge: true, // Badge via adminStats
             },
         ]
     },

@@ -12,6 +12,13 @@ use Inertia\Response as InertiaResponse;
 
 class AuthController extends Controller
 {
+    private string $appName;
+
+    public function __construct()
+    {
+        $this->appName = config('app.name');
+    }
+
     public function login(Request $request): InertiaResponse|HttpResponse
     {
         $credentials = $request->validate([
@@ -26,8 +33,9 @@ class AuthController extends Controller
         }
 
         return Inertia::render('Auth/Login', [
+            'title' => __('auth.title_login').' - '.$this->appName,
             'error' => true,
-            'message' => 'These credentials do not match any of our records!',
+            'message' => __('auth.failed'),
         ]);
     }
 

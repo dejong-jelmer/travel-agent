@@ -223,7 +223,7 @@ const stats = computed(() => [
                     </Link>
 
                     <Link
-                        :href="route('admin.products.index')"
+                        :href="route('admin.trips.index')"
                         class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors group"
                     >
                         <div class="flex items-center">
@@ -233,7 +233,7 @@ const stats = computed(() => [
                                 </svg>
                             </div>
                             <span class="font-medium text-gray-900 group-hover:text-brand-primary transition-colors">
-                                Beheer reisproducten
+                                Beheer reizen
                             </span>
                         </div>
                         <svg class="h-5 w-5 text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">

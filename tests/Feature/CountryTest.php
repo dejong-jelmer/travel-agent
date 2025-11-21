@@ -19,13 +19,13 @@ class CountryTest extends TestCase
         $this->actingAs($admin);
     }
 
-    public function test_admin_can_view_the_country_index_page(): void
+    public function test_admin_can_view_country_index(): void
     {
         Country::factory(10)->create();
         $response = $this->get(route('admin.countries.index'));
 
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Countries/Index')
+            fn (AssertableInertia $page) => $page->component('Admin/Country/Index')
                 ->has('countries.data', 10)
                 ->has('countries.links')
         );
@@ -33,12 +33,12 @@ class CountryTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_admin_can_view_the_country_create_page(): void
+    public function test_admin_can_view_country_create(): void
     {
         $response = $this->get(route('admin.countries.create'));
 
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Countries/Create')
+            fn (AssertableInertia $page) => $page->component('Admin/Country/Create')
         );
         $response->assertStatus(200);
     }

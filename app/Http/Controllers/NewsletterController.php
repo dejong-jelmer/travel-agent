@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewsletterSubscriptionRequested;
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Http\Requests\SubscribeNewsletterRequest;
 use App\Models\NewsletterSubscriber;
 use Inertia\Inertia;
@@ -10,6 +11,8 @@ use Inertia\Response;
 
 class NewsletterController extends Controller
 {
+    use HasPageTitle;
+
     public function subscribe(SubscribeNewsletterRequest $request): void
     {
         $validated = $request->validated();
@@ -41,7 +44,7 @@ class NewsletterController extends Controller
         ]);
 
         return Inertia::render('Newsletter/Confirmed', [
-            'title' => config('app.name').' - Nieuwsbrief inschrijving bevestigd',
+            'title' => $this->pageTitle('newsletter.title_confirmed'),
         ]);
     }
 
@@ -56,7 +59,7 @@ class NewsletterController extends Controller
         ]);
 
         return Inertia::render('Newsletter/Unsubscribed', [
-            'title' => config('app.name').' - Nieuwsbrief uitschrijving bevestigd',
+            'title' => $this->pageTitle('newsletter.title_unsubscribed'),
         ]);
     }
 }

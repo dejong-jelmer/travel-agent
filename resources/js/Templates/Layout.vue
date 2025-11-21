@@ -10,10 +10,8 @@ const props = defineProps({
     phone: Object,
 });
 const page = usePage()
-const user = page.props.auth?.user ?? {};
 const flash = page.props.flash ?? {};
 const contact = page.props.contact ?? {};
-const breadcrumbs = page.props.breadcrumbs ?? {};
 
 onMounted(() => {
     const encodedMail = contact?.mail?.link;
@@ -37,7 +35,6 @@ Object.entries(flash).forEach(([type, message]) => {
     <main>
         <Topbar class="z-50" />
         <Nav class="z-50 sticky top-0 inset-x-0" />
-        <!-- Spacer for fixed Nav -->
         <slot name="hero"></slot>
         <slot></slot>
         <Footer />

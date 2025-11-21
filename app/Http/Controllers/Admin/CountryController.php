@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Traits\HasPageTitle;
 use App\Models\Country;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -10,22 +11,27 @@ use Inertia\Response;
 
 class CountryController extends Controller
 {
+    use HasPageTitle;
+
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
-        return Inertia::render('Admin/Countries/Index', [
-            'countries' => Country::paginate(15),
+        return Inertia::render('Admin/Country/Index', [
+            'countries' => Country::paginate(),
+            'title' => $this->pageTitle('country.title_index'),
         ]);
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): Response
     {
-        return Inertia::render('Admin/Countries/Create');
+        return Inertia::render('Admin/Country/Create', [
+            'title' => $this->pageTitle('country.title_create'),
+        ]);
     }
 
     /**
@@ -38,7 +44,7 @@ class CountryController extends Controller
         ]);
         Country::create(['name' => $validated['name']]);
 
-        return redirect()->route('admin.countries.index')->with('success', __('Land aangemaakt'));
+        return redirect()->route('admin.countries.index')->with('success', __('country.created'));
 
     }
 
@@ -47,18 +53,18 @@ class CountryController extends Controller
      */
     public function destroy(Country $country)
     {
-        $products = $country->products->count();
+        $trips = $country->trips->count();
         $feedback = [
             'status' => 'error',
-            'message' => "Er zijn nog {$products} producten gekoppeld aan dit land!",
+            'message' => trans_choice('country.delete_failed', $trips, ['trips' => $trips]),
         ];
 
-        if (! $products) {
+        if (! $trips) {
             Country::destroy($country->id);
             $feedback['status'] = 'success';
-            $feedback['message'] = 'Land verwijderd';
+            $feedback['message'] = __('country.deleted');
         }
 
-        return redirect()->route('admin.countries.index')->with($feedback['status'], __($feedback['message']));
+        return redirect()->route('admin.countries.index')->with($feedback['status'], $feedback['message']);
     }
 }

@@ -4,7 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Country;
 use App\Models\Image;
-use App\Models\Product;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -14,13 +14,13 @@ use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
-class ProductTest extends TestCase
+class TripTest extends TestCase
 {
     use RefreshDatabase;
 
     private User $admin;
 
-    private array $productData;
+    private array $tripData;
 
     private Collection $countries;
 
@@ -36,7 +36,7 @@ class ProductTest extends TestCase
 
         $this->countries = Country::factory(2)->create();
 
-        $this->productData = [
+        $this->tripData = [
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
@@ -51,55 +51,55 @@ class ProductTest extends TestCase
         ];
     }
 
-    public function test_admin_can_view_the_products_index_page(): void
+    public function test_admin_can_view_trip_index(): void
     {
-        Product::factory()->count(3)->create();
+        Trip::factory()->count(3)->create();
 
-        $response = $this->get(route('admin.products.index'));
+        $response = $this->get(route('admin.trips.index'));
 
         $response->assertInertia(
             fn (AssertableInertia $page) => $page
-                ->component('Admin/Products/Index')
-                ->has('products.data', 3)
-                ->has('products.links')
+                ->component('Admin/Trip/Index')
+                ->has('trips.data', 3)
+                ->has('trips.links')
         );
 
         $response->assertStatus(200);
     }
 
-    public function test_admin_can_view_the_product_create_page(): void
+    public function test_admin_can_view_strip_create(): void
     {
-        $response = $this->get(route('admin.products.create'));
+        $response = $this->get(route('admin.trips.create'));
 
         $response->assertInertia(
             fn (AssertableInertia $page) => $page
-                ->component('Admin/Products/Create')
+                ->component('Admin/Trip/Create')
         );
 
         $response->assertStatus(200);
     }
 
-    public function test_admin_can_store_a_new_product(): void
+    public function test_admin_can_create_a_new_trip(): void
     {
-        $response = $this->post(route('admin.products.store'), $this->productData);
+        $response = $this->post(route('admin.trips.store'), $this->tripData);
 
-        $product = Product::firstOrFail();
-        $response->assertRedirect(route('admin.products.show', $product));
+        $trip = Trip::firstOrFail();
+        $response->assertRedirect(route('admin.trips.show', $trip));
 
-        $this->assertDatabaseHas('products', Arr::except($this->productData, ['featuredImage', 'images', 'countries']));
+        $this->assertDatabaseHas('trips', Arr::except($this->tripData, ['featuredImage', 'images', 'countries']));
 
         // Assert featured image with hash-based storage
-        $featuredImage = $product->featuredImage;
+        $featuredImage = $trip->featuredImage;
         $this->assertNotNull($featuredImage);
-        $this->assertEquals($this->productData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
+        $this->assertEquals($this->tripData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
         $this->assertEquals('image/jpeg', $featuredImage->mime_type);
         $this->assertTrue($featuredImage->featured);
         Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$featuredImage->path}");
 
         // Assert gallery images with hash-based storage
-        $this->assertCount(2, $product->images);
-        foreach ($product->images as $index => $image) {
-            $originalFile = $this->productData['images'][$index];
+        $this->assertCount(2, $trip->images);
+        foreach ($trip->images as $index => $image) {
+            $originalFile = $this->tripData['images'][$index];
             $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
             $this->assertEquals('image/jpeg', $image->mime_type);
             $this->assertFalse($image->featured);
@@ -107,26 +107,26 @@ class ProductTest extends TestCase
         }
     }
 
-    public function test_admin_can_view_the_product_edit_page(): void
+    public function test_admin_can_view_trip_edit(): void
     {
-        $product = Product::factory()->create();
+        $trip = Trip::factory()->create();
 
-        $response = $this->get(route('admin.products.edit', $product));
+        $response = $this->get(route('admin.trips.edit', $trip));
 
         $response->assertInertia(
             fn (AssertableInertia $page) => $page
-                ->component('Admin/Products/Edit')
-                ->has('product')
-                ->where('product.id', $product->id)
+                ->component('Admin/Trip/Edit')
+                ->has('trip')
+                ->where('trip.id', $trip->id)
                 ->etc()
         );
 
         $response->assertStatus(200);
     }
 
-    public function test_admin_can_update_an_existing_product(): void
+    public function test_admin_can_update_an_existing_trip(): void
     {
-        $product = Product::factory()->create();
+        $trip = Trip::factory()->create();
         $updateData = [
             'name' => 'Updated name',
             'slug' => 'Updated slug',
@@ -141,19 +141,19 @@ class ProductTest extends TestCase
             'countries' => $this->countries->modelKeys(),
         ];
 
-        $response = $this->post(route('admin.products.update', $product), $updateData);
+        $response = $this->post(route('admin.trips.update', $trip), $updateData);
 
-        $response->assertRedirect(route('admin.products.show', $product));
-        $product->refresh();
+        $response->assertRedirect(route('admin.trips.show', $trip));
+        $trip->refresh();
 
-        $this->assertEquals('Updated name', $product->name);
-        $this->assertEquals('Updated description', $product->description);
-        $this->assertEquals('Updated slug', $product->slug);
-        $this->assertEquals(5, $product->duration);
-        $this->assertEquals(1234.56, $product->raw_price);
+        $this->assertEquals('Updated name', $trip->name);
+        $this->assertEquals('Updated description', $trip->description);
+        $this->assertEquals('Updated slug', $trip->slug);
+        $this->assertEquals(5, $trip->duration);
+        $this->assertEquals(1234.56, $trip->raw_price);
 
         // Assert featured image with hash-based storage
-        $featuredImage = $product->featuredImage;
+        $featuredImage = $trip->featuredImage;
         $this->assertNotNull($featuredImage);
         $this->assertEquals($updateData['featuredImage']->getClientOriginalName(), $featuredImage->original_name);
         $this->assertEquals('image/jpeg', $featuredImage->mime_type);
@@ -161,8 +161,8 @@ class ProductTest extends TestCase
         Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$featuredImage->path}");
 
         // Assert gallery images with hash-based storage
-        $this->assertCount(2, $product->images);
-        foreach ($product->images as $index => $image) {
+        $this->assertCount(2, $trip->images);
+        foreach ($trip->images as $index => $image) {
             $originalFile = $updateData['images'][$index];
             $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
             $this->assertEquals('image/jpeg', $image->mime_type);
@@ -171,27 +171,27 @@ class ProductTest extends TestCase
         }
     }
 
-    public function test_admin_can_destroy_a_product(): void
+    public function test_admin_can_softdelete_a_trip(): void
     {
-        $product = Product::factory()->create();
+        $trip = Trip::factory()->create();
         $image = Image::factory()->create([
-            'imageable_id' => $product->id,
-            'imageable_type' => Product::class,
+            'imageable_id' => $trip->id,
+            'imageable_type' => Trip::class,
         ]);
 
-        $response = $this->delete(route('admin.products.destroy', $product));
+        $response = $this->delete(route('admin.trips.destroy', $trip));
 
-        $response->assertRedirect(route('admin.products.index'));
+        $response->assertRedirect(route('admin.trips.index'));
 
-        $this->assertSoftDeleted($product);
+        $this->assertSoftDeleted($trip);
         $this->assertSoftDeleted($image);
 
-        $this->assertDatabaseMissing('products', [
-            'id' => $product->id,
+        $this->assertDatabaseMissing('trips', [
+            'id' => $trip->id,
             'deleted_at' => null,
         ]);
         $this->assertDatabaseMissing('images', [
-            'imageable_id' => $product->id,
+            'imageable_id' => $trip->id,
             'deleted_at' => null,
         ]);
     }

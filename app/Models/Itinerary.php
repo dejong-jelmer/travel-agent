@@ -17,7 +17,7 @@ class Itinerary extends Model
         SoftDeletes;
 
     protected $fillable = [
-        'product_id',
+        'trip_id',
         'title',
         'location',
         'description',
@@ -44,9 +44,9 @@ class Itinerary extends Model
         static::restoring(fn ($itinerary) => $itinerary->image()->withTrashed()->restore());
     }
 
-    public function product()
+    public function trip()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Trip::class);
     }
 
     public function image()
@@ -57,7 +57,7 @@ class Itinerary extends Model
     public function reOrder(): void
     {
         $order = 1;
-        $itineraries = static::where('product_id', $this->product_id)
+        $itineraries = static::where('trip_id', $this->trip_id)
             ->where('id', '!=', $this->id)
             ->orderBy('order')
             ->get();

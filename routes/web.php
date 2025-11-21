@@ -4,7 +4,7 @@ use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ItineraryController;
-use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\TripController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
@@ -44,7 +44,7 @@ Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, '
 // Admin routes
 Route::get('/admin/login', function () {
     return Inertia::render('Auth/Login', [
-        'title' => 'Admin - '.env('APP_NAME'),
+        'title' => __('auth.title_login').' - '.config('app.name'),
     ]);
 })->middleware('guest')->name('admin');
 
@@ -58,13 +58,13 @@ Route::prefix('admin')
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
 
-        // Product routes
-        Route::resource('/products', ProductController::class)->except(['update']);
-        Route::post('/products/update/{product}', [ProductController::class, 'update'])->name('products.update');
+        // Trip routes
+        Route::resource('/trips', TripController::class)->except(['update']);
+        Route::post('/trips/update/{trip}', [TripController::class, 'update'])->name('trips.update');
 
         // Product Itinerary routes
-        Route::resource('products.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
-        Route::patch('/products/{product}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('products.itineraries.order');
+        Route::resource('trips.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
+        Route::patch('/trips/{trip}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('trips.itineraries.order');
 
         // Itinerary routes
         Route::resource('itineraries', ItineraryController::class)->only(['edit', 'destroy']);
