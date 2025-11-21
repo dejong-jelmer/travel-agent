@@ -1,5 +1,5 @@
 <script setup>
-import DownLine from '@/Icons/DownLine.vue'
+import { ChevronDown } from 'lucide-vue-next';
 import { ref } from 'vue';
 
 const props = defineProps({
@@ -34,9 +34,10 @@ defineExpose({
                 </span>
             </slot>
             <span>
-                <DownLine
+                <ChevronDown
                     :class="isOpen ? 'rotate-180' : ''"
-                    class="w-4 h-4 transform transition-transform"
+                    class="w-6 h-6 transform transition-transform"
+                    aria-hidden="true"
                  />
             </span>
         </button>
