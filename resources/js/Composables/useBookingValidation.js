@@ -11,7 +11,7 @@
  */
 
 import { useDateFormatter } from "@/Composables/useDateFormatter.js";
-import { emailRegex, phoneRegex, postalCodeRegex } from "@/validators/regex.js";
+import { emailRegex, phoneRegex, postalCodeRegex } from "@/Validators/regex.js";
 const { isValidDate } = useDateFormatter();
 
 /** Minimum length for most string fields (names, city, street) */
