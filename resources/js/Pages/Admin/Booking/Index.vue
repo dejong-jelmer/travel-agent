@@ -1,10 +1,10 @@
 <script setup>
-import { reactive } from 'vue'
-import { EllipsisVertical } from 'lucide-vue-next'
+import { EllipsisVertical } from 'lucide-vue-next';
+import { reactive } from 'vue';
 
 const props = defineProps({
     bookings: Object
-})
+});
 const showActions = reactive({});
 
 </script>

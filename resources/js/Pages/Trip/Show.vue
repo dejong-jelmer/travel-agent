@@ -46,7 +46,7 @@ const tabs = [
             <!-- Hero Section -->
             <section class="relative overflow-hidden">
                 <!-- Background Image -->
-                <div class="h-[80vh] laptop:h-[90vh] relative">
+                <div class="h-[calc(100vh-140px)] relative">
                     <div class="absolute inset-0 bg-cover bg-center"
                         :style="`background-image: url(${trip.featured_image?.full_path})`"></div>
                     <!-- Overlay -->

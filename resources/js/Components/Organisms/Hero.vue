@@ -12,7 +12,7 @@ const subtitles = [
 </script>
 
 <template>
-    <div class="h-screen bg-cover bg-top flex text-white px-6" :style="{ backgroundImage: `url(${heroImage})` }">
+    <div class="h-[calc(100vh-140px)] bg-cover bg-top flex text-white px-6" :style="{ backgroundImage: `url(${heroImage})` }">
         <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-full mx-auto">
             <div class="absolute top-[35%] tablet:top-[45%]">
                 <h1

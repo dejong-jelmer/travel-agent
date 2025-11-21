@@ -1,9 +1,10 @@
 <script setup>
-import { reactive } from 'vue'
+import { EllipsisVertical } from 'lucide-vue-next';
+import { reactive } from 'vue';
 
 defineProps({
     trips: Object,
-})
+});
 const showActions = reactive({});
 
 </script>
@@ -33,7 +34,7 @@ const showActions = reactive({});
                                 <div class="w-fit mx-auto" v-tippy="`Meer opties`">
                                     <button class="info-button"
                                         @click="showActions[trip.id] = !showActions[trip.id]">
-                                        <More class="h-5" />
+                                        <EllipsisVertical class="h-5" />
                                     </button>
                                 </div>
                                 <div v-if="showActions[trip.id]" class="space-y-2">

@@ -133,10 +133,9 @@ defineProps({
                 <!-- Belangrijke opmerking (optioneel) -->
                 <div v-if="itinerary.remark"
                     class="bg-status-warning/10 rounded-lg p-3 tablet:p-4 border border-status-warning/30 mb-4">
-                    <div class="flex items-start gap-3">
+                    <div class="flex items-center gap-3">
                         <AlertTriangle class="w-5 h-5 text-status-warning flex-shrink-0 mt-0.5" />
                         <div class="min-w-0">
-                            <h5 class="text-sm font-medium text-brand-primary mb-1">Belangrijke opmerking</h5>
                             <p class="text-sm text-brand-primary">{{ itinerary.remark }}</p>
                         </div>
                     </div>
