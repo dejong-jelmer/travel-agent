@@ -12,7 +12,6 @@ class TripValidationRules
             'description' => ['required', 'string'],
         ], $additions);
 
-
     }
 
     public static function pricing(): array
@@ -90,6 +89,7 @@ class TripValidationRules
                 $base[$key] = is_array($rules) ? $rules : [$rules];
             }
         }
+
         return $base;
     }
 }

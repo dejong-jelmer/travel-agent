@@ -1,6 +1,13 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
-import { CircleCheckBig } from 'lucide-vue-next'
+import {
+    CircleCheckBig,
+    MapPinned,
+    CalendarDays,
+    Clock,
+    TrainFront,
+    UserCheck
+} from 'lucide-vue-next'
 
 const props = defineProps({
     booking: {
@@ -30,7 +37,7 @@ const props = defineProps({
                         class="text-left text-base laptop:text-lg text-brand-primary max-w-xl laptop:max-w-2xl leading-relaxed">
                         Bedankt voor uw boeking. We hebben uw reservering ontvangen en verwerkt.
                         U ontvangt binnen enkele ogenblikken een bevestigingsmail op <strong>{{ booking.contact.email
-                        }}</strong>
+                            }}</strong>
                     </p>
                 </div>
 
@@ -41,8 +48,7 @@ const props = defineProps({
                         <!-- Trip Details Card -->
                         <div class="bg-white rounded-xl shadow-sm border border-brand-primary/20 overflow-hidden">
                             <!-- Trip Image Header -->
-                            <div v-if="booking.trip.hero_image"
-                                class="h-48 laptop:h-64 bg-cover bg-center relative"
+                            <div v-if="booking.trip.hero_image" class="h-48 laptop:h-64 bg-cover bg-center relative"
                                 :style="`background-image: url(${booking.trip.hero_image.public_url})`">
                                 <div class="absolute inset-0 bg-gradient-to-t from-brand-primary/50 to-transparent">
                                 </div>
@@ -51,7 +57,7 @@ const props = defineProps({
                                         {{ booking.trip.name }}
                                     </h2>
                                     <div class="flex items-center gap-2 text-white/90">
-                                        <MapPin class="w-4 h-4" />
+                                        <MapPinned class="w-4 h-4" />
                                         <span class="text-sm">{{ booking.trip.formatted_countries }}</span>
                                     </div>
                                 </div>
@@ -62,8 +68,8 @@ const props = defineProps({
                                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-brand-secondary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <Calendar class="w-5 h-5 text-accent-primary" />
+                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <CalendarDays class="w-5 h-5 text-accent-primary" />
                                         </div>
                                         <div>
                                             <p
@@ -77,7 +83,7 @@ const props = defineProps({
 
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-brand-secondary rounded-lg flex items-center justify-center flex-shrink-0">
+                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
                                             <Clock class="w-5 h-5 text-accent-primary" />
                                         </div>
                                         <div>
@@ -92,8 +98,8 @@ const props = defineProps({
 
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-brand-secondary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <Train class="w-5 h-5 text-accent-primary" />
+                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <TrainFront class="w-5 h-5 text-accent-primary" />
                                         </div>
                                         <div>
                                             <p
@@ -107,8 +113,8 @@ const props = defineProps({
 
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-brand-secondary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <UserAdd class="w-5 h-5 text-accent-primary" />
+                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <UserCheck class="w-5 h-5 text-accent-primary" />
                                         </div>
                                         <div>
                                             <p
@@ -128,7 +134,7 @@ const props = defineProps({
                         <div class="bg-white rounded-xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
                             <h3
                                 class="text-lg laptop:text-xl font-bold text-brand-primary mb-4 flex items-center gap-2">
-                                <UserAdd class="w-5 h-5 text-accent-primary" />
+                                <UserCheck class="w-5 h-5 text-accent-primary" />
                                 Reizigers
                             </h3>
                             <div class="space-y-3">

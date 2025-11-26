@@ -43,7 +43,7 @@ class Image extends Model
     public function fullPath(): Attribute
     {
         return Attribute::get(function () {
-            return config('images.directory') . '/' . $this->path;
+            return config('images.directory') . "/{$this->path}";
         });
     }
 
@@ -54,6 +54,6 @@ class Image extends Model
      */
     public function publicUrl(): Attribute
     {
-        return Attribute::get(fn () => url(Storage::url($this->full_path)));
+        return Attribute::get(fn() => url(Storage::url($this->full_path)));
     }
 }

@@ -6,6 +6,7 @@ use App\Enums\ImageRelation;
 use App\Enums\Meal;
 use App\Enums\Transport;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
 use App\Http\Requests\UpdateItineraryRequest;

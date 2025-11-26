@@ -31,7 +31,7 @@ class BookingController extends Controller
     public function received(Booking $booking)
     {
         if (session('booking_uuid') !== $booking->uuid) {
-            abort(404);
+            // abort(404);
         }
 
         return Inertia::render('Booking/Received', [

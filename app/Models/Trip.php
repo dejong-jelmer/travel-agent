@@ -116,7 +116,7 @@ class Trip extends Model
             return match ($countries->count()) {
                 0 => '',
                 1 => $countries->first(),
-                default => $countries->slice(0, -1)->implode(', ') . ' & ' . $countries->last()
+                default => $countries->slice(0, -1)->implode(', ').' & '.$countries->last()
             };
         });
     }
@@ -134,7 +134,7 @@ class Trip extends Model
     public function rawPrice(): Attribute
     {
         return Attribute::get(
-            fn() => (float) $this->getRawOriginal('price')
+            fn () => (float) $this->getRawOriginal('price')
         );
     }
 
@@ -155,7 +155,7 @@ class Trip extends Model
      */
     public function imagePaths(): Attribute
     {
-        return Attribute::get(fn() => $this->images->pluck('path'));
+        return Attribute::get(fn () => $this->images->pluck('path'));
     }
 
     public function bookings(): HasMany
@@ -171,7 +171,7 @@ class Trip extends Model
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn() => $this->heroImage?->public_url
+            fn () => $this->heroImage?->public_url
         );
     }
 
@@ -183,7 +183,7 @@ class Trip extends Model
     public function metaDescription(): Attribute
     {
         return Attribute::get(
-            fn(?string $value) => $value ?? Str::substr(
+            fn (?string $value) => $value ?? Str::substr(
                 $this->description ?? '',
                 0,
                 config(
@@ -201,7 +201,7 @@ class Trip extends Model
     public function metaTitle(): Attribute
     {
         return Attribute::get(
-            fn(?string $value) => $value ?? Str::substr(
+            fn (?string $value) => $value ?? Str::substr(
                 $this->name ?? '',
                 0,
                 config(

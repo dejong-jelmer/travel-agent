@@ -18,7 +18,6 @@ class UpdateTripRequest extends FormRequest
         return Auth::check();
     }
 
-
     /**
      * Prepare the data for validation.
      */
@@ -38,7 +37,7 @@ class UpdateTripRequest extends FormRequest
     {
         return array_merge(
             TripValidationRules::basic([
-                'slug' => Rule::unique('trips', 'slug')->ignore($this->trip)
+                'slug' => Rule::unique('trips', 'slug')->ignore($this->trip),
             ]),
             TripValidationRules::pricing(),
             TripValidationRules::settings(),

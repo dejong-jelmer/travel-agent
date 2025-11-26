@@ -6,15 +6,15 @@ trait HasPageMetadata
 {
     protected function pageTitle(string $key): string
     {
-        return __($key) . ' | ' . config('app.name');
+        return __($key).' | '.config('app.name');
     }
 
     protected function pageSeo(string $key, array $overrides = []): array
     {
         return array_merge([
-            'title' => __("{$key}.title") . ' | ' . config('app.name'),
+            'title' => __("{$key}.title").' | '.config('app.name'),
             'description' => __("{$key}.description"),
-            'og_image' => asset('images/og_image.jpg'),
+            'og_image' => asset(config('seo.default_og_image', 'images/og_image.jpg')),
         ], $overrides);
     }
 }

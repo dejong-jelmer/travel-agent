@@ -6,6 +6,7 @@ use App\Enums\ImageRelation;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\UpdateTripRequest;
+use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\Trip;
 use Illuminate\Http\RedirectResponse;
@@ -24,7 +25,6 @@ class TripController extends Controller
         return Inertia::render('Admin/Trip/Index', [
             'trips' => Trip::with(['countries', 'itineraries', 'heroImage'])->paginate(),
             'title' => $this->pageTitle('trip.title_index'),
-
         ]);
     }
 
@@ -52,7 +52,7 @@ class TripController extends Controller
 
         $trip->fill($validatedFields);
         $trip->save();
-        $trip->syncImages($validatedFiles['heroImage'], ImageRelation::FeaturedImage, true);
+        $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
 
         if (count($countries)) {
@@ -69,7 +69,7 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Show', [
             'trip' => $trip->load(['heroImage', 'images', 'countries', 'itineraries']),
-            'title' => $this->pageTitle('trip.title_show')
+            'title' => $this->pageTitle('trip.title_show'),
         ]);
     }
 
@@ -99,7 +99,7 @@ class TripController extends Controller
 
         // Sync heroImage (handles both existing paths and new uploads)
         if (isset($validatedFiles['heroImage'])) {
-            $trip->syncImages($validatedFiles['heroImage'], ImageRelation::FeaturedImage, true);
+            $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         }
 
         // Sync images array (handles mix of existing paths and new uploads)

@@ -2,10 +2,10 @@
 
 namespace Tests\Feature;
 
-use Faker\Generator;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Country;
 use App\Models\Trip;
+use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia;
