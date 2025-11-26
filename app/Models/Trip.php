@@ -166,12 +166,12 @@ class Trip extends Model
     /**
      * Get the hero image URL for Open Graph usage.
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string|null, never>
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn () => $this->heroImage?->public_url
+            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg'))
         );
     }
 
