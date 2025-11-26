@@ -23,8 +23,6 @@ const props = defineProps({
 })
 
 const page = usePage()
-console.log(page.props);
-
 
 const metaTitle = computed(() => {
     return props.title || page.props.seo?.title || ''
@@ -41,11 +39,6 @@ const metaImage = computed(() => {
 const metaUrl = computed(() => {
     return props.url || window.location.href
 })
-
-console.log('metaTitle: ', metaTitle.value)
-console.log('metaDescription: ', metaDescription.value)
-console.log('metaImage: ', metaImage.value)
-console.log('metaUrl: ', metaUrl.value)
 
 </script>
 <template>
