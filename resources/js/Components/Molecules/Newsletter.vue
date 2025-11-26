@@ -1,10 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { ref } from "vue"
 import { useForm } from '@inertiajs/vue3'
-import { useToast } from "vue-toastification";
+import { useToast } from "vue-toastification"
+import { LoaderCircle } from "lucide-vue-next"
 
-const honeypot = ref(null);
-const toast = useToast();
+const honeypot = ref(null)
+const toast = useToast()
 
 const form = useForm({
     name: '',
@@ -52,7 +53,7 @@ function submit() {
                 </div>
                 <Button :disabled="form.processing" class="w-full" color="primary">
                     <span class="flex justify-center space-x-2">
-                        <Spinner v-if="form.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
+                        <LoaderCircle v-if="form.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
                         <span>{{ form.processing ? 'Bezig met verzenden...' : 'Inschrijven' }}</span>
                     </span>
                 </Button>

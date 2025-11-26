@@ -10,21 +10,11 @@ const props = defineProps({
 
 const form = useForm({
     ...props.itinerary,
-    image: props.itinerary.image?.full_path ?? null,
+    image: props.itinerary.image?.public_url ?? null,
 });
 
 // Counter for image uploader initialization (only 1 image uploader)
 const initCounter = ref(1);
-
-function handleImageInitialized() {
-    initCounter.value--;
-    if (initCounter.value === 0) {
-        // Uploader has finished initialization
-        form.defaults({
-            ...form.data(),
-        });
-    }
-}
 
 function submit() {
     form.post(route("admin.itineraries.update", props.itinerary.id), { forceFormData: true });
@@ -34,7 +24,7 @@ function submit() {
 <template>
     <Admin>
         <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
-            <ItineraryForm :form="form" :meals="meals" :transport="transport" @submit="submit" @initialized="handleImageInitialized" />
+            <ItineraryForm :form="form" :meals="meals" :transport="transport" @submit="submit" />
         </div>
     </Admin>
 </template>

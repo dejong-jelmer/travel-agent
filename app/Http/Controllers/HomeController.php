@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\DTO\ContactFormData;
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
@@ -15,12 +15,14 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'trips' => Trip::with(['countries', 'featuredImage'])->active()->featured()->get(),
+            'title' =>  $this->pageTitle('home.home'),
+            'trips' => Trip::with(['countries', 'heroImage'])->published()->featured()->get(),
+            'seo' => $this->pageSeo('home.home_seo')
         ]);
     }
 
@@ -28,6 +30,7 @@ class HomeController extends Controller
     {
         return Inertia::render('About', [
             'title' => $this->pageTitle('home.about'),
+            'seo' => $this->pageSeo('home.about_seo')
         ]);
     }
 
@@ -35,6 +38,7 @@ class HomeController extends Controller
     {
         return Inertia::render('Contact', [
             'title' => $this->pageTitle('home.contact'),
+            'seo' => $this->pageSeo('home.contact_seo')
         ]);
     }
 
@@ -68,25 +72,19 @@ class HomeController extends Controller
         ], 200);
     }
 
-    public function showTrip(Trip $trip): Response
-    {
-        return Inertia::render('Trip/Show', [
-            'title' => $this->pageTitle($trip->name),
-            'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
-        ]);
-    }
-
-    public function showPrivacy(): Response
+    public function privacy(): Response
     {
         return Inertia::render('Privacy', [
             'title' => $this->pageTitle('home.privacy_statement'),
+            'seo' => $this->pageSeo('home.privacy_seo')
         ]);
     }
 
-    public function showTerms(): Response
+    public function terms(): Response
     {
         return Inertia::render('Terms', [
             'title' => $this->pageTitle('home.conditions'),
+            'seo' => $this->pageSeo('home.terms_seo')
         ]);
     }
 }

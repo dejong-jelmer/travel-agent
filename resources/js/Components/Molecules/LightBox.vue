@@ -22,7 +22,7 @@ defineExpose({ open })
 <template>
     <VueEasyLightbox
         :visible="lightboxVisible"
-        :imgs="images.map((img) => img.full_path)"
+        :imgs="images.map((img) => img.public_url)"
         :index="lightboxIndex"
         :move-disabled="true"
         :scroll-disabled="true"

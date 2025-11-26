@@ -5,6 +5,7 @@ import Trip from '@/Components/Organisms/BookingSteps/Trip.vue';
 import Travelers from '@/Components/Organisms/BookingSteps/Travelers.vue';
 import Contact from '@/Components/Organisms/BookingSteps/Contact.vue';
 import Overview from '@/Components/Organisms/BookingSteps/Overview.vue';
+import { LoaderCircle } from 'lucide-vue-next'
 
 
 const props = defineProps({
@@ -141,7 +142,7 @@ function handleSubmit() {
                 v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
                 class="px-6 py-2 rounded-xl inline-flex gap-2 items-center bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:opacity-40 disabled:hover:bg-accent-primary disabled:hover:text-white disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
-                <Spinner v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
+                <LoaderCircle v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
                 <span>{{ booking.processing ? 'Bezig met verzenden...' : 'Nu boeken' }}</span>
             </button>
         </div>

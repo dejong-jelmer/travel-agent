@@ -6,7 +6,7 @@ const props = defineProps({
     name: String,
     label: String,
     modelValue: {
-        type: [ String, Array ],
+        type: [String, Array],
         required: true,
     },
     options: {
@@ -18,7 +18,7 @@ const props = defineProps({
         required: false,
     },
     feedback: {
-        type: [ String, Array ],
+        type: [String, Array],
         required: false,
     },
     required: {
@@ -48,27 +48,27 @@ const handleChange = (event) => {
 };
 
 const normalizedOptions = computed(() => {
-  if (Array.isArray(props.options)) {
-    return props.options.map(option => {
-      if (typeof option === 'object' && option !== null) {
-        return {
-          value: option.id,
-          label: option.name
-        };
-      }
-      return {
-        value: option,
-        label: option
-      };
-    });
-  } else if (typeof props.options === 'object') {
-    return Object.entries(props.options).map(([value, label]) => ({
-      value,
-      label
-    }));
-  }
+    if (Array.isArray(props.options)) {
+        return props.options.map(option => {
+            if (typeof option === 'object' && option !== null) {
+                return {
+                    value: option.id,
+                    label: option.name
+                };
+            }
+            return {
+                value: option,
+                label: option
+            };
+        });
+    } else if (typeof props.options === 'object') {
+        return Object.entries(props.options).map(([value, label]) => ({
+            value,
+            label
+        }));
+    }
 
-  return [];
+    return [];
 });
 
 const isSelected = (value) => {
@@ -81,21 +81,13 @@ const isSelected = (value) => {
 </script>
 <template>
     <div class="grid gap-1">
-        <Label v-if="showLabel" :form-field="name">{{ label }}</Label>
-        <select
-            class="form-input"
-            :id="name"
-            :required="required"
-            :multiple="multiple"
-            @change="handleChange"
-        >
+        <Label v-if="(label && showLabel) || $slots.label" :for="name" :required="required">
+            <slot name="label">{{ label }}</slot>
+        </Label>
+        <select class="form-input" :id="name" :required="required" :multiple="multiple" @change="handleChange">
             <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
-            <option
-                v-for="(option, index) in normalizedOptions"
-                :selected="isSelected(option['value'])"
-                :key="index"
-                :value="option.value"
-            >
+            <option v-for="(option, index) in normalizedOptions" :selected="isSelected(option['value'])" :key="index"
+                :value="option.value">
                 {{ option.label }}
             </option>
         </select>

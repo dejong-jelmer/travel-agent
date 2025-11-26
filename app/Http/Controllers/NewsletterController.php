@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Events\NewsletterSubscriptionRequested;
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubscribeNewsletterRequest;
 use App\Models\NewsletterSubscriber;
 use Inertia\Inertia;
@@ -11,7 +11,7 @@ use Inertia\Response;
 
 class NewsletterController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     public function subscribe(SubscribeNewsletterRequest $request): void
     {

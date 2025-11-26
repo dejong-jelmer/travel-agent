@@ -41,9 +41,9 @@ const props = defineProps({
                         <!-- Trip Details Card -->
                         <div class="bg-white rounded-xl shadow-sm border border-brand-primary/20 overflow-hidden">
                             <!-- Trip Image Header -->
-                            <div v-if="booking.trip.featured_image"
+                            <div v-if="booking.trip.hero_image"
                                 class="h-48 laptop:h-64 bg-cover bg-center relative"
-                                :style="`background-image: url(${booking.trip.featured_image.full_path})`">
+                                :style="`background-image: url(${booking.trip.hero_image.public_url})`">
                                 <div class="absolute inset-0 bg-gradient-to-t from-brand-primary/50 to-transparent">
                                 </div>
                                 <div class="absolute bottom-4 left-4 right-4">
@@ -52,7 +52,7 @@ const props = defineProps({
                                     </h2>
                                     <div class="flex items-center gap-2 text-white/90">
                                         <MapPin class="w-4 h-4" />
-                                        <span class="text-sm">{{ booking.trip.countries_list }}</span>
+                                        <span class="text-sm">{{ booking.trip.formatted_countries }}</span>
                                     </div>
                                 </div>
                             </div>

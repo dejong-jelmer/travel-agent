@@ -69,7 +69,7 @@ class ImageFactory extends Factory
         return [
             'path' => $hashName,
             'original_name' => basename($filename),
-            'featured' => false,
+            'is_primary' => false,
             'mime_type' => 'image/jpeg',
             'size' => fake()->randomNumber(5, true),
         ];

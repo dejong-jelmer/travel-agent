@@ -10,9 +10,10 @@ const props = defineProps({
 const form = useForm({
     ...props.trip,
     countries: props.trip.countries?.map(country => country.id) ?? [],
-    featuredImage: props.trip.featured_image?.full_path ?? null,
-    images: props.trip.image_urls ?? [],
+    heroImage: props.trip.hero_image?.public_url ?? null,
+    images: props.trip.image_paths ?? [],
 });
+console.log(props.trip);
 
 function submit() {
     form.post(route("admin.trips.update", props.trip), { forceFormData: true });

@@ -3,7 +3,7 @@ import teaserImage from '@/../images/pexels-sonny-vermeer-505472791-17476670.jpg
 
 const props = defineProps({
     trips: Array,
-    contact: Object
+    contact: Object,
 });
 </script>
 

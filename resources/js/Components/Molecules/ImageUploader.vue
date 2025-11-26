@@ -85,7 +85,7 @@ import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
                             Bestandsgrootte: {{ formatBytes(singleImageFile.size) }}
                         </p>
                         <p v-if="sizeExceedsMax(singleImageFile.size)" class="text-status-error">
-                            Maximale bestandsgrootte is {{ formatBytes(images.max_size, true) }}
+                            Maximale bestandsgrootte is {{ formatBytes(imageConfig.max_size, true) }}
                         </p>
                         <p>Bestandstype: {{ singleImageFile.type }}</p>
                     </div>
@@ -144,7 +144,7 @@ import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
 import { usePage } from '@inertiajs/vue3';
 
 export default {
-    name: 'UniversalImageUploader',
+    name: 'ImageUploader',
     props: {
         modelValue: {
             type: [Object, String, Array],
@@ -171,7 +171,7 @@ export default {
     emits: ['update:modelValue', 'change'],
     data() {
         return {
-            uploadedImages: [], // Can contain File objects or string paths
+            uploadedImages: [],
             imageStates: [],
             errorMessage: '',
             imageLoadError: null,
@@ -190,9 +190,9 @@ export default {
         }
     },
     computed: {
-        settings() {
+        imageConfig() {
             const page = usePage();
-            return page.props.images || {};
+            return page.props.config?.images || {};
         },
         hasImages() {
             return this.uploadedImages.length > 0;
@@ -309,9 +309,6 @@ export default {
 
             // Emit the data to parent (no conversion needed)
             this.emitUpdate();
-
-            // Notify parent that initialization is complete
-            // this.$emit('initialized');
         },
         setOriginalState() {
             this.originalFileCount = this.uploadedImages.length;
@@ -506,7 +503,7 @@ export default {
             return parseFloat((bytes / Math.pow(1024, i)).toFixed(decimals)) + " " + sizes[i];
         },
         sizeExceedsMax(bytes) {
-            const maxBytes = (this.images?.max_size || 5000) * 1000;
+            const maxBytes = (this.imageConfig?.max_size || 5000) * 1000;
             return bytes > maxBytes;
         }
     },

@@ -29,7 +29,7 @@ class BookingResponse
         // Web redirect
         return match ($action) {
             ModelAction::Created => redirect()
-                ->route('bookings.confirmation', ['booking' => $this->booking])
+                ->route('booking.received', ['booking' => $this->booking])
                 ->with('success', __('booking.created')),
             ModelAction::Updated => redirect()
                 ->route('admin.bookings.index')

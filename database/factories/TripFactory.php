@@ -36,9 +36,10 @@ class TripFactory extends Factory
             'description' => "Bijzondere reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
             'price' => randomPrice(),
             'duration' => $duration,
-            'active' => true,
             'featured' => true,
-            'published_at' => now(),
+            'published_at' => today()->toDateTimeString(),
+            'meta_title' => Str::substr("Reis naar {$city} | $duration dagen | {$country->name}", 0, 60),
+            'meta_description' => fake()->text(160),
         ];
     }
 }

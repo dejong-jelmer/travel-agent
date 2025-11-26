@@ -3,14 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Booking;
 use App\Services\SystemHealthService;
 use Inertia\Inertia;
 
 class DashboardController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     public function showDashboard(SystemHealthService $healthService)
     {

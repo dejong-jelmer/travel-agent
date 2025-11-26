@@ -40,7 +40,7 @@ class DatabaseSeeder extends Seeder
             ->has(Booking::factory(), 'bookings')
             ->has(Image::factory()->count(3), 'images')
             ->create()->each(function ($trip) use ($countries) {
-                $trip->images()->inRandomOrder()->first()->update(['featured' => true]);
+                $trip->images()->inRandomOrder()->first()->update(['is_primary' => true]);
                 $trip->countries()->attach(
                     $countries->random(rand(1, 3))->modelKeys()
                 );

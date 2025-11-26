@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('mime_type');
             $table->unsignedBigInteger('size');
             $table->morphs('imageable');
-            $table->boolean('featured')->default(false);
+            $table->boolean('is_primary')->default(false);
             $table->softDeletes();
             $table->timestamps();
         });

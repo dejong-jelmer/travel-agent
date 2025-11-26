@@ -12,10 +12,10 @@ const form = useForm({
     price: "",
     duration: "",
     countries: [],
-    featuredImage: null,
+    heroImage: null,
     images: [],
-    active: false,
     featured: false,
+    published_at: new Date(),
 });
 
 
