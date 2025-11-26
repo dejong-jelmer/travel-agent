@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\UpdateTripRequest;
 use App\Models\Country;
@@ -14,7 +15,7 @@ use Inertia\Response;
 
 class TripController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     /**
      * Display a listing of the resource.
@@ -22,7 +23,7 @@ class TripController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Trip/Index', [
-            'trips' => Trip::with(['countries', 'itineraries', 'featuredImage'])->paginate(),
+            'trips' => Trip::with(['countries', 'itineraries', 'heroImage'])->paginate(),
             'title' => $this->pageTitle('trip.title_index'),
         ]);
     }
@@ -45,13 +46,13 @@ class TripController extends Controller
     {
         $trip = new Trip;
 
-        $validatedFiles = $request->safe()->only(['featuredImage', 'images']);
-        $validatedFields = $request->safe()->except(['featuredImage', 'images']);
+        $validatedFiles = $request->safe()->only(['heroImage', 'images']);
+        $validatedFields = $request->safe()->except(['heroImage', 'images']);
         $countries = $request->safe()->countries ?? [];
 
         $trip->fill($validatedFields);
         $trip->save();
-        $trip->syncImages($validatedFiles['featuredImage'], ImageRelation::FeaturedImage, true);
+        $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
 
         if (count($countries)) {
@@ -67,7 +68,7 @@ class TripController extends Controller
     public function show(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Show', [
-            'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries']),
+            'trip' => $trip->load(['heroImage', 'images', 'countries', 'itineraries']),
             'title' => $this->pageTitle('trip.title_show'),
         ]);
     }
@@ -78,7 +79,7 @@ class TripController extends Controller
     public function edit(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Edit', [
-            'trip' => $trip->load(['featuredImage', 'images', 'countries']),
+            'trip' => $trip->load(['heroImage', 'images', 'countries']),
             'countries' => Country::all(),
             'title' => $this->pageTitle('trip.title_edit'),
         ]);
@@ -89,16 +90,16 @@ class TripController extends Controller
      */
     public function update(UpdateTripRequest $request, Trip $trip): RedirectResponse
     {
-        $validatedFiles = $request->safe()->only(['featuredImage', 'images']);
-        $validatedFields = $request->safe()->except(['featuredImage', 'images', 'countries']);
+        $validatedFiles = $request->safe()->only(['heroImage', 'images']);
+        $validatedFields = $request->safe()->except(['heroImage', 'images', 'countries']);
         $countries = $request->safe()->countries ?? [];
 
         $trip->fill($validatedFields);
         $trip->save();
 
-        // Sync featuredImage (handles both existing paths and new uploads)
-        if (isset($validatedFiles['featuredImage'])) {
-            $trip->syncImages($validatedFiles['featuredImage'], ImageRelation::FeaturedImage, true);
+        // Sync heroImage (handles both existing paths and new uploads)
+        if (isset($validatedFiles['heroImage'])) {
+            $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         }
 
         // Sync images array (handles mix of existing paths and new uploads)

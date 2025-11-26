@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -14,17 +15,18 @@ class Image extends Model
 
     protected $fillable = [
         'path',
-        'featured',
+        'is_primary',
         'original_name',
         'mime_type',
         'size',
     ];
 
     protected $casts = [
-        'featured' => 'boolean',
+        'is_primary' => 'boolean',
     ];
 
     protected $appends = [
+        'public_url',
         'full_path',
     ];
 
@@ -34,10 +36,24 @@ class Image extends Model
     }
 
     /**
-     * Get the full public URL for the image.
+     * Get the full storage path for the image.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function getFullPathAttribute(): string
+    public function fullPath(): Attribute
     {
-        return Storage::url(config('images.directory').'/'.$this->path);
+        return Attribute::get(function () {
+            return config('images.directory')."/{$this->path}";
+        });
+    }
+
+    /**
+     * Get the public URL for the image.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    public function publicUrl(): Attribute
+    {
+        return Attribute::get(fn () => url(Storage::url($this->full_path)));
     }
 }

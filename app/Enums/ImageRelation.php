@@ -11,7 +11,7 @@ enum ImageRelation: string
 {
     case Image = 'image';
     case Images = 'images';
-    case FeaturedImage = 'featuredImage';
+    case HeroImage = 'heroImage';
 
     public function getRelation(Model $model): MorphMany|MorphOne
     {
@@ -25,7 +25,7 @@ enum ImageRelation: string
         return match ($this) {
             self::Image => $model->image(),
             self::Images => $model->images(),
-            self::FeaturedImage => $model->featuredImage(),
+            self::HeroImage => $model->heroImage(),
         };
     }
 }

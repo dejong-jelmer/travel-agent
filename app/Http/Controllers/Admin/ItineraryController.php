@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\ImageRelation;
 use App\Enums\Meal;
 use App\Enums\Transport;
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateItineraryRequest;
 use App\Http\Requests\UpdateItineraryOrderRequest;
 use App\Http\Requests\UpdateItineraryRequest;
@@ -18,7 +19,7 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class ItineraryController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     /**
      * Display a listing of a trip's itinerary.

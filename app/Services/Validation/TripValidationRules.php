@@ -4,13 +4,14 @@ namespace App\Services\Validation;
 
 class TripValidationRules
 {
-    public static function basic(): array
+    public static function basic(array $additions = []): array
     {
-        return [
+        return self::mergeRules([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
-        ];
+        ], $additions);
+
     }
 
     public static function pricing(): array
@@ -26,7 +27,15 @@ class TripValidationRules
         return [
             'active' => ['boolean'],
             'featured' => ['boolean'],
-            'published_at' => ['nullable', 'date'],
+            'published_at' => ['required', 'date'],
+        ];
+    }
+
+    public static function seo(): array
+    {
+        return [
+            'meta_title' => ['nullable', 'string', 'max:60'],
+            'meta_description' => ['nullable', 'string', 'max:160'],
         ];
     }
 
@@ -37,18 +46,18 @@ class TripValidationRules
         ];
     }
 
-    public static function featuredImageStore(): array
+    public static function heroImageStore(): array
     {
 
         return [
-            'featuredImage' => ['required', ...ImageValidationRules::baseImage()],
+            'heroImage' => ['required', ...ImageValidationRules::baseImage()],
         ];
     }
 
-    public static function featuredImageUpdate(): array
+    public static function heroImageUpdate(): array
     {
         return [
-            'featuredImage' => ['nullable', ...ImageValidationRules::baseImageOrString()],
+            'heroImage' => ['nullable', ...ImageValidationRules::baseImageOrString()],
         ];
     }
 
@@ -66,5 +75,21 @@ class TripValidationRules
             'images' => ['nullable', 'array'],
             'images.*' => ImageValidationRules::baseImageOrString(),
         ];
+    }
+
+    private static function mergeRules(array $base, array $additions): array
+    {
+        foreach ($additions as $key => $rules) {
+            if (isset($base[$key])) {
+                $base[$key] = array_merge(
+                    $base[$key],
+                    is_array($rules) ? $rules : [$rules]
+                );
+            } else {
+                $base[$key] = is_array($rules) ? $rules : [$rules];
+            }
+        }
+
+        return $base;
     }
 }

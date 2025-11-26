@@ -245,7 +245,7 @@ class BookingTest extends TestCase
 
     private function assertRedirectIsCorrect($response, Booking $booking): void
     {
-        $response->assertRedirect(route('bookings.confirmation', ['booking' => $booking->uuid]));
+        $response->assertRedirect(route('booking.received', ['booking' => $booking->uuid]));
     }
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array

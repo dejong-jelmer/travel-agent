@@ -12,6 +12,6 @@
 return [
     'disk' => 'public',
     'directory' => 'images',
-    'max_size' => 10240,
-    'allowed_mimes' => ['jpeg', 'jpg', 'png', 'gif', 'webp'],
+    'max_size' => 5120,
+    'allowed_mimes' => ['jpeg', 'jpg', 'png', 'webp'],
 ];

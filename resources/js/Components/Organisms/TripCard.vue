@@ -10,8 +10,7 @@ defineProps({ trip: Object });
         <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
             <Link :href="route('trip.show', trip)">
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
-                :style="`background-image: url(${trip.featured_image?.full_path || placeholder})`"></div>
-            <!-- Prijs badge op de foto -->
+                :style="`background-image: url(${trip.hero_image?.public_url || placeholder})`"></div>
             <div class="absolute top-3 right-3">
                 <PriceBadge :price="trip.price" />
             </div>
@@ -22,7 +21,7 @@ defineProps({ trip: Object });
             <div class="inline-flex items-center gap-2">
                 <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
                 <h3 class="text-sm text-brand-light font-medium line-clamp-1">
-                    {{ trip.countries_list }}
+                    {{ trip.formatted_countries }}
                 </h3>
             </div>
 

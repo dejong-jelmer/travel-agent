@@ -48,7 +48,7 @@ const tabs = [
                 <!-- Background Image -->
                 <div class="h-[calc(100vh-140px)] relative">
                     <div class="absolute inset-0 bg-cover bg-center"
-                        :style="`background-image: url(${trip.featured_image?.full_path})`"></div>
+                        :style="`background-image: url(${trip.hero_image?.public_url})`"></div>
                     <!-- Overlay -->
                     <div class="absolute inset-0 ">
                     </div>
@@ -89,7 +89,7 @@ const tabs = [
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                                         <MapPinned class="w-5 h-5" />
-                                        <span class="font-medium">{{ trip.countries_list }}</span>
+                                        <span class="font-medium">{{ trip.formatted_countries }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -114,9 +114,9 @@ const tabs = [
                             <div class="p-6">
                                 <Slider :items="trip.images">
                                     <template #default="{ item, index }">
-                                        <img :src="item.full_path"
+                                        <img :src="item.public_url" alt="Trip image"
                                             class="w-full h-[150px] rounded-md object-cover cursor-zoom-in" :key="index"
-                                            @click="openLightbox(index)" />
+                                            loading="lazy" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />

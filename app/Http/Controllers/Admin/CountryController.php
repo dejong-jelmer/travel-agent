@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Country;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,7 +12,7 @@ use Inertia\Response;
 
 class CountryController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     /**
      * Display a listing of the resource.

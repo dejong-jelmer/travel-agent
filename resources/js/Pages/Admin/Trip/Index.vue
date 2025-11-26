@@ -27,7 +27,7 @@ const showActions = reactive({});
                         <tr v-for="(trip, index) in trips.data" :key="index" class="hover:bg-gray-100 transition">
                             <td class="py-4 px-6 text-center">{{ trip.id }}</td>
                             <td class="py-4 px-6 text-center">{{ trip.name }}</td>
-                            <td class="py-4 px-6 text-center">{{ trip.countries_list }}</td>
+                            <td class="py-4 px-6 text-center">{{ trip.formatted_countries }}</td>
                             <td class="py-4 px-6 text-center">€ {{ trip.price }}</td>
                             <td class="py-4 px-6 text-center">{{ trip.duration }}</td>
                             <td class="py-4 px-6 text-center space-y-2">

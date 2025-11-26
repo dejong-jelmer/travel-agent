@@ -46,7 +46,7 @@ defineProps({
 
                 <!-- Beschrijving met afbeelding -->
                 <div class="mb-4">
-                    <div v-if="itinerary.image?.full_path"
+                    <div v-if="itinerary.image?.public_url"
                         class="flex flex-col tablet:flex-row gap-4 items-start tablet:items-center">
                         <!-- Tekst -->
                         <div class="flex-1 min-w-0">
@@ -57,7 +57,8 @@ defineProps({
                         <!-- Afbeelding -->
                         <div class="flex-shrink-0 w-full tablet:w-32 laptop:w-40">
                             <div class="rounded-lg overflow-hidden shadow-sm border border-accent-sage/20">
-                                <img :src="itinerary.image?.full_path ?? placeholder" :alt="itinerary.title"
+                                <img :src="itinerary.image?.public_url ?? placeholder" :alt="itinerary.title"
+                                    loading="lazy"
                                     class="w-full h-24 tablet:h-12 laptop:h-24 object-cover cursor-zoom-in"
                                     @click="openLightbox(index)" />
                             </div>

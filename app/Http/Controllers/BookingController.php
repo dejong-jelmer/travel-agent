@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\DTO\CreateBookingData;
 use App\Enums\ModelAction;
 use App\Events\BookingCreated;
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
@@ -15,7 +15,7 @@ use Inertia\Inertia;
 
 class BookingController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     public function store(CreateBookingRequest $request, BookingService $bookingService): RedirectResponse|JsonResponse
     {
@@ -28,7 +28,7 @@ class BookingController extends Controller
         return response()->booking($booking, ModelAction::Created);
     }
 
-    public function confirmation(Booking $booking)
+    public function received(Booking $booking)
     {
         if (session('booking_uuid') !== $booking->uuid) {
             abort(404);
@@ -38,7 +38,7 @@ class BookingController extends Controller
             'title' => $this->pageTitle('booking.title_received'),
             'booking' => $booking->load([
                 'trip.countries',
-                'trip.featuredImage',
+                'trip.heroImage',
                 'travelers',
                 'contact',
                 'mainBooker',

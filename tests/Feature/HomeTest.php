@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Country;
 use App\Models\Trip;
+use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia;
@@ -14,12 +15,11 @@ class HomeTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_home_page_displays_trips()
+    public function test_home_page_shows_trips()
     {
         $country = Country::factory()->create();
         $trip = Trip::factory()->create();
         $trip->countries()->attach($country->id);
-
         $response = $this->get(route('home'));
 
         $response->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
@@ -45,7 +45,7 @@ class HomeTest extends TestCase
         $this->get(route('contact'))->assertStatus(200);
     }
 
-    public function test_trip_show_displays_correct_trip()
+    public function test_trip_show_shows_correct_trip()
     {
         $country = Country::factory()->create();
         $trip = Trip::factory()->create();
@@ -60,9 +60,8 @@ class HomeTest extends TestCase
             ->where('trip.slug', $trip->slug)
             ->where('trip.duration', $trip->duration)
             ->where('trip.price', $trip->price)
-            ->where('trip.active', $trip->active)
             ->where('trip.featured', $trip->featured)
-            ->where('trip.published_at', $trip->published_at->format('Y-m-d H:i:s'))
+            ->where('trip.published_at', $trip->published_at->toISOString())
         );
 
         $this->assertDatabaseHas('country_trip', [
@@ -74,7 +73,7 @@ class HomeTest extends TestCase
 
     public function test_submit_contact_sends_contact_email()
     {
-        $faker = app(\Faker\Generator::class);
+        $faker = app(Generator::class);
         Mail::fake();
 
         $contactData = [

@@ -1,4 +1,6 @@
 <script setup>
+import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+
 const props = defineProps({
     trip: Object,
     required: true,
@@ -33,26 +35,64 @@ const props = defineProps({
                 </div>
 
                 <div class="laptop:col-span-2 space-y-8">
-                    <!-- Trip Details Section -->
+                    <!-- Tabbed Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                        <div class="border-b border-gray-200 bg-white px-6 py-4">
-                            <h2 class="text-lg font-semibold text-gray-700">Reis Details</h2>
-                            <p class="mt-1 text-sm text-gray-700/30">Informatie over het reistrip</p>
-                        </div>
-                        <div class="p-6 space-y-4">
-                            <div>
-                                <label class="text-sm font-medium text-gray-700">Naam</label>
-                                <p class="mt-1 text-gray-900">{{ trip.name }}</p>
+                        <TabGroup>
+                            <div class="border-b border-gray-200 bg-white px-6">
+                                <TabList class="flex space-x-8 -mb-px">
+                                    <Tab v-slot="{ selected }" class="outline-none">
+                                        <div class="py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
+                                            :class="selected
+                                                ? 'border-primary-default text-primary-default'
+                                                : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
+                                            Reis Details
+                                        </div>
+                                    </Tab>
+                                    <Tab v-slot="{ selected }" class="outline-none">
+                                        <div class="py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
+                                            :class="selected
+                                                ? 'border-primary-default text-primary-default'
+                                                : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
+                                            Meta data
+                                        </div>
+                                    </Tab>
+                                </TabList>
                             </div>
-                            <div>
-                                <label class="text-sm font-medium text-gray-700">Slug</label>
-                                <p class="mt-1 text-gray-900">{{ trip.slug }}</p>
-                            </div>
-                            <div>
-                                <label class="text-sm font-medium text-gray-700">Beschrijving</label>
-                                <p class="mt-1 text-gray-900">{{ trip.description }}</p>
-                            </div>
-                        </div>
+
+                            <TabPanels>
+                                <TabPanel class="p-6 space-y-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Naam</label>
+                                        <p class="mt-1 text-gray-900">{{ trip.name }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Slug</label>
+                                        <p class="mt-1 text-gray-900">{{ trip.slug }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Beschrijving</label>
+                                        <p class="mt-1 text-gray-900">{{ trip.description }}</p>
+                                    </div>
+                                </TabPanel>
+
+                                <TabPanel class="p-6 space-y-4">
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Meta Title</label>
+                                        <p class="mt-1 text-gray-900">{{ trip.meta_title || '-' }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Meta Description</label>
+                                        <p class="mt-1 text-gray-900">{{ trip.meta_description || '-' }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">Open Graph Afbeelding</label>
+                                        <p class="mt-1 text-xs text-gray-500">
+                                            Effectieve OG URL: <a target="_blank" :href="trip.og_image_url" class="underline text-blue-500">{{ trip.og_image_url }}</a>
+                                        </p>
+                                    </div>
+                                </TabPanel>
+                            </TabPanels>
+                        </TabGroup>
                     </section>
 
                     <!-- Media Section -->
@@ -62,11 +102,11 @@ const props = defineProps({
                             <p class="mt-1 text-sm text-gray-700/30">Reis media</p>
                         </div>
                         <div class="p-6 space-y-6">
-                            <div v-if="trip.featured_image">
+                            <div v-if="trip.hero_image">
                                 <label class="block text-sm font-medium text-gray-700 mb-2">
-                                    Featured Afbeelding
+                                    Hero Afbeelding
                                 </label>
-                                <img :src="trip.featured_image.full_path" alt="Featured image"
+                                <img :src="trip.hero_image.public_url" alt="Hero image"
                                     class="max-w-full h-auto rounded-lg shadow-md" />
                             </div>
 
@@ -75,7 +115,7 @@ const props = defineProps({
                                     Galerij Afbeeldingen
                                 </label>
                                 <div class="flex flex-wrap gap-4">
-                                    <img v-for="(image, index) in trip.images" :key="index" :src="image.full_path"
+                                    <img v-for="(image, index) in trip.images" :key="index" :src="image.public_url"
                                         :alt="`Reis image ${index}`"
                                         class="w-24 h-24 object-cover rounded-lg shadow-md" />
                                 </div>

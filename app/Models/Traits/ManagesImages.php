@@ -24,11 +24,11 @@ trait ManagesImages
      *
      * @param  string|UploadedFile|array<int, string|UploadedFile>  $data  Mixed array of paths (strings) and new uploads (UploadedFile).
      * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
-     * @param  bool  $isFeatured  Whether the image(s) should be marked as featured.
+     * @param  bool  $isPrimary  Whether the image(s) should be marked as is_primary.
      *
      * @throws Exception If any operation fails
      */
-    public function syncImages(string|UploadedFile|array $data, ImageRelation $relation, bool $isFeatured = false): void
+    public function syncImages(string|UploadedFile|array $data, ImageRelation $relation, bool $isPrimary = false): void
     {
         $incomingData = is_array($data) ? $data : [$data];
 
@@ -45,7 +45,7 @@ trait ManagesImages
         }
 
         // PHASE 1: Upload new files (outside transaction to avoid holding locks during I/O)
-        $uploadedFiles = $this->uploadNewImages($newUploads, $isFeatured);
+        $uploadedFiles = $this->uploadNewImages($newUploads, $isPrimary);
 
         try {
             // PHASE 2: Update database records in transaction
@@ -77,12 +77,12 @@ trait ManagesImages
      * Upload new image files to storage.
      *
      * @param  array<int, UploadedFile>  $uploads  Array of uploaded files.
-     * @param  bool  $isFeatured  Whether images should be marked as featured.
-     * @return array<int, array{path: string, original_name: string, featured: bool, mime_type: string, size: int}>
+     * @param  bool  $isPrimary  Whether images should be marked as is_primary.
+     * @return array<int, array{path: string, original_name: string, is_primary: bool, mime_type: string, size: int}>
      *
      * @throws RuntimeException If any operation fails
      */
-    private function uploadNewImages(array $uploads, bool $isFeatured): array
+    private function uploadNewImages(array $uploads, bool $isPrimary): array
     {
         $uploadedFiles = [];
 
@@ -96,7 +96,7 @@ trait ManagesImages
             $uploadedFiles[] = [
                 'path' => basename($fullPath),
                 'original_name' => $upload->getClientOriginalName(),
-                'featured' => $isFeatured,
+                'is_primary' => $isPrimary,
                 'mime_type' => $upload->getClientMimeType(),
                 'size' => $upload->getSize() ?? 0,
             ];
@@ -137,7 +137,7 @@ trait ManagesImages
                 $model->create([
                     'path' => $file['path'],
                     'original_name' => $file['original_name'],
-                    'featured' => $file['featured'],
+                    'is_primary' => $file['is_primary'],
                     'mime_type' => $file['mime_type'],
                     'size' => $file['size'],
                 ]);

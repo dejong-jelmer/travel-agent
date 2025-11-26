@@ -7,7 +7,7 @@ use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\HasPageTitle;
+use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
@@ -18,7 +18,7 @@ use Inertia\Response;
 
 class BookingController extends Controller
 {
-    use HasPageTitle;
+    use HasPageMetadata;
 
     public function __construct(private BookingService $bookingService) {}
 

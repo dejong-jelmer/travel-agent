@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Services\ContactDetailsService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Config;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -44,7 +43,9 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => Auth::user(),
             ],
-            'images' => Config::get('images'),
+            'config' => [
+                'images' => config('images'),
+            ],
             'contact' => [
                 'phone' => function () use ($contactService) {
                     return $contactService->getContact('phone')->getPhoneNumber();

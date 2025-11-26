@@ -59,10 +59,10 @@ const emit = defineEmits(['submit']);
                         <p class="mt-1 text-sm text-gray-700/30">Upload afbeelding voor deze dag</p>
                     </div>
                     <div class="p-6">
-                        <UniversalImageUploader v-model="form.image" preview-size="large"
+                        <ImageUploader v-model="form.image" preview-size="large"
                             :label="form.image ? 'Afbeelding wijzigen' : 'Selecteer een afbeelding'"
                             :feedback="form.errors.image"
-                            @initialized="emit('initialized')" />
+                        />
                         <p class="mt-2 text-xs text-gray-700/30">
                             Deze afbeelding wordt gebruikt voor dit dagprogramma
                         </p>
