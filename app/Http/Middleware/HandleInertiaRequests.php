@@ -45,7 +45,6 @@ class HandleInertiaRequests extends Middleware
             ],
             'config' => [
                 'images' => config('images'),
-                'seo' => config('seo'),
             ],
             'contact' => [
                 'phone' => function () use ($contactService) {
