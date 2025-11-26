@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
+use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\UpdateTripRequest;
-use App\Http\Controllers\Controller;
 use App\Models\Country;
 use App\Models\Trip;
 use Illuminate\Http\RedirectResponse;
