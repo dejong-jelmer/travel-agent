@@ -6,10 +6,11 @@ use App\Models\Booking;
 use App\Models\Country;
 use App\Models\Image;
 use App\Models\Itinerary;
-use App\Models\Product;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class DatabaseSeeder extends Seeder
 {
@@ -20,6 +21,14 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Remove old images
+        $disk = Storage::disk(config('images.disk'));
+        $dir = config('images.directory');
+        $files = $disk->allFiles($dir);
+        if (! empty($files)) {
+            $disk->delete($files);
+        }
+
         $countries = Country::factory(10)->create();
 
         User::factory()->create([
@@ -27,19 +36,19 @@ class DatabaseSeeder extends Seeder
             'email' => 'test@mail.com',
         ]);
 
-        Product::factory(8)
+        Trip::factory(8)
             ->has(Booking::factory(), 'bookings')
             ->has(Image::factory()->count(3), 'images')
-            ->create()->each(function ($product) use ($countries) {
-                $product->images()->inRandomOrder()->first()->update(['featured' => true]);
-                $product->countries()->attach(
+            ->create()->each(function ($trip) use ($countries) {
+                $trip->images()->inRandomOrder()->first()->update(['is_primary' => true]);
+                $trip->countries()->attach(
                     $countries->random(rand(1, 3))->modelKeys()
                 );
-                for ($i = 1; $i <= $product->duration; $i++) {
+                for ($i = 1; $i <= $trip->duration; $i++) {
                     Itinerary::factory()
                         ->has(Image::factory(), 'image')
                         ->create([
-                            'product_id' => $product->id,
+                            'trip_id' => $trip->id,
                             'order' => $i,
                         ]);
                 }

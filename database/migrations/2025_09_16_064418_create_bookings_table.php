@@ -15,12 +15,13 @@ return new class extends Migration
             $table->id();
             $table->uuid('uuid')->unique();
             $table->string('reference')->unique()->nullable();
-            $table->foreignId('product_id')->constrained('products')->cascadeOnDelete();
+            $table->foreignId('trip_id')->constrained('trips')->cascadeOnDelete();
             $table->foreignId('main_booker_id')->cascadeOnDelete()->nullable();
             $table->date('departure_date');
-            $table->boolean('conditions_accepted')->default(false);
-            $table->boolean('is_confirmed')->default(false);
-            $table->boolean('new')->default(true);
+            $table->boolean('has_accepted_conditions')->default(false);
+            $table->boolean('has_confirmed')->default(false);
+            $table->string('status', 20)->index();
+            $table->string('payment_status', 20)->index();
             $table->softDeletes();
             $table->timestamps();
         });

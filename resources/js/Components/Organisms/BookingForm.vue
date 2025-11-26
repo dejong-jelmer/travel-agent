@@ -1,72 +1,3 @@
-<template>
-    <div class="bg-white rounded-2xl shadow-sm border border-secondary-sage/20 overflow-hidden">
-        <!-- Progress indicator (zoals eerder besproken) -->
-        <div class="px-6 pb-4 border-b border-secondary-sage/20">
-            <div class="flex justify-between mb-2 pt-4">
-                <button v-for="(step, index) in stepStates" :key="step.id" type="button" @click="goToStep(index)"
-                    :disabled="step.isLocked" class="text-sm font-medium transition-all relative group" :class="[
-                        step.isActive && 'text-primary-dark font-bold scale-105',
-                        step.isCompleted && 'text-accent-earth',
-                        step.isAccessible && !step.isActive && !step.isCompleted && 'text-secondary-stone hover:text-primary-dark cursor-pointer',
-                        step.isLocked && 'text-secondary-stone/30 cursor-not-allowed'
-                    ]">
-
-                    {{ step.label }}
-
-                    <!-- Tooltip on hover -->
-                    <span v-if="step.isLocked" class="absolute top-full left-1/2 translate-x-[-50%] mt-2
-                        px-2 py-1 bg-gray-900 text-white text-xs rounded
-                        opacity-0 group-hover:opacity-100 transition-opacity
-                        whitespace-nowrap pointer-events-none z-50">
-                        Vul eerst de vorige stappen in
-                    </span>
-
-
-                </button>
-            </div>
-
-            <div class="h-2 bg-neutral-50 rounded-full overflow-hidden">
-                <div class="h-full bg-accent-earth transition-all duration-500 ease-out"
-                    :style="{ width: progress + '%' }"></div>
-            </div>
-        </div>
-
-        <!-- Step content -->
-        <div class="p-2 laptop:p-4 min-h-[400px]">
-            <!-- Trip Step -->
-            <Transition name="fade" mode="out-in">
-                <component :is="currentStepComponent" :booking="booking" :constraints="constraints"
-                    v-bind="currentStep.props" />
-            </Transition>
-        </div>
-
-        <!-- Navigation buttons -->
-        <div class="flex justify-between items-center px-6 py-4 border-t border-secondary-sage/20 bg-neutral-50">
-            <button type="button"
-                class="px-4 py-2 rounded-xl text-primary-dark hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                :disabled="isFirstStep" @click="prevStep">
-                Vorige
-            </button>
-
-            <!-- Next button for non-final steps -->
-            <button v-if="!isLastStep" type="button"
-                class="px-6 py-2 rounded-xl bg-accent-earth text-primary-dark font-medium hover:bg-accent-terracotta hover:text-neutral-25 transition-all disabled:hover:text-primary-dark disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
-                :disabled="booking.processing" @click="handleNext">
-                Volgende
-            </button>
-
-            <!-- Submit button for final step -->
-            <button v-else type="button"
-                v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
-                class="px-6 py-2 rounded-xl flex items-center gap-2 bg-accent-earth text-primary-dark font-medium hover:bg-accent-terracotta hover:text-neutral-25 transition-all disabled:hover:text-primary-dark disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
-                :disabled="!canSubmit || booking.processing" @click="handleSubmit">
-                <Spinner v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
-                <span>{{ booking.processing ? 'Bezig met verzenden...' : 'Nu boeken' }}</span>
-            </button>
-        </div>
-    </div>
-</template>
-
 <script setup>
 import { computed, toRef } from 'vue';
 import { useBookingSteps } from '@/Composables/useBookingSteps.js';
@@ -74,6 +5,7 @@ import Trip from '@/Components/Organisms/BookingSteps/Trip.vue';
 import Travelers from '@/Components/Organisms/BookingSteps/Travelers.vue';
 import Contact from '@/Components/Organisms/BookingSteps/Contact.vue';
 import Overview from '@/Components/Organisms/BookingSteps/Overview.vue';
+import { LoaderCircle } from 'lucide-vue-next'
 
 
 const props = defineProps({
@@ -107,15 +39,13 @@ const stepComponents = {
 
 const currentStepComponent = computed(() => stepComponents[currentStep.value.id]);
 
-// Computed property for submit button state
 const canSubmit = computed(() => {
-    return booking.value.is_confirmed && booking.value.conditions_accepted && !booking.value.processing && !booking.value.hasErrors;
+    return booking.value.has_confirmed && booking.value.has_accepted_conditions && !booking.value.processing && !booking.value.hasErrors;
 });
 
 function handleNext() {
     const success = nextStep();
     if (!success) {
-        // Scroll to first error
         const firstError = document.querySelector('[data-error="true"]');
         firstError?.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -123,7 +53,6 @@ function handleNext() {
 
 function handleSubmit() {
     if (!validateAllSteps()) {
-        // Go to first step with errors
         const errorStep = steps.value.findIndex(step => {
             const errors = step.validate();
             return Object.keys(errors).length > 0;
@@ -139,7 +68,6 @@ function handleSubmit() {
         forceFormData: true,
         onSuccess: () => { },
         onError: (errors) => {
-            // Ga to step with server errors
             const errorKeys = Object.keys(errors);
             const errorStep = steps.value.findIndex(step =>
                 step.fields.some(field =>
@@ -155,19 +83,68 @@ function handleSubmit() {
 }
 </script>
 
-<style scoped>
-.fade-enter-active,
-.fade-leave-active {
-    transition: opacity 0.2s ease, transform 0.2s ease;
-}
+<template>
+    <div class="bg-white rounded-2xl shadow-sm border border-accent-sage/20 overflow-hidden">
+        <div class="px-6 pb-4 border-b border-accent-sage/20">
+            <div class="flex justify-between mb-2 pt-4">
+                <button v-for="(step, index) in stepStates" :key="step.id" type="button" @click="goToStep(index)"
+                    :disabled="step.isLocked" :data-testid="`step-button-${step.id}`"
+                    class="text-sm font-medium transition-all relative group" :class="[
+                        step.isActive && 'text-brand-primary font-bold scale-105',
+                        step.isCompleted && 'text-accent-primary font-bold',
+                        step.isAccessible && !step.isActive && !step.isCompleted && 'text-brand-light hover:text-brand-primary cursor-pointer',
+                        step.isLocked && 'text-brand-light/30 cursor-not-allowed'
+                    ]">
 
-.fade-enter-from {
-    opacity: 0;
-    transform: translateX(10px);
-}
+                    {{ step.label }}
 
-.fade-leave-to {
-    opacity: 0;
-    transform: translateX(-10px);
-}
-</style>
+                    <!-- Tooltip on hover -->
+                    <span v-if="step.isLocked" data-testid="step-tooltip"
+                        class="absolute top-full left-1/2 translate-x-[-50%] mt-2
+                        px-2 py-1 bg-gray-900 text-white text-xs rounded
+                        opacity-0 group-hover:opacity-100 transition-opacity
+                        whitespace-nowrap pointer-events-none z-50">
+                        Vul eerst de vorige stappen in
+                    </span>
+
+
+                </button>
+            </div>
+
+            <div class="h-2 bg-white rounded-full overflow-hidden">
+                <div class="h-full bg-status-success transition-all duration-500 ease-out"
+                    data-testid="progress-bar"
+                    :style="{ width: progress + '%' }"></div>
+            </div>
+        </div>
+        <div class="p-2 laptop:p-4 min-h-[400px]">
+            <Transition mode="out-in" enter-active-class="transition duration-200 ease"
+                leave-active-class="transition duration-200 ease" enter-from-class="opacity-0 translate-x-[10px]"
+                leave-to-class="opacity-0 -translate-x-[10px]">
+                <component :is="currentStepComponent" :booking="booking" :constraints="constraints"
+                    v-bind="currentStep.props" />
+            </Transition>
+        </div>
+        <div class="flex justify-between items-center px-6 py-4 border-t border-accent-sage/20 bg-white">
+            <button type="button" data-testid="prev-button"
+                class="px-4 py-2 rounded-xl text-brand-primary hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                :disabled="isFirstStep" @click="prevStep">
+                Vorige
+            </button>
+
+            <button v-if="!isLastStep" type="button" data-testid="next-button"
+                class="px-6 py-2 rounded-xl bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:hover:text-brand-primary disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
+                :disabled="booking.processing" @click="handleNext">
+                Volgende
+            </button>
+
+            <button v-else type="button" data-testid="submit-button"
+                v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
+                class="px-6 py-2 rounded-xl inline-flex gap-2 items-center bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:opacity-40 disabled:hover:bg-accent-primary disabled:hover:text-white disabled:cursor-not-allowed"
+                :disabled="!canSubmit || booking.processing" @click="handleSubmit">
+                <LoaderCircle v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
+                <span>{{ booking.processing ? 'Bezig met verzenden...' : 'Nu boeken' }}</span>
+            </button>
+        </div>
+    </div>
+</template>

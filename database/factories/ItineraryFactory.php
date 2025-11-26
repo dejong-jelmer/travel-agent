@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Enums\Meals;
+use App\Enums\Meal;
 use App\Enums\Transport;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -34,12 +34,12 @@ class ItineraryFactory extends Factory
                 'Boottocht',
             ], rand(0, 4)),
             'accommodation' => fake()->company.' Hotel',
-            'meals' => fake()->optional()->randomElements(Meals::cases(), rand(0, 2)),
+            'meals' => fake()->optional()->randomElements(Meal::cases(), rand(0, 2)),
             'transport' => fake()->optional()->randomElements(Transport::cases(), rand(0, 4)),
             'remark' => fake()->optional()->randomElement([
                 'Museum toegang niet inbegrepen in de prijs',
                 'Lunch niet inbegrepen',
-                'Tickets moeten voor 08:00 ophaaldt worden op de locatie',
+                'Tickets moeten voor 08:00 opgehaald worden op de locatie',
                 'Museumbezoek is optioneel',
             ]),
         ];

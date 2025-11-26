@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -20,26 +22,36 @@ class Booking extends Model
     use HasFactory,
         SoftDeletes;
 
+    protected $perPage = 10;
+
     protected $fillable = [
-        'product_id',
+        'trip_id',
         'main_booker_id',
         'departure_date',
-        'conditions_accepted',
-        'is_confirmed',
+        'has_accepted_conditions',
+        'has_confirmed',
+        'status',
+        'payment_status',
     ];
 
     protected $casts = [
-        'conditions_accepted' => 'boolean',
-        'is_confirmed' => 'boolean',
-        'new' => 'boolean',
+        'has_accepted_conditions' => 'boolean',
+        'has_confirmed' => 'boolean',
         'departure_date' => 'datetime',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'status' => Status::class,
+        'payment_status' => PaymentStatus::class,
     ];
 
     protected $appends = [
         'departure_date_formatted',
         'created_at_formatted',
+    ];
+
+    protected $attributes = [
+        'status' => Status::New->value,
+        'payment_status' => PaymentStatus::Pending->value,
     ];
 
     protected static function booted()
@@ -108,9 +120,9 @@ class Booking extends Model
         });
     }
 
-    public function product(): BelongsTo
+    public function trip(): BelongsTo
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Trip::class);
     }
 
     public function travelers(): HasMany
@@ -150,24 +162,27 @@ class Booking extends Model
     #[Scope]
     protected function new(Builder $query): void
     {
-        $query->where('new', 1);
+        $query->where('status', Status::New);
     }
 
     /**
-     * Scope a query to only include new bookings.
+     * Scope a query to only include bookings with a departure date in the future.
      */
     #[Scope]
-    protected function future(Builder $query): void
+    protected function upcoming(Builder $query): void
     {
         $query->whereDate('departure_date', '>', now());
     }
 
     /**
-     * Scope a query to only include new bookings.
+     * Scope a query to only include bookings with a departure date in the upcoming month.
      */
     #[Scope]
-    protected function departDueNextMonth(Builder $query): void
+    protected function upcomingMonth(Builder $query): void
     {
-        $query->whereDate('departure_date', '>', now())->whereDate('departure_date', '<', now()->addMonth());
+        $query->whereBetween('departure_date', [
+            now()->startOfDay(),
+            now()->addMonth()->endOfDay(),
+        ]);
     }
 }

@@ -27,9 +27,9 @@ const emit = defineEmits(['update:modelValue'])
 
 </script>
 <template>
-    <div>
-        <Label v-if="showLabel" :form-field="name">
-            {{ label }}
+    <div class="grid gap-1">
+        <Label v-if="(label && showLabel) || $slots.label" :for="name" :required="required">
+            <slot name="label">{{ label }}</slot>
         </Label>
         <input :type="type" :id="name" :value="modelValue" @input="emit('update:modelValue', $event.target.value)"
             class="form-input" :class="!!feedback ? 'ring-[2px] ring-status-error ring-offset-2 bg-status-error/20' : ''"

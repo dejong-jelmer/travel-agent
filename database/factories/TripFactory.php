@@ -1,0 +1,45 @@
+<?php
+
+namespace Database\Factories;
+
+use App\Models\Country;
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Trip>
+ */
+class TripFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
+    {
+        $country = Country::inRandomOrder()->first();
+        while ($country === null) {
+            Country::factory()->create();
+            $country = Country::inRandomOrder()->first();
+        }
+        $city = fake()->city();
+        $text = fake()->paragraph();
+        $duration = fake()->randomDigit();
+        while ($duration < 4) {
+            $duration = fake()->randomDigit();
+        }
+
+        return [
+            'name' => $city,
+            'slug' => Str::slug("bijzondere-reis-naar-{$city}-{$country->name}"),
+            'description' => "Bijzondere reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
+            'price' => randomPrice(),
+            'duration' => $duration,
+            'featured' => true,
+            'published_at' => today()->toDateTimeString(),
+            'meta_title' => Str::substr("Reis naar {$city} | $duration dagen | {$country->name}", 0, 60),
+            'meta_description' => fake()->text(160),
+        ];
+    }
+}

@@ -10,12 +10,14 @@ class Country extends Model
 {
     use HasFactory;
 
+    protected $perPage = 10;
+
     protected $fillable = ['name'];
 
     public $timestamps = false;
 
-    public function products(): BelongsToMany
+    public function trips(): BelongsToMany
     {
-        return $this->belongsToMany(Product::class);
+        return $this->belongsToMany(Trip::class);
     }
 }

@@ -3,9 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\DTO\ContactFormData;
-use App\Http\Requests\ContactRequest;
+use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
-use App\Models\Product;
+use App\Models\Trip;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -14,35 +15,34 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller
 {
-    private string $appName;
-
-    public function __construct()
-    {
-        $this->appName = config('app.name');
-    }
+    use HasPageMetadata;
 
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'products' => Product::with(['countries', 'featuredImage'])->active()->featured()->get(),
+            'title' => $this->pageTitle('home.home'),
+            'trips' => Trip::with(['countries', 'heroImage'])->published()->featured()->get(),
+            'seo' => $this->pageSeo('home.home_seo'),
         ]);
     }
 
     public function about(): Response
     {
         return Inertia::render('About', [
-            'title' => "Over mij - {$this->appName}",
+            'title' => $this->pageTitle('home.about'),
+            'seo' => $this->pageSeo('home.about_seo'),
         ]);
     }
 
     public function contact(): Response
     {
         return Inertia::render('Contact', [
-            'title' => "Contact - {$this->appName}",
+            'title' => $this->pageTitle('home.contact'),
+            'seo' => $this->pageSeo('home.contact_seo'),
         ]);
     }
 
-    public function submitContact(ContactRequest $request): HttpResponse
+    public function submitContact(SubmitContactRequest $request): HttpResponse
     {
         $validated = $request->validated();
         $address = config('contact.mail');
@@ -72,25 +72,19 @@ class HomeController extends Controller
         ], 200);
     }
 
-    public function showTrip(Product $trip): Response
-    {
-        return Inertia::render('Trips/Show', [
-            'title' => "{$this->appName} - {$trip->name}",
-            'trip' => $trip->load(['featuredImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
-        ]);
-    }
-
-    public function showPrivacy(): Response
+    public function privacy(): Response
     {
         return Inertia::render('Privacy', [
-            'title' => "{$this->appName} - Privacyverklaring",
+            'title' => $this->pageTitle('home.privacy_statement'),
+            'seo' => $this->pageSeo('home.privacy_seo'),
         ]);
     }
 
-    public function showTerms(): Response
+    public function terms(): Response
     {
         return Inertia::render('Terms', [
-            'title' => "{$this->appName} - Algemene Voorwaarden",
+            'title' => $this->pageTitle('home.conditions'),
+            'seo' => $this->pageSeo('home.terms_seo'),
         ]);
     }
 }

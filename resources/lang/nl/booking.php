@@ -1,7 +1,16 @@
 <?php
 
 return [
-    'stored' => 'Je boeking is geslaagd! In je mail ontvang je een bevestiging en met meer details voor je aanstaande reis.',
-    'updated' => 'De aan passing op boeking :reference is geslaagd.',
-    'destroyed' => 'De boeking is verwijderd.',
+    // Page titles (Admin)
+    'title_index' => 'Boekingen',
+    'title_show' => 'Boeking details',
+    'title_edit' => 'Boeking bewerken',
+
+    // Page titles (Frontend)
+    'title_received' => 'Boeking ontvangen',
+
+    // Flash messages
+    'created' => 'Je boeking is geslaagd! Je ontvangt een bevestigingsmail met meer details over je aanstaande reis.',
+    'updated' => 'Boeking :reference is succesvol aangepast.',
+    'deleted' => 'Boeking :reference is verwijderd.',
 ];

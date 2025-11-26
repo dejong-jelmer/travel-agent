@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Booking\PaymentStatus;
+use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingTraveler;
-use App\Models\Product;
+use App\Models\Trip;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -19,12 +21,12 @@ class BookingTest extends TestCase
 {
     use RefreshDatabase;
 
-    private Product $trip;
+    private Trip $trip;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->trip = Product::factory()->create();
+        $this->trip = Trip::factory()->create();
     }
 
     public function test_it_can_create_a_booking_with_travelers_and_contact()
@@ -55,7 +57,6 @@ class BookingTest extends TestCase
         $updatedPayload = $this->generateUpdatePayload($booking, $overrides);
 
         $response = $this->put(route('admin.bookings.update', $booking), $updatedPayload);
-
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
 
@@ -67,8 +68,8 @@ class BookingTest extends TestCase
 
     public function test_booking_has_unique_reference()
     {
-        $booking1 = Booking::factory()->for($this->trip, 'product')->create();
-        $booking2 = Booking::factory()->for($this->trip, 'product')->create();
+        $booking1 = Booking::factory()->for($this->trip, 'trip')->create();
+        $booking2 = Booking::factory()->for($this->trip, 'trip')->create();
 
         $this->assertNotNull($booking1->reference);
         $this->assertNotNull($booking2->reference);
@@ -78,7 +79,7 @@ class BookingTest extends TestCase
 
     public function test_booking_has_valid_uuid()
     {
-        $booking = Booking::factory()->for($this->trip, 'product')->create();
+        $booking = Booking::factory()->for($this->trip, 'trip')->create();
 
         $this->assertNotNull($booking->uuid);
         $this->assertTrue(Str::isUuid($booking->uuid));
@@ -86,7 +87,7 @@ class BookingTest extends TestCase
 
     public function test_booking_has_main_booker_relation()
     {
-        $booking = Booking::factory()->for($this->trip, 'product')->create();
+        $booking = Booking::factory()->for($this->trip, 'trip')->create();
         $traveler = BookingTraveler::factory()->create(['booking_id' => $booking->id]);
         $booking->update(['main_booker_id' => $traveler->id]);
 
@@ -128,8 +129,8 @@ class BookingTest extends TestCase
 
         return array_merge([
             'trip' => ['id' => $this->trip->id],
-            'conditions_accepted' => true,
-            'is_confirmed' => true,
+            'has_accepted_conditions' => true,
+            'has_confirmed' => true,
             'departure_date' => fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
             'travelers' => [
                 'adults' => $this->generateTravelers($numberOfAdults, TravelerType::Adult),
@@ -193,12 +194,12 @@ class BookingTest extends TestCase
 
     private function assertBookingWasCreatedCorrectly(Booking $booking, array $payload): void
     {
-        $this->assertEquals($payload['trip']['id'], $booking->product_id);
+        $this->assertEquals($payload['trip']['id'], $booking->trip_id);
         $this->assertDatabaseHas('bookings', [
             'id' => $booking->id,
             'departure_date' => $payload['departure_date'],
-            'is_confirmed' => 1,
-            'conditions_accepted' => 1,
+            'has_confirmed' => 1,
+            'has_accepted_conditions' => 1,
         ]);
     }
 
@@ -244,7 +245,7 @@ class BookingTest extends TestCase
 
     private function assertRedirectIsCorrect($response, Booking $booking): void
     {
-        $response->assertRedirect(route('bookings.confirmation', ['booking' => $booking->uuid]));
+        $response->assertRedirect(route('booking.received', ['booking' => $booking->uuid]));
     }
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array
@@ -292,7 +293,9 @@ class BookingTest extends TestCase
 
         // Create the base payload
         $payload = [
-            'trip' => ['id' => $booking->product_id],
+            'trip' => ['id' => $booking->trip_id],
+            'status' => Status::New->value,
+            'payment_status' => PaymentStatus::Pending->value,
             'travelers' => [
                 'adults' => $adults,
                 'children' => $children,

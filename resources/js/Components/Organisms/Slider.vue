@@ -90,12 +90,12 @@ const endDrag = () => {
             <template v-if="items.length > visibleItems">
                 <button
                     @click="prevSlide"
-                    class="hidden tablet:block text-4xl font-thin text-primary-default hover:text-light-blue transition-colors rotate-180"
+                    class="hidden tablet:block text-4xl font-thin text-brand-primary hover:text-light-blue transition-colors rotate-180"
                 >
                     <ChevronRightIcon class="h-12 w-12" />
                 </button>
             </template>
-            <div class="max-w-screen-desktop w-full overflow-hidden">
+            <div class="max-w-screen-wide laptop:max-w-screen-desktop w-full overflow-hidden">
                 <div
                     ref="slider"
                     class="flex transition-transform duration-500 ease-in-out"
@@ -126,7 +126,7 @@ const endDrag = () => {
             <template v-if="items.length > visibleItems">
                 <button
                     @click="nextSlide"
-                    class="hidden tablet:block text-4xl font-thin text-primary-default hover:text-light-blue transition-colors"
+                    class="hidden tablet:block text-4xl font-thin text-brand-primary hover:text-light-blue transition-colors"
                 >
                     <ChevronRightIcon class="h-12 w-12" />
                 </button>

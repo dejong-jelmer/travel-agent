@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Casts\MealsCast;
+use App\Casts\MealCast;
 use App\Casts\TransportCast;
-use App\Models\Traits\HasStoreableImages;
+use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -13,11 +13,11 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Itinerary extends Model
 {
     use HasFactory,
-        HasStoreableImages,
+        ManagesImages,
         SoftDeletes;
 
     protected $fillable = [
-        'product_id',
+        'trip_id',
         'title',
         'location',
         'description',
@@ -32,7 +32,7 @@ class Itinerary extends Model
 
     protected $casts = [
         'activities' => 'array',
-        'meals' => MealsCast::class,
+        'meals' => MealCast::class,
         'transport' => TransportCast::class,
     ];
 
@@ -44,9 +44,9 @@ class Itinerary extends Model
         static::restoring(fn ($itinerary) => $itinerary->image()->withTrashed()->restore());
     }
 
-    public function product()
+    public function trip()
     {
-        return $this->belongsTo(Product::class);
+        return $this->belongsTo(Trip::class);
     }
 
     public function image()
@@ -57,7 +57,7 @@ class Itinerary extends Model
     public function reOrder(): void
     {
         $order = 1;
-        $itineraries = static::where('product_id', $this->product_id)
+        $itineraries = static::where('trip_id', $this->trip_id)
             ->where('id', '!=', $this->id)
             ->orderBy('order')
             ->get();

@@ -10,7 +10,7 @@ defineProps({
     },
     rows: {
         type: Number,
-        default: 10,
+        default: 5,
     },
     required: {
         type: Boolean,
@@ -25,8 +25,10 @@ defineProps({
 });
 </script>
 <template>
-    <div>
-        <Label v-if="showLabel" :form-field="name">{{ label }}</Label>
+    <div class="grid gap-1">
+        <Label v-if="(label && showLabel) || $slots.label" :for="name" :required="required">
+            <slot name="label">{{ label }}</slot>
+        </Label>
         <textarea
             :id="name"
             :value="modelValue"

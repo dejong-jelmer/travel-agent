@@ -13,8 +13,8 @@ return [
         'departure_date.required' => 'Selecteer een vertrekdatum.',
         'departure_date.date' => 'De geselecteerde datum is ongeldig.',
         'departure_date.after' => 'De vertrekdatum kan niet in het verleden liggen.',
-        'is_confirmed.accepted' => 'Je moet nog akkoord gaan.',
-        'conditions_accepted.accepted' => 'Je moet nog akkoord gaan met de algemene voorwaarde.',
+        'has_confirmed.accepted' => 'Je moet nog akkoord gaan.',
+        'has_accepted_conditions.accepted' => 'Je moet nog akkoord gaan met de algemene voorwaarde.',
 
         // Contactgegevens
         'contact.street.required' => 'Vul een straatnaam in.',

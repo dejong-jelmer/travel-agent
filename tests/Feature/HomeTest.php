@@ -4,7 +4,8 @@ namespace Tests\Feature;
 
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Country;
-use App\Models\Product;
+use App\Models\Trip;
+use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Testing\AssertableInertia;
@@ -14,21 +15,20 @@ class HomeTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_home_page_displays_products()
+    public function test_home_page_shows_trips()
     {
         $country = Country::factory()->create();
-        $product = Product::factory()->create();
-        $product->countries()->attach($country->id);
-
+        $trip = Trip::factory()->create();
+        $trip->countries()->attach($country->id);
         $response = $this->get(route('home'));
 
         $response->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
-            ->has('products', 1)
-            ->where('products.0.id', $product->id)
-            ->where('products.0.price', $product->price)
+            ->has('trips', 1)
+            ->where('trips.0.id', $trip->id)
+            ->where('trips.0.price', $trip->price)
         );
-        $this->assertDatabaseHas('country_product', [
-            'product_id' => $product->id,
+        $this->assertDatabaseHas('country_trip', [
+            'trip_id' => $trip->id,
             'country_id' => $country->id,
         ]);
 
@@ -45,28 +45,27 @@ class HomeTest extends TestCase
         $this->get(route('contact'))->assertStatus(200);
     }
 
-    public function test_product_page_displays_correct_product()
+    public function test_trip_show_shows_correct_trip()
     {
         $country = Country::factory()->create();
-        $trip = Product::factory()->create();
+        $trip = Trip::factory()->create();
         $trip->countries()->attach($country->id);
 
         $response = $this->get(route('trip.show', $trip));
 
-        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Trips/Show')
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Trip/Show')
             ->has('trip')
             ->where('trip.id', $trip->id)
             ->where('trip.name', $trip->name)
             ->where('trip.slug', $trip->slug)
             ->where('trip.duration', $trip->duration)
             ->where('trip.price', $trip->price)
-            ->where('trip.active', $trip->active)
             ->where('trip.featured', $trip->featured)
-            ->where('trip.published_at', $trip->published_at->format('Y-m-d H:i:s'))
+            ->where('trip.published_at', $trip->published_at->toISOString())
         );
 
-        $this->assertDatabaseHas('country_product', [
-            'product_id' => $trip->id,
+        $this->assertDatabaseHas('country_trip', [
+            'trip_id' => $trip->id,
             'country_id' => $country->id,
         ]);
         $response->assertStatus(200);
@@ -74,7 +73,7 @@ class HomeTest extends TestCase
 
     public function test_submit_contact_sends_contact_email()
     {
-        $faker = app(\Faker\Generator::class);
+        $faker = app(Generator::class);
         Mail::fake();
 
         $contactData = [

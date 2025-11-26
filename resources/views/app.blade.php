@@ -14,7 +14,7 @@
     @inertiaHead
 </head>
 
-<body class="overflow-x-hidden font-poppins">
+<body class="font-poppins">
     @inertia
 </body>
 

@@ -1,0 +1,161 @@
+<?php
+
+namespace App\Models\Traits;
+
+use App\Enums\ImageRelation;
+use BadMethodCallException;
+use Exception;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use RuntimeException;
+
+trait ManagesImages
+{
+    /**
+     * Sync images - add new, keep existing, and remove deleted images.
+     *
+     * Uses two-phase commit to ensure atomicity and avoid race conditions:
+     * 1. Upload new files first (outside transaction)
+     * 2. DB transaction: delete old records, create new records
+     * 3. After commit: delete old storage files
+     * 4. On failure: cleanup new uploads and rollback
+     *
+     * @param  string|UploadedFile|array<int, string|UploadedFile>  $data  Mixed array of paths (strings) and new uploads (UploadedFile).
+     * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
+     * @param  bool  $isPrimary  Whether the image(s) should be marked as is_primary.
+     *
+     * @throws Exception If any operation fails
+     */
+    public function syncImages(string|UploadedFile|array $data, ImageRelation $relation, bool $isPrimary = false): void
+    {
+        $incomingData = is_array($data) ? $data : [$data];
+
+        // Separate incoming data into existing paths and new uploads
+        $incomingPaths = [];
+        $newUploads = [];
+
+        foreach ($incomingData as $item) {
+            if (is_string($item)) {
+                $incomingPaths[] = basename($item);
+            } elseif ($item instanceof UploadedFile) {
+                $newUploads[] = $item;
+            }
+        }
+
+        // PHASE 1: Upload new files (outside transaction to avoid holding locks during I/O)
+        $uploadedFiles = $this->uploadNewImages($newUploads, $isPrimary);
+
+        try {
+            // PHASE 2: Update database records in transaction
+            $storagePathsToDelete = $this->updateImageRecordsInTransaction($incomingPaths, $uploadedFiles, $relation);
+
+            // PHASE 3: Delete old storage files after successful transaction
+            $this->deleteStorageFiles($storagePathsToDelete);
+        } catch (\Exception $e) {
+            try {
+                Log::error('Image sync failed', [
+                    'model' => get_class($this),
+                    'id' => $this->id,
+                    'error' => $e->getMessage(),
+                ]);
+                // Cleanup: Delete newly uploaded files if anything failed
+                $this->deleteStorageFiles(array_column($uploadedFiles, 'path'));
+            } catch (\Exception $cleanupException) {
+                Log::error('Failed to cleanup uploaded files', [
+                    'original_error' => $e->getMessage(),
+                    'cleanup_error' => $cleanupException->getMessage(),
+                ]);
+            }
+            // Throw original error
+            throw $e;
+        }
+    }
+
+    /**
+     * Upload new image files to storage.
+     *
+     * @param  array<int, UploadedFile>  $uploads  Array of uploaded files.
+     * @param  bool  $isPrimary  Whether images should be marked as is_primary.
+     * @return array<int, array{path: string, original_name: string, is_primary: bool, mime_type: string, size: int}>
+     *
+     * @throws RuntimeException If any operation fails
+     */
+    private function uploadNewImages(array $uploads, bool $isPrimary): array
+    {
+        $uploadedFiles = [];
+
+        foreach ($uploads as $upload) {
+            $fullPath = $upload->store(config('images.directory'), config('images.disk'));
+
+            if (! $fullPath) {
+                throw new RuntimeException("Failed to upload image: {$upload->getClientOriginalName()}");
+            }
+
+            $uploadedFiles[] = [
+                'path' => basename($fullPath),
+                'original_name' => $upload->getClientOriginalName(),
+                'is_primary' => $isPrimary,
+                'mime_type' => $upload->getClientMimeType(),
+                'size' => $upload->getSize() ?? 0,
+            ];
+        }
+
+        return $uploadedFiles;
+    }
+
+    /**
+     * Update image records in database transaction.
+     *
+     * Removes old records, creates new records, and returns paths of deleted images.
+     *
+     * @param  array<int, string>  $incomingPaths  Array of existing image paths to keep.
+     * @param  array<int, array>  $uploadedFiles  Array of newly uploaded file data.
+     * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
+     * @return array<int, string> Array of storage paths that should be deleted.
+     *
+     * @throws BadMethodCallException If the images relation doesn't exists on the model.
+     */
+    private function updateImageRecordsInTransaction(array $incomingPaths, array $uploadedFiles, ImageRelation $relation): array
+    {
+        $storagePathsToDelete = [];
+
+        DB::transaction(function () use ($incomingPaths, $uploadedFiles, $relation, &$storagePathsToDelete) {
+
+            $model = $relation->getRelation($this);
+            $existingPaths = $model->lockForUpdate()->pluck('path')->toArray();
+            $pathsToDelete = array_diff($existingPaths, $incomingPaths);
+
+            if (! empty($pathsToDelete)) {
+                $model->whereIn('path', $pathsToDelete)->forceDelete();
+            }
+
+            $storagePathsToDelete = $pathsToDelete;
+
+            foreach ($uploadedFiles as $file) {
+                $model->create([
+                    'path' => $file['path'],
+                    'original_name' => $file['original_name'],
+                    'is_primary' => $file['is_primary'],
+                    'mime_type' => $file['mime_type'],
+                    'size' => $file['size'],
+                ]);
+            }
+        });
+
+        return $storagePathsToDelete;
+    }
+
+    /**
+     * Delete image files from storage.
+     *
+     * @param  array<int, string>  $paths  Array of image paths to delete.
+     */
+    private function deleteStorageFiles(array $paths): void
+    {
+        foreach ($paths as $path) {
+            Storage::disk(config('images.disk'))->delete(config('images.directory').'/'.$path);
+        }
+    }
+}

@@ -1,47 +1,60 @@
+<script setup>
+import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
+import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+const { formattedDate } = useDateFormatter();
+
+const props = defineProps({
+    booking: {
+        type: Object,
+        required: true
+    }
+})
+</script>
+
 <template>
     <div key="overview" class="space-y-6">
-        <h2 class="text-xl font-bold text-primary-dark">Bekijken & bevestigen</h2>
-        <hr class="border-secondary-sage/20">
+        <h2 class="text-xl font-bold text-brand-primary">Bekijken & bevestigen</h2>
+        <hr class="border-accent-sage/20">
 
-        <div class="p-6 bg-neutral-50 rounded-2xl shadow-md space-y-6">
+        <div class="p-6 bg-white rounded-2xl shadow-md space-y-6">
             <!-- Reis -->
             <section class="w-[80%]">
-                <h2 class="text-xl font-semibold text-primary-dark mb-3 flex items-center gap-2">
+                <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
                     Een samenvatting van je reis
                 </h2>
                 <div class="grid gap-1 ml-4">
                     <div class="flex items-center">
-                        <Briefcase class="inline w-4 h-4 mr-2 text-secondary-stone" />
+                        <Briefcase class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Reis</span>
-                            <span class="flex-1 border-b border-dotted border-secondary-stone/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <strong>{{ booking.trip.name }}</strong>
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <Euro class="inline w-4 h-4 mr-2 text-secondary-stone" />
+                        <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Totale reissom</span>
-                            <span class="flex-1 border-b border-dotted border-secondary-stone/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <span class="font-bold">€ {{ booking.trip.price }}</span>
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <Calendar class="inline w-4 h-4 mr-2 text-secondary-stone" />
+                        <Calendar class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Totale reisduur</span>
-                            <span class="flex-1 border-b border-dotted border-secondary-stone/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <span class="font-bold">{{ booking.trip.duration }} dagen</span>
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <Train class="inline w-4 h-4 mr-2 text-secondary-stone" />
+                        <Train class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
                             <span>Vertrek datum</span>
-                            <span class="flex-1 border-b-2 border-dotted border-secondary-stone/60"></span>
+                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <span class="font-bold">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</span>
                         </span>
                     </div>
@@ -51,13 +64,13 @@
 
             <!-- Reizigers -->
             <section>
-                <h2 class="text-xl font-semibold text-primary-dark mb-3 flex items-center gap-2">
-                    <Users class="w-5 h-5 text-secondary-stone" /> Reizigers
+                <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
+                    <Users class="w-5 h-5 text-brand-light" /> Reizigers
                 </h2>
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-3 ml-4">
                     <!-- Volwassenen -->
                     <div v-if="booking.travelers.adults.length">
-                        <h3 class="font-medium text-secondary-stone">
+                        <h3 class="font-medium text-brand-light">
                             Volwassenen ({{ booking.participants.adults }})
                         </h3>
                         <ul class="ml-4 mt-1 space-y-0.5 list-disc">
@@ -70,7 +83,7 @@
 
                     <!-- Kinderen -->
                     <div v-if="booking.travelers.children.length">
-                        <h3 class="font-medium text-secondary-stone">
+                        <h3 class="font-medium text-brand-light">
                             Kinderen ({{ booking.participants.children }})
                         </h3>
                         <ul class="ml-4 mt-1 space-y-0.5 list-disc">
@@ -90,15 +103,15 @@
 
             <!-- Contact -->
             <section>
-                <h2 class="text-xl font-semibold text-primary-dark mb-3 flex items-center gap-2">
-                    <Mail class="w-5 h-5 text-secondary-stone" /> Contact informatie
+                <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
+                    <Mail class="w-5 h-5 text-brand-light" /> Contact informatie
                 </h2>
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-2 ml-4">
 
                     <!-- Hoofdboeker -->
                     <address class="not-italic">
                         <p class="flex items-center">
-                            <User class="w-4 h-4 mr-2 text-secondary-stone" /> {{
+                            <User class="w-4 h-4 mr-2 text-brand-light" /> {{
                                 booking.travelers.adults?.[booking.main_booker]?.full_name }}
                         </p>
                         <p class="ml-6">
@@ -112,13 +125,13 @@
                     <div>
                         <!-- Telefoon -->
                         <p class="flex items-center">
-                            <Phone class="w-4 h-4 mr-2 text-secondary-stone" />
+                            <Phone class="w-4 h-4 mr-2 text-brand-light" />
                             {{ booking.contact.phone }}
                         </p>
 
                         <!-- Email -->
                         <p class="flex items-center">
-                            <AtSign class="w-4 h-4 mr-2 text-secondary-stone" />
+                            <AtSign class="w-4 h-4 mr-2 text-brand-light" />
                             {{ booking.contact.email }}
                         </p>
                     </div>
@@ -127,16 +140,16 @@
             <section class="grid gap-4 border-2 bg-slate-50 rounded-2xl p-6">
 
                 <!-- Bevestiging -->
-                <span @click="booking.clearErrors('is_confirmed')">
-                    <Checkbox v-model="booking.is_confirmed" :feedback="booking.errors.is_confirmed">
+                <span @click="booking.clearErrors('has_confirmed')">
+                    <Checkbox v-model="booking.has_confirmed" :feedback="booking.errors.has_confirmed">
                         Ik bevestig de juistheid van mijn gegevens en maak mijn boeking definitief.
                     </Checkbox>
                 </span>
-                <span @click="booking.clearErrors('conditions_accepted')">
-                    <Checkbox v-model="booking.conditions_accepted" :feedback="booking.errors.conditions_accepted">
+                <span @click="booking.clearErrors('has_accepted_conditions')">
+                    <Checkbox v-model="booking.has_accepted_conditions" :feedback="booking.errors.has_accepted_conditions">
                         Ik bevestig dat de
                         <a :href="route('terms')" target="_blank" rel="noopener noreferrer"
-                            class="text-accent-terracotta hover:text-primary-dark font-medium underline decoration-accent-gold/30 hover:decoration-accent-gold transition-colors duration-300">
+                            class="default-link">
                             algemene voorwaarden
                         </a>
                         van toepassing zijn op deze reis.
@@ -156,15 +169,3 @@
         </div>
     </div>
 </template>
-<script setup>
-import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
-import { useDateFormatter } from '@/Composables/useDateFormatter.js'
-const { formattedDate } = useDateFormatter();
-
-const props = defineProps({
-    booking: {
-        type: Object,
-        required: true
-    }
-})
-</script>

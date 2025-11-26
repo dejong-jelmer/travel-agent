@@ -1,19 +1,17 @@
 <script setup>
 import { watchEffect, onMounted } from 'vue';
-import { Head, usePage } from '@inertiajs/vue3';
+import { usePage } from '@inertiajs/vue3';
 import { useToastWatcher } from '@/Composables/useToastWatcher.js';
 import { emailLinks, phoneLinks } from '@/Composables/useAntiSpamLinks.js';
 
 
 const props = defineProps({
     title: String,
-    phone: Object,
+    phone: Object
 });
-
-const user = usePage().props.auth?.user ?? {};
-const flash = usePage().props.flash ?? {};
-const contact = usePage().props.contact ?? {};
-const breadcrumbs = usePage().props.breadcrumbs ?? {};
+const page = usePage()
+const flash = page.props.flash ?? {};
+const contact = page.props.contact ?? {};
 
 onMounted(() => {
     const encodedMail = contact?.mail?.link;
@@ -23,7 +21,7 @@ onMounted(() => {
 });
 
 watchEffect(() => {
-    document.title = usePage().props.title || `${window.appName} - Historische reizen met oog voor de toekomst`;
+    document.title = page.props.title || window.appName
 });
 
 Object.entries(flash).forEach(([type, message]) => {
@@ -32,11 +30,12 @@ Object.entries(flash).forEach(([type, message]) => {
 </script>
 
 <template>
-    <Head :title="title" />
+
+    <SeoHead />
     <main>
+        <Topbar class="z-50" />
+        <Nav class="z-50 sticky top-0 inset-x-0" />
         <slot name="hero"></slot>
-        <Header />
-        <SideMenu v-if="!!user.id" />
         <slot></slot>
         <Footer />
     </main>
