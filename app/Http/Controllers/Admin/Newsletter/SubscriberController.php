@@ -38,6 +38,7 @@ class SubscriberController extends Controller
     public function destroy(NewsletterSubscriber $subscriber): RedirectResponse
     {
         NewsletterSubscriber::destroy($subscriber->id);
+
         return redirect()->route('admin.newsletter.subscribers.index')->with('success', __('newsletter.subscriber.deleted'));
     }
 }

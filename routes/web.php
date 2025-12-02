@@ -5,12 +5,12 @@ use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\Newsletter\CampaignController;
+use App\Http\Controllers\Admin\Newsletter\SubscriberController;
 use App\Http\Controllers\Admin\TripController as AdminTripController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Newsletter\SubscriptionController;
-use App\Http\Controllers\Admin\Newsletter\SubscriberController;
 use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -47,11 +47,11 @@ Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, '
 // Admin routes
 Route::get('admin/login', function () {
     return Inertia::render('Auth/Login', [
-        'title' => __('auth.title_login') . ' - ' . config('app.name'),
+        'title' => __('auth.title_login').' - '.config('app.name'),
     ]);
 })->middleware('guest');
 
-Route::get('admin/', fn() => Auth::check() ? to_route('admin.dashboard') : to_route('admin.login'));
+Route::get('admin/', fn () => Auth::check() ? to_route('admin.dashboard') : to_route('admin.login'));
 Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
 
 Route::prefix('admin')

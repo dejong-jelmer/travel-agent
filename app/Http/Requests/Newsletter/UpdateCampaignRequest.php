@@ -3,12 +3,11 @@
 namespace App\Http\Requests\Newsletter;
 
 use App\Enums\Newsletter\CampaignStatus;
-use App\Enums\UserRole;
 use App\Models\NewsletterCampaign;
 use App\Services\Validation\Newsletter\CampaignValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class UpdateCampaignRequest extends FormRequest
 {
@@ -29,7 +28,7 @@ class UpdateCampaignRequest extends FormRequest
     {
         return array_merge(
             [
-                'id' => ['required', Rule::exists(NewsletterCampaign::class, 'id')]
+                'id' => ['required', Rule::exists(NewsletterCampaign::class, 'id')],
             ],
             CampaignValidationRules::basic([
                 'scheduled_at' => [Rule::requiredIf($this->status === CampaignStatus::Scheduled->value)],

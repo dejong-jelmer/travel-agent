@@ -83,7 +83,7 @@ class Breadcrumbs
             // Newsletter subscriber
             'admin.newsletter.subscribers.index' => [
                 self::dashboardCrumb(),
-                [...self::translateLabel(self::SUBSCRIBER_LABEL), ...self::SUBSCRIBER_ROUTE]
+                [...self::translateLabel(self::SUBSCRIBER_LABEL), ...self::SUBSCRIBER_ROUTE],
             ],
             'admin.newsletter.subscribers.create' => [
                 self::dashboardCrumb(),
@@ -94,7 +94,7 @@ class Breadcrumbs
             // Newsletter campaign
             'admin.newsletter.campaigns.index' => [
                 self::dashboardCrumb(),
-                [...self::translateLabel(self::CAMPAIGN_LABEL), ...self::CAMPAIGN_ROUTE]
+                [...self::translateLabel(self::CAMPAIGN_LABEL), ...self::CAMPAIGN_ROUTE],
             ],
             'admin.newsletter.campaigns.create' => [
                 self::dashboardCrumb(),

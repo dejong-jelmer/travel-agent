@@ -29,10 +29,10 @@ class SendNewsletterCampaign implements ShouldQueue
     }
 
     public function failed(\Throwable $exception): void
-      {
-          Log::error('Newsletter campaign send job failed', [
-              'campaign_id' => $this->campaign->id,
-              'error' => $exception->getMessage(),
-          ]);
-      }
+    {
+        Log::error('Newsletter campaign send job failed', [
+            'campaign_id' => $this->campaign->id,
+            'error' => $exception->getMessage(),
+        ]);
+    }
 }

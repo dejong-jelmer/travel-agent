@@ -2,8 +2,6 @@
 
 namespace App\Models\Traits;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
-
 trait HasFormattedDates
 {
     protected function getFormattedDate(string $attribute): ?string

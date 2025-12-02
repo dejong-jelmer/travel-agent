@@ -18,6 +18,7 @@ class NewsletterCampaignFactory extends Factory
     public function definition(): array
     {
         $status = fake()->randomElement(CampaignStatus::cases());
+
         return [
             'subject' => fake()->text(rand(10, 15)),
             'content' => fake()->paragraphs(rand(5, 10), true),

@@ -32,5 +32,5 @@ return [
         'sent_failed' => 'Er is een fout opgetreden bij het versturen van deze nieuwsbrief campagne: ":error_message"',
         'test_email_sent' => 'Test email is verzonden naar :email',
         'test_email_failed' => 'Er is een fout opgetreden bij het versturen van de test email.',
-    ]
+    ],
 ];

@@ -8,7 +8,6 @@ use App\Services\Traits\MergesRules;
 use App\Services\Validation\ImageValidationRules;
 use Illuminate\Validation\Rule;
 
-
 class CampaignValidationRules
 {
     use MergesRules;
@@ -20,7 +19,7 @@ class CampaignValidationRules
             'content' => ['required', 'string'],
             'preview_text' => ['nullable', 'string', 'max:255'],
             'status' => [
-                Rule::enum(CampaignStatus::class)->except([CampaignStatus::Sending])
+                Rule::enum(CampaignStatus::class)->except([CampaignStatus::Sending]),
             ],
             'scheduled_at' => ['nullable', 'date', 'after:today'],
         ], $additions);

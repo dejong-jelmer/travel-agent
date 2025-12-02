@@ -21,8 +21,8 @@ use Illuminate\Support\Str;
 class Booking extends Model
 {
     use HasFactory,
-        SoftDeletes,
-        HasFormattedDates;
+        HasFormattedDates,
+        SoftDeletes;
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
@@ -65,7 +65,7 @@ class Booking extends Model
     {
         static::created(function ($booking) {
             $year = now()->format('Y');
-            $booking->reference = "{$year}-" . str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
             $booking->saveQuietly();
         });
 

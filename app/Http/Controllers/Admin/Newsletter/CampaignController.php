@@ -116,6 +116,7 @@ class CampaignController extends Controller
     public function destroy(NewsletterCampaign $campaign): RedirectResponse
     {
         NewsletterCampaign::destroy($campaign->id);
+
         return redirect()->route('admin.newsletter.campaigns.index')->with('success', __('newsletter.campaign.deleted'));
     }
 
@@ -142,6 +143,7 @@ class CampaignController extends Controller
     public function send(NewsletterCampaign $campaign): RedirectResponse
     {
         SendNewsletterCampaign::dispatch($campaign);
+
         return back()->with('success', __('newsletter.campaign.sent'));
     }
 }

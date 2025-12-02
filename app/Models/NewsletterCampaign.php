@@ -5,20 +5,17 @@ namespace App\Models;
 use App\Enums\Newsletter\CampaignStatus;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
-use App\Services\NewsletterCampaignService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class NewsletterCampaign extends Model
 {
     use HasFactory,
-        ManagesImages,
-        HasFormattedDates;
+        HasFormattedDates,
+        ManagesImages;
 
     protected array $formattedDates = [
         'scheduled_at' => ['format' => 'DD-MM-YYYY HH:mm'],
@@ -40,12 +37,12 @@ class NewsletterCampaign extends Model
     protected $casts = [
         'scheduled_at' => 'datetime',
         'sent_at' => 'datetime',
-        'status' => CampaignStatus::class
+        'status' => CampaignStatus::class,
     ];
 
     protected $appends = [
         'scheduled_at_formatted',
-        'sent_at_formatted'
+        'sent_at_formatted',
     ];
 
     protected static function booted(): void
@@ -58,12 +55,12 @@ class NewsletterCampaign extends Model
 
     protected function scheduledAtFormatted(): Attribute
     {
-        return Attribute::get(fn() => $this->getFormattedDate('scheduled_at'));
+        return Attribute::get(fn () => $this->getFormattedDate('scheduled_at'));
     }
 
     protected function sentAtFormatted(): Attribute
     {
-        return Attribute::get(fn() => $this->getFormattedDate('sent_at'));
+        return Attribute::get(fn () => $this->getFormattedDate('sent_at'));
     }
 
     public function sentTo(): BelongsToMany
