@@ -51,7 +51,7 @@ class HomeTest extends TestCase
         $trip = Trip::factory()->create();
         $trip->countries()->attach($country->id);
 
-        $response = $this->get(route('trip.show', $trip));
+        $response = $this->get(route('trips.show', $trip));
 
         $response->assertInertia(fn (AssertableInertia $page) => $page->component('Trip/Show')
             ->has('trip')

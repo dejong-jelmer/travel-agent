@@ -16,7 +16,7 @@ class UpdateBookingRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return Auth::user()?->role === 'admin' || false;
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     public function rules(): array
@@ -26,12 +26,12 @@ class UpdateBookingRequest extends FormRequest
                 'status' => [
                     'required',
                     'string',
-                    Rule::in(Status::values()),
+                    Rule::enum(Status::class),
                 ],
                 'payment_status' => [
                     'required',
                     'string',
-                    Rule::in(PaymentStatus::values()),
+                    Rule::enum(PaymentStatus::class),
                 ],
             ],
             [

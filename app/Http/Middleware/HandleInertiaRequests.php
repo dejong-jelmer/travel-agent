@@ -44,6 +44,7 @@ class HandleInertiaRequests extends Middleware
                 'user' => Auth::user(),
             ],
             'config' => [
+                'seo' => config('seo'),
                 'images' => config('images'),
             ],
             'contact' => [

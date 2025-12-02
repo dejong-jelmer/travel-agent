@@ -2,10 +2,19 @@
 
 namespace App\Models;
 
+use App\Enums\Newsletter\SubscriberStatus;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class NewsletterSubscriber extends Model
 {
+    use HasFactory;
+
+    protected $perPage = 15;
+
     protected $fillable = [
         'email',
         'name',
@@ -25,6 +34,10 @@ class NewsletterSubscriber extends Model
         'unsubscribed_at' => 'datetime',
     ];
 
+    protected $appends = [
+        'status',
+    ];
+
     protected static function boot()
     {
         parent::boot();
@@ -34,5 +47,107 @@ class NewsletterSubscriber extends Model
             $subscriber->confirmation_token ??= bin2hex(random_bytes(32));
             $subscriber->unsubscribe_token ??= bin2hex(random_bytes(32));
         });
+    }
+
+    /**
+     * Check if the subscriber is active (confirmed and not unsubscribed).
+     */
+    public function isActive(): bool
+    {
+        return $this->confirmed_at !== null && $this->unsubscribed_at === null;
+    }
+
+    /**
+     * Check if the subscriber is pending (not yet confirmed).
+     */
+    public function isPending(): bool
+    {
+        return $this->confirmed_at === null
+            && $this->unsubscribed_at === null
+            && ($this->confirmation_expires_at === null || $this->confirmation_expires_at >= now());
+    }
+
+    /**
+     * Check if the subscriber's confirmation has expired.
+     */
+    public function isExpired(): bool
+    {
+        return $this->confirmed_at === null
+            && $this->unsubscribed_at === null
+            && $this->confirmation_expires_at !== null
+            && $this->confirmation_expires_at < now();
+    }
+
+    /**
+     * Check if the subscriber has unsubscribed.
+     */
+    public function isUnsubscribed(): bool
+    {
+        return $this->unsubscribed_at !== null;
+    }
+
+    /**
+     * Get the subscription status.
+     */
+    protected function status(): Attribute
+    {
+        return Attribute::get(function () {
+            if ($this->isUnsubscribed()) {
+                return SubscriberStatus::Unsubscribed;
+            }
+            if ($this->isActive()) {
+                return SubscriberStatus::Active;
+            }
+            if ($this->isExpired()) {
+                return SubscriberStatus::Expired;
+            }
+
+            return SubscriberStatus::Pending;
+        });
+    }
+
+    /**
+     * Scope a query to only include active subscribers (confirmed and not unsubscribed).
+     */
+    #[Scope]
+    protected function active(Builder $query): void
+    {
+        $query->whereNotNull('confirmed_at')
+            ->whereNull('unsubscribed_at');
+    }
+
+    /**
+     * Scope a query to only include pending subscribers (not yet confirmed).
+     */
+    #[Scope]
+    protected function pending(Builder $query): void
+    {
+        $query->whereNull('confirmed_at')
+            ->whereNull('unsubscribed_at')
+            ->where(function ($q) {
+                $q->whereNull('confirmation_expires_at')
+                    ->orWhere('confirmation_expires_at', '>=', now());
+            });
+    }
+
+    /**
+     * Scope a query to only include expired subscribers (confirmation expired).
+     */
+    #[Scope]
+    protected function expired(Builder $query): void
+    {
+        $query->whereNull('confirmed_at')
+            ->whereNull('unsubscribed_at')
+            ->whereNotNull('confirmation_expires_at')
+            ->where('confirmation_expires_at', '<', now());
+    }
+
+    /**
+     * Scope a query to only include unsubscribed subscribers.
+     */
+    #[Scope]
+    protected function unsubscribed(Builder $query): void
+    {
+        $query->whereNotNull('unsubscribed_at');
     }
 }

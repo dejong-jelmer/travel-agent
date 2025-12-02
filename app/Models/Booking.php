@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
+use App\Models\Traits\HasFormattedDates;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -20,7 +21,13 @@ use Illuminate\Support\Str;
 class Booking extends Model
 {
     use HasFactory,
-        SoftDeletes;
+        SoftDeletes,
+        HasFormattedDates;
+
+    protected array $formattedDates = [
+        'departure_date' => ['format' => 'dddd LL'],
+        'created_at' => ['format' => 'dddd LL - HH:mm'],
+    ];
 
     protected $perPage = 10;
 
@@ -58,7 +65,7 @@ class Booking extends Model
     {
         static::created(function ($booking) {
             $year = now()->format('Y');
-            $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->reference = "{$year}-" . str_pad($booking->id, 6, '0', STR_PAD_LEFT);
             $booking->saveQuietly();
         });
 
@@ -94,20 +101,12 @@ class Booking extends Model
 
     protected function departureDateFormatted(): Attribute
     {
-        return Attribute::get(
-            fn () => $this->departure_date
-                ? ucfirst($this->departure_date->locale('nl')->isoFormat('dddd D MMMM YYYY'))
-                : null
-        );
+        return Attribute::get(fn () => $this->getFormattedDate('departure_date'));
     }
 
     protected function createdAtFormatted(): Attribute
     {
-        return Attribute::get(
-            fn () => $this->created_at
-                ? $this->created_at->isoFormat('DD-MM-YYYY')
-                : null
-        );
+        return Attribute::get(fn () => $this->getFormattedDate('created_at'));
     }
 
     protected static function boot()

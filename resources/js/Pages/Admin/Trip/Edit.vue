@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
@@ -13,7 +12,6 @@ const form = useForm({
     heroImage: props.trip.hero_image?.public_url ?? null,
     images: props.trip.image_paths ?? [],
 });
-console.log(props.trip);
 
 function submit() {
     form.post(route("admin.trips.update", props.trip), { forceFormData: true });

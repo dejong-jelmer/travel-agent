@@ -21,6 +21,11 @@ const props = defineProps({
         type: [String, Array],
         required: false,
     },
+    enableTimePicker: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -35,14 +40,18 @@ const format = (date) =>
         day: '2-digit',
         month: 'long',
         year: 'numeric',
+        ...(props.enableTimePicker ? {
+            hour: "numeric",
+            minute: "numeric",
+        } : {})
     }).format(date)
 </script>
 
 <template>
     <div>
-        <VueDatePicker v-model="model" locale="nl" placeholder="Kies een datum" :enable-time-picker="false"
+        <VueDatePicker v-model="model" locale="nl" placeholder="Kies een datum" :enable-time-picker="enableTimePicker"
             teleport="body" :format="format" :min-date="props.minDate || null" :max-date="props.maxDate || null"
-            arrow-navigation auto-apply :state="!!feedback ? false : null">
+            :state="!!feedback ? false : null" arrow-navigation auto-apply>
             <template #input-icon>
                 <CalendarDays class="ml-1 h-5 w-auto text-accent-primary" />
             </template>

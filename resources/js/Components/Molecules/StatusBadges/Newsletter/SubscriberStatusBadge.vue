@@ -1,10 +1,9 @@
 <script setup>
 import {
-    Sparkles,
-    CalendarClock,
-    CalendarCheck2,
-    RouteOff,
-    SquareCheckBig,
+    Check,
+    Clock,
+    AlertCircle,
+    X,
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -12,30 +11,26 @@ const props = defineProps({
         type: String,
         required: true,
         validator: (value) => [
-            'new',
+            'active',
             'pending',
-            'confirmed',
-            'cancelled',
-            'completed',
+            'expired',
+            'unsubscribed',
         ].includes(value)
     }
 })
 
 const icons = {
-    'new': Sparkles,
-    'pending': CalendarClock,
-    'confirmed': CalendarCheck2,
-    'cancelled': RouteOff,
-    'completed': SquareCheckBig,
-
+    'active': Check,
+    'pending': Clock,
+    'expired': AlertCircle,
+    'unsubscribed': X,
 }
 
 const pillType = {
-    'new': 'success',
+    'active': 'success',
     'pending': 'accent',
-    'confirmed': 'success',
-    'cancelled': 'error',
-    'completed': 'info',
+    'expired': 'accent',
+    'unsubscribed': 'error',
 }
 
 </script>

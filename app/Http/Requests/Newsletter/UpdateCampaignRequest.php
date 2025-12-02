@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Http\Requests\Newsletter;
+
+use App\Enums\Newsletter\CampaignStatus;
+use App\Enums\UserRole;
+use App\Models\NewsletterCampaign;
+use App\Services\Validation\Newsletter\CampaignValidationRules;
+use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
+
+class UpdateCampaignRequest extends FormRequest
+{
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return Auth::user()?->isAdmin() ?? false;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return array_merge(
+            [
+                'id' => ['required', Rule::exists(NewsletterCampaign::class, 'id')]
+            ],
+            CampaignValidationRules::basic([
+                'scheduled_at' => [Rule::requiredIf($this->status === CampaignStatus::Scheduled->value)],
+            ]),
+            CampaignValidationRules::heroImageUpdate(),
+            CampaignValidationRules::trips(),
+        );
+    }
+}

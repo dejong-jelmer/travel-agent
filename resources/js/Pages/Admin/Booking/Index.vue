@@ -31,7 +31,7 @@ const showActions = reactive({});
                             <td class="py-4 px-6 text-center">{{ booking.trip?.name ?? '-' }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.departure_date_formatted }}</td>
                             <td class="py-4 px-6 text-center">
-                                <StatusBadge :status="booking.status">{{ booking.status }}</StatusBadge>
+                                <BookingStatusBadge :status="booking.status">{{ booking.status }}</BookingStatusBadge>
                             </td>
                             <td class="py-4 px-6 text-center">
                                 <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status }}</PaymentStatusBadge>

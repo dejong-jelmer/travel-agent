@@ -18,7 +18,7 @@
             {{ $booking->reference }}
         </p>
         <p style="margin:12px 0 0 0;font-size:13px;opacity:0.8;">
-            Aangemaakt: {{ $booking->created_at->setTimezone('Europe/Amsterdam')->format('d-m-Y \o\m H:i') }} uur
+            Aangemaakt: {{ $booking->created_at_formatted }} uur
         </p>
         <a href="{{ route('admin.bookings.edit', $booking) }}" style="color:#82b2ca; margin:20px 0 0 0; display:block;">
             Bekijk Boeking in Admin Panel

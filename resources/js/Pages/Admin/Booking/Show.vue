@@ -121,7 +121,7 @@ const props = defineProps({
                         <div class="p-6 space-y-4">
                             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
                                 <span class="text-sm font-medium text-gray-700">Boeking</span>
-                                <StatusBadge :status="booking.status">{{ booking.status }}</StatusBadge>
+                                <BookingStatusBadge :status="booking.status">{{ booking.status }}</BookingStatusBadge>
                             </div>
 
                             <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
