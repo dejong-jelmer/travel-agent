@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Newsletter\CampaignStatus;
+use App\Enums\Newsletter\CampaignSubscriberStatus;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -30,13 +31,19 @@ class NewsletterCampaign extends Model
         'preview_text',
         'status',
         'scheduled_at',
+        'queued_at',
+        'failed_at',
+        'total_recipients',
         'sent_at',
         'sent_count',
+        'failed_count',
     ];
 
     protected $casts = [
         'scheduled_at' => 'datetime',
         'sent_at' => 'datetime',
+        'queued_at' => 'datetime',
+        'failed_at' => 'datetime',
         'status' => CampaignStatus::class,
     ];
 
@@ -65,7 +72,9 @@ class NewsletterCampaign extends Model
 
     public function sentTo(): BelongsToMany
     {
-        return $this->belongsToMany(NewsletterSubscriber::class)->withPivot('sent_at');
+        return $this->belongsToMany(NewsletterSubscriber::class)
+            ->wherePivot('status', CampaignSubscriberStatus::Sent)
+            ->withPivot('sent_at', 'status');
     }
 
     public function heroImage(): MorphOne

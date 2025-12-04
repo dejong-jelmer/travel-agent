@@ -12,10 +12,15 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('newsletter_campaign_subscriber', function (Blueprint $table) {
-            $table->foreignId('newsletter_campaign_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('newsletter_subscriber_id')->constrained()->cascadeOnDelete();
-            $table->timestamp('sent_at');
-            $table->primary(['newsletter_campaign_id', 'newsletter_subscriber_id']);
+            $table->id();
+            $table->foreignId('campaign_id')->constrained('newsletter_campaigns')->cascadeOnDelete();
+            $table->foreignId('subscriber_id')->constrained('newsletter_subscribers')->cascadeOnDelete();
+            $table->string('status')->default('queued');
+            $table->string('error_message')->nullable();
+            $table->timestamp('sent_at')->nullable();
+            $table->timestamp('failed_at')->nullable();
+            $table->unique(['campaign_id', 'subscriber_id']);
+            $table->index(['campaign_id', 'status']);
         });
     }
 

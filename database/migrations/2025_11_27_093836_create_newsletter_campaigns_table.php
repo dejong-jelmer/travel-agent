@@ -18,8 +18,12 @@ return new class extends Migration
             $table->string('preview_text')->nullable();
             $table->string('status')->default('draft');
             $table->dateTime('scheduled_at')->nullable();
+            $table->dateTime('queued_at')->nullable();
             $table->dateTime('sent_at')->nullable();
+            $table->dateTime('failed_at')->nullable();
+            $table->unsignedInteger('total_recipients')->default(0);
             $table->unsignedInteger('sent_count')->default(0);
+            $table->unsignedInteger('failed_count')->default(0);
             $table->timestamps();
         });
     }

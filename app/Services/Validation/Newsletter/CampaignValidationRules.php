@@ -19,7 +19,7 @@ class CampaignValidationRules
             'content' => ['required', 'string'],
             'preview_text' => ['nullable', 'string', 'max:255'],
             'status' => [
-                Rule::enum(CampaignStatus::class)->except([CampaignStatus::Sending]),
+                Rule::enum(CampaignStatus::class)->except([CampaignStatus::Queued]),
             ],
             'scheduled_at' => ['nullable', 'date', 'after:today'],
         ], $additions);

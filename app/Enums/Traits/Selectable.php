@@ -7,8 +7,19 @@ trait Selectable
     public static function options(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn ($option) => [$option->value => $option->value])
+            ->map(fn ($case) => [
+                'id' => $case->value,
+                'name' => $case->value,
+                'disabled' => method_exists($case, 'disabledOption')
+                    ? $case->disabledOption()
+                    : false,
+            ])
             ->toArray();
+    }
+
+    public function disabledOption(): bool
+    {
+        return false;
     }
 
     public static function values(): array

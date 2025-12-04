@@ -90,10 +90,9 @@ Route::prefix('admin')
                 Route::resource('campaigns', CampaignController::class)->except(['update', 'show']);
                 Route::post('/campaigns/update/{campaign}', [CampaignController::class, 'update'])->name('campaigns.update');
 
-                // Send test email for campaign
+                // Send campaign routes
                 Route::post('campaigns/{campaign}/send-test', [CampaignController::class, 'sendTest'])
                     ->name('campaigns.send-test');
-                // Send email campaign
                 Route::post('campaigns/{campaign}/send', [CampaignController::class, 'send'])
                     ->name('campaigns.send');
             });

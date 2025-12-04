@@ -3,10 +3,11 @@
 namespace App\Console\Commands\Newsletter;
 
 use App\Enums\Newsletter\CampaignStatus;
-use App\Jobs\SendNewsletterCampaign;
 use App\Models\NewsletterCampaign;
+use App\Services\NewsletterCampaignService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Log;
+use Throwable;
 
 class SendScheduledCampaigns extends Command
 {
@@ -33,12 +34,19 @@ class SendScheduledCampaigns extends Command
             ->where('scheduled_at', '<=', now())
             ->get();
 
+        if ($campaigns->isEmpty()) {
+            $this->info('No scheduled campaigns found.');
+
+            return;
+        }
+
+        $this->info("Found {$campaigns->count()} scheduled campaign(s).");
+
         foreach ($campaigns as $campaign) {
             try {
-                SendNewsletterCampaign::dispatch($campaign);
+                app(NewsletterCampaignService::class)->sendCampaign($campaign);
                 $this->info("Dispatched campaign: {$campaign->subject}");
-            } catch (\Exception $e) {
-                // Silent fail - log en ga door
+            } catch (Throwable $e) {
                 Log::warning('Failed to dispatch scheduled campaign', [
                     'campaign_id' => $campaign->id,
                     'subject' => $campaign->subject,

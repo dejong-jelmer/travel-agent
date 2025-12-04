@@ -140,8 +140,6 @@ trait ManagesImages
                     'is_primary' => $file['is_primary'],
                     'mime_type' => $file['mime_type'],
                     'size' => $file['size'],
-                    // 'imageable_id' => $this->id,
-                    // 'imageable_type' => get_class($this),
                 ]);
             }
         });

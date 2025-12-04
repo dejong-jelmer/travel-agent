@@ -2,8 +2,9 @@
 import {
     PencilLine,
     CalendarClock,
-    LoaderCircle,
+    FileStack,
     Send,
+    X,
 } from 'lucide-vue-next';
 
 const props = defineProps({
@@ -13,8 +14,9 @@ const props = defineProps({
         validator: (value) => [
             'draft',
             'scheduled',
-            'sending',
+            'queued',
             'sent',
+            'failed',
         ].includes(value)
     }
 })
@@ -22,22 +24,24 @@ const props = defineProps({
 const icons = {
     'draft': PencilLine,
     'scheduled': CalendarClock,
-    'sending': LoaderCircle,
+    'queued': FileStack,
     'sent': Send,
+    'failed': X,
 }
 
 const pillType = {
     'draft': 'sage',
     'scheduled': 'info',
-    'sending': 'accent',
+    'queued': 'accent',
     'sent': 'success',
+    'failed': 'error',
 }
 
 </script>
 
 <template>
     <Pill :type="pillType[status]" variant="transparent">
-        <component :is="icons[status]" class="h-5 w-5 flex-shrink-0" :class="{'animate-spin': props.status === 'sending'}" />
+        <component :is="icons[status]" class="h-5 w-5 flex-shrink-0" />
         <span class="ml-2 w-full text-center text-gray-600">
             <slot></slot>
         </span>

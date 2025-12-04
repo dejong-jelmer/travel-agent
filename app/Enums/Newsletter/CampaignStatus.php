@@ -10,6 +10,17 @@ enum CampaignStatus: string
 
     case Draft = 'draft';
     case Scheduled = 'scheduled';
-    case Sending = 'sending';
+    case Queued = 'queued';
     case Sent = 'sent';
+    case Failed = 'failed';
+
+    public function disabledOption(): bool
+    {
+        return match ($this) {
+            self::Queued => true,
+            self::Sent => true,
+            self::Failed => true,
+            default => false,
+        };
+    }
 }

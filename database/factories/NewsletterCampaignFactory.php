@@ -20,7 +20,7 @@ class NewsletterCampaignFactory extends Factory
         $status = fake()->randomElement(CampaignStatus::cases());
 
         return [
-            'subject' => fake()->text(rand(10, 15)),
+            'subject' => fake()->text(rand(40, 70)),
             'content' => fake()->paragraphs(rand(5, 10), true),
             'preview_text' => fake()->text(rand(140, 255)),
             'status' => $status,

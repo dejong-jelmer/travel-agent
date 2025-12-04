@@ -6,6 +6,7 @@ use App\Events\NewsletterSubscriptionRequested;
 use App\Mail\NewsletterConfirmation;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class SendNewsletterConfirmationEmail
 {
@@ -29,7 +30,7 @@ class SendNewsletterConfirmationEmail
             Mail::to($address)->send(
                 new NewsletterConfirmation($subscriber)
             );
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             Log::error('Mail sending failed: '.$e->getMessage());
             Log::error('Stack trace: '.$e->getTraceAsString());
         }
