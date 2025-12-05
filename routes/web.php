@@ -85,6 +85,7 @@ Route::prefix('admin')
             ->group(function () {
                 // Newsletter subscriber resource routes
                 Route::resource('subscribers', SubscriberController::class)->only(['index', 'destroy']);
+                Route::get('/subscribers/{subscriber}/resend-confirmation/', [SubscriberController::class, 'resendConfirmation'])->name('subscribers.resend');
 
                 // Newsletter campaign resource routes
                 Route::resource('campaigns', CampaignController::class)->except(['update', 'show']);

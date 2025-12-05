@@ -35,11 +35,24 @@ const props = defineProps({
                                 </SubscriberStatusBadge>
                             </td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <IconLink class="mx-auto" type="delete" icon="Trash2"
-                                    :href="route('admin.newsletter.subscribers.destroy', subscriber)" method="delete"
-                                    :showConfirm="true"
-                                    prompt="Weet je zeker dat je deze nieuwsbrief abonnee wilt verwijderen?"
-                                    v-tippy="'Verwijder Abonnee'" />
+                                <DropdownMenu>
+                                    <template #default="{ MenuItem }">
+                                        <component v-if="subscriber.status === 'expired'" :is="MenuItem">
+                                            <IconLink icon="Refresh"
+                                                :href="route('admin.newsletter.subscribers.resend', subscriber)"
+                                                :showConfirm="true"
+                                                prompt="Deze nieuwsbrief abonnee een nieuwe bevestigingsmail sturen?"
+                                                v-tippy="'Bevestigingsmail opnieuw versturen'" />
+                                        </component>
+                                        <component :is="MenuItem">
+                                            <IconLink type="delete" icon="Trash2"
+                                                :href="route('admin.newsletter.subscribers.destroy', subscriber)"
+                                                method="delete" :showConfirm="true"
+                                                prompt="Weet je zeker dat je deze nieuwsbrief abonnee wilt verwijderen?"
+                                                v-tippy="'Verwijder Abonnee'" />
+                                        </component>
+                                    </template>
+                                </DropdownMenu>
                             </td>
                         </tr>
                     </tbody>

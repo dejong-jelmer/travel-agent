@@ -25,10 +25,18 @@ const props = defineProps({
                             <td class="py-4 px-6 text-center">{{ country.id }}</td>
                             <td class="py-4 px-6 text-center">{{ country.name }}</td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <IconLink class="mx-auto" type="delete" icon="Trash2"
-                                    :href="route('admin.countries.destroy', country)" method="delete"
-                                    :showConfirm="true" prompt="Weet je zeker dat je dit land wilt verwijderen?"
-                                    v-tippy="'Verwijder land'" />
+                                <DropdownMenu>
+                                    <template #default="{ MenuItem }">
+                                        <component :is="MenuItem">
+                                            <IconLink class="mx-auto" type="delete" icon="Trash2"
+                                                :href="route('admin.countries.destroy', country)" method="delete"
+                                                :showConfirm="true"
+                                                prompt="Weet je zeker dat je dit land wilt verwijderen?"
+                                                v-tippy="'Verwijder land'" />
+                                        </component>
+                                    </template>
+                                </DropdownMenu>
+
                             </td>
                         </tr>
                     </tbody>

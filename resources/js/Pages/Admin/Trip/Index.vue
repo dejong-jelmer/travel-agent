@@ -1,23 +1,10 @@
 <script setup>
-import { EllipsisVertical } from 'lucide-vue-next';
 import { reactive } from 'vue';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 
 defineProps({
     trips: Object,
 });
-const showActions = reactive({});
-
-function toggleActions(tripId) {
-    // Sluit alle andere dropdowns
-    Object.keys(showActions).forEach(key => {
-        if (key != tripId) {
-            showActions[key] = false;
-        }
-    });
-    // Toggle de geklikte dropdown
-    showActions[tripId] = !showActions[tripId];
-}
 
 </script>
 <template>
@@ -51,38 +38,32 @@ function toggleActions(tripId) {
                             <td class="py-4 px-6 text-center">€ {{ trip.price }}</td>
                             <td class="py-4 px-6 text-center">{{ trip.duration }}</td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <div class="relative w-fit mx-auto" v-tippy="`Opties`">
-                                    <Menu as="div" class="relative w-fit mx-auto">
-                                        <MenuButton class="info-button">
-                                            <EllipsisVertical class="h-5" />
-                                        </MenuButton>
-
-                                        <MenuItems
-                                            class="absolute z-10 space-y-2 bg-white mt-2 -left-2 p-2 border border-slate-700 rounded-lg">
-                                            <MenuItem v-slot="{ active }">
-                                            <IconLink :class="{ 'bg-gray-100': active }" icon="Eye"
-                                                :href="route('admin.trips.show', { trip })" />
-                                            </MenuItem>
-                                            <MenuItem v-slot="{ active }">
-                                            <IconLink :class="{ 'bg-gray-100': active }" icon="Pencil"
-                                                :href="route('admin.trips.edit', trip)" />
-                                            </MenuItem>
-                                            <MenuItem v-slot="{ active }">
-                                            <IconLink :class="{ 'bg-gray-100': active }" icon="Route" :href="trip.itineraries?.length ?
+                                <DropdownMenu>
+                                    <template #default="{ MenuItem }">
+                                        <component :is="MenuItem">
+                                            <IconLink icon="Eye" :href="route('admin.trips.show', { trip })"
+                                                v-tippy="'Bekijk deze reis'" />
+                                        </component>
+                                        <component :is="MenuItem">
+                                            <IconLink icon="Pencil" :href="route('admin.trips.edit', trip)"
+                                                v-tippy="'Bewerk deze reis'" />
+                                        </component>
+                                        <component :is="MenuItem">
+                                            <IconLink icon="Route" :href="trip.itineraries?.length ?
                                                 route('admin.trips.itineraries.index', trip)
                                                 : route('admin.trips.itineraries.create', trip)"
                                                 v-tippy="'Bekijk reisplan van deze reis'" />
-                                            </MenuItem>
-                                            <MenuItem v-slot="{ active }">
-                                            <IconLink :class="{ 'bg-gray-100': active }" type="delete" icon="Trash2"
+                                        </component>
+
+                                        <component :is="MenuItem">
+                                            <IconLink type="delete" icon="Trash2"
                                                 :href="route('admin.trips.destroy', trip)" method="delete"
                                                 :showConfirm="true"
                                                 prompt="Weet je zeker dat je deze reis wilt verwijderen?"
-                                                v-tippy="'Verwijder reis!'" />
-                                            </MenuItem>
-                                        </MenuItems>
-                                    </Menu>
-                                </div>
+                                                v-tippy="'Verwijder deze reis!'" />
+                                        </component>
+                                    </template>
+                                </DropdownMenu>
                             </td>
                         </tr>
                     </tbody>

@@ -17,6 +17,7 @@ return [
         'subscribed' => 'Je bent ingeschreven voor de nieuwsbrief',
         'confirmed' => 'Je nieuwsbrief inschrijving is bevestigd',
         'unsubscribed' => 'Je bent uitgeschreven voor de nieuwsbrief',
+        'confirmation_resend' => 'Bevestigingsmail is opnieuw verstuurd',
     ],
     'campaign' => [
         // Page titles
@@ -31,7 +32,7 @@ return [
         'sent' => 'Deze nieuwsbrief campagne is verzonden naar alle abbonees',
         'sent_failed' => 'Er is een fout opgetreden bij het versturen van deze nieuwsbrief campagne: ":error_message"',
         'test_email_sent' => 'Test email is verzonden naar :email',
-        'test_email_failed' => 'Er is een fout opgetreden bij het versturen van test email: ":error_message"',
+        'test_email_failed' => 'Er is een fout opgetreden bij het versturen van test email',
 
         // Exceptions
         'campaign_already_sent' => 'Campagne met id :campaign_id is al eerder verstuurd of in de wachtrij gezet.',

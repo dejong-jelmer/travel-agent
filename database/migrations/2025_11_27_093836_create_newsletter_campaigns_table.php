@@ -24,6 +24,7 @@ return new class extends Migration
             $table->unsignedInteger('total_recipients')->default(0);
             $table->unsignedInteger('sent_count')->default(0);
             $table->unsignedInteger('failed_count')->default(0);
+            $table->index(['status', 'scheduled_at']);
             $table->timestamps();
         });
     }

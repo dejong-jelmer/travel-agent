@@ -93,7 +93,7 @@ class NewsletterTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(
             fn ($page) => $page
-                ->component('Newsletter/Confirmed')
+                ->component('Newsletter/Subscription/Confirmed')
                 ->has('title')
         );
 
@@ -145,7 +145,7 @@ class NewsletterTest extends TestCase
         $response->assertStatus(200);
         $response->assertInertia(
             fn ($page) => $page
-                ->component('Newsletter/Unsubscribed')
+                ->component('Newsletter/Subscription/Unsubscribed')
                 ->has('title')
         );
 

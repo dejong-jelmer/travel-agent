@@ -2,13 +2,13 @@
 import { router } from '@inertiajs/vue3'
 import { shallowRef, markRaw } from 'vue';
 
-import {Trash2, Pencil, Eye, Route, Save, Plus, Send } from 'lucide-vue-next';
+import {Trash2, Pencil, Eye, Route, Save, Plus, Send, RefreshCcw } from 'lucide-vue-next';
 
 const props = defineProps({
     icon: {
         type: String,
         required: true,
-        validator: (value) => ['Trash2', 'Pencil', 'Eye', 'Route', 'Save', 'Plus', 'Send'].includes(value)
+        validator: (value) => ['Trash2', 'Pencil', 'Eye', 'Route', 'Save', 'Plus', 'Send', 'RefreshCcw'].includes(value)
     },
     href: {
         type: String,
@@ -42,6 +42,7 @@ const icons = {
     Save: markRaw(Save),
     Plus: markRaw(Plus),
     Send: markRaw(Send),
+    Refresh: markRaw(RefreshCcw),
 };
 const currentIcon = shallowRef(icons[`${props.icon}`]);
 

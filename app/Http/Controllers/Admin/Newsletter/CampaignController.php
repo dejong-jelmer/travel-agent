@@ -15,9 +15,11 @@ use App\Models\Trip;
 use App\Services\NewsletterCampaignService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Throwable;
 
 class CampaignController extends Controller
@@ -131,7 +133,11 @@ class CampaignController extends Controller
         try {
             Mail::to($email)->send(new NewsletterCampaignMail($campaign));
         } catch (Throwable $e) {
-            return back()->with('error', __('newsletter.campaign.test_email_failed', ['error_message' => $e->getMessage()]));
+            Log::error("Error while sending test email of newsletter campaign", [
+                'campaign_id' => $campaign->id,
+                'error' => $e->getMessage()
+            ]);
+            return back()->with('error', __('newsletter.campaign.test_email_failed'));
         }
 
         return back()->with('success', __('newsletter.campaign.test_email_sent', ['email' => $email]));
@@ -140,14 +146,13 @@ class CampaignController extends Controller
     /**
      * Send the campaign to all active newsletter subscribers.
      */
-    public function send(NewsletterCampaign $campaign): RedirectResponse
+    public function send(NewsletterCampaignService $campaignService, NewsletterCampaign $campaign): RedirectResponse
     {
         try {
-            app(NewsletterCampaignService::class)->sendCampaign($campaign);
-
-            return back()->with('success', __('newsletter.campaign.sent'));
+            $campaignService->sendCampaign($campaign);
         } catch (CampaignAlreadySentException $e) {
             return back()->with('error', __('newsletter.campaign.sent_failed', ['error_message' => $e->getMessage()]));
         }
+        return back()->with('success', __('newsletter.campaign.sent'));
     }
 }

@@ -23,7 +23,6 @@ class SubscriptionController extends Controller
             ['email' => $validated['email']],
             [
                 'name' => $validated['name'] ?? null,
-                'unsubscribed_at' => null,
                 'subscribed_at' => now(),
                 'confirmation_expires_at' => now()->addHours($hours),
             ]
