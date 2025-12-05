@@ -19,7 +19,6 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
-use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 use Throwable;
 
 class CampaignController extends Controller
@@ -133,10 +132,11 @@ class CampaignController extends Controller
         try {
             Mail::to($email)->send(new NewsletterCampaignMail($campaign));
         } catch (Throwable $e) {
-            Log::error("Error while sending test email of newsletter campaign", [
+            Log::error('Error while sending test email of newsletter campaign', [
                 'campaign_id' => $campaign->id,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
             ]);
+
             return back()->with('error', __('newsletter.campaign.test_email_failed'));
         }
 
@@ -153,6 +153,7 @@ class CampaignController extends Controller
         } catch (CampaignAlreadySentException $e) {
             return back()->with('error', __('newsletter.campaign.sent_failed', ['error_message' => $e->getMessage()]));
         }
+
         return back()->with('success', __('newsletter.campaign.sent'));
     }
 }
