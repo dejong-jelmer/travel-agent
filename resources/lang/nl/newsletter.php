@@ -33,6 +33,7 @@ return [
         'sent_failed' => 'Er is een fout opgetreden bij het versturen van deze nieuwsbrief campagne: ":error_message"',
         'test_email_sent' => 'Test email is verzonden naar :email',
         'test_email_failed' => 'Er is een fout opgetreden bij het versturen van test email',
+        'no_email' => 'Er is geen gebruikers email adres waar we de email naar toe kunnen sturen',
 
         // Exceptions
         'campaign_already_sent' => 'Campagne met id :campaign_id is al eerder verstuurd of in de wachtrij gezet.',

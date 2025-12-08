@@ -12,9 +12,11 @@ use App\Http\Requests\Newsletter\UpdateCampaignRequest;
 use App\Mail\NewsletterCampaignMail;
 use App\Models\NewsletterCampaign;
 use App\Models\Trip;
+use App\Models\User;
 use App\Services\NewsletterCampaignService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -128,9 +130,12 @@ class CampaignController extends Controller
     public function sendTest(NewsletterCampaign $campaign): RedirectResponse
     {
         $user = Auth::user();
-        $email = $user->email ?? '';
+        Gate::allowIf(fn (User $user) => $user->isAdmin());
+        if (empty($user->email)) {
+            return back()->with('error', __('newsletter.campaign.no_email'));
+        }
         try {
-            Mail::to($email)->send(new NewsletterCampaignMail($campaign));
+            Mail::to($user->email)->send(new NewsletterCampaignMail($campaign));
         } catch (Throwable $e) {
             Log::error('Error while sending test email of newsletter campaign', [
                 'campaign_id' => $campaign->id,
@@ -148,6 +153,9 @@ class CampaignController extends Controller
      */
     public function send(NewsletterCampaignService $campaignService, NewsletterCampaign $campaign): RedirectResponse
     {
+        $user = Auth::user();
+        Gate::allowIf(fn (User $user) => $user->isAdmin());
+
         try {
             $campaignService->sendCampaign($campaign);
         } catch (CampaignAlreadySentException $e) {

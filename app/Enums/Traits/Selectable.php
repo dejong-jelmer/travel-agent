@@ -17,13 +17,10 @@ trait Selectable
             ->toArray();
     }
 
-    public function disabledOption(): bool
-    {
-        return false;
-    }
-
     public static function values(): array
     {
         return array_column(self::cases(), 'value');
     }
+
+    abstract public function disabledOption(): bool;
 }

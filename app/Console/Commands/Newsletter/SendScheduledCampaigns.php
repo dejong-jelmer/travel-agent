@@ -28,9 +28,9 @@ class SendScheduledCampaigns extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(NewsletterCampaignService $campaignService): void
     {
-        $campaigns = NewsletterCampaign::where('status', CampaignStatus::Scheduled)
+        $campaigns = NewsletterCampaign::with(['heroImage', 'trips.heroImage'])->where('status', CampaignStatus::Scheduled)
             ->where('scheduled_at', '<=', now())
             ->get();
 
@@ -44,7 +44,7 @@ class SendScheduledCampaigns extends Command
 
         foreach ($campaigns as $campaign) {
             try {
-                app(NewsletterCampaignService::class)->sendCampaign($campaign);
+                $campaignService->sendCampaign($campaign);
                 $this->info("Dispatched campaign: {$campaign->subject}");
             } catch (Throwable $e) {
                 Log::warning('Failed to dispatch scheduled campaign', [
