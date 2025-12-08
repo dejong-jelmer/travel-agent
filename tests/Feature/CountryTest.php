@@ -15,7 +15,7 @@ class CountryTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $admin = User::factory()->create();
+        $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
     }
 

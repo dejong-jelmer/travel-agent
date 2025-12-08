@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Newsletter;
 
 use App\Events\NewsletterSubscriptionRequested;
 use App\Models\NewsletterSubscriber;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
-class NewsletterTest extends TestCase
+class SubscriptionTest extends TestCase
 {
     use RefreshDatabase;
 

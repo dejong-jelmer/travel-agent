@@ -26,7 +26,7 @@ class ItineraryTest extends TestCase
     {
         parent::setUp();
 
-        $admin = User::factory()->create();
+        $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
 
         Storage::fake(config('images.disk'));

@@ -48,7 +48,7 @@ class BookingTest extends TestCase
 
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
     {
-        $admin = User::factory()->create();
+        $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
 
         $booking = $this->createBookingWithTravelersAndContact();
