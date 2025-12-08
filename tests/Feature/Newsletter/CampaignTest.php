@@ -3,9 +3,6 @@
 namespace Tests\Feature\Newsletter;
 
 use App\Enums\Newsletter\CampaignStatus;
-use App\Enums\Newsletter\CampaignSubscriberStatus;
-use App\Events\NewsletterSubscriptionRequested;
-use App\Exceptions\CampaignAlreadySentException;
 use App\Jobs\SendNewsletterCampaign;
 use App\Mail\NewsletterCampaignMail;
 use App\Models\NewsletterCampaign;
@@ -14,12 +11,9 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Facades\Bus;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Testing\TestResponse;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -55,7 +49,7 @@ class CampaignTest extends TestCase
         $response = $this->get(route('admin.newsletter.campaigns.index'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Newsletter/Campaign/Index')
                 ->has('campaigns.data', 10)
                 ->has('campaigns.links')
@@ -69,7 +63,7 @@ class CampaignTest extends TestCase
         $response = $this->get(route('admin.newsletter.campaigns.create'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Newsletter/Campaign/Create')
         );
 
@@ -101,7 +95,7 @@ class CampaignTest extends TestCase
         $this->assertEquals($campaignData['hero_image']->getClientOriginalName(), $heroImage->original_name);
         $this->assertEquals('image/jpeg', $heroImage->mime_type);
         $this->assertTrue($heroImage->is_primary);
-        Storage::disk(config('images.disk'))->assertExists(config('images.directory') . "/{$heroImage->path}");
+        Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$heroImage->path}");
     }
 
     public function test_admin_can_view_campaign_edit(): void
@@ -125,8 +119,6 @@ class CampaignTest extends TestCase
     {
         $campaign = NewsletterCampaign::factory()->create();
 
-
-
         $updateData = [
             'id' => $campaign->id,
             'hero_image' => UploadedFile::fake()->image('hero.jpg'),
@@ -147,7 +139,6 @@ class CampaignTest extends TestCase
         $this->assertEquals($updateData['preview_text'], $campaign->preview_text);
         $this->assertEquals($updateData['status'], $campaign->status->value);
         $this->assertEquals($updateData['scheduled_at'], $campaign->scheduled_at);
-
 
         // Assert featured image with hash-based storage
         $heroImage = $campaign->heroImage;

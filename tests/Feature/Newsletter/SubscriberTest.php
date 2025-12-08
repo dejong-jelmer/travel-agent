@@ -31,7 +31,7 @@ class SubscriberTest extends TestCase
         $response = $this->get(route('admin.newsletter.subscribers.index'));
 
         $response->assertInertia(
-            fn(AssertableInertia $page) => $page
+            fn (AssertableInertia $page) => $page
                 ->component('Admin/Newsletter/Subscriber/Index')
                 ->has('subscribers.data', 15)
                 ->has('subscribers.links')
