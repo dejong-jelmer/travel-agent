@@ -130,12 +130,14 @@ class CampaignController extends Controller
     public function sendTest(NewsletterCampaign $campaign): RedirectResponse
     {
         $user = Auth::user();
+        $email = $user->email;
         Gate::allowIf(fn (User $user) => $user->isAdmin());
-        if (empty($user->email)) {
+
+        if (empty($email)) {
             return back()->with('error', __('newsletter.campaign.no_email'));
         }
         try {
-            Mail::to($user->email)->send(new NewsletterCampaignMail($campaign));
+            Mail::to($email)->send(new NewsletterCampaignMail($campaign));
         } catch (Throwable $e) {
             Log::error('Error while sending test email of newsletter campaign', [
                 'campaign_id' => $campaign->id,

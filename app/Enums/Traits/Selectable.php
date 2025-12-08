@@ -21,6 +21,4 @@ trait Selectable
     {
         return array_column(self::cases(), 'value');
     }
-
-    abstract public function disabledOption(): bool;
 }
