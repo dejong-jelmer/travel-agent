@@ -30,9 +30,7 @@ class UpdateCampaignRequest extends FormRequest
             [
                 'id' => ['required', Rule::exists(NewsletterCampaign::class, 'id')],
             ],
-            CampaignValidationRules::basic([
-                'scheduled_at' => [Rule::requiredIf($this->status === CampaignStatus::Scheduled->value)],
-            ]),
+            CampaignValidationRules::basic(),
             CampaignValidationRules::heroImageUpdate(),
             CampaignValidationRules::trips(),
         );

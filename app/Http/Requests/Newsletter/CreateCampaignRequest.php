@@ -26,9 +26,7 @@ class CreateCampaignRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
-            CampaignValidationRules::basic([
-                'scheduled_at' => [Rule::requiredIf($this->status === CampaignStatus::Scheduled->value)],
-            ]),
+            CampaignValidationRules::basic(),
             CampaignValidationRules::heroImageStore(),
         );
     }
