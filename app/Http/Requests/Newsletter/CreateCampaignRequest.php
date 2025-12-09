@@ -2,11 +2,9 @@
 
 namespace App\Http\Requests\Newsletter;
 
-use App\Enums\Newsletter\CampaignStatus;
 use App\Services\Validation\Newsletter\CampaignValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class CreateCampaignRequest extends FormRequest
 {
