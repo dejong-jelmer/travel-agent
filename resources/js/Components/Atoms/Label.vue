@@ -4,7 +4,7 @@ import { computed } from 'vue';
 const props = defineProps({
     for: {
         type: String,
-        required: true
+        required: false
     },
     required: {
         type: Boolean,

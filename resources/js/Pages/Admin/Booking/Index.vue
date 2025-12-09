@@ -31,28 +31,34 @@ const showActions = reactive({});
                             <td class="py-4 px-6 text-center">{{ booking.trip?.name ?? '-' }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.departure_date_formatted }}</td>
                             <td class="py-4 px-6 text-center">
-                                <StatusBadge :status="booking.status">{{ booking.status }}</StatusBadge>
+                                <BookingStatusBadge :status="booking.status">{{ booking.status }}</BookingStatusBadge>
                             </td>
                             <td class="py-4 px-6 text-center">
-                                <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status }}</PaymentStatusBadge>
+                                <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status }}
+                                </PaymentStatusBadge>
                             </td>
                             <td class="py-4 px-6 text-center space-y-2">
-                                <div class="w-fit mx-auto" v-tippy="`Meer opties`">
-                                    <button class="info-button"
-                                        @click="showActions[booking.id] = !showActions[booking.id]">
-                                        <EllipsisVertical class="h-5" />
-                                    </button>
-                                </div>
-                                <div v-if="showActions[booking.id]" class="space-y-2">
-                                    <IconLink class="mx-auto" icon="Eye" :href="route('admin.bookings.show', booking)"
-                                        v-tippy="'Bekijk boeking'" />
-                                    <IconLink class="mx-auto" icon="Pencil"
-                                        :href="route('admin.bookings.edit', booking)" v-tippy="'Bewerk boeking'" />
-                                    <IconLink class="mx-auto" type="delete" icon="Trash2"
-                                        :href="route('admin.bookings.destroy', booking)" method="delete"
-                                        :showConfirm="true" prompt="Weet je zeker dat je deze boeking wilt verwijderen?"
-                                        v-tippy="'Verwijder boeking!'" />
-                                </div>
+                                <DropdownMenu>
+                                    <template #default="{ MenuItem }">
+                                        <component :is="MenuItem">
+                                            <IconLink icon="Eye"
+                                                :href="route('admin.bookings.show', booking)"
+                                                v-tippy="'Bekijk boeking'" />
+                                        </component>
+                                        <component :is="MenuItem">
+                                            <IconLink icon="Pencil"
+                                                :href="route('admin.bookings.edit', booking)"
+                                                v-tippy="'Bewerk boeking'" />
+                                        </component>
+                                        <component :is="MenuItem">
+                                            <IconLink type="delete" icon="Trash2"
+                                                :href="route('admin.bookings.destroy', booking)" method="delete"
+                                                :showConfirm="true"
+                                                prompt="Weet je zeker dat je deze boeking wilt verwijderen?"
+                                                v-tippy="'Verwijder boeking!'" />
+                                        </component>
+                                    </template>
+                                </DropdownMenu>
                             </td>
                         </tr>
                     </tbody>

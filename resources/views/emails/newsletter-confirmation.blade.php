@@ -19,13 +19,13 @@
     </p>
 
     <div style="margin: 30px 0; text-align: center;">
-        <a href="{{ route('newsletter.confirm', $subscriber->confirmation_token) }}"
+        <a href="{{ route('newsletter.subscription.confirm', $subscriber->confirmation_token) }}"
            style="font-size: 16px; background-color: #2F3E46; color: #F2F4F3; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">
            Aanmeldig afronden
         </a>
     </div>
      <small>
-        Deze link is {{ config('newsletter.confirmation_expires_after') }} uur geldig.
+        Deze link is {{ config('newsletter.subscription.confirmation_expires_after') }} uur geldig.
     </small>
     <p>
         <strong>Wat kun je verwachten?</strong>
@@ -36,7 +36,7 @@
 
     <p>
         Wil je je afmelden? Dat kan altijd via de link onderaan onze nieuwsbrieven,
-        of via <a href="{{ route('newsletter.unsubscribe', $subscriber->unsubscribe_token) }}">deze link</a>.
+        of via <a href="{{ route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token) }}">deze link</a>.
     </p>
 
     <p>

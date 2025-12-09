@@ -6,7 +6,7 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import { ref, computed } from "vue";
-import BookingForm from "@/Components/Organisms/BookingForm.vue";
+import BookingForm from "@/Components/Organisms/Forms/BookingForm.vue";
 
 // ========================================
 // MOCK SETUP

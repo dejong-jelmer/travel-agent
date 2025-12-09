@@ -1,6 +1,5 @@
 <script setup>
 import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
-import { computed } from 'vue';
 
 const props = defineProps({
     name: String,
@@ -47,30 +46,6 @@ const handleChange = (event) => {
     emit("update:modelValue", value);
 };
 
-const normalizedOptions = computed(() => {
-    if (Array.isArray(props.options)) {
-        return props.options.map(option => {
-            if (typeof option === 'object' && option !== null) {
-                return {
-                    value: option.id,
-                    label: option.name
-                };
-            }
-            return {
-                value: option,
-                label: option
-            };
-        });
-    } else if (typeof props.options === 'object') {
-        return Object.entries(props.options).map(([value, label]) => ({
-            value,
-            label
-        }));
-    }
-
-    return [];
-});
-
 const isSelected = (value) => {
     if (!props.modelValue) return false;
     return Array.isArray(props.modelValue)
@@ -86,9 +61,9 @@ const isSelected = (value) => {
         </Label>
         <select class="form-input" :id="name" :required="required" :multiple="multiple" @change="handleChange">
             <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
-            <option v-for="(option, index) in normalizedOptions" :selected="isSelected(option['value'])" :key="index"
-                :value="option.value">
-                {{ option.label }}
+            <option v-for="(option, index) in options" :selected="isSelected(option['id'])" :key="index"
+                :value="option.id" :disabled="option.disabled ?? false" >
+                {{ option.name }}
             </option>
         </select>
         <template v-if="feedback">

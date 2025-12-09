@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Exceptions;
+
+use Exception;
+use Throwable;
+
+class CampaignAlreadySentException extends Exception
+{
+    public function __construct(string $message = 'Newsletter campaign is already sent or queued.', int $code = 0, ?Throwable $previous = null)
+    {
+        parent::__construct($message, $code, $previous);
+    }
+}

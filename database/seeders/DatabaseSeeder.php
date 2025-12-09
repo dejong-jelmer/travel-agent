@@ -2,10 +2,13 @@
 
 namespace Database\Seeders;
 
+use App\Enums\ImageRelation;
 use App\Models\Booking;
 use App\Models\Country;
 use App\Models\Image;
 use App\Models\Itinerary;
+use App\Models\NewsletterCampaign;
+use App\Models\NewsletterSubscriber;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,16 +32,18 @@ class DatabaseSeeder extends Seeder
             $disk->delete($files);
         }
 
+        // Newsletters
+        NewsletterSubscriber::factory(100)->create();
+        NewsletterCampaign::factory(10)->has(Image::factory(['is_primary' => true]), ImageRelation::HeroImage->value)->create();
+
+        // Destinations
         $countries = Country::factory(10)->create();
 
-        User::factory()->create([
-            'name' => 'Tester',
-            'email' => 'test@mail.com',
-        ]);
+        User::factory()->admin()->create();
 
-        Trip::factory(8)
+        Trip::factory(25)
             ->has(Booking::factory(), 'bookings')
-            ->has(Image::factory()->count(3), 'images')
+            ->has(Image::factory()->count(3), ImageRelation::Images->value)
             ->create()->each(function ($trip) use ($countries) {
                 $trip->images()->inRandomOrder()->first()->update(['is_primary' => true]);
                 $trip->countries()->attach(
@@ -46,7 +51,7 @@ class DatabaseSeeder extends Seeder
                 );
                 for ($i = 1; $i <= $trip->duration; $i++) {
                     Itinerary::factory()
-                        ->has(Image::factory(), 'image')
+                        ->has(Image::factory(), ImageRelation::Image->value)
                         ->create([
                             'trip_id' => $trip->id,
                             'order' => $i,

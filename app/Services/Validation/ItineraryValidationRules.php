@@ -33,13 +33,13 @@ class ItineraryValidationRules
             'meals.*' => [
                 'required',
                 'string',
-                Rule::in(Meal::values()),
+                Rule::enum(Meal::class),
             ],
             'transport' => ['nullable', 'array'],
             'transport.*' => [
                 'required',
                 'string',
-                Rule::in(Transport::values()),
+                Rule::enum(Transport::class),
             ],
         ];
     }

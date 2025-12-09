@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Newsletter;
 
 use App\Events\NewsletterSubscriptionRequested;
 use App\Models\NewsletterSubscriber;
@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
-class NewsletterTest extends TestCase
+class SubscriptionTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -22,7 +22,7 @@ class NewsletterTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        config(['newsletter.confirmation_expires_after' => self::CONFIRMATION_EXPIRES_AFTER]);
+        config(['newsletter.subscription.confirmation_expires_after' => self::CONFIRMATION_EXPIRES_AFTER]);
         Event::fake([NewsletterSubscriptionRequested::class]);
         $this->email = fake()->email();
         $this->name = fake()->name();
@@ -59,7 +59,7 @@ class NewsletterTest extends TestCase
 
     public function test_newsletter_subscriber_can_subscribe_without_a_name(): void
     {
-        $this->post(route('newsletter.subscribe'), [
+        $this->post(route('newsletter.subscription.subscribe'), [
             'email' => $this->email,
         ]);
 
@@ -88,12 +88,12 @@ class NewsletterTest extends TestCase
         $this->assertNotNull($subscriber->confirmation_token);
         $this->assertNull($subscriber->confirmed_at);
 
-        $response = $this->get(route('newsletter.confirm', $subscriber->confirmation_token));
+        $response = $this->get(route('newsletter.subscription.confirm', $subscriber->confirmation_token));
 
         $response->assertStatus(200);
         $response->assertInertia(
             fn ($page) => $page
-                ->component('Newsletter/Confirmed')
+                ->component('Newsletter/Subscription/Confirmed')
                 ->has('title')
         );
 
@@ -104,7 +104,7 @@ class NewsletterTest extends TestCase
 
     public function test_newsletter_subscription_cannot_be_confirmed_with_invalid_token(): void
     {
-        $response = $this->get(route('newsletter.confirm', 'ongeldige-token'));
+        $response = $this->get(route('newsletter.subscription.confirm', 'ongeldige-token'));
 
         $response->assertStatus(404);
     }
@@ -117,7 +117,7 @@ class NewsletterTest extends TestCase
         $subscriber->confirmation_expires_at = now()->subHour();
         $subscriber->save();
 
-        $response = $this->get(route('newsletter.confirm', $subscriber->confirmation_token));
+        $response = $this->get(route('newsletter.subscription.confirm', $subscriber->confirmation_token));
 
         $response->assertStatus(404);
     }
@@ -130,7 +130,7 @@ class NewsletterTest extends TestCase
         $subscriber->confirmed_at = now();
         $subscriber->save();
 
-        $response = $this->get(route('newsletter.confirm', $subscriber->confirmation_token));
+        $response = $this->get(route('newsletter.subscription.confirm', $subscriber->confirmation_token));
 
         $response->assertStatus(404);
     }
@@ -140,12 +140,12 @@ class NewsletterTest extends TestCase
         $this->createNewTestSubscriber();
         $subscriber = $this->getTestSubscriber();
 
-        $response = $this->get(route('newsletter.unsubscribe', $subscriber->unsubscribe_token));
+        $response = $this->get(route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token));
 
         $response->assertStatus(200);
         $response->assertInertia(
             fn ($page) => $page
-                ->component('Newsletter/Unsubscribed')
+                ->component('Newsletter/Subscription/Unsubscribed')
                 ->has('title')
         );
 
@@ -157,7 +157,7 @@ class NewsletterTest extends TestCase
 
     public function test_newsletter_subscriber_cannot_unsubscribe_with_invalid_token(): void
     {
-        $response = $this->get(route('newsletter.unsubscribe', 'ongeldige-token'));
+        $response = $this->get(route('newsletter.subscription.unsubscribe', 'ongeldige-token'));
 
         $response->assertStatus(404);
     }
@@ -172,7 +172,7 @@ class NewsletterTest extends TestCase
 
         $subscriber = NewsletterSubscriber::where('email', $this->email)->first();
 
-        $response = $this->get(route('newsletter.unsubscribe', $subscriber->unsubscribe_token));
+        $response = $this->get(route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token));
 
         $response->assertStatus(404);
     }
@@ -194,7 +194,7 @@ class NewsletterTest extends TestCase
 
     private function createNewTestSubscriber(): TestResponse
     {
-        return $this->post(route('newsletter.subscribe'), [
+        return $this->post(route('newsletter.subscription.subscribe'), [
             'email' => $this->email,
             'name' => $this->name,
         ]);

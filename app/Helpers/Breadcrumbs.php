@@ -20,6 +20,14 @@ class Breadcrumbs
 
     public const BOOKING_ROUTE = ['route' => 'admin.bookings.index'];
 
+    public const SUBSCRIBER_LABEL = ['label' => 'newsletter.subscriber.title_index'];
+
+    public const SUBSCRIBER_ROUTE = ['route' => 'admin.newsletter.subscribers.index'];
+
+    public const CAMPAIGN_LABEL = ['label' => 'newsletter.campaign.title_index'];
+
+    public const CAMPAIGN_ROUTE = ['route' => 'admin.newsletter.campaigns.index'];
+
     public static function generate(): array
     {
         $routeName = request()->route()?->getName();
@@ -70,6 +78,28 @@ class Breadcrumbs
                 self::dashboardCrumb(),
                 [...self::translateLabel(self::COUNT_LABEL), ...self::COUNT_ROUTE],
                 ['label' => __('country.title_create'), 'route' => null],
+            ],
+
+            // Newsletter subscriber
+            'admin.newsletter.subscribers.index' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::SUBSCRIBER_LABEL), ...self::SUBSCRIBER_ROUTE],
+            ],
+            'admin.newsletter.subscribers.create' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::SUBSCRIBER_LABEL), ...self::SUBSCRIBER_ROUTE],
+                ['label' => __('newsletter.subscriber.title_create'), 'route' => null],
+            ],
+
+            // Newsletter campaign
+            'admin.newsletter.campaigns.index' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::CAMPAIGN_LABEL), ...self::CAMPAIGN_ROUTE],
+            ],
+            'admin.newsletter.campaigns.create' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::CAMPAIGN_LABEL), ...self::CAMPAIGN_ROUTE],
+                ['label' => __('newsletter.campaign.title_create'), 'route' => null],
             ],
 
             default => [],

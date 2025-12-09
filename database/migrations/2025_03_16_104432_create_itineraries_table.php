@@ -22,7 +22,7 @@ return new class extends Migration
             $table->json('meals')->nullable();
             $table->json('transport')->nullable();
             $table->string('remark')->nullable();
-            $table->integer('order')->default(0);
+            $table->unsignedTinyInteger('order')->default(0);
             $table->softDeletes();
             $table->timestamps();
         });

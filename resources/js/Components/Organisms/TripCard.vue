@@ -8,7 +8,7 @@ defineProps({ trip: Object });
 <template>
     <Card>
         <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
-            <Link :href="route('trip.show', trip)">
+            <Link :href="route('trips.show', trip)">
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
                 :style="`background-image: url(${trip.hero_image?.public_url || placeholder})`"></div>
             <div class="absolute top-3 right-3">
@@ -53,7 +53,7 @@ defineProps({ trip: Object });
 
                     <!-- Rechts: CTA button -->
                     <div class="flex justify-end">
-                        <Link :href="route('trip.show', trip)">
+                        <Link :href="route('trips.show', trip)">
                         <Button>
                             Bekijk&nbsp;reis
                         </Button>

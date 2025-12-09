@@ -48,7 +48,7 @@ class BookingTest extends TestCase
 
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
     {
-        $admin = User::factory()->create();
+        $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
 
         $booking = $this->createBookingWithTravelersAndContact();
@@ -245,7 +245,7 @@ class BookingTest extends TestCase
 
     private function assertRedirectIsCorrect($response, Booking $booking): void
     {
-        $response->assertRedirect(route('booking.received', ['booking' => $booking->uuid]));
+        $response->assertRedirect(route('bookings.received', ['booking' => $booking->uuid]));
     }
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array

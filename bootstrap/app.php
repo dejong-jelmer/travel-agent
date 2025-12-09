@@ -27,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->booted(function () {
         RateLimiter::for('frontend-form-actions', function (Request $request) {
-            return Limit::perMinute(25)->by($request->ip());
+            return Limit::perMinute(5)->by($request->ip());
         });
     })
     ->withExceptions(function (Exceptions $exceptions) {

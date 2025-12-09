@@ -2,8 +2,12 @@
 
 namespace App\Services\Validation;
 
+use App\Services\Traits\MergesRules;
+
 class TripValidationRules
 {
+    use MergesRules;
+
     public static function basic(array $additions = []): array
     {
         return self::mergeRules([
@@ -75,21 +79,5 @@ class TripValidationRules
             'images' => ['nullable', 'array'],
             'images.*' => ImageValidationRules::baseImageOrString(),
         ];
-    }
-
-    private static function mergeRules(array $base, array $additions): array
-    {
-        foreach ($additions as $key => $rules) {
-            if (isset($base[$key])) {
-                $base[$key] = array_merge(
-                    $base[$key],
-                    is_array($rules) ? $rules : [$rules]
-                );
-            } else {
-                $base[$key] = is_array($rules) ? $rules : [$rules];
-            }
-        }
-
-        return $base;
     }
 }

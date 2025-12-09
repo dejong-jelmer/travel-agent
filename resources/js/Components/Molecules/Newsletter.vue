@@ -17,7 +17,7 @@ function submit() {
     form.clearErrors()
     try {
         honeypot.value.validate()
-        form.post(route('newsletter.subscribe'), {
+        form.post(route('newsletter.subscription.subscribe'), {
             preserveScroll: true,
             timeout: 10000,
             onSuccess: () => {
