@@ -58,8 +58,8 @@ class NewsletterCampaignService
             return;
         }
 
-        // Eager load relations used in mail (outside transaction for performance)
-        $campaign->load(['heroImage', 'trips.heroImage']);
+        // Eager load missing relations used in mail (outside transaction for performance)
+        $campaign->loadMissing(['heroImage', 'trips.heroImage']);
 
         // Dispatch SendNewsletterCampaign job in chunks
         NewsletterSubscriber::active()->chunkById($chunkSize, function ($subscribers) use ($campaign) {

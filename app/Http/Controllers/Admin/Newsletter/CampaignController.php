@@ -33,7 +33,7 @@ class CampaignController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Newsletter/Campaign/Index', [
-            'campaigns' => NewsletterCampaign::paginate(),
+            'campaigns' => NewsletterCampaign::with(['heroImage', 'trips'])->paginate(),
             'title' => $this->pageTitle('newsletter.campaign.title_index'),
         ]);
     }
