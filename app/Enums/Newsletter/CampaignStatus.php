@@ -26,7 +26,7 @@ enum CampaignStatus: string
 
     public function label()
     {
-        return match($this) {
+        return match ($this) {
             CampaignStatus::Draft => __('newsletter.campaign.status.draft'),
             CampaignStatus::Scheduled => __('newsletter.campaign.status.scheduled'),
             CampaignStatus::Queued => __('newsletter.campaign.status.queued'),

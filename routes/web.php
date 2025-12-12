@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-ons', [HomeController::class, 'about'])->name('about');

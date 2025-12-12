@@ -16,7 +16,7 @@ enum PaymentStatus: string
 
     public function label()
     {
-        return match($this) {
+        return match ($this) {
             PaymentStatus::Pending => __('booking.payment_status.pending'),
             PaymentStatus::PartiallyPaid => __('booking.payment_status.partial_paid'),
             PaymentStatus::Paid => __('booking.payment_status.paid'),

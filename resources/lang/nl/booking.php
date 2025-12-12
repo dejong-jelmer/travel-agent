@@ -16,11 +16,11 @@ return [
 
     // Status
     'status' => [
-        "new" => "Nieuw",
-        "pending" => "In afwachting",
-        "confirmed" => "Bevestigd",
-        "canceled" => "Geannuleerd",
-        "completed" => "Voltooid",
+        'new' => 'Nieuw',
+        'pending' => 'In afwachting',
+        'confirmed' => 'Bevestigd',
+        'canceled' => 'Geannuleerd',
+        'completed' => 'Voltooid',
     ],
     'payment_status' => [
         'pending' => 'In afwachting',
@@ -29,5 +29,5 @@ return [
         'refunded' => 'Terugbetaald',
         'partially_refunded' => 'Gedeeltelijk_terugbetaald',
         'failed' => 'Mislukt',
-    ]
+    ],
 ];

@@ -187,23 +187,23 @@ class Booking extends Model
         ]);
     }
 
-     /**
+    /**
      * Get the status label.
      *
      * @return Attribute<string, never>
      */
     protected function statusLabel(): Attribute
     {
-        return Attribute::get(fn() => $this->status->label());
+        return Attribute::get(fn () => $this->status->label());
     }
 
-     /**
+    /**
      * Get the status label.
      *
      * @return Attribute<string, never>
      */
     protected function paymentStatusLabel(): Attribute
     {
-        return Attribute::get(fn() => $this->status->label());
+        return Attribute::get(fn () => $this->status->label());
     }
 }

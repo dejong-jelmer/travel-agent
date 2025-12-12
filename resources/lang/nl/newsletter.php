@@ -14,7 +14,7 @@ return [
             'pending' => 'In afwachting',
             'expired' => 'Verlopen',
             'unsubscribed' => 'Uitgeschreven',
-        ]
+        ],
     ],
     'subscription' => [
         // Page titles
@@ -53,6 +53,6 @@ return [
             'queued' => 'In de wachtrij',
             'sent' => 'Verzonden',
             'failed' => 'Mislukt',
-        ]
+        ],
     ],
 ];

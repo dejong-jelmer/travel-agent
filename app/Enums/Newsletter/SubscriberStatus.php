@@ -11,7 +11,7 @@ enum SubscriberStatus: string
 
     public function label()
     {
-        return match($this) {
+        return match ($this) {
             SubscriberStatus::Active => __('newsletter.subscriber.status.active'),
             SubscriberStatus::Pending => __('newsletter.subscriber.status.pending'),
             SubscriberStatus::Expired => __('newsletter.subscriber.status.expired'),

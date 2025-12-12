@@ -16,11 +16,11 @@ return [
 
     // Status
     'status' => [
-        "new" => "New",
-        "pending" => "Pending",
-        "confirmed" => "Confirmed",
-        "canceled" => "Canceled",
-        "completed" => "Completed",
+        'new' => 'New',
+        'pending' => 'Pending',
+        'confirmed' => 'Confirmed',
+        'canceled' => 'Canceled',
+        'completed' => 'Completed',
     ],
     'payment_status' => [
         'pending' => 'Pending',
@@ -29,5 +29,5 @@ return [
         'refunded' => 'Refunded',
         'partially_refunded' => 'Partially refunded',
         'failed' => 'Failed',
-    ]
+    ],
 ];

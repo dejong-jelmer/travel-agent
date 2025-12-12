@@ -14,7 +14,7 @@ return [
             'pending' => 'Pending',
             'expired' => 'Expired',
             'unsubscribed' => 'Unsubscribed',
-        ]
+        ],
     ],
     'subscription' => [
         // Page titles
@@ -53,6 +53,6 @@ return [
             'queued' => 'Queued',
             'sent' => 'Sent',
             'failed' => 'Failed',
-        ]
+        ],
     ],
 ];

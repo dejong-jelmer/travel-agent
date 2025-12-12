@@ -15,7 +15,7 @@ enum Status: string
 
     public function label()
     {
-        return match($this) {
+        return match ($this) {
             Status::New => __('booking.status.new'),
             Status::Pending => __('booking.status.pending'),
             Status::Confirmed => __('booking.status.confirmed'),

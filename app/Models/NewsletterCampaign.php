@@ -97,6 +97,6 @@ class NewsletterCampaign extends Model
      */
     protected function statusLabel(): Attribute
     {
-        return Attribute::get(fn() => $this->status->label());
+        return Attribute::get(fn () => $this->status->label());
     }
 }
