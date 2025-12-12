@@ -1,30 +1,32 @@
 <script setup>
 import { reactive } from 'vue';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
+import { useI18n } from 'vue-i18n';
 
 defineProps({
     trips: Object,
 });
 
+const { t } = useI18n();
 </script>
 <template>
     <Admin :links="trips.links">
         <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
-            <h1 class="text-3xl font-bold mb-4 tablet:mb-0">Reizen</h1>
-            <IconLink v-tippy="'Maak een reis aan'" icon="Plus" type="info" :href="route('admin.trips.create')" />
+            <h1 class="text-3xl font-bold mb-4 tablet:mb-0">{{ t('admin.trips.index.title') }}</h1>
+            <IconLink v-tippy="t('admin.trips.index.create_tooltip')" icon="Plus" type="info" :href="route('admin.trips.create')" />
         </div>
         <template v-if="trips.data.length > 0">
             <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
                 <table class="w-full border-collapse">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
-                            <th class="py-4 px-6 text-center">#</th>
-                            <th class="py-4 px-6 text-center">Afbeelding</th>
-                            <th class="py-4 px-6 text-center">Product</th>
-                            <th class="py-4 px-6 text-center">Land(en)</th>
-                            <th class="py-4 px-6 text-center">Prijs</th>
-                            <th class="py-4 px-6 text-center">Dagen</th>
-                            <th class="py-4 px-6 text-center">Acties</th>
+                            <th class="py-4 px-6 text-center">{{ t('admin.trips.index.table_headers.id') }}</th>
+                            <th class="py-4 px-6 text-center">{{ t('admin.trips.index.table_headers.image') }}</th>
+                            <th class="py-4 px-6 text-center">{{ t('admin.trips.index.table_headers.product') }}</th>
+                            <th class="py-4 px-6 text-center">{{ t('admin.trips.index.table_headers.countries') }}</th>
+                            <th class="py-4 px-6 text-center">{{ t('admin.trips.index.table_headers.price') }}</th>
+                            <th class="py-4 px-6 text-center">{{ t('admin.trips.index.table_headers.days') }}</th>
+                            <th class="py-4 px-6 text-center">{{ t('admin.trips.index.table_headers.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
@@ -42,25 +44,25 @@ defineProps({
                                     <template #default="{ MenuItem }">
                                         <component :is="MenuItem">
                                             <IconLink icon="Eye" :href="route('admin.trips.show', { trip })"
-                                                v-tippy="'Bekijk deze reis'" />
+                                                v-tippy="t('admin.trips.actions.view')" />
                                         </component>
                                         <component :is="MenuItem">
                                             <IconLink icon="Pencil" :href="route('admin.trips.edit', trip)"
-                                                v-tippy="'Bewerk deze reis'" />
+                                                v-tippy="t('admin.trips.actions.edit')" />
                                         </component>
                                         <component :is="MenuItem">
                                             <IconLink icon="Route" :href="trip.itineraries?.length ?
                                                 route('admin.trips.itineraries.index', trip)
                                                 : route('admin.trips.itineraries.create', trip)"
-                                                v-tippy="'Bekijk reisplan van deze reis'" />
+                                                v-tippy="t('admin.trips.actions.itinerary')" />
                                         </component>
 
                                         <component :is="MenuItem">
                                             <IconLink type="delete" icon="Trash2"
                                                 :href="route('admin.trips.destroy', trip)" method="delete"
                                                 :showConfirm="true"
-                                                prompt="Weet je zeker dat je deze reis wilt verwijderen?"
-                                                v-tippy="'Verwijder deze reis!'" />
+                                                :prompt="t('admin.trips.actions.delete_confirm')"
+                                                v-tippy="t('admin.trips.actions.delete')" />
                                         </component>
                                     </template>
                                 </DropdownMenu>
@@ -72,7 +74,7 @@ defineProps({
         </template>
         <template v-else>
             <div class="p-5">
-                <p>Je hebt nog geen reizen aangemaakt.</p>
+                <p>{{ t('admin.trips.index.no_trips') }}</p>
             </div>
         </template>
     </Admin>

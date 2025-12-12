@@ -17,7 +17,7 @@ class PhoneNumberService
     {
         $this->raw = trim($phoneNumber);
         $this->util = PhoneNumberUtil::getInstance();
-        $locale = config('app.locale');
+        $locale = app()->getLocale();
         $this->parsed = $this->util->parse($this->raw, $locale);
     }
 

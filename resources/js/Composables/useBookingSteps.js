@@ -1,6 +1,7 @@
 // Composables/useBookingSteps.js
 import { ref, computed, watch } from "vue";
 import { useBookingValidation } from "@/Composables/useBookingValidation.js";
+import i18n from '@/plugins/i18n.js';
 
 const {
     validateTravelersStep,
@@ -21,25 +22,25 @@ export function useBookingSteps(booking) {
     const steps = computed(() => [
         {
             id: BOOKING_STEPS.TRIP,
-            label: "Reis",
+            label: i18n.global.t('booking_step_labels.trip'),
             fields: ["departure_date"],
             validate: () => validateTripStep(booking.value),
         },
         {
             id: BOOKING_STEPS.TRAVELERS,
-            label: "Reisgezelschap",
+            label: i18n.global.t('booking_step_labels.travelers'),
             fields: ["travelers"],
             validate: () => validateTravelersStep(booking.value),
         },
         {
             id: BOOKING_STEPS.CONTACT,
-            label: "Contactgegevens",
+            label: i18n.global.t('booking_step_labels.contact'),
             fields: ["contact"],
             validate: () => validateContactStep(booking.value),
         },
         {
             id: BOOKING_STEPS.OVERVIEW,
-            label: "Bekijken & bevestigen",
+            label: i18n.global.t('booking_step_labels.overview'),
             fields: ["has_confirmed", "has_accepted_conditions"],
             validate: () => validateOverviewStep(booking.value),
         },

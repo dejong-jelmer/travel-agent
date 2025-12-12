@@ -1,0 +1,938 @@
+{
+    "button": {
+        "email": "Email",
+        "call": "Call",
+        "back_to_home": "Back to the homepage"
+    },
+    "link": {
+        "questions": "Any questions?",
+        "contact_us": "Contact us"
+    },
+    "booker": {
+        "birthdate": "Date of birth",
+        "nationality": "Nationality",
+        "adults": "Adult | Adults",
+        "children": "Child | Children"
+    },
+    "topbar_text": "Travel sustainably",
+    "nav": {
+        "contact": "Contact",
+        "about": "About us"
+    },
+    "trip_card": {
+        "days": "days",
+        "sustainable_travel": "Sustainable travel",
+        "view_trip": "View trip"
+    },
+    "trip_itinerary": {
+        "activities": "Activities",
+        "accommodation": "Accommodation",
+        "accommodation_text": "You will stay at",
+        "meals": "Meals",
+        "transport": "Transport"
+    },
+    "itinerary": {
+        "day": "Day",
+        "edit": "Edit itinerary",
+        "delete": "Delete itinerary",
+        "delete_confirm": "Are you sure you want to delete this itinerary?"
+    },
+    "form": {
+        "footer": {
+            "unsaved_changes": "There are unsaved changes.",
+            "no_changes": "There are no changes."
+        }
+    },
+    "image_uploader": {
+        "drop_zone": {
+            "drop_multiple": "Drop images to upload",
+            "drop_single": "Drop image to upload",
+            "click_or_drag_multiple": "Click here or drag images here",
+            "click_or_drag_single": "Click here or drag an image here",
+            "multiple_allowed": "Multiple images allowed",
+            "single_allowed": "One image allowed"
+        },
+        "errors": {
+            "invalid_files": "Some files are not valid images and have been skipped.",
+            "upload_error": "An error occurred while uploading the files.",
+            "processing_error": "Error processing the file.",
+            "image_load_error": "Image could not be loaded",
+            "cannot_load_image": "Cannot load image"
+        },
+        "preview": {
+            "loading": "Loading...",
+            "remove_image": "Remove image"
+        },
+        "file_info": {
+            "filename": "Filename",
+            "filesize": "File size",
+            "filetype": "File type",
+            "max_size_exceeded": "Maximum file size is {maxSize}"
+        },
+        "console": {
+            "not_an_image": "File {filename} is not an image",
+            "could_not_load": "Image {index} could not be loaded",
+            "could_not_create_url": "Could not create preview URL:",
+            "processing_error": "Error processing files:",
+            "remove_error": "Error removing image:",
+            "emit_error": "Error emitting update:",
+            "cleanup_error": "Error during cleanup:"
+        }
+    },
+    "newsletter": {
+        "heading": "Stay up to date",
+        "description": "Subscribe to our newsletter and receive all the latest updates about our trips.",
+        "form": {
+            "name_placeholder": "Your first name (optional)",
+            "email_placeholder": "your.email{'@'}example.com",
+            "submitting": "Submitting...",
+            "submit": "Subscribe"
+        },
+        "privacy": "We respect your privacy. You can unsubscribe at any time.",
+        "subscription": {
+            "success": "Thank you for subscribing! Please confirm your subscription via the email we just sent to {email}.",
+            "error": "An error occurred while processing your subscription. Please try again later."
+        }
+    },
+    "traveler_form": {
+        "first_name_label": "First name (as in passport)",
+        "first_name_placeholder": "First name",
+        "last_name_label": "Last name (as in passport)",
+        "last_name_placeholder": "Last name",
+        "nationality": "Nationality",
+        "nationality_placeholder": "Nationality (according passport)",
+        "birthdate": "Date of birth",
+        "birthdate_placeholder": "DD-MM-YYYY"
+    },
+    "usp": {
+        "section_header": "why choose us",
+        "intro": "Our unique approach combines comfort, culture and sustainability for a travel experience that goes beyond tourism.",
+        "sustainable": {
+            "title": "Sustainable",
+            "description": "Travel comfortably and relaxed through Europe's most beautiful landscapes. No stress from airports, just the pleasure of the journey itself.",
+            "highlight": "Average 75% less CO₂"
+        },
+        "with_story": {
+            "title": "With a story",
+            "description": "Discover the fascinating stories behind each destination. Our trips bring history to life with stories and special backgrounds at every destination.",
+            "highlight": "Unique insights with every trip"
+        },
+        "carefree": {
+            "title": "Carefree",
+            "description": "We arrange everything from A to Z. You just need to enjoy your sustainable adventure through Europe.",
+            "highlight": "24/7 Travel support"
+        }
+    },
+    "forms": {
+        "booking": {
+            "tooltip_locked": "Please complete the previous steps first",
+            "button_prev": "Previous",
+            "button_next": "Next",
+            "button_submit": "Book now",
+            "button_submit_tooltip": "Book now with payment obligation",
+            "submitting": "Submitting..."
+        },
+        "contact": {
+            "heading": "Contact",
+            "intro": "If you have questions or want to know more, get in touch using one of the methods below.",
+            "call": "Call",
+            "email": "Send an email to",
+            "or_use_form": "Or use the contact form below.",
+            "your_details_heading": "Your details",
+            "your_details_subheading": "How can we reach you?",
+            "your_message_heading": "Your message",
+            "your_message_subheading": "How can we help you?",
+            "name_label": "Name",
+            "email_label": "Your email address",
+            "phone_label": "Your phone number (optional)",
+            "message_label": "Message",
+            "submit_button": "Send message",
+            "success": "Thank you! Your message has been sent successfully."
+        },
+        "trip": {
+            "edit_heading": "Edit Trip",
+            "new_heading": "New Trip",
+            "subheading": "Manage the details of your trip",
+            "tabs": {
+                "basic": "Trip Details",
+                "media": "Media",
+                "details": "Details",
+                "meta": "Meta"
+            },
+            "character_counter": {
+                "too_many": "{count} too many",
+                "remaining": "{count} remaining"
+            },
+            "sections": {
+                "media": {
+                    "subtitle": "Upload images for the trip"
+                },
+                "settings": {
+                    "title": "Settings",
+                    "subtitle": "Configure visibility"
+                },
+                "pricing": {
+                    "title": "Price & Duration",
+                    "subtitle": "Define costs and trip duration"
+                },
+                "countries": {
+                    "title": "Countries",
+                    "subtitle": "Configure linked countries"
+                }
+            },
+            "fields": {
+                "name": {
+                    "label": "Trip name",
+                    "placeholder": "E.g. Discover the Balkans"
+                },
+                "slug": {
+                    "label": "Slug",
+                    "placeholder": "e.g. discover-the-balkans"
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "Describe the trip...",
+                    "characters": "{current} of {max} characters used"
+                },
+                "hero_image": {
+                    "label": "Hero Image",
+                    "help": "Upload an inspiring image that represents this trip",
+                    "change": "Change main image",
+                    "select": "Select an image"
+                },
+                "gallery": {
+                    "label": "Gallery Images",
+                    "help": "Upload images for the gallery",
+                    "drop_label": "Drop multiple images here"
+                },
+                "price": {
+                    "label": "Price per person",
+                    "placeholder": "e.g. 1499"
+                },
+                "duration": {
+                    "label": "Duration (days)",
+                    "placeholder": "e.g. 14",
+                    "unit": "days"
+                },
+                "countries": {
+                    "label": "Countries",
+                    "placeholder": "Select countries...",
+                    "help": "Select the countries that will be visited during this trip"
+                },
+                "highlights": {
+                    "label": "Highlights",
+                    "placeholder": "Add highlights...",
+                    "help": "Enter unique experiences and attractions of this trip"
+                },
+                "active": {
+                    "label": "Active",
+                    "help": "Is this trip available for booking?"
+                },
+                "featured": {
+                    "label": "Featured",
+                    "help": "Should this trip be featured on the homepage?"
+                },
+                "published_at": {
+                    "label": "Publication date",
+                    "help": "From when the trip will be visible on the website"
+                },
+                "meta_title": {
+                    "label": "Meta Title",
+                    "placeholder": "SEO title...",
+                    "characters": "{current} of {max} characters used"
+                },
+                "meta_description": {
+                    "label": "Meta Description",
+                    "placeholder": "SEO description...",
+                    "characters": "{current} of {max} characters used"
+                },
+                "og_image": {
+                    "label": "OG Image",
+                    "help": "Image for social media sharing (Open Graph)"
+                }
+            },
+            "submit": {
+                "create": "Create trip",
+                "update": "Update trip"
+            }
+        },
+        "itinerary": {
+            "edit_heading": "Edit Travel Day",
+            "new_heading": "New Travel Day",
+            "subheading": "Manage day program",
+            "tabs": {
+                "basic": "Basic",
+                "media": "Media",
+                "details": "Details"
+            },
+            "sections": {
+                "basic": {
+                    "subtitle": "Title, location and description of the day"
+                },
+                "media": {
+                    "subtitle": "Upload image for this travel day"
+                },
+                "details": {
+                    "subtitle": "Accommodation, activities and facilities"
+                }
+            },
+            "fields": {
+                "day": {
+                    "label": "Day number",
+                    "placeholder": "e.g. 1"
+                },
+                "location": {
+                    "label": "Location",
+                    "placeholder": "e.g. Amsterdam"
+                },
+                "title": {
+                    "label": "Title",
+                    "placeholder": "e.g. Arrival in Amsterdam"
+                },
+                "description": {
+                    "label": "Description",
+                    "placeholder": "Describe this day...",
+                    "characters": "{current} of {max} characters used"
+                },
+                "remark": {
+                    "label": "Remark",
+                    "placeholder": "Optional remark or warning",
+                    "help": "Remarks are shown with a warning icon"
+                },
+                "image": {
+                    "label": "Day Image",
+                    "help": "Upload an image for this day",
+                    "change": "Change image",
+                    "select": "Select an image"
+                },
+                "transport": {
+                    "label": "Transport",
+                    "placeholder": "Select transport..."
+                },
+                "accommodation": {
+                    "label": "Accommodation",
+                    "placeholder": "e.g. Hotel Central Amsterdam"
+                },
+                "activities": {
+                    "label": "Activities",
+                    "placeholder": "e.g. City walk, museum visit"
+                },
+                "meals": {
+                    "label": "Meals",
+                    "placeholder": "Select meals..."
+                },
+                "distance": {
+                    "label": "Distance (km)",
+                    "placeholder": "e.g. 45"
+                }
+            },
+            "submit": {
+                "create": "Create day",
+                "update": "Update day"
+            }
+        },
+        "campaign": {
+            "edit_heading": "Edit Campaign",
+            "new_heading": "New Campaign",
+            "subheading": "Manage your newsletter campaign",
+            "tabs": {
+                "basic": "Details",
+                "content": "Content",
+                "settings": "Settings"
+            },
+            "character_counter": {
+                "current": "{current} of {max} characters",
+                "too_many": "{count} too many",
+                "remaining": "{count} remaining"
+            },
+            "fields": {
+                "hero_image": {
+                    "change": "Change main image",
+                    "select": "Select an image"
+                },
+                "name": {
+                    "label": "Campaign name",
+                    "placeholder": "e.g. Summer 2025 Newsletter"
+                },
+                "subject": {
+                    "label": "Email subject",
+                    "placeholder": "e.g. Discover our summer trips!"
+                },
+                "preview_text": {
+                    "label": "Preview text (optional)",
+                    "placeholder": "This text appears in the email preview...",
+                    "help": "Preview text is shown next to the subject in email clients. Leave empty to auto-generate from content."
+                },
+                "body": {
+                    "label": "Email text",
+                    "placeholder": "Write your message...",
+                    "help": "Tip: HTML tags are supported for formatting."
+                },
+                "scheduled_at": {
+                    "label": "Send date",
+                    "placeholder": "Select date and time..."
+                },
+                "status": {
+                    "label": "Status",
+                    "placeholder": "Select status..."
+                },
+                "featured_trips": {
+                    "label": "Featured trips (optional)",
+                    "help": "Select trips you want to highlight in this newsletter",
+                    "no_trips": "No trips available",
+                    "duration": "{days} days",
+                    "selected": "{count} trip selected | {count} trips selected"
+                }
+            },
+            "preview": {
+                "title": "Email Preview",
+                "subject": "Subject:",
+                "no_subject": "(No subject)",
+                "preview_text": "Preview text:",
+                "content_preview": "Content preview:",
+                "no_content": "(No content yet)"
+            },
+            "test": {
+                "title": "Test sending",
+                "help": "Send a test email to your own email address to check how the newsletter looks.",
+                "button": "Send test email",
+                "sending": "Sending...",
+                "save_first": "Save the campaign first before sending a test email."
+            },
+            "status": {
+                "title": "Status & Planning",
+                "subtitle": "Configure sending",
+                "help": "Select 'Scheduled' to set a send date",
+                "scheduled_help": "The newsletter will be automatically sent on this date and time"
+            },
+            "statistics": {
+                "title": "Statistics",
+                "subtitle": "Send data",
+                "sent_at": "Sent on:",
+                "sent_count": "Number sent:",
+                "not_sent": "Not sent yet"
+            },
+            "submit": {
+                "create": "Create campaign",
+                "update": "Update campaign"
+            }
+        }
+    },
+    "booking_steps": {
+        "travelers": {
+            "heading": "Travel party",
+            "adult_label": "Adult",
+            "child_label": "Child"
+        },
+        "trip": {
+            "heading": "Book trip - {tripName}",
+            "intro": "How nice that you want to book the trip <strong class=\"text-brand-primary\">{tripName}</strong>. We will go through a few steps to ensure the booking goes smoothly.",
+            "notice_heading": "Please note:",
+            "notice_text": "This is a <strong>booking request</strong>. We will first check whether we can meet all wishes and whether there is sufficient availability. After sending, we will contact you within <strong>two working days</strong> to confirm the booking.",
+            "trip_label": "Trip",
+            "price_from": "From",
+            "per_person": "p.p.",
+            "choose_date": "Choose a <strong>date</strong> for departure",
+            "no_date_chosen": "No date chosen",
+            "choose_number": "Choose the <strong>number</strong> of travelers",
+            "participants_label": "Participants:",
+            "person_singular": "person",
+            "person_plural": "people",
+            "adult_singular": "adult",
+            "adult_plural": "adults",
+            "child_singular": "child",
+            "child_plural": "children"
+        },
+        "contact": {
+            "heading": "Contact details",
+            "main_booker_question": "Who will be the main booker?",
+            "chosen_main_booker": "Chosen main booker:",
+            "street_label": "Street name",
+            "street_placeholder": "Street name",
+            "house_number_label": "House number",
+            "house_number_placeholder": "House number",
+            "addition_label": "Addition (optional)",
+            "addition_placeholder": "House number addition",
+            "postal_code_label": "Postal code",
+            "postal_code_placeholder": "Postal code",
+            "city_label": "City",
+            "city_placeholder": "City",
+            "phone_label": "Phone number",
+            "phone_placeholder": "Phone number",
+            "email_label": "Email",
+            "email_placeholder": "{'@'} email address"
+        },
+        "overview": {
+            "heading": "Review & confirm",
+            "summary_heading": "A summary of your trip",
+            "trip_label": "Trip",
+            "total_price": "Total trip price",
+            "total_duration": "Total trip duration",
+            "days": "days",
+            "departure_date": "Departure date",
+            "no_date_chosen": "No date chosen",
+            "travelers_heading": "Travelers",
+            "adults_label": "Adults",
+            "children_label": "Children",
+            "no_travelers": "No travelers entered yet.",
+            "contact_info_heading": "Contact information",
+            "confirm_data": "I confirm the accuracy of my details and finalize my booking.",
+            "accept_terms": "I confirm that the <a :href=\"route('terms')\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"default-link\">terms and conditions</a> apply to this trip.",
+            "errors_found": "There are {count} error(s) found:"
+        }
+    },
+    "hero": {
+        "title": "Because we",
+        "subtitles": [
+            "never stop learning",
+            "stay curious",
+            "also consider tomorrow",
+            "are connected",
+            "keep exploring"
+        ]
+    },
+    "footer": {
+        "contact": "Contact",
+        "all_rights": "All rights reserverd.",
+        "conditions": "Terms and conditions",
+        "privacy": "Privacy policy",
+        "slogan": "For sustainable travel with a story"
+    },
+    "booking_step_labels": {
+        "trip": "Trip",
+        "travelers": "Travel party",
+        "contact": "Contact details",
+        "overview": "Review & confirm"
+    },
+    "validation": {
+        "errors": {
+            "missing": "{field} is missing — we need this for your booking.",
+            "missing_traveler_data": "Traveler information is missing.",
+            "missing_contact_data": "Contact information is missing.",
+            "missing_booking_data": "Booking information is missing.",
+            "missing_departure_date": "Choose a departure date.",
+            "missing_confirmation": "You must confirm.",
+            "missing_accepted_conditions": "You must accept the terms and conditions.",
+            "too_short": "{field} is too short — enter at least {min} characters.",
+            "too_long": "{field} is too long — enter no more than {max} characters.",
+            "invalid": "{field} is invalid - enter a valid value.",
+            "invalid_postal_code": "{field} is invalid — use the format 1234AB.",
+            "invalid_birthdate": "Enter a valid date of birth.",
+            "invalid_house_number": "House number must be a valid number greater than 0.",
+            "invalid_traveler_data": "Traveler information is invalid."
+        },
+        "fields": {
+            "first_name": "First name",
+            "last_name": "Last name",
+            "nationality": "Nationality",
+            "street_name": "Street name",
+            "house_number": "House number",
+            "postal_code": "Postal code",
+            "city": "City",
+            "email": "Email address",
+            "phone": "Phone number"
+        }
+    },
+    "admin_menu": {
+        "dashboard_title": "Admin Dashboard",
+        "dashboard_version": "Admin Dashboard v1.0",
+        "close_menu": "Close admin menu",
+        "groups": {
+            "overview": "Overview",
+            "bookings": "Bookings",
+            "content": "Content Management",
+            "general": "General"
+        },
+        "items": {
+            "dashboard": "Dashboard",
+            "bookings": "Bookings",
+            "trips": "Trips",
+            "all_trips": "All Trips",
+            "new_trip": "New Trip",
+            "countries": "Countries",
+            "all_countries": "All Countries",
+            "new_country": "New Country",
+            "newsletter": "Newsletter",
+            "subscribers": "Subscribers",
+            "campaigns": "Campaigns",
+            "home": "Home",
+            "logout": "Logout"
+        }
+    },
+    "about": {
+        "page_title": "About us",
+        "image_alt": "Historical (train) journeys in Europe",
+        "intro_paragraph": "Every journey tells a story. The story of places where history comes to life — of people, cultures and traces from the past that are still palpable.",
+        "coming_soon": "We will start soon. <strong class=\"font-semibold\">Stay close, travel further.</strong> Let us take you on a journey with meaning — <strong class=\"font-semibold\">a journey with a story.</strong>",
+        "philosophy": "We believe that travel can be more than just movement. It can touch, inspire and connect. That's why we create <strong class=\"font-semibold\">historical train journeys through Europe</strong>, sustainable and conscious, with an eye for people, nature and the environment."
+    },
+    "home": {
+        "our_trips_heading": "Our trips",
+        "no_trips": {
+            "message_start": "Because we are working hard to set up our first trips, you cannot book any trips yet. Check out our",
+            "blog_link": "blog",
+            "message_middle": "for information about recent activities or visit the",
+            "about_link": "about us",
+            "message_middle2": "page to learn more about Because We Travel. You can also contact us via our",
+            "contact_link": "contact form"
+        }
+    },
+    "trip_show": {
+        "hero": {
+            "from_price": "From €{price},-",
+            "days": "{duration} days",
+            "sustainable_travel": "Sustainable travel"
+        },
+        "about_trip": "About this trip",
+        "highlights": {
+            "romantic_train": "Romantic train ride through the Alps with breathtaking views",
+            "historic_castles": "Visit to historic castles and UNESCO world heritage sites",
+            "culinary": "Local culinary experiences and wine tastings",
+            "small_groups": "Small groups for a personal experience",
+            "sustainable": "Sustainable travel without flying"
+        },
+        "tabs": {
+            "itinerary": "Day by day",
+            "inclusive": "Included & Excluded",
+            "practical": "Practical info",
+            "extra": "Extra info"
+        },
+        "tab_content": {
+            "itinerary_empty": "Detailed itinerary will be added soon",
+            "inclusive_placeholder": "Included and excluded information comes here.",
+            "practical_placeholder": "Practical information about the trip comes here.",
+            "extra_placeholder": "Extra information about this trip comes here."
+        },
+        "sidebar": {
+            "trip_overview": "Trip overview",
+            "from": "From:",
+            "per_person": "p.p.",
+            "duration": "Duration:",
+            "days_label": "days",
+            "transport": "Transport:",
+            "train": "Train",
+            "book_this_trip": "Book this trip",
+            "book_now": "Book now",
+            "contact_info": "Or contact us for more information",
+            "why_choose_us": "Why choose us?",
+            "sustainable_travel": "Sustainable travel",
+            "small_personal": "Small & personal",
+            "carefree_travel": "Carefree travel"
+        }
+    },
+    "date_picker": {
+        "placeholder": "Select a date"
+    },
+    "person_picker": {
+        "adults": "Adult | Adults",
+        "children": "No Children | Child | Children",
+        "upto_12": "upto 12 years old"
+    },
+    "newsletter_subscription": {
+        "confirmed": {
+            "title": "You're subscribed!",
+            "message": "Thank you for confirming your subscription. You will now receive our newsletter with the latest updates, tips and exclusive content.",
+            "box_title": "What to expect?",
+            "updates": "Regular updates about our latest travel offerings",
+            "exclusive_content": "Exclusive content and stories",
+            "unsubscribe_anytime": "You can always unsubscribe"
+        },
+        "unsubscribed": {
+            "title": "You've been unsubscribed.",
+            "message": "You have successfully unsubscribed from our newsletter. You will no longer receive any emails from us, but you can always resubscribe if you want to stay informed about our latest travel offerings.",
+            "box_title": "What now?",
+            "no_more_emails": "You will no longer receive newsletters from us",
+            "resubscribe_anytime": "You can always resubscribe at a later time",
+            "contact_us": "For questions, feel free to contact us"
+        }
+    },
+    "booking_received": {
+        "header": {
+            "title": "Booking received!",
+            "message": "Thank you for your booking. We have received and processed your reservation. You will receive a confirmation email shortly at"
+        },
+        "trip_details": {
+            "departure_date": "Departure date",
+            "duration": "Duration",
+            "days": "{duration} days",
+            "transport": "Transport",
+            "train_trip": "Train journey",
+            "travelers": "Travelers",
+            "person_singular": "person",
+            "person_plural": "people"
+        },
+        "travelers_card": {
+            "title": "Travelers",
+            "main_booker": "Main booker"
+        },
+        "booking_reference": {
+            "label": "Your booking number",
+            "save_message": "Save this number for your records and any correspondence."
+        },
+        "contact_details": {
+            "title": "Contact details",
+            "name": "Name",
+            "email": "Email address",
+            "phone": "Phone number",
+            "address": "Address"
+        },
+        "next_steps": {
+            "title": "Next steps",
+            "confirmation_email": "You will receive a confirmation email with all details of your trip",
+            "contact_soon": "We will contact you soon for the final confirmation",
+            "questions": "Do you have questions? Feel free to contact us"
+        },
+        "back_to_home": "Back to homepage"
+    },
+    "auth": {
+        "login": {
+            "title": "Login",
+            "email_label": "Email",
+            "email_placeholder": "Enter your email",
+            "password_label": "Password",
+            "password_placeholder": "Enter your password",
+            "submit_button": "Login"
+        }
+    },
+    "admin": {
+        "dashboard": {
+            "header": {
+                "title": "Dashboard",
+                "welcome": "Welcome back! Here's an overview of your travel organization."
+            },
+            "stats": {
+                "new": {
+                    "name": "New",
+                    "description": "All newly received bookings"
+                },
+                "upcoming_month": {
+                    "name": "Upcoming departures",
+                    "description": "Departing next month"
+                },
+                "upcoming": {
+                    "name": "Future Trips",
+                    "description": "Upcoming departures"
+                },
+                "total": {
+                    "name": "Total Bookings",
+                    "description": "All bookings"
+                }
+            },
+            "quick_actions": {
+                "title": "Quick Actions",
+                "view_bookings": "View all bookings",
+                "manage_trips": "Manage trips",
+                "manage_countries": "Manage countries"
+            },
+            "system_status": {
+                "title": "System Status",
+                "status_labels": {
+                    "healthy": "Active",
+                    "warning": "Warning",
+                    "error": "Offline",
+                    "unknown": "Unknown"
+                },
+                "services": {
+                    "database": "Database connection",
+                    "email": "Email service",
+                    "queue": "Queue worker"
+                },
+                "details": {
+                    "response": "Response: {time}ms",
+                    "provider": "Provider: {provider}",
+                    "jobs_in_queue": "{count} jobs in queue"
+                },
+                "last_checked": "Last checked: {time}",
+                "loading": "System status is loading..."
+            }
+        },
+        "trips": {
+            "actions": {
+                "view": "View this trip",
+                "edit": "Edit this trip",
+                "itinerary": "View itinerary of this trip",
+                "delete": "Delete this trip!",
+                "delete_confirm": "Are you sure you want to delete this trip?"
+            },
+            "index": {
+                "title": "Trips",
+                "create_tooltip": "Create a trip",
+                "table_headers": {
+                    "id": "#",
+                    "image": "Image",
+                    "product": "Product",
+                    "countries": "Country(ies)",
+                    "price": "Price",
+                    "days": "Days",
+                    "actions": "Actions"
+                },
+                "no_trips": "You haven't created any trips yet."
+            },
+            "show": {
+                "edit_tooltip": "Edit trip",
+                "itinerary_tooltip": "View itinerary of this trip",
+                "tabs": {
+                    "details": "Trip Details",
+                    "meta": "Meta data"
+                },
+                "details": {
+                    "name": "Name",
+                    "slug": "Slug",
+                    "description": "Description"
+                },
+                "meta": {
+                    "title": "Meta Title",
+                    "description": "Meta Description",
+                    "og_image": "Open Graph Image",
+                    "og_url": "Effective OG URL:"
+                },
+                "media": {
+                    "title": "Images",
+                    "subtitle": "Trip media",
+                    "hero": "Hero Image",
+                    "gallery": "Gallery Images",
+                    "alt": "Trip image {index}"
+                },
+                "settings": {
+                    "title": "Settings",
+                    "subtitle": "Visibility",
+                    "published_date": "Publicatiedatum",
+                    "featured": "Featured",
+                    "yes": "Yes",
+                    "no": "No"
+                },
+                "pricing": {
+                    "title": "Price & Duration",
+                    "subtitle": "Costs and travel duration",
+                    "price_per_person": "Price per person",
+                    "duration": "Duration",
+                    "days": "{duration} days"
+                },
+                "countries": {
+                    "title": "Linked Countries",
+                    "subtitle": "Destinations"
+                }
+            }
+        },
+        "booking": {
+            "actions": {
+                "show": "View this booking",
+                "edit": "Edit this booking",
+                "delete": "Delete booking",
+                "delete_confirm": "Are you sure you want to delete this booking?"
+            },
+            "submit": {
+                "edit": "Save changes"
+            },
+            "index": {
+                "table_headers": {
+                    "reference": "Reference",
+                    "trip": "Trip",
+                    "departure_date": "Departure date",
+                    "status": "Status",
+                    "payment": "Payment",
+                    "actions": "Actions"
+                },
+                "no_bookings": "There are no bookings yet."
+            },
+            "edit": {
+                "booking": "Edit booking {reference}",
+                "edit_contact": "Manage contact person",
+                "travelers": "Travel party",
+                "edit_travelers": "Manage travelers",
+                "edit_booking_status": "Manage booking status",
+                "booking_status_placeholder": "Select a booking status",
+                "booking_status_label": "Booking status",
+                "payment_status_placeholder": "Select a payment status",
+                "payment_status_label": "Payment status"
+            },
+            "show": {
+                "details": "Booking details",
+                "info": "Booking information",
+                "reference": "Booking reference",
+                "trip": "Trip",
+                "departure_date": "Departure date",
+                "contact": "Contact details",
+                "contact_info": "Contact person information",
+                "contact_name": "Name",
+                "contact_email": "Email",
+                "contact_telephone": "Phone",
+                "contact_address": "Address",
+                "travelers": "Travel party",
+                "travelers_subheader": "Travel party overview",
+                "booking_status": "Booking status",
+                "payment_status": "Payment status"
+            }
+        },
+        "countries": {
+            "title": "Countries",
+            "actions": {
+                "delete": "Delete country",
+                "delete_confirm": "Are you sure you want to delete this country?"
+            },
+            "submit": {
+                "create": "Create country"
+            },
+            "index": {
+                "table_headers": {
+                    "countries": "Countries",
+                    "actions": "Actions"
+                },
+                "no_countries": "No countries have been created yet."
+            },
+            "create": {
+                "title": "New Country",
+                "subtitle": "Destinations",
+                "heading": "Country Information",
+                "subheading": "Enter the country name",
+                "fields": {
+                    "name": {
+                        "label": "Country name",
+                        "placeholder": "E.g. France"
+                    }
+                }
+            }
+        },
+        "newsletter": {
+            "campaigns": {
+                "actions": {
+                    "edit": "Edit newsletter campaign",
+                    "send": "Send this newsletter campaign",
+                    "send_confirm": "You are about to send this campaign to all your subscribers. Are you sure you want to send this newsletter campaign?",
+                    "delete": "Delete this newsletter campaign",
+                    "delete_confirm": "Are you sure you want to delete this newsletter campaign?"
+                },
+                "index": {
+                    "title": "Newsletter Campaigns",
+                    "table_headers": {
+                        "subject": "Subject",
+                        "status": "Status",
+                        "planned_for": "Scheduled for",
+                        "sent_at": "Sent on",
+                        "sent_count": "Number sent",
+                        "actions": "Actions"
+                    },
+                    "no_campaigns": "You haven't created any newsletter campaigns yet."
+                }
+            },
+            "subscribers": {
+                "actions": {
+                    "delete": "Delete this newsletter subscriber",
+                    "delete_confirm": "Are you sure you want to delete this newsletter subscriber?",
+                    "resend": "Resend confirmation email",
+                    "resend_confirm": "Send this newsletter subscriber a new confirmation email?"
+                },
+                "index": {
+                    "title": "Newsletter Subscribers",
+                    "table_headers": {
+                        "name": "Name",
+                        "email": "Email",
+                        "status": "Status",
+                        "actions": "Actions"
+                    },
+                    "no_subscribers": "No one has subscribed to your newsletter yet."
+                }
+            }
+        }
+    }
+}

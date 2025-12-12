@@ -104,7 +104,7 @@ function handleSubmit() {
                         px-2 py-1 bg-gray-900 text-white text-xs rounded
                         opacity-0 group-hover:opacity-100 transition-opacity
                         whitespace-nowrap pointer-events-none z-50">
-                        Vul eerst de vorige stappen in
+                        {{ $t('forms.booking.tooltip_locked') }}
                     </span>
 
 
@@ -129,21 +129,21 @@ function handleSubmit() {
             <button type="button" data-testid="prev-button"
                 class="px-4 py-2 rounded-xl text-brand-primary hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="isFirstStep" @click="prevStep">
-                Vorige
+                {{ $t('forms.booking.button_prev') }}
             </button>
 
             <button v-if="!isLastStep" type="button" data-testid="next-button"
                 class="px-6 py-2 rounded-xl bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:hover:text-brand-primary disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="booking.processing" @click="handleNext">
-                Volgende
+                {{ $t('forms.booking.button_next') }}
             </button>
 
             <button v-else type="button" data-testid="submit-button"
-                v-tippy="canSubmit ? 'Nu boeken met betalingsverplichting' : null"
+                v-tippy="canSubmit ? $t('forms.booking.button_submit_tooltip') : null"
                 class="px-6 py-2 rounded-xl inline-flex gap-2 items-center bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:opacity-40 disabled:hover:bg-accent-primary disabled:hover:text-white disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
                 <LoaderCircle v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
-                <span>{{ booking.processing ? 'Bezig met verzenden...' : 'Nu boeken' }}</span>
+                <span>{{ booking.processing ? $t('forms.booking.submitting') : $t('forms.booking.button_submit') }}</span>
             </button>
         </div>
     </div>

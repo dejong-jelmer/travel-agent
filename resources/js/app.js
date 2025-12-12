@@ -12,7 +12,7 @@ import toastOptions from './toastOptions.js';
 import screens from './screens.js';
 import VueHoneypot from 'vue-honeypot'
 import '@vuepic/vue-datepicker/dist/main.css';
-
+import i18n from './plugins/i18n';
 
 import.meta.glob([
   '../images/**',
@@ -31,6 +31,13 @@ createInertiaApp({
             app.use(Vue3TouchEvents)
             app.use(Toast, toastOptions)
             app.use(VueHoneypot)
+            app.use(i18n)
+
+            // Sync i18n locale with server-side locale
+            if (props.initialPage.props.locale) {
+                i18n.global.locale.value = props.initialPage.props.locale;
+            }
+
             app.use(Vue3Mq, {
                 breakpoints: screens
             });

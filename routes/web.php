@@ -10,11 +10,13 @@ use App\Http\Controllers\Admin\TripController as AdminTripController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Newsletter\SubscriptionController;
 use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
 
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -22,6 +24,10 @@ Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
+
+// Switch locale
+Route::post('/locale/switch', [LocaleController::class, 'switch'])
+    ->name('locale.switch');
 
 // contact form
 Route::post('/contact', [HomeController::class, 'submitContact'])

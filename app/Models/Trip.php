@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Casts\PriceCast;
+use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -14,16 +15,20 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Trip extends Model
 {
     use HasFactory,
+        HasFormattedDates,
         ManagesImages,
         SoftDeletes;
 
     protected $perPage = 10;
+
+    protected array $formattedDates = [
+        'published_at' => ['format' => 'dddd LL'],
+    ];
 
     protected $fillable = [
         'name',
@@ -41,6 +46,7 @@ class Trip extends Model
         'image_paths',
         'raw_price',
         'formatted_countries',
+        'published_at_formatted',
         'og_image_url',
     ];
 
@@ -98,6 +104,11 @@ class Trip extends Model
     protected function published(Builder $query): void
     {
         $query->where('published_at', '<=', today());
+    }
+
+    protected function publishedAtFormatted(): Attribute
+    {
+        return Attribute::get(fn () => $this->getFormattedDate('published_at'));
     }
 
     /**

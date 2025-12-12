@@ -13,9 +13,6 @@ const form = useForm({
     image: props.itinerary.image?.public_url ?? null,
 });
 
-// Counter for image uploader initialization (only 1 image uploader)
-const initCounter = ref(1);
-
 function submit() {
     form.post(route("admin.itineraries.update", props.itinerary.id), { forceFormData: true });
 }

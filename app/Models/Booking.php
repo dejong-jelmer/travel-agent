@@ -54,6 +54,8 @@ class Booking extends Model
     protected $appends = [
         'departure_date_formatted',
         'created_at_formatted',
+        'status_label',
+        'payment_status_label',
     ];
 
     protected $attributes = [
@@ -183,5 +185,25 @@ class Booking extends Model
             now()->startOfDay(),
             now()->addMonth()->endOfDay(),
         ]);
+    }
+
+     /**
+     * Get the status label.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function statusLabel(): Attribute
+    {
+        return Attribute::get(fn() => $this->status->label());
+    }
+
+     /**
+     * Get the status label.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function paymentStatusLabel(): Attribute
+    {
+        return Attribute::get(fn() => $this->status->label());
     }
 }

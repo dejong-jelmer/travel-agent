@@ -1,8 +1,14 @@
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
+
 <template>
-    <NewsletterStatusTemplate
-        title="Je bent ingeschreven!"
-        message="Bedankt voor het bevestigen van je aanmelding. Je ontvangt vanaf nu onze nieuwsbrief met de laatste updates, tips en exclusieve content."
-        box-title="Wat kun je verwachten?"
+    <NewsletterTemplate
+        :title="t('newsletter_subscription.confirmed.title')"
+        :message="t('newsletter_subscription.confirmed.message')"
+        :box-title="t('newsletter_subscription.confirmed.box_title')"
     >
         <template #icon>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none"
@@ -18,21 +24,21 @@
             <li class="flex items-start">
                 <span class="text-status-success font-bold mr-2">✓</span>
                 <span class="text-brand-primary">
-                    Regelmatige updates over ons nieuwste reisaanbod
+                    {{ t('newsletter_subscription.confirmed.updates') }}
                 </span>
             </li>
             <li class="flex items-start">
                 <span class="text-status-success font-bold mr-2">✓</span>
                 <span class="text-brand-primary">
-                    Exclusieve content en verhalen
+                    {{ t('newsletter_subscription.confirmed.exclusive_content') }}
                 </span>
             </li>
             <li class="flex items-start">
                 <span class="text-status-success font-bold mr-2">✓</span>
                 <span class="text-brand-primary">
-                    Je kunt je altijd weer uitschrijven
+                    {{ t('newsletter_subscription.confirmed.unsubscribe_anytime') }}
                 </span>
             </li>
         </template>
-    </NewsletterStatusTemplate>
+    </NewsletterTemplate>
 </template>

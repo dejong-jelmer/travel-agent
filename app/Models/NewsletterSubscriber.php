@@ -36,6 +36,7 @@ class NewsletterSubscriber extends Model
 
     protected $appends = [
         'status',
+        'status_label',
     ];
 
     protected static function boot()
@@ -87,7 +88,9 @@ class NewsletterSubscriber extends Model
     }
 
     /**
-     * Get the subscription status.
+     * Get the subscriber's status.
+     *
+     * @return Attribute<SubscriberStatus, never>
      */
     protected function status(): Attribute
     {
@@ -104,6 +107,16 @@ class NewsletterSubscriber extends Model
 
             return SubscriberStatus::Pending;
         });
+    }
+
+    /**
+     * Get the status label.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function statusLabel(): Attribute
+    {
+        return Attribute::get(fn() => $this->status->label());
     }
 
     /**

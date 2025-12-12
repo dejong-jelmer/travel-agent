@@ -23,4 +23,15 @@ enum CampaignStatus: string
             default => false,
         };
     }
+
+    public function label()
+    {
+        return match($this) {
+            CampaignStatus::Draft => __('newsletter.campaign.status.draft'),
+            CampaignStatus::Scheduled => __('newsletter.campaign.status.scheduled'),
+            CampaignStatus::Queued => __('newsletter.campaign.status.queued'),
+            CampaignStatus::Sent => __('newsletter.campaign.status.sent'),
+            CampaignStatus::Failed => __('newsletter.campaign.status.failed'),
+        };
+    }
 }
