@@ -43,18 +43,14 @@ defineProps({
                         <span>{{ itinerary.location }}</span>
                     </div>
                 </div>
-
-                <!-- Beschrijving met afbeelding -->
                 <div class="mb-4">
                     <div v-if="itinerary.image?.public_url"
                         class="flex flex-col tablet:flex-row gap-4 items-start tablet:items-center">
-                        <!-- Tekst -->
                         <div class="flex-1 min-w-0">
                             <p class="text-brand-primary leading-relaxed text-sm tablet:text-base">
                                 {{ itinerary.description }}
                             </p>
                         </div>
-                        <!-- Afbeelding -->
                         <div class="flex-shrink-0 w-full tablet:w-32 laptop:w-40">
                             <div class="rounded-lg overflow-hidden shadow-sm border border-accent-sage/20">
                                 <img :src="itinerary.image?.public_url ?? placeholder" :alt="itinerary.title"
@@ -72,14 +68,12 @@ defineProps({
                     </div>
                 </div>
 
-                <!-- Container voor horizontale layout - responsive -->
                 <div class="grid grid-cols-1 tablet:flex flex-wrap gap-4 mb-4">
-                    <!-- Activiteiten (optioneel) -->
                     <div v-if="itinerary.activities?.length" class="flex-1 min-w-0">
                         <h5
                             class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <Camera class="w-4 h-4 text-accent-primary" />
-                            Activiteiten
+                            {{ $t('trip_itinerary.activities') }}
                         </h5>
                         <ul class="space-y-1 px-2">
                             <li v-for="activity in itinerary.activities" :key="activity"
@@ -90,22 +84,20 @@ defineProps({
                         </ul>
                     </div>
 
-                    <!-- Accommodatie info (optioneel) -->
                     <div v-if="itinerary.accommodation" class="flex-1 min-w-0">
                         <h5
                             class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <BedDouble class="w-4 h-4 text-accent-primary" />
-                            Overnachting
+                            {{ $t('trip_itinerary.accommodation') }}
                         </h5>
-                        <p class="text-sm text-brand-primary px-2">U verblijft in het {{ itinerary.accommodation }}</p>
+                        <p class="text-sm text-brand-primary px-2">{{ $t('trip_itinerary.accommodation_text') }} {{ itinerary.accommodation }}</p>
                     </div>
 
-                    <!-- Maaltijden (optioneel) -->
                     <div v-if="itinerary.meals?.length" class="flex-1 min-w-0">
                         <h5
                             class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <UtensilsCrossed class="w-4 h-4 text-accent-primary" />
-                            Maaltijden
+                            {{ $t('trip_itinerary.meals') }}
                         </h5>
                         <div class="flex flex-wrap gap-2 px-2">
                             <Pill type="sage" v-for="meal in itinerary.meals" :key="meal">
@@ -113,13 +105,11 @@ defineProps({
                             </Pill>
                         </div>
                     </div>
-
-                    <!-- Transport info (optioneel) -->
                     <div v-if="itinerary.transport?.length" class="flex-1 min-w-0">
                         <h5
                             class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <Route class="w-4 h-4 text-accent-primary" />
-                            Transport
+                            {{ $t('trip_itinerary.transport') }}
                         </h5>
                         <div class="flex flex-wrap gap-1">
                             <Pill class="w-fit" v-for="mode in itinerary.transport" :key="mode" type="sage"
@@ -131,7 +121,6 @@ defineProps({
                     </div>
                 </div>
 
-                <!-- Belangrijke opmerking (optioneel) -->
                 <div v-if="itinerary.remark"
                     class="bg-status-warning/10 rounded-lg p-3 tablet:p-4 border border-status-warning/30 mb-4">
                     <div class="flex items-center gap-3">

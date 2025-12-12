@@ -6,6 +6,6 @@
     <a href="#"
         class="tel-field has-icon contact-button">
         <Phone class="w-5 h-5" />
-        Bellen
+        {{ $t('button.call') }}
     </a>
 </template>

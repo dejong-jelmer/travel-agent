@@ -12,6 +12,8 @@
 
 import { useDateFormatter } from "@/Composables/useDateFormatter.js";
 import { emailRegex, phoneRegex, postalCodeRegex } from "@/Validators/regex.js";
+import i18n from '@/plugins/i18n.js';
+
 const { isValidDate } = useDateFormatter();
 
 /** Minimum length for most string fields (names, city, street) */
@@ -22,47 +24,6 @@ const MIN_NATIONALITY_LENGTH = 2;
 
 /** Maximum length for most string fields */
 const DEFAULT_MAX_STRING_LENGTH = 255;
-
-/**
- * Error message templates for traveler validation.
- *
- * @constant {Object}
- */
-const ERROR_MESSAGES = {
-    MISSING: "{field} ontbreekt — deze hebben we nodig voor je boeking.",
-    MISSING_TRAVELER_DATA: "Reizigersgegevens ontbreken.",
-    MISSING_CONTACT_DATA: "Contactgegevens ontbreken.",
-    MISSING_BOOKING_DATA: "Boekinggegevens ontbreken.",
-    MISSING_DEPARTURE_DATE: "Kies een vertrekdatum.",
-    MISSING_CONFIRMATION: "Je moet nog akkoord gaan.",
-    MISSING_ACCEPTED_CONDITIONS:
-    "Je moet nog akkoord gaan met de algemene voorwaarden.",
-    TOO_SHORT: "{field} is te kort — vul minimaal {min} tekens in.",
-    TOO_LONG: `{field} is te lang vul maximaal {max} tekens in.`,
-    INVALID: "{field} is ongeldig - voer een geldige waarde in.",
-    INVALID_POSTAL_CODE: "{field} is ongeldig — gebruik het formaat 1234AB.",
-    INVALID_BIRTHDATE: "Vul een geldige geboortedatum in.",
-    INVALID_HOUSE_NUMBER:
-    "Het huisnummer moet een geldig getal groter dan 0 zijn.",
-    INVALID_TRAVELER_DATA: "Reizigersgegevens zijn ongeldig.",
-};
-
-/**
- * Fieldnames templates.
- *
- * @constant {Object}
- */
-const FIELD_NAMES = {
-    FIRST_NAME: "Voornaam",
-    LAST_NAME: "Achternaam",
-    NATIONALITY: "Nationaliteit",
-    STREET_NAME: "Straatnaam",
-    HOUSE_NUMBER: "Huisnummer",
-    POSTAL_CODE: "Postcode",
-    CITY: "Plaatsnaam",
-    EMAIL: "E-mail adres",
-    PHONE: "Telefoonnummer",
-};
 
 /**
  * Composable for validating booking form data across multiple steps.
@@ -80,6 +41,8 @@ const FIELD_NAMES = {
  * @returns {Function} validateOverviewStep - Validates confirmation checkboxes
  */
 export function useBookingValidation() {
+    const t = (key, params) => i18n.global.t(key, params);
+
     /**
      * Validates traveler information for all travelers in the booking.
      *
@@ -93,47 +56,47 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData?.travelers) {
-            return { travelers: ERROR_MESSAGES.MISSING_TRAVELER_DATA };
+            return { travelers: t('validation.errors.missing_traveler_data') };
         }
 
         for (const [type, travelers] of Object.entries(bookingData.travelers)) {
             travelers.forEach((traveler, index) => {
                 const basePath = `travelers.${type}.${index}`;
                 if (!traveler || typeof traveler !== 'object') {
-                    errors[`${basePath}`] = ERROR_MESSAGES.INVALID_TRAVELER_DATA;
+                    errors[`${basePath}`] = t('validation.errors.invalid_traveler_data');
                     return;
                 }
                 const firstNameError = validateStringField(
                     traveler.first_name,
-                    FIELD_NAMES.FIRST_NAME,
+                    t('validation.fields.first_name'),
                     DEFAULT_MIN_STRING_LENGTH,
-                    ERROR_MESSAGES.MISSING,
-                    ERROR_MESSAGES.TOO_SHORT
+                    t('validation.errors.missing'),
+                    t('validation.errors.too_short')
                 );
                 if (firstNameError)
                     errors[`${basePath}.first_name`] = firstNameError;
 
                 const lastNameError = validateStringField(
                     traveler.last_name,
-                    FIELD_NAMES.LAST_NAME,
+                    t('validation.fields.last_name'),
                     DEFAULT_MIN_STRING_LENGTH,
-                    ERROR_MESSAGES.MISSING,
-                    ERROR_MESSAGES.TOO_SHORT
+                    t('validation.errors.missing'),
+                    t('validation.errors.too_short')
                 );
                 if (lastNameError)
                     errors[`${basePath}.last_name`] = lastNameError;
 
                 if (!traveler.birthdate || !isValidDate(traveler.birthdate)) {
                     errors[`${basePath}.birthdate`] =
-                        ERROR_MESSAGES.INVALID_BIRTHDATE;
+                        t('validation.errors.invalid_birthdate');
                 }
 
                 const nationalityError = validateStringField(
                     traveler.nationality,
-                    FIELD_NAMES.NATIONALITY,
+                    t('validation.fields.nationality'),
                     MIN_NATIONALITY_LENGTH,
-                    ERROR_MESSAGES.MISSING,
-                    ERROR_MESSAGES.TOO_SHORT
+                    t('validation.errors.missing'),
+                    t('validation.errors.too_short')
                 );
                 if (nationalityError)
                     errors[`${basePath}.nationality`] = nationalityError;
@@ -155,7 +118,7 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData?.contact) {
-            return { contact: ERROR_MESSAGES.MISSING_CONTACT_DATA };
+            return { contact: t('validation.errors.missing_contact_data') };
         }
 
         const { contact } = bookingData;
@@ -163,54 +126,54 @@ export function useBookingValidation() {
 
         const streetError = validateStringField(
             contact.street,
-            FIELD_NAMES.STREET_NAME,
+            t('validation.fields.street_name'),
             DEFAULT_MIN_STRING_LENGTH,
-            ERROR_MESSAGES.MISSING,
-            ERROR_MESSAGES.TOO_SHORT
+            t('validation.errors.missing'),
+            t('validation.errors.too_short')
         );
         if (streetError) errors["contact.street"] = streetError;
 
         if (isNaN(houseNumber) || houseNumber <= 0) {
             errors["contact.house_number"] =
-                ERROR_MESSAGES.INVALID_HOUSE_NUMBER;
+                t('validation.errors.invalid_house_number');
         }
 
         const postalCodeError = validateRegexField(
             contact.postal_code,
-            FIELD_NAMES.POSTAL_CODE,
+            t('validation.fields.postal_code'),
             postalCodeRegex,
-            ERROR_MESSAGES.MISSING,
-            ERROR_MESSAGES.INVALID_POSTAL_CODE
+            t('validation.errors.missing'),
+            t('validation.errors.invalid_postal_code')
         );
 
         if (postalCodeError) errors["contact.postal_code"] = postalCodeError;
 
         const cityError = validateStringField(
             contact.city,
-            FIELD_NAMES.CITY,
+            t('validation.fields.city'),
             DEFAULT_MIN_STRING_LENGTH,
-            ERROR_MESSAGES.MISSING,
-            ERROR_MESSAGES.TOO_SHORT
+            t('validation.errors.missing'),
+            t('validation.errors.too_short')
         );
 
         if (cityError) errors["contact.city"] = cityError;
 
         const emailError = validateRegexField(
             contact.email,
-            FIELD_NAMES.EMAIL,
+            t('validation.fields.email'),
             emailRegex,
-            ERROR_MESSAGES.MISSING,
-            ERROR_MESSAGES.INVALID
+            t('validation.errors.missing'),
+            t('validation.errors.invalid')
         );
 
         if (emailError) errors["contact.email"] = emailError;
 
         const phoneError = validateRegexField(
             contact.phone,
-            FIELD_NAMES.PHONE,
+            t('validation.fields.phone'),
             phoneRegex,
-            ERROR_MESSAGES.MISSING,
-            ERROR_MESSAGES.INVALID
+            t('validation.errors.missing'),
+            t('validation.errors.invalid')
         );
 
         if (phoneError) errors["contact.phone"] = phoneError;
@@ -231,16 +194,16 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData) {
-            return { overview: ERROR_MESSAGES.MISSING_BOOKING_DATA };
+            return { overview: t('validation.errors.missing_booking_data') };
         }
 
         if (!bookingData.has_confirmed) {
-            errors["has_confirmed"] = ERROR_MESSAGES.MISSING_CONFIRMATION;
+            errors["has_confirmed"] = t('validation.errors.missing_confirmation');
         }
 
         if (!bookingData.has_accepted_conditions) {
             errors["has_accepted_conditions"] =
-                ERROR_MESSAGES.MISSING_ACCEPTED_CONDITIONS;
+                t('validation.errors.missing_accepted_conditions');
         }
 
         return errors;
@@ -258,11 +221,11 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData) {
-            return { trip: ERROR_MESSAGES.MISSING_BOOKING_DATA };
+            return { trip: t('validation.errors.missing_booking_data') };
         }
 
         if (!bookingData.departure_date) {
-            errors["departure_date"] = ERROR_MESSAGES.MISSING_DEPARTURE_DATE;
+            errors["departure_date"] = t('validation.errors.missing_departure_date');
         }
 
         return errors;
@@ -298,10 +261,10 @@ export function useBookingValidation() {
         }
 
         if (trimmed.length > DEFAULT_MAX_STRING_LENGTH) {
-            return ERROR_MESSAGES.TOO_LONG.replace(
-                "{field}",
-                fieldName
-            ).replace("{max}", DEFAULT_MAX_STRING_LENGTH);
+            return t('validation.errors.too_long', {
+                field: fieldName,
+                max: DEFAULT_MAX_STRING_LENGTH
+            });
         }
 
         return null;

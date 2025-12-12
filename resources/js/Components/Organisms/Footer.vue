@@ -23,7 +23,7 @@ const year = new Date().getFullYear();
           <p
             class="max-w-md mx-auto mt-6 leading-relaxed text-left text-brand-secondary"
           >
-            Voor duurzame reizen met een verhaal.
+            {{ $t('footer.slogan') }}
           </p>
           <ul class="mt-5 space-y-4 text-sm">
             <li>
@@ -71,7 +71,7 @@ const year = new Date().getFullYear();
 
         <!-- Contactblok -->
         <div class="col-span-1">
-          <p class="text-lg font-medium text-white">Contact</p>
+          <p class="text-lg font-medium text-white">{{ $t('footer.contact') }}</p>
           <div class="w-full justify-start">
             <ul class="mt-8 space-y-4 text-sm text-left">
               <li>
@@ -152,20 +152,20 @@ const year = new Date().getFullYear();
       <div class="pt-6 mt-12 border-t border-gray-800">
         <div class="text-center tablet:flex tablet:justify-between tablet:text-left">
           <p class="text-sm text-gray-400">
-            <span class="block tablet:inline">Alle rechten voorbehouden.</span>
+            <span class="block tablet:inline">{{ $t('footer.all_rights') }}</span>
             &nbsp;
             <Link
               :href="route('terms')"
               class="inline-block text-accent-link underline transition hover:text-accent-link/75"
             >
-              Algemene voorwaarden
+              {{ $t('footer.conditions') }}
             </Link>
             &nbsp;<span>&middot;</span>&nbsp;
             <Link
               :href="route('privacy')"
               class="inline-block text-accent-link underline transition hover:text-accent-link/75"
             >
-              Privacybeleid
+                {{ $t('footer.privacy') }}
             </Link>
           </p>
 

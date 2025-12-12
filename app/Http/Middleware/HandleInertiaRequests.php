@@ -40,6 +40,8 @@ class HandleInertiaRequests extends Middleware
         $contactService = app(ContactDetailsService::class);
 
         return array_merge(parent::share($request), [
+            'locale' => app()->getLocale(),
+            'locales' => config('app.available_locales', ['nl', 'en']),
             'auth' => [
                 'user' => Auth::user(),
             ],

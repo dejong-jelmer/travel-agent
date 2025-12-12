@@ -44,7 +44,7 @@ Object.entries(flash).forEach(([type, message]) => {
     <header class="fixed top-0 left-0 right-0 z-20 bg-white border-b border-gray-200 shadow-sm">
         <div class="px-4 laptop:px-10">
             <div class="flex items-center justify-between laptop:justify-end h-16">
-                <!-- Links: Menu Toggle Button (alleen zichtbaar op phone/tablet) -->
+                <!-- Left: Menu Toggle Button (only visible on phone/tablet) -->
                 <button
                     type="button"
                     @click="sideMenuOpen = true"
@@ -54,14 +54,14 @@ Object.entries(flash).forEach(([type, message]) => {
                     <Bars3Icon class="h-6 w-6" aria-hidden="true" />
                 </button>
 
-                <!-- Rechts: User Info met Dropdown -->
+                <!-- Right: User Info with Dropdown -->
                 <Menu as="div" class="relative">
                     <MenuButton class="flex items-center space-x-3 rounded-lg px-3 py-2 hover:bg-gray-50 transition-colors focus:outline-none focus:ring-2 focus:ring-brand-primary">
                         <!-- Avatar -->
                         <div class="h-10 w-10 rounded-full bg-gradient-to-br from-accent-primary to-accent-terracotta flex items-center justify-center text-white font-semibold text-sm shadow-md">
                             {{ userInitials }}
                         </div>
-                        <!-- User Info (verborgen op kleine schermen) -->
+                        <!-- User Info (hidden on small screens) -->
                         <div class="hidden tablet:block text-left">
                             <p class="text-sm font-medium text-gray-700">
                                 {{ user.name }}
@@ -85,7 +85,7 @@ Object.entries(flash).forEach(([type, message]) => {
                     >
                         <MenuItems class="absolute right-0 mt-2 w-56 origin-top-right rounded-lg bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
                             <div class="py-1">
-                                <!-- User info voor mobile -->
+                                <!-- User info for mobile -->
                                 <div class="tablet:hidden px-4 py-3 border-b border-gray-100">
                                     <p class="text-sm font-medium text-gray-700">
                                         {{ user.name }}
@@ -108,13 +108,14 @@ Object.entries(flash).forEach(([type, message]) => {
                                             class="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500"
                                             aria-hidden="true"
                                         />
-                                        Uitloggen
+                                        {{ $t('admin_menu.items.logout') }}
                                     </Link>
                                 </MenuItem>
                             </div>
                         </MenuItems>
                     </transition>
                 </Menu>
+                <LocaleSwitcher />
             </div>
         </div>
     </header>

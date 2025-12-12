@@ -8,7 +8,7 @@ trait HasFormattedDates
     {
         $config = $this->formattedDates[$attribute] ?? [];
         $format = $config['format'] ?? 'LLLL';
-        $locale = $config['locale'] ?? config('app.locale');
+        $locale = $config['locale'] ?? app()->getLocale();
 
         return $this->{$attribute}
             ? ucfirst($this->{$attribute}->locale($locale)->isoFormat($format))

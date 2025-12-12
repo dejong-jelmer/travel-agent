@@ -8,7 +8,7 @@ import { Leaf, Phone } from 'lucide-vue-next';
             <div class="flex items-center gap-x-2 laptop:gap-x-3">
                 <Leaf class="h-5 laptop:h-6 text-accent-primary drop-shadow-sm" />
                 <p class="text-xs laptop:text-sm text-brand-primary">
-                    Ga duurzaam op reis
+                    {{ $t('topbar_text') }}
                 </p>
             </div>
             <div class="flex items-center gap-x-2 laptop:gap-x-3">

@@ -4,6 +4,7 @@ import { router } from '@inertiajs/vue3';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { Check, Clock } from 'lucide-vue-next';
 import { useCharacterCounter } from '@/Composables/useCharacterCounter.js';
+import { useI18n } from 'vue-i18n';
 
 const emit = defineEmits(['submit']);
 
@@ -12,6 +13,8 @@ const props = defineProps({
     trips: Object,
     statusOptions: Object
 });
+
+const { t } = useI18n();
 
 const PREVIEW_TEXT_MAX_LENGTH = 255;
 
@@ -73,10 +76,10 @@ function isTripSelected(tripId) {
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-3xl font-bold text-gray-700">
-                            {{ form.id ? 'Bewerk Nieuwsbrief' : 'Nieuwe Nieuwsbrief' }}
+                            {{ form.id ? t('forms.campaign.edit_heading') : t('forms.campaign.new_heading') }}
                         </h1>
                         <p class="mt-1 text-sm text-gray-700/50">
-                            Beheer de details van uw nieuwsbrief campagne
+                            {{ t('forms.campaign.subheading') }}
                         </p>
                     </div>
                 </div>
@@ -93,7 +96,7 @@ function isTripSelected(tripId) {
                                         :class="selected
                                             ? 'border-primary-default text-primary-default'
                                             : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
-                                        Campagne Details
+                                        {{ t('forms.campaign.tabs.basic') }}
                                     </div>
                                 </Tab>
                                 <Tab v-slot="{ selected }" class="outline-none">
@@ -101,7 +104,7 @@ function isTripSelected(tripId) {
                                         :class="selected
                                             ? 'border-primary-default text-primary-default'
                                             : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
-                                        Preview & Testen
+                                        {{ t('forms.campaign.tabs.content') }}
                                     </div>
                                 </Tab>
                             </TabList>
@@ -110,48 +113,47 @@ function isTripSelected(tripId) {
                         <TabPanels>
                             <TabPanel class="p-6 space-y-6">
                                 <ImageUploader v-model="form.hero_image" preview-size="large"
-                                    :label="form.hero_image ? 'Wijzig hoofdafbeelding' : 'Selecteer een afbeelding'"
+                                    :label="form.hero_image ? t('forms.campaign.fields.hero_image.change') : t('forms.campaign.fields.hero_image.select')"
                                     :feedback="form.errors.hero_image" />
 
-                                <Input type="text" name="subject" label="Onderwerp" :required="true"
+                                <Input type="text" name="subject" :label="t('forms.campaign.fields.subject.label')" :required="true"
                                     v-model="form.subject" :feedback="form.errors.subject"
-                                    placeholder="Bijv. Ontdek onze nieuwe treinreizen door Europa" />
+                                    :placeholder="t('forms.campaign.fields.subject.placeholder')" />
 
                                 <div>
-                                    <Input type="text" name="preview_text" label="Preview tekst (optioneel)"
+                                    <Input type="text" name="preview_text" :label="t('forms.campaign.fields.preview_text.label')"
                                         :required="false" v-model="form.preview_text"
                                         :feedback="form.errors.preview_text"
-                                        placeholder="Wordt getoond in inbox preview. Max 140-255 tekens aanbevolen." />
+                                        :placeholder="t('forms.campaign.fields.preview_text.placeholder')" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="previewTextClass">
-                                            {{ previewTextLength }} / {{ PREVIEW_TEXT_MAX_LENGTH }} karakters
+                                            {{ t('forms.campaign.character_counter.current', { current: previewTextLength, max: PREVIEW_TEXT_MAX_LENGTH }) }}
                                         </span>
                                         <span v-if="previewTextCharsLeft < 0" class="text-status-error font-semibold">
-                                            {{ Math.abs(previewTextCharsLeft) }} te veel
+                                            {{ t('forms.campaign.character_counter.too_many', { count: Math.abs(previewTextCharsLeft) }) }}
                                         </span>
                                         <span v-else-if="previewTextCharsLeft <= 20" :class="previewTextClass">
-                                            Nog {{ previewTextCharsLeft }} over
+                                            {{ t('forms.campaign.character_counter.remaining', { count: previewTextCharsLeft }) }}
                                         </span>
                                     </div>
                                     <p class="mt-2 text-xs text-gray-700/30">
-                                        Preview tekst wordt getoond naast het onderwerp in email clients. Laat leeg voor
-                                        automatisch genereren uit content.
+                                        {{ t('forms.campaign.fields.preview_text.help') }}
                                     </p>
                                 </div>
 
-                                <TextArea name="content" label="Inhoud" :required="true" v-model="form.content"
+                                <TextArea name="content" :label="t('forms.campaign.fields.body.label')" :required="true" v-model="form.content"
                                     :feedback="form.errors.content"
-                                    placeholder="Schrijf hier de inhoud van uw nieuwsbrief (HTML ondersteund)..."
+                                    :placeholder="t('forms.campaign.fields.body.placeholder')"
                                     :rows="15" />
                                 <p class="text-xs text-gray-700/30">
-                                    Tip: HTML tags worden ondersteund voor opmaak.
+                                    {{ t('forms.campaign.fields.body.help') }}
                                 </p>
 
                                 <!-- Featured Trips Section -->
                                 <div class="border-t border-gray-200 pt-6">
-                                    <Label>Uitgelichte reizen (optioneel)</Label>
+                                    <Label>{{ t('forms.campaign.fields.featured_trips.label') }}</Label>
                                     <p class="text-xs text-gray-700/30 mb-4">
-                                        Selecteer reizen die je wilt uitlichten in deze nieuwsbrief
+                                        {{ t('forms.campaign.fields.featured_trips.help') }}
                                     </p>
 
                                     <div v-if="trips && trips.length > 0"
@@ -182,7 +184,7 @@ function isTripSelected(tripId) {
                                                 <div class="flex gap-3 text-xs text-gray-500">
                                                     <span v-if="trip.duration" class="flex items-center gap-1">
                                                         <Clock class="w-3.5 h-3.5" />
-                                                        {{ trip.duration }} dagen
+                                                        {{ t('forms.campaign.fields.featured_trips.duration', { days: trip.duration }) }}
                                                     </span>
                                                     |
                                                     <span v-if="trip.price" class="flex items-center gap-1 font-medium">
@@ -195,55 +197,52 @@ function isTripSelected(tripId) {
 
                                     <div v-else
                                         class="text-sm text-gray-700/30 italic p-4 bg-gray-50 rounded-lg border border-gray-200">
-                                        Geen reizen beschikbaar
+                                        {{ t('forms.campaign.fields.featured_trips.no_trips') }}
                                     </div>
 
                                     <p v-if="form.trips && form.trips.length > 0"
                                         class="text-xs text-gray-700/50 mt-3">
-                                        {{ form.trips.length }} {{ form.trips.length === 1 ? 'reis' : 'reizen' }}
-                                        geselecteerd
+                                        {{ t('forms.campaign.fields.featured_trips.selected', { count: form.trips.length }) }}
                                     </p>
                                 </div>
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">
                                 <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                    <h3 class="text-sm font-semibold text-gray-700 mb-4">Email Preview</h3>
+                                    <h3 class="text-sm font-semibold text-gray-700 mb-4">{{ t('forms.campaign.preview.title') }}</h3>
 
                                     <div class="bg-white rounded border border-gray-200 p-4 mb-4">
-                                        <div class="text-xs text-gray-700/50 mb-2">Onderwerp:</div>
+                                        <div class="text-xs text-gray-700/50 mb-2">{{ t('forms.campaign.preview.subject') }}</div>
                                         <div class="font-semibold text-gray-700 mb-3">
-                                            {{ form.subject || '(Geen onderwerp)' }}
+                                            {{ form.subject || t('forms.campaign.preview.no_subject') }}
                                         </div>
 
-                                        <div v-if="form.preview_text" class="text-xs text-gray-700/50 mb-2">Preview
-                                            tekst:</div>
+                                        <div v-if="form.preview_text" class="text-xs text-gray-700/50 mb-2">{{ t('forms.campaign.preview.preview_text') }}</div>
                                         <div v-if="form.preview_text" class="text-sm text-gray-700/70 mb-3">
                                             {{ form.preview_text }}
                                         </div>
                                     </div>
 
                                     <div class="bg-white rounded border border-gray-200 p-4 max-h-96 overflow-y-auto">
-                                        <div class="text-xs text-gray-700/50 mb-2">Inhoud preview:</div>
+                                        <div class="text-xs text-gray-700/50 mb-2">{{ t('forms.campaign.preview.content_preview') }}</div>
                                         <div v-if="form.content" class="prose prose-sm max-w-none"
                                             v-html="form.content"></div>
                                         <div v-else class="text-gray-700/30 text-sm italic">
-                                            (Nog geen inhoud)
+                                            {{ t('forms.campaign.preview.no_content') }}
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <h4 class="text-sm font-semibold text-blue-900 mb-2">Test verzending</h4>
+                                    <h4 class="text-sm font-semibold text-blue-900 mb-2">{{ t('forms.campaign.test.title') }}</h4>
                                     <p class="text-xs text-blue-700 mb-3">
-                                        Verstuur een test email naar uw eigen email adres om te controleren hoe de
-                                        nieuwsbrief eruit ziet.
+                                        {{ t('forms.campaign.test.help') }}
                                     </p>
                                     <Button type="button" @click="sendTestEmail" :disabled="!form?.id || sendingTest">
-                                        {{ sendingTest ? 'Bezig met verzenden...' : 'Verstuur test email' }}
+                                        {{ sendingTest ? t('forms.campaign.test.sending') : t('forms.campaign.test.button') }}
                                     </Button>
                                     <p v-if="!form?.id" class="text-xs text-blue-600 mt-2">
-                                        Sla eerst de campagne op voordat u een test email verstuurt.
+                                        {{ t('forms.campaign.test.save_first') }}
                                     </p>
                                 </div>
                             </TabPanel>
@@ -256,26 +255,26 @@ function isTripSelected(tripId) {
                 <!-- Status & Scheduling Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">Status & Planning</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">Configureer verzending</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.campaign.status.title') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.campaign.status.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
-                            <Select name="status" label="Status" v-model="form.status" :required="true"
+                            <Select name="status" :label="t('forms.campaign.fields.status.label')" v-model="form.status" :required="true"
                                 :options="statusOptions" :feedback="form.errors.status"
-                                placeholder="Selecteer status" />
+                                :placeholder="t('forms.campaign.fields.status.placeholder')" />
                             <p class="mt-2 text-xs text-gray-700/30">
-                                Selecteer 'Gepland' om een verzenddatum in te stellen
+                                {{ t('forms.campaign.status.help') }}
                             </p>
                         </div>
 
                         <div v-if="form.status === 'scheduled'"
                             class="p-4 bg-white rounded-lg border border-gray-200 grid gap-1">
-                            <Label for="scheduled_at" :required="false">Geplande verzending</Label>
+                            <Label for="scheduled_at" :required="false">{{ t('forms.campaign.fields.scheduled_at.label') }}</Label>
                             <DatePicker v-model="form.scheduled_at" :minDate="new Date()"
                                 :feedback="form.errors.scheduled_at" :enableTimePicker="true" />
                             <span class="block text-xs text-gray-700/30 mt-2">
-                                De nieuwsbrief wordt automatisch verzonden op deze datum en tijd
+                                {{ t('forms.campaign.status.scheduled_help') }}
                             </span>
                         </div>
                     </div>
@@ -284,20 +283,20 @@ function isTripSelected(tripId) {
                 <!-- Statistics Section (alleen bij bewerken) -->
                 <section v-if="form.id" class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">Statistieken</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">Verzendgegevens</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.campaign.statistics.title') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.campaign.statistics.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-4">
                         <div v-if="form.sent_at" class="flex justify-between text-sm">
-                            <span class="text-gray-700/50">Verzonden op:</span>
+                            <span class="text-gray-700/50">{{ t('forms.campaign.statistics.sent_at') }}</span>
                             <span class="font-medium text-gray-700">{{ form.sent_at }}</span>
                         </div>
                         <div v-if="form.sent_count !== null" class="flex justify-between text-sm">
-                            <span class="text-gray-700/50">Aantal verzonden:</span>
+                            <span class="text-gray-700/50">{{ t('forms.campaign.statistics.sent_count') }}</span>
                             <span class="font-medium text-gray-700">{{ form.sent_count }}</span>
                         </div>
                         <div v-if="!form.sent_at" class="text-sm text-gray-700/30 italic">
-                            Nog niet verzonden
+                            {{ t('forms.campaign.statistics.not_sent') }}
                         </div>
                     </div>
                 </section>
@@ -305,7 +304,7 @@ function isTripSelected(tripId) {
 
         </div>
         <!-- Footer Actions -->
-        <FormFooter :form="form" label="Campagne opslaan" @submit="emit('submit')" />
+        <FormFooter :form="form" :label="form.id ? t('forms.campaign.submit.update') : t('forms.campaign.submit.create')" @submit="emit('submit')" />
 
     </form>
 </template>

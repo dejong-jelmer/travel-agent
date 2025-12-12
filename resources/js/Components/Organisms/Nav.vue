@@ -1,16 +1,20 @@
 <script setup>
+import { useI18n } from 'vue-i18n';
 import { Link } from "@inertiajs/vue3";
+import { computed } from 'vue';
 
-const links = {
+const { t } = useI18n();
+
+const links = computed(() => ({
     contact: {
-        label: 'Contact',
+        label: t('nav.contact'),
         path: '/contact',
     },
     about: {
-        label: 'Over ons',
+        label: t('nav.about'),
         path: '/over-ons',
     }
-};
+}));
 </script>
 
 <template>

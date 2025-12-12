@@ -56,10 +56,10 @@ const isSelected = (value) => {
 </script>
 <template>
     <div class="grid gap-1">
-        <Label v-if="(label && showLabel) || $slots.label" :for="name" :required="required">
+        <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <select class="form-input" :id="name" :required="required" :multiple="multiple" @change="handleChange">
+        <select class="form-input" :id="props.name" :required="required" :multiple="multiple" @change="handleChange">
             <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
             <option v-for="(option, index) in options" :selected="isSelected(option['id'])" :key="index"
                 :value="option.id" :disabled="option.disabled ?? false" >

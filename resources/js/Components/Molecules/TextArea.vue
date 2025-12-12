@@ -26,7 +26,7 @@ defineProps({
 </script>
 <template>
     <div class="grid gap-1">
-        <Label v-if="(label && showLabel) || $slots.label" :for="name" :required="required">
+        <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
         <textarea

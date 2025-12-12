@@ -51,16 +51,16 @@ defineProps({
                     <div class="mt-8 laptop:mt-12 text-center">
                         <Link :href="route('home')" as="a">
                             <Button>
-                                Terug naar homepagina
+                                {{ $t('button.back_to_home') }}
                             </Button>
                         </Link>
                     </div>
 
                     <!-- Footer Note -->
                     <p class="mt-8 text-sm text-brand-light text-center">
-                        Heb je vragen?
+                        {{ $t('link.questions') }}
                         <DefaultLink href="/contact">
-                            Neem contact met ons op
+                            {{ $t('link.contact_us') }}
                         </DefaultLink>
                     </p>
                 </div>

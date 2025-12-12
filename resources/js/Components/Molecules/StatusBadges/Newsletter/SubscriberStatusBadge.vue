@@ -36,8 +36,8 @@ const pillType = {
 </script>
 
 <template>
-    <Pill :type="pillType[status]" variant="transparent">
-        <component :is="icons[status]" class="h-5 w-5 flex-shrink-0" />
+    <Pill :type="pillType[props.status]" variant="transparent">
+        <component :is="icons[props.status]" class="h-5 w-5 flex-shrink-0" />
         <span class="ml-2 w-full text-center text-gray-600">
             <slot></slot>
         </span>

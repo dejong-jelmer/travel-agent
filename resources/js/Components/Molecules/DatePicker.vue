@@ -1,8 +1,12 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3';
 import VueDatePicker from '@vuepic/vue-datepicker'
 import { CalendarDays } from 'lucide-vue-next'
 import '@vuepic/vue-datepicker/dist/main.css'
+
+const page = usePage();
+
 
 const props = defineProps({
     modelValue: {
@@ -35,6 +39,8 @@ const model = computed({
     set: (val) => emit('update:modelValue', val),
 })
 
+const locale = computed(() => { return page.props.locale })
+
 const format = (date) =>
     new Intl.DateTimeFormat('nl-NL', {
         day: '2-digit',
@@ -49,7 +55,7 @@ const format = (date) =>
 
 <template>
     <div>
-        <VueDatePicker v-model="model" locale="nl" placeholder="Kies een datum" :enable-time-picker="enableTimePicker"
+        <VueDatePicker v-model="model" :locale="locale" :placeholder="$t('date_picker.placeholder')" :enable-time-picker="enableTimePicker"
             teleport="body" :format="format" :min-date="props.minDate || null" :max-date="props.maxDate || null"
             :state="!!feedback ? false : null" arrow-navigation auto-apply>
             <template #input-icon>

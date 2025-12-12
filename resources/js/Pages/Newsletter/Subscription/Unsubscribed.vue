@@ -1,8 +1,14 @@
+<script setup>
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+</script>
+
 <template>
-    <NewsletterStatusTemplate
-        title="Je bent uitgeschreven."
-        message="Je hebt je succesvol afgemeld voor onze nieuwsbrief. Je ontvangt geen verdere e-mails meer, maar je kunt altijd opnieuw inschrijven als je op de hoogte wilt blijven van ons nieuwste reisaanbod."
-        box-title="Wat nu?"
+    <NewsletterTemplate
+        :title="t('newsletter_subscription.unsubscribed.title')"
+        :message="t('newsletter_subscription.unsubscribed.message')"
+        :box-title="t('newsletter_subscription.unsubscribed.box_title')"
     >
         <template #icon>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" fill="none"
@@ -18,21 +24,21 @@
             <li class="flex items-center gap-2">
                 <span class="w-2 h-2 bg-accent-primary rounded-full flex-shrink-0"></span>
                 <span class="text-brand-primary">
-                    Je ontvangt geen nieuwsbrieven meer van ons
+                    {{ t('newsletter_subscription.unsubscribed.no_more_emails') }}
                 </span>
             </li>
             <li class="flex items-center gap-2">
                 <span class="w-2 h-2 bg-accent-primary rounded-full flex-shrink-0"></span>
                 <span class="text-brand-primary">
-                    Je kunt je altijd opnieuw inschrijven op een later moment
+                    {{ t('newsletter_subscription.unsubscribed.resubscribe_anytime') }}
                 </span>
             </li>
             <li class="flex items-center gap-2">
                 <span class="w-2 h-2 bg-accent-primary rounded-full flex-shrink-0"></span>
                 <span class="text-brand-primary">
-                    Voor vragen kun je contact met ons opnemen
+                    {{ t('newsletter_subscription.unsubscribed.contact_us') }}
                 </span>
             </li>
         </template>
-    </NewsletterStatusTemplate>
+    </NewsletterTemplate>
 </template>

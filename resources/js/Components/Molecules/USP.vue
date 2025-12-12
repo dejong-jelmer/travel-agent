@@ -1,28 +1,24 @@
 <script setup>
 import { Leaf, Castle, Handshake } from 'lucide-vue-next';
 
-
-// import * as exportedIcons from '@/Icons';
-// Object.entries(exportedIcons).forEach(([name, exported]) => window[name] = exported);
-
 const usps = [
     {
         icon: Leaf,
-        title: 'Duurzaam',
-        description: 'Reis comfortabel en ontspannen door Europa\'s mooiste landschappen. Geen stress van vliegvelden, wel het plezier van de reis zelf.',
-        highlight: 'Gemiddeld 75% minder CO₂'
+        titleKey: 'usp.sustainable.title',
+        descriptionKey: 'usp.sustainable.description',
+        highlightKey: 'usp.sustainable.highlight'
     },
     {
         icon: Castle,
-        title: 'Met een verhaal',
-        description: 'Ontdek de fascinerende verhalen achter elke bestemming. Onze reizen brengen geschiedenis tot leven met verhalen en bijzondere achtergronden bij elke bestemming.',
-        highlight: 'Unieke achtergronden bij elke reis'
+        titleKey: 'usp.with_story.title',
+        descriptionKey: 'usp.with_story.description',
+        highlightKey: 'usp.with_story.highlight'
     },
     {
         icon: Handshake,
-        title: 'Zorgeloos',
-        description: 'Wij regelen alles van A tot Z. Jij hoeft alleen maar te genieten van je duurzame avontuur door Europa.',
-        highlight: '24/7 Nederlandse reisondersteuning'
+        titleKey: 'usp.carefree.title',
+        descriptionKey: 'usp.carefree.description',
+        highlightKey: 'usp.carefree.highlight'
     }
 ];
 </script>
@@ -30,11 +26,10 @@ const usps = [
     <div class="max-w-6xl mx-auto">
         <div class="text-center mb-12">
             <div class="text-center">
-                <SectionHeader>kiezen voor ons</SectionHeader>
+                <SectionHeader>{{ $t('usp.section_header') }}</SectionHeader>
             </div>
             <p class="text-brand-primary text-lg mt-2 laptop:text-xl max-w-2xl mx-auto leading-relaxed">
-                Onze unieke aanpak combineert comfort, cultuur en duurzaamheid voor een reiservaring die verder gaat dan
-                toerisme.
+                {{ $t('usp.intro') }}
             </p>
         </div>
 
@@ -53,11 +48,11 @@ const usps = [
                 </div>
                 <h3
                     class="text-xl font-bold text-brand-primary mb-3 group-hover:text-accent-primary transition-colors duration-300 relative">
-                    {{ usp.title }}
+                    {{ $t(usp.titleKey) }}
                 </h3>
 
                 <p class="text-brand-primary leading-relaxed min-h-[130px] mb-6 relative">
-                    {{ usp.description }}
+                    {{ $t(usp.descriptionKey) }}
                 </p>
                 <div class="flex items-center gap-2.5 pt-4 border-t border-brand-primary/20 relative">
                     <div
@@ -65,7 +60,7 @@ const usps = [
                     </div>
                     <span
                         class="text-sm text-[#2f4858]/60 font-medium group-hover:text-accent-primary transition-colors duration-300">
-                        {{ usp.highlight }}
+                        {{ $t(usp.highlightKey) }}
                     </span>
                 </div>
             </Card>

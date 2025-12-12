@@ -16,12 +16,12 @@ const showActions = reactive({});
                     <thead>
                         <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
                             <th class="py-4 px-6 text-center">#</th>
-                            <th class="py-4 px-6 text-center">Referentie</th>
-                            <th class="py-4 px-6 text-center">Reis</th>
-                            <th class="py-4 px-6 text-center">Vertrekdatum</th>
-                            <th class="py-4 px-6 text-center">Status</th>
-                            <th class="py-4 px-6 text-center">Betaling</th>
-                            <th class="py-4 px-6 text-center">Acties</th>
+                            <th class="py-4 px-6 text-center">{{ $t('admin.booking.index.table_headers.reference') }}</th>
+                            <th class="py-4 px-6 text-center">{{ $t('admin.booking.index.table_headers.trip') }}</th>
+                            <th class="py-4 px-6 text-center">{{ $t('admin.booking.index.table_headers.departure_date') }}</th>
+                            <th class="py-4 px-6 text-center">{{ $t('admin.booking.index.table_headers.status') }}</th>
+                            <th class="py-4 px-6 text-center">{{ $t('admin.booking.index.table_headers.payment') }}</th>
+                            <th class="py-4 px-6 text-center">{{ $t('admin.booking.index.table_headers.actions') }}</th>
                         </tr>
                     </thead>
                     <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
@@ -31,10 +31,10 @@ const showActions = reactive({});
                             <td class="py-4 px-6 text-center">{{ booking.trip?.name ?? '-' }}</td>
                             <td class="py-4 px-6 text-center">{{ booking.departure_date_formatted }}</td>
                             <td class="py-4 px-6 text-center">
-                                <BookingStatusBadge :status="booking.status">{{ booking.status }}</BookingStatusBadge>
+                                <BookingStatusBadge class="w-full" :status="booking.status">{{ booking.status_label }}</BookingStatusBadge>
                             </td>
                             <td class="py-4 px-6 text-center">
-                                <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status }}
+                                <PaymentStatusBadge class="w-full" :status="booking.payment_status">{{ booking.payment_status_label }}
                                 </PaymentStatusBadge>
                             </td>
                             <td class="py-4 px-6 text-center space-y-2">
@@ -43,19 +43,19 @@ const showActions = reactive({});
                                         <component :is="MenuItem">
                                             <IconLink icon="Eye"
                                                 :href="route('admin.bookings.show', booking)"
-                                                v-tippy="'Bekijk boeking'" />
+                                                v-tippy="$t('admin.booking.actions.show')" />
                                         </component>
                                         <component :is="MenuItem">
                                             <IconLink icon="Pencil"
                                                 :href="route('admin.bookings.edit', booking)"
-                                                v-tippy="'Bewerk boeking'" />
+                                                v-tippy="$t('admin.booking.actions.edit')" />
                                         </component>
                                         <component :is="MenuItem">
                                             <IconLink type="delete" icon="Trash2"
                                                 :href="route('admin.bookings.destroy', booking)" method="delete"
                                                 :showConfirm="true"
-                                                prompt="Weet je zeker dat je deze boeking wilt verwijderen?"
-                                                v-tippy="'Verwijder boeking!'" />
+                                                :prompt="$t('admin.booking.actions.delete_confirm')"
+                                                v-tippy="$t('admin.booking.actions.delete')" />
                                         </component>
                                     </template>
                                 </DropdownMenu>
@@ -66,7 +66,7 @@ const showActions = reactive({});
             </template>
             <template v-else>
                 <div class="p-5">
-                    <p>Er zijn nog geen boekingen.</p>
+                    <p>{{ $t('admin.booking.index.no_bookings') }}</p>
                 </div>
             </template>
         </div>
