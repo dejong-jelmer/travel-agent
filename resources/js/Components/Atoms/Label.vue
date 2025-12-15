@@ -44,7 +44,7 @@ const labelClasses = computed(() => {
 </script>
 
 <template>
-    <label :forField="forField" :class="labelClasses">
+    <label :for="forField" :class="labelClasses">
         <slot /><span v-if="required" class="ml-0.5">*</span>
     </label>
 </template>

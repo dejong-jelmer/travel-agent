@@ -10,4 +10,20 @@ return [
     'created' => 'Reisdag is aangemaakt',
     'updated' => 'Reisdag is aangepast',
     'deleted' => 'Reisdag is verwijderd',
+
+    // Meals
+    "meals" => [
+        'breakfast' => 'Ontbijt',
+        'lunch' => 'lunch',
+        'dinner' => 'Diner',
+    ],
+    // Tranport
+    "transport" => [
+        'train' => 'Trein',
+        'ferry' => 'Veerboot',
+        'bus' => 'Bus',
+        'taxi' => 'Taxi',
+        'transfer' => 'Transfer',
+        'airplane' => 'Vliegtuig',
+    ]
 ];

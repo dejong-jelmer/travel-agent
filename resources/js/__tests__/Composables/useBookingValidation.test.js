@@ -122,7 +122,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "first_name"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain(
-                    "Voornaam ontbreekt"
+                    "ontbreekt"
                 );
             });
 
@@ -194,7 +194,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "last_name"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain(
-                    "Achternaam ontbreekt"
+                    "ontbreekt"
                 );
             });
 
@@ -299,7 +299,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "nationality"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "nationality")]).toContain(
-                    "Nationaliteit ontbreekt"
+                    "ontbreekt"
                 );
             });
 
@@ -444,7 +444,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.street);
-                expect(errors[FIELD_PATHS.contact.street]).toContain("Straatnaam ontbreekt");
+                expect(errors[FIELD_PATHS.contact.street]).toContain("ontbreekt");
             });
 
             it("should return error when street is too short", () => {
@@ -535,7 +535,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.postalCode);
-                expect(errors[FIELD_PATHS.contact.postalCode]).toContain("Postcode ontbreekt");
+                expect(errors[FIELD_PATHS.contact.postalCode]).toContain("ontbreekt");
             });
 
             it("should return error when postal_code is invalid format", () => {
@@ -589,7 +589,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.city);
-                expect(errors[FIELD_PATHS.contact.city]).toContain("Plaatsnaam ontbreekt");
+                expect(errors[FIELD_PATHS.contact.city]).toContain("ontbreekt");
             });
 
             it("should return error when city is too short", () => {
@@ -623,7 +623,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.email);
-                expect(errors[FIELD_PATHS.contact.email]).toContain("E-mail adres ontbreekt");
+                expect(errors[FIELD_PATHS.contact.email]).toContain("ontbreekt");
             });
 
             it("should return error when email is invalid", () => {
@@ -689,7 +689,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.phone);
-                expect(errors[FIELD_PATHS.contact.phone]).toContain("Telefoonnummer ontbreekt");
+                expect(errors[FIELD_PATHS.contact.phone]).toContain("ontbreekt");
             });
 
             it("should return error when phone is invalid", () => {

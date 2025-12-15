@@ -11,4 +11,12 @@ enum Meal: string
     case Lunch = 'lunch';
     case Dinner = 'dinner';
 
+    public function label(): string
+    {
+        return match ($this) {
+            Meal::Breakfast => __('itinerary.meals.breakfast'),
+            Meal::Lunch => __('itinerary.meals.lunch'),
+            Meal::Dinner => __('itinerary.meals.dinner'),
+        };
+    }
 }

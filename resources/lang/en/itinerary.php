@@ -10,4 +10,20 @@ return [
     'created' => 'Itinerary day has been created',
     'updated' => 'Itinerary day has been updated',
     'deleted' => 'Itinerary day has been deleted',
+
+    // Meals
+    "meals" => [
+        'breakfast' => 'Breakfast',
+        'lunch' => 'Lunch',
+        'dinner' => 'Dinner',
+    ],
+    // Tranport
+    "transport" => [
+        'train' => 'Train',
+        'ferry' => 'Ferry',
+        'bus' => 'Bus',
+        'taxi' => 'Taxi',
+        'transfer' => 'Transfer',
+        'airplane' => 'Airplane',
+    ]
 ];

@@ -14,7 +14,7 @@ enum PaymentStatus: string
     case PartiallyRefunded = 'partially_refunded';
     case Failed = 'failed';
 
-    public function label()
+    public function label(): string
     {
         return match ($this) {
             PaymentStatus::Pending => __('booking.payment_status.pending'),

@@ -11,8 +11,7 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next)
     {
-        $locale = $request->input('locale')
-            ?? Session::get('locale')
+        $locale = Session::get('locale')
             ?? $request->getPreferredLanguage(
                 config('app.available_locales', ['nl', 'en'])
             )

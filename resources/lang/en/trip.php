@@ -11,4 +11,10 @@ return [
     'created' => 'Trip has been created',
     'updated' => 'Trip has been updated',
     'deleted' => 'Trip has been deleted',
+
+     // Traveler
+    'traveler' => [
+        'adult' => 'Adult',
+        'child' => 'Child',
+    ],
 ];

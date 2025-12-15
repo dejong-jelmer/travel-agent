@@ -27,8 +27,8 @@ class BookingFactory extends Factory
             'departure_date' => fake()->dateTimeBetween('now', '+5 months'),
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
-            'status' => Status::New,
-            'payment_status' => PaymentStatus::Pending,
+            'status' => fake()->randomElement(Status::cases()),
+            'payment_status' => fake()->randomElement(PaymentStatus::cases()),
         ];
     }
 

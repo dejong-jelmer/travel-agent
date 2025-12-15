@@ -34,8 +34,8 @@ enum TravelerType: string
     public function label(): string
     {
         return match ($this) {
-            self::Adult => 'Volwassene',
-            self::Child => 'Kind',
+            self::Adult => __('trip.traveler.adult'),
+            self::Child => __('trip.traveler.child'),
         };
     }
 }

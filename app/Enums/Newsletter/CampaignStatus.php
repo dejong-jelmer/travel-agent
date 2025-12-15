@@ -24,7 +24,7 @@ enum CampaignStatus: string
         };
     }
 
-    public function label()
+    public function label(): string
     {
         return match ($this) {
             CampaignStatus::Draft => __('newsletter.campaign.status.draft'),

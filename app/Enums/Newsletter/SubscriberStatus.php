@@ -9,7 +9,7 @@ enum SubscriberStatus: string
     case Expired = 'expired';
     case Unsubscribed = 'unsubscribed';
 
-    public function label()
+    public function label(): string
     {
         return match ($this) {
             SubscriberStatus::Active => __('newsletter.subscriber.status.active'),
