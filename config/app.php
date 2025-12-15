@@ -86,6 +86,8 @@ return [
 
     'available_locales' => ['nl', 'en'],
 
+    'phone_region' => 'NL',
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key
