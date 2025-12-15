@@ -2,20 +2,16 @@
 
 namespace App\Enums\Newsletter;
 
+use App\Enums\Traits\HasTranslatableLabel;
+
 enum SubscriberStatus: string
 {
+    use HasTranslatableLabel;
+
+    private const LABEL_KEY = 'newsletter.subscriber.status';
+
     case Active = 'active';
     case Pending = 'pending';
     case Expired = 'expired';
     case Unsubscribed = 'unsubscribed';
-
-    public function label(): string
-    {
-        return match ($this) {
-            self::Active => __('newsletter.subscriber.status.active'),
-            self::Pending => __('newsletter.subscriber.status.pending'),
-            self::Expired => __('newsletter.subscriber.status.expired'),
-            self::Unsubscribed => __('newsletter.subscriber.status.unsubscribed'),
-        };
-    }
 }
