@@ -14,9 +14,9 @@ enum Meal: string
     public function label(): string
     {
         return match ($this) {
-            Meal::Breakfast => __('itinerary.meals.breakfast'),
-            Meal::Lunch => __('itinerary.meals.lunch'),
-            Meal::Dinner => __('itinerary.meals.dinner'),
+            self::Breakfast => __('itinerary.meals.breakfast'),
+            self::Lunch => __('itinerary.meals.lunch'),
+            self::Dinner => __('itinerary.meals.dinner'),
         };
     }
 }

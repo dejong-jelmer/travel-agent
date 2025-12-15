@@ -17,12 +17,12 @@ enum PaymentStatus: string
     public function label(): string
     {
         return match ($this) {
-            PaymentStatus::Pending => __('booking.payment_status.pending'),
-            PaymentStatus::PartiallyPaid => __('booking.payment_status.partial_paid'),
-            PaymentStatus::Paid => __('booking.payment_status.paid'),
-            PaymentStatus::Refunded => __('booking.payment_status.refunded'),
-            PaymentStatus::PartiallyRefunded => __('booking.payment_status.partially_refunded'),
-            PaymentStatus::Failed => __('booking.payment_status.failed'),
+            self::Pending => __('booking.payment_status.pending'),
+            self::PartiallyPaid => __('booking.payment_status.partial_paid'),
+            self::Paid => __('booking.payment_status.paid'),
+            self::Refunded => __('booking.payment_status.refunded'),
+            self::PartiallyRefunded => __('booking.payment_status.partially_refunded'),
+            self::Failed => __('booking.payment_status.failed'),
         };
     }
 }

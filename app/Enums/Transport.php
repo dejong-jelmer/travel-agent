@@ -17,12 +17,12 @@ enum Transport: string
     public function label(): string
     {
         return match ($this) {
-            Transport::Train => __('itinerary.transport.train'),
-            Transport::Ferry => __('itinerary.transport.ferry'),
-            Transport::Bus => __('itinerary.transport.bus'),
-            Transport::Taxi => __('itinerary.transport.taxi'),
-            Transport::Transfer => __('itinerary.transport.transfer'),
-            Transport::Airplane => __('itinerary.transport.airplane'),
+            self::Train => __('itinerary.transport.train'),
+            self::Ferry => __('itinerary.transport.ferry'),
+            self::Bus => __('itinerary.transport.bus'),
+            self::Taxi => __('itinerary.transport.taxi'),
+            self::Transfer => __('itinerary.transport.transfer'),
+            self::Airplane => __('itinerary.transport.airplane'),
         };
     }
 }

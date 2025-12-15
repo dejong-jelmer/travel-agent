@@ -16,11 +16,11 @@ enum Status: string
     public function label(): string
     {
         return match ($this) {
-            Status::New => __('booking.status.new'),
-            Status::Pending => __('booking.status.pending'),
-            Status::Confirmed => __('booking.status.confirmed'),
-            Status::Canceled => __('booking.status.canceled'),
-            Status::Completed => __('booking.status.completed'),
+            self::New => __('booking.status.new'),
+            self::Pending => __('booking.status.pending'),
+            self::Confirmed => __('booking.status.confirmed'),
+            self::Canceled => __('booking.status.canceled'),
+            self::Completed => __('booking.status.completed'),
         };
     }
 }

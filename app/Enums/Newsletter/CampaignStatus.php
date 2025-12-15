@@ -27,11 +27,11 @@ enum CampaignStatus: string
     public function label(): string
     {
         return match ($this) {
-            CampaignStatus::Draft => __('newsletter.campaign.status.draft'),
-            CampaignStatus::Scheduled => __('newsletter.campaign.status.scheduled'),
-            CampaignStatus::Queued => __('newsletter.campaign.status.queued'),
-            CampaignStatus::Sent => __('newsletter.campaign.status.sent'),
-            CampaignStatus::Failed => __('newsletter.campaign.status.failed'),
+            self::Draft => __('newsletter.campaign.status.draft'),
+            self::Scheduled => __('newsletter.campaign.status.scheduled'),
+            self::Queued => __('newsletter.campaign.status.queued'),
+            self::Sent => __('newsletter.campaign.status.sent'),
+            self::Failed => __('newsletter.campaign.status.failed'),
         };
     }
 }
