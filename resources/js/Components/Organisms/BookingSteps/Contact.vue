@@ -8,22 +8,29 @@ const props = defineProps({
 
 const contact = toRef(props.booking, 'contact')
 
-const formatBookerDetails = (booker) => {
-    return `${booker?.full_name} (${formatToDutchDate(parseDutchDate(booker?.birthdate))})`
-}
-
 const parseDutchDate = (dateString) => {
-
-    const [day, month, year] = dateString.split('-');
+    if (!dateString || typeof dateString !== 'string') return null;
+    const parts = dateString.split('-');
+    if (parts.length !== 3) return null;
+    const [day, month, year] = parts;
     return new Date(year, month - 1, day);
 };
 
 const formatToDutchDate = (date) => {
+    if (!date || !(date instanceof Date) || isNaN(date)) return '';
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     return `${day}-${month}-${year}`;
 };
+
+const formatBookerDetails = (booker) => {
+    if (!booker) return '';
+    const name = booker.full_name || 'Unknown';
+    const parsedDate = parseDutchDate(booker.birthdate);
+    const formattedDate = formatToDutchDate(parsedDate);
+    return formattedDate ? `${name} (${formattedDate})` : name;
+}
 
 
 
@@ -51,7 +58,7 @@ const bookerOptions = computed(() => {
                     <RadioGroup v-model="booking.main_booker" name="main_booker" :options="bookerOptions" />
                     <p class="font-bold flex items-center border rounded-2xl p-6 bg-slate-50">
                         <User class="w-4 h-4 mr-2 text-brand-light" />
-                        {{ formatBookerDetails(props.booking.travelers.adults[props.booking.main_booker]) }}</p>
+                        {{ formatBookerDetails(props.booking.travelers?.adults?.[props.booking.main_booker]) }}</p>
                 </div>
             </div>
             <div class="grid grid-cols-3 gap-6">

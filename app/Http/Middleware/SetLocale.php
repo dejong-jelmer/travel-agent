@@ -11,17 +11,20 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next)
     {
+        $availableLocales = config('app.available_locales', ['nl', 'en']);
 
         $currentLocale = Session::get('locale');
         $locale = $currentLocale ?? $request->getPreferredLanguage(
-            config('app.available_locales', ['nl', 'en'])
+            $availableLocales
         )
             ?? config('app.locale');
 
-        App::setLocale($locale);
+        if (in_array($locale, $availableLocales)) {
+            App::setLocale($locale);
 
-        if ($currentLocale !== $locale) {
-            Session::put('locale', $locale);
+            if ($currentLocale !== $locale) {
+                Session::put('locale', $locale);
+            }
         }
 
         return $next($request);

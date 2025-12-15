@@ -874,6 +874,7 @@
                 "create": "Create country"
             },
             "index": {
+                "title": "Landen overzicht",
                 "table_headers": {
                     "countries": "Countries",
                     "actions": "Actions"

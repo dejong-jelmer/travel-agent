@@ -1,5 +1,6 @@
 <script setup>
 import { useBooking } from '@/Composables/useBooking.js';
+import { computed } from 'vue';
 
 const props = defineProps({
     db_booking: Object,
@@ -8,13 +9,17 @@ const props = defineProps({
     required: true
 })
 
-const mainBookerIndex = props.db_booking.adults.findIndex((adult) => adult.id === props.db_booking.main_booker?.id)
+const mainBookerIndex = props.db_booking.adults?.findIndex(
+    (adult) => adult.id === props.db_booking.main_booker?.id
+) ?? 0;
 
 const { booking } = useBooking(
     props.db_booking.trip,
     props.db_booking,
     mainBookerIndex,
 )
+
+const bookingReference = computed(() => props.db_booking.reference || '[No reference]')
 
 function submit() {
     booking.put(route("admin.bookings.update", props.db_booking));
@@ -29,10 +34,10 @@ function submit() {
                     <div class="flex items-center justify-between">
                         <div>
                             <h1 class="text-3xl font-bold text-gray-700">
-                                {{ $t('admin.booking.edit.booking', { "reference": db_booking.reference }) }}
+                                {{ $t('admin.booking.edit.booking', { "reference": bookingReference }) }}
                             </h1>
                             <p class="mt-1 text-sm text-gray-700/50">
-                                {{ db_booking.trip?.name }}
+                                {{ db_booking.trip?.name || '[No trip]' }}
                             </p>
                         </div>
                         <div class="flex space-x-2">
@@ -54,17 +59,17 @@ function submit() {
                             <div>
                                 <label class="text-sm font-medium text-gray-700">{{ $t('admin.booking.show.reference')
                                     }}</label>
-                                <p class="mt-1 text-gray-900">{{ db_booking.reference }}</p>
+                                <p class="mt-1 text-gray-900">{{ bookingReference }}</p>
                             </div>
                             <div>
                                 <label class="text-sm font-medium text-gray-700">{{ $t('admin.booking.show.trip')
                                     }}</label>
-                                <p class="mt-1 text-gray-900">{{ db_booking.trip?.name }}</p>
+                                <p class="mt-1 text-gray-900">{{ db_booking.trip?.name || '[No trip]' }}</p>
                             </div>
                             <div>
                                 <label class="text-sm font-medium text-gray-700">{{
                                     $t('admin.booking.show.departure_date') }}</label>
-                                <p class="mt-1 text-gray-900">{{ db_booking.departure_date_formatted }}</p>
+                                <p class="mt-1 text-gray-900">{{ db_booking.departure_date_formatted || '[No date]' }}</p>
                             </div>
                         </div>
                     </section>

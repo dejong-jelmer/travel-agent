@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
         }
 
         // Newsletters
-        NewsletterSubscriber::factory(100)->create();
-        NewsletterCampaign::factory(10)->withHeroImage()->create();
+        NewsletterSubscriber::factory(1500)->create();
+        NewsletterCampaign::factory(150)->withHeroImage()->create();
 
         // Admin
         User::factory()->admin()->create();
@@ -41,8 +41,10 @@ class DatabaseSeeder extends Seeder
             ->withImages(10)
             ->withCountry()
             ->withAnItinerary()
-            ->create()->each(fn ($trip) => $trip->bookings()->saveMany(
-                Booking::factory(fake()->numberBetween(0, 5))->make()
-            ));
+            ->create()->each(
+                fn ($trip) => Booking::factory(fake()->numberBetween(0, 5))
+                    ->for($trip, 'trip')
+                    ->create()
+            );
     }
 }

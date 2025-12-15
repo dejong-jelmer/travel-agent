@@ -46,13 +46,14 @@ class NewsletterCampaignFactory extends Factory
 
     public function sent(): static
     {
+        $recipients = rand(1000, 10000);
+
         return $this->state([
             'status' => CampaignStatus::Sent,
             'scheduled_at' => now()->startOfHour()->addDays(rand(1, 10))->addHours(rand(0, 24)),
             'sent_at' => now()->startOfHour()->subDays(rand(1, 10))->subHours(rand(0, 24)),
-            'sent_count' => rand(1000, 10000),
-            'total_recipients' => 0,
-            'sent_count' => 0,
+            'sent_count' => $recipients,
+            'total_recipients' => $recipients,
         ]);
     }
 }
