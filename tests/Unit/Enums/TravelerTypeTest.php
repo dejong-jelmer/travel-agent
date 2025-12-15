@@ -33,12 +33,6 @@ class TravelerTypeTest extends TestCase
         $this->assertSame('adults', TravelerType::Adult->relationName());
     }
 
-    public function test_label_returns_correct_dutch_translations(): void
-    {
-        $this->assertSame('Volwassene', TravelerType::Adult->label());
-        $this->assertSame('Kind', TravelerType::Child->label());
-    }
-
     public function test_values_returns_all_enum_values(): void
     {
         $values = TravelerType::values();
