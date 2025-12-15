@@ -24,10 +24,10 @@ return [
     ],
     'payment_status' => [
         'pending' => 'In afwachting',
-        'partial_paid' => 'Gedeeltelijk_betaald',
+        'partial_paid' => 'Gedeeltelijk betaald',
         'paid' => 'Betaald',
         'refunded' => 'Terugbetaald',
-        'partially_refunded' => 'Gedeeltelijk_terugbetaald',
+        'partially_refunded' => 'Gedeeltelijk terugbetaald',
         'failed' => 'Mislukt',
     ],
 ];
