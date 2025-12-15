@@ -7,8 +7,8 @@ use App\Enums\Traits\Selectable;
 
 enum Status: string
 {
-    use Selectable,
-        HasTranslatableLabel;
+    use HasTranslatableLabel,
+        Selectable;
 
     private const LABEL_KEY = 'booking.status';
 

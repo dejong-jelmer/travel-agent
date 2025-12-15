@@ -1,11 +1,12 @@
 <?php
+
 namespace App\Enums\Traits;
 
 trait HasTranslatableLabel
 {
     public function label(): string
     {
-        if (!defined(static::class . '::LABEL_KEY')) {
+        if (! defined(static::class.'::LABEL_KEY')) {
             throw new \LogicException(
                 sprintf(
                     'Enum %s must define a private const LABEL_KEY to use HasTranslatableLabel trait',
@@ -14,6 +15,6 @@ trait HasTranslatableLabel
             );
         }
 
-        return __(self::LABEL_KEY . ".{$this->value}");
+        return __(self::LABEL_KEY.".{$this->value}");
     }
 }

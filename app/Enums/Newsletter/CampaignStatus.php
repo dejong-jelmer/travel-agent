@@ -7,8 +7,8 @@ use App\Enums\Traits\Selectable;
 
 enum CampaignStatus: string
 {
-    use Selectable,
-        HasTranslatableLabel;
+    use HasTranslatableLabel,
+        Selectable;
 
     private const LABEL_KEY = 'newsletter.campaign.status';
 

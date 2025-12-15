@@ -7,8 +7,8 @@ use App\Enums\Traits\Selectable;
 
 enum Transport: string
 {
-    use Selectable,
-        HasTranslatableLabel;
+    use HasTranslatableLabel,
+        Selectable;
 
     private const LABEL_KEY = 'itinerary.transport';
 
