@@ -3,8 +3,24 @@
  * Tests validation logic for all booking form steps
  */
 
-import { describe, it, expect, beforeEach } from "vitest";
+import { describe, it, expect, beforeEach, vi } from "vitest";
 import { useBookingValidation } from "@/Composables/useBookingValidation.js";
+
+// Mock i18n to return translation keys instead of translated strings
+// This makes tests locale-independent and easier to maintain
+vi.mock('@/plugins/i18n.js', () => ({
+    default: {
+        global: {
+            t: (key, params) => {
+                // Return key with params for testing purposes
+                if (params) {
+                    return `${key}|${JSON.stringify(params)}`;
+                }
+                return key;
+            }
+        }
+    }
+}));
 
 // Field path constants for consistent test assertions
 const FIELD_PATHS = {
@@ -75,7 +91,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTripStep(bookingData);
 
                 expect(errors).toHaveProperty("departure_date");
-                expect(errors.departure_date).toBe("Kies een vertrekdatum.");
+                expect(errors.departure_date).toBe("validation.errors.missing_departure_date");
             });
 
             it("should return error when departure_date is undefined", () => {
@@ -83,7 +99,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTripStep(bookingData);
 
                 expect(errors).toHaveProperty("departure_date");
-                expect(errors.departure_date).toContain("vertrekdatum");
+                expect(errors.departure_date).toBe("validation.errors.missing_departure_date");
             });
 
             it("should accept valid departure_date", () => {
@@ -99,14 +115,14 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTripStep(null);
 
                 expect(errors).toHaveProperty("trip");
-                expect(errors.trip).toBe("Boekinggegevens ontbreken.");
+                expect(errors.trip).toBe("validation.errors.missing_booking_data");
             });
 
             it("should return error when bookingData is undefined", () => {
                 const errors = validator.validateTripStep(undefined);
 
                 expect(errors).toHaveProperty("trip");
-                expect(errors.trip).toContain("ontbreken");
+                expect(errors.trip).toBe("validation.errors.missing_booking_data");
             });
         });
     });
@@ -122,7 +138,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "first_name"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain(
-                    "ontbreekt"
+                    "validation.errors.missing"
                 );
             });
 
@@ -135,7 +151,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "first_name"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain(
-                    "ontbreekt"
+                    "validation.errors.missing"
                 );
             });
 
@@ -147,8 +163,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "first_name"));
-                expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain("te kort");
-                expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain("3");
+                expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain("validation.errors.too_short");
             });
 
             it("should return error when first_name is too long", () => {
@@ -159,8 +174,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "first_name"));
-                expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain("te lang");
-                expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain("255");
+                expect(errors[FIELD_PATHS.travelers.adult(0, "first_name")]).toContain("validation.errors.too_long");
             });
 
             it("should accept valid first_name", () => {
@@ -194,7 +208,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "last_name"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain(
-                    "ontbreekt"
+                    "validation.errors.missing"
                 );
             });
 
@@ -206,7 +220,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "last_name"));
-                expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain("ontbreekt");
+                expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain("validation.errors.missing");
             });
 
             it("should return error when last_name is too short", () => {
@@ -217,7 +231,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "last_name"));
-                expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain("te kort");
+                expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain("validation.errors.too_short");
             });
 
             it("should return error when last_name is too long", () => {
@@ -228,8 +242,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "last_name"));
-                expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain("te lang");
-                expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain("255");
+                expect(errors[FIELD_PATHS.travelers.adult(0, "last_name")]).toContain("validation.errors.too_long");
             });
 
             it("should accept valid last_name", () => {
@@ -263,7 +276,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "birthdate"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "birthdate")]).toBe(
-                    "Vul een geldige geboortedatum in."
+                    "validation.errors.invalid_birthdate"
                 );
             });
 
@@ -275,7 +288,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "birthdate"));
-                expect(errors[FIELD_PATHS.travelers.adult(0, "birthdate")]).toContain("geldig");
+                expect(errors[FIELD_PATHS.travelers.adult(0, "birthdate")]).toBe("validation.errors.invalid_birthdate");
             });
 
             it("should accept valid birthdate format", () => {
@@ -299,7 +312,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "nationality"));
                 expect(errors[FIELD_PATHS.travelers.adult(0, "nationality")]).toContain(
-                    "ontbreekt"
+                    "validation.errors.missing"
                 );
             });
 
@@ -311,8 +324,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.adult(0, "nationality"));
-                expect(errors[FIELD_PATHS.travelers.adult(0, "nationality")]).toContain("te kort");
-                expect(errors[FIELD_PATHS.travelers.adult(0, "nationality")]).toContain("2");
+                expect(errors[FIELD_PATHS.travelers.adult(0, "nationality")]).toContain("validation.errors.too_short");
             });
 
             it("should accept valid 2-letter nationality code", () => {
@@ -358,7 +370,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateTravelersStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.travelers.child(0, "first_name"));
-                expect(errors[FIELD_PATHS.travelers.child(0, "first_name")]).toContain("ontbreekt");
+                expect(errors[FIELD_PATHS.travelers.child(0, "first_name")]).toContain("validation.errors.missing");
             });
 
             it("should validate multiple children travelers", () => {
@@ -424,7 +436,7 @@ describe("useBookingValidation", () => {
             const errors = validator.validateTravelersStep({});
 
             expect(errors).toHaveProperty("travelers");
-            expect(errors.travelers).toBe("Reizigersgegevens ontbreken.");
+            expect(errors.travelers).toBe("validation.errors.missing_traveler_data");
         });
 
         it("should return error when bookingData is null", () => {
@@ -444,7 +456,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.street);
-                expect(errors[FIELD_PATHS.contact.street]).toContain("ontbreekt");
+                expect(errors[FIELD_PATHS.contact.street]).toContain("validation.errors.missing");
             });
 
             it("should return error when street is too short", () => {
@@ -455,7 +467,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.street);
-                expect(errors[FIELD_PATHS.contact.street]).toContain("te kort");
+                expect(errors[FIELD_PATHS.contact.street]).toContain("validation.errors.too_short");
             });
 
             it("should accept valid street", () => {
@@ -479,7 +491,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.houseNumber);
                 expect(errors[FIELD_PATHS.contact.houseNumber]).toBe(
-                    "Het huisnummer moet een geldig getal groter dan 0 zijn."
+                    "validation.errors.invalid_house_number"
                 );
             });
 
@@ -491,7 +503,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.houseNumber);
-                expect(errors[FIELD_PATHS.contact.houseNumber]).toContain("geldig getal");
+                expect(errors[FIELD_PATHS.contact.houseNumber]).toBe("validation.errors.invalid_house_number");
             });
 
             it("should return error when house_number is not a number", () => {
@@ -502,7 +514,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.houseNumber);
-                expect(errors[FIELD_PATHS.contact.houseNumber]).toContain("geldig getal");
+                expect(errors[FIELD_PATHS.contact.houseNumber]).toBe("validation.errors.invalid_house_number");
             });
 
             it("should accept valid house_number", () => {
@@ -535,7 +547,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.postalCode);
-                expect(errors[FIELD_PATHS.contact.postalCode]).toContain("ontbreekt");
+                expect(errors[FIELD_PATHS.contact.postalCode]).toContain("validation.errors.missing");
             });
 
             it("should return error when postal_code is invalid format", () => {
@@ -546,7 +558,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.postalCode);
-                expect(errors[FIELD_PATHS.contact.postalCode]).toContain("1234AB");
+                expect(errors[FIELD_PATHS.contact.postalCode]).toContain("validation.errors.invalid_postal_code");
             });
 
             it("should accept valid Dutch postal code (no space)", () => {
@@ -589,7 +601,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.city);
-                expect(errors[FIELD_PATHS.contact.city]).toContain("ontbreekt");
+                expect(errors[FIELD_PATHS.contact.city]).toContain("validation.errors.missing");
             });
 
             it("should return error when city is too short", () => {
@@ -600,7 +612,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.city);
-                expect(errors[FIELD_PATHS.contact.city]).toContain("te kort");
+                expect(errors[FIELD_PATHS.contact.city]).toContain("validation.errors.too_short");
             });
 
             it("should accept valid city", () => {
@@ -623,7 +635,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.email);
-                expect(errors[FIELD_PATHS.contact.email]).toContain("ontbreekt");
+                expect(errors[FIELD_PATHS.contact.email]).toContain("validation.errors.missing");
             });
 
             it("should return error when email is invalid", () => {
@@ -634,7 +646,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.email);
-                expect(errors[FIELD_PATHS.contact.email]).toContain("ongeldig");
+                expect(errors[FIELD_PATHS.contact.email]).toContain("validation.errors.invalid");
             });
 
             it("should return error when email is missing @", () => {
@@ -645,7 +657,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.email);
-                expect(errors[FIELD_PATHS.contact.email]).toContain("ongeldig");
+                expect(errors[FIELD_PATHS.contact.email]).toContain("validation.errors.invalid");
             });
 
             it("should return error when email is missing domain", () => {
@@ -656,7 +668,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.email);
-                expect(errors[FIELD_PATHS.contact.email]).toContain("ongeldig");
+                expect(errors[FIELD_PATHS.contact.email]).toContain("validation.errors.invalid");
             });
 
             it("should accept valid email", () => {
@@ -689,7 +701,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.phone);
-                expect(errors[FIELD_PATHS.contact.phone]).toContain("ontbreekt");
+                expect(errors[FIELD_PATHS.contact.phone]).toContain("validation.errors.missing");
             });
 
             it("should return error when phone is invalid", () => {
@@ -700,7 +712,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateContactStep(bookingData);
 
                 expect(errors).toHaveProperty(FIELD_PATHS.contact.phone);
-                expect(errors[FIELD_PATHS.contact.phone]).toContain("ongeldig");
+                expect(errors[FIELD_PATHS.contact.phone]).toContain("validation.errors.invalid");
             });
 
             it("should accept valid Dutch mobile (06)", () => {
@@ -771,14 +783,14 @@ describe("useBookingValidation", () => {
             const errors = validator.validateContactStep({});
 
             expect(errors).toHaveProperty("contact");
-            expect(errors.contact).toBe("Contactgegevens ontbreken.");
+            expect(errors.contact).toBe("validation.errors.missing_contact_data");
         });
 
         it("should return error when bookingData is null", () => {
             const errors = validator.validateContactStep(null);
 
             expect(errors).toHaveProperty("contact");
-            expect(errors.contact).toContain("ontbreken");
+            expect(errors.contact).toBe("validation.errors.missing_contact_data");
         });
     });
 
@@ -793,7 +805,7 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateOverviewStep(bookingData);
 
                 expect(errors).toHaveProperty("has_confirmed");
-                expect(errors.has_confirmed).toBe("Je moet nog akkoord gaan.");
+                expect(errors.has_confirmed).toBe("validation.errors.missing_confirmation");
             });
 
             it("should accept when has_confirmed is true", () => {
@@ -819,7 +831,7 @@ describe("useBookingValidation", () => {
 
                 expect(errors).toHaveProperty("has_accepted_conditions");
                 expect(errors.has_accepted_conditions).toBe(
-                    "Je moet nog akkoord gaan met de algemene voorwaarden."
+                    "validation.errors.missing_accepted_conditions"
                 );
             });
 
@@ -866,14 +878,14 @@ describe("useBookingValidation", () => {
                 const errors = validator.validateOverviewStep(null);
 
                 expect(errors).toHaveProperty("overview");
-                expect(errors.overview).toBe("Boekinggegevens ontbreken.");
+                expect(errors.overview).toBe("validation.errors.missing_booking_data");
             });
 
             it("should return error when bookingData is undefined", () => {
                 const errors = validator.validateOverviewStep(undefined);
 
                 expect(errors).toHaveProperty("overview");
-                expect(errors.overview).toContain("ontbreken");
+                expect(errors.overview).toBe("validation.errors.missing_booking_data");
             });
         });
     });
