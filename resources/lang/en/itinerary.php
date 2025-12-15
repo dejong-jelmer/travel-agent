@@ -12,18 +12,18 @@ return [
     'deleted' => 'Itinerary day has been deleted',
 
     // Meals
-    "meals" => [
+    'meals' => [
         'breakfast' => 'Breakfast',
         'lunch' => 'Lunch',
         'dinner' => 'Dinner',
     ],
     // Tranport
-    "transport" => [
+    'transport' => [
         'train' => 'Train',
         'ferry' => 'Ferry',
         'bus' => 'Bus',
         'taxi' => 'Taxi',
         'transfer' => 'Transfer',
         'airplane' => 'Airplane',
-    ]
+    ],
 ];

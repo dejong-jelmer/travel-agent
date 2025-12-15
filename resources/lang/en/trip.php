@@ -12,7 +12,7 @@ return [
     'updated' => 'Trip has been updated',
     'deleted' => 'Trip has been deleted',
 
-     // Traveler
+    // Traveler
     'traveler' => [
         'adult' => 'Adult',
         'child' => 'Child',

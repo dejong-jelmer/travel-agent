@@ -12,18 +12,18 @@ return [
     'deleted' => 'Reisdag is verwijderd',
 
     // Meals
-    "meals" => [
+    'meals' => [
         'breakfast' => 'Ontbijt',
         'lunch' => 'lunch',
         'dinner' => 'Diner',
     ],
     // Tranport
-    "transport" => [
+    'transport' => [
         'train' => 'Trein',
         'ferry' => 'Veerboot',
         'bus' => 'Bus',
         'taxi' => 'Taxi',
         'transfer' => 'Transfer',
         'airplane' => 'Vliegtuig',
-    ]
+    ],
 ];
