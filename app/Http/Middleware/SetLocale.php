@@ -17,11 +17,8 @@ class SetLocale
             )
             ?? config('app.locale');
 
-        $currentLocale = App::setLocale($locale);
-
-        if ($currentLocale !== Session::get('locale')) {
-            Session::put('locale', $currentLocale);
-        }
+            App::setLocale($locale);
+            Session::put('locale', $locale);
 
         return $next($request);
     }
