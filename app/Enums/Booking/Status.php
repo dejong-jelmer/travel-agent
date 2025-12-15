@@ -13,7 +13,7 @@ enum Status: string
     case Canceled = 'canceled';
     case Completed = 'completed';
 
-    public function label()
+    public function label(): string
     {
         return match ($this) {
             Status::New => __('booking.status.new'),

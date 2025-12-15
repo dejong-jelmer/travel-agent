@@ -41,6 +41,8 @@ return [
         'travelers.children.*.birthdate' => 'Ongeldige geboortedatum.',
 
         // Main booker
-        'main_booker_birthdate_before' => 'De hoofdboeker moet minimaal 18 jaar oud zijn.',
+        'main_booker' => [
+            'too_young' => 'De hoofdboeker moet minimaal 18 jaar oud zijn.',
+        ],
     ],
 ];
