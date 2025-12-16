@@ -36,7 +36,7 @@ class ItineraryFactory extends Factory
             'description' => fake()->paragraph(3),
             'location' => fake()->city().', '.fake()->country(),
             'activities' => fake()->optional()->randomElements(self::ACTIVITIES, fake()->numberBetween(1, 4)),
-            'accommodation' => fake()->company().' Hotel',
+            'accommodation' => fake()->company().' '.'Hotel',
             'meals' => fake()->optional()->randomElements(Meal::cases(), fake()->numberBetween(1, 2)),
             'transport' => fake()->optional()->randomElements(Transport::cases(), fake()->numberBetween(1, 4)),
             'remark' => fake()->optional()->randomElement(self::REMARKS),

@@ -36,15 +36,21 @@ class DatabaseSeeder extends Seeder
         User::factory()->admin()->create();
 
         // Trips
-        Trip::factory(50)
+        $trips = Trip::factory(50)
             ->withHeroImage()
             ->withImages(10)
             ->withCountry()
             ->withAnItinerary()
-            ->create()->each(
-                fn ($trip) => Booking::factory(fake()->numberBetween(0, 5))
-                    ->for($trip, 'trip')
-                    ->create()
-            );
+            ->create();
+
+        Booking::factory(125)
+            ->recycle($trips)
+            ->withTravelers()
+            ->create();
+        // ->each(
+        //     fn ($trip) => Booking::factory(fake()->numberBetween(0, 5))
+        //         ->for($trip, 'trip')
+        //         ->create()
+        // );
     }
 }

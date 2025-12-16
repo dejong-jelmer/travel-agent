@@ -15,6 +15,6 @@ trait HasTranslatableLabel
             );
         }
 
-        return __(self::LABEL_KEY.".{$this->value}");
+        return __(static::LABEL_KEY.".{$this->value}");
     }
 }

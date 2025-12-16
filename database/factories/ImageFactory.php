@@ -77,7 +77,7 @@ class ImageFactory extends Factory
 
     public function primary(): static
     {
-        return $this->state([
+        return $this->state(fn () => [
             'is_primary' => true,
         ]);
     }

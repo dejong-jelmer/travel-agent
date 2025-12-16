@@ -24,8 +24,8 @@ class CountryFactory extends Factory
 
     public function fromLocale(string $locale = 'nl_NL'): static
     {
-        return $this->state([
-            'name' => Locale::getDisplayRegion($locale, locale_get_default()),
+        return $this->state(fn () => [
+            'name' => Locale::getDisplayRegion($locale, app()->getLocale()),
         ]);
     }
 }

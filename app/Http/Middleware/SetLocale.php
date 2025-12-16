@@ -12,19 +12,23 @@ class SetLocale
     public function handle(Request $request, Closure $next)
     {
         $availableLocales = config('app.available_locales', ['nl', 'en']);
-
         $currentLocale = Session::get('locale');
-        $locale = $currentLocale ?? $request->getPreferredLanguage(
-            $availableLocales
-        )
-            ?? config('app.locale');
 
-        if (in_array($locale, $availableLocales)) {
-            App::setLocale($locale);
+        // Set preferred locale
+        $locale = $currentLocale
+            ?: $request->getPreferredLanguage($availableLocales)
+            ?: config('app.locale');
 
-            if ($currentLocale !== $locale) {
-                Session::put('locale', $locale);
-            }
+        // Validate or fallback to default
+        if (! in_array($locale, $availableLocales)) {
+            $locale = config('app.locale');
+        }
+
+        App::setLocale($locale);
+
+        // Set session locale is changed
+        if ($currentLocale !== $locale) {
+            Session::put('locale', $locale);
         }
 
         return $next($request);

@@ -37,7 +37,7 @@ class NewsletterCampaignFactory extends Factory
 
     public function scheduled(): static
     {
-        return $this->state([
+        return $this->state(fn () => [
             'status' => CampaignStatus::Scheduled,
             'scheduled_at' => now()->startOfHour()->addDays(rand(1, 10))->addHours(rand(0, 24)),
 
@@ -48,7 +48,7 @@ class NewsletterCampaignFactory extends Factory
     {
         $recipients = rand(1000, 10000);
 
-        return $this->state([
+        return $this->state(fn () => [
             'status' => CampaignStatus::Sent,
             'scheduled_at' => now()->startOfHour()->addDays(rand(1, 10))->addHours(rand(0, 24)),
             'sent_at' => now()->startOfHour()->subDays(rand(1, 10))->subHours(rand(0, 24)),
