@@ -9,7 +9,9 @@ trait Selectable
         return collect(self::cases())
             ->map(fn ($case) => [
                 'id' => $case->value,
-                'name' => $case->value,
+                'name' => method_exists($case, 'label')
+                    ? $case->label()
+                    : $case->value,
                 'disabled' => method_exists($case, 'disabledOption')
                     ? $case->disabledOption()
                     : false,

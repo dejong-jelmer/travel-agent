@@ -1,0 +1,939 @@
+{
+    "button": {
+        "email": "E-mail",
+        "call": "Bellen",
+        "back_to_home": "Terug naar homepagina"
+    },
+    "link": {
+        "questions": "Heeft u nog vragen?",
+        "contact_us": "Neem contact met ons op"
+    },
+    "booker": {
+        "birthdate": "Geboortedatum",
+        "nationality": "Nationaliteit",
+        "adults": "Volwassene | Volwassenen",
+        "children": "Kind | Kinderen"
+    },
+    "topbar_text": "Ga duurzaam op reis",
+    "nav": {
+        "contact": "Contact",
+        "about": "Over ons"
+    },
+    "trip_card": {
+        "days": "dagen",
+        "sustainable_travel": "Duurzaam reizen",
+        "view_trip": "Bekijk reis"
+    },
+    "trip_itinerary": {
+        "activities": "Activiteiten",
+        "accommodation": "Overnachting",
+        "accommodation_text": "U verblijft in het",
+        "meals": "Maaltijden",
+        "transport": "Transport"
+    },
+    "itinerary": {
+        "day": "Dag",
+        "edit": "Bewerk reisplan",
+        "delete": "Verwijder reisplan",
+        "delete_confirm": "Weet je zeker dat je dit reisplan wilt verwijderen?"
+    },
+    "form": {
+        "footer": {
+            "unsaved_changes": "Er zijn niet opgeslagen wijzigingen.",
+            "no_changes": "Er zijn geen wijzigingen."
+        }
+    },
+    "image_uploader": {
+        "drop_zone": {
+            "drop_multiple": "Laat afbeeldingen los om te uploaden",
+            "drop_single": "Laat afbeelding los om te uploaden",
+            "click_or_drag_multiple": "Klik hier of sleep afbeeldingen hierheen",
+            "click_or_drag_single": "Klik hier of sleep een afbeelding hierheen",
+            "multiple_allowed": "Meerdere afbeeldingen toegestaan",
+            "single_allowed": "Eén afbeelding toegestaan"
+        },
+        "errors": {
+            "invalid_files": "Sommige bestanden zijn geen geldige afbeeldingen en zijn overgeslagen.",
+            "upload_error": "Er is een fout opgetreden bij het uploaden van de bestanden.",
+            "processing_error": "Fout bij verwerken van het bestand.",
+            "image_load_error": "Afbeelding kon niet worden geladen",
+            "cannot_load_image": "Kan afbeelding niet laden"
+        },
+        "preview": {
+            "loading": "Laden...",
+            "remove_image": "Verwijder afbeelding"
+        },
+        "file_info": {
+            "filename": "Bestandsnaam",
+            "filesize": "Bestandsgrootte",
+            "filetype": "Bestandstype",
+            "max_size_exceeded": "Maximale bestandsgrootte is {maxSize}"
+        },
+        "console": {
+            "not_an_image": "Bestand {filename} is geen afbeelding",
+            "could_not_load": "Afbeelding {index} kon niet worden geladen",
+            "could_not_create_url": "Kon preview URL niet maken:",
+            "processing_error": "Fout bij verwerken van bestanden:",
+            "remove_error": "Fout bij verwijderen van afbeelding:",
+            "emit_error": "Fout bij emit update:",
+            "cleanup_error": "Fout bij cleanup:"
+        }
+    },
+    "newsletter": {
+        "heading": "Blijf op de hoogte",
+        "description": "Schrijf je in voor onze nieuwsbrief en ontvang alle nieuwste updates over onze reizen.",
+        "form": {
+            "name_placeholder": "Uw voornaam (optioneel)",
+            "email_placeholder": "uw.email{'@'}voorbeeld.nl",
+            "submitting": "Bezig met verzenden...",
+            "submit": "Inschrijven"
+        },
+        "privacy": "We respecteren uw privacy. U kunt zich op elk moment uitschrijven.",
+        "subscription": {
+            "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
+            "error": "Er is een fout opgetreden bij het verwerken van je inschrijving. Probeer het later opnieuw."
+        }
+    },
+    "traveler_form": {
+        "first_name_label": "Eerste voornaam (zoals in paspoort)",
+        "first_name_placeholder": "Voornaam",
+        "last_name_label": "Achternaam (zoals in paspoort)",
+        "last_name_placeholder": "Achternaam",
+        "nationality": "Nationaliteit",
+        "nationality_placeholder": "Nationaliteit (volgens paspoort)",
+        "birthdate": "Geboortedatum",
+        "birthdate_placeholder": "DD-MM-JJJJ"
+    },
+    "usp": {
+        "section_header": "kiezen voor ons",
+        "intro": "Onze unieke aanpak combineert comfort, cultuur en duurzaamheid voor een reiservaring die verder gaat dan toerisme.",
+        "sustainable": {
+            "title": "Duurzaam",
+            "description": "Reis comfortabel en ontspannen door Europa's mooiste landschappen. Geen stress van vliegvelden, wel het plezier van de reis zelf.",
+            "highlight": "Gemiddeld 75% minder CO₂"
+        },
+        "with_story": {
+            "title": "Met een verhaal",
+            "description": "Ontdek de fascinerende verhalen achter elke bestemming. Onze reizen brengen geschiedenis tot leven met verhalen en bijzondere achtergronden bij elke bestemming.",
+            "highlight": "Unieke achtergronden bij elke reis"
+        },
+        "carefree": {
+            "title": "Zorgeloos",
+            "description": "Wij regelen alles van A tot Z. Jij hoeft alleen maar te genieten van je duurzame avontuur door Europa.",
+            "highlight": "24/7 Nederlandse reisondersteuning"
+        }
+    },
+    "forms": {
+        "booking": {
+            "tooltip_locked": "Vul eerst de vorige stappen in",
+            "button_prev": "Vorige",
+            "button_next": "Volgende",
+            "button_submit": "Nu boeken",
+            "button_submit_tooltip": "Nu boeken met betalingsverplichting",
+            "submitting": "Bezig met verzenden..."
+        },
+        "contact": {
+            "heading": "Contact",
+            "intro": "Als je vragen hebt of meer wilt weten neem contact op via één van de onderstaaden methoden.",
+            "call": "Bel",
+            "email": "Stuur een mail naar",
+            "or_use_form": "Of gebruik het contactformulier hieronder.",
+            "your_details_heading": "Uw gegevens",
+            "your_details_subheading": "Hoe kunnen we u bereiken?",
+            "your_message_heading": "Uw bericht",
+            "your_message_subheading": "Waarmee kunnen we u helpen?",
+            "name_label": "Naam",
+            "email_label": "Uw Emailadres",
+            "phone_label": "Uw telefoonnummer (optioneel)",
+            "message_label": "Bericht",
+            "submit_button": "Verstuur bericht",
+            "success": "Bedankt! Uw bericht is succesvol verstuurd."
+        },
+        "trip": {
+            "edit_heading": "Bewerk Reis",
+            "new_heading": "Nieuwe Reis",
+            "subheading": "Beheer de details van uw reis",
+            "tabs": {
+                "basic": "Reis Details",
+                "media": "Media",
+                "details": "Details",
+                "meta": "Meta"
+            },
+            "character_counter": {
+                "too_many": "{count} te veel",
+                "remaining": "Nog {count} over"
+            },
+            "sections": {
+                "media": {
+                    "subtitle": "Upload afbeeldingen voor de reis"
+                },
+                "settings": {
+                    "title": "Instellingen",
+                    "subtitle": "Configureer zichtbaarheid"
+                },
+                "pricing": {
+                    "title": "Prijs & Duur",
+                    "subtitle": "Definieer de kosten en reisduur"
+                },
+                "countries": {
+                    "title": "Landen",
+                    "subtitle": "Configureer gekoppelde landen"
+                }
+            },
+            "fields": {
+                "name": {
+                    "label": "Naam van de reis",
+                    "placeholder": "Bijv. Ontdek de Balkan"
+                },
+                "slug": {
+                    "label": "Slug",
+                    "placeholder": "bijv. ontdek-de-balkan"
+                },
+                "description": {
+                    "label": "Omschrijving",
+                    "placeholder": "Beschrijf de reis...",
+                    "characters": "{current} van {max} karakters gebruikt"
+                },
+                "hero_image": {
+                    "label": "Hero Afbeelding",
+                    "help": "Upload een inspirerende afbeelding die deze reis representeert",
+                    "change": "Wijzig hoofdafbeelding",
+                    "select": "Selecteer een afbeelding"
+                },
+                "gallery": {
+                    "label": "Galerij Afbeeldingen",
+                    "help": "Upload afbeeldingen voor de galerij",
+                    "drop_label": "Sleep meerdere afbeeldingen hierheen"
+                },
+                "price": {
+                    "label": "Prijs per persoon",
+                    "placeholder": "bijv. 1499"
+                },
+                "duration": {
+                    "label": "Duur (dagen)",
+                    "placeholder": "bijv. 14",
+                    "unit": "dagen"
+                },
+                "countries": {
+                    "label": "Landen",
+                    "placeholder": "Selecteer landen...",
+                    "help": "Selecteer de landen die bezocht worden tijdens deze reis"
+                },
+                "highlights": {
+                    "label": "Hoogtepunten",
+                    "placeholder": "Voeg hoogtepunten toe...",
+                    "help": "Voer unieke ervaringen en attracties van deze reis in"
+                },
+                "active": {
+                    "label": "Actief",
+                    "help": "Is deze reis beschikbaar voor boeken?"
+                },
+                "featured": {
+                    "label": "Uitgelicht",
+                    "help": "Moet deze reis worden uitgelicht op de homepage?"
+                },
+                "published_at": {
+                    "label": "Publicatiedatum",
+                    "help": "Vanaf wanneer de reis zichtbaar is op de website"
+                },
+                "meta_title": {
+                    "label": "Meta Title",
+                    "placeholder": "SEO titel...",
+                    "characters": "{current} van {max} karakters gebruikt"
+                },
+                "meta_description": {
+                    "label": "Meta Description",
+                    "placeholder": "SEO beschrijving...",
+                    "characters": "{current} van {max} karakters gebruikt"
+                },
+                "og_image": {
+                    "label": "OG Image",
+                    "help": "Afbeelding voor social media delen (Open Graph)"
+                }
+            },
+            "submit": {
+                "create": "Reis aanmaken",
+                "update": "Reis bijwerken"
+            }
+        },
+        "itinerary": {
+            "edit_heading": "Bewerk Reisdag",
+            "new_heading": "Nieuwe Reisdag",
+            "subheading": "Beheer dagprogramma",
+            "tabs": {
+                "basic": "Basis",
+                "media": "Media",
+                "details": "Details"
+            },
+            "sections": {
+                "basic": {
+                    "subtitle": "Titel, locatie en omschrijving van de dag"
+                },
+                "media": {
+                    "subtitle": "Upload afbeelding voor deze reisdag"
+                },
+                "details": {
+                    "subtitle": "Verblijf, activiteiten en faciliteiten"
+                }
+            },
+            "fields": {
+                "day": {
+                    "label": "Dagnummer",
+                    "placeholder": "bijv. 1"
+                },
+                "location": {
+                    "label": "Locatie",
+                    "placeholder": "bijv. Amsterdam"
+                },
+                "title": {
+                    "label": "Titel",
+                    "placeholder": "bijv. Aankomst in Amsterdam"
+                },
+                "description": {
+                    "label": "Omschrijving",
+                    "placeholder": "Beschrijf deze dag...",
+                    "characters": "{current} van {max} karakters gebruikt"
+                },
+                "remark": {
+                    "label": "Opmerking",
+                    "placeholder": "Optionele opmerking of waarschuwing",
+                    "help": "Opmerkingen worden getoond met een waarschuwingspictogram"
+                },
+                "image": {
+                    "label": "Dag Afbeelding",
+                    "help": "Upload een afbeelding voor deze dag",
+                    "change": "Afbeelding wijzigen",
+                    "select": "Selecteer een afbeelding"
+                },
+                "transport": {
+                    "label": "Vervoer",
+                    "placeholder": "Selecteer vervoer..."
+                },
+                "accommodation": {
+                    "label": "Verblijf",
+                    "placeholder": "bijv. Hotel Central Amsterdam"
+                },
+                "activities": {
+                    "label": "Activiteiten",
+                    "placeholder": "bijv. Stadswandeling, museumbezoek"
+                },
+                "meals": {
+                    "label": "Maaltijden",
+                    "placeholder": "Selecteer maaltijden..."
+                },
+                "distance": {
+                    "label": "Afstand (km)",
+                    "placeholder": "bijv. 45"
+                }
+            },
+            "submit": {
+                "create": "Dag aanmaken",
+                "update": "Dag bijwerken"
+            }
+        },
+        "campaign": {
+            "edit_heading": "Bewerk Campagne",
+            "new_heading": "Nieuwe Campagne",
+            "subheading": "Beheer uw nieuwsbrief campagne",
+            "tabs": {
+                "basic": "Details",
+                "content": "Inhoud",
+                "settings": "Instellingen"
+            },
+            "character_counter": {
+                "current": "{current} van {max} karakters",
+                "too_many": "{count} te veel",
+                "remaining": "Nog {count} over"
+            },
+            "fields": {
+                "hero_image": {
+                    "change": "Wijzig hoofdafbeelding",
+                    "select": "Selecteer een afbeelding"
+                },
+                "name": {
+                    "label": "Campagnenaam",
+                    "placeholder": "bijv. Zomer 2025 Nieuwsbrief"
+                },
+                "subject": {
+                    "label": "E-mailonderwerp",
+                    "placeholder": "bijv. Ontdek onze zomerreizen!"
+                },
+                "preview_text": {
+                    "label": "Preview tekst (optioneel)",
+                    "placeholder": "Deze tekst verschijnt in de email preview...",
+                    "help": "Preview tekst wordt getoond naast het onderwerp in email clients. Laat leeg voor automatisch genereren uit content."
+                },
+                "body": {
+                    "label": "E-mailtekst",
+                    "placeholder": "Schrijf uw bericht...",
+                    "help": "Tip: HTML tags worden ondersteund voor opmaak."
+                },
+                "scheduled_at": {
+                    "label": "Verzenddatum",
+                    "placeholder": "Selecteer datum en tijd..."
+                },
+                "status": {
+                    "label": "Status",
+                    "placeholder": "Selecteer status..."
+                },
+                "featured_trips": {
+                    "label": "Uitgelichte reizen (optioneel)",
+                    "help": "Selecteer reizen die je wilt uitlichten in deze nieuwsbrief",
+                    "no_trips": "Geen reizen beschikbaar",
+                    "duration": "{days} dagen",
+                    "selected": "{count} reis geselecteerd | {count} reizen geselecteerd"
+                }
+            },
+            "preview": {
+                "title": "Email Preview",
+                "subject": "Onderwerp:",
+                "no_subject": "(Geen onderwerp)",
+                "preview_text": "Preview tekst:",
+                "content_preview": "Inhoud preview:",
+                "no_content": "(Nog geen inhoud)"
+            },
+            "test": {
+                "title": "Test verzending",
+                "help": "Verstuur een test email naar uw eigen email adres om te controleren hoe de nieuwsbrief eruit ziet.",
+                "button": "Verstuur test email",
+                "sending": "Bezig met verzenden...",
+                "save_first": "Sla eerst de campagne op voordat u een test email verstuurt."
+            },
+            "status": {
+                "title": "Status & Planning",
+                "subtitle": "Configureer verzending",
+                "help": "Selecteer 'Gepland' om een verzenddatum in te stellen",
+                "scheduled_help": "De nieuwsbrief wordt automatisch verzonden op deze datum en tijd"
+            },
+            "statistics": {
+                "title": "Statistieken",
+                "subtitle": "Verzendgegevens",
+                "sent_at": "Verzonden op:",
+                "sent_count": "Aantal verzonden:",
+                "not_sent": "Nog niet verzonden"
+            },
+            "submit": {
+                "create": "Campagne aanmaken",
+                "update": "Campagne bijwerken"
+            }
+        }
+    },
+    "booking_steps": {
+        "travelers": {
+            "heading": "Reisgezelschap",
+            "adult_label": "Volwassene",
+            "child_label": "Kind"
+        },
+        "trip": {
+            "heading": "Reis boeken - {tripName}",
+            "intro": "Wat leuk dat je de reis <strong class=\"text-brand-primary\">{tripName}</strong> wilt gaan boeken. We gaan een aantal stappen doorlopen om te zorgen dat de boeking goed doorkomt.",
+            "notice_heading": "Let op:",
+            "notice_text": "Dit is een <strong>boekingsaanvraag</strong>. We kijken eerst of we aan alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen we binnen <strong>twee werkdagen</strong> contact met u op om de boeking te bevestigen.",
+            "trip_label": "Reis",
+            "price_from": "Vanaf",
+            "per_person": "p.p.",
+            "choose_date": "Kies een <strong>datum</strong> voor vertrek",
+            "no_date_chosen": "Geen datum gekozen",
+            "choose_number": "Kies het <strong>aantal</strong> reizigers",
+            "participants_label": "Deelnemers:",
+            "person_singular": "persoon",
+            "person_plural": "personen",
+            "adult_singular": "volwassene",
+            "adult_plural": "volwassenen",
+            "child_singular": "kind",
+            "child_plural": "kinderen"
+        },
+        "contact": {
+            "heading": "Contactgegevens",
+            "main_booker_question": "Wie wordt de hoofdboeker?",
+            "chosen_main_booker": "Gekozen hoofdboeker:",
+            "street_label": "Straatnaam",
+            "street_placeholder": "Straatnaam",
+            "house_number_label": "Huisnummer",
+            "house_number_placeholder": "Huisnummer",
+            "addition_label": "Toevoeging (optioneel)",
+            "addition_placeholder": "Huisnummer toevoeging",
+            "postal_code_label": "Postcode",
+            "postal_code_placeholder": "Postcode",
+            "city_label": "Plaatsnaam",
+            "city_placeholder": "Woonplaats",
+            "phone_label": "Telefoonnummer",
+            "phone_placeholder": "Telefoonnummer",
+            "email_label": "E-mail",
+            "email_placeholder": "{'@'} e-mailadres"
+        },
+        "overview": {
+            "heading": "Bekijken & bevestigen",
+            "summary_heading": "Een samenvatting van je reis",
+            "trip_label": "Reis",
+            "total_price": "Totale reissom",
+            "total_duration": "Totale reisduur",
+            "days": "dagen",
+            "departure_date": "Vertrek datum",
+            "no_date_chosen": "Geen datum gekozen",
+            "travelers_heading": "Reizigers",
+            "adults_label": "Volwassenen",
+            "children_label": "Kinderen",
+            "no_travelers": "Nog geen reizigers ingevoerd.",
+            "contact_info_heading": "Contact informatie",
+            "confirm_data": "Ik bevestig de juistheid van mijn gegevens en maak mijn boeking definitief.",
+            "accept_terms": "Ik bevestig dat de <a :href=\"route('terms')\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"default-link\">algemene voorwaarden</a> van toepassing zijn op deze reis.",
+            "errors_found": "Er zijn {count} fout(en) gevonden:"
+        }
+    },
+    "hero": {
+        "title": "Omdat we",
+        "subtitles": [
+            "nooit uitgeleerd zijn",
+            "altijd nieuwsgierig blijven",
+            "ook oog hebben voor de toekomst",
+            "verbonden zijn",
+            "willen blijven ontdekken"
+        ]
+    },
+    "footer": {
+        "contact": "Contact",
+        "all_rights": "Alle rechten voorbehouden.",
+        "conditions": "Algemene voorwaarden",
+        "privacy": "Privacybeleid",
+        "slogan": "Voor duurzame reizen met een verhaal."
+    },
+    "booking_step_labels": {
+        "trip": "Reis",
+        "travelers": "Reisgezelschap",
+        "contact": "Contactgegevens",
+        "overview": "Bekijken & bevestigen"
+    },
+    "validation": {
+        "errors": {
+            "missing": "{field} ontbreekt — deze hebben we nodig voor je boeking.",
+            "missing_traveler_data": "Reizigersgegevens ontbreken.",
+            "missing_contact_data": "Contactgegevens ontbreken.",
+            "missing_booking_data": "Boekinggegevens ontbreken.",
+            "missing_departure_date": "Kies een vertrekdatum.",
+            "missing_confirmation": "Je moet nog akkoord gaan.",
+            "missing_accepted_conditions": "Je moet nog akkoord gaan met de algemene voorwaarden.",
+            "too_short": "{field} is te kort — vul minimaal {min} tekens in.",
+            "too_long": "{field} is te lang vul maximaal {max} tekens in.",
+            "invalid": "{field} is ongeldig - voer een geldige waarde in.",
+            "invalid_postal_code": "{field} is ongeldig — gebruik het formaat 1234AB.",
+            "invalid_birthdate": "Vul een geldige geboortedatum in.",
+            "invalid_house_number": "Het huisnummer moet een geldig getal groter dan 0 zijn.",
+            "invalid_traveler_data": "Reizigersgegevens zijn ongeldig."
+        },
+        "fields": {
+            "first_name": "Voornaam",
+            "last_name": "Achternaam",
+            "nationality": "Nationaliteit",
+            "street_name": "Straatnaam",
+            "house_number": "Huisnummer",
+            "postal_code": "Postcode",
+            "city": "Plaatsnaam",
+            "email": "E-mail adres",
+            "phone": "Telefoonnummer"
+        }
+    },
+    "admin_menu": {
+        "dashboard_title": "Admin Dashboard",
+        "dashboard_version": "Admin Dashboard v1.0",
+        "close_menu": "Close admin menu",
+        "groups": {
+            "overview": "Overzicht",
+            "bookings": "Boekingen",
+            "content": "Content Management",
+            "general": "Algemeen"
+        },
+        "items": {
+            "dashboard": "Dashboard",
+            "bookings": "Boekingen",
+            "trips": "Reizen",
+            "all_trips": "Alle Reizen",
+            "new_trip": "Nieuw Reis",
+            "countries": "Landen",
+            "all_countries": "Alle Landen",
+            "new_country": "Nieuw Land",
+            "newsletter": "Nieuwsbrief",
+            "subscribers": "Abonnees",
+            "campaigns": "Campagnes",
+            "home": "Home",
+            "logout": "Uitloggen"
+        }
+    },
+    "about": {
+        "page_title": "Over ons",
+        "image_alt": "Historische (trein)reizen in Europa",
+        "intro_paragraph": "Elke reis vertelt een verhaal. Het verhaal van plekken waar geschiedenis tot leven komt — van mensen, culturen en sporen uit het verleden die nog altijd voelbaar zijn.",
+        "coming_soon": "Binnenkort gaan we van start. <strong class=\"font-semibold\">Blijf dichtbij, reis verder.</strong> Laat je meenemen op een reis met betekenis — <strong class=\"font-semibold\">een reis met een verhaal.</strong>",
+        "philosophy": "Wij geloven dat reizen meer mag zijn dan alleen verplaatsen. Het mag raken, inspireren en verbinden. Daarom creëren we <strong class=\"font-semibold\">historische treinreizen door Europa</strong>, duurzaam en bewust, met oog voor mens, natuur en omgeving."
+    },
+    "home": {
+        "our_trips_heading": "Onze reizen",
+        "no_trips": {
+            "message_start": "Omdat we hard aan het werk zijn om onze eerste reizen op te zetten, kunt u momenteel nog geen reizen boeken. Kijk op onze",
+            "blog_link": "blog",
+            "message_middle": "voor informatie over recente activiteiten of bekijk de",
+            "about_link": "over ons",
+            "message_middle2": "pagina om meer te weten te komen over Omdat we reizen. U kunt ook contact opnemen via ons",
+            "contact_link": "contactformulier"
+        }
+    },
+    "trip_show": {
+        "hero": {
+            "from_price": "Vanaf €{price},-",
+            "days": "{duration} dagen",
+            "sustainable_travel": "Duurzaam reizen"
+        },
+        "about_trip": "Over deze reis",
+        "highlights": {
+            "romantic_train": "Romantische treinrit door de Alpen met adembenemende uitzichten",
+            "historic_castles": "Bezoek aan historische kastelen en UNESCO werelderfgoed locaties",
+            "culinary": "Lokale culinaire ervaringen en wijnproeverijen",
+            "small_groups": "Kleinschalige groepen voor een persoonlijke ervaring",
+            "sustainable": "Duurzaam reizen zonder vliegtuig"
+        },
+        "tabs": {
+            "itinerary": "Dag tot dag",
+            "inclusive": "Inclusief & Exclusief",
+            "practical": "Praktische info",
+            "extra": "Extra info"
+        },
+        "tab_content": {
+            "itinerary_empty": "Gedetailleerd reisprogramma wordt binnenkort toegevoegd",
+            "inclusive_placeholder": "Inbegrepen en niet inbegrepen informatie komt hier.",
+            "practical_placeholder": "Praktische informatie over de reis komt hier.",
+            "extra_placeholder": "Extra informatie over deze reis komt hier."
+        },
+        "sidebar": {
+            "trip_overview": "Reis overzicht",
+            "from": "Vanaf:",
+            "per_person": "p.p.",
+            "duration": "Duur:",
+            "days_label": "dagen",
+            "transport": "Vervoer:",
+            "train": "Trein",
+            "book_this_trip": "Boek deze reis",
+            "book_now": "Boek nu",
+            "contact_info": "Of neem contact op voor meer informatie",
+            "why_choose_us": "Waarom kiezen voor ons?",
+            "sustainable_travel": "Duurzaam reizen",
+            "small_personal": "Kleinschalig & persoonlijk",
+            "carefree_travel": "Zorgeloos op reis"
+        }
+    },
+    "date_picker": {
+        "placeholder": "Kies een datum"
+    },
+    "person_picker": {
+        "adults": "Volwassene | Volwassenen",
+        "children": "Geen Kinderen | Kind | Kinderen",
+        "upto_12": "tot 12 jaar"
+    },
+    "newsletter_subscription": {
+        "confirmed": {
+            "title": "Je bent ingeschreven!",
+            "message": "Bedankt voor het bevestigen van je aanmelding. Je ontvangt vanaf nu onze nieuwsbrief met de laatste updates, tips en exclusieve content.",
+            "box_title": "Wat kun je verwachten?",
+            "updates": "Regelmatige updates over ons nieuwste reisaanbod",
+            "exclusive_content": "Exclusieve content en verhalen",
+            "unsubscribe_anytime": "Je kunt je altijd weer uitschrijven"
+        },
+        "unsubscribed": {
+            "title": "Je bent uitgeschreven.",
+            "message": "Je hebt je succesvol afgemeld voor onze nieuwsbrief. Je ontvangt geen verdere e-mails meer, maar je kunt altijd opnieuw inschrijven als je op de hoogte wilt blijven van ons nieuwste reisaanbod.",
+            "box_title": "Wat nu?",
+            "no_more_emails": "Je ontvangt geen nieuwsbrieven meer van ons",
+            "resubscribe_anytime": "Je kunt je altijd opnieuw inschrijven op een later moment",
+            "contact_us": "Voor vragen kun je contact met ons opnemen"
+        }
+    },
+    "booking_received": {
+        "header": {
+            "title": "Boeking ontvangen!",
+            "message": "Bedankt voor uw boeking. We hebben uw reservering ontvangen en verwerkt. U ontvangt binnen enkele ogenblikken een bevestigingsmail op"
+        },
+        "trip_details": {
+            "departure_date": "Vertrekdatum",
+            "duration": "Duur",
+            "days": "{duration} dagen",
+            "transport": "Vervoer",
+            "train_trip": "Treinreis",
+            "travelers": "Reizigers",
+            "person_singular": "persoon",
+            "person_plural": "personen"
+        },
+        "travelers_card": {
+            "title": "Reizigers",
+            "main_booker": "Hoofdboeker"
+        },
+        "booking_reference": {
+            "label": "Uw boekingsnummer",
+            "save_message": "Bewaar dit nummer voor uw administratie en eventuele correspondentie."
+        },
+        "contact_details": {
+            "title": "Contactgegevens",
+            "name": "Naam",
+            "email": "E-mailadres",
+            "phone": "Telefoonnummer",
+            "address": "Adres"
+        },
+        "next_steps": {
+            "title": "Volgende stappen",
+            "confirmation_email": "U ontvangt een bevestigingsmail met alle details van uw reis",
+            "contact_soon": "We nemen binnenkort contact met u op voor de definitieve bevestiging",
+            "questions": "Heeft u vragen? Neem gerust contact met ons op"
+        },
+        "back_to_home": "Terug naar homepagina"
+    },
+    "auth": {
+        "login": {
+            "title": "Inloggen",
+            "email_label": "Email",
+            "email_placeholder": "Vul uw email in",
+            "password_label": "Wachtwoord",
+            "password_placeholder": "Vul uw wachtwoord in",
+            "submit_button": "Inloggen"
+        }
+    },
+    "admin": {
+        "dashboard": {
+            "header": {
+                "title": "Dashboard",
+                "welcome": "Welkom terug! Hier is een overzicht van je reisorganisatie."
+            },
+            "stats": {
+                "new": {
+                    "name": "Nieuw",
+                    "description": "Alle nieuw binengekomen boekingen"
+                },
+                "upcoming_month": {
+                    "name": "Komende vertrekken",
+                    "description": "Vertrek volgende maand"
+                },
+                "upcoming": {
+                    "name": "Toekomstige Reizen",
+                    "description": "Aankomende vertrekken"
+                },
+                "total": {
+                    "name": "Totaal Boekingen",
+                    "description": "Alle boekingen"
+                }
+            },
+            "quick_actions": {
+                "title": "Snelle Acties",
+                "view_bookings": "Bekijk alle boekingen",
+                "manage_trips": "Beheer reizen",
+                "manage_countries": "Beheer landen"
+            },
+            "system_status": {
+                "title": "Systeemstatus",
+                "status_labels": {
+                    "healthy": "Actief",
+                    "warning": "Waarschuwing",
+                    "error": "Offline",
+                    "unknown": "Onbekend"
+                },
+                "services": {
+                    "database": "Database verbinding",
+                    "email": "Email service",
+                    "queue": "Queue worker"
+                },
+                "details": {
+                    "response": "Response: {time}ms",
+                    "provider": "Provider: {provider}",
+                    "jobs_in_queue": "{count} jobs in wachtrij"
+                },
+                "last_checked": "Laatste check: {time}",
+                "loading": "Systeem status wordt geladen..."
+            }
+        },
+        "trips": {
+            "actions": {
+                "view": "Bekijk deze reis",
+                "edit": "Bewerk deze reis",
+                "itinerary": "Bekijk reisplan van deze reis",
+                "delete": "Verwijder deze reis!",
+                "delete_confirm": "Weet je zeker dat je deze reis wilt verwijderen?"
+            },
+            "index": {
+                "title": "Reizen",
+                "create_tooltip": "Maak een reis aan",
+                "table_headers": {
+                    "id": "#",
+                    "image": "Afbeelding",
+                    "product": "Product",
+                    "countries": "Land(en)",
+                    "price": "Prijs",
+                    "days": "Dagen",
+                    "actions": "Acties"
+                },
+                "no_trips": "Je hebt nog geen reizen aangemaakt."
+            },
+            "show": {
+                "edit_tooltip": "Bewerk reistrip",
+                "itinerary_tooltip": "Bekijk reisplan van deze reis",
+                "tabs": {
+                    "details": "Reis Details",
+                    "meta": "Meta data"
+                },
+                "details": {
+                    "name": "Naam",
+                    "slug": "Slug",
+                    "description": "Beschrijving"
+                },
+                "meta": {
+                    "title": "Meta Title",
+                    "description": "Meta Description",
+                    "og_image": "Open Graph Afbeelding",
+                    "og_url": "Effectieve OG URL:"
+                },
+                "media": {
+                    "title": "Afbeeldingen",
+                    "subtitle": "Reis media",
+                    "hero": "Hero Afbeelding",
+                    "gallery": "Galerij Afbeeldingen",
+                    "alt": "Reis image {index}"
+                },
+                "settings": {
+                    "title": "Instellingen",
+                    "subtitle": "Zichtbaarheid",
+                    "published_date": "Publicatiedatum",
+                    "featured": "Uitgelicht",
+                    "yes": "Ja",
+                    "no": "Nee"
+                },
+                "pricing": {
+                    "title": "Prijs & Duur",
+                    "subtitle": "Kosten en reisduur",
+                    "price_per_person": "Prijs per persoon",
+                    "duration": "Duur",
+                    "days": "{duration} dagen"
+                },
+                "countries": {
+                    "title": "Gekoppelde Landen",
+                    "subtitle": "Bestemmingen"
+                }
+            }
+        },
+        "booking": {
+            "actions": {
+                "show": "Bekijk deze boeking",
+                "edit": "Bewerk deze boeking",
+                "delete": "Verwijder boeking",
+                "delete_confirm": "Weet je zeker dat je deze boeking wilt verwijderen?"
+            },
+            "submit": {
+                "edit": "Wijzigingen opslaan"
+            },
+            "index": {
+                "table_headers": {
+                    "reference": "Referentie",
+                    "trip": "Reis",
+                    "departure_date": "Vertrekdatum",
+                    "status": "Status",
+                    "payment": "Betaling",
+                    "actions": "Acties"
+                },
+                "no_bookings": "Er zijn nog geen boekingen."
+            },
+            "edit": {
+                "booking": "Boeking {reference} bewerken",
+                "edit_contact": "Beheer contactpersoon",
+                "travelers": "Reisgezelschap",
+                "edit_travelers": "Beheer reizigers",
+                "edit_booking_status": "Beheer boekingsstatus",
+                "booking_status_placeholder": "Selecteer een boekingstatus",
+                "booking_status_label": "Boekingstatus",
+                "payment_status_placeholder": "Selecteer een betaalstatus",
+                "payment_status_label": "Betaalstatus"
+            },
+            "show": {
+                "details": "Boekingsgegevens",
+                "info": "Informatie over de boeking",
+                "reference": "Boekingsreferentie",
+                "trip": "Reis",
+                "departure_date": "Vertrekdatum",
+                "contact": "Contactgegevens",
+                "contact_info": "Contactpersoon informatie",
+                "contact_name": "Naam",
+                "contact_email": "E-mail",
+                "contact_telephone": "Telefoon",
+                "contact_address": "Adres",
+                "travelers": "Reisgezelschap",
+                "travelers_subheader": "Overzicht van alle reizigers",
+                "booking_status": "Boekingstatus",
+                "payment_status": "Betaalstatus"
+            }
+        },
+        "countries": {
+            "title": "Landen",
+            "actions": {
+                "delete": "Verwijder land",
+                "delete_confirm": "Weet je zeker dat je dit land wilt verwijderen?"
+            },
+            "submit": {
+                "create": "Land aanmaken"
+            },
+            "index": {
+                "title": "Landen overzicht",
+                "table_headers": {
+                    "countries": "Landen",
+                    "actions": "Acties"
+                },
+                "no_countries": "Er zijn nog geen landen aangemaakt."
+            },
+            "create": {
+                "title": "Nieuw Land",
+                "subtitle": "Bestemmingen",
+                "heading": "Land Informatie",
+                "subheading": "Voer de naam van het land in",
+                "fields": {
+                    "name": {
+                        "label": "Land naam",
+                        "placeholder": "Bijv. Frankrijk"
+                    }
+                }
+            }
+        },
+        "newsletter": {
+            "campaigns": {
+                "actions": {
+                    "edit":"Bewerk nieuwsbrief campagne",
+                    "send": "Verstuur deze nieuwsbrief campagne",
+                    "send_confirm": "Je staat op het punt deze campagne naar al je abbonees te versturen. Weet je zeker dat je deze nieuwsbrief campagne wilt versturen?",
+                    "delete": "Verwijder deze nieuwsbrief campagne",
+                    "delete_confirm": "Weet je zeker dat je deze nieuwsbrief campagne wilt verwijderen?"
+                },
+                "index": {
+                    "title": "Nieuwsbrief Campagnes",
+                    "table_headers": {
+                        "subject": "Onderwerp",
+                        "status": "Status",
+                        "planned_for": "Gepland voor",
+                        "sent_at": "Verzonden op",
+                        "sent_count": "Aantal verzonden",
+                        "actions": "Acties"
+                    },
+                    "no_campaigns": "Je hebt nog nieuwsbrief campagnes aangemaakt."
+                }
+            },
+            "subscribers": {
+                "actions": {
+                    "delete": "Verwijder deze nieuwsbrief abonnee",
+                    "delete_confirm": "Weet je zeker dat je deze nieuwsbrief abonnee wilt verwijderen?",
+                    "resend": "Bevestigingsmail opnieuw versturen",
+                    "resend_confirm": "Deze nieuwsbrief abonnee een nieuwe bevestigingsmail sturen?"
+                },
+                "index": {
+                    "title": "Nieuwsbrief Abonnees",
+                    "table_headers": {
+                        "name": "Naam",
+                        "email": "E-mail",
+                        "status": "Status",
+                        "actions": "Acties"
+                    },
+                    "no_subscribers": "Er is nog niemand geabboneerd op jouw nieuwsbrief."
+                }
+            }
+        }
+    }
+}

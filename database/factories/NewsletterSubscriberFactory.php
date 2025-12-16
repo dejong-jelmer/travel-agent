@@ -17,7 +17,7 @@ class NewsletterSubscriberFactory extends Factory
     public function definition(): array
     {
         return [
-            'email' => fake()->email(),
+            'email' => fake()->unique()->email(),
             'name' => fake()->name(),
             'token' => bin2hex(random_bytes(32)),
             'confirmation_token' => bin2hex(random_bytes(32)),

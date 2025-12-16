@@ -28,7 +28,7 @@ class BookingController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Booking/Index', [
-            'bookings' => Booking::with(['trip', 'adults', 'children', 'mainBooker'])->paginate(),
+            'bookings' => Booking::with(['trip'])->paginate(),
             'title' => $this->pageTitle('booking.title_index'),
         ]);
     }

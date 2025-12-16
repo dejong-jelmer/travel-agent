@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Locale;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Country>
@@ -17,7 +18,14 @@ class CountryFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake(locale_get_default())->unique()->country(),
+            'name' => fake()->unique()->country(),
         ];
+    }
+
+    public function fromLocale(string $locale = 'nl_NL'): static
+    {
+        return $this->state(fn () => [
+            'name' => Locale::getDisplayRegion($locale, app()->getLocale()),
+        ]);
     }
 }

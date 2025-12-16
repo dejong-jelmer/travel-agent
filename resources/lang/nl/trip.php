@@ -11,4 +11,10 @@ return [
     'created' => 'Reis is aangemaakt',
     'updated' => 'Reis is aangepast',
     'deleted' => 'Reis is verwijderd',
+
+    // Traveler
+    'traveler' => [
+        'adult' => 'Volwassene',
+        'child' => 'Kind',
+    ],
 ];

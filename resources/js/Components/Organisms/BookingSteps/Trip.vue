@@ -1,7 +1,10 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
 import { toRef, computed } from 'vue'
 import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+
 const { formattedDate } = useDateFormatter();
+const { t } = useI18n();
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -18,9 +21,9 @@ const participantSummary = computed(() => {
         adults,
         children,
         adultLabel: children > 0
-            ? (adults === 1 ? 'volwassene' : 'volwassenen')
-            : (adults === 1 ? 'persoon' : 'personen'),
-        childLabel: children === 1 ? 'kind' : 'kinderen'
+            ? (adults === 1 ? t('booking_steps.trip.adult_singular') : t('booking_steps.trip.adult_plural'))
+            : (adults === 1 ? t('booking_steps.trip.person_singular') : t('booking_steps.trip.person_plural')),
+        childLabel: children === 1 ? t('booking_steps.trip.child_singular') : t('booking_steps.trip.child_plural')
     };
 });
 
@@ -30,20 +33,13 @@ const participantSummary = computed(() => {
     <div key="trip" class="space-y-4">
         <div class="space-y-2">
             <h2 class="text-xl font-bold text-brand-primary">
-                Reis boeken - {{ booking.trip?.name }}
+                {{ $t('booking_steps.trip.heading', { tripName: booking.trip?.name }) }}
             </h2>
-            <p class="text-brand-primary leading-relaxed">
-                Wat leuk dat je de reis <strong class="text-brand-primary">{{ booking.trip?.name }}</strong>
-                wilt gaan boeken.
-                We gaan een aantal stappen doorlopen om te zorgen dat de boeking goed doorkomt.
+            <p class="text-brand-primary leading-relaxed" v-html="$t('booking_steps.trip.intro', { tripName: booking.trip?.name })">
             </p>
             <div class="bg-accent-sand/20 border border-accent-sand rounded-lg p-4">
                 <p class="text-sm text-brand-primary">
-                    <strong>Let op:</strong> Dit is een <strong>boekingsaanvraag</strong>. We kijken eerst
-                    of we aan
-                    alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen
-                    we binnen
-                    <strong>twee werkdagen</strong> contact met u op om de boeking te bevestigen.
+                    <strong>{{ $t('booking_steps.trip.notice_heading') }}</strong> <span v-html="$t('booking_steps.trip.notice_text')"></span>
                 </p>
             </div>
         </div>
@@ -51,19 +47,19 @@ const participantSummary = computed(() => {
         <hr class="border-accent-sage/20">
 
         <div class="grid grid-cols-3 gap-2 items-center">
-            <p>Reis</p>
+            <p>{{ $t('booking_steps.trip.trip_label') }}</p>
             <p class="text-center"><strong>{{ booking.trip.name }}</strong></p>
-            <p class="text-right">Vanaf <strong>€ {{ booking.trip.price }},-</strong> p.p.</p>
+            <p class="text-right">{{ $t('booking_steps.trip.price_from') }} <strong>€ {{ booking.trip.price }},-</strong> {{ $t('booking_steps.trip.per_person') }}</p>
 
-            <p>Kies een <strong>datum</strong> voor vertrek</p>
+            <p v-html="$t('booking_steps.trip.choose_date')"></p>
             <DatePicker v-model="departure_date" :min-date="new Date()" :feedback="booking.errors['departure_date']"
                 @mouseup="booking.clearErrors('departure_date')" />
-            <p class="text-right">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</p>
+            <p class="text-right">{{ formattedDate(booking.departure_date) || $t('booking_steps.trip.no_date_chosen') }}</p>
 
-            <p>Kies het <strong>aantal</strong> reizigers</p>
+            <p v-html="$t('booking_steps.trip.choose_number')"></p>
             <PersonPicker v-model="participants" />
             <div class="text-right">
-                <p>Deelnemers:</p>
+                <p>{{ $t('booking_steps.trip.participants_label') }}</p>
                 <div class="min-h-[3em]">
                     <div>
                         <p>{{ participantSummary.adults }} {{ participantSummary.adultLabel }}</p>

@@ -30,7 +30,7 @@ function submit() {
         axios
             .post(route("contact"), form)
             .then((response) => {
-                toast.success("Bedankt! Uw bericht is succesvol verstuurd.");
+                toast.success($t('forms.contact.success'));
                 resetObject(form);
             })
             .catch((error) => {
@@ -48,15 +48,15 @@ function submit() {
 
         <!-- Header sectie -->
         <div class="text-center">
-            <SectionHeader>Contact</SectionHeader>
+            <SectionHeader>{{ $t('forms.contact.heading') }}</SectionHeader>
             <div
                 class="max-w-2xl mx-auto bg-white backdrop-blur-sm rounded-xl p-6 tablet:p-8 border border-brand-primary/20 shadow-sm">
                 <p class="text-left text-base tablet:text-lg text-brand-primary leading-relaxed">
-                    Als je vragen hebt of meer wilt weten neem contact op via één van de onderstaaden methoden.
+                    {{ $t('forms.contact.intro') }}
                     <br />
                     <span class="inline-flex items-center gap-2 mt-4">
                     <Phone class="w-5 h-5 text-accent-primary" />
-                        <span class="hidden tablet:inline-flex">Bel</span>
+                        <span class="hidden tablet:inline-flex">{{ $t('forms.contact.call') }}</span>
                         <span class="font-bold text-brand-primary">
                             <a class="tel-field default-link"
                                 href="#">+3112345678</a>
@@ -65,7 +65,7 @@ function submit() {
                     <br />
                     <span class="inline-flex items-center gap-2 mt-2">
                         <AtSign class="w-5 h-5 text-accent-primary" />
-                        <span class="hidden tablet:inline-flex">Stuur een mail naar</span>
+                        <span class="hidden tablet:inline-flex">{{ $t('forms.contact.email') }}</span>
                         <span class="font-bold text-brand-secondary">
                             <a class="email-field default-link"
                                 href="#" v-html="contact.mail.display"></a>
@@ -74,7 +74,7 @@ function submit() {
                     <br />
                     <span class="inline-flex items-center gap-2 mt-4 text-brand-primary">
                         <Pencil class="w-5 h-5 text-accent-primary" />
-                        Of&nbsp;gebruik&nbsp;het contactformulier hieronder.
+                        {{ $t('forms.contact.or_use_form') }}
                     </span>
                 </p>
             </div>
@@ -89,17 +89,17 @@ function submit() {
                         <!-- Links: persoonlijke gegevens -->
                         <div class="space-y-6">
                             <div class="border-l-4 border-accent-primary pl-4 mb-6">
-                                <h3 class="text-lg font-semibold text-brand-primary">Uw gegevens</h3>
-                                <p class="text-sm text-brand-primary/60">Hoe kunnen we u bereiken?</p>
+                                <h3 class="text-lg font-semibold text-brand-primary">{{ $t('forms.contact.your_details_heading') }}</h3>
+                                <p class="text-sm text-brand-primary/60">{{ $t('forms.contact.your_details_subheading') }}</p>
                             </div>
 
-                            <Input type="text" name="name" label="Naam" :required="false" :show-label="false"
+                            <Input type="text" name="name" :label="$t('forms.contact.name_label')" :required="false" :show-label="false"
                                 v-model="form.name" :feedback="errors?.name"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
-                            <Input type="email" name="email" label="Uw Emailadres" :required="false" :show-label="false"
+                            <Input type="email" name="email" :label="$t('forms.contact.email_label')" :required="false" :show-label="false"
                                 v-model="form.email" :feedback="errors?.email"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
-                            <Input type="phone" name="phone" label="Uw telefoonnummer (optioneel)"
+                            <Input type="phone" name="phone" :label="$t('forms.contact.phone_label')"
                                 :required="false" :show-label="false" v-model="form.phone"
                                 :feedback="errors?.phone"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
@@ -108,11 +108,11 @@ function submit() {
                         <!-- Rechts: bericht -->
                         <div class="space-y-6">
                             <div class="border-l-4 border-accent-primary pl-4 mb-6">
-                                <h3 class="text-lg font-semibold text-brand-primary">Uw bericht</h3>
-                                <p class="text-sm text-brand-primary/60">Waarmee kunnen we u helpen?</p>
+                                <h3 class="text-lg font-semibold text-brand-primary">{{ $t('forms.contact.your_message_heading') }}</h3>
+                                <p class="text-sm text-brand-primary/60">{{ $t('forms.contact.your_message_subheading') }}</p>
                             </div>
 
-                            <TextArea name="text" label="Bericht" :required="false" :show-label="false" v-model="form.text"
+                            <TextArea name="text" :label="$t('forms.contact.message_label')" :required="false" :show-label="false" v-model="form.text"
                                 :feedback="errors?.text"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02] h-auto" />
                         </div>
@@ -124,7 +124,7 @@ function submit() {
                 <!-- Submit button -->
                 <div class="flex justify-center pt-6">
                     <Button>
-                        Verstuur bericht
+                        {{ $t('forms.contact.submit_button') }}
                     </Button>
                 </div>
             </form>

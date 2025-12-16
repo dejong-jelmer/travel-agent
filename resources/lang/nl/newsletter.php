@@ -7,6 +7,14 @@ return [
 
         // Flash messages
         'deleted' => 'De nieuwsbrief abonnee is verwijderd.',
+
+        // Status
+        'status' => [
+            'active' => 'Actief',
+            'pending' => 'In afwachting',
+            'expired' => 'Verlopen',
+            'unsubscribed' => 'Uitgeschreven',
+        ],
     ],
     'subscription' => [
         // Page titles
@@ -37,5 +45,14 @@ return [
 
         // Exceptions
         'campaign_already_sent' => 'Campagne met id :campaign_id is al eerder verstuurd of in de wachtrij gezet.',
+
+        // Status
+        'status' => [
+            'draft' => 'Ontwerp',
+            'scheduled' => 'Gepland',
+            'queued' => 'In de wachtrij',
+            'sent' => 'Verzonden',
+            'failed' => 'Mislukt',
+        ],
     ],
 ];

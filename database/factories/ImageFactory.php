@@ -74,4 +74,11 @@ class ImageFactory extends Factory
             'size' => fake()->randomNumber(5, true),
         ];
     }
+
+    public function primary(): static
+    {
+        return $this->state(fn () => [
+            'is_primary' => true,
+        ]);
+    }
 }

@@ -42,20 +42,20 @@ defineProps({ trip: Object });
                         <div class="inline-flex gap-x-2 items-center">
                             <Clock class="h-5 w-5 text-accent-primary"></Clock>
                             <p class="text-sm text-brand-primary">
-                                {{ trip.duration }} dagen
+                                {{ trip.duration }} {{ $t('trip_card.days') }}
                             </p>
                         </div>
                         <div class="inline-flex gap-x-2 items-center">
                             <Route class="h-5 w-5 text-accent-primary"></Route>
-                            <p class="text-sm text-brand-primary">Duurzaam reizen</p>
+                            <p class="text-sm text-brand-primary">{{ $t('trip_card.sustainable_travel') }}</p>
                         </div>
                     </div>
 
                     <!-- Rechts: CTA button -->
                     <div class="flex justify-end">
                         <Link :href="route('trips.show', trip)">
-                        <Button>
-                            Bekijk&nbsp;reis
+                        <Button class="whitespace-nowrap">
+                            {{ $t('trip_card.view_trip') }}
                         </Button>
                         </Link>
                     </div>

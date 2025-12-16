@@ -2,11 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Enums\ImageRelation;
 use App\Models\Booking;
-use App\Models\Country;
-use App\Models\Image;
-use App\Models\Itinerary;
 use App\Models\NewsletterCampaign;
 use App\Models\NewsletterSubscriber;
 use App\Models\Trip;
@@ -33,30 +29,23 @@ class DatabaseSeeder extends Seeder
         }
 
         // Newsletters
-        NewsletterSubscriber::factory(100)->create();
-        NewsletterCampaign::factory(10)->has(Image::factory(['is_primary' => true]), ImageRelation::HeroImage->value)->create();
+        NewsletterSubscriber::factory(1500)->create();
+        NewsletterCampaign::factory(150)->withHeroImage()->create();
 
-        // Destinations
-        $countries = Country::factory(10)->create();
-
+        // Admin
         User::factory()->admin()->create();
 
-        Trip::factory(25)
-            ->has(Booking::factory(), 'bookings')
-            ->has(Image::factory()->count(3), ImageRelation::Images->value)
-            ->create()->each(function ($trip) use ($countries) {
-                $trip->images()->inRandomOrder()->first()->update(['is_primary' => true]);
-                $trip->countries()->attach(
-                    $countries->random(rand(1, 3))->modelKeys()
-                );
-                for ($i = 1; $i <= $trip->duration; $i++) {
-                    Itinerary::factory()
-                        ->has(Image::factory(), ImageRelation::Image->value)
-                        ->create([
-                            'trip_id' => $trip->id,
-                            'order' => $i,
-                        ]);
-                }
-            });
+        // Trips
+        $trips = Trip::factory(50)
+            ->withHeroImage()
+            ->withImages(10)
+            ->withCountry()
+            ->withAnItinerary()
+            ->create();
+
+        Booking::factory(125)
+            ->recycle($trips)
+            ->withTravelers()
+            ->create();
     }
 }

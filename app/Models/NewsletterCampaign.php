@@ -50,6 +50,7 @@ class NewsletterCampaign extends Model
     protected $appends = [
         'scheduled_at_formatted',
         'sent_at_formatted',
+        'status_label',
     ];
 
     protected static function booted(): void
@@ -87,5 +88,15 @@ class NewsletterCampaign extends Model
         return $this->BelongsToMany(Trip::class)
             ->withTimestamps()
             ->orderBy('order');
+    }
+
+    /**
+     * Get the status label.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function statusLabel(): Attribute
+    {
+        return Attribute::get(fn () => $this->status->label());
     }
 }

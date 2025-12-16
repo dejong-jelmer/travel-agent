@@ -2,14 +2,23 @@
 
 namespace App\Enums;
 
+use App\Enums\Traits\HasTranslatableLabel;
 use App\Enums\Traits\Selectable;
 
 enum Transport: string
 {
-    use Selectable;
+    use HasTranslatableLabel,
+        Selectable;
+
     case Train = 'train';
-    case Boat = 'boat';
+    case Ferry = 'ferry';
     case Bus = 'bus';
+    case Taxi = 'taxi';
     case Transfer = 'transfer';
     case Airplane = 'airplane';
+
+    protected function getLabelKey(): string
+    {
+        return 'itinerary.transport';
+    }
 }

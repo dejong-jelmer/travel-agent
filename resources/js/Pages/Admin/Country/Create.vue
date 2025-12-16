@@ -19,10 +19,10 @@ function submit() {
                     <div class="flex items-center justify-between">
                         <div>
                             <h1 class="text-3xl font-bold text-gray-700">
-                                Nieuw Land
+                                {{ $t('admin.countries.create.title') }}
                             </h1>
                             <p class="mt-1 text-sm text-gray-700/50">
-                                Voeg een nieuw land toe aan de database
+                                {{ $t('admin.countries.create.subtitle') }}
                             </p>
                         </div>
                     </div>
@@ -32,15 +32,16 @@ function submit() {
                 <div class="laptop:col-span-2">
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
-                            <h2 class="text-lg font-semibold text-gray-700">Land Informatie</h2>
-                            <p class="mt-1 text-sm text-gray-700/30">Voer de naam van het land in</p>
+                            <h2 class="text-lg font-semibold text-gray-700">Land Informatie {{ $t('admin.countries.create.heading') }}</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">Voer de naam van het land in {{ $t('admin.countries.create.subheading') }}</p>
                         </div>
                         <div class="p-6">
                             <Input
                                 @input="form.clearErrors('name')"
                                 type="text"
                                 name="name"
-                                label="Land naam"
+                                :label="$t('admin.countries.create.fields.name.label')"
+                                :placeholder="$t('admin.countries.create.fields.name.placeholder')"
                                 :required="true"
                                 v-model="form.name"
                                 :feedback="form.errors.name"
@@ -51,7 +52,7 @@ function submit() {
                 </div>
 
                 <!-- Footer Actions -->
-                <FormFooter :form="form" label="Land Opslaan" @submit="submit" />
+                <FormFooter :form="form" :label="$t('admin.countries.submit.create')" @submit="submit" />
             </div>
         </form>
     </Admin>

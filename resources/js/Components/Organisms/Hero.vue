@@ -1,14 +1,15 @@
 <script setup>
+import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 import heroImage from '@/../images/hero-image.jpg';
 
-const title = "Omdat we";
-const subtitles = [
-    "nooit uitgeleerd zijn",
-    "altijd nieuwsgierig blijven",
-    "ook oog hebben voor de toekomst",
-    "verbonden zijn",
-    "willen blijven ontdekken",
-];
+const { tm } = useI18n();
+
+const subtitles = computed(() => {
+    const subs = tm('hero.subtitles');
+    return Array.isArray(subs) ? subs : [];
+});
+
 </script>
 
 <template>
@@ -17,7 +18,7 @@ const subtitles = [
             <div class="absolute top-[35%] tablet:top-[45%]">
                 <h1
                     class="text-4xl tablet:text-6xl font-normal leading-10 tablet:leading-[72px] font-elite select-none">
-                    {{ title }}
+                    {{ $t('hero.title') }}
                     <br>
                     <TypewriterText :texts="subtitles" />
                 </h1>

@@ -31,7 +31,7 @@ trait ValidatesMainBooker
         if ($birthdate->age < 18) {
             $validator->errors()->add(
                 "travelers.adults.$mainBookerIndex.birthdate",
-                __('custom_validation.main_booker.birthdate.before')
+                __('validation.custom.main_booker.too_young')
             );
         }
     }

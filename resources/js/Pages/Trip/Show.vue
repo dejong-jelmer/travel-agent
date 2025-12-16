@@ -1,12 +1,16 @@
 <script setup>
-import { ref, toRef, watch } from 'vue'
+import { ref, toRef, watch, computed } from 'vue'
 import { Clock, TrainFront, MapPinned, ChevronRight } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
+import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
     trip: Object,
     required: true
 })
+
+const { t } = useI18n()
+
 // Tabs
 const activeTab = ref('itinerary')
 // Modal
@@ -31,12 +35,12 @@ watch(
     }
 )
 
-const tabs = [
-    { id: 'itinerary', label: 'Dag tot dag' },
-    { id: 'inclusive', label: 'Inclusief & Exclusief' },
-    { id: 'practical', label: 'Praktische info' },
-    { id: 'extra', label: 'Extra info' }
-]
+const tabs = computed(() => [
+    { id: 'itinerary', label: t('trip_show.tabs.itinerary') },
+    { id: 'inclusive', label: t('trip_show.tabs.inclusive') },
+    { id: 'practical', label: t('trip_show.tabs.practical') },
+    { id: 'extra', label: t('trip_show.tabs.extra') }
+])
 
 </script>
 
@@ -68,21 +72,21 @@ const tabs = [
                                     <!-- Price -->
                                     <div
                                         class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full font-bold">
-                                        <span class="text-lg">Vanaf €{{ trip.price }},-</span>
+                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price }) }}</span>
                                     </div>
 
                                     <!-- Duration -->
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                                         <Clock class="w-5 h-5" />
-                                        <span class="font-medium">{{ trip.duration }} dagen</span>
+                                        <span class="font-medium">{{ t('trip_show.hero.days', { duration: trip.duration }) }}</span>
                                     </div>
 
                                     <!-- Transport -->
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                                         <TrainFront class="w-5 h-5" />
-                                        <span class="font-medium">Duurzaam reizen</span>
+                                        <span class="font-medium">{{ t('trip_show.hero.sustainable_travel') }}</span>
                                     </div>
 
                                     <!-- Countries -->
@@ -109,7 +113,7 @@ const tabs = [
                     <div class="bg-white rounded-2xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
                         <div class="mb-8">
                             <div class="w-full text-center">
-                                <SectionHeader>Over deze reis</SectionHeader>
+                                <SectionHeader>{{ t('trip_show.about_trip') }}</SectionHeader>
                             </div>
                             <div class="p-6">
                                 <Slider :items="trip.images">
@@ -131,29 +135,23 @@ const tabs = [
                             <ul class="space-y-4">
                                 <li class="flex items-start gap-3">
                                     <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">Romantische treinrit door de Alpen met
-                                        adembenemende
-                                        uitzichten</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.highlights.romantic_train') }}</span>
                                 </li>
                                 <li class="flex items-start gap-3">
                                     <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">Bezoek aan historische kastelen en UNESCO
-                                        werelderfgoed
-                                        locaties</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.highlights.historic_castles') }}</span>
                                 </li>
                                 <li class="flex items-start gap-3">
                                     <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">Lokale culinaire ervaringen en
-                                        wijnproeverijen</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.highlights.culinary') }}</span>
                                 </li>
                                 <li class="flex items-start gap-3">
                                     <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">Kleinschalige groepen voor een persoonlijke
-                                        ervaring</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.highlights.small_groups') }}</span>
                                 </li>
                                 <li class="flex items-start gap-3">
                                     <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">Duurzaam reizen zonder vliegtuig</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.highlights.sustainable') }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -185,20 +183,20 @@ const tabs = [
                                         </template>
                                     </div>
                                     <p v-else class="text-brand-light">
-                                        Gedetailleerd reisprogramma wordt binnenkort toegevoegd
+                                        {{ t('trip_show.tab_content.itinerary_empty') }}
                                     </p>
                                 </div>
                             </div>
                             <div v-else-if="activeTab === 'inclusive'" class="space-y-6">
-                                <p>Inbegrepen en niet inbegrepen informatie komt hier.</p>
+                                <p>{{ t('trip_show.tab_content.inclusive_placeholder') }}</p>
                             </div>
 
                             <div v-else-if="activeTab === 'practical'" class="space-y-6">
-                                <p>Praktische informatie over de reis komt hier.</p>
+                                <p>{{ t('trip_show.tab_content.practical_placeholder') }}</p>
                             </div>
 
                             <div v-else-if="activeTab === 'extra'" class="space-y-6">
-                                <p>Extra informatie over deze reis komt hier.</p>
+                                <p>{{ t('trip_show.tab_content.extra_placeholder') }}</p>
                             </div>
                         </div>
                     </div>
@@ -211,7 +209,7 @@ const tabs = [
                         <div class="bg-white rounded-2xl shadow-lg border border-accent-primary/20 overflow-hidden">
                             <div class=" bg-accent-primary p-4">
                                 <h3 class="text-xl font-bold text-white">
-                                    Reis overzicht
+                                    {{ t('trip_show.sidebar.trip_overview') }}
                                 </h3>
 
                             </div>
@@ -220,38 +218,38 @@ const tabs = [
                                 <!-- Quick Facts -->
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center">
-                                        <span class="text-brand-light">Vanaf:</span>
+                                        <span class="text-brand-light">{{ t('trip_show.sidebar.from') }}</span>
                                         <span class="font-medium text-brand-primary"><strong> €{{ trip.price }},-
-                                            </strong> p.p.</span>
+                                            </strong> {{ t('trip_show.sidebar.per_person') }}</span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-brand-light">Duur:</span>
+                                        <span class="text-brand-light">{{ t('trip_show.sidebar.duration') }}</span>
                                         <span class="font-medium text-brand-primary">{{ trip.duration }}
-                                            dagen</span>
+                                            {{ t('trip_show.sidebar.days_label') }}</span>
                                     </div>
                                     <div class="flex justify-between items-center">
-                                        <span class="text-brand-light">Vervoer:</span>
+                                        <span class="text-brand-light">{{ t('trip_show.sidebar.transport') }}</span>
                                         <span class="font-medium text-brand-primary flex items-center gap-1">
                                             <TrainFront class="w-5 h-5" />
-                                            Trein
+                                            {{ t('trip_show.sidebar.train') }}
                                         </span>
                                     </div>
                                 </div>
                                 <div class="border-t border-accent-primary/20 pt-6 space-y-6">
                                     <h3 class="text-xl font-bold text-brand-primary">
-                                        Boek deze reis
+                                        {{ t('trip_show.sidebar.book_this_trip') }}
                                     </h3>
                                     <DatePicker v-model="departure_date" :min-date="new Date()" />
                                     <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
                                         :max-adults="6" :max-children="4" />
                                     <Button @click="bookingModalOpen = true"
                                         class="w-full flex justify-center items-center group">
-                                        Boek nu
+                                        {{ t('trip_show.sidebar.book_now') }}
                                         <ChevronRight
                                             class=" group-hover:translate-x-2 transition-transform duration-300" />
                                     </Button>
                                     <p class="text-sm text-brand-light text-center mt-4">
-                                        Of neem contact op voor meer informatie
+                                        {{ t('trip_show.sidebar.contact_info') }}
                                     </p>
                                     <div class="flex gap-3 mt-4">
                                         <CallButton />
@@ -263,19 +261,19 @@ const tabs = [
 
                         <!-- Trust Indicators -->
                         <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-accent-primary/20">
-                            <h4 class="font-semibold text-brand-primary mb-4">Waarom kiezen voor ons?</h4>
+                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_us') }}</h4>
                             <ul class="space-y-3 text-sm">
                                 <li class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-brand-primary">Duurzaam reizen</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.sidebar.sustainable_travel') }}</span>
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-brand-primary">Kleinschalig & persoonlijk</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.sidebar.small_personal') }}</span>
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-brand-primary">Zorgeloos op reis</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.sidebar.carefree_travel') }}</span>
                                 </li>
                             </ul>
                         </div>

@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TripController as AdminTripController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Newsletter\SubscriptionController;
 use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\DB;
@@ -22,6 +23,11 @@ Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact']);
 Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
+
+// Switch locale
+Route::post('/locale/switch', [LocaleController::class, 'switch'])
+    ->middleware('throttle:10,1')
+    ->name('locale.switch');
 
 // contact form
 Route::post('/contact', [HomeController::class, 'submitContact'])

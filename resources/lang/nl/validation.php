@@ -39,5 +39,10 @@ return [
         'travelers.children.*.birthdate.after_or_equal' => 'Voor kinderen geldt een maximum leeftijd van 12 jaar, kinderen vanaf 12 jaar en ouder tellen mee als volwassenen.',
         'travelers.children.*.birthdate.before' => 'De geboortedatum kan niet in de toekomst liggen.',
         'travelers.children.*.birthdate' => 'Ongeldige geboortedatum.',
+
+        // Main booker
+        'main_booker' => [
+            'too_young' => 'De hoofdboeker moet minimaal 18 jaar oud zijn.',
+        ],
     ],
 ];

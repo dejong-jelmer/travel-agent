@@ -18,7 +18,9 @@ import {
     UsersIcon,
     PencilSquareIcon
 } from '@heroicons/vue/24/outline'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const open = defineModel('open', { type: Boolean, default: false })
 const page = usePage()
 const adminStats = page.props.adminStats ?? {};
@@ -38,13 +40,13 @@ const collapsedItems = ref({
 })
 
 // Menu structuur met categorieën
-const menuGroups = ref([
+const menuGroups = computed(() => [
     {
         id: 'overview',
-        label: 'Overzicht',
+        label: t('admin_menu.groups.overview'),
         items: [
             {
-                label: 'Dashboard',
+                label: t('admin_menu.items.dashboard'),
                 path: new URL(route('admin.dashboard'), window.location.origin).pathname,
                 icon: ChartBarIcon,
             },
@@ -52,10 +54,10 @@ const menuGroups = ref([
     },
     {
         id: 'bookings',
-        label: 'Boekingen',
+        label: t('admin_menu.groups.bookings'),
         items: [
             {
-                label: 'Boekingen',
+                label: t('admin_menu.items.bookings'),
                 path: new URL(route('admin.bookings.index'), window.location.origin).pathname,
                 icon: CalendarDaysIcon,
                 badge: true, // Badge via adminStats
@@ -64,20 +66,20 @@ const menuGroups = ref([
     },
     {
         id: 'content',
-        label: 'Content Management',
+        label: t('admin_menu.groups.content'),
         items: [
             {
                 id: 'trips',
-                label: 'Reizen',
+                label: t('admin_menu.items.trips'),
                 icon: LayoutPanelTop,
                 children: [
                     {
-                        label: 'Alle Reizen',
+                        label: t('admin_menu.items.all_trips'),
                         path: new URL(route('admin.trips.index'), window.location.origin).pathname,
                         icon: GlobeAltIcon,
                     },
                     {
-                        label: 'Nieuw Reis',
+                        label: t('admin_menu.items.new_trip'),
                         path: new URL(route('admin.trips.create'), window.location.origin).pathname,
                         icon: PlusIcon,
                     },
@@ -85,16 +87,16 @@ const menuGroups = ref([
             },
             {
                 id: 'countries',
-                label: 'Landen',
+                label: t('admin_menu.items.countries'),
                 icon: MapPinIcon,
                 children: [
                     {
-                        label: 'Alle Landen',
+                        label: t('admin_menu.items.all_countries'),
                         path: new URL(route('admin.countries.index'), window.location.origin).pathname,
                         icon: MapPinIcon,
                     },
                     {
-                        label: 'Nieuw Land',
+                        label: t('admin_menu.items.new_country'),
                         path: new URL(route('admin.countries.create'), window.location.origin).pathname,
                         icon: PlusIcon,
                     },
@@ -102,16 +104,16 @@ const menuGroups = ref([
             },
             {
                 id: 'newsletter',
-                label: 'Nieuwsbrief',
+                label: t('admin_menu.items.newsletter'),
                 icon: NewspaperIcon,
                 children: [
                     {
-                        label: 'Abonnees',
+                        label: t('admin_menu.items.subscribers'),
                         path: new URL(route('admin.newsletter.subscribers.index'), window.location.origin).pathname,
                         icon: UsersIcon,
                     },
                     {
-                        label: 'Campagnes',
+                        label: t('admin_menu.items.campaigns'),
                         path: new URL(route('admin.newsletter.campaigns.index'), window.location.origin).pathname,
                         icon: PencilSquareIcon,
                     },
@@ -121,15 +123,15 @@ const menuGroups = ref([
     },
     {
         id: 'general',
-        label: 'Algemeen',
+        label: t('admin_menu.groups.general'),
         items: [
             {
-                label: 'Home',
+                label: t('admin_menu.items.home'),
                 path: new URL(route('home'), window.location.origin).pathname,
                 icon: HomeIcon,
             },
             {
-                label: 'Uitloggen',
+                label: t('admin_menu.items.logout'),
                 path: new URL(route('admin.logout'), window.location.origin).pathname,
                 icon: ArrowRightStartOnRectangleIcon,
             },
@@ -268,7 +270,7 @@ const stats = computed(() => adminStats)
                 <!-- Footer (desktop) -->
                 <div class="border-t border-white/10 px-6 py-4">
                     <p class="text-xs text-white/40 text-center">
-                        Admin Dashboard v1.0
+                        {{ $t('admin_menu.dashboard_version') }}
                     </p>
                 </div>
             </div>
@@ -297,7 +299,7 @@ const stats = computed(() => adminStats)
                                     <div class="absolute top-6 right-4 z-20">
                                         <button type="button"
                                             class="rounded-full bg-white/10 p-2 text-gray-400 hover:bg-white/20 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-brand-primary shadow-sm backdrop-blur-sm transition-colors"
-                                            @click="open = false" aria-label="Close admin menu">
+                                            @click="open = false" :aria-label="$t('admin_menu.close_menu')">
                                             <XMarkIcon class="h-5 w-5" aria-hidden="true" />
                                         </button>
                                     </div>
@@ -308,7 +310,7 @@ const stats = computed(() => adminStats)
                                         <!-- Header -->
                                         <div class="px-6 py-8 border-b border-white/10">
                                             <DialogTitle class="text-lg font-semibold text-white/90">
-                                                Admin Dashboard
+                                                {{ $t('admin_menu.dashboard_title') }}
                                             </DialogTitle>
                                         </div>
 
@@ -438,7 +440,7 @@ const stats = computed(() => adminStats)
                                         <!-- Footer -->
                                         <div class="border-t border-white/10 px-6 py-4">
                                             <p class="text-xs text-white/40 text-center">
-                                                Admin Dashboard v1.0
+                                                {{ $t('admin_menu.dashboard_version') }}
                                             </p>
                                         </div>
                                     </div>

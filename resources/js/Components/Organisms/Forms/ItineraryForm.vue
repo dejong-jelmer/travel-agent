@@ -1,4 +1,6 @@
 <script setup>
+import { useI18n } from 'vue-i18n';
+
 const props = defineProps({
     form: Object,
     meals: Object,
@@ -6,6 +8,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['submit']);
+const { t } = useI18n();
 </script>
 
 <template>
@@ -16,10 +19,10 @@ const emit = defineEmits(['submit']);
                 <div class="flex items-center justify-between">
                     <div>
                         <h1 class="text-3xl font-bold text-gray-700">
-                            {{ form.id ? 'Bewerk Reisplan' : 'Nieuw Reisplan' }}
+                            {{ form.id ? t('forms.itinerary.edit_heading') : t('forms.itinerary.new_heading') }}
                         </h1>
                         <p class="mt-1 text-sm text-gray-700/50">
-                            Beheer de details van de dagplanning
+                            {{ t('forms.itinerary.subheading') }}
                         </p>
                     </div>
                 </div>
@@ -30,36 +33,36 @@ const emit = defineEmits(['submit']);
                 <!-- Basic Information Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">Basis Informatie</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">Titel, locatie en omschrijving van de dag</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.itinerary.tabs.basic') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.itinerary.sections.basic.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
-                        <Input type="text" name="title" label="Titel" :required="true" v-model="form.title"
-                            :feedback="form.errors.title" placeholder="Bijv. Aankomst in Venetië" />
-                        <Input type="text" name="location" label="Locatie" :required="true" v-model="form.location"
-                            :feedback="form.errors.location" placeholder="Bijv. Venetië, Italië" />
-                        <TextArea name="description" label="Omschrijving" :required="true" v-model="form.description"
-                            :feedback="form.errors.description" placeholder="Beschrijf wat er deze dag gebeurt..."
+                        <Input type="text" name="title" :label="t('forms.itinerary.fields.title.label')" :required="true" v-model="form.title"
+                            :feedback="form.errors.title" :placeholder="t('forms.itinerary.fields.title.placeholder')" />
+                        <Input type="text" name="location" :label="t('forms.itinerary.fields.location.label')" :required="true" v-model="form.location"
+                            :feedback="form.errors.location" :placeholder="t('forms.itinerary.fields.location.placeholder')" />
+                        <TextArea name="description" :label="t('forms.itinerary.fields.description.label')" :required="true" v-model="form.description"
+                            :feedback="form.errors.description" :placeholder="t('forms.itinerary.fields.description.placeholder')"
                             :rows="6" />
-                        <Input type="text" name="remark" label="Opmerking" :required="false" v-model="form.remark"
-                            :feedback="form.errors.remark" placeholder="Optionele opmerking of waarschuwing" />
+                        <Input type="text" name="remark" :label="t('forms.itinerary.fields.remark.label')" :required="false" v-model="form.remark"
+                            :feedback="form.errors.remark" :placeholder="t('forms.itinerary.fields.remark.placeholder')" />
                         <p class="text-xs text-gray-700/30">
-                            Opmerkingen worden getoond met een waarschuwingspictogram
+                            {{ t('forms.itinerary.fields.remark.help') }}
                         </p>
                     </div>
                 </section>
                 <!-- Media Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">Media</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">Upload afbeelding voor deze reisdag</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.itinerary.tabs.media') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.itinerary.sections.media.subtitle') }}</p>
                     </div>
                     <div class="p-6">
                         <ImageUploader v-model="form.image" preview-size="large"
-                            :label="form.image ? 'Afbeelding wijzigen' : 'Selecteer een afbeelding'"
+                            :label="form.image ? t('forms.itinerary.fields.image.change') : t('forms.itinerary.fields.image.select')"
                             :feedback="form.errors.image" />
                         <p class="mt-2 text-xs text-gray-700/30">
-                            Deze afbeelding wordt gebruikt voor dit dagprogramma
+                            {{ t('forms.itinerary.fields.image.help') }}
                         </p>
                     </div>
                 </section>
@@ -70,28 +73,28 @@ const emit = defineEmits(['submit']);
                 <!-- Details Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">Details</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">Verblijf, activiteiten en faciliteiten</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.itinerary.tabs.details') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.itinerary.sections.details.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
-                        <Input type="text" name="accommodation" label="Verblijf" :required="true"
+                        <Input type="text" name="accommodation" :label="t('forms.itinerary.fields.accommodation.label')" :required="true"
                             v-model="form.accommodation" :feedback="form.errors.accommodation"
-                            placeholder="Bijv. Hotel Centrale" />
-                        <Input type="text" name="activities" label="Activiteiten" :required="true"
+                            :placeholder="t('forms.itinerary.fields.accommodation.placeholder')" />
+                        <Input type="text" name="activities" :label="t('forms.itinerary.fields.activities.label')" :required="true"
                             v-model="form.activities" :feedback="form.errors.activities"
-                            placeholder="Bijv. Stadswandeling, museumbezoek" />
-                        <Select name="transport" label="Vervoer" v-model="form.transport" :multiple="true"
+                            :placeholder="t('forms.itinerary.fields.activities.placeholder')" />
+                        <Select name="transport" :label="t('forms.itinerary.fields.transport.label')" v-model="form.transport" :multiple="true"
                             :required="false" :options="transport" :feedback="form.errors.transport"
-                            :placeholder="'Kies vervoer types'" />
-                        <Select name="meals" label="Maaltijden" v-model="form.meals" :multiple="true" :required="false"
+                            :placeholder="t('forms.itinerary.fields.transport.placeholder')" />
+                        <Select name="meals" :label="t('forms.itinerary.fields.meals.label')" v-model="form.meals" :multiple="true" :required="false"
                             :options="meals" :feedback="form.errors.meals"
-                            :placeholder="'Kies inbegrepen maaltijden'" />
+                            :placeholder="t('forms.itinerary.fields.meals.placeholder')" />
                     </div>
                 </section>
             </div>
         </div>
 
         <!-- Footer Actions -->
-        <FormFooter :form="form" label="Reisplan Opslaan" @submit="emit('submit')" />
+        <FormFooter :form="form" :label="form.id ? t('forms.itinerary.submit.update') : t('forms.itinerary.submit.create')" @submit="emit('submit')" />
     </form>
 </template>

@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
 import { Link } from '@inertiajs/vue3'
+import { useI18n } from 'vue-i18n'
 import {
     CalendarDaysIcon,
     CheckCircleIcon,
@@ -14,6 +15,8 @@ const props = defineProps({
     bookings: Object,
     systemHealth: Object
 })
+
+const { t } = useI18n()
 
 // Helper functies voor system health
 const getStatusColor = (status) => {
@@ -45,13 +48,13 @@ const getStatusTextColor = (status) => {
 const getStatusLabel = (status) => {
     switch (status) {
         case 'healthy':
-            return 'Actief'
+            return t('admin.dashboard.system_status.status_labels.healthy')
         case 'warning':
-            return 'Waarschuwing'
+            return t('admin.dashboard.system_status.status_labels.warning')
         case 'error':
-            return 'Offline'
+            return t('admin.dashboard.system_status.status_labels.error')
         default:
-            return 'Onbekend'
+            return t('admin.dashboard.system_status.status_labels.unknown')
     }
 }
 
@@ -59,26 +62,26 @@ const getStatusLabel = (status) => {
 const systemHealthItems = computed(() => [
     {
         id: 'database',
-        label: 'Database verbinding',
+        label: t('admin.dashboard.system_status.services.database'),
         data: props.systemHealth?.database,
         details: props.systemHealth?.database?.responseTime
-            ? `Response: ${props.systemHealth.database.responseTime}ms`
+            ? t('admin.dashboard.system_status.details.response', { time: props.systemHealth.database.responseTime })
             : null
     },
     {
         id: 'email',
-        label: 'Email service',
+        label: t('admin.dashboard.system_status.services.email'),
         data: props.systemHealth?.email,
         details: props.systemHealth?.email?.provider
-            ? `Provider: ${props.systemHealth.email.provider}`
+            ? t('admin.dashboard.system_status.details.provider', { provider: props.systemHealth.email.provider })
             : null
     },
     {
         id: 'queue',
-        label: 'Queue worker',
+        label: t('admin.dashboard.system_status.services.queue'),
         data: props.systemHealth?.queue,
         details: props.systemHealth?.queue?.pendingJobs !== null
-            ? `${props.systemHealth.queue.pendingJobs} jobs in wachtrij`
+            ? t('admin.dashboard.system_status.details.jobs_in_queue', { count: props.systemHealth.queue.pendingJobs })
             : null
     }
 ])
@@ -97,9 +100,9 @@ const lastCheckedTime = computed(() => {
 const stats = computed(() => [
     {
         id: 1,
-        name: 'Nieuw',
+        name: t('admin.dashboard.stats.new.name'),
         value: props.bookings.new,
-        description: 'Alle nieuw binengekomen boekingen',
+        description: t('admin.dashboard.stats.new.description'),
         icon: SparklesIcon,
         iconColor: 'text-accent-primary',
         bgColor: 'bg-accent-primary/10',
@@ -108,9 +111,9 @@ const stats = computed(() => [
     },
     {
         id: 2,
-        name: 'Komende vertrekken',
+        name: t('admin.dashboard.stats.upcoming_month.name'),
         value: props.bookings.upcomingMonth,
-        description: 'Vertrek volgende maand',
+        description: t('admin.dashboard.stats.upcoming_month.description'),
         icon: CalendarDaysIcon,
         iconColor: 'text-accent-sage',
         bgColor: 'bg-accent-sage/10',
@@ -119,9 +122,9 @@ const stats = computed(() => [
     },
     {
         id: 3,
-        name: 'Toekomstige Reizen',
+        name: t('admin.dashboard.stats.upcoming.name'),
         value: props.bookings.upcoming,
-        description: 'Aankomende vertrekken',
+        description: t('admin.dashboard.stats.upcoming.description'),
         icon: ClockIcon,
         iconColor: 'text-accent-link',
         bgColor: 'bg-accent-link/10',
@@ -130,9 +133,9 @@ const stats = computed(() => [
     },
     {
         id: 4,
-        name: 'Totaal Boekingen',
+        name: t('admin.dashboard.stats.total.name'),
         value: props.bookings.all,
-        description: 'Alle boekingen',
+        description: t('admin.dashboard.stats.total.description'),
         icon: UserGroupIcon,
         iconColor: 'text-brand-primary',
         bgColor: 'bg-brand-primary/10',
@@ -146,8 +149,8 @@ const stats = computed(() => [
     <Admin>
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-brand-primary mb-2">Dashboard</h1>
-            <p class="text-brand-light">Welkom terug! Hier is een overzicht van je reisorganisatie.</p>
+            <h1 class="text-3xl font-bold text-brand-primary mb-2">{{ t('admin.dashboard.header.title') }}</h1>
+            <p class="text-brand-light">{{ t('admin.dashboard.header.welcome') }}</p>
         </div>
 
         <!-- Stats Grid -->
@@ -201,7 +204,7 @@ const stats = computed(() => [
                 <div class="bg-gradient-to-r from-brand-primary to-brand-primary px-6 py-4">
                     <h3 class="text-lg font-semibold text-white flex items-center">
                         <ClockIcon class="h-5 w-5 mr-2" />
-                        Snelle Acties
+                        {{ t('admin.dashboard.quick_actions.title') }}
                     </h3>
                 </div>
                 <div class="p-6 space-y-3">
@@ -214,7 +217,7 @@ const stats = computed(() => [
                                 <CalendarDaysIcon class="h-5 w-5 text-accent-primary" />
                             </div>
                             <span class="font-medium text-gray-900 group-hover:text-brand-primary transition-colors">
-                                Bekijk alle boekingen
+                                {{ t('admin.dashboard.quick_actions.view_bookings') }}
                             </span>
                         </div>
                         <svg class="h-5 w-5 text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -233,7 +236,7 @@ const stats = computed(() => [
                                 </svg>
                             </div>
                             <span class="font-medium text-gray-900 group-hover:text-brand-primary transition-colors">
-                                Beheer reizen
+                                {{ t('admin.dashboard.quick_actions.manage_trips') }}
                             </span>
                         </div>
                         <svg class="h-5 w-5 text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -253,7 +256,7 @@ const stats = computed(() => [
                                 </svg>
                             </div>
                             <span class="font-medium text-gray-900 group-hover:text-brand-primary transition-colors">
-                                Beheer landen
+                                {{ t('admin.dashboard.quick_actions.manage_countries') }}
                             </span>
                         </div>
                         <svg class="h-5 w-5 text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -268,7 +271,7 @@ const stats = computed(() => [
                 <div class="bg-accent-sage  px-6 py-4">
                     <h3 class="text-lg font-semibold text-white flex items-center">
                         <CheckCircleIcon class="h-5 w-5 mr-2" />
-                        Systeemstatus
+                        {{ t('admin.dashboard.system_status.title') }}
                     </h3>
                 </div>
                 <div class="p-6 space-y-4">
@@ -329,10 +332,10 @@ const stats = computed(() => [
                     <div class="mt-6 pt-4 border-t border-gray-100">
                         <p class="text-xs text-brand-light leading-relaxed">
                             <span v-if="lastCheckedTime">
-                                Laatste check: {{ lastCheckedTime }}
+                                {{ t('admin.dashboard.system_status.last_checked', { time: lastCheckedTime }) }}
                             </span>
                             <span v-else>
-                                Systeem status wordt geladen...
+                                {{ t('admin.dashboard.system_status.loading') }}
                             </span>
                         </p>
                     </div>

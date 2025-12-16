@@ -17,8 +17,9 @@ class PhoneNumberService
     {
         $this->raw = trim($phoneNumber);
         $this->util = PhoneNumberUtil::getInstance();
-        $locale = config('app.locale');
-        $this->parsed = $this->util->parse($this->raw, $locale);
+        $region = config('app.phone_region', 'NL');
+
+        $this->parsed = $this->util->parse($this->raw, $region);
     }
 
     public function isValid(): bool
