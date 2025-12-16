@@ -15,14 +15,11 @@ class SetLocale
         $currentLocale = Session::get('locale');
 
         // Set preferred locale
-        $locale = $currentLocale
-            ?: $request->getPreferredLanguage($availableLocales)
-            ?: config('app.locale');
+        $locale = in_array($currentLocale, $availableLocales)
+            ? $currentLocale
+            : $request->getPreferredLanguage($availableLocales);
 
-        // Validate or fallback to default
-        if (! in_array($locale, $availableLocales)) {
-            $locale = config('app.locale');
-        }
+        $locale = $locale ?? config('app.locale');
 
         App::setLocale($locale);
 
