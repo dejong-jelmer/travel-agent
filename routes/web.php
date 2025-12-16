@@ -26,6 +26,7 @@ Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('ter
 
 // Switch locale
 Route::post('/locale/switch', [LocaleController::class, 'switch'])
+    ->middleware('throttle:10,1')
     ->name('locale.switch');
 
 // contact form

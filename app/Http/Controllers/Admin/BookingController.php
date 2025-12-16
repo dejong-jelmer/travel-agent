@@ -28,7 +28,7 @@ class BookingController extends Controller
     public function index(): Response
     {
         return Inertia::render('Admin/Booking/Index', [
-            'bookings' => Booking::with(['trip', 'adults', 'children', 'mainBooker'])->paginate(),
+            'bookings' => Booking::with(['trip'])->paginate(),
             'title' => $this->pageTitle('booking.title_index'),
         ]);
     }
@@ -39,7 +39,7 @@ class BookingController extends Controller
     public function show(Booking $booking): Response
     {
         return Inertia::render('Admin/Booking/Show', [
-            'booking' => $booking->load(['trip']),
+            'booking' => $booking->load(['trip', 'contact', 'adults', 'children', 'mainBooker']),
             'title' => $this->pageTitle('booking.title_show'),
         ]);
     }

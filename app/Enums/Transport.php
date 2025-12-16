@@ -10,12 +10,15 @@ enum Transport: string
     use HasTranslatableLabel,
         Selectable;
 
-    private const LABEL_KEY = 'itinerary.transport';
-
     case Train = 'train';
     case Ferry = 'ferry';
     case Bus = 'bus';
     case Taxi = 'taxi';
     case Transfer = 'transfer';
     case Airplane = 'airplane';
+
+    protected function getLabelKey(): string
+    {
+        return 'itinerary.transport';
+    }
 }

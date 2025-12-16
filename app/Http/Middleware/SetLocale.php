@@ -26,7 +26,7 @@ class SetLocale
 
         App::setLocale($locale);
 
-        // Set session locale is changed
+        // Set session locale if changed
         if ($currentLocale !== $locale) {
             Session::put('locale', $locale);
         }

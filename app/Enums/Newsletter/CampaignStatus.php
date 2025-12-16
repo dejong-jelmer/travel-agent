@@ -10,13 +10,16 @@ enum CampaignStatus: string
     use HasTranslatableLabel,
         Selectable;
 
-    private const LABEL_KEY = 'newsletter.campaign.status';
-
     case Draft = 'draft';
     case Scheduled = 'scheduled';
     case Queued = 'queued';
     case Sent = 'sent';
     case Failed = 'failed';
+
+    protected function getLabelKey(): string
+    {
+        return 'newsletter.campaign.status';
+    }
 
     public function disabledOption(): bool
     {

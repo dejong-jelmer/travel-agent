@@ -9,10 +9,13 @@ enum TravelerType: string
 {
     use HasTranslatableLabel;
 
-    private const LABEL_KEY = 'trip.traveler';
-
     case Adult = 'adult';
     case Child = 'child';
+
+    protected function getLabelKey(): string
+    {
+        return 'trip.traveler';
+    }
 
     public static function values(): array
     {

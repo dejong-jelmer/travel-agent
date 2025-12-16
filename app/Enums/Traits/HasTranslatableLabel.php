@@ -4,17 +4,13 @@ namespace App\Enums\Traits;
 
 trait HasTranslatableLabel
 {
+    /**
+     * Get the translation key prefix for this enum
+     */
+    abstract protected function getLabelKey(): string;
+
     public function label(): string
     {
-        if (! defined(static::class.'::LABEL_KEY')) {
-            throw new \LogicException(
-                sprintf(
-                    'Enum %s must define a private const LABEL_KEY to use HasTranslatableLabel trait',
-                    static::class
-                )
-            );
-        }
-
-        return __(static::LABEL_KEY.".{$this->value}");
+        return __($this->getLabelKey().".{$this->value}");
     }
 }

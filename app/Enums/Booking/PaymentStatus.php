@@ -10,12 +10,15 @@ enum PaymentStatus: string
     use HasTranslatableLabel,
         Selectable;
 
-    private const LABEL_KEY = 'booking.payment_status';
-
     case Pending = 'pending';
     case PartiallyPaid = 'partial_paid';
     case Paid = 'paid';
     case Refunded = 'refunded';
     case PartiallyRefunded = 'partially_refunded';
     case Failed = 'failed';
+
+    protected function getLabelKey(): string
+    {
+        return 'booking.payment_status';
+    }
 }

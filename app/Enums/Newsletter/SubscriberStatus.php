@@ -8,10 +8,13 @@ enum SubscriberStatus: string
 {
     use HasTranslatableLabel;
 
-    private const LABEL_KEY = 'newsletter.subscriber.status';
-
     case Active = 'active';
     case Pending = 'pending';
     case Expired = 'expired';
     case Unsubscribed = 'unsubscribed';
+
+    protected function getLabelKey(): string
+    {
+        return 'newsletter.subscriber.status';
+    }
 }

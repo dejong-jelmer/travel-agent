@@ -10,11 +10,14 @@ enum Status: string
     use HasTranslatableLabel,
         Selectable;
 
-    private const LABEL_KEY = 'booking.status';
-
     case New = 'new';
     case Pending = 'pending';
     case Confirmed = 'confirmed';
     case Canceled = 'canceled';
     case Completed = 'completed';
+
+    protected function getLabelKey(): string
+    {
+        return 'booking.status';
+    }
 }

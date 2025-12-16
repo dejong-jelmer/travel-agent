@@ -47,10 +47,5 @@ class DatabaseSeeder extends Seeder
             ->recycle($trips)
             ->withTravelers()
             ->create();
-        // ->each(
-        //     fn ($trip) => Booking::factory(fake()->numberBetween(0, 5))
-        //         ->for($trip, 'trip')
-        //         ->create()
-        // );
     }
 }

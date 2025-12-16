@@ -19,11 +19,27 @@ class NewsletterCampaignFactory extends Factory
      */
     public function definition(): array
     {
+        $status = fake()->randomElement([
+            CampaignStatus::Draft,
+            CampaignStatus::Scheduled,
+            CampaignStatus::Sent,
+        ]);
+
+        $recipients = in_array($status, [CampaignStatus::Sent]) ? rand(1000, 10000) : 0;
+
         return [
             'subject' => fake()->text(rand(40, 70)),
             'content' => fake()->paragraphs(rand(5, 10), true),
             'preview_text' => fake()->text(rand(140, 255)),
-            'status' => CampaignStatus::Draft,
+            'status' => $status,
+            'scheduled_at' => in_array($status, [CampaignStatus::Scheduled, CampaignStatus::Sent])
+                ? now()->startOfHour()->addDays(rand(1, 10))->addHours(rand(0, 24))
+                : null,
+            'sent_at' => in_array($status, [CampaignStatus::Sent])
+                ? now()->startOfHour()->subDays(rand(1, 10))->subHours(rand(0, 24))
+                : null,
+            'sent_count' => $recipients,
+            'total_recipients' => $recipients,
         ];
     }
 

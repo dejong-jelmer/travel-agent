@@ -30,7 +30,7 @@ class TripFactory extends Factory
             'name' => $city,
             'slug' => $this->generateSlug($city),
             'description' => $this->generateDescription($city),
-            'price' => randomPrice(),
+            'price' => randomPrice(995, 12000),
             'duration' => $duration,
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
