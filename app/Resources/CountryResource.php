@@ -72,7 +72,7 @@ class CountryResource
     }
 
     /**
-     * Get a unique country name (for use in factories/tests)
+     * Get a unique country name
      * Uses a static pool to ensure uniqueness across multiple calls
      */
     public static function uniqueRandomName(): string

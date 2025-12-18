@@ -40,28 +40,6 @@ class TripFactory extends Factory
         ];
     }
 
-    // public function withCountry(): static
-    // {
-    //     return $this->afterCreating(function (Trip $trip) {
-    //         $locale = fake()->locale();
-    //         $countryName = \Locale::getDisplayRegion($locale, app()->getLocale());
-
-    //         // Use firstOrCreate to prevent duplicate country errors
-    //         $country = Country::firstOrCreate(['name' => $countryName]);
-
-    //         $city = fake($locale)->city();
-
-    //         $trip->countries()->attach($country);
-
-    //         $trip->update([
-    //             'name' => $city,
-    //             'slug' => $this->generateSlug($city, $country->name),
-    //             'description' => $this->generateDescription($city, $country->name),
-    //             'meta_title' => $this->generateMetaTitle($city, $trip->duration, $country->name),
-    //         ]);
-    //     });
-    // }
-
     private function generateSlug(string $city, ?string $country = null): string
     {
         if ($country) {
