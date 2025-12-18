@@ -3,10 +3,12 @@
 namespace App\Enums\Newsletter;
 
 use App\Enums\Traits\HasTranslatableLabel;
+use App\Enums\Traits\Selectable;
 
 enum SubscriberStatus: string
 {
-    use HasTranslatableLabel;
+    use HasTranslatableLabel,
+        Selectable;
 
     case Active = 'active';
     case Pending = 'pending';

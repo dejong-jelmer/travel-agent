@@ -6,6 +6,7 @@ use App\Enums\ImageRelation;
 use App\Enums\Newsletter\CampaignStatus;
 use App\Exceptions\CampaignAlreadySentException;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\Newsletter\CreateCampaignRequest;
 use App\Http\Requests\Newsletter\UpdateCampaignRequest;
@@ -25,15 +26,38 @@ use Throwable;
 
 class CampaignController extends Controller
 {
-    use HasPageMetadata;
+    use HasDataTableFilters,
+        HasPageMetadata;
 
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
+
+        $query = NewsletterCampaign::with(['heroImage', 'trips']);
+
+        // Apply DataTable filters
+        $this->applyDataTableFilters($query, [
+            'searchable' => ['subject'],
+            'searchableRelations' => ['trip.name'],
+            'filterable' => ['status'],
+            'sortable' => ['id', 'subject', 'status', 'sent_at', 'scheduled_at', 'sent_count'],
+            'belongsToSorts' => [
+                'trip' => [
+                    'table' => 'trips',
+                    'foreign_key' => 'trip_id',
+                    'column' => 'name',
+                ],
+            ],
+            'defaultSort' => ['id', 'desc'],
+        ]);
+
         return Inertia::render('Admin/Newsletter/Campaign/Index', [
-            'campaigns' => NewsletterCampaign::with(['heroImage', 'trips'])->paginate(),
+            'campaigns' => $query->paginate()->withQueryString(),
+            'totalCampaigns' => NewsletterCampaign::count(),
+            'filters' => $this->getCurrentFilters(['status']),
+            'statusOptions' => CampaignStatus::options(),
             'title' => $this->pageTitle('newsletter.campaign.title_index'),
         ]);
     }

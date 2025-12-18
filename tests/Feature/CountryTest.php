@@ -22,6 +22,7 @@ class CountryTest extends TestCase
     public function test_admin_can_view_country_index(): void
     {
         Country::factory(10)->create();
+
         $response = $this->get(route('admin.countries.index'));
 
         $response->assertInertia(

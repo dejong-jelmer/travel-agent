@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Country;
 use Illuminate\Http\RedirectResponse;
@@ -12,15 +13,27 @@ use Inertia\Response;
 
 class CountryController extends Controller
 {
-    use HasPageMetadata;
+    use HasDataTableFilters,
+        HasPageMetadata;
 
     /**
      * Display a listing of the resource.
      */
     public function index(): Response
     {
+        $query = Country::query();
+
+        // Apply DataTable filters
+        $this->applyDataTableFilters($query, [
+            'searchable' => ['name'],
+            'sortable' => ['id', 'name'],
+            'defaultSort' => ['id', 'asc'],
+        ]);
+
         return Inertia::render('Admin/Country/Index', [
-            'countries' => Country::paginate(),
+            'countries' => $query->paginate()->withQueryString(),
+            'totalCountries' => Country::count(),
+            'filters' => $this->getCurrentFilters(['name', 'id']),
             'title' => $this->pageTitle('country.title_index'),
         ]);
     }

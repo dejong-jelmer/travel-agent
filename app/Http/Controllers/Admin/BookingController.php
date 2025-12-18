@@ -7,6 +7,7 @@ use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
@@ -18,7 +19,8 @@ use Inertia\Response;
 
 class BookingController extends Controller
 {
-    use HasPageMetadata;
+    use HasDataTableFilters,
+        HasPageMetadata;
 
     public function __construct(private BookingService $bookingService) {}
 
@@ -27,8 +29,30 @@ class BookingController extends Controller
      */
     public function index(): Response
     {
+        $query = Booking::with(['trip']);
+
+        // Apply DataTable filters
+        $this->applyDataTableFilters($query, [
+            'searchable' => ['reference'],
+            'searchableRelations' => ['trip.name'],
+            'filterable' => ['status', 'payment_status'],
+            'sortable' => ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip'],
+            'belongsToSorts' => [
+                'trip' => [
+                    'table' => 'trips',
+                    'foreign_key' => 'trip_id',
+                    'column' => 'name',
+                ],
+            ],
+            'defaultSort' => ['id', 'desc'],
+        ]);
+
         return Inertia::render('Admin/Booking/Index', [
-            'bookings' => Booking::with(['trip'])->paginate(),
+            'bookings' => $query->paginate()->withQueryString(),
+            'totalBookings' => Booking::count(),
+            'filters' => $this->getCurrentFilters(['status', 'payment_status']),
+            'statusOptions' => Status::options(),
+            'paymentStatusOptions' => PaymentStatus::options(),
             'title' => $this->pageTitle('booking.title_index'),
         ]);
     }

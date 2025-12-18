@@ -28,4 +28,33 @@ class NewsletterSubscriberFactory extends Factory
             'unsubscribed_at' => fake()->optional(0.2)->dateTime(),
         ];
     }
+
+    public function active(): static
+    {
+        return $this->state([
+            'confirmed_at' => now(),
+            'unsubscribed_at' => null,
+        ]);
+    }
+
+    public function pending(): static
+    {
+        return $this->state([
+            'confirmed_at' => null,
+            'unsubscribed_at' => null,
+        ]);
+    }
+
+    public function Expired(): static
+    {
+        return $this->state([]);
+    }
+
+    public function unsubscribed(): static
+    {
+        return $this->state([
+            'confirmed_at' => now(),
+            'unsubscribed_at' => now(),
+        ]);
+    }
 }

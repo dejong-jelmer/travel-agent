@@ -29,7 +29,7 @@ class Booking extends Model
         'created_at' => ['format' => 'dddd LL - HH:mm'],
     ];
 
-    protected $perPage = 10;
+    protected $perPage = 15;
 
     protected $fillable = [
         'trip_id',

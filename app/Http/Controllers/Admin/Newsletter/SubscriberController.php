@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Newsletter;
 
+use App\Enums\Newsletter\SubscriberStatus;
 use App\Events\NewsletterSubscriptionRequested;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\NewsletterSubscriber;
 use Illuminate\Http\RedirectResponse;
@@ -12,6 +14,7 @@ use Inertia\Response;
 
 class SubscriberController extends Controller
 {
+    use HasDataTableFilters;
     use HasPageMetadata;
 
     /**
@@ -19,8 +22,31 @@ class SubscriberController extends Controller
      */
     public function index(): Response
     {
+        $query = NewsletterSubscriber::query();
+
+        // Apply status filter using model scopes
+        if ($statusFilter = request('status')) {
+            $status = SubscriberStatus::tryFrom($statusFilter);
+            if ($status) {
+                $query->{$status->value}();
+            }
+        }
+
+        // Apply DataTable filters (excluding status as it's handled above)
+        $this->applyDataTableFilters($query, [
+            'searchable' => ['email', 'name'],
+            'searchableRelations' => [],
+            'filterable' => [],
+            'sortable' => ['id', 'email', 'name'],
+            'belongsToSorts' => [],
+            'defaultSort' => ['id', 'desc'],
+        ]);
+
         return Inertia::render('Admin/Newsletter/Subscriber/Index', [
-            'subscribers' => NewsletterSubscriber::paginate(),
+            'subscribers' => $query->paginate()->withQueryString(),
+            'totalSubscribers' => NewsletterSubscriber::count(),
+            'filters' => $this->getCurrentFilters(['status']),
+            'statusOptions' => SubscriberStatus::options(),
             'title' => $this->pageTitle('newsletter.subscriber.title_index'),
         ]);
     }
