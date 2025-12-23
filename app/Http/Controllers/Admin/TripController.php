@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\DataTableConfigData;
 use App\Enums\ImageRelation;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\UpdateTripRequest;
@@ -15,6 +17,7 @@ use Inertia\Response;
 
 class TripController extends Controller
 {
+    use HasDataTableFilters;
     use HasPageMetadata;
 
     /**
@@ -22,8 +25,29 @@ class TripController extends Controller
      */
     public function index(): Response
     {
+        $query = Trip::with(['countries', 'itineraries', 'heroImage']);
+
+        // Apply DataTable filters
+        $this->applyDataTableFilters($query, new DataTableConfigData(
+            searchable: ['name'],
+            searchableRelations: ['countries.name'],
+            sortable: ['id', 'name', 'price', 'duration', 'published_at', 'countries'],
+            belongsToManySorts: [
+                'countries' => [
+                    'relation' => 'countries',
+                    'column' => 'name',
+                    'pivot_table' => 'country_trip',
+                    'pivot_foreign_key' => 'trip_id',
+                    'pivot_related_key' => 'country_id',
+                ],
+            ],
+            defaultSort: ['id', 'asc']
+        ));
+
         return Inertia::render('Admin/Trip/Index', [
-            'trips' => Trip::with(['countries', 'itineraries', 'heroImage'])->paginate(),
+            'trips' => $query->paginate()->withQueryString(),
+            'totalTrips' => Trip::count(),
+            'filters' => $this->getCurrentFilters([]),
             'title' => $this->pageTitle('trip.title_index'),
         ]);
     }

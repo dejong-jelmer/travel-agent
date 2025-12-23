@@ -188,10 +188,7 @@ class CampaignTest extends TestCase
             'status' => CampaignStatus::Draft,
         ]);
 
-        NewsletterSubscriber::factory()->count(3)->create([
-            'confirmed_at' => now(),
-            'unsubscribed_at' => null,
-        ]);
+        NewsletterSubscriber::factory(3)->active()->create();
 
         $response = $this->post(route('admin.newsletter.campaigns.send', $campaign));
 
@@ -211,9 +208,7 @@ class CampaignTest extends TestCase
     {
         Queue::fake();
 
-        $campaign = NewsletterCampaign::factory()->create([
-            'status' => CampaignStatus::Draft,
-        ]);
+        $campaign = NewsletterCampaign::factory()->draft()->create();
 
         $response = $this->post(route('admin.newsletter.campaigns.send', $campaign));
 
@@ -265,20 +260,11 @@ class CampaignTest extends TestCase
             'status' => CampaignStatus::Draft,
         ]);
 
-        NewsletterSubscriber::factory()->count(2)->create([
-            'confirmed_at' => now(),
-            'unsubscribed_at' => null,
-        ]);
+        NewsletterSubscriber::factory(2)->active()->create();
 
-        NewsletterSubscriber::factory()->create([
-            'confirmed_at' => null,
-            'unsubscribed_at' => null,
-        ]);
+        NewsletterSubscriber::factory()->pending()->create();
 
-        NewsletterSubscriber::factory()->create([
-            'confirmed_at' => now(),
-            'unsubscribed_at' => now(),
-        ]);
+        NewsletterSubscriber::factory()->unsubscribed()->create();
 
         $response = $this->post(route('admin.newsletter.campaigns.send', $campaign));
 

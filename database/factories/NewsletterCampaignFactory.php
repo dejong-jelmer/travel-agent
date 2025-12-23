@@ -51,12 +51,25 @@ class NewsletterCampaignFactory extends Factory
         );
     }
 
+    public function draft(): static
+    {
+        return $this->state(fn () => [
+            'status' => CampaignStatus::Draft,
+            'scheduled_at' => null,
+            'sent_at' => null,
+            'sent_count' => 0,
+            'total_recipients' => 0,
+        ]);
+    }
+
     public function scheduled(): static
     {
         return $this->state(fn () => [
             'status' => CampaignStatus::Scheduled,
             'scheduled_at' => now()->startOfHour()->addDays(rand(1, 10))->addHours(rand(0, 24)),
-
+            'sent_at' => null,
+            'sent_count' => 0,
+            'total_recipients' => 0,
         ]);
     }
 
