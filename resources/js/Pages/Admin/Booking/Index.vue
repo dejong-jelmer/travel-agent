@@ -25,12 +25,12 @@ const columns = [
 const filterOptions = computed(() => [
     {
         key: 'status',
-        label: t('admin.booking.index.filters.status', 'Status'),
+        label: t('admin.booking.index.filters.status'),
         options: props.statusOptions || [],
     },
     {
         key: 'payment_status',
-        label: t('admin.booking.index.filters.payment_status', 'Payment'),
+        label: t('admin.booking.index.filters.payment_status'),
         options: props.paymentStatusOptions || [],
     },
 ]);

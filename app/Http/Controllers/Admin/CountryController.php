@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\DataTableConfigData;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
@@ -24,11 +25,11 @@ class CountryController extends Controller
         $query = Country::query();
 
         // Apply DataTable filters
-        $this->applyDataTableFilters($query, [
-            'searchable' => ['name'],
-            'sortable' => ['id', 'name'],
-            'defaultSort' => ['id', 'asc'],
-        ]);
+        $this->applyDataTableFilters($query, new DataTableConfigData(
+            searchable: ['name'],
+            sortable: ['id', 'name'],
+            defaultSort: ['id', 'asc']
+        ));
 
         return Inertia::render('Admin/Country/Index', [
             'countries' => $query->paginate()->withQueryString(),

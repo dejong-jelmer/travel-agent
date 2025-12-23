@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Country;
-use App\Resources\CountryResource;
+use App\Services\CountryService;
 use Illuminate\Database\Seeder;
 
 class CountrySeeder extends Seeder
@@ -13,7 +13,7 @@ class CountrySeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (CountryResource::names() as $countryName) {
+        foreach (CountryService::names() as $countryName) {
             Country::firstOrCreate(['name' => $countryName]);
         }
     }

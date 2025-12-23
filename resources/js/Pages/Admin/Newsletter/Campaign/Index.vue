@@ -41,7 +41,7 @@ const filterOptions = computed(() => [
             <DataTable :data="campaigns.data" :columns="columns" :links="campaigns.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" :filter-options="filterOptions"
                 searchable
-                :search-placeholder="t('admin.newsletter.campaigns.index.search_placeholder', 'Search by reference or trip...')"
+                :search-placeholder="t('admin.newsletter.campaigns.index.search_placeholder')"
                 :empty-message="t('admin.newsletter.campaigns.index.no_campaigns_found', { search: filters.search })">
                 <!-- Custom cell for status -->
                 <template #cell-status="{ row }">

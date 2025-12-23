@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Country;
 use App\Models\User;
+use App\Services\CountryService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -17,6 +18,7 @@ class CountryTest extends TestCase
         parent::setUp();
         $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
+        CountryService::resetUniquePool();
     }
 
     public function test_admin_can_view_country_index(): void

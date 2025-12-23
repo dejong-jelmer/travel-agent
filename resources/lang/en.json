@@ -695,6 +695,12 @@
             "submit_button": "Login"
         }
     },
+    "data_table": {
+        "filters": "Filters",
+        "select": {
+            "all": "All"
+        }
+    },
     "admin": {
         "dashboard": {
             "header": {
@@ -828,6 +834,11 @@
                 "edit": "Save changes"
             },
             "index": {
+                "search_placeholder": "Search by reference or trip...",
+                "filters": {
+                    "status": "Status",
+                    "payment_status": "Payment status"
+                },
                 "table_headers": {
                     "reference": "Reference",
                     "trip": "Trip",
@@ -879,6 +890,7 @@
                 "create": "Create country"
             },
             "index": {
+                "search_placeholder": "Search on country name...",
                 "title": "Landen overzicht",
                 "table_headers": {
                     "countries": "Countries",
@@ -912,6 +924,7 @@
                     "delete_confirm": "Are you sure you want to delete this newsletter campaign?"
                 },
                 "index": {
+                    "search_placeholder": "Search on subject...",
                     "title": "Newsletter Campaigns",
                     "table_headers": {
                         "subject": "Subject",

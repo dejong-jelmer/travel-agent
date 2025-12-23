@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\DataTableConfigData;
 use App\Enums\ImageRelation;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasDataTableFilters;
@@ -27,13 +28,11 @@ class TripController extends Controller
         $query = Trip::with(['countries', 'itineraries', 'heroImage']);
 
         // Apply DataTable filters
-        $this->applyDataTableFilters($query, [
-            'searchable' => ['name'],
-            'searchableRelations' => ['countries.name'],
-            'filterable' => [],
-            'sortable' => ['id', 'name', 'price', 'duration', 'published_at', 'countries'],
-            'belongsToSorts' => [],
-            'belongsToManySorts' => [
+        $this->applyDataTableFilters($query, new DataTableConfigData(
+            searchable: ['name'],
+            searchableRelations: ['countries.name'],
+            sortable: ['id', 'name', 'price', 'duration', 'published_at', 'countries'],
+            belongsToManySorts: [
                 'countries' => [
                     'relation' => 'countries',
                     'column' => 'name',
@@ -42,8 +41,8 @@ class TripController extends Controller
                     'pivot_related_key' => 'country_id',
                 ],
             ],
-            'defaultSort' => ['id', 'asc'],
-        ]);
+            defaultSort: ['id', 'asc']
+        ));
 
         return Inertia::render('Admin/Trip/Index', [
             'trips' => $query->paginate()->withQueryString(),

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Newsletter;
 
+use App\DTO\DataTableConfigData;
 use App\Enums\Newsletter\SubscriberStatus;
 use App\Events\NewsletterSubscriptionRequested;
 use App\Http\Controllers\Controller;
@@ -33,14 +34,11 @@ class SubscriberController extends Controller
         }
 
         // Apply DataTable filters (excluding status as it's handled above)
-        $this->applyDataTableFilters($query, [
-            'searchable' => ['email', 'name'],
-            'searchableRelations' => [],
-            'filterable' => [],
-            'sortable' => ['id', 'email', 'name'],
-            'belongsToSorts' => [],
-            'defaultSort' => ['id', 'desc'],
-        ]);
+        $this->applyDataTableFilters($query, new DataTableConfigData(
+            searchable: ['email', 'name'],
+            sortable: ['id', 'email', 'name'],
+            defaultSort: ['id', 'desc']
+        ));
 
         return Inertia::render('Admin/Newsletter/Subscriber/Index', [
             'subscribers' => $query->paginate()->withQueryString(),

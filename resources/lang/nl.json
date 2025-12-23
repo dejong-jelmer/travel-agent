@@ -695,6 +695,12 @@
             "submit_button": "Inloggen"
         }
     },
+    "data_table": {
+        "filters": "Filteren",
+        "select": {
+            "all": "Alle"
+        }
+    },
     "admin": {
         "dashboard": {
             "header": {
@@ -758,7 +764,7 @@
             },
             "index": {
                 "title": "Reizen",
-                "search_placeholder" : "Zoek op reis of land...",
+                "search_placeholder" : "Zoek op reis of op land...",
                 "table_headers": {
                     "id": "#",
                     "image": "Afbeelding",
@@ -828,6 +834,11 @@
                 "edit": "Wijzigingen opslaan"
             },
             "index": {
+                "search_placeholder": "Zoek op referentie of op reis...",
+                "filters": {
+                    "status": "Status",
+                    "payment_status": "Betaalstatus"
+                },
                 "table_headers": {
                     "reference": "Referentie",
                     "trip": "Reis",
@@ -879,6 +890,7 @@
                 "create": "Land aanmaken"
             },
             "index": {
+                "search_placeholder": "Zoek op landnaam...",
                 "title": "Landen overzicht",
                 "table_headers": {
                     "countries": "Landen",
@@ -911,6 +923,7 @@
                     "delete_confirm": "Weet je zeker dat je deze nieuwsbrief campagne wilt verwijderen?"
                 },
                 "index": {
+                    "search_placeholder": "Zoek op onderwerp...",
                     "title": "Nieuwsbrief Campagnes",
                     "table_headers": {
                         "subject": "Onderwerp",
@@ -933,7 +946,7 @@
                 },
                 "index": {
                     "title": "Nieuwsbrief Abonnees",
-                    "search_placeholder": "Zoek op naam of email...",
+                    "search_placeholder": "Zoek op naam of op email...",
                     "table_headers": {
                         "name": "Naam",
                         "email": "E-mail",

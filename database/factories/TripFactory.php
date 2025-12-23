@@ -7,7 +7,7 @@ use App\Models\Country;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
-use App\Resources\CountryResource;
+use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
@@ -108,8 +108,8 @@ class TripFactory extends Factory
             if ($country = Country::inRandomOrder()->first()) {
                 $trip->countries()->attach($country);
 
-                // Get locale from CountryResource
-                $locale = CountryResource::getLocale($country->name);
+                // Get locale from CountryService
+                $locale = CountryService::getLocale($country->name);
                 $city = fake($locale)->city();
 
                 $trip->update([

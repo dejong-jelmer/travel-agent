@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Resources;
+namespace App\Services;
 
-class CountryResource
+class CountryService
 {
     /**
      * European countries with their locale ISO codes for faker
@@ -11,28 +11,7 @@ class CountryResource
      */
     public static function europeanCountries(): array
     {
-        return [
-            'Nederland' => 'nl_NL',
-            'België' => 'nl_BE',
-            'Frankrijk' => 'fr_FR',
-            'Duitsland' => 'de_DE',
-            'Oostenrijk' => 'de_AT',
-            'Zwitserland' => 'de_CH',
-            'Italië' => 'it_IT',
-            'Spanje' => 'es_ES',
-            'Portugal' => 'pt_PT',
-            'Denemarken' => 'da_DK',
-            'Zweden' => 'sv_SE',
-            'Noorwegen' => 'nb_NO',
-            'Polen' => 'pl_PL',
-            'Tsjechië' => 'cs_CZ',
-            'Hongarije' => 'hu_HU',
-            'Slovenië' => 'sl_SI',
-            'Kroatië' => 'hr_HR',
-            'Griekenland' => 'el_GR',
-            'Roemenië' => 'ro_RO',
-            'Bulgarije' => 'bg_BG',
-        ];
+        return config('countries.europe', []);
     }
 
     /**
@@ -72,29 +51,45 @@ class CountryResource
     }
 
     /**
+     * Static pool for unique country generation
+     *
+     * @var array<int, string>|null
+     */
+    private static ?array $availableCountries = null;
+
+    /**
      * Get a unique country name
      * Uses a static pool to ensure uniqueness across multiple calls
+     *
+     * @return string Unique country name
      */
     public static function uniqueRandomName(): string
     {
-        static $availableCountries = null;
-
         // Initialize the list of available countries on first use
-        if ($availableCountries === null) {
-            $availableCountries = self::names();
+        if (self::$availableCountries === null) {
+            self::$availableCountries = self::names();
         }
 
         // If we've run out of countries, reset the list
-        if (empty($availableCountries)) {
-            $availableCountries = self::names();
+        if (empty(self::$availableCountries)) {
+            self::$availableCountries = self::names();
         }
 
         // Pick and remove a random country from the available list
-        $randomKey = array_rand($availableCountries);
+        $randomKey = array_rand(self::$availableCountries);
 
-        $countryName = $availableCountries[$randomKey];
-        unset($availableCountries[$randomKey]);
+        $countryName = self::$availableCountries[$randomKey];
+        unset(self::$availableCountries[$randomKey]);
 
         return $countryName;
+    }
+
+    /**
+     * Reset the unique country pool
+     * Useful for tests to ensure clean state between test cases
+     */
+    public static function resetUniquePool(): void
+    {
+        self::$availableCountries = null;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Newsletter;
 
+use App\DTO\DataTableConfigData;
 use App\Enums\ImageRelation;
 use App\Enums\Newsletter\CampaignStatus;
 use App\Exceptions\CampaignAlreadySentException;
@@ -34,24 +35,23 @@ class CampaignController extends Controller
      */
     public function index(): Response
     {
-
         $query = NewsletterCampaign::with(['heroImage', 'trips']);
 
         // Apply DataTable filters
-        $this->applyDataTableFilters($query, [
-            'searchable' => ['subject'],
-            'searchableRelations' => ['trip.name'],
-            'filterable' => ['status'],
-            'sortable' => ['id', 'subject', 'status', 'sent_at', 'scheduled_at', 'sent_count'],
-            'belongsToSorts' => [
+        $this->applyDataTableFilters($query, new DataTableConfigData(
+            searchable: ['subject'],
+            searchableRelations: ['trip.name'],
+            filterable: ['status'],
+            sortable: ['id', 'subject', 'status', 'sent_at', 'scheduled_at', 'sent_count'],
+            belongsToSorts: [
                 'trip' => [
                     'table' => 'trips',
                     'foreign_key' => 'trip_id',
                     'column' => 'name',
                 ],
             ],
-            'defaultSort' => ['id', 'desc'],
-        ]);
+            defaultSort: ['id', 'desc']
+        ));
 
         return Inertia::render('Admin/Newsletter/Campaign/Index', [
             'campaigns' => $query->paginate()->withQueryString(),

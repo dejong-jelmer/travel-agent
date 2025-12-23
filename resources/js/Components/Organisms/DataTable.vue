@@ -172,7 +172,7 @@ const isSorted = (columnKey) => {
             <div v-if="filterOptions.length > 0" class="flex flex-wrap items-center gap-3">
                 <div class="flex items-center gap-2 text-sm text-gray-600">
                     <Filter class="w-4 h-4" />
-                    <span class="font-medium">Filters:</span>
+                    <span class="font-medium">{{ $t('data_table.filters') }}:</span>
                 </div>
 
                 <div
@@ -189,7 +189,7 @@ const isSorted = (columnKey) => {
                         @change="applyFilters"
                         class="text-sm border border-gray-300 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary-default focus:border-transparent"
                     >
-                        <option :value="null">All</option>
+                        <option :value="null">{{ $t('data_table.select.all') }}</option>
                         <option
                             v-for="option in filter.options"
                             :key="option.id"

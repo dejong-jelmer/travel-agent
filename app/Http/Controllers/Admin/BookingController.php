@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\DTO\DataTableConfigData;
 use App\DTO\UpdateBookingData;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
@@ -32,20 +33,20 @@ class BookingController extends Controller
         $query = Booking::with(['trip']);
 
         // Apply DataTable filters
-        $this->applyDataTableFilters($query, [
-            'searchable' => ['reference'],
-            'searchableRelations' => ['trip.name'],
-            'filterable' => ['status', 'payment_status'],
-            'sortable' => ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip'],
-            'belongsToSorts' => [
+        $this->applyDataTableFilters($query, new DataTableConfigData(
+            searchable: ['reference'],
+            searchableRelations: ['trip.name'],
+            filterable: ['status', 'payment_status'],
+            sortable: ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip'],
+            belongsToSorts: [
                 'trip' => [
                     'table' => 'trips',
                     'foreign_key' => 'trip_id',
                     'column' => 'name',
                 ],
             ],
-            'defaultSort' => ['id', 'desc'],
-        ]);
+            defaultSort: ['id', 'desc']
+        ));
 
         return Inertia::render('Admin/Booking/Index', [
             'bookings' => $query->paginate()->withQueryString(),
