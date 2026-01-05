@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { ArrowUpDown, ArrowUp, ArrowDown, Search, Filter } from 'lucide-vue-next';
 import { debounce } from 'lodash';
@@ -203,8 +203,9 @@ const isSorted = (columnKey) => {
         </div>
 
         <!-- Table -->
-        <div class="bg-white shadow-lg rounded-2xl">
+        <div class="bg-white shadow-lg rounded-2xl min-w-fit overflow-auto">
             <template v-if="data.length > 0">
+                <div class="overflow-x-auto">
                 <table class="w-full border-collapse">
                     <thead>
                         <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
@@ -252,6 +253,7 @@ const isSorted = (columnKey) => {
                         </tr>
                     </tbody>
                 </table>
+                </div>
             </template>
             <template v-else>
                 <div class="p-8 text-center text-gray-500">

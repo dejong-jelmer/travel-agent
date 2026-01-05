@@ -6,6 +6,7 @@ use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
 use App\Models\Traits\HasFormattedDates;
+use App\Models\Traits\Sortable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -22,7 +23,8 @@ class Booking extends Model
 {
     use HasFactory,
         HasFormattedDates,
-        SoftDeletes;
+        SoftDeletes,
+        Sortable;
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
@@ -62,6 +64,25 @@ class Booking extends Model
         'status' => Status::New->value,
         'payment_status' => PaymentStatus::Pending->value,
     ];
+
+    // Sortable properties
+    protected $searchable = ['reference'];
+
+    protected $searchableRelations = ['trip.name'];
+
+    protected $filterable = ['status', 'payment_status'];
+
+    protected $sortable = ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip'];
+
+    protected $sortableBelongsTo = [
+        'trip' => [
+            'table' => 'trips',
+            'foreign_key' => 'trip_id',
+            'column' => 'name',
+        ],
+    ];
+
+    protected $defaultSort = ['id', 'desc'];
 
     protected static function booted()
     {

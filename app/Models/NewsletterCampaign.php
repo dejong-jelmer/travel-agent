@@ -6,6 +6,7 @@ use App\Enums\Newsletter\CampaignStatus;
 use App\Enums\Newsletter\CampaignSubscriberStatus;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
+use App\Models\Traits\Sortable;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -16,7 +17,8 @@ class NewsletterCampaign extends Model
 {
     use HasFactory,
         HasFormattedDates,
-        ManagesImages;
+        ManagesImages,
+        Sortable;
 
     protected array $formattedDates = [
         'scheduled_at' => ['format' => 'DD-MM-YYYY HH:mm'],
@@ -52,6 +54,25 @@ class NewsletterCampaign extends Model
         'sent_at_formatted',
         'status_label',
     ];
+
+    // Sortable properties
+    protected $searchable = ['subject'];
+
+    protected $searchableRelations = ['trips.name'];
+
+    protected $filterable = ['status', 'payment_status'];
+
+    protected $sortable = ['id', 'subject', 'status', 'sent_at', 'scheduled_at', 'sent_count'];
+
+    protected $sortableBelongsTo = [
+        'trip' => [
+            'table' => 'trips',
+            'foreign_key' => 'trip_id',
+            'column' => 'name',
+        ],
+    ];
+
+    protected $defaultSort = ['id', 'desc'];
 
     protected static function booted(): void
     {

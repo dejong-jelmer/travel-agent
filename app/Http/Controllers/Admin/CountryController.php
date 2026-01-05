@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DTO\DataTableConfigData;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Country;
+use App\Services\DataTableService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class CountryController extends Controller
 {
-    use HasDataTableFilters,
-        HasPageMetadata;
+    use HasPageMetadata;
+
+    public function __construct(private DataTableService $dataTableService) {}
 
     /**
      * Display a listing of the resource.
@@ -25,16 +26,12 @@ class CountryController extends Controller
         $query = Country::query();
 
         // Apply DataTable filters
-        $this->applyDataTableFilters($query, new DataTableConfigData(
-            searchable: ['name'],
-            sortable: ['id', 'name'],
-            defaultSort: ['id', 'asc']
-        ));
+        $this->dataTableService->applySortFilters($query, Country::dataTableConfig());
 
         return Inertia::render('Admin/Country/Index', [
             'countries' => $query->paginate()->withQueryString(),
-            'totalCountries' => Country::count(),
-            'filters' => $this->getCurrentFilters(['name', 'id']),
+            'totalCountries' => Cache::remember('countries.count', config('datatables.cache.ttl'), fn () => Country::count()),
+            'filters' => $this->dataTableService->getCurrentSortFilters(['name', 'id']),
             'title' => $this->pageTitle('country.title_index'),
         ]);
     }

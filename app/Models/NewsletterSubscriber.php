@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Newsletter\SubscriberStatus;
+use App\Models\Traits\Sortable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -11,7 +12,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class NewsletterSubscriber extends Model
 {
-    use HasFactory;
+    use HasFactory,
+        Sortable;
 
     protected $perPage = 15;
 
@@ -37,6 +39,17 @@ class NewsletterSubscriber extends Model
     protected $appends = [
         'status',
         'status_label',
+    ];
+
+    // Sortable properties
+    protected $searchable = ['email', 'name'];
+
+    protected $sortable = ['id', 'email', 'name'];
+
+    protected $defaultSort = ['id', 'desc'];
+
+    protected array $scopeFilters = [
+        'status' => SubscriberStatus::class,
     ];
 
     protected static function boot()

@@ -32,7 +32,10 @@ const columns = [
             <DataTable :data="trips.data" :columns="columns" :links="trips.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" :searchable="totalTrips > 0"
                 :search-placeholder="t('admin.trips.index.search_placeholder')"
-                :empty-message="t('admin.trips.index.no_trips_found', { search: filters.search })">
+                :empty-message="filters.search
+                    ? t('admin.trips.index.no_trips_found_with_search', { search: filters.search })
+                    : t('admin.trips.index.no_trips_found')">
+
                 <!-- Custom cell for image -->
                 <template #cell-image="{ row }">
                     <div class="flex justify-center">

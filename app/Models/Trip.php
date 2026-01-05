@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Casts\PriceCast;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
+use App\Models\Traits\Sortable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -22,7 +23,8 @@ class Trip extends Model
     use HasFactory,
         HasFormattedDates,
         ManagesImages,
-        SoftDeletes;
+        SoftDeletes,
+        Sortable;
 
     protected $perPage = 10;
 
@@ -52,6 +54,23 @@ class Trip extends Model
 
     protected $casts = [
         'price' => PriceCast::class,
+    ];
+
+    // Sortable properties
+    protected $searchable = ['name'];
+
+    protected $searchableRelations = ['countries.name'];
+
+    protected $sortable = ['id', 'name', 'price', 'duration', 'published_at', 'countries'];
+
+    protected $sortableBelongsToMany = [
+        'countries' => [
+            'relation' => 'countries',
+            'column' => 'name',
+            'pivot_table' => 'country_trip',
+            'pivot_foreign_key' => 'trip_id',
+            'pivot_related_key' => 'country_id',
+        ],
     ];
 
     /**

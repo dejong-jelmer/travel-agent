@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DTO\DataTableConfigData;
 use App\DTO\UpdateBookingData;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
+use App\Services\DataTableService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BookingController extends Controller
 {
-    use HasDataTableFilters,
-        HasPageMetadata;
+    use HasPageMetadata;
 
-    public function __construct(private BookingService $bookingService) {}
+    public function __construct(private BookingService $bookingService, private DataTableService $dataTableService) {}
 
     /**
      * Display a listing of the resource.
@@ -33,25 +32,12 @@ class BookingController extends Controller
         $query = Booking::with(['trip']);
 
         // Apply DataTable filters
-        $this->applyDataTableFilters($query, new DataTableConfigData(
-            searchable: ['reference'],
-            searchableRelations: ['trip.name'],
-            filterable: ['status', 'payment_status'],
-            sortable: ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip'],
-            belongsToSorts: [
-                'trip' => [
-                    'table' => 'trips',
-                    'foreign_key' => 'trip_id',
-                    'column' => 'name',
-                ],
-            ],
-            defaultSort: ['id', 'desc']
-        ));
+        $this->dataTableService->applySortFilters($query, Booking::dataTableConfig());
 
         return Inertia::render('Admin/Booking/Index', [
             'bookings' => $query->paginate()->withQueryString(),
-            'totalBookings' => Booking::count(),
-            'filters' => $this->getCurrentFilters(['status', 'payment_status']),
+            'totalBookings' => Cache::remember('bookings.count', config('datatables.cache.ttl'), fn () => Booking::count()),
+            'filters' => $this->dataTableService->getCurrentSortFilters(['status', 'payment_status']),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
             'title' => $this->pageTitle('booking.title_index'),

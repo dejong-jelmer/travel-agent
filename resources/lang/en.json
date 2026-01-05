@@ -764,7 +764,7 @@
             },
             "index": {
                 "title": "Trips",
-                "search_placeholder" : "Search trips or countries...",
+                "search_placeholder": "Search trips or countries...",
                 "table_headers": {
                     "id": "#",
                     "image": "Image",
@@ -775,189 +775,193 @@
                     "actions": "Actions"
                 },
                 "no_trips": "You haven't created any trips yet. Go to \"New Trip\" or click on \"+\" to create your first trip.",
-                "no_trips_found": "No trips found on \"{search}\""
-            },
-            "show": {
-                "edit_tooltip": "Edit trip",
-                "itinerary_tooltip": "View itinerary of this trip",
-                "tabs": {
-                    "details": "Trip Details",
-                    "meta": "Meta data"
-                },
-                "details": {
-                    "name": "Name",
-                    "slug": "Slug",
-                    "description": "Description"
-                },
-                "meta": {
-                    "title": "Meta Title",
-                    "description": "Meta Description",
-                    "og_image": "Open Graph Image",
-                    "og_url": "Effective OG URL:"
-                },
-                "media": {
-                    "title": "Images",
-                    "subtitle": "Trip media",
-                    "hero": "Hero Image",
-                    "gallery": "Gallery Images",
-                    "alt": "Trip image {index}"
-                },
-                "settings": {
-                    "title": "Settings",
-                    "subtitle": "Visibility",
-                    "published_date": "Publicatiedatum",
-                    "featured": "Featured",
-                    "yes": "Yes",
-                    "no": "No"
-                },
-                "pricing": {
-                    "title": "Price & Duration",
-                    "subtitle": "Costs and travel duration",
-                    "price_per_person": "Price per person",
-                    "duration": "Duration",
-                    "days": "{duration} days"
-                },
-                "countries": {
-                    "title": "Linked Countries",
-                    "subtitle": "Destinations"
-                }
-            }
+                "no_trips_found": "No trips found.",
+                "no_trips_found_with_search": "No trips found matching: \"{search}\"."
         },
-        "booking": {
-            "actions": {
-                "show": "View this booking",
-                "edit": "Edit this booking",
-                "delete": "Delete booking",
-                "delete_confirm": "Are you sure you want to delete this booking?"
+        "show": {
+            "edit_tooltip": "Edit trip",
+            "itinerary_tooltip": "View itinerary of this trip",
+            "tabs": {
+                "details": "Trip Details",
+                "meta": "Meta data"
             },
-            "submit": {
-                "edit": "Save changes"
+            "details": {
+                "name": "Name",
+                "slug": "Slug",
+                "description": "Description"
             },
-            "index": {
-                "search_placeholder": "Search by reference or trip...",
-                "filters": {
-                    "status": "Status",
-                    "payment_status": "Payment status"
-                },
-                "table_headers": {
-                    "reference": "Reference",
-                    "trip": "Trip",
-                    "departure_date": "Departure date",
-                    "status": "Status",
-                    "payment": "Payment",
-                    "actions": "Actions"
-                },
-                "no_bookings": "There are no bookings yet.",
-                "no_bookings_found": "There are no bookings found on: \"{search}\"."
+            "meta": {
+                "title": "Meta Title",
+                "description": "Meta Description",
+                "og_image": "Open Graph Image",
+                "og_url": "Effective OG URL:"
             },
-            "edit": {
-                "booking": "Edit booking {reference}",
-                "edit_contact": "Manage contact person",
-                "travelers": "Travel party",
-                "edit_travelers": "Manage travelers",
-                "edit_booking_status": "Manage booking status",
-                "booking_status_placeholder": "Select a booking status",
-                "booking_status_label": "Booking status",
-                "payment_status_placeholder": "Select a payment status",
-                "payment_status_label": "Payment status"
+            "media": {
+                "title": "Images",
+                "subtitle": "Trip media",
+                "hero": "Hero Image",
+                "gallery": "Gallery Images",
+                "alt": "Trip image {index}"
             },
-            "show": {
-                "details": "Booking details",
-                "info": "Booking information",
-                "reference": "Booking reference",
+            "settings": {
+                "title": "Settings",
+                "subtitle": "Visibility",
+                "published_date": "Publicatiedatum",
+                "featured": "Featured",
+                "yes": "Yes",
+                "no": "No"
+            },
+            "pricing": {
+                "title": "Price & Duration",
+                "subtitle": "Costs and travel duration",
+                "price_per_person": "Price per person",
+                "duration": "Duration",
+                "days": "{duration} days"
+            },
+            "countries": {
+                "title": "Linked Countries",
+                "subtitle": "Destinations"
+            }
+        }
+    },
+    "booking": {
+        "actions": {
+            "show": "View this booking",
+            "edit": "Edit this booking",
+            "delete": "Delete booking",
+            "delete_confirm": "Are you sure you want to delete this booking?"
+        },
+        "submit": {
+            "edit": "Save changes"
+        },
+        "index": {
+            "search_placeholder": "Search by reference or trip...",
+            "filters": {
+                "status": "Status",
+                "payment_status": "Payment status"
+            },
+            "table_headers": {
+                "reference": "Reference",
                 "trip": "Trip",
                 "departure_date": "Departure date",
-                "contact": "Contact details",
-                "contact_info": "Contact person information",
-                "contact_name": "Name",
-                "contact_email": "Email",
-                "contact_telephone": "Phone",
-                "contact_address": "Address",
-                "travelers": "Travel party",
-                "travelers_subheader": "Travel party overview",
-                "booking_status": "Booking status",
-                "payment_status": "Payment status"
-            }
+                "status": "Status",
+                "payment": "Payment",
+                "actions": "Actions"
+            },
+            "no_bookings": "There are no bookings yet.",
+            "no_bookings_found": "No bookings found.",
+            "no_bookings_found_with_search": "No bookings found matching: \"{search}\"."
         },
-        "countries": {
-            "title": "Countries",
-            "actions": {
-                "create": "Create a new country",
-                "delete": "Delete country",
-                "delete_confirm": "Are you sure you want to delete this country?"
-            },
-            "submit": {
-                "create": "Create country"
-            },
-            "index": {
-                "search_placeholder": "Search on country name...",
-                "title": "Landen overzicht",
-                "table_headers": {
-                    "countries": "Countries",
-                    "actions": "Actions"
-                },
-                "no_countries": "You haven't created any countries yet. Go to \"New Country\" or click on \"+\" to create your country trip.",
-                "no_countries_found": "No countries found on: \"{search}\"."
-
-            },
-            "create": {
-                "title": "New Country",
-                "subtitle": "Destinations",
-                "heading": "Country Information",
-                "subheading": "Enter the country name",
-                "fields": {
-                    "name": {
-                        "label": "Country name",
-                        "placeholder": "E.g. France"
-                    }
-                }
-            }
+        "edit": {
+            "booking": "Edit booking {reference}",
+            "edit_contact": "Manage contact person",
+            "travelers": "Travel party",
+            "edit_travelers": "Manage travelers",
+            "edit_booking_status": "Manage booking status",
+            "booking_status_placeholder": "Select a booking status",
+            "booking_status_label": "Booking status",
+            "payment_status_placeholder": "Select a payment status",
+            "payment_status_label": "Payment status"
         },
-        "newsletter": {
-            "campaigns": {
-                "actions": {
-                    "edit": "Edit newsletter campaign",
-                    "send": "Send this newsletter campaign",
-                    "create": "Create a new newsletter campaign",
-                    "send_confirm": "You are about to send this campaign to all your subscribers. Are you sure you want to send this newsletter campaign?",
-                    "delete": "Delete this newsletter campaign",
-                    "delete_confirm": "Are you sure you want to delete this newsletter campaign?"
-                },
-                "index": {
-                    "search_placeholder": "Search on subject...",
-                    "title": "Newsletter Campaigns",
-                    "table_headers": {
-                        "subject": "Subject",
-                        "status": "Status",
-                        "scheduled_at": "Scheduled for",
-                        "sent_at": "Sent on",
-                        "sent_count": "Number sent",
-                        "actions": "Actions"
-                    },
-                    "no_campaigns": "You haven't created any newsletter campaigns yet. Go to \"New Campaign\" or click \"+\" to create your first newsletter campaign.",
-                    "no_campaigns_found": "No newsletter campagigns found."
-                }
+        "show": {
+            "details": "Booking details",
+            "info": "Booking information",
+            "reference": "Booking reference",
+            "trip": "Trip",
+            "departure_date": "Departure date",
+            "contact": "Contact details",
+            "contact_info": "Contact person information",
+            "contact_name": "Name",
+            "contact_email": "Email",
+            "contact_telephone": "Phone",
+            "contact_address": "Address",
+            "travelers": "Travel party",
+            "travelers_subheader": "Travel party overview",
+            "booking_status": "Booking status",
+            "payment_status": "Payment status"
+        }
+    },
+    "countries": {
+        "title": "Countries",
+        "actions": {
+            "create": "Create a new country",
+            "delete": "Delete country",
+            "delete_confirm": "Are you sure you want to delete this country?"
+        },
+        "submit": {
+            "create": "Create country"
+        },
+        "index": {
+            "search_placeholder": "Search on country name...",
+            "title": "Landen overzicht",
+            "table_headers": {
+                "countries": "Countries",
+                "actions": "Actions"
             },
-            "subscribers": {
-                "actions": {
-                    "delete": "Delete this newsletter subscriber",
-                    "delete_confirm": "Are you sure you want to delete this newsletter subscriber?",
-                    "resend": "Resend confirmation email",
-                    "resend_confirm": "Send this newsletter subscriber a new confirmation email?"
-                },
-                "index": {
-                    "title": "Newsletter Subscribers",
-                    "search_placeholder" : "Search trips or countries...",
-                    "table_headers": {
-                        "name": "Name",
-                        "email": "Email",
-                        "status": "Status",
-                        "actions": "Actions"
-                    },
-                    "no_subscribers": "No one has subscribed to your newsletter yet.",
-                    "no_subscribers_found": "No subscriber found."
+            "no_countries": "You haven't created any countries yet. Go to \"New Country\" or click on \"+\" to create your country trip.",
+            "no_countries_found": "No countries found.",
+            "no_countries_found_with_search": "No countries found matching: \"{search}\"."
+        },
+        "create": {
+            "title": "New Country",
+            "subtitle": "Destinations",
+            "heading": "Country Information",
+            "subheading": "Enter the country name",
+            "fields": {
+                "name": {
+                    "label": "Country name",
+                    "placeholder": "E.g. France"
                 }
             }
         }
+    },
+    "newsletter": {
+        "campaigns": {
+            "actions": {
+                "edit": "Edit newsletter campaign",
+                "send": "Send this newsletter campaign",
+                "create": "Create a new newsletter campaign",
+                "send_confirm": "You are about to send this campaign to all your subscribers. Are you sure you want to send this newsletter campaign?",
+                "delete": "Delete this newsletter campaign",
+                "delete_confirm": "Are you sure you want to delete this newsletter campaign?"
+            },
+            "index": {
+                "search_placeholder": "Search on subject...",
+                "title": "Newsletter Campaigns",
+                "table_headers": {
+                    "subject": "Subject",
+                    "status": "Status",
+                    "scheduled_at": "Scheduled for",
+                    "sent_at": "Sent on",
+                    "sent_count": "Number sent",
+                    "actions": "Actions"
+                },
+                "no_campaigns": "You haven't created any newsletter campaigns yet. Go to \"New Campaign\" or click \"+\" to create your first newsletter campaign.",
+                "no_campaigns_found": "No newsletter campaigns found.",
+                "no_campaigns_found_with_search": "No newsletter campaigns found matching: \"{search}\"."
+            }
+        },
+        "subscribers": {
+            "actions": {
+                "delete": "Delete this newsletter subscriber",
+                "delete_confirm": "Are you sure you want to delete this newsletter subscriber?",
+                "resend": "Resend confirmation email",
+                "resend_confirm": "Send this newsletter subscriber a new confirmation email?"
+            },
+            "index": {
+                "title": "Newsletter Subscribers",
+                "search_placeholder": "Search trips or countries...",
+                "table_headers": {
+                    "name": "Name",
+                    "email": "Email",
+                    "status": "Status",
+                    "actions": "Actions"
+                },
+                "no_subscribers": "No one has subscribed to your newsletter yet.",
+                "no_subscribers_found": "No subscribers found.",
+                "no_subscribers_found_with_search": "No subscribers found matching: \"{search}\"."
+            }
+        }
     }
+}
 }

@@ -53,7 +53,9 @@ const currentFilters = computed(() => ({
             :current-filters="currentFilters"
             searchable
             :search-placeholder="t('admin.newsletter.subscribers.index.search_placeholder')"
-            :empty-message="t('admin.newsletter.subscribers.index.no_subscribers_found')">
+            :empty-message="filters.search
+                    ? t('admin.newsletter.subscribers.index.no_subscribers_found_with_search', { search: filters.search })
+                    : t('admin.newsletter.subscribers.index.no_subscribers_found')">
             <!-- Custom cell for name -->
             <template #cell-name="{ row }">
                 {{ row.name || '-' }}

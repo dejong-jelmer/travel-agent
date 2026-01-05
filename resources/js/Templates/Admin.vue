@@ -123,7 +123,7 @@ Object.entries(flash).forEach(([type, message]) => {
             <SideMenu v-model:open="sideMenuOpen" class="hidden laptop:block laptop:col-start-1" />
 
             <!-- Content in kolom 2-4 -->
-            <div class="laptop:col-start-2 laptop:col-span-3 pt-4">
+            <div class="laptop:col-start-2 laptop:col-span-3 p-4">
                 <Breadcrumbs :breadcrumbs="breadcrumbs" />
                 <slot></slot>
             </div>

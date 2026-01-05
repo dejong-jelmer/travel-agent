@@ -696,7 +696,7 @@
         }
     },
     "data_table": {
-        "filters": "Filteren",
+        "filters": "Filters",
         "select": {
             "all": "Alle"
         }
@@ -775,7 +775,8 @@
                     "actions": "Acties"
                 },
                 "no_trips": "Je hebt nog geen reizen aangemaakt, ga naar \"Nieuwe Reis\" of op klik op \"+\" om je eerst reis aan te maken.",
-                "no_trips_found": "Geen reizen gevonden op \"{search}\""
+                "no_trips_found": "Geen reizen gevonden.",
+                "no_trips_found_with_search": "Geen reizen gevonden met de zoekopdracht: \"{search}\"."
             },
             "show": {
                 "edit_tooltip": "Bewerk reistrip",
@@ -848,7 +849,8 @@
                     "actions": "Acties"
                 },
                 "no_bookings": "Er zijn nog geen boekingen.",
-                "no_bookings_found": "Er zijn geen boekingen gevonden op: \"{search}\"."
+                "no_bookings_found": "Geen boekingen gevonden.",
+                "no_bookings_found_with_search": "Geen boekingen gevonden met de zoekopdracht: \"{search}\"."
             },
             "edit": {
                 "booking": "Boeking {reference} bewerken",
@@ -897,7 +899,8 @@
                     "actions": "Acties"
                 },
                 "no_countries": "Je hebt nog geen landen aangemaakt, ga naar \"Nieuwe Land\" of op klik op \"+\" om je eerst land aan te maken.",
-                "no_countries_found": "Er zijn geen landen gevonden op: \"{search}\"."
+                "no_countries_found": "Geen landen gevonden.",
+                "no_countries_found_with_search": "Geen landen gevonden met de zoekopdracht: \"{search}\"."
             },
             "create": {
                 "title": "Nieuw Land",
@@ -934,7 +937,8 @@
                         "actions": "Acties"
                     },
                     "no_campaigns": "Je hebt nog geen nieuwsbrief campagnes aangemaakt, ga naar \"Nieuwe Campagne\" of op klik op \"+\" om je eerst nieuwsbrief campagne aan te maken.",
-                    "no_campaigns_found": "Geen nieuwsbrief campagnes gevonden."
+                    "no_campaigns_found": "Geen nieuwsbrief campagnes gevonden.",
+                    "no_campaigns_found_with_search": "Geen nieuwsbrief campagnes gevonden met de zoekopdracht: \"{search}\"."
                 }
             },
             "subscribers": {
@@ -954,8 +958,8 @@
                         "actions": "Acties"
                     },
                     "no_subscribers": "Er is nog niemand geabboneerd op jouw nieuwsbrief.",
-                    "no_subscribers_found": "Geen abbonees gevonden."
-
+                    "no_subscribers_found": "Geen abbonees gevonden.",
+                    "no_subscribers_found_with_search": "Geen abbonees gevonden met de zoekopdracht: \"{search}\"."
                 }
             }
         }

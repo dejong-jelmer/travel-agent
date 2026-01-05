@@ -42,7 +42,9 @@ const filterOptions = computed(() => [
                 :current-direction="filters.direction" :current-search="filters.search" :filter-options="filterOptions"
                 searchable
                 :search-placeholder="t('admin.newsletter.campaigns.index.search_placeholder')"
-                :empty-message="t('admin.newsletter.campaigns.index.no_campaigns_found', { search: filters.search })">
+                :empty-message="filters.search
+                    ? t('admin.newsletter.campaigns.index.no_campaigns_found_with_search', { search: filters.search })
+                    : t('admin.newsletter.campaigns.index.no_campaigns_found')">
                 <!-- Custom cell for status -->
                 <template #cell-status="{ row }">
                     <CampaignStatusBadge class="w-full mx-auto" :status="row.status">

@@ -2,21 +2,22 @@
 
 namespace App\Http\Controllers\Admin\Newsletter;
 
-use App\DTO\DataTableConfigData;
 use App\Enums\Newsletter\SubscriberStatus;
 use App\Events\NewsletterSubscriptionRequested;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\Traits\HasDataTableFilters;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\NewsletterSubscriber;
+use App\Services\DataTableService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class SubscriberController extends Controller
 {
-    use HasDataTableFilters;
     use HasPageMetadata;
+
+    public function __construct(private DataTableService $dataTableService) {}
 
     /**
      * Display a listing of the resource.
@@ -26,24 +27,15 @@ class SubscriberController extends Controller
         $query = NewsletterSubscriber::query();
 
         // Apply status filter using model scopes
-        if ($statusFilter = request('status')) {
-            $status = SubscriberStatus::tryFrom($statusFilter);
-            if ($status) {
-                $query->{$status->value}();
-            }
-        }
+        NewsletterSubscriber::applyScopeFilters($query);
 
         // Apply DataTable filters (excluding status as it's handled above)
-        $this->applyDataTableFilters($query, new DataTableConfigData(
-            searchable: ['email', 'name'],
-            sortable: ['id', 'email', 'name'],
-            defaultSort: ['id', 'desc']
-        ));
+        $this->dataTableService->applySortFilters($query, NewsletterSubscriber::dataTableConfig());
 
         return Inertia::render('Admin/Newsletter/Subscriber/Index', [
             'subscribers' => $query->paginate()->withQueryString(),
-            'totalSubscribers' => NewsletterSubscriber::count(),
-            'filters' => $this->getCurrentFilters(['status']),
+            'totalSubscribers' => Cache::remember('newsletter.subscribers.count', config('datatables.cache.ttl'), fn () => NewsletterSubscriber::count()),
+            'filters' => $this->dataTableService->getCurrentSortFilters(['status']),
             'statusOptions' => SubscriberStatus::options(),
             'title' => $this->pageTitle('newsletter.subscriber.title_index'),
         ]);

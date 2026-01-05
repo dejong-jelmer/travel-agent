@@ -47,8 +47,10 @@ const currentFilters = computed(() => ({
             <DataTable :data="bookings.data" :columns="columns" :links="bookings.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" :filter-options="filterOptions"
                 :current-filters="currentFilters" searchable
-                :search-placeholder="t('admin.booking.index.search_placeholder', 'Search by reference or trip...')"
-                :empty-message="t('admin.booking.index.no_bookings_found', { search: filters.search })">
+                :search-placeholder="t('admin.booking.index.search_placeholder')"
+                :empty-message="filters.search
+                    ? t('admin.booking.index.no_bookings_found_with_search', { search: filters.search })
+                    : t('admin.booking.index.no_bookings_found')">
                 <!-- Custom cell for trip -->
                 <template #cell-trip="{ row }">
                     {{ row.trip?.name ?? '-' }}

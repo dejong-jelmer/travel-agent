@@ -26,8 +26,10 @@ const columns = [
         <template v-if="totalCountries > 0">
             <DataTable :data="countries.data" :columns="columns" :links="countries.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" searchable
-                :search-placeholder="t('admin.countries.index.search_placeholder', 'Search by reference or trip...')"
-                :empty-message="t('admin.countries.index.no_countries_found', { search: filters.search })">
+                :search-placeholder="t('admin.countries.index.search_placeholder')"
+                :empty-message="filters.search
+                    ? t('admin.countries.index.no_countries_found_with_search', { search: filters.search })
+                    : t('admin.countries.index.no_countries_found')">
 
 
                 <!-- Custom cell for actions -->
