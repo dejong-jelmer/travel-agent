@@ -23,17 +23,15 @@ class CountryController extends Controller
      */
     public function index(DataTableRequest $request): Response
     {
-        $query = Country::query();
-
-        // Apply DataTable filters
-        $this->dataTableService
-            ->withValidatedData($request->validated())
-            ->applySortFilters($query, Country::dataTableConfig());
+        $countries = $this->dataTableService
+            ->applyFilters(Country::query(), $request, Country::filters())
+            ->paginate()
+            ->withQueryString();
 
         return Inertia::render('Admin/Country/Index', [
-            'countries' => $query->paginate()->withQueryString(),
+            'countries' => $countries,
             'totalCountries' => Country::count(),
-            'filters' => $this->dataTableService->getCurrentSortFilters(['name', 'id']),
+            'filters' => $this->dataTableService->getSortFilters(Country::filters()),
             'title' => $this->pageTitle('country.title_index'),
         ]);
     }

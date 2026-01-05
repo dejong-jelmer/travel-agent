@@ -24,26 +24,17 @@ class SubscriberController extends Controller
      */
     public function index(DataTableRequest $request): Response
     {
-        $query = NewsletterSubscriber::query();
-
         // Apply status filter using model scopes
-        NewsletterSubscriber::applyScopeFilters($query);
-
-        // Merge validated data with validated filters
-        $validatedData = array_merge(
-            $request->validated(),
-            $request->getValidatedFilters(['status'])
-        );
-
-        // Apply DataTable filters (excluding status as it's handled above)
-        $this->dataTableService
-            ->withValidatedData($validatedData)
-            ->applySortFilters($query, NewsletterSubscriber::dataTableConfig());
+        $query = NewsletterSubscriber::applyScopeFilters(NewsletterSubscriber::query());
+        $subscribers = $this->dataTableService
+            ->applyFilters($query, $request, NewsletterSubscriber::filters())
+            ->paginate()
+            ->withQueryString();
 
         return Inertia::render('Admin/Newsletter/Subscriber/Index', [
-            'subscribers' => $query->paginate()->withQueryString(),
+            'subscribers' => $subscribers,
             'totalSubscribers' => NewsletterSubscriber::count(),
-            'filters' => $this->dataTableService->getCurrentSortFilters(['status']),
+            'filters' => $this->dataTableService->getSortFilters(NewsletterSubscriber::filters()),
             'statusOptions' => SubscriberStatus::options(),
             'title' => $this->pageTitle('newsletter.subscriber.title_index'),
         ]);

@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\DTO\DataTableConfig;
+use App\Http\Requests\DataTableRequest;
 use Illuminate\Database\Eloquent\Builder;
 
 class DataTableService
@@ -34,7 +35,7 @@ class DataTableService
         $query = $this->applySearch($query, $config);
 
         // Apply filters
-        $query = $this->applyFilters($query, $config->filterable);
+        $query = $this->applyQueryFilters($query, $config->filterable);
 
         // Apply sorting
         $query = $this->applySorting($query, $config);
@@ -48,7 +49,7 @@ class DataTableService
      * @param  array  $filterableFields  Array of filterable field names
      * @return array<string, mixed> Array of current filter values
      */
-    public function getCurrentSortFilters(array $filterableFields = []): array
+    public function getSortFilters(array $filterableFields = []): array
     {
         $filters = [
             'search' => $this->validatedData['search'] ?? '',
@@ -61,6 +62,18 @@ class DataTableService
         }
 
         return $filters;
+    }
+
+    public function applyFilters(Builder $query, DataTableRequest $request, array $filterFields = []): Builder
+    {
+        $validatedData = array_merge(
+            $request->validated(),
+            $request->getValidatedFilters($filterFields)
+        );
+
+        $this->withValidatedData($validatedData)->applySortFilters($query, $query->getModel()::dataTableConfig());
+
+        return $query;
     }
 
     /**
@@ -106,7 +119,7 @@ class DataTableService
      * @param  array  $filterable  Array of field names that can be filtered
      * @return Builder The modified query builder
      */
-    private function applyFilters(Builder $query, array $filterable): Builder
+    private function applyQueryFilters(Builder $query, array $filterable): Builder
     {
         foreach ($filterable as $field) {
             if ($value = $this->validatedData[$field] ?? null) {

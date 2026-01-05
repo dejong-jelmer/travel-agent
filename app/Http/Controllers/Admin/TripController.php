@@ -26,17 +26,15 @@ class TripController extends Controller
      */
     public function index(DataTableRequest $request): Response
     {
-        $query = Trip::with(['countries', 'itineraries', 'heroImage']);
-
-        // Apply DataTable filters
-        $this->dataTableService
-            ->withValidatedData($request->validated())
-            ->applySortFilters($query, Trip::dataTableConfig());
+        $trips = $this->dataTableService
+            ->applyFilters(Trip::with(['countries', 'itineraries', 'heroImage']), $request, Trip::filters())
+            ->paginate()
+            ->withQueryString();
 
         return Inertia::render('Admin/Trip/Index', [
-            'trips' => $query->paginate()->withQueryString(),
+            'trips' => $trips,
             'totalTrips' => Trip::count(),
-            'filters' => $this->dataTableService->getCurrentSortFilters(),
+            'filters' => $this->dataTableService->getSortFilters(),
             'title' => $this->pageTitle('trip.title_index'),
         ]);
     }

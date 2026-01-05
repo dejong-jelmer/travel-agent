@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
 
 class DataTableRequest extends FormRequest
 {
@@ -29,19 +30,14 @@ class DataTableRequest extends FormRequest
      */
     public function getValidatedFilters(array $filterableFields = []): array
     {
-        $validated = $this->validated();
-        $filters = [];
-
+        $rules = [];
         foreach ($filterableFields as $field) {
-            if ($this->has($field)) {
-                // Validate the filter value exists and is not empty
-                $value = $this->input($field);
-                if ($value !== null && $value !== '') {
-                    $filters[$field] = $value;
-                }
-            }
+            $rules[$field] = ['nullable', 'string', 'max:255'];
         }
 
-        return $filters;
+        $validator = Validator::make($this->all(), $rules);
+
+        return array_filter($validator->validated());
+
     }
 }

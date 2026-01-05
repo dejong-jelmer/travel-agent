@@ -36,23 +36,15 @@ class CampaignController extends Controller
      */
     public function index(DataTableRequest $request): Response
     {
-        $query = NewsletterCampaign::with(['heroImage', 'trips']);
-
-        // Merge validated data with validated filters
-        $validatedData = array_merge(
-            $request->validated(),
-            $request->getValidatedFilters(['status'])
-        );
-
-        // Apply DataTable filters
-        $this->dataTableService
-            ->withValidatedData($validatedData)
-            ->applySortFilters($query, NewsletterCampaign::dataTableConfig());
+        $trips = $this->dataTableService
+            ->applyFilters(NewsletterCampaign::with(['heroImage', 'trips']), $request, NewsletterCampaign::filters())
+            ->paginate()
+            ->withQueryString();
 
         return Inertia::render('Admin/Newsletter/Campaign/Index', [
-            'campaigns' => $query->paginate()->withQueryString(),
+            'campaigns' => $trips,
             'totalCampaigns' => NewsletterCampaign::count(),
-            'filters' => $this->dataTableService->getCurrentSortFilters(['status']),
+            'filters' => $this->dataTableService->getSortFilters(NewsletterCampaign::filters()),
             'statusOptions' => CampaignStatus::options(),
             'title' => $this->pageTitle('newsletter.campaign.title_index'),
         ]);

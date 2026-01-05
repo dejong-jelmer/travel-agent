@@ -25,12 +25,12 @@ trait Sortable
         );
     }
 
-    public static function applyScopeFilters(Builder $query): void
+    public static function applyScopeFilters(Builder $query): Builder
     {
         $instance = new static;
 
         if (! isset($instance->scopeFilters)) {
-            return;
+            return $query;
         }
 
         foreach ($instance->scopeFilters as $param => $enumClass) {
@@ -41,5 +41,12 @@ trait Sortable
                 }
             }
         }
+
+        return $query;
+    }
+
+    public static function filters(): array
+    {
+        return property_exists(new static, 'filterable') ? new static()->filterable : [];
     }
 }

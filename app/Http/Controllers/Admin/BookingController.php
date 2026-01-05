@@ -29,23 +29,15 @@ class BookingController extends Controller
      */
     public function index(DataTableRequest $request): Response
     {
-        $query = Booking::with(['trip']);
-
-        // Merge validated data with validated filters
-        $validatedData = array_merge(
-            $request->validated(),
-            $request->getValidatedFilters(['status', 'payment_status'])
-        );
-
-        // Apply DataTable filters
-        $this->dataTableService
-            ->withValidatedData($validatedData)
-            ->applySortFilters($query, Booking::dataTableConfig());
+        $bookings = $this->dataTableService
+            ->applyFilters(Booking::with(['trip']), $request, Booking::filters())
+            ->paginate()
+            ->withQueryString();
 
         return Inertia::render('Admin/Booking/Index', [
-            'bookings' => $query->paginate()->withQueryString(),
+            'bookings' => $bookings,
             'totalBookings' => Booking::count(),
-            'filters' => $this->dataTableService->getCurrentSortFilters(['status', 'payment_status']),
+            'filters' => $this->dataTableService->getSortFilters(Booking::filters()),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
             'title' => $this->pageTitle('booking.title_index'),
