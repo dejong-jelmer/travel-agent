@@ -60,7 +60,7 @@ class NewsletterCampaign extends Model
 
     protected $searchableRelations = ['trips.name'];
 
-    protected $filterable = ['status', 'payment_status'];
+    protected $filterable = ['status'];
 
     protected $sortable = ['id', 'subject', 'status', 'sent_at', 'scheduled_at', 'sent_count'];
 
@@ -72,7 +72,10 @@ class NewsletterCampaign extends Model
         ],
     ];
 
-    protected $defaultSort = ['id', 'desc'];
+    protected $defaultSort = [
+        'column' => 'id',
+        'direction' => 'desc',
+    ];
 
     protected static function booted(): void
     {

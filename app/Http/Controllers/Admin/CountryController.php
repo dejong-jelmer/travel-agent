@@ -4,11 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\DataTableRequest;
 use App\Models\Country;
 use App\Services\DataTableService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -21,16 +21,18 @@ class CountryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
         $query = Country::query();
 
         // Apply DataTable filters
-        $this->dataTableService->applySortFilters($query, Country::dataTableConfig());
+        $this->dataTableService
+            ->withValidatedData($request->validated())
+            ->applySortFilters($query, Country::dataTableConfig());
 
         return Inertia::render('Admin/Country/Index', [
             'countries' => $query->paginate()->withQueryString(),
-            'totalCountries' => Cache::remember('countries.count', config('datatables.cache.ttl'), fn () => Country::count()),
+            'totalCountries' => Country::count(),
             'filters' => $this->dataTableService->getCurrentSortFilters(['name', 'id']),
             'title' => $this->pageTitle('country.title_index'),
         ]);

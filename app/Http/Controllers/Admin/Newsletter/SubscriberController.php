@@ -6,10 +6,10 @@ use App\Enums\Newsletter\SubscriberStatus;
 use App\Events\NewsletterSubscriptionRequested;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\DataTableRequest;
 use App\Models\NewsletterSubscriber;
 use App\Services\DataTableService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -22,19 +22,27 @@ class SubscriberController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
         $query = NewsletterSubscriber::query();
 
         // Apply status filter using model scopes
         NewsletterSubscriber::applyScopeFilters($query);
 
+        // Merge validated data with validated filters
+        $validatedData = array_merge(
+            $request->validated(),
+            $request->getValidatedFilters(['status'])
+        );
+
         // Apply DataTable filters (excluding status as it's handled above)
-        $this->dataTableService->applySortFilters($query, NewsletterSubscriber::dataTableConfig());
+        $this->dataTableService
+            ->withValidatedData($validatedData)
+            ->applySortFilters($query, NewsletterSubscriber::dataTableConfig());
 
         return Inertia::render('Admin/Newsletter/Subscriber/Index', [
             'subscribers' => $query->paginate()->withQueryString(),
-            'totalSubscribers' => Cache::remember('newsletter.subscribers.count', config('datatables.cache.ttl'), fn () => NewsletterSubscriber::count()),
+            'totalSubscribers' => NewsletterSubscriber::count(),
             'filters' => $this->dataTableService->getCurrentSortFilters(['status']),
             'statusOptions' => SubscriberStatus::options(),
             'title' => $this->pageTitle('newsletter.subscriber.title_index'),

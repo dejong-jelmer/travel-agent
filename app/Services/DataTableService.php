@@ -7,6 +7,20 @@ use Illuminate\Database\Eloquent\Builder;
 
 class DataTableService
 {
+    private array $validatedData = [];
+
+    /**
+     * Set validated request data for filtering/sorting
+     *
+     * @param  array  $data  Validated request data
+     */
+    public function withValidatedData(array $data): self
+    {
+        $this->validatedData = $data;
+
+        return $this;
+    }
+
     /**
      * Apply DataTable filters (search, filters, sort) to a query
      *
@@ -37,13 +51,13 @@ class DataTableService
     public function getCurrentSortFilters(array $filterableFields = []): array
     {
         $filters = [
-            'search' => request('search', ''),
-            'sort' => request('sort'),
-            'direction' => request('direction', 'desc'),
+            'search' => $this->validatedData['search'] ?? '',
+            'sort' => $this->validatedData['sort'] ?? null,
+            'direction' => $this->validatedData['direction'] ?? 'desc',
         ];
 
         foreach ($filterableFields as $field) {
-            $filters[$field] = request($field);
+            $filters[$field] = $this->validatedData[$field] ?? null;
         }
 
         return $filters;
@@ -64,7 +78,7 @@ class DataTableService
         $searchable = $config->searchable;
         $searchableRelations = $config->searchableRelations;
 
-        if ($search = request('search')) {
+        if ($search = $this->validatedData['search'] ?? null) {
             $query->where(function ($q) use ($search, $searchable, $searchableRelations) {
                 // Search in direct fields
                 foreach ($searchable as $field) {
@@ -95,7 +109,7 @@ class DataTableService
     private function applyFilters(Builder $query, array $filterable): Builder
     {
         foreach ($filterable as $field) {
-            if ($value = request($field)) {
+            if ($value = $this->validatedData[$field] ?? null) {
                 $query->where($field, $value);
             }
         }
@@ -125,8 +139,9 @@ class DataTableService
         $sortableBelongsToMany = $config->sortableBelongsToMany;
         $defaultSort = $config->defaultSort;
 
-        $sortField = in_array(request('sort'), $sortable) ? request('sort') : null;
-        $sortDirection = request('direction', 'desc');
+        $requestedSort = $this->validatedData['sort'] ?? null;
+        $sortField = in_array($requestedSort, $sortable) ? $requestedSort : null;
+        $sortDirection = $this->validatedData['direction'] ?? 'desc';
         $sortDirection = in_array(strtolower($sortDirection), ['asc', 'desc'])
             ? $sortDirection
             : 'desc';
@@ -173,7 +188,7 @@ class DataTableService
             }
         } else {
             // Default sort when no sort or reset
-            $query->orderBy($defaultSort[0], $defaultSort[1]);
+            $query->orderBy($defaultSort['column'], $defaultSort['direction']);
         }
 
         return $query;

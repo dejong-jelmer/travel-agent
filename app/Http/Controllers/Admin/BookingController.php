@@ -8,13 +8,13 @@ use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
 use App\Services\DataTableService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Cache;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -27,16 +27,24 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
         $query = Booking::with(['trip']);
 
+        // Merge validated data with validated filters
+        $validatedData = array_merge(
+            $request->validated(),
+            $request->getValidatedFilters(['status', 'payment_status'])
+        );
+
         // Apply DataTable filters
-        $this->dataTableService->applySortFilters($query, Booking::dataTableConfig());
+        $this->dataTableService
+            ->withValidatedData($validatedData)
+            ->applySortFilters($query, Booking::dataTableConfig());
 
         return Inertia::render('Admin/Booking/Index', [
             'bookings' => $query->paginate()->withQueryString(),
-            'totalBookings' => Cache::remember('bookings.count', config('datatables.cache.ttl'), fn () => Booking::count()),
+            'totalBookings' => Booking::count(),
             'filters' => $this->dataTableService->getCurrentSortFilters(['status', 'payment_status']),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),

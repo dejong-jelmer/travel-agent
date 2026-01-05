@@ -18,7 +18,10 @@ trait Sortable
             sortable: $instance->sortable ?? [],
             sortableBelongsTo: $instance->sortableBelongsTo ?? [],
             sortableBelongsToMany: $instance->sortableBelongsToMany ?? [],
-            defaultSort: $instance->defaultSort ?? ['id', 'asc']
+            defaultSort: $instance->defaultSort ?? [
+                'column' => 'id',
+                'direction' => 'asc',
+            ]
         );
     }
 

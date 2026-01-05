@@ -82,7 +82,10 @@ class Booking extends Model
         ],
     ];
 
-    protected $defaultSort = ['id', 'desc'];
+    protected $defaultSort = [
+        'column' => 'id',
+        'direction' => 'desc',
+    ];
 
     protected static function booted()
     {

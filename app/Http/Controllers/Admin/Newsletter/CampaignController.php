@@ -7,6 +7,7 @@ use App\Enums\Newsletter\CampaignStatus;
 use App\Exceptions\CampaignAlreadySentException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\Newsletter\CreateCampaignRequest;
 use App\Http\Requests\Newsletter\UpdateCampaignRequest;
 use App\Mail\NewsletterCampaignMail;
@@ -17,7 +18,6 @@ use App\Services\DataTableService;
 use App\Services\NewsletterCampaignService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -34,16 +34,24 @@ class CampaignController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
         $query = NewsletterCampaign::with(['heroImage', 'trips']);
 
+        // Merge validated data with validated filters
+        $validatedData = array_merge(
+            $request->validated(),
+            $request->getValidatedFilters(['status'])
+        );
+
         // Apply DataTable filters
-        $this->dataTableService->applySortFilters($query, NewsletterCampaign::dataTableConfig());
+        $this->dataTableService
+            ->withValidatedData($validatedData)
+            ->applySortFilters($query, NewsletterCampaign::dataTableConfig());
 
         return Inertia::render('Admin/Newsletter/Campaign/Index', [
             'campaigns' => $query->paginate()->withQueryString(),
-            'totalCampaigns' => Cache::remember('newsletter.campaigns.count', config('datatables.cache.ttl'), fn () => NewsletterCampaign::count()),
+            'totalCampaigns' => NewsletterCampaign::count(),
             'filters' => $this->dataTableService->getCurrentSortFilters(['status']),
             'statusOptions' => CampaignStatus::options(),
             'title' => $this->pageTitle('newsletter.campaign.title_index'),

@@ -46,7 +46,10 @@ class NewsletterSubscriber extends Model
 
     protected $sortable = ['id', 'email', 'name'];
 
-    protected $defaultSort = ['id', 'desc'];
+    protected $defaultSort = [
+        'column' => 'id',
+        'direction' => 'desc',
+    ];
 
     protected array $scopeFilters = [
         'status' => SubscriberStatus::class,
