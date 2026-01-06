@@ -35,6 +35,9 @@ class DatabaseSeeder extends Seeder
         // Admin
         User::factory()->admin()->create();
 
+        // Seed countries first
+        $this->call(CountrySeeder::class);
+
         // Trips
         $trips = Trip::factory(50)
             ->withHeroImage()

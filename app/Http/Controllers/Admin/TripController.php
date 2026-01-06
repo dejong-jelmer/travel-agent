@@ -6,9 +6,11 @@ use App\Enums\ImageRelation;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
+use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateTripRequest;
 use App\Models\Country;
 use App\Models\Trip;
+use App\Services\DataTableService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -17,13 +19,22 @@ class TripController extends Controller
 {
     use HasPageMetadata;
 
+    public function __construct(private DataTableService $dataTableService) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
+        $trips = $this->dataTableService
+            ->applyFilters(Trip::with(['countries', 'itineraries', 'heroImage']), $request, Trip::filters())
+            ->paginate()
+            ->withQueryString();
+
         return Inertia::render('Admin/Trip/Index', [
-            'trips' => Trip::with(['countries', 'itineraries', 'heroImage'])->paginate(),
+            'trips' => $trips,
+            'totalTrips' => Trip::count(),
+            'filters' => $this->dataTableService->getSortFilters(Trip::filters()),
             'title' => $this->pageTitle('trip.title_index'),
         ]);
     }

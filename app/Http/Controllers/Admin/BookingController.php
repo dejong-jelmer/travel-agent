@@ -8,9 +8,11 @@ use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
+use App\Services\DataTableService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -20,15 +22,24 @@ class BookingController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private BookingService $bookingService) {}
+    public function __construct(private BookingService $bookingService, private DataTableService $dataTableService) {}
 
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
+        $bookings = $this->dataTableService
+            ->applyFilters(Booking::with(['trip']), $request, Booking::filters())
+            ->paginate()
+            ->withQueryString();
+
         return Inertia::render('Admin/Booking/Index', [
-            'bookings' => Booking::with(['trip'])->paginate(),
+            'bookings' => $bookings,
+            'totalBookings' => Booking::count(),
+            'filters' => $this->dataTableService->getSortFilters(Booking::filters()),
+            'statusOptions' => Status::options(),
+            'paymentStatusOptions' => PaymentStatus::options(),
             'title' => $this->pageTitle('booking.title_index'),
         ]);
     }

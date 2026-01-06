@@ -7,12 +7,14 @@ use App\Enums\Newsletter\CampaignStatus;
 use App\Exceptions\CampaignAlreadySentException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\Newsletter\CreateCampaignRequest;
 use App\Http\Requests\Newsletter\UpdateCampaignRequest;
 use App\Mail\NewsletterCampaignMail;
 use App\Models\NewsletterCampaign;
 use App\Models\Trip;
 use App\Models\User;
+use App\Services\DataTableService;
 use App\Services\NewsletterCampaignService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
@@ -27,13 +29,23 @@ class CampaignController extends Controller
 {
     use HasPageMetadata;
 
+    public function __construct(private DataTableService $dataTableService) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
+        $campaigns = $this->dataTableService
+            ->applyFilters(NewsletterCampaign::with(['heroImage', 'trips']), $request, NewsletterCampaign::filters())
+            ->paginate()
+            ->withQueryString();
+
         return Inertia::render('Admin/Newsletter/Campaign/Index', [
-            'campaigns' => NewsletterCampaign::with(['heroImage', 'trips'])->paginate(),
+            'campaigns' => $campaigns,
+            'totalCampaigns' => NewsletterCampaign::count(),
+            'filters' => $this->dataTableService->getSortFilters(NewsletterCampaign::filters()),
+            'statusOptions' => CampaignStatus::options(),
             'title' => $this->pageTitle('newsletter.campaign.title_index'),
         ]);
     }

@@ -117,6 +117,11 @@ const menuGroups = computed(() => [
                         path: new URL(route('admin.newsletter.campaigns.index'), window.location.origin).pathname,
                         icon: PencilSquareIcon,
                     },
+                    {
+                        label: t('admin_menu.items.new_campaign'),
+                        path: new URL(route('admin.newsletter.campaigns.create'), window.location.origin).pathname,
+                        icon: PlusIcon,
+                    },
                 ]
             },
         ]

@@ -8,11 +8,7 @@ import { Bars3Icon, ArrowRightStartOnRectangleIcon, ChevronDownIcon } from '@her
 
 const props = defineProps({
     title: String,
-    phone: Object,
-    links: {
-        type: Object,
-        required: false
-    }
+    phone: Object
 });
 
 const user = usePage().props.auth?.user ?? {};
@@ -127,12 +123,9 @@ Object.entries(flash).forEach(([type, message]) => {
             <SideMenu v-model:open="sideMenuOpen" class="hidden laptop:block laptop:col-start-1" />
 
             <!-- Content in kolom 2-4 -->
-            <div class="laptop:col-start-2 laptop:col-span-3 pt-4">
+            <div class="laptop:col-start-2 laptop:col-span-3 p-4">
                 <Breadcrumbs :breadcrumbs="breadcrumbs" />
                 <slot></slot>
-                <div class="my-5 w-full flex justify-center">
-                    <Pagination v-if="(typeof links !== 'undefined')" :links="links"></Pagination>
-                </div>
             </div>
         </section>
     </main>

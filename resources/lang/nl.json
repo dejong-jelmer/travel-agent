@@ -555,6 +555,7 @@
             "newsletter": "Nieuwsbrief",
             "subscribers": "Abonnees",
             "campaigns": "Campagnes",
+            "new_campaign": "Nieuwe Campagne",
             "home": "Home",
             "logout": "Uitloggen"
         }
@@ -694,6 +695,12 @@
             "submit_button": "Inloggen"
         }
     },
+    "data_table": {
+        "filters": "Filters",
+        "select": {
+            "all": "Alle"
+        }
+    },
     "admin": {
         "dashboard": {
             "header": {
@@ -750,13 +757,14 @@
             "actions": {
                 "view": "Bekijk deze reis",
                 "edit": "Bewerk deze reis",
+                "create": "Maak een reis aan",
                 "itinerary": "Bekijk reisplan van deze reis",
                 "delete": "Verwijder deze reis!",
                 "delete_confirm": "Weet je zeker dat je deze reis wilt verwijderen?"
             },
             "index": {
                 "title": "Reizen",
-                "create_tooltip": "Maak een reis aan",
+                "search_placeholder" : "Zoek op reis of op land...",
                 "table_headers": {
                     "id": "#",
                     "image": "Afbeelding",
@@ -766,7 +774,9 @@
                     "days": "Dagen",
                     "actions": "Acties"
                 },
-                "no_trips": "Je hebt nog geen reizen aangemaakt."
+                "no_trips": "Je hebt nog geen reizen aangemaakt, ga naar \"Nieuwe Reis\" of op klik op \"+\" om je eerst reis aan te maken.",
+                "no_trips_found": "Geen reizen gevonden.",
+                "no_trips_found_with_search": "Geen reizen gevonden met de zoekopdracht: \"{search}\"."
             },
             "show": {
                 "edit_tooltip": "Bewerk reistrip",
@@ -825,15 +835,23 @@
                 "edit": "Wijzigingen opslaan"
             },
             "index": {
+                "search_placeholder": "Zoek op referentie, reis of op land...",
+                "filters": {
+                    "status": "Status",
+                    "payment_status": "Betaalstatus"
+                },
                 "table_headers": {
                     "reference": "Referentie",
                     "trip": "Reis",
+                    "countries": "Land(en)",
                     "departure_date": "Vertrekdatum",
                     "status": "Status",
                     "payment": "Betaling",
                     "actions": "Acties"
                 },
-                "no_bookings": "Er zijn nog geen boekingen."
+                "no_bookings": "Er zijn nog geen boekingen.",
+                "no_bookings_found": "Geen boekingen gevonden.",
+                "no_bookings_found_with_search": "Geen boekingen gevonden met de zoekopdracht: \"{search}\"."
             },
             "edit": {
                 "booking": "Boeking {reference} bewerken",
@@ -847,6 +865,7 @@
                 "payment_status_label": "Betaalstatus"
             },
             "show": {
+                "booking": "Boeking",
                 "details": "Boekingsgegevens",
                 "info": "Informatie over de boeking",
                 "reference": "Boekingsreferentie",
@@ -867,6 +886,7 @@
         "countries": {
             "title": "Landen",
             "actions": {
+                "create": "Maak een nieuw land aan",
                 "delete": "Verwijder land",
                 "delete_confirm": "Weet je zeker dat je dit land wilt verwijderen?"
             },
@@ -874,12 +894,15 @@
                 "create": "Land aanmaken"
             },
             "index": {
+                "search_placeholder": "Zoek op landnaam...",
                 "title": "Landen overzicht",
                 "table_headers": {
                     "countries": "Landen",
                     "actions": "Acties"
                 },
-                "no_countries": "Er zijn nog geen landen aangemaakt."
+                "no_countries": "Je hebt nog geen landen aangemaakt, ga naar \"Nieuwe Land\" of op klik op \"+\" om je eerst land aan te maken.",
+                "no_countries_found": "Geen landen gevonden.",
+                "no_countries_found_with_search": "Geen landen gevonden met de zoekopdracht: \"{search}\"."
             },
             "create": {
                 "title": "Nieuw Land",
@@ -899,21 +922,25 @@
                 "actions": {
                     "edit":"Bewerk nieuwsbrief campagne",
                     "send": "Verstuur deze nieuwsbrief campagne",
+                    "create": "Maak een nieuwe nieuwsbrief campagne aan",
                     "send_confirm": "Je staat op het punt deze campagne naar al je abbonees te versturen. Weet je zeker dat je deze nieuwsbrief campagne wilt versturen?",
                     "delete": "Verwijder deze nieuwsbrief campagne",
                     "delete_confirm": "Weet je zeker dat je deze nieuwsbrief campagne wilt verwijderen?"
                 },
                 "index": {
+                    "search_placeholder": "Zoek op onderwerp...",
                     "title": "Nieuwsbrief Campagnes",
                     "table_headers": {
                         "subject": "Onderwerp",
                         "status": "Status",
-                        "planned_for": "Gepland voor",
+                        "scheduled_at": "Gepland voor",
                         "sent_at": "Verzonden op",
                         "sent_count": "Aantal verzonden",
                         "actions": "Acties"
                     },
-                    "no_campaigns": "Je hebt nog nieuwsbrief campagnes aangemaakt."
+                    "no_campaigns": "Je hebt nog geen nieuwsbrief campagnes aangemaakt, ga naar \"Nieuwe Campagne\" of op klik op \"+\" om je eerst nieuwsbrief campagne aan te maken.",
+                    "no_campaigns_found": "Geen nieuwsbrief campagnes gevonden.",
+                    "no_campaigns_found_with_search": "Geen nieuwsbrief campagnes gevonden met de zoekopdracht: \"{search}\"."
                 }
             },
             "subscribers": {
@@ -925,13 +952,16 @@
                 },
                 "index": {
                     "title": "Nieuwsbrief Abonnees",
+                    "search_placeholder": "Zoek op naam of op email...",
                     "table_headers": {
                         "name": "Naam",
                         "email": "E-mail",
                         "status": "Status",
                         "actions": "Acties"
                     },
-                    "no_subscribers": "Er is nog niemand geabboneerd op jouw nieuwsbrief."
+                    "no_subscribers": "Er is nog niemand geabboneerd op jouw nieuwsbrief.",
+                    "no_subscribers_found": "Geen abbonees gevonden.",
+                    "no_subscribers_found_with_search": "Geen abbonees gevonden met de zoekopdracht: \"{search}\"."
                 }
             }
         }

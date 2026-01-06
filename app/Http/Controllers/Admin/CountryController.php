@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Http\Requests\DataTableRequest;
 use App\Models\Country;
+use App\Services\DataTableService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -14,13 +16,22 @@ class CountryController extends Controller
 {
     use HasPageMetadata;
 
+    public function __construct(private DataTableService $dataTableService) {}
+
     /**
      * Display a listing of the resource.
      */
-    public function index(): Response
+    public function index(DataTableRequest $request): Response
     {
+        $countries = $this->dataTableService
+            ->applyFilters(Country::query(), $request, Country::filters())
+            ->paginate()
+            ->withQueryString();
+
         return Inertia::render('Admin/Country/Index', [
-            'countries' => Country::paginate(),
+            'countries' => $countries,
+            'totalCountries' => Country::count(),
+            'filters' => $this->dataTableService->getSortFilters(Country::filters()),
             'title' => $this->pageTitle('country.title_index'),
         ]);
     }

@@ -7,6 +7,7 @@ use App\Models\Country;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
+use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
@@ -37,24 +38,6 @@ class TripFactory extends Factory
             'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
         ];
-    }
-
-    public function withCountry(): static
-    {
-        return $this->afterCreating(function (Trip $trip) {
-            $locale = fake()->locale();
-            $country = Country::factory()->fromLocale($locale)->create();
-            $city = fake($locale)->city();
-
-            $trip->countries()->attach($country);
-
-            $trip->update([
-                'name' => $city,
-                'slug' => $this->generateSlug($city, $country->name),
-                'description' => $this->generateDescription($city, $country->name),
-                'meta_title' => $this->generateMetaTitle($city, $trip->duration, $country->name),
-            ]);
-        });
     }
 
     private function generateSlug(string $city, ?string $country = null): string
@@ -112,6 +95,30 @@ class TripFactory extends Factory
                     'order' => $sequence->index + 1,
                 ])
                 ->create(['trip_id' => $trip->id]);
+        });
+    }
+
+    /**
+     * Attach random country from existing pool
+     * Requires countries to be seeded first (via CountrySeeder)
+     */
+    public function withCountry(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            if ($country = Country::inRandomOrder()->first()) {
+                $trip->countries()->attach($country);
+
+                // Get locale from CountryService
+                $locale = CountryService::getLocale($country->name);
+                $city = fake($locale)->city();
+
+                $trip->update([
+                    'name' => $city,
+                    'slug' => $this->generateSlug($city, $country->name),
+                    'description' => $this->generateDescription($city, $country->name),
+                    'meta_title' => $this->generateMetaTitle($city, $trip->duration, $country->name),
+                ]);
+            }
         });
     }
 }

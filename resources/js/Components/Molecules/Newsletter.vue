@@ -3,6 +3,9 @@ import { ref } from "vue"
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification"
 import { LoaderCircle } from "lucide-vue-next"
+import i18n from '@/plugins/i18n.js';
+
+const t = (key, params) => i18n.global.t(key, params);
 
 const honeypot = ref(null)
 const toast = useToast()
@@ -23,10 +26,10 @@ function submit() {
             onSuccess: () => {
                 const email = form.email
                 form.reset()
-                toast.success($t('newsletter.subscription.success', { "email": email }))
+                toast.success(t('newsletter.subscription.success', { "email": email }))
             },
             onError: () => {
-                toast.error($t('newsletter.subscription.error'))
+                toast.error(t('newsletter.subscription.error'))
             }
         })
     } catch (error) { }
