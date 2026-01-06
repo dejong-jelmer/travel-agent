@@ -34,7 +34,7 @@ class TripController extends Controller
         return Inertia::render('Admin/Trip/Index', [
             'trips' => $trips,
             'totalTrips' => Trip::count(),
-            'filters' => $this->dataTableService->getSortFilters(),
+            'filters' => $this->dataTableService->getSortFilters(Trip::filters()),
             'title' => $this->pageTitle('trip.title_index'),
         ]);
     }

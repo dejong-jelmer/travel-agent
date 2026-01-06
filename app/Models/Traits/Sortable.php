@@ -56,6 +56,8 @@ trait Sortable
 
     /**
      * Get the models filterable fields property.
+     *
+     * @return array<string>
      */
     public static function filters(): array
     {

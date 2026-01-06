@@ -49,7 +49,7 @@ class DataTableService
      * @param  array  $filterableFields  Array of filterable field names
      * @return array<string, mixed> Array of current filter values
      */
-    public function getSortFilters(array $filterableFields = []): array
+    public function getSortFilters(array $filterableFields): array
     {
         $filters = [
             'search' => $this->validatedData['search'] ?? '',
