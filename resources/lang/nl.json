@@ -835,7 +835,7 @@
                 "edit": "Wijzigingen opslaan"
             },
             "index": {
-                "search_placeholder": "Zoek op referentie of op reis...",
+                "search_placeholder": "Zoek op referentie, reis of op land...",
                 "filters": {
                     "status": "Status",
                     "payment_status": "Betaalstatus"
@@ -843,6 +843,7 @@
                 "table_headers": {
                     "reference": "Referentie",
                     "trip": "Reis",
+                    "countries": "Land(en)",
                     "departure_date": "Vertrekdatum",
                     "status": "Status",
                     "payment": "Betaling",
@@ -864,6 +865,7 @@
                 "payment_status_label": "Betaalstatus"
             },
             "show": {
+                "booking": "Boeking",
                 "details": "Boekingsgegevens",
                 "info": "Informatie over de boeking",
                 "reference": "Boekingsreferentie",

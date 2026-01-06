@@ -18,11 +18,14 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 class Booking extends Model
 {
     use HasFactory,
         HasFormattedDates,
+        HasRelationships,
         SoftDeletes,
         Sortable;
 
@@ -68,17 +71,28 @@ class Booking extends Model
     // Sortable properties
     protected $searchable = ['reference'];
 
-    protected $searchableRelations = ['trip.name'];
+    protected $searchableRelations = ['trip.name', 'countries.countries.name'];
 
     protected $filterable = ['status', 'payment_status'];
 
-    protected $sortable = ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip'];
+    protected $sortable = ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip', 'countries'];
 
     protected $sortableBelongsTo = [
         'trip' => [
             'table' => 'trips',
             'foreign_key' => 'trip_id',
             'column' => 'name',
+        ],
+    ];
+
+    protected $sortableBelongsToMany = [
+        'countries' => [
+            'relation' => 'countries',
+            'column' => 'name',
+            'pivot_table' => 'country_trip',
+            'pivot_foreign_key' => 'trip_id',
+            'pivot_related_key' => 'country_id',
+            'join_key' => 'trip_id',
         ],
     ];
 
@@ -179,6 +193,13 @@ class Booking extends Model
     public function changes(): HasMany
     {
         return $this->hasMany(BookingChange::class);
+    }
+
+    public function countries(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->trip(), (new Trip)->countries()
+        );
     }
 
     /**

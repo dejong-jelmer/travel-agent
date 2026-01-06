@@ -166,6 +166,9 @@ class DataTableService
                 $modelTable = $query->getModel()->getTable();
                 $relatedTableName = $sortConfig['relation'];
 
+                // Use custom join_key if provided, otherwise default to 'id'
+                $joinKey = $sortConfig['join_key'] ?? 'id';
+
                 // Use subquery with MIN to get the first related record alphabetically
                 $query->leftJoinSub(
                     \DB::table($sortConfig['pivot_table'])
@@ -176,7 +179,7 @@ class DataTableService
                         )
                         ->groupBy($sortConfig['pivot_table'].'.'.$sortConfig['pivot_foreign_key']),
                     'related_agg',
-                    $modelTable.'.id',
+                    $modelTable.'.'.$joinKey,
                     '=',
                     'related_agg.'.$sortConfig['pivot_foreign_key']
                 )

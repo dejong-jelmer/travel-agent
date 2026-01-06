@@ -16,6 +16,7 @@ const columns = [
     { key: 'id', label: '#', sortable: true },
     { key: 'reference', label: t('admin.booking.index.table_headers.reference'), sortable: true },
     { key: 'trip', label: t('admin.booking.index.table_headers.trip'), sortable: true },
+    { key: 'countries', label: t('admin.booking.index.table_headers.countries'), sortable: true },
     { key: 'departure_date', label: t('admin.booking.index.table_headers.departure_date'), sortable: true },
     { key: 'status', label: t('admin.booking.index.table_headers.status'), sortable: true },
     { key: 'payment_status', label: t('admin.booking.index.table_headers.payment'), sortable: true },
@@ -54,6 +55,11 @@ const currentFilters = computed(() => ({
                 <!-- Custom cell for trip -->
                 <template #cell-trip="{ row }">
                     {{ row.trip?.name ?? '-' }}
+                </template>
+
+                <!-- Custom cell for trip -->
+                <template #cell-countries="{ row }">
+                    {{ row.trip?.formatted_countries ?? '-' }}
                 </template>
 
                 <!-- Custom cell for departure_date -->

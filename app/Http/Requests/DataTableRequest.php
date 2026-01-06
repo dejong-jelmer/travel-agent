@@ -38,6 +38,5 @@ class DataTableRequest extends FormRequest
         $validator = Validator::make($this->all(), $rules);
 
         return array_filter($validator->validated());
-
     }
 }

@@ -36,13 +36,13 @@ class CampaignController extends Controller
      */
     public function index(DataTableRequest $request): Response
     {
-        $trips = $this->dataTableService
+        $campaigns = $this->dataTableService
             ->applyFilters(NewsletterCampaign::with(['heroImage', 'trips']), $request, NewsletterCampaign::filters())
             ->paginate()
             ->withQueryString();
 
         return Inertia::render('Admin/Newsletter/Campaign/Index', [
-            'campaigns' => $trips,
+            'campaigns' => $campaigns,
             'totalCampaigns' => NewsletterCampaign::count(),
             'filters' => $this->dataTableService->getSortFilters(NewsletterCampaign::filters()),
             'statusOptions' => CampaignStatus::options(),

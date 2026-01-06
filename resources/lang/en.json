@@ -835,7 +835,7 @@
             "edit": "Save changes"
         },
         "index": {
-            "search_placeholder": "Search by reference or trip...",
+            "search_placeholder": "Search by reference, trip or country...",
             "filters": {
                 "status": "Status",
                 "payment_status": "Payment status"
@@ -843,6 +843,7 @@
             "table_headers": {
                 "reference": "Reference",
                 "trip": "Trip",
+                "countries": "Countries",
                 "departure_date": "Departure date",
                 "status": "Status",
                 "payment": "Payment",
@@ -864,6 +865,7 @@
             "payment_status_label": "Payment status"
         },
         "show": {
+            "booking": "Booking",
             "details": "Booking details",
             "info": "Booking information",
             "reference": "Booking reference",
