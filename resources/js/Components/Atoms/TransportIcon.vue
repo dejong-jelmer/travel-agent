@@ -23,9 +23,11 @@ const transportIcons = {
     airplane: markRaw(Plane)
 };
 
-const currentIcon = computed(() => transportIcons[props.transport]);
+const currentIcon = computed(() => {
+    return transportIcons[props.transport] ?? markRaw(TrainFront);
+});
 </script>
 
 <template>
-    <component :is="currentIcon" :class="size" />
+    <component :is="currentIcon" :class="size" role="img" :aria-label="transport" />
 </template>

@@ -17,23 +17,6 @@ class UpdateItineraryRequest extends FormRequest
     }
 
     /**
-     * Prepare the request for validation, default to empty array on null
-     */
-    protected function prepareForValidation(): void
-    {
-        if ($this->input('meals') === null) {
-            $this->merge([
-                'meals' => [],
-            ]);
-        }
-        if ($this->input('transport') === null) {
-            $this->merge([
-                'transport' => [],
-            ]);
-        }
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>

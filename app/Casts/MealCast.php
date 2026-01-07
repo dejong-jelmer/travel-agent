@@ -16,11 +16,7 @@ class MealCast implements CastsAttributes
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         return collect(json_decode($value ?? '[]', true))
-            ->map(fn ($meal) => [
-                'value' => $meal,
-                'label' => Meal::from($meal)->label(),
-            ])
-            ->all();
+            ->map(fn ($meal) => Meal::from($meal))->all();
     }
 
     /**
@@ -30,6 +26,10 @@ class MealCast implements CastsAttributes
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
+        if (is_null($value) || (is_array($value) && empty($value))) {
+            return null;
+        }
+
         return json_encode(collect($value)
             ->map(fn ($meal) => $meal instanceof Meal ? $meal->value : $meal)
             ->all());

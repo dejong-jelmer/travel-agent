@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Casts\MealCast;
 use App\Casts\TransportCast;
+use App\Enums\Meal;
+use App\Enums\Transport;
 use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -34,6 +36,11 @@ class Itinerary extends Model
         'activities' => 'array',
         'meals' => MealCast::class,
         'transport' => TransportCast::class,
+    ];
+
+    protected $appends = [
+        'meals_formatted',
+        'transport_formatted',
     ];
 
     protected static function boot()
@@ -79,5 +86,43 @@ class Itinerary extends Model
                 )
                 : null
         );
+    }
+
+    /**
+     * Get a formatted meals.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    public function mealsFormatted(): Attribute
+    {
+        return Attribute::get(function () {
+            $rawMeals = $this->getRawOriginal('meals') ?? '[]';
+
+            return collect(json_decode($rawMeals, true))
+                ->map(fn ($meal) => [
+                    'value' => $meal,
+                    'label' => Meal::from($meal)->label(),
+                ])
+                ->all();
+        });
+    }
+
+    /**
+     * Get a formatted transport.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    public function transportFormatted(): Attribute
+    {
+        return Attribute::get(function () {
+            $rawTransport = $this->getRawOriginal('transport') ?? '[]';
+
+            return collect(json_decode($rawTransport, true))
+                ->map(fn ($transport) => [
+                    'value' => $transport,
+                    'label' => Transport::from($transport)->label(),
+                ])
+                ->all();
+        });
     }
 }

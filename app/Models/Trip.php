@@ -47,7 +47,7 @@ class Trip extends Model
     protected $appends = [
         'image_paths',
         'raw_price',
-        'formatted_countries',
+        'countries_formatted',
         'published_at_formatted',
         'og_image_url',
     ];
@@ -138,7 +138,7 @@ class Trip extends Model
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function formattedCountries(): Attribute
+    public function countriesFormatted(): Attribute
     {
         return Attribute::get(function () {
             $countries = $this->countries->pluck('name');

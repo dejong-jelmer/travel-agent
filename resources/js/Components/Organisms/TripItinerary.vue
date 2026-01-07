@@ -8,7 +8,7 @@ const lightboxRef = ref(null)
 const openLightbox = (index) => {
     lightboxRef.value?.open(index)
 }
-defineProps({
+const props = defineProps({
     itinerary: {
         type: Object,
         required: true
@@ -101,7 +101,7 @@ defineProps({
                             {{ $t('trip_itinerary.meals') }}
                         </h5>
                         <div class="flex flex-wrap gap-2 px-2 justify-center">
-                            <Pill class="w-[115px]" type="sage" v-for="meal in itinerary.meals" :key="meal">
+                            <Pill class="w-fit min-w-[115px]" type="sage" v-for="meal in itinerary.meals_formatted" :key="meal">
                                 <MealIcon :meal="meal.value" class="text-white mr-2" />
                                 {{ meal.label }}
                             </Pill>
@@ -114,7 +114,7 @@ defineProps({
                             {{ $t('trip_itinerary.transport') }}
                         </h5>
                         <div class="flex flex-wrap gap-2 px-2 justify-center">
-                            <Pill class="w-[115px]" v-for="mode in itinerary.transport" :key="mode" type="accent">
+                            <Pill class="w-fit min-w-[115px]" v-for="mode in itinerary.transport_formatted" :key="mode" type="accent">
                                 <TransportIcon :transport="mode.value" class="text-white mr-2" />
                                 {{ mode.label }}
                             </Pill>

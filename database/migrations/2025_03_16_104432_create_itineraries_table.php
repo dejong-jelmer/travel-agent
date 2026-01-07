@@ -19,8 +19,8 @@ return new class extends Migration
             $table->text('description');
             $table->string('accommodation')->nullable();
             $table->json('activities')->nullable();
-            $table->json('meals')->nullable();
-            $table->json('transport')->nullable();
+            $table->json('meals')->nullable()->default(null);
+            $table->json('transport')->nullable()->default(null);
             $table->string('remark')->nullable();
             $table->unsignedTinyInteger('order')->default(0);
             $table->softDeletes();

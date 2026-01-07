@@ -77,10 +77,10 @@ const { t } = useI18n();
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.itinerary.sections.details.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
-                        <Input type="text" name="accommodation" :label="t('forms.itinerary.fields.accommodation.label')" :required="true"
+                        <Input type="text" name="accommodation" :label="t('forms.itinerary.fields.accommodation.label')" :required="false"
                             v-model="form.accommodation" :feedback="form.errors.accommodation"
                             :placeholder="t('forms.itinerary.fields.accommodation.placeholder')" />
-                        <Input type="text" name="activities" :label="t('forms.itinerary.fields.activities.label')" :required="true"
+                        <Input type="text" name="activities" :label="t('forms.itinerary.fields.activities.label')" :required="false"
                             v-model="form.activities" :feedback="form.errors.activities"
                             :placeholder="t('forms.itinerary.fields.activities.placeholder')" />
                         <Select name="transport" :label="t('forms.itinerary.fields.transport.label')" v-model="form.transport" :multiple="true"

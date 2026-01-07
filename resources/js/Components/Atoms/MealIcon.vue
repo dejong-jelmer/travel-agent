@@ -20,9 +20,11 @@ const mealIcons = {
     dinner: markRaw(HandPlatter)
 };
 
-const currentIcon = computed(() => mealIcons[props.meal]);
+const currentIcon = computed(() => {
+    return mealIcons[props.meal] ?? markRaw(Sandwich);
+});
 </script>
 
 <template>
-    <component :is="currentIcon" :class="size" />
+    <component :is="currentIcon" :class="size" role="img" :aria-label="meal" />
 </template>

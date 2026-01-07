@@ -20,7 +20,11 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(route("admin.trips.itineraries.store", props.trip.id), {
+    form.transform((data) => ({
+        ...data,
+        meals: data.meals?.length ? data.meals : null,
+        transport: data.transport?.length ? data.transport : null,
+    })).post(route("admin.trips.itineraries.store", props.trip.id), {
         forceFormData: true,
     });
 }

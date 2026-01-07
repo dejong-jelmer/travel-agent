@@ -14,7 +14,11 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(route("admin.itineraries.update", props.itinerary.id), { forceFormData: true });
+    form.transform((data) => ({
+        ...data,
+        meals: data.meals?.length ? data.meals : null,
+        transport: data.transport?.length ? data.transport : null,
+    })).post(route("admin.itineraries.update", props.itinerary.id), { forceFormData: true });
 }
 </script>
 
