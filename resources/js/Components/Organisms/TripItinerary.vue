@@ -90,7 +90,8 @@ defineProps({
                             <BedDouble class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.accommodation') }}
                         </h5>
-                        <p class="text-sm text-brand-primary px-2">{{ $t('trip_itinerary.accommodation_text') }} {{ itinerary.accommodation }}</p>
+                        <p class="text-sm text-brand-primary px-2">{{ $t('trip_itinerary.accommodation_text') }} {{
+                            itinerary.accommodation }}</p>
                     </div>
 
                     <div v-if="itinerary.meals?.length" class="flex-1 min-w-0">
@@ -99,9 +100,10 @@ defineProps({
                             <UtensilsCrossed class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.meals') }}
                         </h5>
-                        <div class="flex flex-wrap gap-2 px-2">
-                            <Pill type="sage" v-for="meal in itinerary.meals" :key="meal">
-                                {{ meal }}
+                        <div class="flex flex-wrap gap-2 px-2 justify-center">
+                            <Pill class="w-[115px]" type="sage" v-for="meal in itinerary.meals" :key="meal">
+                                <MealIcon :meal="meal.value" class="text-white mr-2" />
+                                {{ meal.label }}
                             </Pill>
                         </div>
                     </div>
@@ -111,11 +113,10 @@ defineProps({
                             <Route class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.transport') }}
                         </h5>
-                        <div class="flex flex-wrap gap-1">
-                            <Pill class="w-fit" v-for="mode in itinerary.transport" :key="mode" type="sage"
-                                variant="transparent">
-                                <TrainFront class="w-4 h-4 text-accent-sage mr-2" />
-                                {{ mode }}
+                        <div class="flex flex-wrap gap-2 px-2 justify-center">
+                            <Pill class="w-[115px]" v-for="mode in itinerary.transport" :key="mode" type="accent">
+                                <TransportIcon :transport="mode.value" class="text-white mr-2" />
+                                {{ mode.label }}
                             </Pill>
                         </div>
                     </div>

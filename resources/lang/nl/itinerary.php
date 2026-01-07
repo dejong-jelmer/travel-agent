@@ -14,7 +14,7 @@ return [
     // Meals
     'meals' => [
         'breakfast' => 'Ontbijt',
-        'lunch' => 'lunch',
+        'lunch' => 'Lunch',
         'dinner' => 'Diner',
     ],
     // Tranport

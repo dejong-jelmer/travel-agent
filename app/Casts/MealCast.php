@@ -16,7 +16,10 @@ class MealCast implements CastsAttributes
     public function get(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         return collect(json_decode($value ?? '[]', true))
-            ->map(fn ($meal) => Meal::from($meal))
+            ->map(fn ($meal) => [
+                'value' => $meal,
+                'label' => Meal::from($meal)->label()
+            ])
             ->all();
     }
 
