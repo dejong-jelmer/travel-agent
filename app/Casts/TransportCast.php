@@ -18,7 +18,7 @@ class TransportCast implements CastsAttributes
         return collect(json_decode($value ?? '[]', true))
             ->map(fn ($transport) => [
                 'value' => $transport,
-                'label' => Transport::from($transport)->label()
+                'label' => Transport::from($transport)->label(),
             ])
             ->all();
     }

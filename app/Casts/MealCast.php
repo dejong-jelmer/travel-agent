@@ -18,7 +18,7 @@ class MealCast implements CastsAttributes
         return collect(json_decode($value ?? '[]', true))
             ->map(fn ($meal) => [
                 'value' => $meal,
-                'label' => Meal::from($meal)->label()
+                'label' => Meal::from($meal)->label(),
             ])
             ->all();
     }
