@@ -45,7 +45,7 @@ const columns = [
 
                 <!-- Custom cell for countries -->
                 <template #cell-countries="{ row }">
-                    {{ row.formatted_countries }}
+                    {{ row.countries_formatted }}
                 </template>
 
                 <!-- Custom cell for price -->

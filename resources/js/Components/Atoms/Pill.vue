@@ -14,8 +14,8 @@ const props = defineProps({
 const divClass = {
     filled: {
         primary: 'bg-brand-primary/20',
-        accent: 'bg-accent-primary/20',
-        sage: 'bg-accent-sage/20',
+        accent: 'bg-accent-primary',
+        sage: 'bg-accent-sage',
         success: 'bg-status-success',
         error: 'bg-status-error',
         warning: 'bg-status-warning',
@@ -34,8 +34,8 @@ const divClass = {
 const spanClass = {
     filled: {
         primary: 'text-brand-primary',
-        accent: 'text-accent-primary',
-        sage: 'text-accent-sage',
+        accent: 'text-white',
+        sage: 'text-white',
         success: 'text-white',
         error: 'text-white',
         warning: 'text-white',
@@ -53,9 +53,9 @@ const spanClass = {
 }
 </script>
 <template>
-    <div :class="['flex px-4 py-1 rounded-full min-w-fit items-center', divClass[props.variant][props.type]]">
+    <div :class="['flex px-4 py-1 rounded-full', divClass[props.variant][props.type]]">
         <span
-            :class="['text-xs w-full font-medium flex items-center', spanClass[props.variant][props.type]]">
+            :class="['text-xs font-medium flex w-full', spanClass[props.variant][props.type]]">
             <slot></slot>
         </span>
     </div>

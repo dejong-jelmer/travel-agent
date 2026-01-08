@@ -21,7 +21,7 @@ defineProps({ trip: Object });
             <div class="inline-flex items-center gap-2">
                 <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
                 <h3 class="text-sm text-brand-light font-medium line-clamp-1">
-                    {{ trip.formatted_countries }}
+                    {{ trip.countries_formatted }}
                 </h3>
             </div>
 

@@ -49,7 +49,7 @@ const props = defineProps({
                                     <DefaultLink :href="route('admin.trips.show', booking.trip)"
                                         class="mt-1 block text-gray-900 hover:text-accent-link">
                                         {{ booking.trip?.name }}
-                                    - {{ booking.trip?.formatted_countries }}
+                                    - {{ booking.trip?.countries_formatted }}
                                     </DefaultLink>
                             </div>
                             <div>

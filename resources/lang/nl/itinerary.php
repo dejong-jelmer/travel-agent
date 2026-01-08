@@ -14,10 +14,10 @@ return [
     // Meals
     'meals' => [
         'breakfast' => 'Ontbijt',
-        'lunch' => 'lunch',
+        'lunch' => 'Lunch',
         'dinner' => 'Diner',
     ],
-    // Tranport
+    // Transport
     'transport' => [
         'train' => 'Trein',
         'ferry' => 'Veerboot',

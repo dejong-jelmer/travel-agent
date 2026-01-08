@@ -59,7 +59,7 @@ const currentFilters = computed(() => ({
 
                 <!-- Custom cell for trip -->
                 <template #cell-countries="{ row }">
-                    {{ row.trip?.formatted_countries ?? '-' }}
+                    {{ row.trip?.countries_formatted ?? '-' }}
                 </template>
 
                 <!-- Custom cell for departure_date -->

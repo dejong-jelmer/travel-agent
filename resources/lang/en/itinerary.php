@@ -17,7 +17,7 @@ return [
         'lunch' => 'Lunch',
         'dinner' => 'Dinner',
     ],
-    // Tranport
+    // Transport
     'transport' => [
         'train' => 'Train',
         'ferry' => 'Ferry',
