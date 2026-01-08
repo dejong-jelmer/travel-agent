@@ -53,9 +53,9 @@ const spanClass = {
 }
 </script>
 <template>
-    <div :class="['flex px-4 py-1 rounded-full min-w-fit items-center', divClass[props.variant][props.type]]">
+    <div :class="['flex px-4 py-1 rounded-full', divClass[props.variant][props.type]]">
         <span
-            :class="['text-xs mx-auto font-medium flex items-center', spanClass[props.variant][props.type]]">
+            :class="['text-xs font-medium flex w-full', spanClass[props.variant][props.type]]">
             <slot></slot>
         </span>
     </div>

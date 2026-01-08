@@ -43,7 +43,7 @@
                 </p>
                 @if ($booking->trip->countries->isNotEmpty())
                     <p style="margin:0;font-size:14px;color:#A3BCCB;">
-                        {{ $booking->trip->formattedCountries }}
+                        {{ $booking->trip->countriesFormatted }}
                     </p>
                 @endif
             </td>

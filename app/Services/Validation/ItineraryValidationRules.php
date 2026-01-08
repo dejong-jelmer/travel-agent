@@ -31,10 +31,14 @@ class ItineraryValidationRules
         return [
             'meals' => ['nullable', 'array'],
             'meals.*' => [
+                'required',
+                'string',
                 Rule::enum(Meal::class),
             ],
             'transport' => ['nullable', 'array'],
             'transport.*' => [
+                'required',
+                'string',
                 Rule::enum(Transport::class),
             ],
         ];
