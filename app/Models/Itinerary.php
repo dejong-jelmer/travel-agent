@@ -98,13 +98,11 @@ class Itinerary extends Model
         return Attribute::get(function () {
             $rawMeals = $this->getRawOriginal('meals');
 
-            return collect(json_decode($rawMeals ?? '', true))
+            return collect(json_decode($rawMeals ?? '[]', true))
                 ->map(fn ($meal) => [
                     'value' => $meal,
-                    'label' => Meal::tryFrom($meal)->label(),
+                    'label' => Meal::from($meal)->label(),
                 ])
-                ->filter()
-                ->values()
                 ->all();
         });
     }
@@ -119,13 +117,11 @@ class Itinerary extends Model
         return Attribute::get(function () {
             $rawTransport = $this->getRawOriginal('transport');
 
-            return collect(json_decode($rawTransport ?? '', true))
+            return collect(json_decode($rawTransport ?? '[]', true))
                 ->map(fn ($transport) => [
                     'value' => $transport,
-                    'label' => Transport::tryFrom($transport)->label(),
+                    'label' => Transport::from($transport)->label(),
                 ])
-                ->filter()
-                ->values()
                 ->all();
         });
     }
