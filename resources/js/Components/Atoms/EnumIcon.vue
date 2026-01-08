@@ -28,5 +28,5 @@ const currentIcon = computed(() => {
 </script>
 
 <template>
-    <component :is="currentIcon" role="img" :aria-label="transport" />
+    <component :is="currentIcon" role="img" :aria-label="props.enum" />
 </template>
