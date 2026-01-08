@@ -96,9 +96,9 @@ class Itinerary extends Model
     public function mealsFormatted(): Attribute
     {
         return Attribute::get(function () {
-            $rawMeals = $this->getRawOriginal('meals');
+            $rawMeals = $this->getRawOriginal('meals') ?? '[]';
 
-            return collect(json_decode($rawMeals ?? '[]', true))
+            return collect(json_decode($rawMeals, true))
                 ->map(fn ($meal) => [
                     'value' => $meal,
                     'label' => Meal::from($meal)->label(),
@@ -115,9 +115,9 @@ class Itinerary extends Model
     public function transportFormatted(): Attribute
     {
         return Attribute::get(function () {
-            $rawTransport = $this->getRawOriginal('transport');
+            $rawTransport = $this->getRawOriginal('transport') ?? '[]';
 
-            return collect(json_decode($rawTransport ?? '[]', true))
+            return collect(json_decode($rawTransport, true))
                 ->map(fn ($transport) => [
                     'value' => $transport,
                     'label' => Transport::from($transport)->label(),

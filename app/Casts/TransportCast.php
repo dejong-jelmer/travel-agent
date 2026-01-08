@@ -17,7 +17,6 @@ class TransportCast implements CastsAttributes
     {
         return collect(json_decode($value ?? '', true))
             ->map(fn ($transport) => Transport::from($transport))
-            ->values()
             ->all();
     }
 
@@ -29,8 +28,13 @@ class TransportCast implements CastsAttributes
     public function set(Model $model, string $key, mixed $value, array $attributes): mixed
     {
         return json_encode(collect($value)
-            ->map(fn ($transport) => $transport instanceof Transport ? $transport->value : $transport)
-            ->values()
+            ->map(function ($transport) {
+                if ($transport instanceof Transport) {
+                    return $transport->value;
+                }
+
+                return Transport::from($transport)->value;
+            })
             ->all());
     }
 }
