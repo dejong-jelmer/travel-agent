@@ -89,40 +89,34 @@ class Itinerary extends Model
     }
 
     /**
-     * Get a formatted meals.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
-     */
-    public function mealsFormatted(): Attribute
-    {
-        return Attribute::get(function () {
-            $rawMeals = $this->getRawOriginal('meals');
-
-            return collect(json_decode($rawMeals ?? '[]', true))
-                ->map(fn ($meal) => [
-                    'value' => $meal,
-                    'label' => Meal::from($meal)->label(),
-                ])
-                ->all();
-        });
-    }
-
-    /**
      * Get a formatted transport.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     public function transportFormatted(): Attribute
     {
-        return Attribute::get(function () {
-            $rawTransport = $this->getRawOriginal('transport');
+        return Attribute::get(fn () => $this->formatEnumAttribute('transport', Transport::class));
+    }
 
-            return collect(json_decode($rawTransport ?? '[]', true))
-                ->map(fn ($transport) => [
-                    'value' => $transport,
-                    'label' => Transport::from($transport)->label(),
-                ])
-                ->all();
-        });
+    /**
+     * Get a formatted meals.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    public function mealsFormatted(): Attribute
+    {
+        return Attribute::get(fn () => $this->formatEnumAttribute('meals', Meal::class));
+    }
+
+    private function formatEnumAttribute(string $attribute, string $enumClass): array
+    {
+        $raw = $this->getRawOriginal($attribute);
+
+        return collect(json_decode($raw ?? '[]', true))
+            ->map(fn ($value) => [
+                'value' => $value,
+                'label' => $enumClass::from($value)->label(),
+            ])
+            ->all();
     }
 }
