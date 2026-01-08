@@ -84,7 +84,7 @@ class Itinerary extends Model
                         ? array_map('trim', explode(',', $value))
                         : $value
                 )
-                : null
+                : '[]'
         );
     }
 

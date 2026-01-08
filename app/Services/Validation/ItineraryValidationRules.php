@@ -29,13 +29,13 @@ class ItineraryValidationRules
     public static function options(): array
     {
         return [
-            'meals' => ['nullable', 'array'],
+            'meals' => ['array'],
             'meals.*' => [
                 'required',
                 'string',
                 Rule::enum(Meal::class),
             ],
-            'transport' => ['nullable', 'array'],
+            'transport' => ['array'],
             'transport.*' => [
                 'required',
                 'string',
