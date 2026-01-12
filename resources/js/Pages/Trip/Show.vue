@@ -72,14 +72,17 @@ const tabs = computed(() => [
                                     <!-- Price -->
                                     <div
                                         class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full font-bold">
-                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price }) }}</span>
+                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price })
+                                            }}</span>
                                     </div>
 
                                     <!-- Duration -->
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                                         <Clock class="w-5 h-5" />
-                                        <span class="font-medium">{{ t('trip_show.hero.days', { duration: trip.duration }) }}</span>
+                                        <span class="font-medium">{{ t('trip_show.hero.days', {
+                                            duration: trip.duration
+                                            }) }}</span>
                                     </div>
 
                                     <!-- Transport -->
@@ -133,26 +136,12 @@ const tabs = computed(() => [
                         <!-- Highlights -->
                         <div class="border-t border-accent-primary/20 pt-8">
                             <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.romantic_train') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.historic_castles') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.culinary') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.small_groups') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.sustainable') }}</span>
-                                </li>
+                                <template v-for="(highlight, index) in trip.highlights" :key="index">
+                                    <li class="flex items-start gap-3">
+                                        <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                        <span class="text-brand-primary">{{ highlight }}</span>
+                                    </li>
+                                </template>
                             </ul>
                         </div>
                     </div>
@@ -261,11 +250,13 @@ const tabs = computed(() => [
 
                         <!-- Trust Indicators -->
                         <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-accent-primary/20">
-                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_us') }}</h4>
+                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_us') }}
+                            </h4>
                             <ul class="space-y-3 text-sm">
                                 <li class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.sidebar.sustainable_travel') }}</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.sidebar.sustainable_travel')
+                                        }}</span>
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-accent-primary rounded-full"></span>

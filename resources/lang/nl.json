@@ -585,13 +585,6 @@
             "sustainable_travel": "Duurzaam reizen"
         },
         "about_trip": "Over deze reis",
-        "highlights": {
-            "romantic_train": "Romantische treinrit door de Alpen met adembenemende uitzichten",
-            "historic_castles": "Bezoek aan historische kastelen en UNESCO werelderfgoed locaties",
-            "culinary": "Lokale culinaire ervaringen en wijnproeverijen",
-            "small_groups": "Kleinschalige groepen voor een persoonlijke ervaring",
-            "sustainable": "Duurzaam reizen zonder vliegtuig"
-        },
         "tabs": {
             "itinerary": "Dag tot dag",
             "inclusive": "Inclusief & Exclusief",
@@ -784,6 +777,9 @@
                 "tabs": {
                     "details": "Reis Details",
                     "meta": "Meta data"
+                },
+                "highlights": {
+                    "label": "Hoogtepunten van deze reis"
                 },
                 "details": {
                     "name": "Naam",

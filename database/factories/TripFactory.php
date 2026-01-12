@@ -17,6 +17,14 @@ use Illuminate\Support\Str;
  */
 class TripFactory extends Factory
 {
+
+    private const HIGHLIGHTS = [
+        'Romantische treinrit door de Alpen met adembenemende uitzichten',
+        'Bezoek aan historische kastelen en unieke UNESCO werelderfgoed locaties',
+        'Lokale culinaire ervaringen en wijnproeverijen',
+        'Duurzaam reizen per trein',
+    ];
+
     /**
      * Define the model's default state.
      *
@@ -35,6 +43,7 @@ class TripFactory extends Factory
             'duration' => $duration,
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
+            'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
             'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
         ];
@@ -57,7 +66,7 @@ class TripFactory extends Factory
 
         $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes. ';
 
-        return $intro.$secondLine.fake()->paragraph();
+        return $intro . $secondLine . fake()->paragraph();
     }
 
     private function generateMetaTitle(string $city, int $duration, ?string $country = null): string
@@ -91,7 +100,7 @@ class TripFactory extends Factory
             Itinerary::factory()
                 ->withImage()
                 ->count($trip->duration)
-                ->sequence(fn (Sequence $sequence) => [
+                ->sequence(fn(Sequence $sequence) => [
                     'order' => $sequence->index + 1,
                 ])
                 ->create(['trip_id' => $trip->id]);

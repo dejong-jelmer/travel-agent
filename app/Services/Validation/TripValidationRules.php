@@ -13,6 +13,11 @@ class TripValidationRules
         return self::mergeRules([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
+            'highlights' => ['required', 'array'],
+            'highlights.*' => [
+                'nullable',
+                'string',
+            ],
             'description' => ['required', 'string'],
         ], $additions);
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('duration');
             $table->boolean('featured')->default(true);
             $table->dateTime('published_at');
+            $table->json('highlights')->nullable();
             $table->string('meta_title', 60)->nullable();
             $table->text('meta_description', 160)->nullable();
             $table->softDeletes();

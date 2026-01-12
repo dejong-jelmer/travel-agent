@@ -11,6 +11,8 @@ const props = defineProps({
     form: Object,
 });
 
+console.log(props.form);
+
 const { t } = useI18n();
 
 const imageErrors = computed(() =>
@@ -90,6 +92,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 <TextArea name="description" :label="t('forms.trip.fields.description.label')" :required="true"
                                     v-model="form.description" :feedback="form.errors.description"
                                     :placeholder="t('forms.trip.fields.description.placeholder')" :rows="6" />
+                                <DynamicInputList :items="form.highlights" name="highlights" :label="t('forms.trip.fields.highlights.label')" :placeholder="t('forms.trip.fields.highlights.placeholder')" :feedback="form.errors" />
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">

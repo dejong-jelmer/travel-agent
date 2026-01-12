@@ -16,6 +16,7 @@ const form = useForm({
     images: [],
     featured: false,
     published_at: new Date(),
+    highlights: [],
 });
 
 

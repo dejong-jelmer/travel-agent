@@ -40,6 +40,7 @@ class Trip extends Model
         'duration',
         'featured',
         'published_at',
+        'highlights',
         'meta_title',
         'meta_description',
     ];
@@ -54,6 +55,7 @@ class Trip extends Model
 
     protected $casts = [
         'price' => PriceCast::class,
+        'highlights' => 'array',
     ];
 
     // Sortable properties
@@ -127,7 +129,7 @@ class Trip extends Model
 
     protected function publishedAtFormatted(): Attribute
     {
-        return Attribute::get(fn () => $this->getFormattedDate('published_at'));
+        return Attribute::get(fn() => $this->getFormattedDate('published_at'));
     }
 
     /**
@@ -146,7 +148,7 @@ class Trip extends Model
             return match ($countries->count()) {
                 0 => '',
                 1 => $countries->first(),
-                default => $countries->slice(0, -1)->implode(', ').' & '.$countries->last()
+                default => $countries->slice(0, -1)->implode(', ') . ' & ' . $countries->last()
             };
         });
     }
@@ -164,7 +166,7 @@ class Trip extends Model
     public function rawPrice(): Attribute
     {
         return Attribute::get(
-            fn () => (float) $this->getRawOriginal('price')
+            fn() => (float) $this->getRawOriginal('price')
         );
     }
 
@@ -185,7 +187,7 @@ class Trip extends Model
      */
     public function imagePaths(): Attribute
     {
-        return Attribute::get(fn () => $this->images->pluck('path'));
+        return Attribute::get(fn() => $this->images->pluck('path'));
     }
 
     public function bookings(): HasMany
@@ -201,19 +203,19 @@ class Trip extends Model
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg'))
+            fn() => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg'))
         );
     }
 
     /**
-     * Get the meta_description property or fallback to substring of trip->description.
+     * Get the meta_description property or fallback to substring of $trip->description.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function metaDescription(): Attribute
+    protected function metaDescription(): Attribute
     {
         return Attribute::get(
-            fn (?string $value) => $value ?? Str::substr(
+            fn(?string $value) => $value ?? Str::substr(
                 $this->description ?? '',
                 0,
                 config(
@@ -224,20 +226,40 @@ class Trip extends Model
     }
 
     /**
-     * Get the meta_titleproperty or fallback to substring of trip->name.
+     * Get the meta_title property or fallback to substring of $trip->name.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function metaTitle(): Attribute
+    protected function metaTitle(): Attribute
     {
         return Attribute::get(
-            fn (?string $value) => $value ?? Str::substr(
+            fn(?string $value) => $value ?? Str::substr(
                 $this->name ?? '',
                 0,
                 config(
                     'seo.meta_title_max_length'
                 )
             )
+        );
+    }
+
+    /**
+     * Get the trip highlights
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function highlights(): Attribute
+    {
+        return Attribute::make(
+            set: fn($value) => ! is_null($value)
+                ? json_encode(
+                    collect(
+                        ! is_array($value)
+                            ? array_map('trim', explode(',', $value))
+                            : $value,
+                    )->filter(fn($item) => ! is_null($item) && $item !== '')->values()->all()
+                )
+                : '[]'
         );
     }
 }

@@ -75,6 +75,14 @@ const { t } = useI18n();
                                         <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.details.description') }}</label>
                                         <p class="mt-1 text-gray-900">{{ trip.description }}</p>
                                     </div>
+                                    <div v-if="trip.highlights?.length">
+                                        <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.highlights.label') }}</label>
+                                        <ul class="mt-1 text-gray-900 list-disc list-inside space-y-1">
+                                            <li v-for="(highlight, index) in trip.highlights" :key="index">
+                                                {{ highlight }}
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </TabPanel>
 
                                 <TabPanel class="p-6 space-y-4">

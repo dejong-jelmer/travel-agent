@@ -17,10 +17,11 @@ class UpdateItineraryRequest extends FormRequest
     }
 
     /**
-     * Prepare the request for validation, default to empty array on null
+     * Prepare the request for validation
      */
     protected function prepareForValidation(): void
     {
+        //  Default to empty array's on null
         if ($this->input('meals') === null) {
             $this->merge([
                 'meals' => [],
