@@ -17,14 +17,14 @@ const props = defineProps({
 </script>
 <template>
     <div class="relative">
-        <!-- Timeline lijn (verticaal) -->
+        <!-- Timeline (vertical) -->
         <div class="absolute left-4 top-16 bottom-0 w-0.5 bg-accent-sage/30"></div>
 
         <!-- Itinerary item -->
         <div class="relative flex gap-3 tablet:gap-6 pb-8 last:pb-0">
             <!-- Timeline marker -->
             <div class="relative flex-shrink-0">
-                <!-- Dag nummer cirkel -->
+                <!-- Day number cirkel -->
                 <div
                     class="w-8 h-8 bg-accent-earth rounded-full flex items-center justify-center shadow-sm relative ring-offset-2 ring-2 ring-accent-primary/30">
                     <span class="text-sm font-bold text-white">{{ itinerary.order }}</span>
@@ -100,7 +100,7 @@ const props = defineProps({
                             <UtensilsCrossed class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.meals') }}
                         </h5>
-                        <div class="grid gap-2 px-2 justify-center">
+                        <div class="flex flex-wrap md:grid gap-2 px-2 justify-center">
                             <Pill class="w-fit min-w-[115px]" type="sage" v-for="meal in itinerary.meals_formatted"
                                 :key="meal">
                                 <EnumIcon :enum="meal.value" class="text-white mr-2 w-4 h-4 flex-none" />
@@ -116,7 +116,7 @@ const props = defineProps({
                             <Route class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.transport') }}
                         </h5>
-                        <div class="grid gap-2 px-2 justify-center">
+                        <div class="flex flex-wrap md:grid gap-2 px-2 justify-center">
                             <Pill class="w-fit min-w-[115px]" v-for="mode in itinerary.transport_formatted" :key="mode"
                                 type="accent">
                                 <EnumIcon :enum="mode.value" class="text-white mr-2 w-4 h-4 flex-none" />

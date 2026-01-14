@@ -16,9 +16,13 @@ class TripController extends Controller
      */
     public function show(Trip $trip): Response
     {
+        $trip->load(['heroImage', 'images', 'countries', 'itineraries', 'itineraries.image', 'items']);
+
         return Inertia::render('Trip/Show', [
             'title' => $this->pageTitle($trip->name),
-            'trip' => $trip->load(['heroImage', 'images', 'countries', 'itineraries', 'itineraries.image']),
+            'trip' => $trip,
+            'inclusions' => $trip->getAllInclusions(),
+            'exclusions' => $trip->getAllExclusions(),
             'seo' => [
                 'title' => $trip->meta_title,
                 'description' => $trip->meta_description,

@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Casts\PriceCast;
+use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\ItemType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
+use App\Services\TripItemFormatter;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -16,6 +19,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 
 class Trip extends Model
@@ -56,6 +60,8 @@ class Trip extends Model
     protected $casts = [
         'price' => PriceCast::class,
         'highlights' => 'array',
+        'published_at' => 'date',
+        'featured' => 'boolean',
     ];
 
     // Sortable properties
@@ -74,19 +80,6 @@ class Trip extends Model
             'pivot_related_key' => 'country_id',
         ],
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'published_at' => 'date',
-            'featured' => 'boolean',
-        ];
-    }
 
     protected static function booted(): void
     {
@@ -109,6 +102,11 @@ class Trip extends Model
         return $this->belongsToMany(Country::class)->withTimestamps();
     }
 
+    public function items(): HasMany
+    {
+        return $this->hasMany(TripItem::class);
+    }
+
     /**
      * Scope a query to only include featured trips.
      */
@@ -129,7 +127,7 @@ class Trip extends Model
 
     protected function publishedAtFormatted(): Attribute
     {
-        return Attribute::get(fn() => $this->getFormattedDate('published_at'));
+        return Attribute::get(fn () => $this->getFormattedDate('published_at'));
     }
 
     /**
@@ -148,7 +146,7 @@ class Trip extends Model
             return match ($countries->count()) {
                 0 => '',
                 1 => $countries->first(),
-                default => $countries->slice(0, -1)->implode(', ') . ' & ' . $countries->last()
+                default => $countries->slice(0, -1)->implode(', ').' & '.$countries->last()
             };
         });
     }
@@ -166,7 +164,7 @@ class Trip extends Model
     public function rawPrice(): Attribute
     {
         return Attribute::get(
-            fn() => (float) $this->getRawOriginal('price')
+            fn () => (float) $this->getRawOriginal('price')
         );
     }
 
@@ -187,7 +185,7 @@ class Trip extends Model
      */
     public function imagePaths(): Attribute
     {
-        return Attribute::get(fn() => $this->images->pluck('path'));
+        return Attribute::get(fn () => $this->images->pluck('path'));
     }
 
     public function bookings(): HasMany
@@ -203,7 +201,7 @@ class Trip extends Model
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn() => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg'))
+            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg'))
         );
     }
 
@@ -215,7 +213,7 @@ class Trip extends Model
     protected function metaDescription(): Attribute
     {
         return Attribute::get(
-            fn(?string $value) => $value ?? Str::substr(
+            fn (?string $value) => $value ?? Str::substr(
                 $this->description ?? '',
                 0,
                 config(
@@ -233,7 +231,7 @@ class Trip extends Model
     protected function metaTitle(): Attribute
     {
         return Attribute::get(
-            fn(?string $value) => $value ?? Str::substr(
+            fn (?string $value) => $value ?? Str::substr(
                 $this->name ?? '',
                 0,
                 config(
@@ -251,15 +249,60 @@ class Trip extends Model
     protected function highlights(): Attribute
     {
         return Attribute::make(
-            set: fn($value) => ! is_null($value)
+            set: fn ($value) => ! is_null($value)
                 ? json_encode(
                     collect(
                         ! is_array($value)
                             ? array_map('trim', explode(',', $value))
                             : $value,
-                    )->filter(fn($item) => ! is_null($item) && $item !== '')->values()->all()
+                    )->filter(fn ($item) => ! is_null($item) && $item !== '')->values()->all()
                 )
                 : '[]'
         );
+    }
+
+    public function inclusions(): HasMany
+    {
+        return $this->items()->where('type', ItemType::Inclusion);
+    }
+
+    public function exclusions(): HasMany
+    {
+        return $this->items()->where('type', ItemType::Exclusion);
+    }
+
+    public function getAllInclusions(): array
+    {
+        $defaults = $this->getDefaultItems(ItemType::Inclusion);
+        $custom = $this->inclusions;
+
+        return TripItemFormatter::format($defaults->merge($custom), ItemType::Inclusion);
+    }
+
+    public function getAllExclusions(): array
+    {
+        $defaults = $this->getDefaultItems(ItemType::Exclusion);
+        $custom = $this->exclusions;
+
+        return TripItemFormatter::format($defaults->merge($custom), ItemType::Exclusion);
+    }
+
+    private function getDefaultItems(ItemType $type): Collection
+    {
+        $defaults = config("trip-defaults.{$type->value}", []);
+
+        return collect($defaults)->flatMap(function ($items, $category) use ($type) {
+            return collect($items)->map(function ($item) use ($type, $category) {
+                $categoryEnum = ItemCategory::from($category);
+
+                return (object) [
+                    'type' => $type,
+                    'type_label' => $type->label(),
+                    'category' => $categoryEnum,
+                    'category_label' => $categoryEnum->label(),
+                    'item' => __($item),
+                ];
+            });
+        });
     }
 }

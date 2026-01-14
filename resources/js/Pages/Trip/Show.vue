@@ -1,12 +1,22 @@
 <script setup>
 import { ref, toRef, watch, computed } from 'vue'
-import { Clock, TrainFront, MapPinned, ChevronRight } from 'lucide-vue-next';
+import { Clock, TrainFront, MapPinned, ChevronRight, X, Check } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
-    trip: Object,
-    required: true
+    trip: {
+        type: Object,
+        required: true
+    },
+    inclusions: {
+        type: Object,
+        default: () => ({ type_label: '', categories: [] })
+    },
+    exclusions: {
+        type: Object,
+        default: () => ({ type_label: '', categories: [] })
+    }
 })
 
 const { t } = useI18n()
@@ -176,8 +186,50 @@ const tabs = computed(() => [
                                     </p>
                                 </div>
                             </div>
-                            <div v-else-if="activeTab === 'inclusive'" class="space-y-6">
-                                <p>{{ t('trip_show.tab_content.inclusive_placeholder') }}</p>
+                            <div v-else-if="activeTab === 'inclusive'" class="space-y-8">
+                                <!-- Inclusions Section -->
+                                <div v-if="inclusions.categories.length > 0" class="space-y-6">
+                                    <h3 class="text-xl font-semibold text-primary-dark">
+                                        {{ inclusions.type_label }}
+                                    </h3>
+                                    <div v-for="(category, index) in inclusions.categories" :key="`inclusion-${index}`" class="space-y-3">
+                                        <h4 class="text-base font-medium text-primary-default">
+                                            {{ category.label }}
+                                        </h4>
+                                        <ul class="space-y-2 ml-4">
+                                            <li v-for="(item, itemIndex) in category.items" :key="`inclusion-item-${itemIndex}`"
+                                                class="flex items-start">
+                                                <Check class="text-status-success h-4 mt-1" />
+                                                {{ item }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Exclusions Section -->
+                                <div v-if="exclusions.categories.length > 0" class="space-y-6">
+                                    <h3 class="text-xl font-semibold text-primary-dark">
+                                        {{ exclusions.type_label }}
+                                    </h3>
+                                    <div v-for="(category, index) in exclusions.categories" :key="`exclusion-${index}`" class="space-y-3">
+                                        <h4 class="text-base font-medium text-primary-default">
+                                            {{ category.label }}
+                                        </h4>
+                                        <ul class="space-y-2 ml-4">
+                                            <li v-for="(item, itemIndex) in category.items" :key="`exclusion-item-${itemIndex}`"
+                                                class="flex items-start">
+                                                <X class="text-status-error h-4 mt-1" />
+                                                {{ item }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+
+                                <!-- Empty State -->
+                                <p v-if="inclusions.categories.length === 0 && exclusions.categories.length === 0"
+                                   class="text-brand-light">
+                                    {{ t('trip_show.tab_content.inclusive_placeholder') }}
+                                </p>
                             </div>
 
                             <div v-else-if="activeTab === 'practical'" class="space-y-6">

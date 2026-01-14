@@ -1,5 +1,5 @@
 <script setup>
-import { computed, defineEmits, onMounted, watchEffect, ref } from 'vue';
+import { computed, onMounted, watchEffect, ref } from 'vue';
 import { Plus, Minus } from 'lucide-vue-next';
 
 
