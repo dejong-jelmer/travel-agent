@@ -124,6 +124,10 @@
         }
     },
     "forms": {
+        "actions": {
+            "add": "Toevoegen",
+            "delete": "Verwijderen"
+        },
         "booking": {
             "tooltip_locked": "Vul eerst de vorige stappen in",
             "button_prev": "Vorige",
@@ -156,6 +160,7 @@
             "tabs": {
                 "basic": "Reis Details",
                 "media": "Media",
+                "items": "Inclusief/exclusief",
                 "details": "Details",
                 "meta": "Meta"
             },
@@ -776,6 +781,7 @@
                 "itinerary_tooltip": "Bekijk reisplan van deze reis",
                 "tabs": {
                     "details": "Reis Details",
+                    "items": "Inclusief/exclusief",
                     "meta": "Meta data"
                 },
                 "highlights": {
@@ -785,6 +791,10 @@
                     "name": "Naam",
                     "slug": "Slug",
                     "description": "Beschrijving"
+                },
+                "items": {
+                    "no_items": "Geen items",
+                    "empty": "Er zijn nog geen items toegevoegd aan deze reis"
                 },
                 "meta": {
                     "title": "Meta Title",

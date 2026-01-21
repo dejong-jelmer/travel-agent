@@ -1,6 +1,7 @@
 <script setup>
 import { computed, onMounted, watchEffect, ref } from 'vue';
 import { Plus, Minus } from 'lucide-vue-next';
+import DeleteButton from '@/Components/Atoms/DeleteButton.vue';
 
 
 const props = defineProps({
@@ -49,22 +50,35 @@ const handleInput = (index) => {
     }
 }
 
+const deleteItem = (index) => {
+    if (items.value.length > 1) {
+        items.value.splice(index, 1)
+    }
+}
+
 </script>
 <template>
     <div class="grid gap-2">
         <Label :for="label" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <div v-for="(item, index) in items" :key="`${name}-${index}`" role="group">
-            <Input
-                type="text"
-                :name="`${name}.${index}`"
-                :label="label"
-                :showLabel="false"
-                v-model="items[index]"
-                :placeholder="placeholder"
-                :feedback="feedback[`${name}.${index}`] ?? null"
-                @keyup="handleInput(index)"
+        <div v-for="(item, index) in items" :key="`${name}-${index}`" role="group" class="flex items-start gap-2 group">
+            <div class="flex-1">
+                <Input
+                    type="text"
+                    :name="`${name}.${index}`"
+                    :label="label"
+                    :showLabel="false"
+                    v-model="items[index]"
+                    :placeholder="placeholder"
+                    :feedback="feedback[`${name}.${index}`] ?? null"
+                    @keyup="handleInput(index)"
+                />
+            </div>
+            <DeleteButton
+                v-if="items.length > 1 && index !== items.length - 1"
+                @delete="deleteItem(index)"
+                :show-on-hover="true"
             />
         </div>
     </div>

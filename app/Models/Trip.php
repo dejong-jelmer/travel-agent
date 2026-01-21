@@ -3,12 +3,9 @@
 namespace App\Models;
 
 use App\Casts\PriceCast;
-use App\Enums\Trip\ItemCategory;
-use App\Enums\Trip\ItemType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
-use App\Services\TripItemFormatter;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -113,7 +110,7 @@ class Trip extends Model
     #[Scope]
     protected function featured(Builder $query): void
     {
-        $query->where('featured', 1);
+        $query->where('featured', true);
     }
 
     /**
@@ -259,50 +256,5 @@ class Trip extends Model
                 )
                 : '[]'
         );
-    }
-
-    public function inclusions(): HasMany
-    {
-        return $this->items()->where('type', ItemType::Inclusion);
-    }
-
-    public function exclusions(): HasMany
-    {
-        return $this->items()->where('type', ItemType::Exclusion);
-    }
-
-    public function getAllInclusions(): array
-    {
-        $defaults = $this->getDefaultItems(ItemType::Inclusion);
-        $custom = $this->inclusions;
-
-        return TripItemFormatter::format($defaults->merge($custom), ItemType::Inclusion);
-    }
-
-    public function getAllExclusions(): array
-    {
-        $defaults = $this->getDefaultItems(ItemType::Exclusion);
-        $custom = $this->exclusions;
-
-        return TripItemFormatter::format($defaults->merge($custom), ItemType::Exclusion);
-    }
-
-    private function getDefaultItems(ItemType $type): Collection
-    {
-        $defaults = config("trip-defaults.{$type->value}", []);
-
-        return collect($defaults)->flatMap(function ($items, $category) use ($type) {
-            return collect($items)->map(function ($item) use ($type, $category) {
-                $categoryEnum = ItemCategory::from($category);
-
-                return (object) [
-                    'type' => $type,
-                    'type_label' => $type->label(),
-                    'category' => $categoryEnum,
-                    'category_label' => $categoryEnum->label(),
-                    'item' => __($item),
-                ];
-            });
-        });
     }
 }

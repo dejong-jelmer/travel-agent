@@ -7,15 +7,20 @@ trait Selectable
     public static function options(): array
     {
         return collect(self::cases())
-            ->map(fn ($case) => [
-                'id' => $case->value,
-                'name' => method_exists($case, 'label')
-                    ? $case->label()
-                    : $case->value,
-                'disabled' => method_exists($case, 'disabledOption')
-                    ? $case->disabledOption()
-                    : false,
-            ])
+            ->map(function ($case) {
+                $option = [
+                    'id' => $case->value,
+                    'name' => method_exists($case, 'label')
+                        ? $case->label()
+                        : $case->value,
+                ];
+
+                if (method_exists($case, 'extraOptions')) {
+                    $option = array_merge($option, $case->extraOptions());
+                }
+
+                return $option;
+            })
             ->toArray();
     }
 

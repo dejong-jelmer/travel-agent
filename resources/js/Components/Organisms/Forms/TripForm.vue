@@ -4,14 +4,15 @@ import { usePage } from '@inertiajs/vue3';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useCharacterCounter } from '@/Composables/useCharacterCounter.js';
 import { useI18n } from 'vue-i18n';
+import TripItemsTab from './TripItemsTab.vue';
 
 const emit = defineEmits(['submit']);
 const props = defineProps({
     countries: Object,
     form: Object,
+    typeOptions: Object,
+    categoryOptions: Object,
 });
-
-console.log(props.form);
 
 const { t } = useI18n();
 
@@ -74,6 +75,14 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                         :class="selected
                                             ? 'border-primary-default text-primary-default'
                                             : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
+                                        {{ t('forms.trip.tabs.items') }}
+                                    </div>
+                                </Tab>
+                                <Tab v-slot="{ selected }" class="outline-none">
+                                    <div class="py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
+                                        :class="selected
+                                            ? 'border-primary-default text-primary-default'
+                                            : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
                                         {{ t('forms.trip.tabs.meta') }}
                                     </div>
                                 </Tab>
@@ -93,6 +102,10 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                     v-model="form.description" :feedback="form.errors.description"
                                     :placeholder="t('forms.trip.fields.description.placeholder')" :rows="6" />
                                 <DynamicInputList :items="form.highlights" name="highlights" :label="t('forms.trip.fields.highlights.label')" :placeholder="t('forms.trip.fields.highlights.placeholder')" :feedback="form.errors" />
+                            </TabPanel>
+
+                            <TabPanel class="p-6">
+                                <TripItemsTab :form="form" :type-options="typeOptions" :category-options="categoryOptions" />
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">

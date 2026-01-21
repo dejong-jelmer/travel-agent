@@ -33,6 +33,11 @@ class UpdateTripRequest extends FormRequest
                 'highlights' => [],
             ]);
         }
+
+        // Handle items: map to trip_items for validation
+        if ($this->input('items') === null) {
+            $this->merge(['items' => []]);
+        }
     }
 
     /**
@@ -52,6 +57,7 @@ class UpdateTripRequest extends FormRequest
             TripValidationRules::countries(),
             TripValidationRules::heroImageUpdate(),
             TripValidationRules::imagesUpdate(),
+            TripValidationRules::items(),
         );
     }
 }

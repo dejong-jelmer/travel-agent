@@ -23,8 +23,8 @@ class TripItem extends Model
     ];
 
     protected $appends = [
-        'type_label',
-        'category_label',
+        'is_inclusive',
+        'is_exclusive',
     ];
 
     public function trip(): BelongsTo
@@ -32,13 +32,17 @@ class TripItem extends Model
         return $this->belongsTo(Trip::class);
     }
 
-    protected function typeLabel(): Attribute
+    protected function isInclusive(): Attribute
     {
-        return Attribute::get(fn () => $this->type?->label());
+        return Attribute::make(
+            get: fn () => $this->type === ItemType::Inclusion,
+        );
     }
 
-    protected function categoryLabel(): Attribute
+    protected function isExclusive(): Attribute
     {
-        return Attribute::get(fn () => $this->category?->label());
+        return Attribute::make(
+            get: fn () => $this->type === ItemType::Exclusion,
+        );
     }
 }

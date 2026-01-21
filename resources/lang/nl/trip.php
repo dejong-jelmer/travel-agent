@@ -53,4 +53,22 @@ return [
             'local_tourist_tax' => 'Lokale toeristenbelasting',
         ],
     ],
+
+    // Forms
+    'forms' => [
+        'tabs' => [
+            'items' => 'Inclusies & Exclusies',
+        ],
+        'sections' => [
+            'items' => [
+                'inclusions_title' => 'Inbegrepen',
+                'exclusions_title' => 'Niet inbegrepen',
+            ],
+        ],
+        'fields' => [
+            'trip_items' => [
+                'placeholder' => 'Voer item beschrijving in',
+            ],
+        ],
+    ],
 ];

@@ -124,6 +124,10 @@
         }
     },
     "forms": {
+        "actions": {
+            "add": "Add",
+            "delete": "Delete"
+        },
         "booking": {
             "tooltip_locked": "Please complete the previous steps first",
             "button_prev": "Previous",
@@ -156,6 +160,7 @@
             "tabs": {
                 "basic": "Trip Details",
                 "media": "Media",
+                "items": "Inclusive/exclusive",
                 "details": "Details",
                 "meta": "Meta"
             },
@@ -776,6 +781,7 @@
                 "itinerary_tooltip": "View itinerary of this trip",
                 "tabs": {
                     "details": "Trip Details",
+                    "items": "Inclusive/exclusive",
                     "meta": "Meta data"
                 },
                 "highlights": {
@@ -785,6 +791,10 @@
                     "name": "Name",
                     "slug": "Slug",
                     "description": "Description"
+                },
+                "items": {
+                    "no_items": "No items",
+                    "empty": "No items have been added to this trip yet"
                 },
                 "meta": {
                     "title": "Meta Title",

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
+use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\ItemType;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
@@ -11,6 +13,7 @@ use App\Http\Requests\UpdateTripRequest;
 use App\Models\Country;
 use App\Models\Trip;
 use App\Services\DataTableService;
+use App\Services\TripItemService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -19,7 +22,10 @@ class TripController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private DataTableService $dataTableService) {}
+    public function __construct(
+        private DataTableService $dataTableService,
+        private TripItemService $tripItemService
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -46,6 +52,8 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Create', [
             'countries' => Country::all(),
+            'typeOptions' => ItemType::options(),
+            'categoryOptions' => ItemCategory::options(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
     }
@@ -70,6 +78,9 @@ class TripController extends Controller
             $trip->countries()->sync($countries);
         }
 
+        // Sync trip items
+        $this->tripItemService::syncTripItems($trip, $request->input('items'));
+
         return redirect()->route('admin.trips.show', $trip)->with('success', __('trip.created'));
     }
 
@@ -80,6 +91,7 @@ class TripController extends Controller
     {
         return Inertia::render('Admin/Trip/Show', [
             'trip' => $trip->load(['heroImage', 'images', 'countries', 'itineraries']),
+            'tripItems' => $this->tripItemService::aggregate($trip),
             'title' => $this->pageTitle('trip.title_show'),
         ]);
     }
@@ -90,7 +102,9 @@ class TripController extends Controller
     public function edit(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Edit', [
-            'trip' => $trip->load(['heroImage', 'images', 'countries']),
+            'trip' => $trip->load(['heroImage', 'images', 'countries', 'items']),
+            'typeOptions' => ItemType::options(),
+            'categoryOptions' => ItemCategory::options(),
             'countries' => Country::all(),
             'title' => $this->pageTitle('trip.title_edit'),
         ]);
@@ -121,6 +135,10 @@ class TripController extends Controller
         if (count($countries)) {
             $trip->countries()->sync($countries);
         }
+
+        // Sync trip items - delete all and recreate
+        $trip->items()->delete();
+        $this->tripItemService::syncTripItems($trip, $request->input('items'));
 
         return redirect()->route('admin.trips.show', $trip)
             ->with('success', __('trip.updated'));

@@ -53,4 +53,22 @@ return [
             'local_tourist_tax' => 'Local tourist tax',
         ],
     ],
+
+    // Forms
+    'forms' => [
+        'tabs' => [
+            'items' => 'Items',
+        ],
+        'sections' => [
+            'items' => [
+                'inclusions_title' => 'What\'s Included',
+                'exclusions_title' => 'What\'s Not Included',
+            ],
+        ],
+        'fields' => [
+            'trip_items' => [
+                'placeholder' => 'Enter item description',
+            ],
+        ],
+    ],
 ];

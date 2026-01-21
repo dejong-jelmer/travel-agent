@@ -9,6 +9,7 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    tripItems: Object,
     inclusions: {
         type: Object,
         default: () => ({ type_label: '', categories: [] })
@@ -18,6 +19,10 @@ const props = defineProps({
         default: () => ({ type_label: '', categories: [] })
     }
 })
+
+console.log(props.tripItems);
+console.log(Object.keys(props.tripItems).length);
+
 
 const { t } = useI18n()
 
@@ -187,27 +192,29 @@ const tabs = computed(() => [
                                 </div>
                             </div>
                             <div v-else-if="activeTab === 'inclusive'" class="space-y-8">
-                                <!-- Inclusions Section -->
-                                <div v-if="inclusions.categories.length > 0" class="space-y-6">
-                                    <h3 class="text-xl font-semibold text-primary-dark">
-                                        {{ inclusions.type_label }}
-                                    </h3>
-                                    <div v-for="(category, index) in inclusions.categories" :key="`inclusion-${index}`" class="space-y-3">
+                                <!-- Trip items Section -->
+                                <div v-if="Object.keys(props.tripItems).length > 0" class="space-y-6">
+                                    <template v-for="(categories, type) in tripItems" :key="type">
+                                        <h3 class="text-xl font-semibold text-primary-dark">
+                                            {{ type }}
+                                        </h3>
+                                    <div v-for="(items, category) in categories" :key="category" class="space-y-3">
                                         <h4 class="text-base font-medium text-primary-default">
-                                            {{ category.label }}
+                                            {{ category }}
                                         </h4>
                                         <ul class="space-y-2 ml-4">
-                                            <li v-for="(item, itemIndex) in category.items" :key="`inclusion-item-${itemIndex}`"
+                                            <li v-for="(tripItem, index) in items" :key="index"
                                                 class="flex items-start">
-                                                <Check class="text-status-success h-4 mt-1" />
-                                                {{ item }}
+                                                <component :is="tripItem.is_inclusive ? Check : X" :class="tripItem.is_inclusive ? 'text-status-success' : 'text-status-error'" class="h-4 mt-1" />
+                                                {{ tripItem.item }}
                                             </li>
                                         </ul>
                                     </div>
+                                    </template>
                                 </div>
 
                                 <!-- Exclusions Section -->
-                                <div v-if="exclusions.categories.length > 0" class="space-y-6">
+                                <!-- <div v-if="exclusions.categories.length > 0" class="space-y-6">
                                     <h3 class="text-xl font-semibold text-primary-dark">
                                         {{ exclusions.type_label }}
                                     </h3>
@@ -223,10 +230,10 @@ const tabs = computed(() => [
                                             </li>
                                         </ul>
                                     </div>
-                                </div>
+                                </div> -->
 
                                 <!-- Empty State -->
-                                <p v-if="inclusions.categories.length === 0 && exclusions.categories.length === 0"
+                                <p v-if="Object.keys(props.tripItems).length === 0"
                                    class="text-brand-light">
                                     {{ t('trip_show.tab_content.inclusive_placeholder') }}
                                 </p>

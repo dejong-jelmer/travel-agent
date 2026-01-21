@@ -3,6 +3,8 @@ import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
    countries: Object,
+   typeOptions: Object,
+    categoryOptions: Object,
 });
 
 const form = useForm({
@@ -17,8 +19,8 @@ const form = useForm({
     featured: false,
     published_at: new Date(),
     highlights: [],
+    items: [],
 });
-
 
 function submit() {
     form.post(route("admin.trips.store"), { forceFormData: true });
@@ -27,6 +29,6 @@ function submit() {
 
 <template>
     <Admin>
-        <TripForm :form="form" :countries="countries" @submit="submit" />
+        <TripForm :form="form" :countries="countries" :type-options="typeOptions" :category-options="categoryOptions" @submit="submit" />
     </Admin>
 </template>

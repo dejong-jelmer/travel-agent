@@ -26,6 +26,10 @@ class CreateTripRequest extends FormRequest
         $this->merge([
             'slug' => Str::slug($this->slug),
         ]);
+
+        if ($this->input('items') === null) {
+            $this->merge(['items' => []]);
+        }
     }
 
     /**
@@ -45,6 +49,7 @@ class CreateTripRequest extends FormRequest
             TripValidationRules::countries(),
             TripValidationRules::heroImageStore(),
             TripValidationRules::imagesStore(),
+            TripValidationRules::items(),
         );
     }
 }
