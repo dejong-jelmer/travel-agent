@@ -35,12 +35,25 @@ const itemsFor = (category) => {
     );
 };
 
+const lastItemEmpty = (category) => {
+    const items = props.form.items.filter(
+        item => item.category === category
+    );
+    const lastValue = Object.values(items).at(-1)
+
+    return lastValue.item === ''
+}
+
 const addItem = (category, type) => {
-    props.form.items.push({
-        type,
-        category,
-        item: ''
-    });
+
+    if (!lastItemEmpty(category)) {
+        props.form.items.push({
+            type,
+            category,
+            item: ''
+        });
+    }
+
 };
 
 const deleteItem = (item) => {
@@ -62,24 +75,16 @@ const deleteItem = (item) => {
                 <h4 class="text-base font-semibold text-gray-700 mb-3">{{ category.name }}</h4>
 
                 <div class="space-y-2 mb-3 ml-4">
-                    <TripItemRow
-                        v-for="(item, index) in itemsFor(category.id)"
-                        :key="index"
-                        :index="index"
-                        :item="item"
-                        @delete="() => deleteItem(item)"
-                        :category-options="categoryOptions"
-                        :show-type-select="false"
-                    />
+                    <TripItemRow v-for="(item, index) in itemsFor(category.id)" :key="`${category.id}-${index}`" :index="form.items.indexOf(item)" :item="item"
+                        @delete="() => deleteItem(item)" :category-options="categoryOptions" :show-type-select="false"
+                        :errors="form.errors" />
                 </div>
 
                 <!-- Add button -->
                 <div class="ml-4">
-                    <button
-                        type="button"
-                        @click="addItem(category.id, category.type)"
+                    <button type="button" @click="addItem(category.id, category.type)"
                         class="flex items-center gap-2 px-3 py-2 text-sm text-primary-default hover:text-primary-dark transition-colors"
-                    >
+                        :class="{ 'cursor-not-allowed': lastItemEmpty(category.id) }">
                         <Plus class="h-4 w-4" />
                         <span>{{ $t('forms.actions.add') }}</span>
                     </button>

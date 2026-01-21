@@ -3,6 +3,7 @@
 namespace App\Services\Validation;
 
 use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\ItemType;
 use App\Services\Traits\MergesRules;
 use Illuminate\Validation\Rule;
 
@@ -19,6 +20,7 @@ class TripValidationRules
             'highlights.*' => [
                 'nullable',
                 'string',
+                'max:255',
             ],
             'description' => ['required', 'string'],
         ], $additions);
@@ -90,17 +92,11 @@ class TripValidationRules
 
     public static function items(): array
     {
-        // Get all valid category values
-        $validCategoryValues = array_map(
-            fn ($case) => $case->value,
-            ItemCategory::cases()
-        );
-
         return [
             'items' => ['nullable', 'array'],
-            'items.*.type' => ['required', 'string'],
-            'items.*.category' => ['required', 'string', Rule::in($validCategoryValues)],
-            'items.*.item' => ['required', 'string', 'max:255'],
+            'items.*.type' => ['required', 'string', Rule::enum(ItemType::class)],
+            'items.*.category' => ['required', 'string', Rule::enum(ItemCategory::class)],
+            'items.*.item' => ['required', 'string', 'max:1'],
         ];
     }
 }

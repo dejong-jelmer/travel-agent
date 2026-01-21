@@ -1,7 +1,6 @@
 <script setup>
 import { computed, onMounted, watchEffect, ref } from 'vue';
 import { Plus, Minus } from 'lucide-vue-next';
-import DeleteButton from '@/Components/Atoms/DeleteButton.vue';
 
 
 const props = defineProps({
@@ -78,7 +77,6 @@ const deleteItem = (index) => {
             <DeleteButton
                 v-if="items.length > 1 && index !== items.length - 1"
                 @delete="deleteItem(index)"
-                :show-on-hover="true"
             />
         </div>
     </div>

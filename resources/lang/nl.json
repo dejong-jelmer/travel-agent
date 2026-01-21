@@ -828,6 +828,12 @@
                     "title": "Gekoppelde Landen",
                     "subtitle": "Bestemmingen"
                 }
+            },
+            "edit": {
+                "items": {
+                    "select_category": "Selecteer een category...",
+                    "description": "Omschrijving"
+                }
             }
         },
         "booking": {

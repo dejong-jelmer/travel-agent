@@ -90,7 +90,7 @@ class TripController extends Controller
     public function show(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Show', [
-            'trip' => $trip->load(['heroImage', 'images', 'countries', 'itineraries']),
+            'trip' => $trip->load(['heroImage', 'images', 'countries', 'itineraries', 'items']),
             'tripItems' => $this->tripItemService::aggregate($trip),
             'title' => $this->pageTitle('trip.title_show'),
         ]);

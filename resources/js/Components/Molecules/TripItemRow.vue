@@ -1,8 +1,4 @@
 <script setup>
-import Input from '@/Components/Molecules/Input.vue';
-import Select from '@/Components/Molecules/Select.vue';
-import DeleteButton from '@/Components/Atoms/DeleteButton.vue';
-
 const props = defineProps({
     item: {
         type: Object,
@@ -20,11 +16,13 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
-    error: {
-        type: String,
+    errors: {
+        type: Object,
         default: null,
     },
 });
+
+// console.log(props.errors[`items.${index}.item`]);
 
 const emit = defineEmits(['update', 'delete']);
 
@@ -48,8 +46,8 @@ const handleCategoryChange = (newCategory) => {
                 :multiple="false"
                 :required="true"
                 :options="categoryOptions"
-                :feedback="null"
-                placeholder="Select category..."
+                :feedback="errors[`items.${index}.category`]"
+                :placeholder="$t('admin.trips.edit.items.select_category')"
                 :show-label="false"
             />
         </div>
@@ -58,10 +56,10 @@ const handleCategoryChange = (newCategory) => {
         <div class="flex-1">
             <Input
                 type="text"
-                name="item"
+                name="items[]"
                 v-model="item.item"
-                placeholder="Omschrijving..."
-                :feedback="error"
+                :placeholder="$t('admin.trips.edit.items.description')"
+                :feedback="errors[`items.${index}.item`]"
                 :show-label="false"
             />
         </div>

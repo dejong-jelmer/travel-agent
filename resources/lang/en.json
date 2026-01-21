@@ -828,6 +828,12 @@
                     "title": "Linked Countries",
                     "subtitle": "Destinations"
                 }
+            },
+            "edit": {
+                "items": {
+                    "select_category": "Selecteer een category...",
+                    "description": "Omschrijving"
+                }
             }
         },
         "booking": {
