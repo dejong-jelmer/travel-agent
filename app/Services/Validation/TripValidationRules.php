@@ -96,7 +96,7 @@ class TripValidationRules
             'items' => ['nullable', 'array'],
             'items.*.type' => ['required', 'string', Rule::enum(ItemType::class)],
             'items.*.category' => ['required', 'string', Rule::enum(ItemCategory::class)],
-            'items.*.item' => ['required', 'string', 'max:1'],
+            'items.*.item' => ['required', 'string', 'max:255'],
         ];
     }
 }
