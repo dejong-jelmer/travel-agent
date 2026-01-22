@@ -23,13 +23,12 @@ class CreateTripRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        //  Default to empty array's on null
+        emptyFormRequestToArray($this, ['highlights', 'items']);
+
         $this->merge([
             'slug' => Str::slug($this->slug),
         ]);
-
-        if ($this->input('items') === null) {
-            $this->merge(['items' => []]);
-        }
     }
 
     /**

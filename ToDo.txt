@@ -3,13 +3,14 @@
 - Create/Update tripItems opslaan ✓
 - Trip Items in Admin/Trip/Show.vue ✓
 - Itinerary: edit admin Itinerary card to include all data
+- Add Booking constraints like avalable dates.
 - Trip: Praktische info
 - Trip: Extra info (via countries?)
 - Review module
-- Bookingform resposive maken
-- Auto update trip->slug in Admin/Trip/Edit & Create
-- Additional cost (booking fee) in Bookingform & total price
-- Editable Additional cost
-- Downloadable trems to pdf
+- Update Bookingform resposiveness
+- trip->slug: Auto update in Admin/Trip/Edit & Create
+- Additional cost (booking fee) in Bookingform & total Praktische
+- Editable Additional cost ->  editable defaults page with booking fees & trips items ect.
+- Downloadable terms to pdf
 - Add terms to booking confirmation mail
 

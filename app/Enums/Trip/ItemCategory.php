@@ -32,16 +32,16 @@ enum ItemCategory: string
     public function isCustomizable(): bool
     {
         return match ($this) {
-            self::Transport, self::Accommodation, self::AdditionalCost => true,
             self::GeneralInclusions, self::CostsToConsider => false,
+            default => true,
         };
     }
 
     public function type(): ItemType
     {
         return match ($this) {
-            self::GeneralInclusions, self::Transport, self::Accommodation => ItemType::Inclusion,
             self::AdditionalCost, self::CostsToConsider => ItemType::Exclusion,
+            default => ItemType::Inclusion,
         };
     }
 }

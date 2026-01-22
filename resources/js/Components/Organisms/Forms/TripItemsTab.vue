@@ -40,8 +40,10 @@ const lastItemEmpty = (category) => {
         item => item.category === category
     );
     const lastValue = Object.values(items).at(-1)
-
-    return lastValue.item === ''
+    if (typeof lastValue !== 'undefined') {
+        return lastValue.item === ''
+    }
+    return false;
 }
 
 const addItem = (category, type) => {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Concerns\ValidatesMainBooker;
+use App\Http\Requests\Traits\ValidatesMainBooker;
 use App\Models\Trip;
 use App\Services\Validation\BookingValidationRules;
 use Illuminate\Foundation\Http\FormRequest;

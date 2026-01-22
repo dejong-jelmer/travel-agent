@@ -23,21 +23,12 @@ class UpdateTripRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-        //  Format string to slug
+        //  Default to empty array's on null
+        emptyFormRequestToArray($this, ['highlights', 'items']);
+
         $this->merge([
             'slug' => Str::slug($this->slug),
         ]);
-        //  Default to empty array's on null
-        if ($this->input('highlights') === null) {
-            $this->merge([
-                'highlights' => [],
-            ]);
-        }
-
-        // Handle items: map to trip_items for validation
-        if ($this->input('items') === null) {
-            $this->merge(['items' => []]);
-        }
     }
 
     /**
