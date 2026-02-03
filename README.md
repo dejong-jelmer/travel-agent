@@ -1,6 +1,7 @@
 # Sustainable Travel Agent
 ---
 [![run-tests](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml)
+[![GitHub Code Style Action Status](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml)
 
 A Laravel 12 + Inertia.js + Vue 3 application promoting sustainable European train travel. Built with modern development practices, comprehensive testing, and automated CI/CD deployment.
 
@@ -305,25 +306,25 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 
 - **Brand Identity**
   - `brand.primary` (#2F3E46) - Primary dark blue-gray for text and headings
-  - `brand.secondary` (#fbfbf7) - Off-white/cream for backgrounds
-  - `brand.tertiary` (#ccf6ff) - Light cyan accent
+  - `brand.secondary` (#F0F4F7) - Off-white/cream for backgrounds
+  - `brand.tertiary` (#CCF6FF) - Light cyan accent
   - `brand.light` (#A3BCCB) - Soft blue for subtle text and borders
-  - `brand.link` (#82b2ca) - Blue for links and interactive elements
 
 - **Accent Colors** (Nature/Sustainability focus)
-  - `accent.primary` (#f0972d) - Warm orange for primary CTAs and highlights
+  - `accent.primary` (#F0972D) - Warm orange for primary CTAs and highlights
   - `accent.sage` (#AFCB98) - Sage green for success and eco-friendly elements
   - `accent.earth` (#DCC7AA) - Earth/sand tone for warmth
   - `accent.terracotta` (#B17C65) - Terracotta for contrast and emphasis
-  - `accent.blue` (#A3BCCB) - Soft blue for subtle accents
+  - `accent.link` (#82B2CA) - Soft blue for links
 
 - **Status Feedback**
-  - `status.error` (#e63946) - Error states and validation failures
-  - `status.success` (#06a77d) - Success states and confirmations
-  - `status.warning` (#f4a261) - Warning states and alerts
+  - `status.error` (#DC3545) - Error states and validation failures
+  - `status.success` (#198754) - Success states and confirmations
+  - `status.warning` (#FFC107) - Warning states and alerts
+  - `status.info` (#0D6EFD) - Informatieve states
 
 **Rate Limiting:**
-Custom `frontend-form-actions` limiter: 25 requests/min per IP
+Custom `frontend-form-actions` limiter: 5 requests/min per IP
 Applied to: booking forms, contact forms, newsletter subscriptions
 
 ---
@@ -342,7 +343,7 @@ Applied to: booking forms, contact forms, newsletter subscriptions
 - Email validation with domain checks
 
 ### Rate Limiting
-- Public form endpoints: 25 requests/minute per IP
+- Public form endpoints: 5 requests/minute per IP
 - Configured via `frontend-form-actions` rate limiter
 - Protects booking, contact, and newsletter endpoints
 
@@ -350,7 +351,7 @@ Applied to: booking forms, contact forms, newsletter subscriptions
 - **Vue Honeypot** - Invisible form field traps for bot detection
 - **AntiSpamEmailService** - Server-side suspicious pattern detection
 - **Email/Phone Obfuscation** - Contact links protected via `useAntiSpamLinks` composable
-- **Rate Limiting** - 25 requests/min on all public forms
+- **Rate Limiting** - 5 requests/min on all public forms
 
 **How Email/Phone Obfuscation Works:**
 ```js
@@ -456,7 +457,7 @@ php artisan view:clear
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+2. Create a feature branch (`git checkout -b feature-amazing-feature`)
 3. Run tests: `php artisan test && npx vitest run`
 4. Run code quality checks: `./vendor/bin/pint && ./vendor/bin/phpstan analyse`
 5. Commit changes using conventional commits

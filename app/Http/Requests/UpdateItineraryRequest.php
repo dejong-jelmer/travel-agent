@@ -21,8 +21,8 @@ class UpdateItineraryRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
-            //  Default to empty array's on null
-            emptyFormRequestToArray($this, ['meals', 'transport']);
+        //  Default to empty array's on null
+        emptyFormRequestToArray($this, ['meals', 'transport']);
     }
 
     /**

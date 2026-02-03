@@ -33,22 +33,22 @@ export default {
                 brand: {
                     primary: "#2F3E46",
                     secondary: "#F0F4F7",
-                    tertiary: "#ccf6ff",
+                    tertiary: "#CCF6FF",
                     light: "#A3BCCB"
                 },
                 accent: {
-                    primary: "#f0972d",
+                    primary: "#F0972D",
                     sage: "#AFCB98",
                     earth: "#DCC7AA",
                     terracotta: "#B17C65",
-                    link: "#82b2ca"
+                    link: "#82B2CA"
                 },
                 // Status feedback colors
                 status: {
-                    error: "#dc3545",
+                    error: "#DC3545",
                     success: "#198754",
-                    warning: "#ffc107",
-                    info: "#0d6efd"
+                    warning: "#FFC107",
+                    info: "#0D6EFD"
                 },
             },
             screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
