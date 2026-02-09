@@ -19,7 +19,7 @@ const { isValidDate } = useDateFormatter();
 /** Minimum length for most string fields (names, city, street) */
 const DEFAULT_MIN_STRING_LENGTH = 3;
 
-/** Minimum length for nationality field (2-letter country codes) */
+/** Minimum length for nationality field (2-letter destination codes) */
 const MIN_NATIONALITY_LENGTH = 2;
 
 /** Maximum length for most string fields */

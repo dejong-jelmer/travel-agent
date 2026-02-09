@@ -71,4 +71,13 @@ return [
             ],
         ],
     ],
+    'practical-info' => [
+        'sections' => [
+            'travel_period' => 'Reisperiode',
+            'departure_dates' => 'Vertrekdata',
+            'outbound_return' => 'Heen- en terugreis',
+            'transport' => 'Vervoer tijdens de reis',
+            'accommodation' => 'Logies',
+        ]
+    ]
 ];

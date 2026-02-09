@@ -2,28 +2,40 @@
 
 namespace App\Models;
 
-use App\Models\Traits\Sortable;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Country extends Model
 {
-    use HasFactory,
-        Sortable;
-
-    protected $perPage = 15;
-
-    protected $fillable = ['name'];
-
     public $timestamps = false;
+    protected $primaryKey = 'code';
+    public $incrementing = false;
+    protected $keyType = 'string';
 
-    protected $searchable = ['name'];
+    protected $fillable = ['code', 'name', 'region', 'translations'];
 
-    protected $sortable = ['id', 'name'];
+    protected $casts = [
+        'translations' => AsArrayObject::class,
+    ];
 
-    public function trips(): BelongsToMany
+    /**
+     * Retrieve translated country name (fallback to English)
+     */
+    public function getTranslatedName(?string $locale = null): string
     {
-        return $this->belongsToMany(Trip::class);
+        $locale = $locale ?? app()->getLocale();
+
+        // Map to ISO 639-3
+        $iso3 = config("app.locales.{$locale}")
+            ?? config("app.locales." . config('app.fallback_locale'))
+            ?? 'eng';
+
+        if ($iso3 === 'eng') {
+            return $this->name;
+        }
+
+        return $this->translations[$iso3]['common']
+            ?? $this->translations[$iso3]['official']
+            ?? $this->name;
     }
 }

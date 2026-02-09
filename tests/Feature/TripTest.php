@@ -2,7 +2,7 @@
 
 namespace Tests\Feature;
 
-use App\Models\Country;
+use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Trip;
 use App\Models\User;
@@ -22,7 +22,7 @@ class TripTest extends TestCase
 
     private array $tripData;
 
-    private Collection $countries;
+    private Collection $destinations;
 
     protected function setUp(): void
     {
@@ -34,7 +34,7 @@ class TripTest extends TestCase
         Storage::fake(config('images.disk'));
         Storage::makeDirectory(config('images.directory'));
 
-        $this->countries = Country::factory(2)->create();
+        $this->destinations = Destination::factory(2)->create();
 
         $this->tripData = [
             'name' => fake()->words(2, true),
@@ -47,7 +47,7 @@ class TripTest extends TestCase
                 UploadedFile::fake()->image('image1.jpg'),
                 UploadedFile::fake()->image('image2.jpg'),
             ],
-            'countries' => $this->countries->modelKeys(),
+            'destinations' => $this->destinations->modelKeys(),
             'published_at' => now(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
@@ -89,7 +89,7 @@ class TripTest extends TestCase
         $trip = Trip::firstOrFail();
         $response->assertRedirect(route('admin.trips.show', $trip));
 
-        $this->assertDatabaseHas('trips', Arr::except($this->tripData, ['heroImage', 'images', 'countries']));
+        $this->assertDatabaseHas('trips', Arr::except($this->tripData, ['heroImage', 'images', 'destinations']));
 
         // Assert hero image with hash-based storage
         $heroImage = $trip->heroImage;
@@ -141,7 +141,7 @@ class TripTest extends TestCase
                 UploadedFile::fake()->image('new1.jpg'),
                 UploadedFile::fake()->image('new2.jpg'),
             ],
-            'countries' => $this->countries->modelKeys(),
+            'destinations' => $this->destinations->modelKeys(),
             'published_at' => now()->addDay(fake()->randomDigit())->startOfDay()->toDateTimeString(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),

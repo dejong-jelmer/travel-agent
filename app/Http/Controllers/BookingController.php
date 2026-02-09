@@ -37,7 +37,7 @@ class BookingController extends Controller
         return Inertia::render('Booking/Received', [
             'title' => $this->pageTitle('booking.title_received'),
             'booking' => $booking->load([
-                'trip.countries',
+                'trip.destinations',
                 'trip.heroImage',
                 'travelers',
                 'contact',

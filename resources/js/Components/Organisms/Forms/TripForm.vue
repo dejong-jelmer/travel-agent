@@ -8,11 +8,18 @@ import TripItemsTab from './TripItemsTab.vue';
 
 const emit = defineEmits(['submit']);
 const props = defineProps({
-    countries: Object,
+    destinations: Object,
     form: Object,
     typeOptions: Object,
     categoryOptions: Object,
+    practicalSections: Object,
 });
+
+const destinationOptions = computed(() => (
+    props.destinations?.map((d) => (
+        { 'id': d.id, 'name': d.region || d.name }
+    )).sort((a, b) => a.name.localeCompare(b.name))
+))
 
 const { t } = useI18n();
 
@@ -83,6 +90,14 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                         :class="selected
                                             ? 'border-primary-default text-primary-default'
                                             : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
+                                        {{ t('forms.trip.tabs.practical') }}
+                                    </div>
+                                </Tab>
+                                <Tab v-slot="{ selected }" class="outline-none">
+                                    <div class="py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
+                                        :class="selected
+                                            ? 'border-primary-default text-primary-default'
+                                            : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
                                         {{ t('forms.trip.tabs.meta') }}
                                     </div>
                                 </Tab>
@@ -106,6 +121,18 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
 
                             <TabPanel class="p-6">
                                 <TripItemsTab :form="form" :type-options="typeOptions" :category-options="categoryOptions" />
+                            </TabPanel>
+
+                            <TabPanel class="p-6 space-y-6">
+                                <template v-for="(label, key) in practicalSections" :key="key">
+                                    <TextArea
+                                        :name="`practical_info.${key}`"
+                                        :label="label"
+                                        v-model="form.practical_info[key]"
+                                        :feedback="form.errors[`practical_info.${key}`]"
+                                        :rows="6"
+                                    />
+                                </template>
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">
@@ -236,19 +263,19 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     </div>
                 </section>
 
-                <!-- Linked countries -->
+                <!-- Linked destinations -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.countries.title') }}</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.countries.subtitle') }}</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.destinations.title') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.destinations.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
-                            <Select name="country" v-model="form.countries" :multiple="true" :required="true"
-                                :options="countries" :feedback="form.errors.countries"
-                                :placeholder="t('forms.trip.fields.countries.placeholder')" />
+                            <Select name="destination" v-model="form.destinations" :multiple="true" :required="true"
+                                :options="destinationOptions" :feedback="form.errors.destinations"
+                                :placeholder="t('forms.trip.fields.destinations.placeholder')" />
                             <p class="mt-2 text-xs text-gray-700/30">
-                                {{ t('forms.trip.fields.countries.help') }}
+                                {{ t('forms.trip.fields.destinations.help') }}
                             </p>
                         </div>
                     </div>

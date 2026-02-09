@@ -3,11 +3,12 @@
 namespace Database\Factories;
 
 use App\Enums\ImageRelation;
-use App\Models\Country;
+use App\Enums\Trip\PracticalInfo;
+use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
-use App\Services\CountryService;
+use App\Services\DestinationService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
@@ -48,30 +49,30 @@ class TripFactory extends Factory
         ];
     }
 
-    private function generateSlug(string $city, ?string $country = null): string
+    private function generateSlug(string $city, ?string $destination = null): string
     {
-        if ($country) {
-            return Str::slug("reis-naar-{$city}-{$country}");
+        if ($destination) {
+            return Str::slug("reis-naar-{$city}-{$destination}");
         }
 
         return Str::slug("reis-naar-{$city}");
     }
 
-    private function generateDescription(string $city, ?string $country = null): string
+    private function generateDescription(string $city, ?string $destination = null): string
     {
-        $intro = $country
-            ? "Ontdek het prachtige {$city} in {$country}. "
+        $intro = $destination
+            ? "Ontdek het prachtige {$city} in {$destination}. "
             : "Ontdek het prachtige {$city}. ";
 
         $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes. ';
 
-        return $intro.$secondLine.fake()->paragraph();
+        return $intro . $secondLine . fake()->paragraph();
     }
 
-    private function generateMetaTitle(string $city, int $duration, ?string $country = null): string
+    private function generateMetaTitle(string $city, int $duration, ?string $destination = null): string
     {
-        $title = $country
-            ? "Reis naar {$city}, {$country} | {$duration} dagen"
+        $title = $destination
+            ? "Reis naar {$city}, {$destination} | {$duration} dagen"
             : "Reis naar {$city} | {$duration} dagen";
 
         return Str::substr($title, 0, 60);
@@ -99,7 +100,7 @@ class TripFactory extends Factory
             Itinerary::factory()
                 ->withImage()
                 ->count($trip->duration)
-                ->sequence(fn (Sequence $sequence) => [
+                ->sequence(fn(Sequence $sequence) => [
                     'order' => $sequence->index + 1,
                 ])
                 ->create(['trip_id' => $trip->id]);
@@ -107,26 +108,45 @@ class TripFactory extends Factory
     }
 
     /**
-     * Attach random country from existing pool
-     * Requires countries to be seeded first (via CountrySeeder)
+     * Attach random destination from existing pool
+     * Requires destinations to be seeded first (via DestinationSeeder)
      */
-    public function withCountry(): static
+    public function withDestination(): static
     {
         return $this->afterCreating(function (Trip $trip) {
-            if ($country = Country::inRandomOrder()->first()) {
-                $trip->countries()->attach($country);
+            if ($destination = Destination::inRandomOrder()->first()) {
+                $trip->destinations()->attach($destination);
 
-                // Get locale from CountryService
-                $locale = CountryService::getLocale($country->name);
+                // Get locale from DestinationService using country_code and region
+                $locale = DestinationService::getLocaleByCountryCode(
+                    $destination->country_code,
+                );
                 $city = fake($locale)->city();
 
                 $trip->update([
                     'name' => $city,
-                    'slug' => $this->generateSlug($city, $country->name),
-                    'description' => $this->generateDescription($city, $country->name),
-                    'meta_title' => $this->generateMetaTitle($city, $trip->duration, $country->name),
+                    'slug' => $this->generateSlug($city, $destination->name),
+                    'description' => $this->generateDescription($city, $destination->name),
+                    'meta_title' => $this->generateMetaTitle($city, $trip->duration, $destination->name),
                 ]);
             }
+        });
+    }
+
+    /**
+     * Update trip with 'practical infromation' section headers
+     * defined in App\Enums\Trip\PracticalInfo
+     */
+    public function withPracticalInfo(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            $trip->update([
+                'practical_info' => collect(PracticalInfo::cases())
+                    ->mapWithKeys(fn($case) => [
+                        $case->value => fake()->text(fake()->numberBetween(50, 250))
+                    ])
+                    ->all()
+            ]);
         });
     }
 }

@@ -17,11 +17,10 @@ defineProps({ trip: Object });
             </Link>
         </div>
         <div class="py-5 px-8 space-y-3 text-left bg-white">
-            <!-- Landen met sage green accent -->
             <div class="inline-flex items-center gap-2">
                 <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
                 <h3 class="text-sm text-brand-light font-medium line-clamp-1">
-                    {{ trip.countries_formatted }}
+                    {{ trip.destinations_formatted }}
                 </h3>
             </div>
 

@@ -31,6 +31,7 @@ defineProps({
             <slot name="label">{{ label }}</slot>
         </Label>
         <textarea
+            v-bind="$attrs"
             :id="name"
             :value="modelValue"
             :rows="rows"

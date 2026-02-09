@@ -45,10 +45,11 @@ class UpdateTripRequest extends FormRequest
             TripValidationRules::pricing(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),
-            TripValidationRules::countries(),
+            TripValidationRules::destinations(),
             TripValidationRules::heroImageUpdate(),
             TripValidationRules::imagesUpdate(),
             TripValidationRules::items(),
+            TripValidationRules::practicalInfo(),
         );
     }
 }

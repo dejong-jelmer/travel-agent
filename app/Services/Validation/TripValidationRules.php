@@ -4,6 +4,7 @@ namespace App\Services\Validation;
 
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\PracticalInfo;
 use App\Services\Traits\MergesRules;
 use Illuminate\Validation\Rule;
 
@@ -52,10 +53,10 @@ class TripValidationRules
         ];
     }
 
-    public static function countries(): array
+    public static function destinations(): array
     {
         return [
-            'countries' => ['required', 'array'],
+            'destinations' => ['required', 'array'],
         ];
     }
 
@@ -97,6 +98,14 @@ class TripValidationRules
             'items.*.type' => ['required', 'string', Rule::enum(ItemType::class)],
             'items.*.category' => ['required', 'string', Rule::enum(ItemCategory::class)],
             'items.*.item' => ['required', 'string', 'max:255'],
+        ];
+    }
+
+    public static function practicalInfo(): array
+    {
+        return [
+            'practical_info' => ['nullable', 'array'],
+            'practical_info.*' => ['nullable', 'string', 'max:1020'],
         ];
     }
 }

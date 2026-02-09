@@ -5,12 +5,13 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\ImageRelation;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateTripRequest;
-use App\Models\Country;
+use App\Models\Destination;
 use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\TripItemService;
@@ -33,7 +34,7 @@ class TripController extends Controller
     public function index(DataTableRequest $request): Response
     {
         $trips = $this->dataTableService
-            ->applyFilters(Trip::with(['countries', 'itineraries', 'heroImage']), $request, Trip::filters())
+            ->applyFilters(Trip::with(['destinations', 'itineraries', 'heroImage']), $request, Trip::filters())
             ->paginate()
             ->withQueryString();
 
@@ -51,9 +52,10 @@ class TripController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Trip/Create', [
-            'countries' => Country::all(),
+            'destinations' => Destination::all(),
             'typeOptions' => ItemType::options(),
             'categoryOptions' => ItemCategory::options(),
+            'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
     }
@@ -67,15 +69,15 @@ class TripController extends Controller
 
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
         $validatedFields = $request->safe()->except(['heroImage', 'images']);
-        $countries = $request->safe()->countries ?? [];
+        $destinations = $request->safe()->destinations ?? [];
 
         $trip->fill($validatedFields);
         $trip->save();
         $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
 
-        if (count($countries)) {
-            $trip->countries()->sync($countries);
+        if (count($destinations)) {
+            $trip->destinations()->sync($destinations);
         }
 
         // Sync trip items
@@ -90,8 +92,9 @@ class TripController extends Controller
     public function show(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Show', [
-            'trip' => $trip->load(['heroImage', 'images', 'countries', 'itineraries', 'items']),
+            'trip' => $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'items']),
             'tripItems' => $this->tripItemService::aggregate($trip),
+            'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_show'),
         ]);
     }
@@ -102,10 +105,11 @@ class TripController extends Controller
     public function edit(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Edit', [
-            'trip' => $trip->load(['heroImage', 'images', 'countries', 'items']),
+            'trip' => $trip->load(['heroImage', 'images', 'destinations', 'items']),
             'typeOptions' => ItemType::options(),
             'categoryOptions' => ItemCategory::options(),
-            'countries' => Country::all(),
+            'destinations' => Destination::all(),
+            'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),
         ]);
     }
@@ -116,8 +120,8 @@ class TripController extends Controller
     public function update(UpdateTripRequest $request, Trip $trip): RedirectResponse
     {
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
-        $validatedFields = $request->safe()->except(['heroImage', 'images', 'countries']);
-        $countries = $request->safe()->countries ?? [];
+        $validatedFields = $request->safe()->except(['heroImage', 'images', 'destinations']);
+        $destinations = $request->safe()->destinations ?? [];
 
         $trip->fill($validatedFields);
         $trip->save();
@@ -132,8 +136,8 @@ class TripController extends Controller
             $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
         }
 
-        if (count($countries)) {
-            $trip->countries()->sync($countries);
+        if (count($destinations)) {
+            $trip->destinations()->sync($destinations);
         }
 
         // Sync trip items - delete all and recreate

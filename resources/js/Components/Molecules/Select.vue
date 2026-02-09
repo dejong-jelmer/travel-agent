@@ -4,6 +4,14 @@ import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
 const props = defineProps({
     name: String,
     label: String,
+    optionKey: {
+        type: String,
+        default: 'id',
+    },
+    optionValue: {
+        type: String,
+        default: 'name',
+    },
     modelValue: {
         type: [String, Array],
         required: true,
@@ -59,11 +67,11 @@ const isSelected = (value) => {
         <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <select :class="['form-input', $attrs.class]" :id="props.name" :required="required" :multiple="multiple" @change="handleChange">
+        <select v-bind="$attrs" :class="['form-input', $attrs.class]" :id="props.name" :required="required" :multiple="multiple" @change="handleChange">
             <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
             <option v-for="(option, index) in options" :selected="isSelected(option['id'])" :key="index"
-                :value="option.id" :disabled="option.disabled ?? false" >
-                {{ option.name }}
+                :value="option[optionKey]" :disabled="option.disabled ?? false" >
+                {{ option[optionValue] }}
             </option>
         </select>
         <template v-if="feedback">

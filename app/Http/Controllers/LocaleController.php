@@ -16,7 +16,7 @@ class LocaleController extends Controller
             'locale' => [
                 'required',
                 'string',
-                Rule::in(config('app.available_locales', ['nl', 'en'])),
+                Rule::in(availableLocales()),
             ],
         ]);
 

@@ -2,10 +2,20 @@
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
-   countries: Object,
-   typeOptions: Object,
+    destinations: Object,
+    typeOptions: Object,
     categoryOptions: Object,
+    practicalSections: Object,
 });
+
+// Initialize practical_info with all keys from practicalSections
+const initializePracticalInfo = () => {
+    const info = {};
+    Object.keys(props.practicalSections).forEach(key => {
+        info[key] = '';
+    });
+    return info;
+};
 
 const form = useForm({
     name: "",
@@ -13,13 +23,14 @@ const form = useForm({
     description: "",
     price: "",
     duration: "",
-    countries: [],
+    destinations: [],
     heroImage: null,
     images: [],
     featured: false,
     published_at: new Date(),
     highlights: [],
     items: [],
+    practical_info: initializePracticalInfo(),
 });
 
 function submit() {
@@ -29,6 +40,12 @@ function submit() {
 
 <template>
     <Admin>
-        <TripForm :form="form" :countries="countries" :type-options="typeOptions" :category-options="categoryOptions" @submit="submit" />
+        <TripForm
+            :form="form"
+            :destinations="destinations"
+            :type-options="typeOptions"
+            :category-options="categoryOptions"
+            :practical-sections="practicalSections"
+            @submit="submit" />
     </Admin>
 </template>

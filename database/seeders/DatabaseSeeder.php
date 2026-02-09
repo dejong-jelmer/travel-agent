@@ -35,14 +35,15 @@ class DatabaseSeeder extends Seeder
         // Admin
         User::factory()->admin()->create();
 
-        // Seed countries first
+        // Seed destinations first
         $this->call(CountrySeeder::class);
+        $this->call(DestinationSeeder::class);
 
         // Trips
         $trips = Trip::factory(50)
             ->withHeroImage()
             ->withImages(10)
-            ->withCountry()
+            ->withDestination()
             ->withAnItinerary()
             ->create();
 

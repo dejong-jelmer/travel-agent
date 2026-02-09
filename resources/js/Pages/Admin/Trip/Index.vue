@@ -13,7 +13,7 @@ const columns = [
     { key: 'id', label: t('admin.trips.index.table_headers.id'), sortable: true },
     { key: 'image', label: t('admin.trips.index.table_headers.image'), sortable: false },
     { key: 'name', label: t('admin.trips.index.table_headers.product'), sortable: true },
-    { key: 'countries', label: t('admin.trips.index.table_headers.countries'), sortable: true },
+    { key: 'destinations', label: t('admin.trips.index.table_headers.destinations'), sortable: true },
     { key: 'price', label: t('admin.trips.index.table_headers.price'), sortable: true },
     { key: 'duration', label: t('admin.trips.index.table_headers.days'), sortable: true },
     { key: 'actions', label: t('admin.trips.index.table_headers.actions'), sortable: false },
@@ -43,9 +43,9 @@ const columns = [
                     </div>
                 </template>
 
-                <!-- Custom cell for countries -->
-                <template #cell-countries="{ row }">
-                    {{ row.countries_formatted }}
+                <!-- Custom cell for destinations -->
+                <template #cell-destinations="{ row }">
+                    {{ row.destinations_formatted }}
                 </template>
 
                 <!-- Custom cell for price -->

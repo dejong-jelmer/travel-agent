@@ -11,9 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('countries', function (Blueprint $table) {
+        Schema::create('destinations', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('country_code', 2)->index();
+            $table->string('region')->nullable()->index();
+            $table->string('name');
+            $table->json('travel_info')->nullable();
+
+            $table->unique(['country_code', 'region']);
         });
     }
 
@@ -22,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('countries');
+        Schema::dropIfExists('destinations');
     }
 };

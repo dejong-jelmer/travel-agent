@@ -1,10 +1,13 @@
 <script setup>
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+
 
 const props = defineProps({
     trip: Object,
     tripItems: Object,
+    practicalSections: Object,
     required: true,
 });
 
@@ -57,6 +60,14 @@ const { t } = useI18n();
                                                 ? 'border-primary-default text-primary-default'
                                                 : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
                                             {{ t('admin.trips.show.tabs.items') }}
+                                        </div>
+                                    </Tab>
+                                    <Tab v-slot="{ selected }" class="outline-none">
+                                        <div class="py-4 px-1 border-b-2 font-medium text-sm transition-colors cursor-pointer"
+                                            :class="selected
+                                                ? 'border-primary-default text-primary-default'
+                                                : 'border-transparent text-gray-700/50 hover:text-gray-700 hover:border-gray-300'">
+                                            {{ t('admin.trips.show.tabs.practical') }}
                                         </div>
                                     </Tab>
                                     <Tab v-slot="{ selected }" class="outline-none">
@@ -126,6 +137,19 @@ const { t } = useI18n();
                                         {{ t('admin.trips.show.items.empty') }}
                                     </div>
                                 </TabPanel>
+                                <TabPanel class="p-4 space-y-2">
+                                    <template v-for="(label, key) in practicalSections" :key="key">
+                                        <div v-if="trip.practical_info?.[key]" class="p-2">
+                                            <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
+                                                {{ label }}
+                                            </h4>
+                                            <div
+                                                class="text-sm tablet:text-base text-brand-primary leading-relaxed whitespace-pre-line">
+                                                {{ trip.practical_info[key] }}
+                                            </div>
+                                        </div>
+                                    </template>
+                                </TabPanel>
 
                                 <TabPanel class="p-6 space-y-4">
                                     <div>
@@ -144,7 +168,7 @@ const { t } = useI18n();
                                         <p class="mt-1 text-xs text-gray-500">
                                             {{ t('admin.trips.show.meta.og_url') }} <a target="_blank"
                                                 :href="trip.og_image_url" class="underline text-blue-500">{{
-                                                trip.og_image_url }}</a>
+                                                    trip.og_image_url }}</a>
                                         </p>
                                     </div>
                                 </TabPanel>
@@ -181,7 +205,7 @@ const { t } = useI18n();
                     </section>
                 </div>
 
-                <!-- Rechterkolom: Prijs & Duur + Instellingen + Landen -->
+                <!-- Rechterkolom: Prijs & Duur + Instellingen + Bestemmingen -->
                 <div class="laptop:col-start-3 space-y-8">
                     <!-- Settings Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
@@ -226,23 +250,28 @@ const { t } = useI18n();
                                     t('admin.trips.show.pricing.duration') }}</label>
                                 <p class="mt-1 text-xl text-gray-900">{{ t('admin.trips.show.pricing.days', {
                                     duration:
-                                    trip.duration }) }}</p>
+                                        trip.duration
+                                }) }}</p>
                             </div>
                         </div>
                     </section>
 
-                    <!-- Countries Section -->
+                    <!-- Destination Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
-                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.countries.title') }}
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.destinations.title')
+                            }}
                             </h2>
-                            <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.countries.subtitle') }}</p>
+                            <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.destinations.subtitle') }}
+                            </p>
                         </div>
                         <div class="p-6">
                             <div class="flex flex-wrap gap-2">
-                                <Pill v-for="country in trip.countries" :key="country.id" type="success"
+                                <Pill v-for="destination in trip.destinations" :key="destination.id" type="success"
                                     variant="transparent">
-                                    {{ country.name }}
+                                    <Link :href="route('admin.destinations.edit', destination.id)">
+                                    {{ destination.region || destination.name }}
+                                    </Link>
                                 </Pill>
                             </div>
                         </div>

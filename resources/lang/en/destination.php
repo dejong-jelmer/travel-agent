@@ -1,0 +1,73 @@
+<?php
+
+return [
+    // Page titles
+    'title_index' => 'Destination',
+    'title_create' => 'Create destination',
+    'title_edit' => 'Edit destination',
+
+    // Flash messages
+    'created' => 'Destination has been created',
+    'updated' => 'Destination has been updated',
+    'deleted' => 'Destination has been deleted',
+    'delete_failed' => '{1} Destination cannot be deleted: there is still :trips linked trip |[2,*] Destination cannot be deleted: there are still :trips linked trips',
+
+    // Travel info sections
+    'travel-info' => [
+        'sections' => [
+            'general_info' => 'General information',
+            'travel_documents' => 'Travel documents',
+            'visa' => 'Visa',
+            'health_safety' => 'Health & Safety',
+            'currency' => 'Currency',
+            'climate' => 'Climate',
+        ],
+    ],
+
+    'europe' => [
+        'netherlands' => 'Netherlands',
+        'belgium' => 'Belgium',
+        'france' => 'France',
+        'germany' => 'Germany',
+        'austria' => 'Austria',
+        'switzerland' => 'Switzerland',
+        'italy' => 'Italy',
+        'spain' => 'Spain',
+        'portugal' => 'Portugal',
+        'denmark' => 'Denmark',
+        'sweden' => 'Sweden',
+        'norway' => 'Norway',
+        'poland' => 'Poland',
+        'czechia' => 'Czechia',
+        'hungary' => 'Hungary',
+        'slovenia' => 'Slovenia',
+        'croatia' => 'Croatia',
+        'greece' => 'Greece',
+        'romania' => 'Romania',
+        'bulgaria' => 'Bulgaria',
+        'united_kingdom' => 'the United Kingdom',
+        'england' => 'England',
+        'scotland' => 'Scotland',
+        'wales' => 'Wales',
+        'ireland' => 'Ireland',
+        'iceland' => 'Iceland',
+        'finland' => 'Finland',
+        'estonia' => 'Estonia',
+        'latvia' => 'Latvia',
+        'lithuania' => 'Lithuania',
+        'slovakia' => 'Slovakia',
+        'serbia' => 'Serbia',
+        'montenegro' => 'Montenegro',
+        'albania' => 'Albania',
+        'north_macedonia' => 'North Macedonia',
+        'bosnia_herzegovina' => 'Bosnia and Herzegovina',
+        'luxembourg' => 'Luxembourg',
+        'liechtenstein' => 'Liechtenstein',
+        'monaco' => 'Monaco',
+        'andorra' => 'Andorra',
+        'san_marino' => 'San Marino',
+        'vatican_city' => 'Vatican City',
+        'malta' => 'Malta',
+        'cyprus' => 'Cyprus',
+    ],
+];

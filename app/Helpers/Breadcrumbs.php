@@ -12,9 +12,9 @@ class Breadcrumbs
 
     public const DASH_ROUTE = ['route' => 'admin.dashboard'];
 
-    public const COUNT_LABEL = ['label' => 'country.title_index'];
+    public const COUNT_LABEL = ['label' => 'destination.title_index'];
 
-    public const COUNT_ROUTE = ['route' => 'admin.countries.index'];
+    public const COUNT_ROUTE = ['route' => 'admin.destinations.index'];
 
     public const BOOKING_LABEL = ['label' => 'booking.title_index'];
 
@@ -69,15 +69,15 @@ class Breadcrumbs
             'admin.bookings.show' => self::bookingShow(),
             'admin.bookings.edit' => self::bookingEdit(),
 
-            // Countries
-            'admin.countries.index' => [
+            // Destination
+            'admin.destinations.index' => [
                 self::dashboardCrumb(),
                 [...self::translateLabel(self::COUNT_LABEL), 'route' => null],
             ],
-            'admin.countries.create' => [
+            'admin.destinations.create' => [
                 self::dashboardCrumb(),
                 [...self::translateLabel(self::COUNT_LABEL), ...self::COUNT_ROUTE],
-                ['label' => __('country.title_create'), 'route' => null],
+                ['label' => __('destination.title_create'), 'route' => null],
             ],
 
             // Newsletter subscriber

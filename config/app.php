@@ -84,7 +84,10 @@ return [
 
     'faker_locale' => env('APP_FAKER_LOCALE', 'nl_NL'),
 
-    'available_locales' => ['nl', 'en'],
+    'locales' => [
+        'nl' => 'nld',
+        'en' => 'eng',
+    ],
 
     'phone_region' => 'NL',
 
