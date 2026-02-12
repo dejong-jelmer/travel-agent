@@ -22,8 +22,6 @@ const props = defineProps({
     },
 });
 
-// console.log(props.errors[`items.${index}.item`]);
-
 const emit = defineEmits(['update', 'delete']);
 
 // Update type automatically when category changes

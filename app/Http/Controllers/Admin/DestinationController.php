@@ -97,12 +97,19 @@ class DestinationController extends Controller
         $validated = $request->validate([
             'country_code' => 'required|string|size:2',
             'region' => 'nullable|string|max:10',
-            'name' => 'required|string|max:255',
             'travel_info' => 'nullable|array',
             'travel_info.*' => 'nullable|string',
         ]);
 
-        $destination->update($validated);
+        $country = Country::find($validated['country_code']);
+        $name = $country->getTranslatedName();
+
+        $destination->update([
+            'country_code' => $validated['country_code'],
+            'name' => $name,
+            'region' => $validated['region'],
+            'travel_info' => $validated['travel_info'],
+        ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.updated'));
     }

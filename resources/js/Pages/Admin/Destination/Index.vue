@@ -6,7 +6,6 @@ const props = defineProps({
     filters: Object,
     totalDestination: Number,
 });
-console.log(props.destinations);
 
 const { t } = useI18n();
 

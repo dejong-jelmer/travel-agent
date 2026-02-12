@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\PracticalInfo;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Trip;
+use App\Models\TripItem;
 use App\Models\User;
 use Database\Seeders\CountrySeeder;
 use Illuminate\Database\Eloquent\Collection;
@@ -187,6 +190,67 @@ class TripTest extends TestCase
         }
     }
 
+    public function test_practical_info_accessor_returns_all_keys_with_stored_values(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $trip->update([
+            'practical_info' => [
+                'travel_period' => 'Juni - September',
+                'transport' => 'Trein',
+            ],
+        ]);
+
+        $trip->refresh();
+        $info = $trip->practical_info;
+
+        foreach (PracticalInfo::cases() as $case) {
+            $this->assertArrayHasKey($case->value, $info);
+        }
+
+        $this->assertEquals('Juni - September', $info['travel_period']);
+        $this->assertEquals('Trein', $info['transport']);
+        $this->assertSame('', $info['departure_dates']);
+        $this->assertSame('', $info['outbound_return']);
+        $this->assertSame('', $info['accommodation']);
+    }
+
+    public function test_destinations_formatted_accessor(): void
+    {
+        $trip = Trip::factory()->create();
+
+        // 0 destinations
+        $this->assertEquals('', $trip->destinations_formatted);
+
+        // 1 destination
+        $d1 = Destination::factory()->withName('Netherlands')->create();
+        $trip->destinations()->attach($d1);
+        $trip->load('destinations');
+        $this->assertEquals('Netherlands', $trip->destinations_formatted);
+
+        // 2 destinations
+        $d2 = Destination::factory()->withName('Belgium')->create();
+        $trip->destinations()->attach($d2);
+        $trip->load('destinations');
+        $this->assertEquals('Netherlands & Belgium', $trip->destinations_formatted);
+
+        // 3 destinations
+        $d3 = Destination::factory()->withName('Germany')->create();
+        $trip->destinations()->attach($d3);
+        $trip->load('destinations');
+        $this->assertEquals('Netherlands, Belgium & Germany', $trip->destinations_formatted);
+    }
+
+    public function test_destinations_formatted_prefers_region_over_name(): void
+    {
+        $trip = Trip::factory()->create();
+        $destination = Destination::factory()->create(['region' => 'Tuscany', 'name' => 'Italy']);
+        $trip->destinations()->attach($destination);
+        $trip->load('destinations');
+
+        $this->assertEquals('Tuscany', $trip->destinations_formatted);
+    }
+
     public function test_admin_can_softdelete_a_trip(): void
     {
         $trip = Trip::factory()->create();
@@ -194,6 +258,15 @@ class TripTest extends TestCase
             'imageable_id' => $trip->id,
             'imageable_type' => Trip::class,
         ]);
+
+        foreach ([ItemCategory::Transport, ItemCategory::Accommodation] as $category) {
+            TripItem::create([
+                'trip_id' => $trip->id,
+                'type' => $category->type(),
+                'category' => $category,
+                'item' => fake()->sentence(),
+            ]);
+        }
 
         $response = $this->delete(route('admin.trips.destroy', $trip));
 
@@ -209,6 +282,9 @@ class TripTest extends TestCase
         $this->assertDatabaseMissing('images', [
             'imageable_id' => $trip->id,
             'deleted_at' => null,
+        ]);
+        $this->assertDatabaseMissing('trip_items', [
+            'trip_id' => $trip->id,
         ]);
     }
 }

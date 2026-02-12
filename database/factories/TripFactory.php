@@ -3,11 +3,13 @@
 namespace Database\Factories;
 
 use App\Enums\ImageRelation;
+use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
+use App\Models\TripItem;
 use App\Services\DestinationService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -128,6 +130,20 @@ class TripFactory extends Factory
                     'slug' => $this->generateSlug($city, $destination->name),
                     'description' => $this->generateDescription($city, $destination->name),
                     'meta_title' => $this->generateMetaTitle($city, $trip->duration, $destination->name),
+                ]);
+            }
+        });
+    }
+
+    public function withItems(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            foreach ([ItemCategory::Transport, ItemCategory::Accommodation, ItemCategory::AdditionalCost] as $category) {
+                TripItem::create([
+                    'trip_id' => $trip->id,
+                    'type' => $category->type(),
+                    'category' => $category,
+                    'item' => fake()->sentence(),
                 ]);
             }
         });

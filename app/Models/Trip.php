@@ -86,6 +86,7 @@ class Trip extends Model
             $trip->images()->delete();
             $trip->heroImage()->delete();
             $trip->itineraries()->delete();
+            $trip->items()->delete();
         });
 
         static::restoring(function ($trip) {

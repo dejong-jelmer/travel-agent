@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\Destination\TravelInfo;
 use App\Models\Destination;
+use App\Models\Trip;
 use App\Models\User;
 use App\Services\DestinationService;
 use Database\Seeders\CountrySeeder;
@@ -63,5 +64,72 @@ class DestinationTest extends TestCase
         $response->assertRedirect(route('admin.destinations.index'));
 
         $this->assertDatabaseHas('destinations', ['country_code' => $destination['country_code'], 'name' => $destination['name']]);
+    }
+
+    public function test_admin_can_view_destination_edit(): void
+    {
+        $destination = Destination::factory()->create();
+
+        $response = $this->get(route('admin.destinations.edit', $destination));
+
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page->component('Admin/Destination/Edit')
+                ->has('destination')
+                ->where('destination.id', $destination->id)
+                ->where('destination.country_code', $destination->country_code)
+                ->has('travelInfoSections')
+                ->has('countries')
+        );
+        $response->assertStatus(200);
+    }
+
+    public function test_admin_can_update_a_destination(): void
+    {
+        $destination = Destination::factory()->withTravelInfo()->create();
+
+        $travelInfo = collect(TravelInfo::cases())
+            ->mapWithKeys(fn ($case) => [
+                $case->value => fake()->text(fake()->numberBetween(50, 250)),
+            ])->toArray();
+
+        $updateData = [
+            'country_code' => 'GB',
+            'region' => 'Wales',
+            'travel_info' => $travelInfo,
+        ];
+
+        $response = $this->put(route('admin.destinations.update', $destination), $updateData);
+
+        $response->assertRedirect(route('admin.destinations.index'));
+        $response->assertSessionHas('success');
+
+        $destination->refresh();
+        $this->assertEquals('GB', $destination->country_code);
+        $this->assertEquals('Wales', $destination->region);
+        $this->assertEquals($travelInfo, $destination->travel_info);
+    }
+
+    public function test_admin_can_destroy_a_destination_without_trips(): void
+    {
+        $destination = Destination::factory()->create();
+
+        $response = $this->delete(route('admin.destinations.destroy', $destination));
+
+        $response->assertRedirect(route('admin.destinations.index'));
+        $response->assertSessionHas('success');
+        $this->assertDatabaseMissing('destinations', ['id' => $destination->id]);
+    }
+
+    public function test_admin_cannot_destroy_a_destination_with_trips(): void
+    {
+        $destination = Destination::factory()->create();
+        $trip = Trip::factory()->create();
+        $trip->destinations()->attach($destination->id);
+
+        $response = $this->delete(route('admin.destinations.destroy', $destination));
+
+        $response->assertRedirect(route('admin.destinations.index'));
+        $response->assertSessionHas('error');
+        $this->assertDatabaseHas('destinations', ['id' => $destination->id]);
     }
 }
