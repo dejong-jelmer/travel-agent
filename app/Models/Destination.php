@@ -63,13 +63,13 @@ class Destination extends Model
 
                 // Get all keys from TravelInfo enum
                 $allKeys = collect(TravelInfo::cases())
-                    ->mapWithKeys(fn($case) => [$case->value => ''])
+                    ->mapWithKeys(fn ($case) => [$case->value => ''])
                     ->all();
 
                 // Merge with existing values
                 return array_merge($allKeys, $decoded);
             },
-            set: fn($value) => json_encode($value ?? [])
+            set: fn ($value) => json_encode($value ?? [])
         );
     }
 

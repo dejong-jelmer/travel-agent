@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\PriceCast;
 use App\Enums\Trip\PracticalInfo;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
@@ -49,17 +48,17 @@ class Trip extends Model
 
     protected $appends = [
         'image_paths',
-        'raw_price',
+        'price_formatted',
         'destinations_formatted',
         'published_at_formatted',
         'og_image_url',
     ];
 
     protected $casts = [
-        'price' => PriceCast::class,
+        'price' => 'decimal:2',
         'highlights' => 'array',
         'practical_info' => 'array',
-        'published_at' => 'date',
+        'published_at' => 'datetime',
         'featured' => 'boolean',
     ];
 
@@ -140,7 +139,7 @@ class Trip extends Model
     public function destinationsFormatted(): Attribute
     {
         return Attribute::get(function () {
-            $destinations = $this->destinations->map(fn($d) => $d->region ?? $d->name);
+            $destinations = $this->destinations->map(fn ($d) => $d->region ?? $d->name);
 
             return match ($destinations->count()) {
                 0 => '',
@@ -160,10 +159,10 @@ class Trip extends Model
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function rawPrice(): Attribute
+    protected function priceFormatted(): Attribute
     {
-        return Attribute::get(
-            fn () => (float) $this->getRawOriginal('price')
+        return Attribute::make(
+            get: fn () => number_format($this->price, 0, ',', '.')
         );
     }
 
@@ -273,7 +272,7 @@ class Trip extends Model
 
                 // Get all keys from PracticalInfo enum
                 $allKeys = collect(PracticalInfo::cases())
-                    ->mapWithKeys(fn($case) => [$case->value => ''])
+                    ->mapWithKeys(fn ($case) => [$case->value => ''])
                     ->all();
 
                 // Merge with existing values

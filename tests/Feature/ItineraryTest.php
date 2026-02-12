@@ -86,7 +86,7 @@ class ItineraryTest extends TestCase
         $itineraryData = [
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
-            'location' => fake()->city.', '.fake()->destination,
+            'location' => fake()->city.', '.fake()->country(),
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
             'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
@@ -139,7 +139,7 @@ class ItineraryTest extends TestCase
         $itineraryData = [
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
-            'location' => fake()->city.', '.fake()->destination,
+            'location' => fake()->city.', '.fake()->country(),
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
             'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
             'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),

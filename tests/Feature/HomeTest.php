@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Destination;
 use App\Models\Trip;
+use Database\Seeders\CountrySeeder;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
@@ -14,6 +15,12 @@ use Tests\TestCase;
 class HomeTest extends TestCase
 {
     use RefreshDatabase;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(CountrySeeder::class);
+    }
 
     public function test_home_page_shows_trips()
     {

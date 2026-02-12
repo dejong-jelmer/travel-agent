@@ -13,7 +13,7 @@ class DestinationSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (DestinationService::europeanDestination() as $destination) {
+        foreach (DestinationService::europeanDestinations() as $destination) {
             Destination::factory()->withTravelInfo()->create([
                 'country_code' => $destination['code'],
                 'region' => in_array($destination['name'], ['Engeland, Schotland, Wales']) ? $destination['name'] : null,

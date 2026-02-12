@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\AsArrayObject;
 use Illuminate\Database\Eloquent\Model;
 
 class Country extends Model
 {
     public $timestamps = false;
+
     protected $primaryKey = 'code';
+
     public $incrementing = false;
+
     protected $keyType = 'string';
 
     protected $fillable = ['code', 'name', 'region', 'translations'];
 
     protected $casts = [
-        'translations' => AsArrayObject::class,
+        'translations' => 'array',
     ];
 
     /**
@@ -27,7 +29,7 @@ class Country extends Model
 
         // Map to ISO 639-3
         $iso3 = config("app.locales.{$locale}")
-            ?? config("app.locales." . config('app.fallback_locale'))
+            ?? config('app.locales.'.config('app.fallback_locale'))
             ?? 'eng';
 
         if ($iso3 === 'eng') {

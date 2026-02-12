@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\Newsletter\CampaignController;
 use App\Http\Controllers\Admin\Newsletter\SubscriberController;

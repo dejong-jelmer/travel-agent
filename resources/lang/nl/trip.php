@@ -78,6 +78,6 @@ return [
             'outbound_return' => 'Heen- en terugreis',
             'transport' => 'Vervoer tijdens de reis',
             'accommodation' => 'Logies',
-        ]
-    ]
+        ],
+    ],
 ];

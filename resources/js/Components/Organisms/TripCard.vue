@@ -12,7 +12,7 @@ defineProps({ trip: Object });
             <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
                 :style="`background-image: url(${trip.hero_image?.public_url || placeholder})`"></div>
             <div class="absolute top-3 right-3">
-                <PriceBadge :price="trip.price" />
+                <PriceBadge :price="trip.price_formatted" />
             </div>
             </Link>
         </div>

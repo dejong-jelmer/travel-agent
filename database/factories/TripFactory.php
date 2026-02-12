@@ -66,7 +66,7 @@ class TripFactory extends Factory
 
         $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes. ';
 
-        return $intro . $secondLine . fake()->paragraph();
+        return $intro.$secondLine.fake()->paragraph();
     }
 
     private function generateMetaTitle(string $city, int $duration, ?string $destination = null): string
@@ -100,7 +100,7 @@ class TripFactory extends Factory
             Itinerary::factory()
                 ->withImage()
                 ->count($trip->duration)
-                ->sequence(fn(Sequence $sequence) => [
+                ->sequence(fn (Sequence $sequence) => [
                     'order' => $sequence->index + 1,
                 ])
                 ->create(['trip_id' => $trip->id]);
@@ -142,10 +142,10 @@ class TripFactory extends Factory
         return $this->afterCreating(function (Trip $trip) {
             $trip->update([
                 'practical_info' => collect(PracticalInfo::cases())
-                    ->mapWithKeys(fn($case) => [
-                        $case->value => fake()->text(fake()->numberBetween(50, 250))
+                    ->mapWithKeys(fn ($case) => [
+                        $case->value => fake()->text(fake()->numberBetween(50, 250)),
                     ])
-                    ->all()
+                    ->all(),
             ]);
         });
     }

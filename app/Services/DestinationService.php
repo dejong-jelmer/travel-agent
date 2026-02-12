@@ -7,7 +7,7 @@ use App\Models\Country;
 
 class DestinationService
 {
-     /**
+    /**
      * Static pool for unique destination generation
      *
      * @var array<int, array>|null
@@ -19,7 +19,7 @@ class DestinationService
      *
      * @return array<int, array{country_code: string, region: string|null, name: string, locale: string}>
      */
-    public static function europeanDestination(): array
+    public static function europeanDestinations(): array
     {
         return CountryResource::collection(
             Country::whereIn('code', array_keys(config('locales')))->orderBy('name')->get()
@@ -56,12 +56,12 @@ class DestinationService
     {
         // Initialize the list of available destinations on first use
         if (self::$availableDestination === null) {
-            self::$availableDestination = self::europeanDestination();
+            self::$availableDestination = self::europeanDestinations();
         }
 
         // If we've run out of destinations, reset the list
         if (empty(self::$availableDestination)) {
-            self::$availableDestination = self::europeanDestination();
+            self::$availableDestination = self::europeanDestinations();
         }
 
         // Pick and remove a random destination from the available list

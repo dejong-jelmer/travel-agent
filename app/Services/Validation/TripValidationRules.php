@@ -4,7 +4,6 @@ namespace App\Services\Validation;
 
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
-use App\Enums\Trip\PracticalInfo;
 use App\Services\Traits\MergesRules;
 use Illuminate\Validation\Rule;
 

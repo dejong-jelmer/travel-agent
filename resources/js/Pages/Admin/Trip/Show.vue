@@ -243,7 +243,7 @@ const { t } = useI18n();
                             <div>
                                 <label class="text-sm font-medium text-gray-700">{{
                                     t('admin.trips.show.pricing.price_per_person') }}</label>
-                                <p class="mt-1 text-2xl font-semibold text-gray-900">{{ trip.price }}</p>
+                                <p class="mt-1 text-2xl font-semibold text-gray-900">{{ trip.price_formatted }}</p>
                             </div>
                             <div>
                                 <label class="text-sm font-medium text-gray-700">{{

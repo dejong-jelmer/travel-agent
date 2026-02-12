@@ -71,7 +71,7 @@ class DestinationController extends Controller
             'name' => $name,
             'region' => $validated['region'],
             'travel_info' => $validated['travel_info'],
-            ]);
+        ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.created'));
     }

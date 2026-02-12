@@ -49,7 +49,7 @@ const participantSummary = computed(() => {
         <div class="grid grid-cols-3 gap-2 items-center">
             <p>{{ $t('booking_steps.trip.trip_label') }}</p>
             <p class="text-center"><strong>{{ booking.trip.name }}</strong></p>
-            <p class="text-right">{{ $t('booking_steps.trip.price_from') }} <strong>€ {{ booking.trip.price }},-</strong> {{ $t('booking_steps.trip.per_person') }}</p>
+            <p class="text-right">{{ $t('booking_steps.trip.price_from') }} <strong>€ {{ booking.trip.price_formatted }},-</strong> {{ $t('booking_steps.trip.per_person') }}</p>
 
             <p v-html="$t('booking_steps.trip.choose_date')"></p>
             <DatePicker v-model="departure_date" :min-date="new Date()" :feedback="booking.errors['departure_date']"

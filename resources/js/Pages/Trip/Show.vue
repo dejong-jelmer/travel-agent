@@ -85,7 +85,7 @@ const tabs = computed(() => [
                                     <!-- Price -->
                                     <div
                                         class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full font-bold">
-                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price })
+                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price_formatted })
                                         }}</span>
                                     </div>
 
@@ -190,7 +190,7 @@ const tabs = computed(() => [
                                 </div>
                             </div>
                             <div v-else-if="activeTab === 'inclusive'" class="space-y-8">
-                                <TripInclusionsExclusions :trip-items="tripItems" />
+                                <TripItems:trip-items="tripItems" />
                             </div>
 
                             <div v-else-if="activeTab === 'practical'" class="space-y-2">
@@ -240,7 +240,7 @@ const tabs = computed(() => [
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center">
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.from') }}</span>
-                                        <span class="font-medium text-brand-primary"><strong> €{{ trip.price }},-
+                                        <span class="font-medium text-brand-primary"><strong> €{{ trip.price_formatted }},-
                                             </strong> {{ t('trip_show.sidebar.per_person') }}</span>
                                     </div>
                                     <div class="flex justify-between items-center">

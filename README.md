@@ -339,7 +339,7 @@ Applied to: booking forms, contact forms, newsletter subscriptions
 ### Input Validation
 - Server-side validation via Form Requests
 - Client-side validation via Vue composables
-- Phone number validation with destination-specific rules
+- Phone number validation with country-specific rules
 - Email validation with domain checks
 
 ### Rate Limiting

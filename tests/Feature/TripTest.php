@@ -6,10 +6,10 @@ use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Trip;
 use App\Models\User;
+use Database\Seeders\CountrySeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -20,8 +20,6 @@ class TripTest extends TestCase
 
     private User $admin;
 
-    private array $tripData;
-
     private Collection $destinations;
 
     protected function setUp(): void
@@ -31,27 +29,12 @@ class TripTest extends TestCase
         $this->admin = User::factory()->create();
         $this->actingAs($this->admin);
 
+        $this->seed(CountrySeeder::class);
+
         Storage::fake(config('images.disk'));
         Storage::makeDirectory(config('images.directory'));
 
         $this->destinations = Destination::factory(2)->create();
-
-        $this->tripData = [
-            'name' => fake()->words(2, true),
-            'slug' => fake()->slug(),
-            'description' => fake()->paragraph(),
-            'duration' => fake()->randomDigit(),
-            'price' => fake()->randomFloat(2, 500, 5000),
-            'heroImage' => UploadedFile::fake()->image('hero.jpg'),
-            'images' => [
-                UploadedFile::fake()->image('image1.jpg'),
-                UploadedFile::fake()->image('image2.jpg'),
-            ],
-            'destinations' => $this->destinations->modelKeys(),
-            'published_at' => now(),
-            'meta_title' => fake()->text(60),
-            'meta_description' => fake()->text(160),
-        ];
     }
 
     public function test_admin_can_view_trip_index(): void
@@ -84,17 +67,40 @@ class TripTest extends TestCase
 
     public function test_admin_can_create_a_new_trip(): void
     {
-        $response = $this->post(route('admin.trips.store'), $this->tripData);
+        $tripData = [
+            'name' => fake()->words(2, true),
+            'slug' => fake()->slug(),
+            'description' => fake()->paragraph(),
+            'duration' => fake()->randomDigit(),
+            'price' => randomPrice(500, 5000),
+            'heroImage' => UploadedFile::fake()->image('hero.jpg'),
+            'images' => [
+                UploadedFile::fake()->image('image1.jpg'),
+                UploadedFile::fake()->image('image2.jpg'),
+            ],
+            'destinations' => $this->destinations->modelKeys(),
+            'highlights' => ['highlight 1', 'highlight 2', 'highlight 3'],
+            'published_at' => now(),
+            'meta_title' => fake()->text(60),
+            'meta_description' => fake()->text(160),
+        ];
+
+        $response = $this->post(route('admin.trips.store'), $tripData);
 
         $trip = Trip::firstOrFail();
-        $response->assertRedirect(route('admin.trips.show', $trip));
 
-        $this->assertDatabaseHas('trips', Arr::except($this->tripData, ['heroImage', 'images', 'destinations']));
+        $response->assertRedirect(route('admin.trips.show', $trip));
+        $this->assertEquals($tripData['name'], $trip->name);
+        $this->assertEquals($tripData['slug'], $trip->slug);
+        $this->assertEquals($tripData['price'], $trip->price);
+        $this->assertEquals($tripData['highlights'], $trip->highlights);
+        $this->assertTrue($trip->published_at->isSameSecond($tripData['published_at']));
+        $this->assertCount(2, $trip->destinations);
 
         // Assert hero image with hash-based storage
         $heroImage = $trip->heroImage;
         $this->assertNotNull($heroImage);
-        $this->assertEquals($this->tripData['heroImage']->getClientOriginalName(), $heroImage->original_name);
+        $this->assertEquals($tripData['heroImage']->getClientOriginalName(), $heroImage->original_name);
         $this->assertEquals('image/jpeg', $heroImage->mime_type);
         $this->assertTrue($heroImage->is_primary);
         Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$heroImage->path}");
@@ -102,7 +108,7 @@ class TripTest extends TestCase
         // Assert gallery images with hash-based storage
         $this->assertCount(2, $trip->images);
         foreach ($trip->images as $index => $image) {
-            $originalFile = $this->tripData['images'][$index];
+            $originalFile = $tripData['images'][$index];
             $this->assertEquals($originalFile->getClientOriginalName(), $image->original_name);
             $this->assertEquals('image/jpeg', $image->mime_type);
             $this->assertFalse($image->is_primary);
@@ -142,6 +148,7 @@ class TripTest extends TestCase
                 UploadedFile::fake()->image('new2.jpg'),
             ],
             'destinations' => $this->destinations->modelKeys(),
+            'highlights' => ['updated highlight 1', 'updated highlight 2', 'updated highlight 3'],
             'published_at' => now()->addDay(fake()->randomDigit())->startOfDay()->toDateTimeString(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
@@ -156,7 +163,7 @@ class TripTest extends TestCase
         $this->assertEquals($updateData['description'], $trip->description);
         $this->assertEquals($updateData['slug'], $trip->slug);
         $this->assertEquals($updateData['duration'], $trip->duration);
-        $this->assertEquals($updateData['price'], $trip->raw_price);
+        $this->assertEquals($updateData['price'], $trip->price);
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
         $this->assertEquals($updateData['meta_description'], $trip->meta_description);

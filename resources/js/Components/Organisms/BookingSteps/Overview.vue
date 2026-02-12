@@ -37,7 +37,7 @@ const props = defineProps({
                         <span class="flex-1 flex items-center gap-2">
                             <span>{{ $t('booking_steps.overview.total_price') }}</span>
                             <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                            <span class="font-bold">€ {{ booking.trip.price }}</span>
+                            <span class="font-bold">€ {{ booking.trip.price_formatted }}</span>
                         </span>
                     </div>
 

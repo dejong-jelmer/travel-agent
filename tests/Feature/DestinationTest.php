@@ -2,9 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Destination\TravelInfo;
 use App\Models\Destination;
 use App\Models\User;
 use App\Services\DestinationService;
+use Database\Seeders\CountrySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -18,6 +20,7 @@ class DestinationTest extends TestCase
         parent::setUp();
         $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
+        $this->seed(CountrySeeder::class);
         DestinationService::resetUniquePool();
     }
 
@@ -48,11 +51,17 @@ class DestinationTest extends TestCase
 
     public function test_admin_can_store_a_new_destination(): void
     {
-        $destination = fake(locale_get_default())->unique()->destination();
-        $response = $this->post(route('admin.destinations.store'), ['name' => $destination]);
+        $destination = [
+            'country_code' => 'nl',
+            'name' => 'Netherlands',
+            'region' => null,
+            'travel_info' => TravelInfo::labels(),
+        ];
+
+        $response = $this->post(route('admin.destinations.store'), $destination);
 
         $response->assertRedirect(route('admin.destinations.index'));
 
-        $this->assertDatabaseHas('destinations', ['name' => $destination]);
+        $this->assertDatabaseHas('destinations', ['country_code' => $destination['country_code'], 'name' => $destination['name']]);
     }
 }

@@ -48,10 +48,10 @@ class DestinationFactory extends Factory
         return $this->afterCreating(function (Destination $destination) {
             $destination->update([
                 'travel_info' => collect(TravelInfo::cases())
-                    ->mapWithKeys(fn($case) => [
-                        $case->value => fake()->text(fake()->numberBetween(50, 250))
+                    ->mapWithKeys(fn ($case) => [
+                        $case->value => fake()->text(fake()->numberBetween(50, 250)),
                     ])
-                    ->all()
+                    ->all(),
             ]);
         });
     }

@@ -8,12 +8,12 @@ enum TravelInfo: string
 {
     use HasTranslatableLabel;
 
-    case GeneralInfo       = 'general_info';
-    case TravelDocuments   = 'travel_documents';
-    case Visa              = 'visa';
-    case HealthSafety      = 'health_safety';
-    case Currency          = 'currency';
-    case Climate           = 'climate';
+    case GeneralInfo = 'general_info';
+    case TravelDocuments = 'travel_documents';
+    case Visa = 'visa';
+    case HealthSafety = 'health_safety';
+    case Currency = 'currency';
+    case Climate = 'climate';
 
     protected function getLabelKey(): string
     {
@@ -23,7 +23,7 @@ enum TravelInfo: string
     public static function labels(): array
     {
         return collect(self::cases())
-            ->mapWithKeys(fn(self $section) => [$section->value => $section->label()])
+            ->mapWithKeys(fn (self $section) => [$section->value => $section->label()])
             ->all();
     }
 }
