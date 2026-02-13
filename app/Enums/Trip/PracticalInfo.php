@@ -19,10 +19,10 @@ enum PracticalInfo: string
         return 'trip.practical-info.sections';
     }
 
-    public static function labels(): array
-    {
-        return collect(self::cases())
-            ->mapWithKeys(fn (self $section) => [$section->value => $section->label()])
-            ->all();
-    }
+    // public static function labels(): array
+    // {
+    //     return collect(self::cases())
+    //         ->mapWithKeys(fn (self $section) => [$section->value => $section->label()])
+    //         ->all();
+    // }
 }

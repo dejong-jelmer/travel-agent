@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\Destination\TravelInfo;
 use App\Models\Destination;
-use App\Services\DestinationService;
+use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,13 +14,13 @@ class DestinationFactory extends Factory
 {
     /**
      * Define the model's default state.
-     * Returns a unique European destination from DestinationService
+     * Returns a unique European destination from CountryService
      *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
-        $destination = DestinationService::uniqueRandom();
+        $destination = CountryService::uniqueRandom();
 
         return [
             'country_code' => $destination['country_code'],

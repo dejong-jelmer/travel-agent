@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('region')->nullable()->index();
             $table->string('name');
             $table->json('travel_info')->nullable();
+            $table->softDeletes();
+            $table->timestamps();
 
             $table->unique(['country_code', 'region']);
         });

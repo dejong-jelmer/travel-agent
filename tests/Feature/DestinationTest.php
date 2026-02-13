@@ -6,7 +6,7 @@ use App\Enums\Destination\TravelInfo;
 use App\Models\Destination;
 use App\Models\Trip;
 use App\Models\User;
-use App\Services\DestinationService;
+use App\Services\CountryService;
 use Database\Seeders\CountrySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
@@ -22,7 +22,7 @@ class DestinationTest extends TestCase
         $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
         $this->seed(CountrySeeder::class);
-        DestinationService::resetUniquePool();
+        CountryService::resetUniquePool();
     }
 
     public function test_admin_can_view_destination_index(): void
@@ -117,7 +117,7 @@ class DestinationTest extends TestCase
 
         $response->assertRedirect(route('admin.destinations.index'));
         $response->assertSessionHas('success');
-        $this->assertDatabaseMissing('destinations', ['id' => $destination->id]);
+        $this->assertSoftDeleted('destinations', ['id' => $destination->id]);
     }
 
     public function test_admin_cannot_destroy_a_destination_with_trips(): void

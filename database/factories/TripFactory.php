@@ -10,7 +10,7 @@ use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
 use App\Models\TripItem;
-use App\Services\DestinationService;
+use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
@@ -119,8 +119,8 @@ class TripFactory extends Factory
             if ($destination = Destination::inRandomOrder()->first()) {
                 $trip->destinations()->attach($destination);
 
-                // Get locale from DestinationService using country_code and region
-                $locale = DestinationService::getLocaleByCountryCode(
+                // Get locale from CountryService using country_code and region
+                $locale = CountryService::getLocaleByCountryCode(
                     $destination->country_code,
                 );
                 $city = fake($locale)->city();

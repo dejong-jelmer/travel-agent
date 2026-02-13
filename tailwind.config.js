@@ -31,24 +31,24 @@ export default {
             colors: {
                 // Brand identity colors
                 brand: {
-                    primary: "#2F3E46",
-                    secondary: "#F0F4F7",
-                    tertiary: "#CCF6FF",
-                    light: "#A3BCCB"
+                    primary: "#2f3e46",
+                    secondary: "#f0f4f7",
+                    tertiary: "#ccf6ff",
+                    light: "#a3bccb"
                 },
                 accent: {
-                    primary: "#F0972D",
-                    sage: "#AFCB98",
-                    earth: "#DCC7AA",
-                    terracotta: "#B17C65",
-                    link: "#82B2CA"
+                    primary: "#f0972d",
+                    sage: "#afcb98",
+                    earth: "#dcc7aa",
+                    terracotta: "#b17c65",
+                    link: "#82b2ca"
                 },
                 // Status feedback colors
                 status: {
-                    error: "#DC3545",
+                    error: "#dc3545",
                     success: "#198754",
-                    warning: "#FFC107",
-                    info: "#0D6EFD"
+                    warning: "#ffc107",
+                    info: "#0d6efd"
                 },
             },
             screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}

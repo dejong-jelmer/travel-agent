@@ -305,23 +305,23 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 *Semantic color system for sustainable travel aesthetic:*
 
 - **Brand Identity**
-  - `brand.primary` (#2F3E46) - Primary dark blue-gray for text and headings
-  - `brand.secondary` (#F0F4F7) - Off-white/cream for backgrounds
-  - `brand.tertiary` (#CCF6FF) - Light cyan accent
-  - `brand.light` (#A3BCCB) - Soft blue for subtle text and borders
+  - `brand.primary` (#2f3e46) - Primary dark blue-gray for text and headings
+  - `brand.secondary` (#f0f4f7) - Off-white/cream for backgrounds
+  - `brand.tertiary` (#ccf6ff) - Light cyan accent
+  - `brand.light` (#a3bccb) - Soft blue for subtle text and borders
 
 - **Accent Colors** (Nature/Sustainability focus)
-  - `accent.primary` (#F0972D) - Warm orange for primary CTAs and highlights
-  - `accent.sage` (#AFCB98) - Sage green for success and eco-friendly elements
-  - `accent.earth` (#DCC7AA) - Earth/sand tone for warmth
-  - `accent.terracotta` (#B17C65) - Terracotta for contrast and emphasis
-  - `accent.link` (#82B2CA) - Soft blue for links
+  - `accent.primary` (#f0972d) - Warm orange for primary CTAs and highlights
+  - `accent.sage` (#afcb98) - Sage green for success and eco-friendly elements
+  - `accent.earth` (#dcc7aa) - Earth/sand tone for warmth
+  - `accent.terracotta` (#b17c65) - Terracotta for contrast and emphasis
+  - `accent.link` (#82b2ca) - Soft blue for links
 
 - **Status Feedback**
-  - `status.error` (#DC3545) - Error states and validation failures
+  - `status.error` (#dc3545) - Error states and validation failures
   - `status.success` (#198754) - Success states and confirmations
-  - `status.warning` (#FFC107) - Warning states and alerts
-  - `status.info` (#0D6EFD) - Informatieve states
+  - `status.warning` (#ffc107) - Warning states and alerts
+  - `status.info` (#0d6efd) - Informatieve states
 
 **Rate Limiting:**
 Custom `frontend-form-actions` limiter: 5 requests/min per IP

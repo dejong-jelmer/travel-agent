@@ -8,10 +8,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Destination extends Model
 {
     use HasFactory,
+        SoftDeletes,
         Sortable;
 
     protected $perPage = 15;
@@ -27,11 +29,7 @@ class Destination extends Model
         'travel_info' => 'array',
     ];
 
-    protected $appends = [
-        'travel_info',
-    ];
-
-    public $timestamps = false;
+    protected $appends = [];
 
     protected $searchable = ['country_code', 'name', 'region'];
 
@@ -56,9 +54,9 @@ class Destination extends Model
                         ->value('travel_info');
                 }
                 $decoded = match (true) {
-                    is_null($rawValue) => [],
+                    is_null($rawValue), $rawValue === '' => [],
                     is_array($rawValue) => $rawValue,
-                    default => json_decode($rawValue, true)
+                    default => json_decode($rawValue, true) ?? []
                 };
 
                 // Get all keys from TravelInfo enum
@@ -68,8 +66,7 @@ class Destination extends Model
 
                 // Merge with existing values
                 return array_merge($allKeys, $decoded);
-            },
-            set: fn ($value) => json_encode($value ?? [])
+            }
         );
     }
 

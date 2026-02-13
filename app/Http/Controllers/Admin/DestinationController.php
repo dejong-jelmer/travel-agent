@@ -6,12 +6,12 @@ use App\Enums\Destination\TravelInfo;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\DataTableRequest;
-use App\Models\Country;
+use App\Http\Requests\StoreDestinationRequest;
 use App\Models\Destination;
+use App\Services\CountryService;
 use App\Services\DataTableService;
 use App\Services\DestinationService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -47,30 +47,24 @@ class DestinationController extends Controller
         return Inertia::render('Admin/Destination/Create', [
             'title' => $this->pageTitle('destination.title_create'),
             'travelInfoSections' => TravelInfo::labels(),
-            'countries' => DestinationService::countries(),
+            'countries' => CountryService::countries(),
         ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
+    public function store(StoreDestinationRequest $request): RedirectResponse
     {
-        $validated = $request->validate([
-            'country_code' => 'required|string|size:2',
-            'region' => 'nullable|string|max:255',
-            'travel_info' => 'nullable|array',
-            'travel_info.*' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
-        $country = Country::find($validated['country_code']);
-        $name = $country->getTranslatedName();
+        $fallbackCreated = DestinationService::createFallbackDestination($validated);
 
         Destination::create([
             'country_code' => $validated['country_code'],
-            'name' => $name,
+            'name' => CountryService::getTranslatedCountryName($validated['country_code']),
             'region' => $validated['region'],
-            'travel_info' => $validated['travel_info'],
+            'travel_info' => $fallbackCreated ? null : $validated['travel_info'],
         ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.created'));
@@ -85,30 +79,24 @@ class DestinationController extends Controller
             'title' => $this->pageTitle('destination.title_edit'),
             'destination' => $destination,
             'travelInfoSections' => TravelInfo::labels(),
-            'countries' => DestinationService::countries(),
+            'countries' => CountryService::countries(),
         ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Destination $destination): RedirectResponse
+    public function update(StoreDestinationRequest $request, Destination $destination): RedirectResponse
     {
-        $validated = $request->validate([
-            'country_code' => 'required|string|size:2',
-            'region' => 'nullable|string|max:10',
-            'travel_info' => 'nullable|array',
-            'travel_info.*' => 'nullable|string',
-        ]);
+        $validated = $request->validated();
 
-        $country = Country::find($validated['country_code']);
-        $name = $country->getTranslatedName();
+        $fallbackCreated = DestinationService::createFallbackDestination($validated);
 
         $destination->update([
             'country_code' => $validated['country_code'],
-            'name' => $name,
+            'name' => CountryService::getTranslatedCountryName($validated['country_code']),
             'region' => $validated['region'],
-            'travel_info' => $validated['travel_info'],
+            'travel_info' => $fallbackCreated ? null : $validated['travel_info'],
         ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.updated'));

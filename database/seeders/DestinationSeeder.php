@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Destination;
-use App\Services\DestinationService;
+use App\Services\CountryService;
 use Illuminate\Database\Seeder;
 
 class DestinationSeeder extends Seeder
@@ -13,7 +13,7 @@ class DestinationSeeder extends Seeder
      */
     public function run(): void
     {
-        foreach (DestinationService::europeanDestinations() as $destination) {
+        foreach (CountryService::europeanCountries() as $destination) {
             Destination::factory()->withTravelInfo()->create([
                 'country_code' => $destination['code'],
                 'region' => in_array($destination['name'], ['Engeland, Schotland, Wales']) ? $destination['name'] : null,

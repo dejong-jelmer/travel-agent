@@ -13,4 +13,11 @@ trait HasTranslatableLabel
     {
         return __($this->getLabelKey().".{$this->value}");
     }
+
+    public static function labels(): array
+    {
+        return collect(self::cases())
+            ->mapWithKeys(fn (self $section) => [$section->value => $section->label()])
+            ->all();
+    }
 }
