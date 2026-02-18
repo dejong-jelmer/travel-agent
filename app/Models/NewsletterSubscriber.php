@@ -110,7 +110,8 @@ class NewsletterSubscriber extends Model
      */
     protected function status(): Attribute
     {
-        return Attribute::get(function () {
+        /** @phpstan-ignore return.type */
+        return Attribute::get(function (): SubscriberStatus {
             if ($this->isUnsubscribed()) {
                 return SubscriberStatus::Unsubscribed;
             }

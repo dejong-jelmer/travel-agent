@@ -22,10 +22,7 @@ enum ImageRelation: string
             );
         }
 
-        return match ($this) {
-            self::Image => $model->image(),
-            self::Images => $model->images(),
-            self::HeroImage => $model->heroImage(),
-        };
+        /** @var MorphMany|MorphOne */
+        return $model->{$method}();
     }
 }

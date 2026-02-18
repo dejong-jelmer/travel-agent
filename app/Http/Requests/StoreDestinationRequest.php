@@ -18,11 +18,6 @@ class StoreDestinationRequest extends FormRequest
         return Auth::user()?->isAdmin() ?? false;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     protected function prepareForValidation(): void
     {
         if (is_array($this->travel_info) && empty(array_filter($this->travel_info))) {

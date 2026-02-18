@@ -71,7 +71,7 @@ class DataTableService
             $request->getValidatedFilters($filterFields)
         );
 
-        $this->withValidatedData($validatedData)->applySortFilters($query, $query->getModel()::dataTableConfig());
+        $this->withValidatedData($validatedData)->applySortFilters($query, $query->getModel()::dataTableConfig()); // @phpstan-ignore staticMethod.notFound
 
         return $query;
     }

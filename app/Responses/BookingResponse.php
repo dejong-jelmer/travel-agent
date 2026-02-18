@@ -10,7 +10,7 @@ use InvalidArgumentException;
 
 class BookingResponse
 {
-    public function __construct(protected Booking $booking, private array $options = []) {}
+    public function __construct(protected Booking $booking) {}
 
     /**
      * Undocumented function
@@ -39,8 +39,8 @@ class BookingResponse
 
     }
 
-    public static function make(Booking $booking): static
+    public static function make(Booking $booking): self
     {
-        return new static($booking);
+        return new self($booking);
     }
 }

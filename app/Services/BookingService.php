@@ -16,6 +16,7 @@ class BookingService
         $travelersData = $bookingData->travelers;
 
         // Create booking
+        /** @var Booking $booking */
         $booking = $bookingData->trip->bookings()->create([
             'departure_date' => $bookingData->date,
             'has_accepted_conditions' => $bookingData->has_accepted_conditions,
@@ -67,10 +68,11 @@ class BookingService
         return $booking;
     }
 
-    private function storeTravelers(Booking $booking, array $data, int $mainBookerIndex)
+    private function storeTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $type => $travelers) {
             foreach ($travelers as $index => $travelerData) {
+                /** @var \App\Models\BookingTraveler $travelerModel */
                 $travelerModel = $booking->travelers()->create([
                     'type' => TravelerType::fromKey($type),
                     'first_name' => $travelerData['first_name'],
@@ -86,10 +88,11 @@ class BookingService
         }
     }
 
-    private function updateTravelers(Booking $booking, array $data, int $mainBookerIndex)
+    private function updateTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $travelers) {
             foreach ($travelers as $index => $travelerData) {
+                /** @var \App\Models\BookingTraveler $travelerModel */
                 $travelerModel = $booking->travelers()->updateOrCreate(
                     ['id' => $travelerData['id']],
                     [

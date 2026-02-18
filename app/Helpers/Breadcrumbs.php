@@ -113,7 +113,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => null],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => null],
         ];
     }
 
@@ -124,7 +124,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('trip.title_edit'), 'route' => null],
         ];
     }
@@ -157,7 +157,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('itinerary.title_index'), 'route' => null],
         ];
     }
@@ -170,7 +170,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('itinerary.title_index'), 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
             ['label' => __('itinerary.title_edit'), 'route' => null],
         ];

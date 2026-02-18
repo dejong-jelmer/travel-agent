@@ -16,7 +16,7 @@ class NewsletterCampaignService
      * Send all active newsletter subscribers the newsletter campaign via
      * the App\Jobs\SendNewsletterCampaign job by chunks
      *
-     * @throws App\Exceptions\CampaignAlreadySentException
+     * @throws \App\Exceptions\CampaignAlreadySentException
      */
     public function sendCampaign(NewsletterCampaign $campaign): void
     {

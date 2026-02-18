@@ -12,7 +12,7 @@ trait Sortable
      */
     public static function dataTableConfig(): DataTableConfig
     {
-        $instance = new static;
+        $instance = new static; // @phpstan-ignore new.static
 
         return new DataTableConfig(
             searchable: $instance->searchable ?? [],
@@ -36,7 +36,7 @@ trait Sortable
      */
     public static function applyScopeFilters(Builder $query): Builder
     {
-        $instance = new static;
+        $instance = new static; // @phpstan-ignore new.static
 
         if (! isset($instance->scopeFilters)) {
             return $query;
@@ -61,7 +61,7 @@ trait Sortable
      */
     public static function filters(): array
     {
-        $instance = new static;
+        $instance = new static; // @phpstan-ignore new.static
 
         return $instance->filterable ?? [];
     }

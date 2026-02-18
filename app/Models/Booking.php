@@ -21,6 +21,11 @@ use Illuminate\Support\Str;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
+/**
+ * @property Trip $trip
+ * @property BookingContact $contact
+ * @property BookingTraveler $mainBooker
+ */
 class Booking extends Model
 {
     use HasFactory,
