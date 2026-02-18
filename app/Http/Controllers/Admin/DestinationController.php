@@ -59,7 +59,7 @@ class DestinationController extends Controller
         $validated = $request->validated();
 
         if (! empty($validated['region']) && ! DestinationService::fallbackExists($validated['country_code'])) {
-            return redirect()->route('admin.destinations.index')->with('error', __('destination.needs_fallback'));
+            return redirect()->back()->with('error', __('destination.needs_fallback'));
         }
 
         Destination::create([
@@ -93,7 +93,7 @@ class DestinationController extends Controller
         $validated = $request->validated();
 
         if (! empty($validated['region']) && ! DestinationService::fallbackExists($validated['country_code'])) {
-            return redirect()->route('admin.destinations.index')->with('error', __('destination.needs_fallback'));
+            return redirect()->back()->with('error', __('destination.needs_fallback'));
         }
 
         $destination->update([

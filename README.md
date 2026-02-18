@@ -351,7 +351,7 @@ Applied to: booking forms, contact forms, newsletter subscriptions
 - **Vue Honeypot** - Invisible form field traps for bot detection
 - **AntiSpamEmailService** - Server-side suspicious pattern detection
 - **Email/Phone Obfuscation** - Contact links protected via `useAntiSpamLinks` composable
-- **Rate Limiting** - 5 requests/min on all public forms
+- **Rate Limiting** - 25 requests/min on all public forms
 
 **How Email/Phone Obfuscation Works:**
 ```js
