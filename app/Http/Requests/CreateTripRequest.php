@@ -23,6 +23,9 @@ class CreateTripRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        //  Default to empty array's on null
+        emptyFormRequestToArray($this, ['highlights', 'items']);
+
         $this->merge([
             'slug' => Str::slug($this->slug),
         ]);
@@ -42,9 +45,11 @@ class CreateTripRequest extends FormRequest
             TripValidationRules::pricing(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),
-            TripValidationRules::countries(),
+            TripValidationRules::destinations(),
             TripValidationRules::heroImageStore(),
             TripValidationRules::imagesStore(),
+            TripValidationRules::items(),
+            TripValidationRules::practicalInfo(),
         );
     }
 }

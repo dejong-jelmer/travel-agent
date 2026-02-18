@@ -5,8 +5,21 @@ import { useBooking } from '@/Composables/useBooking.js'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
-    trip: Object,
-    required: true
+    trip: {
+        type: Object,
+        required: true
+    },
+    tripItems: Object,
+    practicalSections: Object,
+    travelInfoSections: Object,
+    inclusions: {
+        type: Object,
+        default: () => ({ type_label: '', categories: [] })
+    },
+    exclusions: {
+        type: Object,
+        default: () => ({ type_label: '', categories: [] })
+    }
 })
 
 const { t } = useI18n()
@@ -39,7 +52,7 @@ const tabs = computed(() => [
     { id: 'itinerary', label: t('trip_show.tabs.itinerary') },
     { id: 'inclusive', label: t('trip_show.tabs.inclusive') },
     { id: 'practical', label: t('trip_show.tabs.practical') },
-    { id: 'extra', label: t('trip_show.tabs.extra') }
+    { id: 'general_info', label: t('trip_show.tabs.general_info') }
 ])
 
 </script>
@@ -72,14 +85,17 @@ const tabs = computed(() => [
                                     <!-- Price -->
                                     <div
                                         class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full font-bold">
-                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price }) }}</span>
+                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price_formatted })
+                                        }}</span>
                                     </div>
 
                                     <!-- Duration -->
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                                         <Clock class="w-5 h-5" />
-                                        <span class="font-medium">{{ t('trip_show.hero.days', { duration: trip.duration }) }}</span>
+                                        <span class="font-medium">{{ t('trip_show.hero.days', {
+                                            duration: trip.duration
+                                        }) }}</span>
                                     </div>
 
                                     <!-- Transport -->
@@ -89,11 +105,11 @@ const tabs = computed(() => [
                                         <span class="font-medium">{{ t('trip_show.hero.sustainable_travel') }}</span>
                                     </div>
 
-                                    <!-- Countries -->
+                                    <!-- Destination -->
                                     <div
                                         class="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full">
                                         <MapPinned class="w-5 h-5" />
-                                        <span class="font-medium">{{ trip.countries_formatted }}</span>
+                                        <span class="font-medium">{{ trip.destinations_formatted }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -133,26 +149,12 @@ const tabs = computed(() => [
                         <!-- Highlights -->
                         <div class="border-t border-accent-primary/20 pt-8">
                             <ul class="space-y-4">
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.romantic_train') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.historic_castles') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.culinary') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.small_groups') }}</span>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.highlights.sustainable') }}</span>
-                                </li>
+                                <template v-for="(highlight, index) in trip.highlights" :key="index">
+                                    <li class="flex items-start gap-3">
+                                        <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                        <span class="text-brand-primary">{{ highlight }}</span>
+                                    </li>
+                                </template>
                             </ul>
                         </div>
                     </div>
@@ -187,16 +189,35 @@ const tabs = computed(() => [
                                     </p>
                                 </div>
                             </div>
-                            <div v-else-if="activeTab === 'inclusive'" class="space-y-6">
-                                <p>{{ t('trip_show.tab_content.inclusive_placeholder') }}</p>
+                            <div v-else-if="activeTab === 'inclusive'" class="space-y-8">
+                                <TripItems:trip-items="tripItems" />
                             </div>
 
-                            <div v-else-if="activeTab === 'practical'" class="space-y-6">
-                                <p>{{ t('trip_show.tab_content.practical_placeholder') }}</p>
+                            <div v-else-if="activeTab === 'practical'" class="space-y-2">
+                                <template v-for="(label, key) in practicalSections" :key="key">
+                                    <div v-if="trip.practical_info?.[key]" class="p-2 tablet:p-4">
+                                        <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
+                                            {{ label }}
+                                        </h4>
+                                        <div
+                                            class="text-sm tablet:text-base text-brand-primary leading-relaxed whitespace-pre-line">
+                                            {{ trip.practical_info[key] }}
+                                        </div>
+                                    </div>
+                                </template>
+
+                                <!-- Empty state -->
+                                <p v-if="!trip.practical_info || !Object.values(trip.practical_info).some(v => v)"
+                                    class="text-brand-light text-center py-8">
+                                    {{ t('trip_show.tab_content.practical_placeholder') }}
+                                </p>
                             </div>
 
-                            <div v-else-if="activeTab === 'extra'" class="space-y-6">
-                                <p>{{ t('trip_show.tab_content.extra_placeholder') }}</p>
+                            <div v-else-if="activeTab === 'general_info'" class="space-y-2">
+                                <TripTravelInfo
+                                    :destinations="trip.destinations"
+                                    :travel-info-sections="travelInfoSections"
+                                />
                             </div>
                         </div>
                     </div>
@@ -219,7 +240,7 @@ const tabs = computed(() => [
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center">
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.from') }}</span>
-                                        <span class="font-medium text-brand-primary"><strong> €{{ trip.price }},-
+                                        <span class="font-medium text-brand-primary"><strong> €{{ trip.price_formatted }},-
                                             </strong> {{ t('trip_show.sidebar.per_person') }}</span>
                                     </div>
                                     <div class="flex justify-between items-center">
@@ -259,13 +280,18 @@ const tabs = computed(() => [
                             </div>
                         </div>
 
+                        <!-- Extra Info -->
+                        <TripExtraInfo />
+
                         <!-- Trust Indicators -->
                         <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-accent-primary/20">
-                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_us') }}</h4>
+                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_us') }}
+                            </h4>
                             <ul class="space-y-3 text-sm">
                                 <li class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-brand-primary">{{ t('trip_show.sidebar.sustainable_travel') }}</span>
+                                    <span class="text-brand-primary">{{ t('trip_show.sidebar.sustainable_travel')
+                                    }}</span>
                                 </li>
                                 <li class="flex items-center gap-2">
                                     <span class="w-2 h-2 bg-accent-primary rounded-full"></span>

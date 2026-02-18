@@ -21,12 +21,17 @@ enum CampaignStatus: string
         return 'newsletter.campaign.status';
     }
 
-    public function disabledOption(): bool
+    public function extraOptions(): array
+    {
+        return [
+            'disabled' => $this->isDisabled(),
+        ];
+    }
+
+    public function isDisabled(): bool
     {
         return match ($this) {
-            self::Queued => true,
-            self::Sent => true,
-            self::Failed => true,
+            self::Queued, self::Sent, self::Failed => true,
             default => false,
         };
     }

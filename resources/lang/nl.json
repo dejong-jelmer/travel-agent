@@ -1,4 +1,7 @@
 {
+    "common": {
+        "no_results": "Geen resultaten"
+    },
     "button": {
         "email": "E-mail",
         "call": "Bellen",
@@ -124,6 +127,10 @@
         }
     },
     "forms": {
+        "actions": {
+            "add": "Toevoegen",
+            "delete": "Verwijderen"
+        },
         "booking": {
             "tooltip_locked": "Vul eerst de vorige stappen in",
             "button_prev": "Vorige",
@@ -156,7 +163,8 @@
             "tabs": {
                 "basic": "Reis Details",
                 "media": "Media",
-                "details": "Details",
+                "items": "Inclusief/exclusief",
+                "practical": "Praktische info",
                 "meta": "Meta"
             },
             "character_counter": {
@@ -175,9 +183,9 @@
                     "title": "Prijs & Duur",
                     "subtitle": "Definieer de kosten en reisduur"
                 },
-                "countries": {
-                    "title": "Landen",
-                    "subtitle": "Configureer gekoppelde landen"
+                "destinations": {
+                    "title": "Bestemmingen",
+                    "subtitle": "Configureer gekoppelde bestemmingen"
                 }
             },
             "fields": {
@@ -214,10 +222,10 @@
                     "placeholder": "bijv. 14",
                     "unit": "dagen"
                 },
-                "countries": {
-                    "label": "Landen",
-                    "placeholder": "Selecteer landen...",
-                    "help": "Selecteer de landen die bezocht worden tijdens deze reis"
+                "destinations": {
+                    "label": "Bestemmingen",
+                    "placeholder": "Selecteer bestemmingen...",
+                    "help": "Selecteer de bestemmingen die bezocht worden tijdens deze reis"
                 },
                 "highlights": {
                     "label": "Hoogtepunten",
@@ -416,6 +424,45 @@
                 "create": "Campagne aanmaken",
                 "update": "Campagne bijwerken"
             }
+        },
+        "destination": {
+            "new_heading": "Nieuwe bestemming aanmaken",
+            "edit_heading": "Bestemming bewerken",
+            "subheading": "Vul de gegevens van de bestemming in",
+            "travel_info_reference": "Reisinformatie voor deze bestemming bewerkbaar in bij de hoofdbestemming.",
+            "sections": {
+                "basic": {
+                    "title": "Basis informatie",
+                    "subtitle": "Voer de landcode, regio (optioneel) en naam in"
+                },
+                "travel_info": {
+                    "title": "Reisinformatie",
+                    "subtitle": "Voeg nuttige reisinformatie toe per sectie"
+                }
+            },
+            "fields": {
+                "country_code": {
+                    "label": "Landcode",
+                    "placeholder": "Bijv. NL, BE, FR",
+                    "help": "2-letter landcode (ISO)"
+                },
+                "region": {
+                    "label": "Regio",
+                    "placeholder": "Bijv. engeland, schotland, wales of provence",
+                "help": "Optioneel: regio naam voor specifieke gebieden binnen een land (maak eerst het land aan)"
+                },
+                "country": {
+                    "label": "Land",
+                    "placeholder": "Selecteer een land"
+                },
+                "travel_info": {
+                    "placeholder": "Voer informatie in voor {section}"
+                }
+            },
+            "submit": {
+                "create": "Bestemming aanmaken",
+                "update": "Bestemming bijwerken"
+            }
         }
     },
     "booking_steps": {
@@ -549,9 +596,9 @@
             "trips": "Reizen",
             "all_trips": "Alle Reizen",
             "new_trip": "Nieuw Reis",
-            "countries": "Landen",
-            "all_countries": "Alle Landen",
-            "new_country": "Nieuw Land",
+            "destinations": "Bestemmingen",
+            "all_destinations": "Alle Bestemmingen",
+            "new_destination": "Nieuw Bestemming",
             "newsletter": "Nieuwsbrief",
             "subscribers": "Abonnees",
             "campaigns": "Campagnes",
@@ -585,18 +632,11 @@
             "sustainable_travel": "Duurzaam reizen"
         },
         "about_trip": "Over deze reis",
-        "highlights": {
-            "romantic_train": "Romantische treinrit door de Alpen met adembenemende uitzichten",
-            "historic_castles": "Bezoek aan historische kastelen en UNESCO werelderfgoed locaties",
-            "culinary": "Lokale culinaire ervaringen en wijnproeverijen",
-            "small_groups": "Kleinschalige groepen voor een persoonlijke ervaring",
-            "sustainable": "Duurzaam reizen zonder vliegtuig"
-        },
         "tabs": {
             "itinerary": "Dag tot dag",
             "inclusive": "Inclusief & Exclusief",
             "practical": "Praktische info",
-            "extra": "Extra info"
+            "general_info": "Algemene informatie"
         },
         "tab_content": {
             "itinerary_empty": "Gedetailleerd reisprogramma wordt binnenkort toegevoegd",
@@ -729,7 +769,7 @@
                 "title": "Snelle Acties",
                 "view_bookings": "Bekijk alle boekingen",
                 "manage_trips": "Beheer reizen",
-                "manage_countries": "Beheer landen"
+                "manage_destinations": "Beheer bestemmingen"
             },
             "system_status": {
                 "title": "Systeemstatus",
@@ -764,12 +804,12 @@
             },
             "index": {
                 "title": "Reizen",
-                "search_placeholder" : "Zoek op reis of op land...",
+                "search_placeholder": "Zoek op reis of op bestemming...",
                 "table_headers": {
                     "id": "#",
                     "image": "Afbeelding",
                     "product": "Product",
-                    "countries": "Land(en)",
+                    "destinations": "Bestemming(en)",
                     "price": "Prijs",
                     "days": "Dagen",
                     "actions": "Acties"
@@ -783,12 +823,21 @@
                 "itinerary_tooltip": "Bekijk reisplan van deze reis",
                 "tabs": {
                     "details": "Reis Details",
+                    "items": "Inclusief/exclusief",
+                    "practical": "Praktische info",
                     "meta": "Meta data"
+                },
+                "highlights": {
+                    "label": "Hoogtepunten van deze reis"
                 },
                 "details": {
                     "name": "Naam",
                     "slug": "Slug",
                     "description": "Beschrijving"
+                },
+                "items": {
+                    "no_items": "Geen items",
+                    "empty": "Er zijn nog geen items toegevoegd aan deze reis"
                 },
                 "meta": {
                     "title": "Meta Title",
@@ -818,9 +867,15 @@
                     "duration": "Duur",
                     "days": "{duration} dagen"
                 },
-                "countries": {
-                    "title": "Gekoppelde Landen",
+                "destinations": {
+                    "title": "Gekoppelde Bestemmingen",
                     "subtitle": "Bestemmingen"
+                }
+            },
+            "edit": {
+                "items": {
+                    "select_category": "Selecteer een category...",
+                    "description": "Omschrijving"
                 }
             }
         },
@@ -835,7 +890,7 @@
                 "edit": "Wijzigingen opslaan"
             },
             "index": {
-                "search_placeholder": "Zoek op referentie, reis of op land...",
+                "search_placeholder": "Zoek op referentie, reis of op bestemming...",
                 "filters": {
                     "status": "Status",
                     "payment_status": "Betaalstatus"
@@ -843,7 +898,7 @@
                 "table_headers": {
                     "reference": "Referentie",
                     "trip": "Reis",
-                    "countries": "Land(en)",
+                    "destinations": "Bestemming(en)",
                     "departure_date": "Vertrekdatum",
                     "status": "Status",
                     "payment": "Betaling",
@@ -883,35 +938,37 @@
                 "payment_status": "Betaalstatus"
             }
         },
-        "countries": {
-            "title": "Landen",
+        "destinations": {
+            "title": "Bestemmingen",
             "actions": {
-                "create": "Maak een nieuw land aan",
-                "delete": "Verwijder land",
-                "delete_confirm": "Weet je zeker dat je dit land wilt verwijderen?"
+                "create": "Maak een nieuw bestemming aan",
+                "delete": "Verwijder bestemming",
+                "delete_confirm": "Weet je zeker dat je dit bestemming wilt verwijderen?"
             },
             "submit": {
-                "create": "Land aanmaken"
+                "create": "Bestemming aanmaken"
             },
             "index": {
-                "search_placeholder": "Zoek op landnaam...",
-                "title": "Landen overzicht",
+                "search_placeholder": "Zoek op bestemmingnaam...",
+                "title": "Bestemmingen overzicht",
                 "table_headers": {
-                    "countries": "Landen",
+                    "destinations": "Bestemmingen",
+                    "country_code": "Landcode",
+                    "region": "Regio",
                     "actions": "Acties"
                 },
-                "no_countries": "Je hebt nog geen landen aangemaakt, ga naar \"Nieuwe Land\" of op klik op \"+\" om je eerst land aan te maken.",
-                "no_countries_found": "Geen landen gevonden.",
-                "no_countries_found_with_search": "Geen landen gevonden met de zoekopdracht: \"{search}\"."
+                "no_destinations": "Je hebt nog geen bestemmingen aangemaakt, ga naar \"Nieuwe Bestemming\" of op klik op \"+\" om je eerst bestemming aan te maken.",
+                "no_destinations_found": "Geen bestemmingen gevonden.",
+                "no_destinations_found_with_search": "Geen bestemmingen gevonden met de zoekopdracht: \"{search}\"."
             },
             "create": {
-                "title": "Nieuw Land",
+                "title": "Nieuw Bestemming",
                 "subtitle": "Bestemmingen",
-                "heading": "Land Informatie",
-                "subheading": "Voer de naam van het land in",
+                "heading": "Bestemming Informatie",
+                "subheading": "Voer de naam van het bestemming in",
                 "fields": {
                     "name": {
-                        "label": "Land naam",
+                        "label": "Bestemming naam",
                         "placeholder": "Bijv. Frankrijk"
                     }
                 }
@@ -920,7 +977,7 @@
         "newsletter": {
             "campaigns": {
                 "actions": {
-                    "edit":"Bewerk nieuwsbrief campagne",
+                    "edit": "Bewerk nieuwsbrief campagne",
                     "send": "Verstuur deze nieuwsbrief campagne",
                     "create": "Maak een nieuwe nieuwsbrief campagne aan",
                     "send_confirm": "Je staat op het punt deze campagne naar al je abbonees te versturen. Weet je zeker dat je deze nieuwsbrief campagne wilt versturen?",

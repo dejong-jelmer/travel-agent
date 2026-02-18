@@ -41,9 +41,9 @@
                 <p style="margin:0 0 15px 0;font-size:22px;font-weight:700;color:#2F3E46;">
                     {{ $booking->trip->name }}
                 </p>
-                @if ($booking->trip->countries->isNotEmpty())
+                @if ($booking->trip->destinations->isNotEmpty())
                     <p style="margin:0;font-size:14px;color:#A3BCCB;">
-                        {{ $booking->trip->countriesFormatted }}
+                        {{ $booking->trip->destinationsFormatted }}
                     </p>
                 @endif
             </td>

@@ -71,11 +71,11 @@ class Booking extends Model
     // Sortable properties
     protected $searchable = ['reference'];
 
-    protected $searchableRelations = ['trip.name', 'countries.countries.name'];
+    protected $searchableRelations = ['trip.name', 'destinations.destinations.name'];
 
     protected $filterable = ['status', 'payment_status'];
 
-    protected $sortable = ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip', 'countries'];
+    protected $sortable = ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip', 'destinations'];
 
     protected $sortableBelongsTo = [
         'trip' => [
@@ -86,12 +86,12 @@ class Booking extends Model
     ];
 
     protected $sortableBelongsToMany = [
-        'countries' => [
-            'relation' => 'countries',
+        'destinations' => [
+            'relation' => 'destinations',
             'column' => 'name',
-            'pivot_table' => 'country_trip',
+            'pivot_table' => 'destination_trip',
             'pivot_foreign_key' => 'trip_id',
-            'pivot_related_key' => 'country_id',
+            'pivot_related_key' => 'destination_id',
             'join_key' => 'trip_id',
         ],
     ];
@@ -195,10 +195,10 @@ class Booking extends Model
         return $this->hasMany(BookingChange::class);
     }
 
-    public function countries(): HasManyDeep
+    public function destinations(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
-            $this->trip(), (new Trip)->countries()
+            $this->trip(), (new Trip)->destinations()
         );
     }
 

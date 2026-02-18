@@ -4,6 +4,7 @@ defineProps({
     modelValue: String,
     name: String,
     label: String,
+    placeholder: String,
     feedback: {
         type: [ String, Array ],
         required: false,
@@ -30,12 +31,13 @@ defineProps({
             <slot name="label">{{ label }}</slot>
         </Label>
         <textarea
+            v-bind="$attrs"
             :id="name"
             :value="modelValue"
             :rows="rows"
             @input="$emit('update:modelValue', $event.target.value)"
             class="form-input"
-            :placeholder="!showLabel ? label : ''"
+            :placeholder="placeholder"
             :required="required"
         >
         </textarea>

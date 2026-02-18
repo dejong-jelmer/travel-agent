@@ -2,86 +2,79 @@
 
 namespace App\Services;
 
+use App\Http\Resources\CountryResource;
+use App\Models\Country;
+
 class CountryService
 {
     /**
-     * European countries with their locale ISO codes for faker
-     *
-     * @return array<string, string> Country name => Locale ISO code
-     */
-    public static function europeanCountries(): array
-    {
-        return config('countries.europe', []);
-    }
-
-    /**
-     * Get all country names
-     *
-     * @return array<string>
-     */
-    public static function names(): array
-    {
-        return array_keys(self::europeanCountries());
-    }
-
-    /**
-     * Get locale for a country name
-     *
-     * @return string Locale ISO code (defaults to nl_NL if not found)
-     */
-    public static function getLocale(string $countryName): string
-    {
-        return self::europeanCountries()[$countryName] ?? 'nl_NL';
-    }
-
-    /**
-     * Get random country with its locale
-     *
-     * @return array{name: string, locale: string}
-     */
-    public static function random(): array
-    {
-        $countries = self::europeanCountries();
-        $name = array_rand($countries);
-
-        return [
-            'name' => $name,
-            'locale' => $countries[$name],
-        ];
-    }
-
-    /**
      * Static pool for unique country generation
      *
-     * @var array<int, string>|null
+     * @var array<int, array>|null
      */
     private static ?array $availableCountries = null;
 
     /**
-     * Get a unique country name
+     * European countries with their country codes, regions, and locales
+     *
+     * @return array<int, array{country_code: string, region: string|null, name: string, locale: string}>
+     */
+    public static function europeanCountries(): array
+    {
+        return CountryResource::collection(
+            Country::whereIn('code', array_keys(config('locales')))->orderBy('name')->get()
+        )->resolve();
+    }
+
+    /**
+     * Get all countries as a resource collection
+     */
+    public static function countries(): array
+    {
+        return CountryResource::collection(
+            Country::orderBy('name')->get()
+        )->resolve();
+    }
+
+    /**
+     * Get locale by country code and optional region
+     *
+     * @return string Locale ISO code (defaults to nl_NL if not found)
+     */
+    public static function getLocaleByCountryCode(string $countryCode): string
+    {
+        return config("locales.{$countryCode}", 'nl_NL');
+    }
+
+    /**
+     * Get a unique random country with all data
      * Uses a static pool to ensure uniqueness across multiple calls
      *
-     * @return string Unique country name
+     * @return array{country_code: string, region: string|null, name: string, locale: string}
      */
-    public static function uniqueRandomName(): string
+    public static function uniqueRandom(): array
     {
         // Initialize the list of available countries on first use
         if (self::$availableCountries === null) {
-            self::$availableCountries = self::names();
+            self::$availableCountries = self::europeanCountries();
         }
 
         // If we've run out of countries, reset the list
         if (empty(self::$availableCountries)) {
-            self::$availableCountries = self::names();
+            self::$availableCountries = self::europeanCountries();
         }
 
         // Pick and remove a random country from the available list
         $randomKey = array_rand(self::$availableCountries);
-
-        $countryName = self::$availableCountries[$randomKey];
+        $country = self::$availableCountries[$randomKey];
         unset(self::$availableCountries[$randomKey]);
 
-        return $countryName;
+        return [
+            'country_code' => $country['code'],
+            'region' => in_array($country['name'], ['Engeland, Schotland, Wales']) ? $country['name'] : null,
+            'name' => $country['name'],
+            'locale' => self::getLocaleByCountryCode($country['code']),
+        ];
     }
 
     /**
@@ -91,5 +84,15 @@ class CountryService
     public static function resetUniquePool(): void
     {
         self::$availableCountries = null;
+    }
+
+    /**
+     * Get the translated country name for a given country code.
+     */
+    public static function getTranslatedCountryName(string $countryCode): string
+    {
+        $country = Country::find($countryCode);
+
+        return $country?->getTranslatedName() ?? $countryCode;
     }
 }

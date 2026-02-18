@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
-use App\Http\Requests\Concerns\ValidatesMainBooker;
+use App\Http\Requests\Traits\ValidatesMainBooker;
 use App\Services\Validation\BookingValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;

@@ -31,16 +31,16 @@ export default {
             colors: {
                 // Brand identity colors
                 brand: {
-                    primary: "#2F3E46",
-                    secondary: "#F0F4F7",
+                    primary: "#2f3e46",
+                    secondary: "#f0f4f7",
                     tertiary: "#ccf6ff",
-                    light: "#A3BCCB"
+                    light: "#a3bccb"
                 },
                 accent: {
                     primary: "#f0972d",
-                    sage: "#AFCB98",
-                    earth: "#DCC7AA",
-                    terracotta: "#B17C65",
+                    sage: "#afcb98",
+                    earth: "#dcc7aa",
+                    terracotta: "#b17c65",
                     link: "#82b2ca"
                 },
                 // Status feedback colors

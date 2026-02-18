@@ -31,9 +31,9 @@ const emit = defineEmits(['update:modelValue'])
         <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <input :type="type" :id="name" :value="modelValue" @input="emit('update:modelValue', $event.target.value)"
+        <input v-bind="$attrs" :type="type" :id="name" :value="modelValue" @input="emit('update:modelValue', $event.target.value)"
             class="form-input" :class="!!feedback ? 'ring-[2px] ring-status-error ring-offset-2 bg-status-error/20' : ''"
-            :placeholder="!showLabel ? label : placeholder" :required="required" />
+            :placeholder="placeholder" :required="required" />
         <template v-if="!!feedback">
             <FormFeedback :message="feedback" />
         </template>

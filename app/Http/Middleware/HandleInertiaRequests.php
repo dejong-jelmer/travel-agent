@@ -41,7 +41,7 @@ class HandleInertiaRequests extends Middleware
 
         return array_merge(parent::share($request), [
             'locale' => app()->getLocale(),
-            'locales' => config('app.available_locales', ['nl', 'en']),
+            'locales' => availableLocales() ?: ['nl', 'en'],
             'auth' => [
                 'user' => Auth::user(),
             ],

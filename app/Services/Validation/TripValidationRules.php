@@ -2,7 +2,10 @@
 
 namespace App\Services\Validation;
 
+use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\ItemType;
 use App\Services\Traits\MergesRules;
+use Illuminate\Validation\Rule;
 
 class TripValidationRules
 {
@@ -13,6 +16,12 @@ class TripValidationRules
         return self::mergeRules([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
+            'highlights' => ['required', 'array'],
+            'highlights.*' => [
+                'nullable',
+                'string',
+                'max:255',
+            ],
             'description' => ['required', 'string'],
         ], $additions);
 
@@ -43,10 +52,10 @@ class TripValidationRules
         ];
     }
 
-    public static function countries(): array
+    public static function destinations(): array
     {
         return [
-            'countries' => ['required', 'array'],
+            'destinations' => ['required', 'array'],
         ];
     }
 
@@ -78,6 +87,24 @@ class TripValidationRules
         return [
             'images' => ['nullable', 'array'],
             'images.*' => ImageValidationRules::baseImageOrString(),
+        ];
+    }
+
+    public static function items(): array
+    {
+        return [
+            'items' => ['nullable', 'array'],
+            'items.*.type' => ['required', 'string', Rule::enum(ItemType::class)],
+            'items.*.category' => ['required', 'string', Rule::enum(ItemCategory::class)],
+            'items.*.item' => ['required', 'string', 'max:255'],
+        ];
+    }
+
+    public static function practicalInfo(): array
+    {
+        return [
+            'practical_info' => ['nullable', 'array'],
+            'practical_info.*' => ['nullable', 'string', 'max:1020'],
         ];
     }
 }

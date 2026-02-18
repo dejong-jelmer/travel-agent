@@ -6,7 +6,7 @@ defineProps({
 
 <template>
     <Accordion>
-        <template #trigger>
+        <template #header>
             <span><strong>{{ booker.full_name }}</strong> ({{ booker.birthdate_formatted }})</span>
         </template>
         <div class="text-brand-primary">

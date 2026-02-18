@@ -3,14 +3,28 @@ import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     trip: Object,
-    countries: Object,
+    destinations: Object,
+    typeOptions: Object,
+    categoryOptions: Object,
+    practicalSections: Object,
 });
+
+// Initialize practical_info with all keys from practicalSections, merging with existing data
+const initializePracticalInfo = () => {
+    const info = {};
+    Object.keys(props.practicalSections).forEach(key => {
+        info[key] = props.trip.practical_info?.[key] ?? '';
+    });
+    return info;
+};
 
 const form = useForm({
     ...props.trip,
-    countries: props.trip.countries?.map(country => country.id) ?? [],
+    destinations: props.trip.destinations?.map(destination => destination.id) ?? [],
     heroImage: props.trip.hero_image?.public_url ?? null,
     images: props.trip.image_paths ?? [],
+    items: props.trip.items ?? [],
+    practical_info: initializePracticalInfo(),
 });
 
 function submit() {
@@ -21,6 +35,12 @@ function submit() {
 
 <template>
     <Admin>
-        <TripForm :form="form" :countries="countries" @submit="submit" />
+        <TripForm
+            :form="form"
+            :destinations="destinations"
+            :type-options="typeOptions"
+            :category-options="categoryOptions"
+            :practical-sections="practicalSections"
+            @submit="submit" />
     </Admin>
 </template>

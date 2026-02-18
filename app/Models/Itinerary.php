@@ -27,7 +27,6 @@ class Itinerary extends Model
         'activities',
         'meals',
         'transport',
-        'highlights',
         'remark',
         'order',
     ];

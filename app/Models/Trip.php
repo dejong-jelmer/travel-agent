@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use App\Casts\PriceCast;
+use App\Enums\Trip\PracticalInfo;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
@@ -40,51 +40,44 @@ class Trip extends Model
         'duration',
         'featured',
         'published_at',
+        'highlights',
+        'practical_info',
         'meta_title',
         'meta_description',
     ];
 
     protected $appends = [
         'image_paths',
-        'raw_price',
-        'countries_formatted',
+        'price_formatted',
+        'destinations_formatted',
         'published_at_formatted',
         'og_image_url',
     ];
 
     protected $casts = [
-        'price' => PriceCast::class,
+        'price' => 'decimal:2',
+        'highlights' => 'array',
+        'practical_info' => 'array',
+        'published_at' => 'datetime',
+        'featured' => 'boolean',
     ];
 
     // Sortable properties
     protected $searchable = ['name'];
 
-    protected $searchableRelations = ['countries.name'];
+    protected $searchableRelations = ['destinations.name'];
 
-    protected $sortable = ['id', 'name', 'price', 'duration', 'published_at', 'countries'];
+    protected $sortable = ['id', 'name', 'price', 'duration', 'published_at', 'destinations'];
 
     protected $sortableBelongsToMany = [
-        'countries' => [
-            'relation' => 'countries',
+        'destinations' => [
+            'relation' => 'destinations',
             'column' => 'name',
-            'pivot_table' => 'country_trip',
+            'pivot_table' => 'destination_trip',
             'pivot_foreign_key' => 'trip_id',
-            'pivot_related_key' => 'country_id',
+            'pivot_related_key' => 'destination_id',
         ],
     ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'published_at' => 'date',
-            'featured' => 'boolean',
-        ];
-    }
 
     protected static function booted(): void
     {
@@ -93,6 +86,7 @@ class Trip extends Model
             $trip->images()->delete();
             $trip->heroImage()->delete();
             $trip->itineraries()->delete();
+            $trip->items()->delete();
         });
 
         static::restoring(function ($trip) {
@@ -102,9 +96,14 @@ class Trip extends Model
         });
     }
 
-    public function countries(): BelongsToMany
+    public function destinations(): BelongsToMany
     {
-        return $this->belongsToMany(Country::class)->withTimestamps();
+        return $this->belongsToMany(Destination::class)->withTimestamps();
+    }
+
+    public function items(): HasMany
+    {
+        return $this->hasMany(TripItem::class);
     }
 
     /**
@@ -113,7 +112,7 @@ class Trip extends Model
     #[Scope]
     protected function featured(Builder $query): void
     {
-        $query->where('featured', 1);
+        $query->where('featured', true);
     }
 
     /**
@@ -131,22 +130,22 @@ class Trip extends Model
     }
 
     /**
-     * Get a formatted, comma-separated list of country names.
+     * Get a formatted, comma-separated list of destination names.
      *
-     * Multiple countries are joined with commas and an ampersand before the last item.
+     * Multiple destinations are joined with commas and an ampersand before the last item.
      * Example: "Netherlands, Belgium & Germany"
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function countriesFormatted(): Attribute
+    public function destinationsFormatted(): Attribute
     {
         return Attribute::get(function () {
-            $countries = $this->countries->pluck('name');
+            $destinations = $this->destinations->map(fn ($d) => $d->region ?? $d->name);
 
-            return match ($countries->count()) {
+            return match ($destinations->count()) {
                 0 => '',
-                1 => $countries->first(),
-                default => $countries->slice(0, -1)->implode(', ').' & '.$countries->last()
+                1 => $destinations->first(),
+                default => $destinations->slice(0, -1)->implode(', ').' & '.$destinations->last()
             };
         });
     }
@@ -161,10 +160,10 @@ class Trip extends Model
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function rawPrice(): Attribute
+    protected function priceFormatted(): Attribute
     {
-        return Attribute::get(
-            fn () => (float) $this->getRawOriginal('price')
+        return Attribute::make(
+            get: fn () => number_format($this->price, 0, ',', '.')
         );
     }
 
@@ -206,11 +205,11 @@ class Trip extends Model
     }
 
     /**
-     * Get the meta_description property or fallback to substring of trip->description.
+     * Get the meta_description property or fallback to substring of $trip->description.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function metaDescription(): Attribute
+    protected function metaDescription(): Attribute
     {
         return Attribute::get(
             fn (?string $value) => $value ?? Str::substr(
@@ -224,11 +223,11 @@ class Trip extends Model
     }
 
     /**
-     * Get the meta_titleproperty or fallback to substring of trip->name.
+     * Get the meta_title property or fallback to substring of $trip->name.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
-    public function metaTitle(): Attribute
+    protected function metaTitle(): Attribute
     {
         return Attribute::get(
             fn (?string $value) => $value ?? Str::substr(
@@ -238,6 +237,49 @@ class Trip extends Model
                     'seo.meta_title_max_length'
                 )
             )
+        );
+    }
+
+    /**
+     * Get the trip highlights
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function highlights(): Attribute
+    {
+        return Attribute::make(
+            set: fn ($value) => ! is_null($value)
+                ? json_encode(
+                    collect(
+                        ! is_array($value)
+                            ? array_map('trim', explode(',', $value))
+                            : $value,
+                    )->filter(fn ($item) => ! is_null($item) && $item !== '')->values()->all()
+                )
+                : '[]'
+        );
+    }
+
+    /**
+     * Get the practical info with all keys from PracticalInfo enum
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array, never>
+     */
+    protected function practicalInfo(): Attribute
+    {
+        return Attribute::make(
+            get: function ($value) {
+                $decoded = is_null($value) ? [] : json_decode($value, true);
+
+                // Get all keys from PracticalInfo enum
+                $allKeys = collect(PracticalInfo::cases())
+                    ->mapWithKeys(fn ($case) => [$case->value => ''])
+                    ->all();
+
+                // Merge with existing values
+                return array_merge($allKeys, $decoded);
+            },
+            set: fn ($value) => json_encode($value ?? [])
         );
     }
 }

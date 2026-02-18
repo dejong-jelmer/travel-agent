@@ -19,7 +19,7 @@ const { isValidDate } = useDateFormatter();
 /** Minimum length for most string fields (names, city, street) */
 const DEFAULT_MIN_STRING_LENGTH = 3;
 
-/** Minimum length for nationality field (2-letter country codes) */
+/** Minimum length for nationality field (2-letter destination codes) */
 const MIN_NATIONALITY_LENGTH = 2;
 
 /** Maximum length for most string fields */
@@ -70,7 +70,7 @@ export function useBookingValidation() {
                     traveler.first_name,
                     t('validation.fields.first_name'),
                     DEFAULT_MIN_STRING_LENGTH,
-                    t('validation.errors.missing'),
+                    t('validation.errors.missing', { field: t('validation.fields.first_name') }),
                     t('validation.errors.too_short')
                 );
                 if (firstNameError)
@@ -80,7 +80,7 @@ export function useBookingValidation() {
                     traveler.last_name,
                     t('validation.fields.last_name'),
                     DEFAULT_MIN_STRING_LENGTH,
-                    t('validation.errors.missing'),
+                    t('validation.errors.missing', { field: t('validation.fields.last_name') }),
                     t('validation.errors.too_short')
                 );
                 if (lastNameError)
@@ -95,7 +95,7 @@ export function useBookingValidation() {
                     traveler.nationality,
                     t('validation.fields.nationality'),
                     MIN_NATIONALITY_LENGTH,
-                    t('validation.errors.missing'),
+                    t('validation.errors.missing', { field: t('validation.fields.nationality') }),
                     t('validation.errors.too_short')
                 );
                 if (nationalityError)
@@ -128,7 +128,7 @@ export function useBookingValidation() {
             contact.street,
             t('validation.fields.street_name'),
             DEFAULT_MIN_STRING_LENGTH,
-            t('validation.errors.missing'),
+            t('validation.errors.missing', { field: t('validation.fields.street_name') }),
             t('validation.errors.too_short')
         );
         if (streetError) errors["contact.street"] = streetError;
@@ -142,7 +142,7 @@ export function useBookingValidation() {
             contact.postal_code,
             t('validation.fields.postal_code'),
             postalCodeRegex,
-            t('validation.errors.missing'),
+            t('validation.errors.missing', { field: t('validation.fields.postal_code') }),
             t('validation.errors.invalid_postal_code')
         );
 
@@ -152,7 +152,7 @@ export function useBookingValidation() {
             contact.city,
             t('validation.fields.city'),
             DEFAULT_MIN_STRING_LENGTH,
-            t('validation.errors.missing'),
+            t('validation.errors.missing', { field: t('validation.fields.city') }),
             t('validation.errors.too_short')
         );
 
@@ -162,7 +162,7 @@ export function useBookingValidation() {
             contact.email,
             t('validation.fields.email'),
             emailRegex,
-            t('validation.errors.missing'),
+            t('validation.errors.missing', { field: t('validation.fields.email') }),
             t('validation.errors.invalid')
         );
 
@@ -172,7 +172,7 @@ export function useBookingValidation() {
             contact.phone,
             t('validation.fields.phone'),
             phoneRegex,
-            t('validation.errors.missing'),
+            t('validation.errors.missing', { field: t('validation.fields.phone') }),
             t('validation.errors.invalid')
         );
 
