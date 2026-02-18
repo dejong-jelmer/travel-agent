@@ -28,6 +28,6 @@ if (! function_exists('emptyFormRequestToArray')) {
 if (! function_exists('availableLocales')) {
     function availableLocales(): array
     {
-        return array_keys(config('app.locales')) ?: ['en'];
+        return array_keys(config('app.locales'), []) ?: ['en'];
     }
 }

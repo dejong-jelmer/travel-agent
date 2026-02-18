@@ -343,7 +343,7 @@ Applied to: booking forms, contact forms, newsletter subscriptions
 - Email validation with domain checks
 
 ### Rate Limiting
-- Public form endpoints: 5 requests/minute per IP
+- Public form endpoints: 25 requests/minute per IP
 - Configured via `frontend-form-actions` rate limiter
 - Protects booking, contact, and newsletter endpoints
 
