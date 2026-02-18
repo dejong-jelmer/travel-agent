@@ -13,6 +13,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
+/**
+ * @property Image|null $heroImage
+ */
 class NewsletterCampaign extends Model
 {
     use HasFactory,

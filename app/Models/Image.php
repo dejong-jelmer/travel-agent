@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * @property string $public_url
+ * @property string $full_path
+ */
 class Image extends Model
 {
     use HasFactory,
@@ -38,7 +42,7 @@ class Image extends Model
     /**
      * Get the full storage path for the image.
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<non-falsy-string, never>
      */
     public function fullPath(): Attribute
     {

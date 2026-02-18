@@ -5,10 +5,10 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response as HttpResponse;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 class AuthController extends Controller
 {
@@ -19,7 +19,7 @@ class AuthController extends Controller
         $this->appName = config('app.name');
     }
 
-    public function login(Request $request): InertiaResponse|HttpResponse
+    public function login(Request $request): InertiaResponse|SymfonyResponse
     {
         $credentials = $request->validate([
             'email' => ['required', 'email'],

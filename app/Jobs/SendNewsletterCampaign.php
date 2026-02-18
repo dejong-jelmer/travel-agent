@@ -154,8 +154,6 @@ class SendNewsletterCampaign implements ShouldQueue
 
     /**
      * Update campaign counters
-     *
-     * @return NewsletterCampaign $campaign
      */
     private function updateCounters(NewsletterCampaign $campaign, int $sentCount, int $failedCount): void
     {

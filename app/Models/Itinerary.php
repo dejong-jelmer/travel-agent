@@ -12,6 +12,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property Trip $trip
+ * @property array $meals_formatted
+ * @property array $transport_formatted
+ */
 class Itinerary extends Model
 {
     use HasFactory,
@@ -90,7 +95,7 @@ class Itinerary extends Model
     /**
      * Get a formatted transport.
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array, never>
      */
     public function transportFormatted(): Attribute
     {
@@ -100,7 +105,7 @@ class Itinerary extends Model
     /**
      * Get a formatted meals.
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array, never>
      */
     public function mealsFormatted(): Attribute
     {

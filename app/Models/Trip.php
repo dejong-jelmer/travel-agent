@@ -18,6 +18,13 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 
+/**
+ * @property string $name
+ * @property string $og_image_url
+ * @property \Illuminate\Support\Collection $image_paths
+ * @property string $destinations_formatted
+ * @property Image|null $heroImage
+ */
 class Trip extends Model
 {
     use HasFactory,
@@ -140,12 +147,14 @@ class Trip extends Model
     public function destinationsFormatted(): Attribute
     {
         return Attribute::get(function () {
-            $destinations = $this->destinations->map(fn ($d) => $d->region ?? $d->name);
+            /** @var \Illuminate\Database\Eloquent\Collection<int, Destination> $destinations */
+            $destinations = $this->destinations;
+            $names = $destinations->map(fn (Destination $d) => $d->region ?? $d->name);
 
-            return match ($destinations->count()) {
+            return match ($names->count()) {
                 0 => '',
-                1 => $destinations->first(),
-                default => $destinations->slice(0, -1)->implode(', ').' & '.$destinations->last()
+                1 => $names->first(),
+                default => $names->slice(0, -1)->implode(', ').' & '.$names->last()
             };
         });
     }
@@ -163,7 +172,7 @@ class Trip extends Model
     protected function priceFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => number_format($this->price, 0, ',', '.')
+            get: fn () => number_format((float) $this->price, 0, ',', '.')
         );
     }
 
@@ -200,7 +209,7 @@ class Trip extends Model
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg'))
+            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg')) // @phpstan-ignore nullsafe.neverNull
         );
     }
 
