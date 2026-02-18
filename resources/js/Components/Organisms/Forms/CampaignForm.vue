@@ -187,8 +187,8 @@ function isTripSelected(tripId) {
                                                         {{ t('forms.campaign.fields.featured_trips.duration', { days: trip.duration }) }}
                                                     </span>
                                                     |
-                                                    <span v-if="trip.price" class="flex items-center gap-1 font-medium">
-                                                        €{{ trip.price }}
+                                                    <span v-if="trip.price_formatted" class="flex items-center gap-1 font-medium">
+                                                        €{{ trip.price_formatted }}
                                                     </span>
                                                 </div>
                                             </div>

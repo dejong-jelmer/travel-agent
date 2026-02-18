@@ -59,7 +59,7 @@ const { t } = useI18n()
                                     </h2>
                                     <div class="flex items-center gap-2 text-white/90">
                                         <MapPinned class="w-4 h-4" />
-                                        <span class="text-sm">{{ booking.trip.countries_formatted }}</span>
+                                        <span class="text-sm">{{ booking.trip.destinations_formatted }}</span>
                                     </div>
                                 </div>
                             </div>

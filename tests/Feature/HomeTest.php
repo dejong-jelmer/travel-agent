@@ -3,8 +3,9 @@
 namespace Tests\Feature;
 
 use App\Mail\AdminContactFormNotificationMail;
-use App\Models\Country;
+use App\Models\Destination;
 use App\Models\Trip;
+use Database\Seeders\CountrySeeder;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Mail;
@@ -15,11 +16,17 @@ class HomeTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->seed(CountrySeeder::class);
+    }
+
     public function test_home_page_shows_trips()
     {
-        $country = Country::factory()->create();
+        $destination = Destination::factory()->create();
         $trip = Trip::factory()->create();
-        $trip->countries()->attach($country->id);
+        $trip->destinations()->attach($destination->id);
         $response = $this->get(route('home'));
 
         $response->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
@@ -27,9 +34,9 @@ class HomeTest extends TestCase
             ->where('trips.0.id', $trip->id)
             ->where('trips.0.price', $trip->price)
         );
-        $this->assertDatabaseHas('country_trip', [
+        $this->assertDatabaseHas('destination_trip', [
             'trip_id' => $trip->id,
-            'country_id' => $country->id,
+            'destination_id' => $destination->id,
         ]);
 
         $response->assertStatus(200);
@@ -47,9 +54,9 @@ class HomeTest extends TestCase
 
     public function test_trip_show_shows_correct_trip()
     {
-        $country = Country::factory()->create();
+        $destination = Destination::factory()->create();
         $trip = Trip::factory()->create();
-        $trip->countries()->attach($country->id);
+        $trip->destinations()->attach($destination->id);
 
         $response = $this->get(route('trips.show', $trip));
 
@@ -64,9 +71,9 @@ class HomeTest extends TestCase
             ->where('trip.published_at', $trip->published_at->toISOString())
         );
 
-        $this->assertDatabaseHas('country_trip', [
+        $this->assertDatabaseHas('destination_trip', [
             'trip_id' => $trip->id,
-            'country_id' => $country->id,
+            'destination_id' => $destination->id,
         ]);
         $response->assertStatus(200);
     }

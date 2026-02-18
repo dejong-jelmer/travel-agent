@@ -36,7 +36,7 @@ const collapsedSections = ref({
 // Collapsible state voor items met sub-items
 const collapsedItems = ref({
     trips: false,
-    countries: false,
+    destinations: false,
 })
 
 // Menu structuur met categorieën
@@ -86,18 +86,18 @@ const menuGroups = computed(() => [
                 ]
             },
             {
-                id: 'countries',
-                label: t('admin_menu.items.countries'),
+                id: 'destinations',
+                label: t('admin_menu.items.destinations'),
                 icon: MapPinIcon,
                 children: [
                     {
-                        label: t('admin_menu.items.all_countries'),
-                        path: new URL(route('admin.countries.index'), window.location.origin).pathname,
+                        label: t('admin_menu.items.all_destinations'),
+                        path: new URL(route('admin.destinations.index'), window.location.origin).pathname,
                         icon: MapPinIcon,
                     },
                     {
-                        label: t('admin_menu.items.new_country'),
-                        path: new URL(route('admin.countries.create'), window.location.origin).pathname,
+                        label: t('admin_menu.items.new_destination'),
+                        path: new URL(route('admin.destinations.create'), window.location.origin).pathname,
                         icon: PlusIcon,
                     },
                 ]

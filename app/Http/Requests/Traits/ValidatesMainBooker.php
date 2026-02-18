@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\Concerns;
+namespace App\Http\Requests\Traits;
 
 use Carbon\Carbon;
 

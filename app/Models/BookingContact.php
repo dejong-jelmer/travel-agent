@@ -22,7 +22,7 @@ class BookingContact extends Model
         'city',
         'email',
         'phone',
-        'country',
+        'destination',
     ];
 
     protected $appends = [

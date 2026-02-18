@@ -1,8 +1,8 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\Newsletter\CampaignController;
 use App\Http\Controllers\Admin\Newsletter\SubscriberController;
@@ -79,8 +79,8 @@ Route::prefix('admin')
         Route::resource('itineraries', ItineraryController::class)->only(['edit', 'destroy']);
         Route::post('/itineraries/{itinerary}', [ItineraryController::class, 'update'])->name('itineraries.update');
 
-        // Country resource routes
-        Route::resource('countries', CountryController::class)->except(['show', 'edit', 'update']);
+        // Destination resource routes
+        Route::resource('destinations', DestinationController::class)->except(['show']);
 
         // Booking resource routes
         Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);

@@ -1,6 +1,7 @@
 # Sustainable Travel Agent
 ---
 [![run-tests](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml)
+[![GitHub Code Style Action Status](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml)
 
 A Laravel 12 + Inertia.js + Vue 3 application promoting sustainable European train travel. Built with modern development practices, comprehensive testing, and automated CI/CD deployment.
 
@@ -304,23 +305,23 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 *Semantic color system for sustainable travel aesthetic:*
 
 - **Brand Identity**
-  - `brand.primary` (#2F3E46) - Primary dark blue-gray for text and headings
-  - `brand.secondary` (#fbfbf7) - Off-white/cream for backgrounds
+  - `brand.primary` (#2f3e46) - Primary dark blue-gray for text and headings
+  - `brand.secondary` (#f0f4f7) - Off-white/cream for backgrounds
   - `brand.tertiary` (#ccf6ff) - Light cyan accent
-  - `brand.light` (#A3BCCB) - Soft blue for subtle text and borders
-  - `brand.link` (#82b2ca) - Blue for links and interactive elements
+  - `brand.light` (#a3bccb) - Soft blue for subtle text and borders
 
 - **Accent Colors** (Nature/Sustainability focus)
   - `accent.primary` (#f0972d) - Warm orange for primary CTAs and highlights
-  - `accent.sage` (#AFCB98) - Sage green for success and eco-friendly elements
-  - `accent.earth` (#DCC7AA) - Earth/sand tone for warmth
-  - `accent.terracotta` (#B17C65) - Terracotta for contrast and emphasis
-  - `accent.blue` (#A3BCCB) - Soft blue for subtle accents
+  - `accent.sage` (#afcb98) - Sage green for success and eco-friendly elements
+  - `accent.earth` (#dcc7aa) - Earth/sand tone for warmth
+  - `accent.terracotta` (#b17c65) - Terracotta for contrast and emphasis
+  - `accent.link` (#82b2ca) - Soft blue for links
 
 - **Status Feedback**
-  - `status.error` (#e63946) - Error states and validation failures
-  - `status.success` (#06a77d) - Success states and confirmations
-  - `status.warning` (#f4a261) - Warning states and alerts
+  - `status.error` (#dc3545) - Error states and validation failures
+  - `status.success` (#198754) - Success states and confirmations
+  - `status.warning` (#ffc107) - Warning states and alerts
+  - `status.info` (#0d6efd) - Informatieve states
 
 **Rate Limiting:**
 Custom `frontend-form-actions` limiter: 25 requests/min per IP

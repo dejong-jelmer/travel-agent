@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('city');
             $table->string('email');
             $table->string('phone');
-            $table->string('country')->default('NL');
+            $table->string('destination')->default('NL');
             $table->timestamps();
         });
     }

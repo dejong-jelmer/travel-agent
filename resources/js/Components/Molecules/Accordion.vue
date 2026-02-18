@@ -1,49 +1,22 @@
 <script setup>
 import { ChevronDown } from 'lucide-vue-next';
-import { ref } from 'vue';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 
-const props = defineProps({
-    title: {
-        type: String,
-        required: false
-    },
-    initiallyOpen: {
-        type: Boolean,
-        default: false
-    }
-});
-
-const isOpen = ref(props.initiallyOpen);
-
-const toggle = () => {
-    isOpen.value = !isOpen.value;
-};
-
-defineExpose({
-    toggle,
-    isOpen
-});
 </script>
 
 <template>
-    <div class="border-b py-2">
-        <button class="flex justify-between items-center w-full text-left" @click="toggle">
-            <slot name="trigger" :isOpen="isOpen">
-                <span class="text-brand-primary">
-                    {{ title }}
+    <Disclosure v-slot="{ open }" defaultOpen>
+        <div class="border border-gray-200 rounded-lg overflow-hidden">
+            <DisclosureButton
+                class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors">
+                <span class="font-medium text-gray-700">
+                    <slot name="header"></slot>
                 </span>
-            </slot>
-            <span>
-                <ChevronDown
-                    :class="isOpen ? 'rotate-180' : ''"
-                    class="w-6 h-6 transform transition-transform"
-                    aria-hidden="true"
-                 />
-            </span>
-        </button>
-
-        <div v-if="isOpen" class="mt-2 ml-4">
-            <slot :isOpen="isOpen"></slot>
+                <ChevronDown :class="open ? 'rotate-180' : ''" class="w-5 h-5 text-gray-500 transition-transform" />
+            </DisclosureButton>
+            <DisclosurePanel class="p-4 bg-white">
+                <slot></slot>
+            </DisclosurePanel>
         </div>
-    </div>
+    </Disclosure>
 </template>
