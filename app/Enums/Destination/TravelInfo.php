@@ -17,6 +17,6 @@ enum TravelInfo: string
 
     protected function getLabelKey(): string
     {
-        return 'destination.travel-info.sections';
+        return 'destination.travel_info.sections';
     }
 }

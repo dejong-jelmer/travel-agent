@@ -13,7 +13,7 @@ return [
     'delete_failed' => '{1} Destination cannot be deleted: there is still :trips linked trip |[2,*] Destination cannot be deleted: there are still :trips linked trips',
 
     // Travel info sections
-    'travel-info' => [
+    'travel_info' => [
         'sections' => [
             'general_info' => 'General information',
             'travel_documents' => 'Travel documents',

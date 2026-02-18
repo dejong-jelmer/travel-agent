@@ -29,6 +29,9 @@ enum ItemCategory: string
         ];
     }
 
+    /**
+     * Determine if this category allows custom items to be added.
+     */
     public function isCustomizable(): bool
     {
         return match ($this) {

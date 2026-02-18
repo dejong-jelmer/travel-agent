@@ -10,7 +10,7 @@ use App\Http\Requests\StoreDestinationRequest;
 use App\Models\Destination;
 use App\Services\CountryService;
 use App\Services\DataTableService;
-use App\Services\DestinatinService;
+use App\Services\DestinationService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -58,7 +58,7 @@ class DestinationController extends Controller
     {
         $validated = $request->validated();
 
-        if (DestinatinService::fallbackExists($validated)) {
+        if (! empty($validated['region']) && ! DestinationService::fallbackExists($validated['country_code'])) {
             return redirect()->route('admin.destinations.index')->with('error', __('destination.needs_fallback'));
         }
 
@@ -92,8 +92,7 @@ class DestinationController extends Controller
     {
         $validated = $request->validated();
 
-        // $needsFallback = ! empty($validated['region']) && ! Destination::fallbackExists($validated['country_code']);
-        if (DestinatinService::fallbackExists($validated)) {
+        if (! empty($validated['region']) && ! DestinationService::fallbackExists($validated['country_code'])) {
             return redirect()->route('admin.destinations.index')->with('error', __('destination.needs_fallback'));
         }
 

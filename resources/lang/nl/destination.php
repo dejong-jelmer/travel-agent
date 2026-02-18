@@ -13,7 +13,7 @@ return [
     'delete_failed' => '{1} Bestemming kan niet worden verwijderd: er is nog :trips gekoppelde reis |[2,*] Bestemming kan niet worden verwijderd: er zijn nog :trips gekoppelde reizen',
 
     // Travel info sections
-    'travel-info' => [
+    'travel_info' => [
         'sections' => [
             'general_info' => 'Algemene informatie',
             'travel_documents' => 'Reisdocumenten',
