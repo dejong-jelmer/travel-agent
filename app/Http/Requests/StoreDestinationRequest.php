@@ -6,6 +6,7 @@ use App\Enums\Destination\TravelInfo;
 use App\Rules\EnumKeys;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\Rule;
 
 class StoreDestinationRequest extends FormRequest
 {
@@ -34,11 +35,15 @@ class StoreDestinationRequest extends FormRequest
         return [
             'country_code' => 'required|string|size:2|exists:countries,code',
             'region' => 'nullable|string|max:255',
-            'travel_info' => ['nullable', new EnumKeys(TravelInfo::class)],
+            'travel_info' => [
+                Rule::prohibitedIf(! empty($this->region)),
+                'nullable',
+                new EnumKeys(TravelInfo::class),
+            ],
             'travel_info.*' => [
                 'nullable',
                 'string',
-                'max:10000',
+                'max:1000',
 
             ],
         ];

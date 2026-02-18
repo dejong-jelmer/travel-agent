@@ -1,4 +1,7 @@
 {
+    "common": {
+        "no_results": "Geen resultaten"
+    },
     "button": {
         "email": "E-mail",
         "call": "Bellen",
@@ -426,6 +429,7 @@
             "new_heading": "Nieuwe bestemming aanmaken",
             "edit_heading": "Bestemming bewerken",
             "subheading": "Vul de gegevens van de bestemming in",
+            "travel_info_reference": "Reisinformatie voor deze bestemming bewerkbaar in bij de hoofdbestemming.",
             "sections": {
                 "basic": {
                     "title": "Basis informatie",

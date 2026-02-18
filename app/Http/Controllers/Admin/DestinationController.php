@@ -10,7 +10,6 @@ use App\Http\Requests\StoreDestinationRequest;
 use App\Models\Destination;
 use App\Services\CountryService;
 use App\Services\DataTableService;
-use App\Services\DestinationService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -57,14 +56,16 @@ class DestinationController extends Controller
     public function store(StoreDestinationRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-
-        $fallbackCreated = DestinationService::createFallbackDestination($validated);
+        $needsFallback = ! empty($validated['region']) && ! Destination::fallbackExists($validated['country_code']);
+        if ($needsFallback) {
+            Destination::createFallback($validated);
+        }
 
         Destination::create([
             'country_code' => $validated['country_code'],
             'name' => CountryService::getTranslatedCountryName($validated['country_code']),
             'region' => $validated['region'],
-            'travel_info' => $fallbackCreated ? null : $validated['travel_info'],
+            'travel_info' => $needsFallback ? null : $validated['travel_info'],
         ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.created'));
@@ -90,13 +91,16 @@ class DestinationController extends Controller
     {
         $validated = $request->validated();
 
-        $fallbackCreated = DestinationService::createFallbackDestination($validated);
+        $needsFallback = ! empty($validated['region']) && ! Destination::fallbackExists($validated['country_code']);
+        if ($needsFallback) {
+            Destination::createFallback($validated);
+        }
 
         $destination->update([
             'country_code' => $validated['country_code'],
             'name' => CountryService::getTranslatedCountryName($validated['country_code']),
             'region' => $validated['region'],
-            'travel_info' => $fallbackCreated ? null : $validated['travel_info'],
+            'travel_info' => $needsFallback ? null : $validated['travel_info'],
         ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.updated'));

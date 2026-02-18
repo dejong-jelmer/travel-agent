@@ -1,4 +1,7 @@
 {
+    "common": {
+        "no_results": "No results"
+    },
     "button": {
         "email": "Email",
         "call": "Call",
@@ -426,6 +429,7 @@
             "new_heading": "Create new destination",
             "edit_heading": "Edit destination",
             "subheading": "Fill in the destination details",
+            "travel_info_reference": "Travel information for this destination editable in main destination.",
             "sections": {
                 "basic": {
                     "title": "Basic information",

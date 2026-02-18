@@ -23,7 +23,10 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(route("admin.destinations.store"), { forceFormData: true });
+    form.transform((data) => ({
+        ...data,
+        travel_info: form.region ? null : form.travel_info,
+    })).post(route("admin.destinations.store"), { forceFormData: true });
 }
 </script>
 

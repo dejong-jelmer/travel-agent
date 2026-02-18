@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Destination\TravelInfo;
 use App\Models\Traits\Sortable;
+use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -73,5 +74,22 @@ class Destination extends Model
     public function country()
     {
         return $this->belongsTo(Country::class, 'country_code', 'code');
+    }
+
+    public static function fallbackExists(string $fallbackCountryCode): bool
+    {
+        return self::where('country_code', $fallbackCountryCode)
+            ->whereNull('region')
+            ->exists();
+    }
+
+    public static function createFallback(array $fields): self
+    {
+        return self::create([
+            'country_code' => $fields['country_code'],
+            'name' => CountryService::getTranslatedCountryName($fields['country_code']),
+            'region' => null,
+            'travel_info' => $fields['travel_info'],
+        ]);
     }
 }

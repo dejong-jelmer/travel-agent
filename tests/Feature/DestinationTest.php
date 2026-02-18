@@ -83,7 +83,33 @@ class DestinationTest extends TestCase
         $response->assertStatus(200);
     }
 
-    public function test_admin_can_update_a_destination(): void
+    public function test_admin_can_update_a_destination_without_region_and_with_travel_info(): void
+    {
+        $destination = Destination::factory()->withTravelInfo()->create();
+
+        $travelInfo = collect(TravelInfo::cases())
+            ->mapWithKeys(fn ($case) => [
+                $case->value => fake()->text(fake()->numberBetween(50, 250)),
+            ])->toArray();
+
+        $updateData = [
+            'country_code' => 'GB',
+            'region' => null,
+            'travel_info' => $travelInfo,
+        ];
+
+        $response = $this->put(route('admin.destinations.update', $destination), $updateData);
+        $response->assertRedirect(route('admin.destinations.index'));
+
+        $response->assertSessionHas('success');
+        $destination->refresh();
+
+        $this->assertEquals('GB', $destination->country_code);
+        $this->assertEquals(null, $destination->region);
+        $this->assertEquals($travelInfo, $destination->travel_info);
+    }
+
+    public function test_admin_cannot_update_a_destination_with_region_and_travel_info(): void
     {
         $destination = Destination::factory()->withTravelInfo()->create();
 
@@ -100,13 +126,11 @@ class DestinationTest extends TestCase
 
         $response = $this->put(route('admin.destinations.update', $destination), $updateData);
 
-        $response->assertRedirect(route('admin.destinations.index'));
-        $response->assertSessionHas('success');
+        $response->assertSessionHasErrors('travel_info');
 
         $destination->refresh();
-        $this->assertEquals('GB', $destination->country_code);
-        $this->assertEquals('Wales', $destination->region);
-        $this->assertEquals($travelInfo, $destination->travel_info);
+        $this->assertNotEquals('GB', $destination->country_code);
+        $this->assertNotEquals('Wales', $destination->region);
     }
 
     public function test_admin_can_destroy_a_destination_without_trips(): void

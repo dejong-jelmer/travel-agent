@@ -19,11 +19,4 @@ enum TravelInfo: string
     {
         return 'destination.travel-info.sections';
     }
-
-    // public static function labels(): array
-    // {
-    //     return collect(self::cases())
-    //         ->mapWithKeys(fn (self $section) => [$section->value => $section->label()])
-    //         ->all();
-    // }
 }

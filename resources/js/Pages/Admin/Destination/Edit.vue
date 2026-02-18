@@ -22,7 +22,10 @@ const form = useForm({
 });
 
 function submit() {
-    form.put(route("admin.destinations.update", props.destination));
+    form.transform((data) => ({
+        ...data,
+        travel_info: form.region ? null : form.travel_info,
+    })).put(route("admin.destinations.update", props.destination));
 }
 </script>
 
