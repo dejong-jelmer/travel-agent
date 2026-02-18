@@ -149,12 +149,12 @@ class Trip extends Model
         return Attribute::get(function () {
             /** @var \Illuminate\Database\Eloquent\Collection<int, Destination> $destinations */
             $destinations = $this->destinations;
-            $destinations = $destinations->map(fn (Destination $d) => $d->region ?? $d->name);
+            $names = $destinations->map(fn (Destination $d) => $d->region ?? $d->name);
 
-            return match ($destinations->count()) {
+            return match ($names->count()) {
                 0 => '',
-                1 => $destinations->first(),
-                default => $destinations->slice(0, -1)->implode(', ').' & '.$destinations->last()
+                1 => $names->first(),
+                default => $names->slice(0, -1)->implode(', ').' & '.$names->last()
             };
         });
     }
