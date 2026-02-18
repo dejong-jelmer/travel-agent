@@ -23,4 +23,5 @@ return [
             'climate' => 'Klimaat',
         ],
     ],
+    'needs_fallback' => 'Maak eerst de overkoepelende bestemming zonder regio aan. Een regio kan alleen toegevoegd worden aan een bestaande bestemming,',
 ];

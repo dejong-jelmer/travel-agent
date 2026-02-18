@@ -449,7 +449,7 @@
                 "region": {
                     "label": "Region",
                     "placeholder": "E.g. england, scotland, wales or provence",
-                    "help": "Optional: region code for specific areas within a country"
+                    "help": "Optional: region code for specific areas within a country (create country first)"
                 },
                 "country": {
                     "label": "Country",

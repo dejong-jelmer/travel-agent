@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 const props = defineProps({
     destinations: Object,
     filters: Object,
-    totalDestination: Number,
+    totalDestinations: Number,
 });
 
 const { t } = useI18n();
@@ -25,7 +25,7 @@ const columns = [
             <IconLink v-tippy="t('admin.destinations.actions.create')" icon="Plus" type="info"
                 :href="route('admin.destinations.create')" />
         </div>
-        <template v-if="totalDestination > 0">
+        <template v-if="totalDestinations > 0">
             <DataTable :data="destinations.data" :columns="columns" :links="destinations.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" searchable
                 :search-placeholder="t('admin.destinations.index.search_placeholder')"

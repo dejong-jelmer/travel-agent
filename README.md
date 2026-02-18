@@ -324,7 +324,7 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
   - `status.info` (#0d6efd) - Informatieve states
 
 **Rate Limiting:**
-Custom `frontend-form-actions` limiter: 5 requests/min per IP
+Custom `frontend-form-actions` limiter: 25 requests/min per IP
 Applied to: booking forms, contact forms, newsletter subscriptions
 
 ---
@@ -457,7 +457,7 @@ php artisan view:clear
 ## Contributing
 
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature-amazing-feature`)
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
 3. Run tests: `php artisan test && npx vitest run`
 4. Run code quality checks: `./vendor/bin/pint && ./vendor/bin/phpstan analyse`
 5. Commit changes using conventional commits

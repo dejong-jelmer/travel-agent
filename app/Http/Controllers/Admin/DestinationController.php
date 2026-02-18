@@ -10,6 +10,7 @@ use App\Http\Requests\StoreDestinationRequest;
 use App\Models\Destination;
 use App\Services\CountryService;
 use App\Services\DataTableService;
+use App\Services\DestinatinService;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -32,7 +33,7 @@ class DestinationController extends Controller
 
         return Inertia::render('Admin/Destination/Index', [
             'destinations' => $destinations,
-            'totalDestination' => Destination::count(),
+            'totalDestinations' => Destination::count(),
             'filters' => $this->dataTableService->getSortFilters(Destination::filters()),
             'title' => $this->pageTitle('destination.title_index'),
         ]);
@@ -56,16 +57,16 @@ class DestinationController extends Controller
     public function store(StoreDestinationRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        $needsFallback = ! empty($validated['region']) && ! Destination::fallbackExists($validated['country_code']);
-        if ($needsFallback) {
-            Destination::createFallback($validated);
+
+        if (DestinatinService::fallbackExists($validated)) {
+            return redirect()->route('admin.destinations.index')->with('error', __('destination.needs_fallback'));
         }
 
         Destination::create([
             'country_code' => $validated['country_code'],
             'name' => CountryService::getTranslatedCountryName($validated['country_code']),
             'region' => $validated['region'],
-            'travel_info' => $needsFallback ? null : $validated['travel_info'],
+            'travel_info' => $validated['travel_info'],
         ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.created'));
@@ -91,16 +92,16 @@ class DestinationController extends Controller
     {
         $validated = $request->validated();
 
-        $needsFallback = ! empty($validated['region']) && ! Destination::fallbackExists($validated['country_code']);
-        if ($needsFallback) {
-            Destination::createFallback($validated);
+        // $needsFallback = ! empty($validated['region']) && ! Destination::fallbackExists($validated['country_code']);
+        if (DestinatinService::fallbackExists($validated)) {
+            return redirect()->route('admin.destinations.index')->with('error', __('destination.needs_fallback'));
         }
 
         $destination->update([
             'country_code' => $validated['country_code'],
             'name' => CountryService::getTranslatedCountryName($validated['country_code']),
             'region' => $validated['region'],
-            'travel_info' => $needsFallback ? null : $validated['travel_info'],
+            'travel_info' => $validated['travel_info'],
         ]);
 
         return redirect()->route('admin.destinations.index')->with('success', __('destination.updated'));

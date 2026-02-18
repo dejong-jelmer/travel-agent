@@ -449,7 +449,7 @@
                 "region": {
                     "label": "Regio",
                     "placeholder": "Bijv. engeland, schotland, wales of provence",
-                    "help": "Optioneel: regio code voor specifieke gebieden binnen een land"
+                "help": "Optioneel: regio naam voor specifieke gebieden binnen een land (maak eerst het land aan)"
                 },
                 "country": {
                     "label": "Land",
