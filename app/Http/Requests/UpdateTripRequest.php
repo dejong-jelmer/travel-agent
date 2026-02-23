@@ -26,6 +26,18 @@ class UpdateTripRequest extends FormRequest
         //  Default to empty array's on null
         emptyFormRequestToArray($this, ['highlights', 'items', 'blocked_dates']);
 
+        // Normalize blocked_dates sub-fields: FormData omits empty arrays,
+        // so explicitly default dates and weekdays to [] when absent.
+        $blockedDates = $this->input('blocked_dates');
+        if (is_array($blockedDates)) {
+            $this->merge([
+                'blocked_dates' => [
+                    'dates'    => array_values($blockedDates['dates'] ?? []),
+                    'weekdays' => $blockedDates['weekdays'] ?? [],
+                ],
+            ]);
+        }
+
         $this->merge([
             'slug' => Str::slug($this->slug),
         ]);

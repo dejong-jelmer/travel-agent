@@ -1,6 +1,6 @@
 // Composables/useBooking.js
 import { watch, reactive, readonly, computed, watchEffect } from "vue";
-import { useForm } from "@inertiajs/vue3";
+import { useForm, usePage } from "@inertiajs/vue3";
 
 // Constants buiten state
 export const BOOKING_CONSTRAINTS = readonly({
@@ -167,6 +167,21 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         });
     });
 
+    const page = usePage();
+
+    const constraints = computed(() => {
+        const seasonEnd = page.props.bookingSeasonEnd;
+        let maxDate;
+        if (seasonEnd) {
+            maxDate = new Date(seasonEnd + 'T00:00:00');
+        } else {
+            const d = new Date();
+            d.setFullYear(d.getFullYear() + 1);
+            maxDate = d;
+        }
+        return { maxDate };
+    });
+
     const disabledDates = computed(() => {
         const blocked = trip?.blocked_dates;
         if (!blocked) return null;
@@ -202,7 +217,7 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
 
     return {
         booking,
-        constraints: BOOKING_CONSTRAINTS,
+        constraints,
         disabledDates,
     };
 }

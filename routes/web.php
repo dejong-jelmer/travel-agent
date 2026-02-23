@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\Newsletter\CampaignController;
 use App\Http\Controllers\Admin\Newsletter\SubscriberController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TripController as AdminTripController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
@@ -81,6 +82,10 @@ Route::prefix('admin')
 
         // Destination resource routes
         Route::resource('destinations', DestinationController::class)->except(['show']);
+
+        // Settings routes (singleton resource)
+        Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
 
         // Booking resource routes
         Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);

@@ -441,6 +441,19 @@
                 "update": "Update campaign"
             }
         },
+        "settings": {
+            "heading": "Global Settings",
+            "subheading": "Configure global booking rules",
+            "fields": {
+                "booking_season_end": {
+                    "label": "End of booking season",
+                    "help": "Bookings cannot be made beyond this date. Leave empty for no upper limit."
+                }
+            },
+            "submit": {
+                "update": "Save settings"
+            }
+        },
         "destination": {
             "new_heading": "Create new destination",
             "edit_heading": "Edit destination",
@@ -620,6 +633,7 @@
             "campaigns": "Campaigns",
             "new_campaign": "New Campaigns",
             "home": "Home",
+            "settings": "Settings",
             "logout": "Logout"
         }
     },

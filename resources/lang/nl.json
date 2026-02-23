@@ -441,6 +441,19 @@
                 "update": "Campagne bijwerken"
             }
         },
+        "settings": {
+            "heading": "Globale Instellingen",
+            "subheading": "Configureer globale boekingsregels",
+            "fields": {
+                "booking_season_end": {
+                    "label": "Einde boekingsseizoen",
+                    "help": "Er kunnen geen boekingen worden gemaakt na deze datum. Laat leeg voor geen bovengrens."
+                }
+            },
+            "submit": {
+                "update": "Instellingen opslaan"
+            }
+        },
         "destination": {
             "new_heading": "Nieuwe bestemming aanmaken",
             "edit_heading": "Bestemming bewerken",
@@ -620,6 +633,7 @@
             "campaigns": "Campagnes",
             "new_campaign": "Nieuwe Campagne",
             "home": "Home",
+            "settings": "Instellingen",
             "logout": "Uitloggen"
         }
     },

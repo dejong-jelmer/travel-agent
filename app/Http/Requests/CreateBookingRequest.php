@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Http\Requests\Traits\ValidatesMainBooker;
+use App\Models\Setting;
 use App\Models\Trip;
 use App\Services\Validation\BookingValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
@@ -19,11 +20,17 @@ class CreateBookingRequest extends FormRequest
 
     public function rules(): array
     {
+        $seasonEnd = Setting::get('booking_season_end');
+        $departureDateRules = ['required', 'date', 'after:today'];
+        if ($seasonEnd !== null) {
+            $departureDateRules[] = 'before_or_equal:'.$seasonEnd;
+        }
+
         return array_merge(
             [
                 'trip.id' => ['required', Rule::exists(Trip::class, 'id')],
                 // Selectie datum & bevestiging
-                'departure_date' => ['required', 'date', 'after:today'],
+                'departure_date' => $departureDateRules,
                 'has_confirmed' => ['accepted'],
                 'has_accepted_conditions' => ['accepted'],
                 'travelers.*.*.full_name' => ['required', 'string', 'min:3', 'max:255'],

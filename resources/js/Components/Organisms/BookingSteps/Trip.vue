@@ -53,7 +53,8 @@ const participantSummary = computed(() => {
             <p class="text-right">{{ $t('booking_steps.trip.price_from') }} <strong>€ {{ booking.trip.price_formatted }},-</strong> {{ $t('booking_steps.trip.per_person') }}</p>
 
             <p v-html="$t('booking_steps.trip.choose_date')"></p>
-            <DatePicker v-model="departure_date" :min-date="new Date()" :disabled-dates="disabledDates"
+            <DatePicker v-model="departure_date" :min-date="new Date()" :max-date="constraints?.maxDate ?? null"
+                :disabled-dates="disabledDates"
                 :feedback="booking.errors['departure_date']" @mouseup="booking.clearErrors('departure_date')" />
             <p class="text-right">{{ formattedDate(booking.departure_date) || $t('booking_steps.trip.no_date_chosen') }}</p>
 

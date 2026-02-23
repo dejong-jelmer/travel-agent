@@ -16,7 +16,8 @@ import {
     PlusIcon,
     NewspaperIcon,
     UsersIcon,
-    PencilSquareIcon
+    PencilSquareIcon,
+    Cog6ToothIcon
 } from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 
@@ -134,6 +135,11 @@ const menuGroups = computed(() => [
                 label: t('admin_menu.items.home'),
                 path: new URL(route('home'), window.location.origin).pathname,
                 icon: HomeIcon,
+            },
+            {
+                label: t('admin_menu.items.settings'),
+                path: new URL(route('admin.settings.edit'), window.location.origin).pathname,
+                icon: Cog6ToothIcon,
             },
             {
                 label: t('admin_menu.items.logout'),

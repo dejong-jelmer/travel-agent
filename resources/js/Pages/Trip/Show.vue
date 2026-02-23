@@ -260,7 +260,7 @@ const tabs = computed(() => [
                                     <h3 class="text-xl font-bold text-brand-primary">
                                         {{ t('trip_show.sidebar.book_this_trip') }}
                                     </h3>
-                                    <DatePicker v-model="departure_date" :min-date="new Date()" :disabled-dates="booking.disabledDates.value" />
+                                    <DatePicker v-model="departure_date" :min-date="new Date()" :max-date="booking.constraints.value?.maxDate ?? null" :disabled-dates="booking.disabledDates.value" />
                                     <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
                                         :max-adults="6" :max-children="4" />
                                     <Button @click="bookingModalOpen = true"
