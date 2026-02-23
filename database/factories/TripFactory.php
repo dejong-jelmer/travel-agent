@@ -48,6 +48,14 @@ class TripFactory extends Factory
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
             'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
+            'blocked_dates' => [
+                'dates' => [
+                    now()->addDays(fake()->numberBetween(1, 10))->format('Y-m-d'),
+                    now()->addDays(fake()->numberBetween(10, 30))->format('Y-m-d'),
+                    ['start' => now()->addDays(fake()->numberBetween(40, 80))->format('Y-m-d'), 'end' => now()->addDays(fake()->numberBetween(81, 105))->format('Y-m-d')],
+                ],
+                'weekdays' => [1, 2, 3],
+            ],
         ];
     }
 

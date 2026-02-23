@@ -30,6 +30,7 @@ const form = useForm({
     published_at: new Date(),
     highlights: [],
     items: [],
+    blocked_dates: { dates: [], weekdays: [] },
     practical_info: initializePracticalInfo(),
 });
 

@@ -186,6 +186,10 @@
                 "destinations": {
                     "title": "Destination",
                     "subtitle": "Configure linked destinations"
+                },
+                "availability": {
+                    "title": "Availability",
+                    "subtitle": "Manage blocked dates and weekdays"
                 }
             },
             "fields": {
@@ -226,6 +230,18 @@
                     "label": "Destination",
                     "placeholder": "Select destinations...",
                     "help": "Select the destinations that will be visited during this trip"
+                },
+                "blocked_dates": {
+                    "weekdays_label": "Blocked weekdays",
+                    "weekdays_help": "Select weekdays on which departure is not possible",
+                    "dates_label": "Specific dates",
+                    "dates_help": "Block individual dates or date ranges",
+                    "add_date": "Add date",
+                    "add_range": "Add range",
+                    "range_start": "Start date",
+                    "range_end": "End date",
+                    "confirm": "Add",
+                    "cancel": "Cancel"
                 },
                 "highlights": {
                     "label": "Highlights",
@@ -870,6 +886,13 @@
                 "destinations": {
                     "title": "Linked Destination",
                     "subtitle": "Destinations"
+                },
+                "availability": {
+                    "title": "Availability",
+                    "subtitle": "Blocked dates and weekdays",
+                    "blocked_weekdays": "Blocked weekdays",
+                    "blocked_dates": "Blocked dates",
+                    "no_restrictions": "No restrictions set"
                 }
             },
             "edit": {

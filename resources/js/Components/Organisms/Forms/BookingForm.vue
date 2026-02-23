@@ -10,7 +10,8 @@ import { LoaderCircle } from 'lucide-vue-next'
 
 const props = defineProps({
     booking: { type: Object, required: true },
-    constraints: { type: Object, required: true }
+    constraints: { type: Object, required: true },
+    disabledDates: { type: [Array, Function], default: null },
 });
 
 const booking = toRef(props.booking)
@@ -122,7 +123,7 @@ function handleSubmit() {
                 leave-active-class="transition duration-200 ease" enter-from-class="opacity-0 translate-x-[10px]"
                 leave-to-class="opacity-0 -translate-x-[10px]">
                 <component :is="currentStepComponent" :booking="booking" :constraints="constraints"
-                    v-bind="currentStep.props" />
+                    :disabled-dates="disabledDates" v-bind="currentStep.props" />
             </Transition>
         </div>
         <div class="flex justify-between items-center px-6 py-4 border-t border-accent-sage/20 bg-white">

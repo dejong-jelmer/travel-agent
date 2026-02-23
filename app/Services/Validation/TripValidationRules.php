@@ -107,4 +107,15 @@ class TripValidationRules
             'practical_info.*' => ['nullable', 'string', 'max:1020'],
         ];
     }
+
+    public static function blockedDates(): array
+    {
+        return [
+            'blocked_dates' => ['nullable', 'array'],
+            'blocked_dates.dates' => ['nullable', 'array'],
+            'blocked_dates.dates.*' => ['nullable'],
+            'blocked_dates.weekdays' => ['nullable', 'array'],
+            'blocked_dates.weekdays.*' => ['integer', 'between:0,6'],
+        ];
+    }
 }

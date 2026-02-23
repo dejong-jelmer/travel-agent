@@ -186,6 +186,10 @@
                 "destinations": {
                     "title": "Bestemmingen",
                     "subtitle": "Configureer gekoppelde bestemmingen"
+                },
+                "availability": {
+                    "title": "Beschikbaarheid",
+                    "subtitle": "Beheer geblokkeerde datums en weekdagen"
                 }
             },
             "fields": {
@@ -226,6 +230,18 @@
                     "label": "Bestemmingen",
                     "placeholder": "Selecteer bestemmingen...",
                     "help": "Selecteer de bestemmingen die bezocht worden tijdens deze reis"
+                },
+                "blocked_dates": {
+                    "weekdays_label": "Geblokkeerde weekdagen",
+                    "weekdays_help": "Selecteer weekdagen waarop geen vertrek mogelijk is",
+                    "dates_label": "Specifieke datums",
+                    "dates_help": "Blokkeer individuele datums of periodes",
+                    "add_date": "Datum toevoegen",
+                    "add_range": "Periode toevoegen",
+                    "range_start": "Startdatum",
+                    "range_end": "Einddatum",
+                    "confirm": "Toevoegen",
+                    "cancel": "Annuleren"
                 },
                 "highlights": {
                     "label": "Hoogtepunten",
@@ -870,6 +886,13 @@
                 "destinations": {
                     "title": "Gekoppelde Bestemmingen",
                     "subtitle": "Bestemmingen"
+                },
+                "availability": {
+                    "title": "Beschikbaarheid",
+                    "subtitle": "Geblokkeerde datums en weekdagen",
+                    "blocked_weekdays": "Geblokkeerde weekdagen",
+                    "blocked_dates": "Geblokkeerde datums",
+                    "no_restrictions": "Geen beperkingen ingesteld"
                 }
             },
             "edit": {

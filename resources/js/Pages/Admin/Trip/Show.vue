@@ -2,7 +2,9 @@
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { computed } from 'vue';
 
+const WEEKDAY_LABELS = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za']
 
 const props = defineProps({
     trip: Object,
@@ -12,6 +14,29 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+
+const blockedWeekdays = computed(() =>
+    (props.trip.blocked_dates?.weekdays ?? []).map(Number)
+)
+
+const blockedDates = computed(() =>
+    props.trip.blocked_dates?.dates ?? []
+)
+
+const hasAvailabilityRestrictions = computed(() =>
+    blockedWeekdays.value.length > 0 || blockedDates.value.length > 0
+)
+
+function displayDate(entry) {
+    if (typeof entry === 'string') {
+        return new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(entry + 'T00:00:00'))
+    }
+    if (entry.start && entry.end) {
+        const fmt = (d) => new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d + 'T00:00:00'))
+        return `${fmt(entry.start)} — ${fmt(entry.end)}`
+    }
+    return ''
+}
 </script>
 
 <template>
@@ -274,6 +299,49 @@ const { t } = useI18n();
                                     </Link>
                                 </Pill>
                             </div>
+                        </div>
+                    </section>
+
+                    <!-- Availability Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.availability.title') }}</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.availability.subtitle') }}</p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <template v-if="hasAvailabilityRestrictions">
+                                <div v-if="blockedWeekdays.length">
+                                    <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.availability.blocked_weekdays') }}</label>
+                                    <div class="mt-2 flex flex-wrap gap-2">
+                                        <span
+                                            v-for="day in 7"
+                                            :key="day"
+                                            class="px-3 py-1.5 rounded-md text-sm font-medium border"
+                                            :class="blockedWeekdays.includes(day % 7)
+                                                ? 'bg-status-error/10 border-status-error text-status-error'
+                                                : 'bg-white border-gray-200 text-gray-700/30'"
+                                        >
+                                            {{ WEEKDAY_LABELS[day % 7] }}
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div v-if="blockedDates.length">
+                                    <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.availability.blocked_dates') }}</label>
+                                    <div class="mt-2 space-y-2">
+                                        <div
+                                            v-for="(entry, index) in blockedDates"
+                                            :key="index"
+                                            class="p-2 bg-gray-50 rounded-md border border-gray-200 text-sm text-gray-700"
+                                        >
+                                            {{ displayDate(entry) }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                            <p v-else class="text-sm text-gray-700/30">
+                                {{ t('admin.trips.show.availability.no_restrictions') }}
+                            </p>
                         </div>
                     </section>
                 </div>
