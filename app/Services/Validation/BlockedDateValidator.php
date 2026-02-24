@@ -9,9 +9,9 @@ class BlockedDateValidator
 {
     public function isBlocked(Trip $trip, Carbon $date): bool
     {
-        $blocked  = $trip->blocked_dates;
+        $blocked = $trip->blocked_dates;
         $weekdays = array_map('intval', $blocked['weekdays'] ?? []);
-        $dates    = $blocked['dates'] ?? [];
+        $dates = $blocked['dates'] ?? [];
 
         if (in_array($date->dayOfWeek, $weekdays)) {
             return true;

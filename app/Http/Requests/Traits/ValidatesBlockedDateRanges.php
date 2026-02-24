@@ -15,7 +15,7 @@ trait ValidatesBlockedDateRanges
                 }
 
                 $start = $entry['start'] ?? null;
-                $end   = $entry['end'] ?? null;
+                $end = $entry['end'] ?? null;
 
                 if (! $start || ! $end) {
                     continue;
