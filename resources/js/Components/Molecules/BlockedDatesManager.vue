@@ -1,28 +1,40 @@
 <script setup>
 import { computed, ref } from 'vue'
+import { usePage } from '@inertiajs/vue3';
 import { Plus } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
+import FormFeedback from '../Atoms/FormFeedback.vue'
+import moment from 'moment';
+import { useDateFormatter } from '@/Composables/useDateFormatter'
+
+const { toDateString } = useDateFormatter()
+
 
 const { t } = useI18n()
+const page = usePage();
 
 const props = defineProps({
     modelValue: {
         type: Object,
         default: () => ({ dates: [], weekdays: [] }),
     },
+    errors: {
+        type: Object,
+        default: null
+    }
 })
+
+const locale = computed(() => { return page.props.locale })
 
 const emit = defineEmits(['update:modelValue'])
 
-const WEEKDAYS = [
-    { value: 1, label: 'Ma' },
-    { value: 2, label: 'Di' },
-    { value: 3, label: 'Wo' },
-    { value: 4, label: 'Do' },
-    { value: 5, label: 'Vr' },
-    { value: 6, label: 'Za' },
-    { value: 0, label: 'Zo' },
-]
+const weekdaystranslated = computed(() => {
+    const _locale = locale.value
+    moment.updateLocale(_locale, {
+        weekdaysShort: t('common.weekdays').split('_'),
+    })
+    return moment.weekdaysShort().map((label, index) => ({ value: index, label }))
+})
 
 const dates = computed({
     get: () => props.modelValue?.dates ?? [],
@@ -55,7 +67,7 @@ const rangeEnd = ref(null)
 
 function addDate() {
     if (!newDate.value) return
-    dates.value = [...dates.value, formatDate(newDate.value)]
+    dates.value = [...dates.value, toDateString(newDate.value)]
     newDate.value = null
     showDatePicker.value = false
 }
@@ -63,8 +75,8 @@ function addDate() {
 function addRange() {
     if (!rangeStart.value || !rangeEnd.value) return
     dates.value = [...dates.value, {
-        start: formatDate(rangeStart.value),
-        end: formatDate(rangeEnd.value),
+        start: toDateString(rangeStart.value),
+        end: toDateString(rangeEnd.value),
     }]
     rangeStart.value = null
     rangeEnd.value = null
@@ -77,19 +89,13 @@ function removeDate(index) {
     dates.value = updated
 }
 
-function formatDate(date) {
-    const d = new Date(date)
-    return d.getFullYear() + '-' +
-        String(d.getMonth() + 1).padStart(2, '0') + '-' +
-        String(d.getDate()).padStart(2, '0')
-}
-
 function displayDate(entry) {
+    const _locale = locale.value
     if (typeof entry === 'string') {
-        return new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(entry + 'T00:00:00'))
+        return new Intl.DateTimeFormat(_locale, { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(entry + 'T00:00:00'))
     }
     if (entry.start && entry.end) {
-        const fmt = (d) => new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d + 'T00:00:00'))
+        const fmt = (d) => new Intl.DateTimeFormat(_locale, { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d + 'T00:00:00'))
         return `${fmt(entry.start)} — ${fmt(entry.end)}`
     }
     return ''
@@ -103,16 +109,10 @@ function displayDate(entry) {
             <Label>{{ t('forms.trip.fields.blocked_dates.weekdays_label') }}</Label>
             <p class="text-xs text-gray-700/30 mt-1 mb-3">{{ t('forms.trip.fields.blocked_dates.weekdays_help') }}</p>
             <div class="flex flex-wrap gap-2">
-                <button
-                    v-for="day in WEEKDAYS"
-                    :key="day.value"
-                    type="button"
-                    @click="toggleWeekday(day.value)"
-                    class="px-3 py-1.5 rounded-md text-sm font-medium border transition-colors"
-                    :class="weekdays.includes(day.value)
+                <button v-for="day in weekdaystranslated" :key="day.value" type="button" @click="toggleWeekday(day.value)"
+                    class="px-3 py-1.5 rounded-md text-sm font-medium border transition-colors" :class="weekdays.includes(day.value)
                         ? 'bg-status-error/10 border-status-error text-status-error'
-                        : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300'"
-                >
+                        : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300'">
                     {{ day.label }}
                 </button>
             </div>
@@ -125,31 +125,26 @@ function displayDate(entry) {
 
             <!-- Existing dates list -->
             <div v-if="dates.length" class="space-y-2 mb-3">
-                <div
-                    v-for="(entry, index) in dates"
-                    :key="index"
-                    class="flex items-center justify-between p-2 bg-gray-50 rounded-md border border-gray-200 group"
-                >
-                    <span class="text-sm text-gray-700">{{ displayDate(entry) }}</span>
-                    <DeleteButton @delete="removeDate(index)" />
-                </div>
+                <template v-for="(entry, index) in dates" :key="index">
+                    <div
+                        class="flex items-center justify-between p-2 bg-gray-50 rounded-md border border-gray-200 group">
+                        <span class="text-sm text-gray-700">{{ displayDate(entry) }}</span>
+                        <DeleteButton @delete="removeDate(index)" />
+                    </div>
+                    <FormFeedback v-if="errors[`blocked_dates.dates.${index}`]"
+                        :message="errors[`blocked_dates.dates.${index}`]" />
+                </template>
             </div>
 
             <!-- Add buttons -->
             <div class="flex flex-wrap gap-2">
-                <button
-                    type="button"
-                    @click="showDatePicker = !showDatePicker; showRangePicker = false"
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-default bg-primary-default/5 rounded-md border border-primary-default/20 hover:bg-primary-default/10 transition-colors"
-                >
+                <button type="button" @click="showDatePicker = !showDatePicker; showRangePicker = false"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-default bg-primary-default/5 rounded-md border border-primary-default/20 hover:bg-primary-default/10 transition-colors">
                     <Plus class="w-4 h-4" />
                     {{ t('forms.trip.fields.blocked_dates.add_date') }}
                 </button>
-                <button
-                    type="button"
-                    @click="showRangePicker = !showRangePicker; showDatePicker = false"
-                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-default bg-primary-default/5 rounded-md border border-primary-default/20 hover:bg-primary-default/10 transition-colors"
-                >
+                <button type="button" @click="showRangePicker = !showRangePicker; showDatePicker = false"
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-primary-default bg-primary-default/5 rounded-md border border-primary-default/20 hover:bg-primary-default/10 transition-colors">
                     <Plus class="w-4 h-4" />
                     {{ t('forms.trip.fields.blocked_dates.add_range') }}
                 </button>
@@ -157,7 +152,7 @@ function displayDate(entry) {
 
             <!-- Single date picker -->
             <div v-if="showDatePicker" class="mt-3 p-3 bg-gray-50 rounded-md border border-gray-200 space-y-3">
-                <DatePicker v-model="newDate" />
+                <DatePicker v-model="newDate" :min-date="new Date()" />
                 <div class="flex gap-2">
                     <Button type="button" size="small" @click="addDate" :disabled="!newDate">
                         {{ t('forms.trip.fields.blocked_dates.confirm') }}
@@ -173,7 +168,7 @@ function displayDate(entry) {
                 <div class="grid grid-cols-1 gap-3">
                     <div>
                         <Label>{{ t('forms.trip.fields.blocked_dates.range_start') }}</Label>
-                        <DatePicker v-model="rangeStart" />
+                        <DatePicker v-model="rangeStart" :min-date="new Date()" />
                     </div>
                     <div>
                         <Label>{{ t('forms.trip.fields.blocked_dates.range_end') }}</Label>
@@ -184,7 +179,8 @@ function displayDate(entry) {
                     <Button type="button" size="small" @click="addRange" :disabled="!rangeStart || !rangeEnd">
                         {{ t('forms.trip.fields.blocked_dates.confirm') }}
                     </Button>
-                    <Button type="button" size="small" variant="ghost" @click="showRangePicker = false; rangeStart = null; rangeEnd = null">
+                    <Button type="button" size="small" variant="ghost"
+                        @click="showRangePicker = false; rangeStart = null; rangeEnd = null">
                         {{ t('forms.trip.fields.blocked_dates.cancel') }}
                     </Button>
                 </div>

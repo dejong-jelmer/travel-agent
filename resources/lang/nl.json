@@ -1,6 +1,7 @@
 {
     "common": {
-        "no_results": "Geen resultaten"
+        "no_results": "Geen resultaten",
+        "weekdays": "Zo_Ma_Di_Wo_Do_Vr_Za"
     },
     "button": {
         "email": "E-mail",

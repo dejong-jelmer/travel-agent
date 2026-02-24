@@ -1,6 +1,7 @@
 {
     "common": {
-        "no_results": "No results"
+        "no_results": "No results",
+        "weekdays": "Su_Mo_Tu_We_Th_Fr_Sa"
     },
     "button": {
         "email": "Email",

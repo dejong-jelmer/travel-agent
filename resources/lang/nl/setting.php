@@ -2,5 +2,5 @@
 
 return [
     'title_edit' => 'Instellingen',
-    'updated'    => 'Instellingen zijn opgeslagen',
+    'updated' => 'Instellingen zijn opgeslagen',
 ];

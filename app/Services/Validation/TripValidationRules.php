@@ -24,7 +24,6 @@ class TripValidationRules
             ],
             'description' => ['required', 'string'],
         ], $additions);
-
     }
 
     public static function pricing(): array
@@ -113,7 +112,12 @@ class TripValidationRules
         return [
             'blocked_dates' => ['nullable', 'array'],
             'blocked_dates.dates' => ['nullable', 'array'],
-            'blocked_dates.dates.*' => ['nullable'],
+            'blocked_dates.dates.*' =>
+            Rule::anyOf([
+                ['array', 'in_array_keys:start,end'],
+                ['nullable', 'date', 'after_or_equal:today'],
+            ]),
+
             'blocked_dates.weekdays' => ['nullable', 'array'],
             'blocked_dates.weekdays.*' => ['integer', 'between:0,6'],
         ];

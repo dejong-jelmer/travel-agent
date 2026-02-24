@@ -2,19 +2,29 @@
 
 namespace App\Models;
 
+use App\Enums\SettingKey;
 use Illuminate\Database\Eloquent\Model;
 
 class Setting extends Model
 {
+    public $incrementing = false;
+    public $timestamps = false;
+    protected $primaryKey = 'key';
+    protected $keyType = 'string';
     protected $fillable = ['key', 'value'];
 
-    public static function get(string $key, mixed $default = null): mixed
+    public static function get(SettingKey $key, mixed $default = null): mixed
     {
-        return static::where('key', $key)->value('value') ?? $default;
+        return static::where('key', $key->value)->value('value') ?? $default;
     }
 
-    public static function set(string $key, mixed $value): void
+    public static function set(SettingKey $key, mixed $value): void
     {
-        static::updateOrCreate(['key' => $key], ['value' => $value]);
+        if ($value === null) {
+            static::where('key', $key->value)->delete();
+            return;
+        }
+
+        static::updateOrCreate(['key' => $key->value], ['value' => $value]);
     }
 }

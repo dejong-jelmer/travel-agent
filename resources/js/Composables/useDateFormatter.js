@@ -81,6 +81,13 @@ export function useDateFormatter() {
         });
     };
 
+    function toDateString(date) {
+        const d = new Date(date);
+        return d.getFullYear() + '-' +
+            String(d.getMonth() + 1).padStart(2, '0') + '-' +
+            String(d.getDate()).padStart(2, '0');
+    }
+
     function isValidDate(dateString) {
         if (!dateString || dateString.length !== 10) return false;
         const thisYear = new Date().getFullYear();
@@ -103,6 +110,7 @@ export function useDateFormatter() {
 
     return {
         formattedDate,
+        toDateString,
         normalizeDateFormat,
         initializeBirthdate,
         formatBirthDateInput,

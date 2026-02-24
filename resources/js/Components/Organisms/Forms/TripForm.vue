@@ -272,6 +272,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     <div class="p-6">
                         <BlockedDatesManager
                             :modelValue="form.blocked_dates"
+                            :errors="form.errors"
                             @update:modelValue="val => { form.blocked_dates = { dates: val.dates ?? [], weekdays: val.weekdays ?? [] } }"
                         />
                     </div>

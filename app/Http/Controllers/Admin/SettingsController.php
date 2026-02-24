@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\SettingKey;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\UpdateSettingsRequest;
@@ -19,7 +20,7 @@ class SettingsController extends Controller
         return Inertia::render('Admin/Settings/Edit', [
             'title' => $this->pageTitle('setting.title_edit'),
             'settings' => [
-                'booking_season_end' => Setting::get('booking_season_end'),
+                SettingKey::BookingSeasonEnd->value => Setting::get(SettingKey::BookingSeasonEnd),
             ],
         ]);
     }
@@ -27,7 +28,7 @@ class SettingsController extends Controller
     public function update(UpdateSettingsRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        Setting::set('booking_season_end', $validated['booking_season_end'] ?? null);
+        Setting::set(SettingKey::BookingSeasonEnd, $validated[SettingKey::BookingSeasonEnd->value]);
 
         return redirect()->route('admin.settings.edit')
             ->with('success', __('setting.updated'));

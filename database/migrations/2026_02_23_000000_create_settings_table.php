@@ -9,10 +9,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('settings', function (Blueprint $table) {
-            $table->id();
-            $table->string('key')->unique();
+            $table->string('key')->primary();
             $table->text('value')->nullable();
-            $table->timestamps();
         });
     }
 

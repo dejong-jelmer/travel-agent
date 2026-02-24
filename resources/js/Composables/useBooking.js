@@ -170,7 +170,7 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
     const page = usePage();
 
     const constraints = computed(() => {
-        const seasonEnd = page.props.bookingSeasonEnd;
+        const seasonEnd = page.props.settings?.booking_season_end || null;
         let maxDate;
         if (seasonEnd) {
             maxDate = new Date(seasonEnd + 'T00:00:00');

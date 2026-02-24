@@ -54,7 +54,7 @@ class TripFactory extends Factory
                     now()->addDays(fake()->numberBetween(10, 30))->format('Y-m-d'),
                     ['start' => now()->addDays(fake()->numberBetween(40, 80))->format('Y-m-d'), 'end' => now()->addDays(fake()->numberBetween(81, 105))->format('Y-m-d')],
                 ],
-                'weekdays' => [1, 2, 3],
+                'weekdays' => fake()->randomElements(range(0, 6)),
             ],
         ];
     }

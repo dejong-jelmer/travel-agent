@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\SettingKey;
 use App\Http\Requests\Traits\ValidatesMainBooker;
 use App\Models\Setting;
 use App\Models\Trip;
@@ -20,7 +21,7 @@ class CreateBookingRequest extends FormRequest
 
     public function rules(): array
     {
-        $seasonEnd = Setting::get('booking_season_end');
+        $seasonEnd = Setting::get(SettingKey::BookingSeasonEnd);
         $departureDateRules = ['required', 'date', 'after:today'];
         if ($seasonEnd !== null) {
             $departureDateRules[] = 'before_or_equal:'.$seasonEnd;
