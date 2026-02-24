@@ -4,9 +4,11 @@ namespace Tests\Feature;
 
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
+use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingTraveler;
+use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
 use Carbon\Carbon;
@@ -92,6 +94,142 @@ class BookingTest extends TestCase
         $booking->update(['main_booker_id' => $traveler->id]);
 
         $this->assertTrue($booking->mainBooker->is($traveler));
+    }
+
+    // Blocked dates backend enforcement tests
+
+    public function test_booking_is_rejected_when_departure_date_is_a_blocked_weekday(): void
+    {
+        $nextMonday = now()->next(Carbon::MONDAY);
+
+        $trip = Trip::factory()->create([
+            'blocked_dates' => ['dates' => [], 'weekdays' => [Carbon::MONDAY]],
+        ]);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $nextMonday->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_rejected_when_departure_date_is_a_blocked_specific_date(): void
+    {
+        $blockedDate = now()->addMonth();
+
+        $trip = Trip::factory()->create([
+            'blocked_dates' => ['dates' => [$blockedDate->format('Y-m-d')], 'weekdays' => []],
+        ]);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $blockedDate->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_rejected_when_departure_date_falls_within_a_blocked_range(): void
+    {
+        $rangeStart = now()->addMonth();
+        $rangeEnd = now()->addMonths(2);
+        $dateInRange = now()->addMonth()->addDays(7);
+
+        $trip = Trip::factory()->create([
+            'blocked_dates' => [
+                'dates' => [['start' => $rangeStart->format('Y-m-d'), 'end' => $rangeEnd->format('Y-m-d')]],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $dateInRange->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_accepted_when_departure_date_does_not_match_any_blocked_date(): void
+    {
+        $trip = Trip::factory()->create([
+            'blocked_dates' => [
+                'dates' => [now()->addMonths(3)->format('Y-m-d')],
+                'weekdays' => [Carbon::SUNDAY],
+            ],
+        ]);
+
+        $availableDate = now()->next(Carbon::MONDAY)->addMonths(4);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $availableDate->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    // Booking season end constraint tests
+
+    public function test_booking_is_rejected_when_departure_date_exceeds_season_end(): void
+    {
+        $seasonEnd = now()->addMonths(2);
+        Setting::set(SettingKey::BookingSeasonEnd, $seasonEnd->format('Y-m-d'));
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => $seasonEnd->addDay()->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_accepted_when_departure_date_is_on_season_end(): void
+    {
+        $seasonEnd = now()->addMonths(2);
+        Setting::set(SettingKey::BookingSeasonEnd, $seasonEnd->format('Y-m-d'));
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => $seasonEnd->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_booking_is_accepted_when_departure_date_is_before_season_end(): void
+    {
+        Setting::set(SettingKey::BookingSeasonEnd, now()->addMonths(3)->format('Y-m-d'));
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => now()->addMonth()->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_booking_is_accepted_when_no_season_end_is_set(): void
+    {
+        $payload = $this->generateBookingPayload([
+            'departure_date' => now()->addYear()->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasNoErrors();
     }
 
     // Helper Methods

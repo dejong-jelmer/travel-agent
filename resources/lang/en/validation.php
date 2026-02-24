@@ -13,6 +13,7 @@ return [
         'departure_date.required' => 'Please select a departure date.',
         'departure_date.date' => 'The selected date is invalid.',
         'departure_date.after' => 'The departure date cannot be in the past.',
+        'departure_date.blocked' => 'The selected departure date is not available for this trip.',
         'has_confirmed.accepted' => 'You must still agree.',
         'has_accepted_conditions.accepted' => 'You must still agree to the terms and conditions.',
 

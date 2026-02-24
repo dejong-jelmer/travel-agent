@@ -8,9 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Setting extends Model
 {
     public $incrementing = false;
+
     public $timestamps = false;
+
     protected $primaryKey = 'key';
+
     protected $keyType = 'string';
+
     protected $fillable = ['key', 'value'];
 
     public static function get(SettingKey $key, mixed $default = null): mixed
@@ -22,6 +26,7 @@ class Setting extends Model
     {
         if ($value === null) {
             static::where('key', $key->value)->delete();
+
             return;
         }
 

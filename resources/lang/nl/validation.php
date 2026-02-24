@@ -13,6 +13,7 @@ return [
         'departure_date.required' => 'Selecteer een vertrekdatum.',
         'departure_date.date' => 'De geselecteerde datum is ongeldig.',
         'departure_date.after' => 'De vertrekdatum kan niet in het verleden liggen.',
+        'departure_date.blocked' => 'De geselecteerde vertrekdatum is niet beschikbaar voor deze reis.',
         'has_confirmed.accepted' => 'Je moet nog akkoord gaan.',
         'has_accepted_conditions.accepted' => 'Je moet nog akkoord gaan met de algemene voorwaarde.',
 

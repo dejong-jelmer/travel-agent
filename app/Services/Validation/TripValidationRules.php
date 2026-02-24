@@ -112,8 +112,7 @@ class TripValidationRules
         return [
             'blocked_dates' => ['nullable', 'array'],
             'blocked_dates.dates' => ['nullable', 'array'],
-            'blocked_dates.dates.*' =>
-            Rule::anyOf([
+            'blocked_dates.dates.*' => Rule::anyOf([
                 ['array', 'in_array_keys:start,end'],
                 ['nullable', 'date', 'after_or_equal:today'],
             ]),
