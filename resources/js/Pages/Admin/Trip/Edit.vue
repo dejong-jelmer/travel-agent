@@ -25,6 +25,7 @@ const form = useForm({
     images: props.trip.image_paths ?? [],
     items: props.trip.items ?? [],
     practical_info: initializePracticalInfo(),
+    blocked_dates: JSON.parse(JSON.stringify(props.trip.blocked_dates ?? { dates: [], weekdays: [] })),
 });
 
 function submit() {

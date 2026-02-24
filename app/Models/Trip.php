@@ -49,6 +49,7 @@ class Trip extends Model
         'published_at',
         'highlights',
         'practical_info',
+        'blocked_dates',
         'meta_title',
         'meta_description',
     ];
@@ -65,6 +66,7 @@ class Trip extends Model
         'price' => 'decimal:2',
         'highlights' => 'array',
         'practical_info' => 'array',
+        'blocked_dates' => 'array',
         'published_at' => 'datetime',
         'featured' => 'boolean',
     ];

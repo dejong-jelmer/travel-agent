@@ -263,6 +263,21 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     </div>
                 </section>
 
+                <!-- Availability / Blocked Dates -->
+                <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="border-b border-gray-200 bg-white px-6 py-4">
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.availability.title') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.availability.subtitle') }}</p>
+                    </div>
+                    <div class="p-6">
+                        <BlockedDatesManager
+                            :modelValue="form.blocked_dates"
+                            :errors="form.errors"
+                            @update:modelValue="val => { form.blocked_dates = { dates: val.dates ?? [], weekdays: val.weekdays ?? [] } }"
+                        />
+                    </div>
+                </section>
+
                 <!-- Linked destinations -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">

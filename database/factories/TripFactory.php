@@ -48,6 +48,7 @@ class TripFactory extends Factory
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
             'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
+            'blocked_dates' => null,
         ];
     }
 
@@ -162,6 +163,25 @@ class TripFactory extends Factory
                         $case->value => fake()->text(fake()->numberBetween(50, 250)),
                     ])
                     ->all(),
+            ]);
+        });
+    }
+
+    /**
+     * Update trip with 'blocked_dates'
+     */
+    public function withBlockedDates(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            $trip->update([
+                'blocked_dates' => [
+                    'dates' => [
+                        now()->addDays(fake()->numberBetween(1, 10))->format('Y-m-d'),
+                        now()->addDays(fake()->numberBetween(10, 30))->format('Y-m-d'),
+                        ['start' => now()->addDays(fake()->numberBetween(40, 80))->format('Y-m-d'), 'end' => now()->addDays(fake()->numberBetween(81, 105))->format('Y-m-d')],
+                    ],
+                    'weekdays' => fake()->randomElements(range(0, 6)),
+                ],
             ]);
         });
     }

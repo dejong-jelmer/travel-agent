@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Enums\ModelAction;
 use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
+use App\Models\Setting;
 use App\Responses\BookingResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -42,6 +43,7 @@ class AppServiceProvider extends ServiceProvider
             'adminStats' => fn () => request()->routeIs('admin.*') && Auth::check()
                 ? ['newBookingsCount' => Booking::new()->count()]
                 : null,
+            'settings' => fn () => Setting::pluck('value', 'key')->all(),
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());

@@ -1,6 +1,7 @@
 {
     "common": {
-        "no_results": "No results"
+        "no_results": "No results",
+        "weekdays": "Su_Mo_Tu_We_Th_Fr_Sa"
     },
     "button": {
         "email": "Email",
@@ -186,6 +187,10 @@
                 "destinations": {
                     "title": "Destination",
                     "subtitle": "Configure linked destinations"
+                },
+                "availability": {
+                    "title": "Availability",
+                    "subtitle": "Manage blocked dates and weekdays"
                 }
             },
             "fields": {
@@ -226,6 +231,18 @@
                     "label": "Destination",
                     "placeholder": "Select destinations...",
                     "help": "Select the destinations that will be visited during this trip"
+                },
+                "blocked_dates": {
+                    "weekdays_label": "Blocked weekdays",
+                    "weekdays_help": "Select weekdays on which departure is not possible",
+                    "dates_label": "Specific dates",
+                    "dates_help": "Block individual dates or date ranges",
+                    "add_date": "Add date",
+                    "add_range": "Add range",
+                    "range_start": "Start date",
+                    "range_end": "End date",
+                    "confirm": "Add",
+                    "cancel": "Cancel"
                 },
                 "highlights": {
                     "label": "Highlights",
@@ -425,6 +442,19 @@
                 "update": "Update campaign"
             }
         },
+        "settings": {
+            "heading": "Global Settings",
+            "subheading": "Configure global booking rules",
+            "fields": {
+                "booking_season_end": {
+                    "label": "End of booking season",
+                    "help": "Bookings cannot be made beyond this date. Leave empty for no upper limit."
+                }
+            },
+            "submit": {
+                "update": "Save settings"
+            }
+        },
         "destination": {
             "new_heading": "Create new destination",
             "edit_heading": "Edit destination",
@@ -604,6 +634,7 @@
             "campaigns": "Campaigns",
             "new_campaign": "New Campaigns",
             "home": "Home",
+            "settings": "Settings",
             "logout": "Logout"
         }
     },
@@ -870,6 +901,13 @@
                 "destinations": {
                     "title": "Linked Destination",
                     "subtitle": "Destinations"
+                },
+                "availability": {
+                    "title": "Availability",
+                    "subtitle": "Blocked dates and weekdays",
+                    "blocked_weekdays": "Blocked weekdays",
+                    "blocked_dates": "Blocked dates",
+                    "no_restrictions": "No restrictions set"
                 }
             },
             "edit": {

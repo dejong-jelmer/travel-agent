@@ -1,6 +1,7 @@
 {
     "common": {
-        "no_results": "Geen resultaten"
+        "no_results": "Geen resultaten",
+        "weekdays": "Zo_Ma_Di_Wo_Do_Vr_Za"
     },
     "button": {
         "email": "E-mail",
@@ -186,6 +187,10 @@
                 "destinations": {
                     "title": "Bestemmingen",
                     "subtitle": "Configureer gekoppelde bestemmingen"
+                },
+                "availability": {
+                    "title": "Beschikbaarheid",
+                    "subtitle": "Beheer geblokkeerde datums en weekdagen"
                 }
             },
             "fields": {
@@ -226,6 +231,18 @@
                     "label": "Bestemmingen",
                     "placeholder": "Selecteer bestemmingen...",
                     "help": "Selecteer de bestemmingen die bezocht worden tijdens deze reis"
+                },
+                "blocked_dates": {
+                    "weekdays_label": "Geblokkeerde weekdagen",
+                    "weekdays_help": "Selecteer weekdagen waarop geen vertrek mogelijk is",
+                    "dates_label": "Specifieke datums",
+                    "dates_help": "Blokkeer individuele datums of periodes",
+                    "add_date": "Datum toevoegen",
+                    "add_range": "Periode toevoegen",
+                    "range_start": "Startdatum",
+                    "range_end": "Einddatum",
+                    "confirm": "Toevoegen",
+                    "cancel": "Annuleren"
                 },
                 "highlights": {
                     "label": "Hoogtepunten",
@@ -425,6 +442,19 @@
                 "update": "Campagne bijwerken"
             }
         },
+        "settings": {
+            "heading": "Globale Instellingen",
+            "subheading": "Configureer globale boekingsregels",
+            "fields": {
+                "booking_season_end": {
+                    "label": "Einde boekingsseizoen",
+                    "help": "Er kunnen geen boekingen worden gemaakt na deze datum. Laat leeg voor geen bovengrens."
+                }
+            },
+            "submit": {
+                "update": "Instellingen opslaan"
+            }
+        },
         "destination": {
             "new_heading": "Nieuwe bestemming aanmaken",
             "edit_heading": "Bestemming bewerken",
@@ -604,6 +634,7 @@
             "campaigns": "Campagnes",
             "new_campaign": "Nieuwe Campagne",
             "home": "Home",
+            "settings": "Instellingen",
             "logout": "Uitloggen"
         }
     },
@@ -870,6 +901,13 @@
                 "destinations": {
                     "title": "Gekoppelde Bestemmingen",
                     "subtitle": "Bestemmingen"
+                },
+                "availability": {
+                    "title": "Beschikbaarheid",
+                    "subtitle": "Geblokkeerde datums en weekdagen",
+                    "blocked_weekdays": "Geblokkeerde weekdagen",
+                    "blocked_dates": "Geblokkeerde datums",
+                    "no_restrictions": "Geen beperkingen ingesteld"
                 }
             },
             "edit": {

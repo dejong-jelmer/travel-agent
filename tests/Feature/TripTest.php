@@ -251,6 +251,173 @@ class TripTest extends TestCase
         $this->assertEquals('Tuscany', $trip->destinations_formatted);
     }
 
+    // Blocked dates validation tests
+
+    public function test_trip_update_accepts_a_single_blocked_date(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [now()->addMonth()->format('Y-m-d')],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_trip_update_accepts_a_blocked_date_range(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [
+                    ['start' => now()->addMonth()->format('Y-m-d'), 'end' => now()->addMonths(2)->format('Y-m-d')],
+                ],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_trip_update_accepts_blocked_weekdays(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [],
+                'weekdays' => [0, 6],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_trip_update_accepts_null_blocked_dates(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, ['blocked_dates' => null]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_trip_update_rejects_a_blocked_date_in_the_past(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [now()->subDay()->format('Y-m-d')],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('blocked_dates.dates.0');
+    }
+
+    public function test_trip_update_rejects_invalid_weekday(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [],
+                'weekdays' => [7],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('blocked_dates.weekdays.0');
+    }
+
+    public function test_trip_update_rejects_range_with_end_before_start(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [
+                    ['start' => now()->addMonths(2)->format('Y-m-d'), 'end' => now()->addMonth()->format('Y-m-d')],
+                ],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('blocked_dates.dates.0.end');
+    }
+
+    public function test_trip_update_rejects_range_with_start_in_the_past(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [
+                    ['start' => now()->subDay()->format('Y-m-d'), 'end' => now()->addMonth()->format('Y-m-d')],
+                ],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('blocked_dates.dates.0.start');
+    }
+
+    public function test_trip_update_normalizes_missing_dates_to_empty_array(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => ['weekdays' => [1]],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame([], $trip->refresh()->blocked_dates['dates']);
+    }
+
+    public function test_trip_update_normalizes_missing_weekdays_to_empty_array(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => ['dates' => [now()->addMonth()->format('Y-m-d')]],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame([], $trip->refresh()->blocked_dates['weekdays']);
+    }
+
+    // Helper Methods
+
+    private function generateTripUpdatePayload(Trip $trip, array $overrides = []): array
+    {
+        return array_merge([
+            'name' => $trip->name,
+            'slug' => $trip->slug,
+            'description' => $trip->description,
+            'duration' => $trip->duration,
+            'price' => $trip->price,
+            'published_at' => $trip->published_at->toDateTimeString(),
+            'destinations' => $this->destinations->modelKeys(),
+            'highlights' => ['highlight 1'],
+            'meta_title' => $trip->meta_title,
+            'meta_description' => $trip->meta_description,
+        ], $overrides);
+    }
+
     public function test_admin_can_softdelete_a_trip(): void
     {
         $trip = Trip::factory()->create();
