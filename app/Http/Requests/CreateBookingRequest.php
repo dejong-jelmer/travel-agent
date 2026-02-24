@@ -6,6 +6,7 @@ use App\Enums\SettingKey;
 use App\Http\Requests\Traits\ValidatesMainBooker;
 use App\Models\Setting;
 use App\Models\Trip;
+use App\Services\Validation\BlockedDateValidator;
 use App\Services\Validation\BookingValidationRules;
 use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
@@ -29,35 +30,15 @@ class CreateBookingRequest extends FormRequest
             }
 
             $trip = Trip::find($this->input('trip.id'));
-            $blocked = $trip?->blocked_dates;
-            if (empty($blocked)) {
+
+            if (! $trip || empty($trip->blocked_dates)) {
                 return;
             }
 
             $date = Carbon::parse($this->input('departure_date'));
-            $weekdays = array_map('intval', $blocked['weekdays'] ?? []);
-            $dates = $blocked['dates'] ?? [];
 
-            if (in_array($date->dayOfWeek, $weekdays)) {
+            if ((new BlockedDateValidator)->isBlocked($trip, $date)) {
                 $validator->errors()->add('departure_date', __('validation.custom.departure_date.blocked'));
-
-                return;
-            }
-
-            foreach ($dates as $entry) {
-                if (is_string($entry) && $date->toDateString() === $entry) {
-                    $validator->errors()->add('departure_date', __('validation.custom.departure_date.blocked'));
-
-                    return;
-                }
-
-                if (is_array($entry) && isset($entry['start'], $entry['end'])) {
-                    if ($date->between(Carbon::parse($entry['start']), Carbon::parse($entry['end']))) {
-                        $validator->errors()->add('departure_date', __('validation.custom.departure_date.blocked'));
-
-                        return;
-                    }
-                }
             }
         });
     }
