@@ -33,7 +33,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $settings = Setting::pluck('value', 'key')->all();
         Inertia::share([
             'flash' => function () {
                 return [
@@ -44,7 +43,7 @@ class AppServiceProvider extends ServiceProvider
             'adminStats' => fn () => request()->routeIs('admin.*') && Auth::check()
                 ? ['newBookingsCount' => Booking::new()->count()]
                 : null,
-            'settings' => $settings,
+            'settings' => fn () => Setting::pluck('value', 'key')->all(),
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());
