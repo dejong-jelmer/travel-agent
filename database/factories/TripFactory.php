@@ -48,13 +48,7 @@ class TripFactory extends Factory
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
             'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
-            'blocked_dates' => [
-                'dates' => [
-                    null,
-                    ['start' => null, 'end' => null],
-                ],
-                'weekdays' => fake()->randomElements(range(0, 6)),
-            ],
+            'blocked_dates' => null,
         ];
     }
 

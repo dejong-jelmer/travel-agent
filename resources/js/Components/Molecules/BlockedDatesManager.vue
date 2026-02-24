@@ -1,17 +1,13 @@
 <script setup>
 import { computed, ref } from 'vue'
-import { usePage } from '@inertiajs/vue3';
 import { Plus } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import FormFeedback from '../Atoms/FormFeedback.vue'
-import moment from 'moment';
 import { useDateFormatter } from '@/Composables/useDateFormatter'
 
 const { toDateString } = useDateFormatter()
 
-
-const { t } = useI18n()
-const page = usePage();
+const { t, locale } = useI18n()
 
 const props = defineProps({
     modelValue: {
@@ -24,16 +20,10 @@ const props = defineProps({
     }
 })
 
-const locale = computed(() => { return page.props.locale })
-
 const emit = defineEmits(['update:modelValue'])
 
 const weekdaystranslated = computed(() => {
-    const _locale = locale.value
-    moment.updateLocale(_locale, {
-        weekdaysShort: t('common.weekdays').split('_'),
-    })
-    return moment.weekdaysShort().map((label, index) => ({ value: index, label }))
+    return t('common.weekdays').split('_').map((label, index) => ({ value: index, label }))
 })
 
 const dates = computed({

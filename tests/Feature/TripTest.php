@@ -340,6 +340,40 @@ class TripTest extends TestCase
         $response->assertSessionHasErrors('blocked_dates.weekdays.0');
     }
 
+    public function test_trip_update_rejects_range_with_end_before_start(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [
+                    ['start' => now()->addMonths(2)->format('Y-m-d'), 'end' => now()->addMonth()->format('Y-m-d')],
+                ],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('blocked_dates.dates.0.end');
+    }
+
+    public function test_trip_update_rejects_range_with_start_in_the_past(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'blocked_dates' => [
+                'dates' => [
+                    ['start' => now()->subDay()->format('Y-m-d'), 'end' => now()->addMonth()->format('Y-m-d')],
+                ],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('blocked_dates.dates.0.start');
+    }
+
     public function test_trip_update_normalizes_missing_dates_to_empty_array(): void
     {
         $trip = Trip::factory()->create();

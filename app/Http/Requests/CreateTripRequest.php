@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\Validator;
 
 class CreateTripRequest extends FormRequest
 {
@@ -16,6 +17,38 @@ class CreateTripRequest extends FormRequest
     public function authorize(): bool
     {
         return Auth::user()?->isAdmin() ?? false;
+    }
+
+    public function withValidator(Validator $validator): void
+    {
+        $validator->after(function (Validator $validator) {
+            foreach ($this->input('blocked_dates.dates', []) as $index => $entry) {
+                if (! is_array($entry)) {
+                    continue;
+                }
+
+                $start = $entry['start'] ?? null;
+                $end = $entry['end'] ?? null;
+
+                if (! $start || ! $end) {
+                    continue;
+                }
+
+                if ($validator->errors()->hasAny([
+                    "blocked_dates.dates.{$index}.start",
+                    "blocked_dates.dates.{$index}.end",
+                ])) {
+                    continue;
+                }
+
+                if ($start > $end) {
+                    $validator->errors()->add(
+                        "blocked_dates.dates.{$index}.end",
+                        __('validation.custom.date_range_end')
+                    );
+                }
+            }
+        });
     }
 
     /**

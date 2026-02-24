@@ -116,6 +116,8 @@ class TripValidationRules
                 ['array', 'in_array_keys:start,end'],
                 ['nullable', 'date', 'after_or_equal:today'],
             ]),
+            'blocked_dates.dates.*.start' => ['nullable', 'date', 'after_or_equal:today'],
+            'blocked_dates.dates.*.end' => ['nullable', 'date'],
 
             'blocked_dates.weekdays' => ['nullable', 'array'],
             'blocked_dates.weekdays.*' => ['integer', 'between:0,6'],
