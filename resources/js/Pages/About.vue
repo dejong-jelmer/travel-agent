@@ -26,18 +26,14 @@ const { t, tm } = useI18n()
                         </h1>
                     </div>
 
-                    <div class="grid grid-cols-1 laptop:grid-cols-2 gap-8 laptop:gap-16 items-center mt-12 laptop:mt-16">
-                        <div class="order-last laptop:order-first">
-                            <div class="space-y-4">
-                                <p v-for="(paragraph, i) in tm('about.intro_paragraph')" :key="i"
-                                    class="text-lg laptop:text-xl text-accent-text leading-relaxed">
-                                    {{ paragraph }}
-                                </p>
-                            </div>
-                        </div>
-                        <div class="order-first laptop:order-last">
-                            <img :src="teaserImage" :alt="t('about.image_alt')"
-                                class="w-full h-auto rounded-2xl shadow-lg object-cover" />
+                    <div class="mt-12 laptop:mt-16 overflow-hidden">
+                        <img :src="teaserImage" :alt="t('about.image_alt')"
+                            class="w-full laptop:w-1/2 laptop:float-right laptop:ml-8 laptop:mb-4 mb-6 h-auto rounded-2xl shadow-lg object-cover" />
+                        <div class="space-y-4">
+                            <p v-for="(paragraph, i) in tm('about.intro_paragraph')" :key="i"
+                                class="text-lg laptop:text-xl text-accent-text leading-relaxed">
+                                {{ paragraph }}
+                            </p>
                         </div>
                     </div>
 

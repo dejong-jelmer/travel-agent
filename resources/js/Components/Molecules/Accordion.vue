@@ -2,10 +2,13 @@
 import { ChevronDown } from 'lucide-vue-next';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 
+const props = defineProps({
+    defaultOpen: { type: Boolean, default: true }
+})
 </script>
 
 <template>
-    <Disclosure v-slot="{ open }" defaultOpen>
+    <Disclosure v-slot="{ open }" :defaultOpen="props.defaultOpen">
         <div class="border border-gray-200 rounded-lg overflow-hidden">
             <DisclosureButton
                 class="w-full flex items-center justify-between px-4 py-3 bg-gray-50 hover:bg-gray-100 transition-colors">

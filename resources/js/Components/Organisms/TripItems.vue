@@ -15,9 +15,9 @@ const props = defineProps({
             <template v-for="(categories, type) in tripItems" :key="type">
                 <!-- Type Section (Inclusief/Exclusief) -->
                 <div class="space-y-4">
-                    <h3 class="text-xl tablet:text-2xl font-bold text-brand-primary mb-4">
+                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-4">
                         {{ type }}
-                    </h3>
+                    </h4>
 
                     <!-- Categories within type -->
                     <div v-for="(items, category) in categories" :key="category"

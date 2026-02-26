@@ -1,6 +1,6 @@
 <script setup>
 import { ref, toRef, watch, computed } from 'vue'
-import { Clock, TrainFront, MapPinned, ChevronRight } from 'lucide-vue-next';
+import { Clock, TrainFront, MapPinned, ChevronRight, Map, ListChecks, Info, Globe } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
 import { useI18n } from 'vue-i18n'
 
@@ -26,6 +26,11 @@ const { t } = useI18n()
 
 // Tabs
 const activeTab = ref('itinerary')
+const tabsSection = ref(null)
+const selectTab = (id) => {
+    activeTab.value = id
+    tabsSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
 // Modal
 const bookingModalOpen = ref(false)
 // LigtBox
@@ -54,6 +59,13 @@ const tabs = computed(() => [
     { id: 'practical', label: t('trip_show.tabs.practical') },
     { id: 'general_info', label: t('trip_show.tabs.general_info') }
 ])
+
+const tabIcons = {
+    itinerary: Map,
+    inclusive: ListChecks,
+    practical: Info,
+    general_info: Globe,
+}
 
 </script>
 
@@ -120,7 +132,7 @@ const tabs = computed(() => [
         </template>
         <DecorativeLine />
         <!-- Main Content -->
-        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16">
+        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-24 laptop:pb-0">
             <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">
@@ -160,9 +172,9 @@ const tabs = computed(() => [
                     </div>
 
                     <!-- Tabs Section -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-accent-primary/20 overflow-hidden">
+                    <div ref="tabsSection" class="bg-white rounded-2xl shadow-sm border border-accent-primary/20 overflow-hidden scroll-mt-[125px]">
                         <!-- Tab Headers -->
-                        <div class="border-b border-accent-primary/20">
+                        <div class="hidden laptop:block border-b border-accent-primary/20">
                             <nav class="flex overflow-x-auto">
                                 <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
                                     'flex-1 px-6 py-4 text-center font-medium whitespace-nowrap transition-colors',
@@ -178,18 +190,16 @@ const tabs = computed(() => [
                         <!-- Tab Content -->
                         <div class="p-6 laptop:p-8">
                             <div v-if="activeTab === 'itinerary'" class="space-y-6">
-                                <div class="text-left py-4">
-                                    <div v-if="trip.itineraries?.length" class="text-left space-y-6">
-                                        <template v-for="(itinerary, index) in trip.itineraries" :key="index">
-                                            <TripItinerary :itinerary="itinerary" />
-                                        </template>
-                                    </div>
-                                    <p v-else class="text-brand-light">
-                                        {{ t('trip_show.tab_content.itinerary_empty') }}
-                                    </p>
+                                <div v-if="trip.itineraries?.length" class="space-y-6">
+                                    <template v-for="(itinerary, index) in trip.itineraries" :key="index">
+                                        <TripItinerary :itinerary="itinerary" />
+                                    </template>
                                 </div>
+                                <p v-else class="text-brand-light">
+                                    {{ t('trip_show.tab_content.itinerary_empty') }}
+                                </p>
                             </div>
-                            <div v-else-if="activeTab === 'inclusive'" class="space-y-8">
+                            <div v-else-if="activeTab === 'inclusive'" class="space-y-6">
                                 <TripItems :trip-items="tripItems" />
                             </div>
 
@@ -200,7 +210,7 @@ const tabs = computed(() => [
                                             {{ label }}
                                         </h4>
                                         <div
-                                            class="text-sm tablet:text-base text-brand-primary leading-relaxed whitespace-pre-line">
+                                            class="text-sm tablet:text-base text-accent-text leading-relaxed whitespace-pre-line">
                                             {{ trip.practical_info[key] }}
                                         </div>
                                     </div>
@@ -305,6 +315,29 @@ const tabs = computed(() => [
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Fixed bottom nav: mobile + tablet only -->
+        <div class="fixed bottom-0 left-0 right-0 z-40 laptop:hidden bg-white border-t border-brand-primary/20 shadow-lg">
+            <div class="flex items-center gap-1 px-2 py-2">
+                <button
+                    v-for="tab in tabs"
+                    :key="tab.id"
+                    @click="selectTab(tab.id)"
+                    class="flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg transition-colors"
+                    :class="activeTab === tab.id
+                        ? 'text-brand-primary bg-accent-earth/10'
+                        : 'text-brand-light hover:text-brand-primary'"
+                >
+                    <component :is="tabIcons[tab.id]" class="w-5 h-5" />
+                    <span class="text-xs hidden tablet:inline">{{ tab.label }}</span>
+                </button>
+
+                <Button @click="bookingModalOpen = true" class="shrink-0 flex items-center gap-1 group">
+                    {{ t('trip_show.sidebar.book_now') }}
+                    <ChevronRight class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                </Button>
             </div>
         </div>
     </Layout>
