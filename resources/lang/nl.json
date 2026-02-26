@@ -24,7 +24,7 @@
         "about": "Over ons"
     },
     "trip_card": {
-        "days": "dagen",
+        "days": "reisdagen",
         "sustainable_travel": "Duurzaam reizen",
         "view_trip": "Bekijk reis"
     },
@@ -109,7 +109,7 @@
         "birthdate_placeholder": "DD-MM-JJJJ"
     },
     "usp": {
-        "section_header": "kiezen voor ons",
+        "section_header": "Kiezen voor ons",
         "intro": "Onze unieke aanpak combineert comfort, cultuur en duurzaamheid voor een reiservaring die verder gaat dan toerisme.",
         "sustainable": {
             "title": "Duurzaam",
@@ -479,7 +479,7 @@
                 "region": {
                     "label": "Regio",
                     "placeholder": "Bijv. engeland, schotland, wales of provence",
-                "help": "Optioneel: regio naam voor specifieke gebieden binnen een land (maak eerst het land aan)"
+                    "help": "Optioneel: regio naam voor specifieke gebieden binnen een land (maak eerst het land aan)"
                 },
                 "country": {
                     "label": "Land",
@@ -559,14 +559,7 @@
         }
     },
     "hero": {
-        "title": "Omdat we",
-        "subtitles": [
-            "nooit uitgeleerd zijn",
-            "altijd nieuwsgierig blijven",
-            "ook oog hebben voor de toekomst",
-            "verbonden zijn",
-            "willen blijven ontdekken"
-        ]
+        "title": "Omdat we reizen"
     },
     "footer": {
         "contact": "Contact",
@@ -641,9 +634,23 @@
     "about": {
         "page_title": "Over ons",
         "image_alt": "Historische (trein)reizen in Europa",
-        "intro_paragraph": "Elke reis vertelt een verhaal. Het verhaal van plekken waar geschiedenis tot leven komt — van mensen, culturen en sporen uit het verleden die nog altijd voelbaar zijn.",
-        "coming_soon": "Binnenkort gaan we van start. <strong class=\"font-semibold\">Blijf dichtbij, reis verder.</strong> Laat je meenemen op een reis met betekenis — <strong class=\"font-semibold\">een reis met een verhaal.</strong>",
-        "philosophy": "Wij geloven dat reizen meer mag zijn dan alleen verplaatsen. Het mag raken, inspireren en verbinden. Daarom creëren we <strong class=\"font-semibold\">historische treinreizen door Europa</strong>, duurzaam en bewust, met oog voor mens, natuur en omgeving."
+        "team": {
+            "section_header": "Ontmoet het team",
+            "heading": "De persoon achter jouw reis",
+            "member": {
+                "name": "Jelmer de Jong",
+                "role": "Founder & treinreisspecialist",
+                "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            }
+        },
+        "intro_paragraph": [
+            "Onze missie is om jou een zorgeloze reis te bezorgen waar je met plezier en vervulling op terug zal kijken — lang nadat je weer thuis bent.",
+            "Wij geloven dat reizen meer is dan een bestemming. Het gaat om de mensen die je ontmoet, de culturen die je raken en de verhalen die je meeneemt. Daarom brengen wij reizigers, culturen en verhalen op een duurzame manier bij elkaar, met respect voor de wereld om ons heen en de mensen die er deel van uitmaken.",
+            "Duurzaam reizen is niet alleen weggelegd voor de trein-hobbyist of de overtuigde duurzaamheidsfanaat — het is voor iedereen die wil genieten van een reis die ergens toe bijdraagt. Wij geloven dat duurzaam reizen de toekomst heeft, en de trein is voor ons de logische en vanzelfsprekende keuze. Niet als compromis, maar als de mooiste manier om onderweg te zijn.",
+            "Wij willen dat jij geïnspireerd raakt — door de boeiende verhalen achter een plek, de rijke culturen die je verwelkomen en de prachtige landschappen die aan je voorbijglijden. Maar inspiratie begint pas als je hoofd vrij is. Daarom nemen wij de planning, organisatie en alle zorgen volledig uit handen, zodat jij de ruimte hebt om te genieten van de reis, de bestemming en de mensen met wie je reist.",
+            "Wij zijn pas tevreden als jij rijker thuiskomt dan je vertrok — rijker in ervaringen, inzichten en herinneringen."
+        ],
+        "tagline": "Meer dan een bestemming"
     },
     "home": {
         "our_trips_heading": "Onze reizen",
@@ -660,7 +667,8 @@
         "hero": {
             "from_price": "Vanaf €{price},-",
             "days": "{duration} dagen",
-            "sustainable_travel": "Duurzaam reizen"
+            "sustainable_travel": "Duurzaam reizen",
+            "per_person": "p.p."
         },
         "about_trip": "Over deze reis",
         "tabs": {

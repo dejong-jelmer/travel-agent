@@ -47,7 +47,7 @@ const props = defineProps({
                     <div v-if="itinerary.image?.public_url"
                         class="flex flex-col tablet:flex-row gap-4 items-start tablet:items-center">
                         <div class="flex-1 min-w-0">
-                            <p class="text-brand-primary leading-relaxed text-sm tablet:text-base">
+                            <p class="text-accent-text leading-relaxed text-sm tablet:text-base">
                                 {{ itinerary.description }}
                             </p>
                         </div>
@@ -71,7 +71,7 @@ const props = defineProps({
                 <div class="grid grid-cols-1 tablet:flex flex-wrap gap-4 mb-4">
                     <div v-if="itinerary.activities?.length" class="flex-1 min-w-0">
                         <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
+                            class="text-sm font-medium text-brand-primary mb-2 flex justify-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <Camera class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.activities') }}
                         </h5>
@@ -86,7 +86,7 @@ const props = defineProps({
 
                     <div v-if="itinerary.accommodation" class="flex-1 min-w-0">
                         <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
+                            class="text-sm font-medium text-brand-primary mb-2 flex justify-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <BedDouble class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.accommodation') }}
                         </h5>
@@ -96,7 +96,7 @@ const props = defineProps({
 
                     <div v-if="itinerary.meals?.length" class="flex-1 min-w-0">
                         <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
+                            class="text-sm font-medium text-brand-primary mb-2 flex justify-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <UtensilsCrossed class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.meals') }}
                         </h5>
@@ -112,7 +112,7 @@ const props = defineProps({
                     </div>
                     <div v-if="itinerary.transport?.length" class="flex-1 min-w-0">
                         <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
+                            class="text-sm font-medium text-brand-primary mb-2 flex justify-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <Route class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.transport') }}
                         </h5>

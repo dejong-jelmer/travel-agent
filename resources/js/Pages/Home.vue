@@ -78,7 +78,7 @@ const { t } = useI18n()
                 <div class="absolute inset-0 opacity-5"
                     style="background-image: radial-gradient(circle at 1px 1px, #A3BCCB 1px, transparent 0); background-size: 20px 20px;">
                 </div>
-                <section id="contact" class="max-w-screen-wide laptop:max-w-screen-desktop scroll-mt-12 mx-auto h-auto py-24 px-1 laptop:px-8">
+                <section id="contact" class="max-w-screen-wide laptop:max-w-screen-desktop scroll-mt-12 mx-auto h-auto pt-8 pb-24 px-1 laptop:px-8">
                     <ContactForm :contact="contact" />
                 </section>
             </section>

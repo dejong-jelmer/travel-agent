@@ -38,7 +38,7 @@ const textSizeClass = computed(() => {
 
 <template>
     <div
-        class="bg-accent-primary text-white rounded-full shadow-lg"
+        class="bg-brand-light text-white rounded-full shadow-lg"
         :class="sizeClasses"
     >
         <p class="font-semibold" :class="textSizeClass">

@@ -11,7 +11,7 @@ const props = defineProps({
 
 <template>
     <div class="space-y-6">
-        <template v-if="Object.keys(tripItems).length > 0">
+        <template v-if="tripItems && Object.keys(tripItems).length > 0">
             <template v-for="(categories, type) in tripItems" :key="type">
                 <!-- Type Section (Inclusief/Exclusief) -->
                 <div class="space-y-4">

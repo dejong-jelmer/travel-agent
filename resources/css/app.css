@@ -49,16 +49,10 @@
 }
 
 @font-face {
-    font-family: 'Tahu';
-    src: url('../fonts/Tahu!.ttf') format('truetype');
-    font-weight: normal;
-    font-style: normal;
-}
-
-@font-face {
-    font-family: "SpecialElite";
-    src: url('../fonts/SpecialElite-Regular.ttf') format('truetype');
-    font-weight: 400;
+    font-family: "Caveat";
+    src: url('../fonts/caveat/Caveat-VariableFont_wght.ttf') format('truetype');
+    font-weight: 125 950;
+    font-stretch: 75% 125%;
     font-style: normal;
 }
 
@@ -165,7 +159,7 @@ body {
     }
 
     .section {
-        @apply py-[150px] laptop:py-40 px-2 wide:px-40;
+        @apply pb-[150px] laptop:pb-40 laptop:pt-10 px-2 wide:px-40;
     }
 
     a.email-field:not(.has-icon)>span:nth-child(4) {

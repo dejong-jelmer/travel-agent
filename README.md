@@ -305,13 +305,13 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 *Semantic color system for sustainable travel aesthetic:*
 
 - **Brand Identity**
-  - `brand.primary` (#2f3e46) - Primary dark blue-gray for text and headings
+  - `brand.primary` (#30547e) - Primary dark blue-gray for text and headings
   - `brand.secondary` (#f0f4f7) - Off-white/cream for backgrounds
   - `brand.tertiary` (#ccf6ff) - Light cyan accent
   - `brand.light` (#a3bccb) - Soft blue for subtle text and borders
 
 - **Accent Colors** (Nature/Sustainability focus)
-  - `accent.primary` (#f0972d) - Warm orange for primary CTAs and highlights
+  - `accent.primary` (#f59e0b) - Warm orange for primary CTAs and highlights
   - `accent.sage` (#afcb98) - Sage green for success and eco-friendly elements
   - `accent.earth` (#dcc7aa) - Earth/sand tone for warmth
   - `accent.terracotta` (#b17c65) - Terracotta for contrast and emphasis

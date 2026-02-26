@@ -1,26 +1,32 @@
 <script setup>
-import { useI18n } from 'vue-i18n';
-import { computed } from 'vue';
-import heroImage from '@/../images/hero-image.jpg';
+import { ref, onMounted } from 'vue';
+import heroVideo from '@/../videos/177314-857365374.mp4';
 
-const { tm } = useI18n();
 
-const subtitles = computed(() => {
-    const subs = tm('hero.subtitles');
-    return Array.isArray(subs) ? subs : [];
-});
+const videoRef = ref(null)
+const visible = ref(false)
+
+onMounted(() => {
+    if (videoRef.value) {
+        videoRef.value.playbackRate = 0.5
+    }
+    setTimeout(() => {
+        visible.value = true
+    }, 5000)
+})
 
 </script>
 
 <template>
-    <div class="h-[calc(100vh-140px)] bg-cover bg-top flex text-white px-6" :style="{ backgroundImage: `url(${heroImage})` }">
+    <div class="relative h-[calc(100vh-140px)] flex px-6 overflow-hidden">
+        <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" :src="heroVideo" autoplay
+            muted loop playsinline />
+
         <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-full mx-auto">
-            <div class="absolute top-[35%] tablet:top-[45%]">
-                <h1
-                    class="text-4xl tablet:text-6xl font-normal leading-10 tablet:leading-[72px] font-elite select-none">
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
+                <h1 class="text-[#f4f1ec] font-caveat font-light text-5xl laptop:text-8xl transition-opacity duration-[5000ms] ease-in-out select-none"
+                :class="visible ? 'opacity-100' : 'opacity-0'">
                     {{ $t('hero.title') }}
-                    <br>
-                    <TypewriterText :texts="subtitles" />
                 </h1>
             </div>
         </div>

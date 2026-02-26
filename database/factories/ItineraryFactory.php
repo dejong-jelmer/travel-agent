@@ -35,11 +35,7 @@ class ItineraryFactory extends Factory
             'title' => fake()->randomElement(self::TITLE_PREFIXES).fake()->city(),
             'description' => fake()->paragraph(3),
             'location' => fake()->city().', '.fake()->country(),
-            'activities' => fake()->optional()->randomElements(self::ACTIVITIES, fake()->numberBetween(1, 4)) ?? [],
             'accommodation' => fake()->company().' '.'Hotel',
-            'meals' => fake()->optional()->randomElements(Meal::cases(), fake()->numberBetween(1, 2)) ?? [],
-            'transport' => fake()->optional()->randomElements(Transport::cases(), fake()->numberBetween(1, 4)) ?? [],
-            'remark' => fake()->optional()->randomElement(self::REMARKS),
         ];
     }
 
@@ -49,5 +45,33 @@ class ItineraryFactory extends Factory
             Image::factory()->primary(),
             ImageRelation::Image->value
         );
+    }
+
+    public function withMeals(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'meals' => fake()->optional()->randomElements(Meal::cases(), fake()->numberBetween(1, 2)) ?? [],
+        ]);
+    }
+
+    public function withTransport(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'transport' => fake()->randomElements([Transport::Train, Transport::Ferry], fake()->numberBetween(1, 2)),
+        ]);
+    }
+
+    public function withRemarks(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'remark' => fake()->optional()->randomElement(self::REMARKS),
+        ]);
+    }
+
+    public function withActivities(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'activities' => fake()->optional()->randomElements(self::ACTIVITIES, fake()->numberBetween(1, 4)) ?? [],
+        ]);
     }
 }

@@ -14,7 +14,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                         Prijzen & Offerte
                     </h4>
-                    <p class="text-sm tablet:text-base text-brand-primary leading-relaxed">
+                    <p class="text-sm tablet:text-base text-accent-text leading-relaxed">
                         De vermelde prijzen zijn indicatieve prijzen per persoon. Voor een nauwkeurige berekening
                         op basis van jouw reisdata en gezelschap, vraag je een vrijblijvend reisvoorstel aan.
                         Boek tijdig voor de beste prijzen, vooral tijdens vakantieperiodes.
@@ -33,7 +33,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                         Hoe verloopt de boeking?
                     </h4>
-                    <div class="space-y-3 text-sm tablet:text-base text-brand-primary leading-relaxed">
+                    <div class="space-y-3 text-sm tablet:text-base text-accent-text leading-relaxed">
                         <div class="flex items-start gap-2">
                             <span class="w-6 h-6 bg-accent-earth text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
                             <p>Dien een aanvraag in via het boekingsformulier op deze pagina</p>
@@ -65,7 +65,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                         Betalingsvoorwaarden
                     </h4>
-                    <p class="text-sm tablet:text-base text-brand-primary leading-relaxed">
+                    <p class="text-sm tablet:text-base text-accent-text leading-relaxed">
                         Bij bevestiging betaal je een voorschot. Het resterende bedrag is verschuldigd
                         twee maanden voor vertrek. De hoogte van het voorschot verschilt per reis en
                         staat vermeld in je persoonlijke reisvoorstel.
@@ -84,7 +84,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                         Betaalmethoden
                     </h4>
-                    <p class="text-sm tablet:text-base text-brand-primary leading-relaxed">
+                    <p class="text-sm tablet:text-base text-accent-text leading-relaxed">
                         Je kunt betalen via bankoverschrijving of met je creditcard.
                     </p>
                 </div>
@@ -101,7 +101,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                         Hulp onderweg
                     </h4>
-                    <p class="text-sm tablet:text-base text-brand-primary leading-relaxed">
+                    <p class="text-sm tablet:text-base text-accent-text leading-relaxed">
                         Bij je reisdocumenten ontvang je ons 24/7 bereikbare noodnummer. Hiermee kun je
                         ons altijd bereiken bij problemen of vragen tijdens je reis, ook buiten kantooruren
                         en in het weekend.
@@ -120,11 +120,11 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                         Betalingsgarantie via STO Garant
                     </h4>
-                    <p class="text-sm tablet:text-base text-brand-primary leading-relaxed mb-3">
+                    <p class="text-sm tablet:text-base text-accent-text leading-relaxed mb-3">
                         Al onze reizen zijn verzekerd via STO Garant, een garantieregeling die voldoet
                         aan de Europese Richtlijn Pakketreizen. Dit beschermt jouw betalingen.
                     </p>
-                    <p class="text-sm tablet:text-base text-brand-primary leading-relaxed">
+                    <p class="text-sm tablet:text-base text-accent-text leading-relaxed">
                         Via het derdengeldenprincipe wordt jouw betaling veilig beheerd op een aparte
                         rekening tot de reis is voltooid. Pas daarna wordt het bedrag vrijgegeven.
                         Zo ben je verzekerd van een zorgeloze boeking.

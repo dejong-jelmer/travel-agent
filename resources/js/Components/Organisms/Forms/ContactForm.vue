@@ -44,7 +44,7 @@ function submit() {
 
 <template>
     <div
-        class="grid gap-y-12 laptop:gap-y-24 px-6 tablet:px-24 py-12 tablet:py-24  laptop:border-2 laptop:border-brand-primary/20 laptop:rounded-2xl laptop:shadow-xl backdrop-blur-sm">
+        class="grid gap-y-12 laptop:gap-y-24 px-6 tablet:px-24 py-12 laptop:border-2 laptop:border-brand-primary/20 laptop:rounded-2xl laptop:shadow-xl backdrop-blur-sm">
 
         <!-- Header sectie -->
         <div class="text-center">

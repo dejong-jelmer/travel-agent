@@ -102,6 +102,10 @@ class TripFactory extends Factory
         return $this->afterCreating(function (Trip $trip) {
             Itinerary::factory()
                 ->withImage()
+                ->withMeals()
+                ->withTransport()
+                ->withRemarks()
+                ->withActivities()
                 ->count($trip->duration)
                 ->sequence(fn (Sequence $sequence) => [
                     'order' => $sequence->index + 1,
