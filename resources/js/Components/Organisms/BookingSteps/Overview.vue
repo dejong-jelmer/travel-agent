@@ -18,7 +18,7 @@ const props = defineProps({
 
         <div class="p-6 bg-white rounded-2xl shadow-md space-y-6">
             <!-- Reis -->
-            <section class="w-[80%]">
+            <section class="w-full">
                 <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
                     {{ $t('booking_steps.overview.summary_heading') }}
                 </h2>

@@ -71,17 +71,17 @@ const tabs = computed(() => [
                     </div>
 
                     <!-- Hero Content -->
-                    <div class="absolute bottom-2 left-0 right-0">
+                    <div class="absolute bottom-4 tablet:bottom-8 left-0 right-0">
                         <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
                             <div
-                                class="max-w-5xl p-4 mx-2 laptop:p-8 border border-white rounded-3xl bg-brand-primary/30 backdrop -blur-[2px]">
+                                class="max-w-5xl p-4 tablet:p-6 mx-2 tablet:mx-4 laptop:mx-0 laptop:p-8 border border-white rounded-3xl bg-brand-primary/30 backdrop-blur-[2px]">
                                 <!-- Trip Title -->
-                                <h1 class="text-3xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
+                                <h1 class="text-3xl tablet:text-5xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
                                     {{ trip.name }}
                                 </h1>
 
                                 <!-- Trip Meta Info -->
-                                <div class="flex flex-wrap gap-6 text-white">
+                                <div class="flex flex-wrap gap-3 tablet:gap-6 text-white">
                                     <!-- Price -->
                                     <div
                                         class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full">
@@ -120,7 +120,7 @@ const tabs = computed(() => [
         </template>
         <DecorativeLine />
         <!-- Main Content -->
-        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 py-12 laptop:py-16">
+        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16">
             <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">
@@ -135,7 +135,7 @@ const tabs = computed(() => [
                                 <Slider :items="trip.images">
                                     <template #default="{ item, index }">
                                         <img :src="item.public_url" alt="Trip image"
-                                            class="w-full h-[150px] rounded-md object-cover cursor-zoom-in" :key="index"
+                                            class="w-full h-36 tablet:h-48 rounded-md object-cover cursor-zoom-in" :key="index"
                                             loading="lazy" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>

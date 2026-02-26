@@ -22,7 +22,7 @@ const { t } = useI18n()
                 <div class="absolute top-32 right-24 w-2 h-2 bg-brand-secondary rounded-full"></div>
                 <div class="absolute bottom-24 left-16 w-3 h-3 bg-brand-tertiary rounded-full"></div>
                 <!-- Trips -->
-                <article class="relative py-8 desktop:py-24">
+                <article class="relative py-10 laptop:py-16 desktop:py-24">
                     <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
                         <div class="text-center">
                             <SectionHeader>{{ t('home.our_trips_heading') }}</SectionHeader>
@@ -49,7 +49,7 @@ const { t } = useI18n()
                     </div>
                 </article>
                 <!-- Newsletter -->
-                <article class="relative py-8 desktop:py-24 bg-brand-secondary">
+                <article class="relative bg-brand-secondary">
                     <Newsletter />
                 </article>
             </section>

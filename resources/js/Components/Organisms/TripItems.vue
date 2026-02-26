@@ -36,7 +36,7 @@ const props = defineProps({
                                         class="w-5 h-5"
                                     />
                                 </div>
-                                <span class="text-sm tablet:text-base text-brand-primary leading-relaxed flex-1">
+                                <span class="text-sm tablet:text-base text-accent-text leading-relaxed flex-1">
                                     {{ tripItem.item }}
                                 </span>
                             </li>

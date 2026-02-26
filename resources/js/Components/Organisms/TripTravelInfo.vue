@@ -49,7 +49,7 @@ const getDestinationsWithInfo = (key) => {
                         {{ group.destinations.join(', ') }}
                     </h5>
                     <div
-                        class="text-sm tablet:text-base text-brand-primary leading-relaxed whitespace-pre-line">
+                        class="text-sm tablet:text-base text-accent-text leading-relaxed whitespace-pre-line">
                         {{ group.content }}
                     </div>
                 </div>

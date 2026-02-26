@@ -24,7 +24,7 @@ onMounted(() => {
 
         <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-full mx-auto">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full">
-                <h1 class="text-[#f4f1ec] font-caveat font-light text-5xl laptop:text-8xl transition-opacity duration-[5000ms] ease-in-out select-none"
+                <h1 class="text-[#f4f1ec] font-caveat font-light text-5xl tablet:text-6xl laptop:text-8xl transition-opacity duration-[5000ms] ease-in-out select-none"
                 :class="visible ? 'opacity-100' : 'opacity-0'">
                     {{ $t('hero.title') }}
                 </h1>

@@ -13,7 +13,7 @@ const year = new Date().getFullYear();
       class="max-w-screen-wide laptop:max-w-screen-desktop px-4 pt-16 pb-6 mx-auto tablet:px-6 laptop:pt-24"
     >
       <div
-        class="grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between"
+        class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-12"
       >
         <!-- Logo + Slogan -->
         <div class="text-left">

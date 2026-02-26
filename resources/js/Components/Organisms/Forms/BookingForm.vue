@@ -5,7 +5,14 @@ import Trip from '@/Components/Organisms/BookingSteps/Trip.vue';
 import Travelers from '@/Components/Organisms/BookingSteps/Travelers.vue';
 import Contact from '@/Components/Organisms/BookingSteps/Contact.vue';
 import Overview from '@/Components/Organisms/BookingSteps/Overview.vue';
-import { LoaderCircle } from 'lucide-vue-next'
+import { LoaderCircle, TrainFront, Users, Home, ClipboardList } from 'lucide-vue-next'
+
+const stepIcons = {
+    trip: TrainFront,
+    travelers: Users,
+    contact: Home,
+    overview: ClipboardList,
+}
 
 
 const props = defineProps({
@@ -90,14 +97,15 @@ function handleSubmit() {
             <div class="flex justify-between mb-2 pt-4">
                 <button v-for="(step, index) in stepStates" :key="step.id" type="button" @click="goToStep(index)"
                     :disabled="step.isLocked" :data-testid="`step-button-${step.id}`"
-                    class="text-sm font-medium transition-all relative group" :class="[
+                    class="inline-flex items-center gap-1.5 text-xs tablet:text-sm font-medium transition-all relative group" :class="[
                         step.isActive && 'text-brand-primary font-bold scale-105',
                         step.isCompleted && 'text-accent-primary font-bold',
                         step.isAccessible && !step.isActive && !step.isCompleted && 'text-brand-light hover:text-brand-primary cursor-pointer',
                         step.isLocked && 'text-brand-light/30 cursor-not-allowed'
                     ]">
 
-                    {{ step.label }}
+                    <component :is="stepIcons[step.id]" class="w-5 h-5 shrink-0" />
+                    <span class="hidden tablet:inline">{{ step.label }}</span>
 
                     <!-- Tooltip on hover -->
                     <span v-if="step.isLocked" data-testid="step-tooltip"

@@ -51,7 +51,7 @@ const usps = [
                     {{ $t(usp.titleKey) }}
                 </h3>
 
-                <p class="text-accent-text leading-relaxed min-h-[130px] mb-6 relative">
+                <p class="text-accent-text leading-relaxed mb-6 relative">
                     {{ $t(usp.descriptionKey) }}
                 </p>
                 <div class="flex items-center gap-2.5 pt-4 border-t border-brand-primary/20 relative">

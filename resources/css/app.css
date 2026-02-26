@@ -159,7 +159,7 @@ body {
     }
 
     .section {
-        @apply pb-[150px] laptop:pb-40 laptop:pt-10 px-2 wide:px-40;
+        @apply pb-16 tablet:pb-24 laptop:pb-40 px-4 tablet:px-6 laptop:pt-10 wide:px-40;
     }
 
     a.email-field:not(.has-icon)>span:nth-child(4) {

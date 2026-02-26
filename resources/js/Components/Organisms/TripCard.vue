@@ -10,7 +10,7 @@ console.log(props.trip.transport_modes_formatted);
 </script>
 <template>
     <Card>
-        <div class="h-[55%] min-h-[180px] rounded-t-xl overflow-hidden relative">
+        <div class="h-48 tablet:h-52 rounded-t-xl overflow-hidden relative">
             <Link :href="route('trips.show', trip)">
                 <div class="absolute inset-0 bg-cover bg-center transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
                     :style="`background-image: url(${trip.hero_image?.public_url || placeholder})`"></div>
