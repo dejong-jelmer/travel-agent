@@ -129,6 +129,7 @@ class ItineraryTest extends TestCase
     public function test_admin_can_update_an_existing_itinerary(): void
     {
         $itineraryData = [
+            'trip_id' => $this->trip->id,
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
             'day_from' => fake()->numberBetween(1, 4),

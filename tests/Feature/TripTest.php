@@ -72,7 +72,6 @@ class TripTest extends TestCase
     public function test_admin_can_create_a_new_trip(): void
     {
         $tripData = [
-            'trip_id' => null,
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
@@ -148,7 +147,6 @@ class TripTest extends TestCase
     {
         $trip = Trip::factory()->create();
         $updateData = [
-            'trip_id' => $trip->id,
             'name' => 'Updated trip name',
             'slug' => fake()->slug(),
             'description' => fake()->text(),
