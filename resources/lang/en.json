@@ -29,10 +29,10 @@
         "view_trip": "View trip"
     },
     "trip_itinerary": {
+        "day": "Day",
         "activities": "Activities",
         "accommodation": "Accommodation",
         "accommodation_text": "You will stay at",
-        "meals": "Meals",
         "transport": "Transport"
     },
     "itinerary": {
@@ -191,6 +191,11 @@
                 "availability": {
                     "title": "Availability",
                     "subtitle": "Manage blocked dates and weekdays"
+                },
+                "transport": {
+                    "label": "Transport",
+                    "placeholder": "Select transport...",
+                    "help": "Select the different modes of transportation for this trip"
                 }
             },
             "fields": {
@@ -292,7 +297,7 @@
             },
             "sections": {
                 "basic": {
-                    "subtitle": "Title, location and description of the day"
+                    "subtitle": "Title, day number and description of the day"
                 },
                 "media": {
                     "subtitle": "Upload image for this travel day"
@@ -306,9 +311,14 @@
                     "label": "Day number",
                     "placeholder": "e.g. 1"
                 },
-                "location": {
-                    "label": "Location",
-                    "placeholder": "e.g. Amsterdam"
+                "day_from": {
+                    "label": "Itinerary day",
+                    "placeholder": "Day number or start range",
+                    "help": "Itinerary day or range with end day"
+                },
+                "day_to": {
+                    "label": "Itinerary range end",
+                    "placeholder": "End range"
                 },
                 "title": {
                     "label": "Title",
@@ -330,10 +340,6 @@
                     "change": "Change image",
                     "select": "Select an image"
                 },
-                "transport": {
-                    "label": "Transport",
-                    "placeholder": "Select transport..."
-                },
                 "accommodation": {
                     "label": "Accommodation",
                     "placeholder": "e.g. Hotel Central Amsterdam"
@@ -341,10 +347,6 @@
                 "activities": {
                     "label": "Activities",
                     "placeholder": "e.g. City walk, museum visit"
-                },
-                "meals": {
-                    "label": "Meals",
-                    "placeholder": "Select meals..."
                 },
                 "distance": {
                     "label": "Distance (km)",
@@ -666,8 +668,7 @@
     "trip_show": {
         "hero": {
             "from_price": "From €{price},-",
-            "days": "{duration} days",
-            "sustainable_travel": "Sustainable travel"
+            "days": "{duration} days"
         },
         "about_trip": "About this trip",
         "tabs": {
@@ -915,6 +916,11 @@
                     "blocked_weekdays": "Blocked weekdays",
                     "blocked_dates": "Blocked dates",
                     "no_restrictions": "No restrictions set"
+                },
+                "transport": {
+                    "title": "Transport",
+                    "subtitle": "Used modes of transport",
+                    "empty": "No modes of transport set"
                 }
             },
             "edit": {

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
 use App\Models\Destination;
@@ -71,10 +72,12 @@ class TripTest extends TestCase
     public function test_admin_can_create_a_new_trip(): void
     {
         $tripData = [
+            'trip_id' => null,
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
             'duration' => fake()->randomDigit(),
+            'transport' => [Transport::Train->value],
             'price' => randomPrice(500, 5000),
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [
@@ -95,10 +98,15 @@ class TripTest extends TestCase
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
         $this->assertEquals($tripData['slug'], $trip->slug);
+        $this->assertEquals($tripData['description'], $trip->description);
+        $this->assertEquals($tripData['duration'], $trip->duration);
         $this->assertEquals($tripData['price'], $trip->price);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
         $this->assertTrue($trip->published_at->isSameSecond($tripData['published_at']));
         $this->assertCount(2, $trip->destinations);
+
+        $expectedTransport = collect($tripData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedTransport, $trip->transport);
 
         // Assert hero image with hash-based storage
         $heroImage = $trip->heroImage;
@@ -140,9 +148,11 @@ class TripTest extends TestCase
     {
         $trip = Trip::factory()->create();
         $updateData = [
+            'trip_id' => $trip->id,
             'name' => 'Updated trip name',
             'slug' => fake()->slug(),
             'description' => fake()->text(),
+            'transport' => array_column([Transport::Bus, Transport::Airplane], 'value'),
             'duration' => fake()->randomDigit(),
             'price' => randomPrice(),
             'heroImage' => UploadedFile::fake()->image('updated-featured.jpg'),
@@ -170,6 +180,9 @@ class TripTest extends TestCase
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
         $this->assertEquals($updateData['meta_description'], $trip->meta_description);
+
+        $expectedTransport = collect($updateData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedTransport, $trip->transport);
 
         // Assert featured image with hash-based storage
         $heroImage = $trip->heroImage;

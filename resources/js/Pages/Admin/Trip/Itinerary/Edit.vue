@@ -1,11 +1,8 @@
 <script setup>
-import { ref } from 'vue';
 import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     itinerary: Object,
-    meals: Object,
-    transport: Object,
 });
 
 const form = useForm({
@@ -21,7 +18,7 @@ function submit() {
 <template>
     <Admin>
         <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
-            <ItineraryForm :form="form" :meals="meals" :transport="transport" @submit="submit" />
+            <ItineraryForm :form="form" @submit="submit" />
         </div>
     </Admin>
 </template>

@@ -11,6 +11,7 @@ const props = defineProps({
     destinations: Object,
     form: Object,
     typeOptions: Object,
+    transportOptions: Object,
     categoryOptions: Object,
     practicalSections: Object,
 });
@@ -263,6 +264,39 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     </div>
                 </section>
 
+                <!-- Transport -->
+                <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="border-b border-gray-200 bg-white px-6 py-4">
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.transport.label') }} *</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.transport.help') }}</p>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <Select name="transport" :show-label="false" v-model="form.transport" :multiple="true"
+                            :required="false" :options="transportOptions" :feedback="form.errors.transport"
+                            :placeholder="t('forms.trip.sections.transport.placeholder')" />
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Linked destinations -->
+                <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="border-b border-gray-200 bg-white px-6 py-4">
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.destinations.title') }} *</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.destinations.subtitle') }}</p>
+                    </div>
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <Select name="destination" v-model="form.destinations" :multiple="true" :required="true"
+                                :options="destinationOptions" :feedback="form.errors.destinations"
+                                :placeholder="t('forms.trip.fields.destinations.placeholder')" />
+                            <p class="mt-2 text-xs text-gray-700/30">
+                                {{ t('forms.trip.fields.destinations.help') }}
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
                 <!-- Availability / Blocked Dates -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
@@ -278,23 +312,6 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     </div>
                 </section>
 
-                <!-- Linked destinations -->
-                <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
-                    <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.destinations.title') }}</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.destinations.subtitle') }}</p>
-                    </div>
-                    <div class="p-6 space-y-6">
-                        <div>
-                            <Select name="destination" v-model="form.destinations" :multiple="true" :required="true"
-                                :options="destinationOptions" :feedback="form.errors.destinations"
-                                :placeholder="t('forms.trip.fields.destinations.placeholder')" />
-                            <p class="mt-2 text-xs text-gray-700/30">
-                                {{ t('forms.trip.fields.destinations.help') }}
-                            </p>
-                        </div>
-                    </div>
-                </section>
             </div>
 
         </div>

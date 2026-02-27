@@ -1,6 +1,6 @@
 <script setup>
 import { ref, toRef, watch, computed } from 'vue'
-import { Clock, TrainFront, MapPinned, ChevronRight, Map, ListChecks, Info, Globe } from 'lucide-vue-next';
+import { Clock, TrainFront, MapPinned, ChevronRight, Map, ListChecks, Info, Globe, Route } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
 import { useI18n } from 'vue-i18n'
 
@@ -88,22 +88,24 @@ const tabIcons = {
                             <div
                                 class="max-w-5xl p-4 tablet:p-6 mx-2 tablet:mx-4 laptop:mx-0 laptop:p-8 border border-white rounded-3xl bg-brand-primary/30 backdrop-blur-[2px]">
                                 <!-- Trip Title -->
-                                <h1 class="text-3xl tablet:text-5xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
+                                <h1
+                                    class="text-3xl tablet:text-5xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
                                     {{ trip.name }}
                                 </h1>
 
                                 <!-- Trip Meta Info -->
                                 <div class="flex flex-wrap gap-3 tablet:gap-6 text-white">
                                     <!-- Price -->
-                                    <div
-                                        class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full">
-                                        <span class="text-lg">{{ t('trip_show.hero.from_price', { price: trip.price_formatted })
-                                        }} {{$t('trip_show.hero.per_person')}}</span>
+                                    <div class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full">
+                                        <span class="text-lg">{{ t('trip_show.hero.from_price', {
+                                            price:
+                                                trip.price_formatted
+                                        })
+                                        }} {{ $t('trip_show.hero.per_person') }}</span>
                                     </div>
 
                                     <!-- Duration -->
-                                    <div
-                                        class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
+                                    <div class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
                                         <Clock class="w-5 h-5" />
                                         <span class="font-medium">{{ t('trip_show.hero.days', {
                                             duration: trip.duration
@@ -111,15 +113,18 @@ const tabIcons = {
                                     </div>
 
                                     <!-- Transport -->
-                                    <div
-                                        class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
-                                        <TrainFront class="w-5 h-5" />
-                                        <span class="font-medium">{{ t('trip_show.hero.sustainable_travel') }}</span>
+                                    <div class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
+                                        <Route class="h-5 w-5 flex-none" />
+                                        <EnumIcon v-for="mode in trip.transport_formatted.slice(0, 4)" :key="mode.value"
+                                            :enum="mode.value" v-tippy="mode.label"
+                                            class="text-white w-4 h-4 flex-none" />
+                                        <span v-if="trip.transport_formatted.length > 4" class="text-xs text-white">
+                                            +{{ trip.transport_formatted.length - 4 }}
+                                        </span>
                                     </div>
 
                                     <!-- Destination -->
-                                    <div
-                                        class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
+                                    <div class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
                                         <MapPinned class="w-5 h-5" />
                                         <span class="font-medium">{{ trip.destinations_formatted }}</span>
                                     </div>
@@ -132,7 +137,8 @@ const tabIcons = {
         </template>
         <DecorativeLine />
         <!-- Main Content -->
-        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-24 laptop:pb-0">
+        <div
+            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-24 laptop:pb-0">
             <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">
@@ -147,8 +153,8 @@ const tabIcons = {
                                 <Slider :items="trip.images">
                                     <template #default="{ item, index }">
                                         <img :src="item.public_url" alt="Trip image"
-                                            class="w-full h-36 tablet:h-48 rounded-md object-cover cursor-zoom-in" :key="index"
-                                            loading="lazy" @click="openLightbox(index)" />
+                                            class="w-full h-36 tablet:h-48 rounded-md object-cover cursor-zoom-in"
+                                            :key="index" loading="lazy" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
@@ -172,7 +178,8 @@ const tabIcons = {
                     </div>
 
                     <!-- Tabs Section -->
-                    <div ref="tabsSection" class="bg-white rounded-2xl shadow-sm border border-accent-primary/20 overflow-hidden scroll-mt-[125px]">
+                    <div ref="tabsSection"
+                        class="bg-white rounded-2xl shadow-sm border border-accent-primary/20 overflow-hidden scroll-mt-[125px]">
                         <!-- Tab Headers -->
                         <div class="hidden laptop:block border-b border-accent-primary/20">
                             <nav class="flex overflow-x-auto">
@@ -224,10 +231,8 @@ const tabIcons = {
                             </div>
 
                             <div v-else-if="activeTab === 'general_info'" class="space-y-2">
-                                <TripTravelInfo
-                                    :destinations="trip.destinations"
-                                    :travel-info-sections="travelInfoSections"
-                                />
+                                <TripTravelInfo :destinations="trip.destinations"
+                                    :travel-info-sections="travelInfoSections" />
                             </div>
                         </div>
                     </div>
@@ -250,19 +255,21 @@ const tabIcons = {
                                 <div class="space-y-4">
                                     <div class="flex justify-between items-center">
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.from') }}</span>
-                                        <span class="font-medium text-accent-text"><strong> €{{ trip.price_formatted }},-
+                                        <span class="font-medium text-brand-primary"><strong> € {{ trip.price_formatted
+                                        }},-
                                             </strong> {{ t('trip_show.sidebar.per_person') }}</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.duration') }}</span>
-                                        <span class="font-medium text-accent-text">{{ trip.duration }}
+                                        <span class="font-medium text-brand-primary">{{ trip.duration }}
                                             {{ t('trip_show.sidebar.days_label') }}</span>
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.transport') }}</span>
                                         <span class="font-medium text-accent-text flex items-center gap-1">
-                                            <TrainFront class="w-5 h-5" />
-                                            {{ t('trip_show.sidebar.train') }}
+                                            <EnumIcon v-for="mode in trip.transport_formatted" :key="mode.value"
+                                                :enum="mode.value" v-tippy="mode.label"
+                                                class="text-brand-primary w-4 h-4 flex-none" />
                                         </span>
                                     </div>
                                 </div>
@@ -270,7 +277,9 @@ const tabIcons = {
                                     <h3 class="text-xl font-bold text-brand-primary">
                                         {{ t('trip_show.sidebar.book_this_trip') }}
                                     </h3>
-                                    <DatePicker v-model="departure_date" :min-date="new Date()" :max-date="booking.constraints.value?.maxDate ?? null" :disabled-dates="booking.disabledDates.value" />
+                                    <DatePicker v-model="departure_date" :min-date="new Date()"
+                                        :max-date="booking.constraints.value?.maxDate ?? null"
+                                        :disabled-dates="booking.disabledDates.value" />
                                     <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
                                         :max-adults="6" :max-children="4" />
                                     <Button @click="bookingModalOpen = true"
@@ -319,17 +328,13 @@ const tabIcons = {
         </div>
 
         <!-- Fixed bottom nav: mobile + tablet only -->
-        <div class="fixed bottom-0 left-0 right-0 z-40 laptop:hidden bg-white border-t border-brand-primary/20 shadow-lg">
+        <div
+            class="fixed bottom-0 left-0 right-0 z-40 laptop:hidden bg-white border-t border-brand-primary/20 shadow-lg">
             <div class="flex items-center gap-1 px-2 py-2">
-                <button
-                    v-for="tab in tabs"
-                    :key="tab.id"
-                    @click="selectTab(tab.id)"
-                    class="flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg transition-colors"
-                    :class="activeTab === tab.id
+                <button v-for="tab in tabs" :key="tab.id" @click="selectTab(tab.id)"
+                    class="flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg transition-colors" :class="activeTab === tab.id
                         ? 'text-brand-primary bg-accent-earth/10'
-                        : 'text-brand-light hover:text-brand-primary'"
-                >
+                        : 'text-brand-light hover:text-brand-primary'">
                     <component :is="tabIcons[tab.id]" class="w-5 h-5" />
                     <span class="text-xs hidden tablet:inline">{{ tab.label }}</span>
                 </button>
@@ -342,6 +347,7 @@ const tabIcons = {
         </div>
     </Layout>
     <Modal :open="bookingModalOpen" @close="bookingModalOpen = false">
-        <BookingForm :booking="booking.booking" :constraints="booking.constraints" :disabled-dates="booking.disabledDates.value" />
+        <BookingForm :booking="booking.booking" :constraints="booking.constraints"
+            :disabled-dates="booking.disabledDates.value" />
     </Modal>
 </template>

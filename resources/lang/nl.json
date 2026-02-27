@@ -29,10 +29,10 @@
         "view_trip": "Bekijk reis"
     },
     "trip_itinerary": {
+        "day": "Dag",
         "activities": "Activiteiten",
         "accommodation": "Overnachting",
         "accommodation_text": "U verblijft in het",
-        "meals": "Maaltijden",
         "transport": "Vervoer"
     },
     "itinerary": {
@@ -191,6 +191,11 @@
                 "availability": {
                     "title": "Beschikbaarheid",
                     "subtitle": "Beheer geblokkeerde datums en weekdagen"
+                },
+                "transport": {
+                    "label": "Vervoer",
+                    "placeholder": "Selecteer vervoer...",
+                    "help": "Selecteer de verschillende type van vervoer voor deze reis"
                 }
             },
             "fields": {
@@ -292,7 +297,7 @@
             },
             "sections": {
                 "basic": {
-                    "subtitle": "Titel, locatie en omschrijving van de dag"
+                    "subtitle": "Titel, reisdag nummer en omschrijving van de dag"
                 },
                 "media": {
                     "subtitle": "Upload afbeelding voor deze reisdag"
@@ -306,9 +311,14 @@
                     "label": "Dagnummer",
                     "placeholder": "bijv. 1"
                 },
-                "location": {
-                    "label": "Locatie",
-                    "placeholder": "bijv. Amsterdam"
+                "day_from": {
+                    "label": "Reisdag",
+                    "placeholder": "Dagnummer of start reeks",
+                    "help": "Vul reisdag of reeks met einddag"
+                },
+                "day_to": {
+                    "label": "Reisdagen reeks einde",
+                    "placeholder": "Eind reeks"
                 },
                 "title": {
                     "label": "Titel",
@@ -330,10 +340,6 @@
                     "change": "Afbeelding wijzigen",
                     "select": "Selecteer een afbeelding"
                 },
-                "transport": {
-                    "label": "Vervoer",
-                    "placeholder": "Selecteer vervoer..."
-                },
                 "accommodation": {
                     "label": "Verblijf",
                     "placeholder": "bijv. Hotel Central Amsterdam"
@@ -341,10 +347,6 @@
                 "activities": {
                     "label": "Activiteiten",
                     "placeholder": "bijv. Stadswandeling, museumbezoek"
-                },
-                "meals": {
-                    "label": "Maaltijden",
-                    "placeholder": "Selecteer maaltijden..."
                 },
                 "distance": {
                     "label": "Afstand (km)",
@@ -667,7 +669,6 @@
         "hero": {
             "from_price": "Vanaf €{price},-",
             "days": "{duration} dagen",
-            "sustainable_travel": "Duurzaam reizen",
             "per_person": "p.p."
         },
         "about_trip": "Over deze reis",
@@ -916,6 +917,11 @@
                     "blocked_weekdays": "Geblokkeerde weekdagen",
                     "blocked_dates": "Geblokkeerde datums",
                     "no_restrictions": "Geen beperkingen ingesteld"
+                },
+                "transport": {
+                    "title": "Vervoer",
+                    "subtitle": "Gebruikte vervoersmiddelen",
+                    "empty": "Geen vervoersmiddelen ingesteld"
                 }
             },
             "edit": {

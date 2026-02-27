@@ -25,7 +25,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection $image_paths
  * @property string $destinations_formatted
  * @property Image|null $heroImage
- * @property array $transport_modes_formatted
+ * @property array $transport_formatted
  */
 class Trip extends Model
 {
@@ -47,6 +47,7 @@ class Trip extends Model
         'description',
         'price',
         'duration',
+        'transport',
         'featured',
         'published_at',
         'highlights',
@@ -62,11 +63,12 @@ class Trip extends Model
         'destinations_formatted',
         'published_at_formatted',
         'og_image_url',
-        'transport_modes_formatted',
+        'transport_formatted',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'transport' => 'array',
         'highlights' => 'array',
         'practical_info' => 'array',
         'blocked_dates' => 'array',
@@ -255,6 +257,23 @@ class Trip extends Model
     }
 
     /**
+     * Get transport modes with translated labels.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array, never>
+     */
+    public function transportFormatted(): Attribute
+    {
+        return Attribute::get(
+            fn () => collect($this->transport ?? [])
+                ->map(fn (string $value) => [
+                    'value' => $value,
+                    'label' => Transport::from($value)->label(),
+                ])
+                ->toArray()
+        );
+    }
+
+    /**
      * Get the trip highlights
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
@@ -295,25 +314,5 @@ class Trip extends Model
             },
             set: fn ($value) => json_encode($value ?? [])
         );
-    }
-
-    /**
-     * Get all unique modes of transports from Itinerary
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{value: string, label: string}>, never>
-     */
-    public function transportModesFormatted(): Attribute
-    {
-        return Attribute::get(function () {
-            return $this->itineraries
-                ->flatMap(fn ($itinerary) => $itinerary->transport ?? [])
-                ->unique(fn ($transport) => $transport->value)
-                ->map(fn (Transport $transport) => [
-                    'value' => $transport->value,
-                    'label' => $transport->label(),
-                ])
-                ->values()
-                ->all();
-        });
     }
 }

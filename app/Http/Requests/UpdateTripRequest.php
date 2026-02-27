@@ -27,7 +27,7 @@ class UpdateTripRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         //  Default to empty array's on null
-        emptyFormRequestToArray($this, ['highlights', 'items', 'blocked_dates']);
+        emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'blocked_dates']);
 
         // Normalize blocked_dates sub-fields: FormData omits empty arrays,
         // so explicitly default dates and weekdays to [] when absent.
@@ -61,6 +61,7 @@ class UpdateTripRequest extends FormRequest
             TripValidationRules::settings(),
             TripValidationRules::seo(),
             TripValidationRules::destinations(),
+            TripValidationRules::transport(),
             TripValidationRules::heroImageUpdate(),
             TripValidationRules::imagesUpdate(),
             TripValidationRules::items(),

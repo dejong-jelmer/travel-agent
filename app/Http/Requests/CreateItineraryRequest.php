@@ -17,12 +17,12 @@ class CreateItineraryRequest extends FormRequest
     }
 
     /**
-     * Prepare the request for validation, default to empty array on null
+     * Prepare the request for validation
      */
     protected function prepareForValidation(): void
     {
         //  Default to empty array's on null
-        emptyFormRequestToArray($this, ['meals', 'transport']);
+        emptyFormRequestToArray($this, 'activities');
     }
 
     /**
@@ -35,7 +35,6 @@ class CreateItineraryRequest extends FormRequest
         return array_merge(
             ItineraryValidationRules::basic(),
             ItineraryValidationRules::details(),
-            ItineraryValidationRules::options(),
             ItineraryValidationRules::imageCreate(),
         );
     }

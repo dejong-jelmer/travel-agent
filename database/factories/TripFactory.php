@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\ImageRelation;
+use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
 use App\Models\Destination;
@@ -102,8 +103,6 @@ class TripFactory extends Factory
         return $this->afterCreating(function (Trip $trip) {
             Itinerary::factory()
                 ->withImage()
-                ->withMeals()
-                ->withTransport()
                 ->withRemarks()
                 ->withActivities()
                 ->count($trip->duration)
@@ -112,6 +111,16 @@ class TripFactory extends Factory
                 ])
                 ->create(['trip_id' => $trip->id]);
         });
+    }
+
+    /**
+     * Add mode of transport to Trip
+     */
+    public function withTransport(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'transport' => fake()->randomElements([Transport::Train, Transport::Ferry], fake()->numberBetween(1, 2)),
+        ]);
     }
 
     /**

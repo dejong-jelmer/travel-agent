@@ -5,6 +5,7 @@ const props = defineProps({
     destinations: Object,
     typeOptions: Object,
     categoryOptions: Object,
+    transportOptions: Object,
     practicalSections: Object,
 });
 
@@ -23,6 +24,7 @@ const form = useForm({
     description: "",
     price: "",
     duration: "",
+    transport: [],
     destinations: [],
     heroImage: null,
     images: [],
@@ -46,6 +48,7 @@ function submit() {
             :destinations="destinations"
             :type-options="typeOptions"
             :category-options="categoryOptions"
+            :transport-options="transportOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

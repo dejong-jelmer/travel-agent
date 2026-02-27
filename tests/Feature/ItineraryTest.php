@@ -2,8 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Enums\Meal;
-use App\Enums\Transport;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
@@ -86,10 +84,9 @@ class ItineraryTest extends TestCase
         $itineraryData = [
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
-            'location' => fake()->city.', '.fake()->country(),
+            'day_from' => fake()->numberBetween(1, 4),
+            'day_to' => fake()->optional()->numberBetween(5, 8),
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
-            'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
-            'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
             'remark' => fake()->words(10, true),
         ];
 
@@ -102,14 +99,9 @@ class ItineraryTest extends TestCase
 
         $this->assertEquals($itineraryData['title'], $itinerary->title);
         $this->assertEquals($itineraryData['description'], $itinerary->description);
-        $this->assertEquals($itineraryData['location'], $itinerary->location);
+        $this->assertEquals($itineraryData['day_from'], $itinerary->day_from);
+        $this->assertEquals($itineraryData['day_to'], $itinerary->day_to);
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
-
-        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meal::from($meal)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
-
-        $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
         $image = $itinerary->image;
         $this->assertNotNull($image);
@@ -139,10 +131,9 @@ class ItineraryTest extends TestCase
         $itineraryData = [
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
-            'location' => fake()->city.', '.fake()->country(),
+            'day_from' => fake()->numberBetween(1, 4),
+            'day_to' => fake()->optional()->numberBetween(5, 8),
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
-            'meals' => fake()->randomElements(array_column(Meal::cases(), 'value'), rand(1, 2)),
-            'transport' => fake()->randomElements(array_column(Transport::cases(), 'value'), rand(1, 4)),
             'remark' => fake()->words(10, true),
         ];
 
@@ -153,14 +144,9 @@ class ItineraryTest extends TestCase
 
         $this->assertEquals($itineraryData['title'], $itinerary->title);
         $this->assertEquals($itineraryData['description'], $itinerary->description);
-        $this->assertEquals($itineraryData['location'], $itinerary->location);
+        $this->assertEquals($itineraryData['day_from'], $itinerary->day_from);
+        $this->assertEquals($itineraryData['day_to'], $itinerary->day_to);
         $this->assertEquals($itineraryData['remark'], $itinerary->remark);
-
-        $expectedMeals = collect($itineraryData['meals'])->map(fn ($meal) => Meal::from($meal)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedMeals, array_map(fn ($m) => $m->value, $itinerary->meals));
-
-        $expectedTransport = collect($itineraryData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
-        $this->assertEqualsCanonicalizing($expectedTransport, array_map(fn ($t) => $t->value, $itinerary->transport));
 
         $image = $itinerary->image;
         $this->assertNotNull($image);

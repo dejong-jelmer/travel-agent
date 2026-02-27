@@ -2,6 +2,7 @@
 
 namespace App\Services\Validation;
 
+use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Services\Traits\MergesRules;
@@ -55,6 +56,18 @@ class TripValidationRules
     {
         return [
             'destinations' => ['required', 'array'],
+        ];
+    }
+
+    public static function transport(): array
+    {
+        return [
+            'transport' => ['array'],
+            'transport.*' => [
+                'required',
+                'string',
+                Rule::enum(Transport::class),
+            ],
         ];
     }
 

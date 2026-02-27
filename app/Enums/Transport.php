@@ -19,6 +19,6 @@ enum Transport: string
 
     protected function getLabelKey(): string
     {
-        return 'itinerary.transport';
+        return 'trip.transport';
     }
 }

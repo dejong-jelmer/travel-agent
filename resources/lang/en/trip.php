@@ -71,4 +71,14 @@ return [
             ],
         ],
     ],
+
+    // Transport
+    'transport' => [
+        'train' => 'Train',
+        'ferry' => 'Ferry',
+        'bus' => 'Bus',
+        'taxi' => 'Taxi',
+        'transfer' => 'Transfer',
+        'airplane' => 'Airplane',
+    ],
 ];

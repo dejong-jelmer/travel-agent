@@ -3,8 +3,6 @@
 namespace Database\Factories;
 
 use App\Enums\ImageRelation;
-use App\Enums\Meal;
-use App\Enums\Transport;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -15,7 +13,7 @@ class ItineraryFactory extends Factory
 {
     private const TITLE_PREFIXES = ['Aankomst in ', 'Verblijf in ', 'Vertrek uit '];
 
-    private const ACTIVITIES = ['Check-in hotel', 'Stadswandeling', 'Museumbezoek', 'Fietstocht', 'Boottocht'];
+    private const ACTIVITIES = ['Stadswandeling', 'Museumbezoek', 'Fietstocht', 'Boottocht'];
 
     private const REMARKS = [
         'Museum toegang niet inbegrepen in de prijs',
@@ -34,7 +32,9 @@ class ItineraryFactory extends Factory
         return [
             'title' => fake()->randomElement(self::TITLE_PREFIXES).fake()->city(),
             'description' => fake()->paragraph(3),
-            'location' => fake()->city().', '.fake()->country(),
+            // @todo: ask Claude to create an icrementing day number
+            'day_from' => fake()->numberBetween(1, 4),
+            'day_to' => fake()->optional()->numberBetween(5, 8),
             'accommodation' => fake()->company().' '.'Hotel',
         ];
     }
@@ -47,24 +47,10 @@ class ItineraryFactory extends Factory
         );
     }
 
-    public function withMeals(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'meals' => fake()->optional()->randomElements(Meal::cases(), fake()->numberBetween(1, 2)) ?? [],
-        ]);
-    }
-
-    public function withTransport(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'transport' => fake()->randomElements([Transport::Train, Transport::Ferry], fake()->numberBetween(1, 2)),
-        ]);
-    }
-
     public function withRemarks(): static
     {
         return $this->state(fn (array $attributes) => [
-            'remark' => fake()->optional()->randomElement(self::REMARKS),
+            'remark' => fake()->optional(0.1)->randomElement(self::REMARKS),
         ]);
     }
 

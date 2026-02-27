@@ -2,10 +2,6 @@
 
 namespace App\Models;
 
-use App\Casts\MealCast;
-use App\Casts\TransportCast;
-use App\Enums\Meal;
-use App\Enums\Transport;
 use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -14,8 +10,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property Trip $trip
- * @property array $meals_formatted
- * @property array $transport_formatted
  */
 class Itinerary extends Model
 {
@@ -26,25 +20,17 @@ class Itinerary extends Model
     protected $fillable = [
         'trip_id',
         'title',
-        'location',
+        'day_from',
+        'day_to',
         'description',
         'accommodation',
         'activities',
-        'meals',
-        'transport',
         'remark',
         'order',
     ];
 
     protected $casts = [
         'activities' => 'array',
-        'meals' => MealCast::class,
-        'transport' => TransportCast::class,
-    ];
-
-    protected $appends = [
-        'meals_formatted',
-        'transport_formatted',
     ];
 
     protected static function boot()
@@ -79,48 +65,23 @@ class Itinerary extends Model
         }
     }
 
+    /**
+     * Get the itinerary activities
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
     protected function activities(): Attribute
     {
         return Attribute::make(
             set: fn ($value) => ! is_null($value)
                 ? json_encode(
-                    ! is_array($value)
-                        ? array_map('trim', explode(',', $value))
-                        : $value
+                    collect(
+                        ! is_array($value)
+                            ? array_map('trim', explode(',', $value))
+                            : $value,
+                    )->filter(fn ($item) => ! is_null($item) && $item !== '')->values()->all()
                 )
                 : '[]'
         );
-    }
-
-    /**
-     * Get a formatted transport.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array, never>
-     */
-    public function transportFormatted(): Attribute
-    {
-        return Attribute::get(fn () => $this->formatEnumAttribute('transport', Transport::class));
-    }
-
-    /**
-     * Get a formatted meals.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array, never>
-     */
-    public function mealsFormatted(): Attribute
-    {
-        return Attribute::get(fn () => $this->formatEnumAttribute('meals', Meal::class));
-    }
-
-    private function formatEnumAttribute(string $attribute, string $enumClass): array
-    {
-        $raw = $this->getRawOriginal($attribute);
-
-        return collect(json_decode($raw ?? '[]', true))
-            ->map(fn ($value) => [
-                'value' => $value,
-                'label' => $enumClass::from($value)->label(),
-            ])
-            ->all();
     }
 }

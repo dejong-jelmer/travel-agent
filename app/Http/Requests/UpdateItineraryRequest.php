@@ -22,7 +22,7 @@ class UpdateItineraryRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         //  Default to empty array's on null
-        emptyFormRequestToArray($this, ['meals', 'transport']);
+        emptyFormRequestToArray($this, 'activities');
     }
 
     /**
@@ -33,9 +33,11 @@ class UpdateItineraryRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
+            [
+                'trip_id' => ['required', 'exists:trips,id'],
+            ],
             ItineraryValidationRules::basic(),
             ItineraryValidationRules::details(),
-            ItineraryValidationRules::options(),
             ItineraryValidationRules::imageUpdate(),
         );
     }
