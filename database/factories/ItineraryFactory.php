@@ -5,6 +5,7 @@ namespace Database\Factories;
 use App\Enums\ImageRelation;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Itinerary>
@@ -32,11 +33,24 @@ class ItineraryFactory extends Factory
         return [
             'title' => fake()->randomElement(self::TITLE_PREFIXES).fake()->city(),
             'description' => fake()->paragraph(3),
-            // @todo: ask Claude to create an icrementing day number
-            'day_from' => fake()->numberBetween(1, 4),
-            'day_to' => fake()->optional()->numberBetween(5, 8),
+            'day_from' => 1,
+            'day_to' => null,
             'accommodation' => fake()->company().' '.'Hotel',
         ];
+    }
+
+    public function withIncrementingDays(): static
+    {
+        return $this->sequence(
+            fn (Sequence $sequence) => ['day_from' => $sequence->index + 1]
+        );
+    }
+
+    public function withIncrementingOrder(): static
+    {
+        return $this->sequence(
+            fn (Sequence $sequence) => ['order' => $sequence->index + 1]
+        );
     }
 
     public function withImage(): static

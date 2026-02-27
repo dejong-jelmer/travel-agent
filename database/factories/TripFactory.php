@@ -106,9 +106,8 @@ class TripFactory extends Factory
                 ->withRemarks()
                 ->withActivities()
                 ->count($trip->duration)
-                ->sequence(fn (Sequence $sequence) => [
-                    'order' => $sequence->index + 1,
-                ])
+                ->withIncrementingDays()
+                ->withIncrementingOrder()
                 ->create(['trip_id' => $trip->id]);
         });
     }

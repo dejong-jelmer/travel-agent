@@ -18,7 +18,8 @@ class ItineraryValidationRules
     {
         return [
             'accommodation' => ['nullable', 'string', 'max:255'],
-            'activities' => ['array', 'max:255'],
+            'activities' => ['nullable', 'array'],
+            'activities.*' => ['string', 'max:255'],
             'remark' => ['nullable', 'string', 'max:255'],
         ];
     }

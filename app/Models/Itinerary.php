@@ -68,7 +68,7 @@ class Itinerary extends Model
     /**
      * Get the itinerary activities
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array|null, string>
      */
     protected function activities(): Attribute
     {
