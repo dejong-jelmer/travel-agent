@@ -181,8 +181,8 @@
                     "subtitle": "Configure visibility"
                 },
                 "pricing": {
-                    "title": "Price & Duration",
-                    "subtitle": "Define costs and trip duration"
+                    "title": "Price",
+                    "subtitle": "Define costs"
                 },
                 "destinations": {
                     "title": "Destination",
@@ -900,8 +900,8 @@
                     "no": "No"
                 },
                 "pricing": {
-                    "title": "Price & Duration",
-                    "subtitle": "Costs and travel duration",
+                    "title": "Price",
+                    "subtitle": "Costs",
                     "price_per_person": "Price per person",
                     "duration": "Duration",
                     "days": "{duration} days"

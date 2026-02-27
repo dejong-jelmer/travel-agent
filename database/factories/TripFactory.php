@@ -42,7 +42,6 @@ class TripFactory extends Factory
             'slug' => $this->generateSlug($city),
             'description' => $this->generateDescription($city),
             'price' => randomPrice(995, 12000),
-            'duration' => $duration,
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
@@ -104,10 +103,12 @@ class TripFactory extends Factory
                 ->withImage()
                 ->withRemarks()
                 ->withActivities()
-                ->count($trip->duration)
+                ->count(fake()->numberBetween(6, 14))
                 ->withIncrementingDays()
                 ->withIncrementingOrder()
                 ->create(['trip_id' => $trip->id]);
+
+            $trip->recalculateDuration();
         });
     }
 
@@ -136,12 +137,13 @@ class TripFactory extends Factory
                     $destination->country_code,
                 );
                 $city = fake($locale)->city();
+                $duration = fake()->numberBetween(6, 14);
 
                 $trip->update([
                     'name' => $city,
                     'slug' => $this->generateSlug($city, $destination->name),
                     'description' => $this->generateDescription($city, $destination->name),
-                    'meta_title' => $this->generateMetaTitle($city, $trip->duration, $destination->name),
+                    'meta_title' => $this->generateMetaTitle($city, $duration, $destination->name),
                 ]);
             }
         });

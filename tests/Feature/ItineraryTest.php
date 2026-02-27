@@ -81,7 +81,10 @@ class ItineraryTest extends TestCase
 
     public function test_admin_can_create_a_new_itinerary(): void
     {
+        $trip = Trip::factory()->create();
+
         $itineraryData = [
+            'trip_id' => $trip->id,
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
             'day_from' => fake()->numberBetween(1, 4),
@@ -89,8 +92,6 @@ class ItineraryTest extends TestCase
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
             'remark' => fake()->words(10, true),
         ];
-
-        $trip = Trip::factory()->create();
 
         $response = $this->post(route('admin.trips.itineraries.store', $trip), $itineraryData);
         $response->assertRedirect(route('admin.trips.itineraries.index', $trip));
@@ -132,8 +133,8 @@ class ItineraryTest extends TestCase
             'trip_id' => $this->trip->id,
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
-            'day_from' => fake()->numberBetween(1, 4),
-            'day_to' => fake()->optional()->numberBetween(5, 8),
+            'day_from' => fake()->numberBetween(9, 20),
+            'day_to' => fake()->optional()->numberBetween(21, 30),
             'image' => UploadedFile::fake()->image('itinerary-image.jpg'),
             'remark' => fake()->words(10, true),
         ];

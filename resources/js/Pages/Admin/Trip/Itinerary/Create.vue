@@ -6,6 +6,7 @@ const props = defineProps({
 });
 
 const form = useForm({
+    trip_id: props.trip.id,
     title: '',
     day_from: '',
     day_to: '',

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->decimal('price', 8, 2)->default(0.00)->nullable(false);
-            $table->integer('duration');
+            $table->integer('duration')->nullable();
             $table->json('transport')->nullable();
             $table->boolean('featured')->default(true);
             $table->dateTime('published_at');

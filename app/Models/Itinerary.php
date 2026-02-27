@@ -39,6 +39,10 @@ class Itinerary extends Model
         static::deleting(fn ($itinerary) => $itinerary->image()->delete());
         static::deleted(fn ($itinerary) => $itinerary->reOrder());
         static::restoring(fn ($itinerary) => $itinerary->image()->withTrashed()->restore());
+
+        static::saved(fn ($itinerary) => $itinerary->trip->recalculateDuration());
+        static::deleted(fn ($itinerary) => $itinerary->trip->recalculateDuration());
+        static::restored(fn ($itinerary) => $itinerary->trip->recalculateDuration());
     }
 
     public function trip()

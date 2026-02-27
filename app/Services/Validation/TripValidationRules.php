@@ -17,12 +17,8 @@ class TripValidationRules
         return self::mergeRules([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
-            'highlights' => ['required', 'array'],
-            'highlights.*' => [
-                'nullable',
-                'string',
-                'max:255',
-            ],
+            'highlights' => ['nullable', 'array'],
+            'highlights.*' => ['string', 'max:255', 'distinct'],
             'description' => ['required', 'string'],
         ], $additions);
     }
@@ -31,7 +27,6 @@ class TripValidationRules
     {
         return [
             'price' => ['required', 'numeric', 'between:-999999.99,999999.99'],
-            'duration' => ['required', 'integer', 'min:0'],
         ];
     }
 

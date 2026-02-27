@@ -181,8 +181,8 @@
                     "subtitle": "Configureer zichtbaarheid"
                 },
                 "pricing": {
-                    "title": "Prijs & Duur",
-                    "subtitle": "Definieer de kosten en reisduur"
+                    "title": "Prijs",
+                    "subtitle": "Definieer de kosten"
                 },
                 "destinations": {
                     "title": "Bestemmingen",
@@ -901,8 +901,8 @@
                     "no": "Nee"
                 },
                 "pricing": {
-                    "title": "Prijs & Duur",
-                    "subtitle": "Kosten en reisduur",
+                    "title": "Prijs",
+                    "subtitle": "Kosten",
                     "price_per_person": "Prijs per persoon",
                     "duration": "Duur",
                     "days": "{duration} dagen"

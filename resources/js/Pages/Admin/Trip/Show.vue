@@ -232,7 +232,6 @@ function displayDate(entry) {
                     </section>
                 </div>
 
-                <!-- Rechterkolom: Prijs & Duur + Instellingen + Bestemmingen -->
                 <div class="laptop:col-start-3 space-y-8">
                     <!-- Settings Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">

@@ -254,12 +254,6 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 <span class="text-gray-700/30">€</span>
                             </template>
                             </Input>
-                            <Input type="number" name="duration" :label="t('forms.trip.fields.duration.label')" :required="true" v-model="form.duration"
-                                :feedback="form.errors.duration" :placeholder="t('forms.trip.fields.duration.placeholder')">
-                            <template #suffix>
-                                <span class="text-gray-700/30">{{ t('forms.trip.fields.duration.unit') }}</span>
-                            </template>
-                            </Input>
                         </div>
                     </div>
                 </section>

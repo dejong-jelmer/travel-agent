@@ -8,7 +8,6 @@ class ItineraryValidationRules
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'day_from' => ['required', 'integer', 'min:1'],
             'day_to' => ['nullable', 'integer', 'min:1', 'gt:day_from'],
             'description' => ['required', 'string'],
         ];
@@ -19,7 +18,7 @@ class ItineraryValidationRules
         return [
             'accommodation' => ['nullable', 'string', 'max:255'],
             'activities' => ['nullable', 'array'],
-            'activities.*' => ['string', 'max:255'],
+            'activities.*' => ['nullable', 'max:255', 'distinct'],
             'remark' => ['nullable', 'string', 'max:255'],
         ];
     }

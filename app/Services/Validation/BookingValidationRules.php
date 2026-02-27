@@ -20,8 +20,8 @@ class BookingValidationRules
     public static function travelers(): array
     {
         return [
-            'travelers.*.*.first_name' => ['required', 'string', 'min:3', 'max:255'],
-            'travelers.*.*.last_name' => ['required', 'string', 'min:3', 'max:255'],
+            'travelers.*.*.first_name' => ['required', 'string', 'min:2', 'max:255'],
+            'travelers.*.*.last_name' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.*.*.nationality' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.adults.*.birthdate' => [
                 'required',

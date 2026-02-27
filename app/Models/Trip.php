@@ -25,7 +25,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection $image_paths
  * @property string $destinations_formatted
  * @property Image|null $heroImage
- * @property array $transport_formatted
+ * @property array<int, array{value: string, label: string}> $transport_formatted
  */
 class Trip extends Model
 {
@@ -46,7 +46,6 @@ class Trip extends Model
         'slug',
         'description',
         'price',
-        'duration',
         'transport',
         'featured',
         'published_at',
@@ -169,6 +168,16 @@ class Trip extends Model
     public function itineraries(): HasMany
     {
         return $this->hasMany(Itinerary::class)->orderBy('order');
+    }
+
+    public function recalculateDuration(): void
+    {
+        $max = $this->itineraries()
+            ->selectRaw('MAX(COALESCE(day_to, day_from)) as max_day')
+            ->value('max_day');
+
+        $this->duration = $max ?? 0;
+        $this->saveQuietly();
     }
 
     /**

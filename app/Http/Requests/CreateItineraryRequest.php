@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NoOverlappingItineraryDays;
 use App\Services\Validation\ItineraryValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -33,6 +34,15 @@ class CreateItineraryRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
+            [
+                'trip_id' => ['required', 'exists:trips,id'],
+                'day_from' => [
+                    'required',
+                    'integer',
+                    'min:1',
+                    new NoOverlappingItineraryDays(tripId: $this->trip_id),
+                ],
+            ],
             ItineraryValidationRules::basic(),
             ItineraryValidationRules::details(),
             ItineraryValidationRules::imageCreate(),
