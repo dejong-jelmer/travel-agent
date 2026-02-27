@@ -13,17 +13,16 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                tahu: ["Tahu", "system-ui", ...defaultTheme.fontFamily.sans],
                 poppins: [
                     "Poppins",
                     "system-ui",
                     ...defaultTheme.fontFamily.sans,
                 ],
-                elite: [
-                    "SpecialElite",
+                caveat: [
+                    "Caveat",
                     "system-ui",
                     ...defaultTheme.fontFamily.sans,
-                ],
+                ]
             },
             fontSize: {
                 "2xs": "10px",
@@ -31,13 +30,14 @@ export default {
             colors: {
                 // Brand identity colors
                 brand: {
-                    primary: "#2f3e46",
-                    secondary: "#f0f4f7",
+                    primary: "#30547e",
+                    secondary: "#d6e4ef",
                     tertiary: "#ccf6ff",
                     light: "#a3bccb"
                 },
                 accent: {
-                    primary: "#f0972d",
+                    primary: "#f59e0b",
+                    text: "#1e2d3d",
                     sage: "#afcb98",
                     earth: "#dcc7aa",
                     terracotta: "#b17c65",

@@ -559,14 +559,7 @@
         }
     },
     "hero": {
-        "title": "Because we",
-        "subtitles": [
-            "never stop learning",
-            "stay curious",
-            "also consider tomorrow",
-            "are connected",
-            "keep exploring"
-        ]
+        "title": "Because we travel"
     },
     "footer": {
         "contact": "Contact",
@@ -641,9 +634,23 @@
     "about": {
         "page_title": "About us",
         "image_alt": "Historical (train) journeys in Europe",
-        "intro_paragraph": "Every journey tells a story. The story of places where history comes to life — of people, cultures and traces from the past that are still palpable.",
-        "coming_soon": "We will start soon. <strong class=\"font-semibold\">Stay close, travel further.</strong> Let us take you on a journey with meaning — <strong class=\"font-semibold\">a journey with a story.</strong>",
-        "philosophy": "We believe that travel can be more than just movement. It can touch, inspire and connect. That's why we create <strong class=\"font-semibold\">historical train journeys through Europe</strong>, sustainable and conscious, with an eye for people, nature and the environment."
+        "team": {
+            "section_header": "Meet the team",
+            "heading": "The person behind your journey",
+            "member": {
+                "name": "Jelmer de Jong",
+                "role": "Founder & train travel specialist",
+                "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            }
+        },
+        "intro_paragraph": [
+            "Our mission is to give you a carefree journey that you will look back on with joy and fulfillment — long after you've returned home.",
+            "We believe that travel is more than a destination. It's about the people you meet, the cultures that move you, and the stories you bring home. That's why we bring travelers, cultures, and stories together in a sustainable way, with respect for the world around us and the people who are part of it.",
+            "Sustainable travel isn't reserved for the train enthusiast or the committed sustainability advocate — it's for everyone who wants to enjoy a trip that actually contributes something. We believe that sustainable travel is the future, and the train is, for us, the logical and natural choice. Not as a compromise, but as the most beautiful way to be on the move.",
+            "We want you to feel inspired — by the fascinating stories behind a place, the rich cultures that welcome you, and the breathtaking landscapes that drift past your window. But inspiration only begins when your mind is free. That's why we take care of all the planning, organisation, and worries, so that you have the space to enjoy the journey, the destination, and the people you travel with.",
+            "We are only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
+        ],
+        "tagline": "More than a destination"
     },
     "home": {
         "our_trips_heading": "Our trips",

@@ -28,7 +28,7 @@ const usps = [
             <div class="text-center">
                 <SectionHeader>{{ $t('usp.section_header') }}</SectionHeader>
             </div>
-            <p class="text-brand-primary text-lg mt-2 laptop:text-xl max-w-2xl mx-auto leading-relaxed">
+            <p class="text-accent-text text-lg mt-2 laptop:text-xl max-w-2xl mx-auto leading-relaxed">
                 {{ $t('usp.intro') }}
             </p>
         </div>
@@ -43,7 +43,7 @@ const usps = [
                             class="h-8 w-8 text-brand-primary group-hover:text-accent-primary transition-colors duration-300" />
                     </div>
                     <div
-                        class="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-primary rounded-full border-2 border-brand-secondary">
+                        class="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-sage rounded-full border-2 border-brand-secondary">
                     </div>
                 </div>
                 <h3
@@ -51,7 +51,7 @@ const usps = [
                     {{ $t(usp.titleKey) }}
                 </h3>
 
-                <p class="text-brand-primary leading-relaxed min-h-[130px] mb-6 relative">
+                <p class="text-accent-text leading-relaxed mb-6 relative">
                     {{ $t(usp.descriptionKey) }}
                 </p>
                 <div class="flex items-center gap-2.5 pt-4 border-t border-brand-primary/20 relative">
@@ -59,7 +59,7 @@ const usps = [
                         class="w-1.5 h-1.5 rounded-full bg-accent-primary group-hover:scale-125 transition-transform duration-300">
                     </div>
                     <span
-                        class="text-sm text-[#2f4858]/60 font-medium group-hover:text-accent-primary transition-colors duration-300">
+                        class="text-sm text-brand-light font-medium group-hover:text-accent-primary transition-colors duration-300">
                         {{ $t(usp.highlightKey) }}
                     </span>
                 </div>

@@ -170,7 +170,7 @@ const stats = computed(() => adminStats)
     <div class="relative">
         <!-- Desktop Sidebar (sticky, altijd zichtbaar op laptop+) -->
         <aside
-            class="hidden laptop:block sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto bg-gradient-to-b from-brand-primary to-brand-primary shadow-xl">
+            class="hidden laptop:block sticky top-16 h-[calc(100vh-4rem)] overflow-y-auto bg-gradient-to-b from-accent-text to-brand-primary shadow-xl">
             <div class="flex flex-col h-full">
                 <!-- Navigation -->
                 <div class="relative flex-1 px-4 py-6">

@@ -52,7 +52,7 @@ const bookerOptions = computed(() => {
 
         <div class="space-y-2 p-4 border rounded-lg">
             <div v-if="bookerOptions.length > 1" class="mb-5">
-                <div class="grid grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6">
                     <h2 class="text-base font-bold text-brand-primary">{{ $t('booking_steps.contact.main_booker_question') }}</h2>
                     <h2 class="text-base font-bold text-brand-primary">{{ $t('booking_steps.contact.chosen_main_booker') }}</h2>
                     <RadioGroup v-model="booking.main_booker" name="main_booker" :options="bookerOptions" />
@@ -61,7 +61,7 @@ const bookerOptions = computed(() => {
                         {{ formatBookerDetails(props.booking.travelers?.adults?.[props.booking.main_booker]) }}</p>
                 </div>
             </div>
-            <div class="grid grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 tablet:grid-cols-3 gap-4 tablet:gap-6">
                 <Input type="text" name="street" :label="$t('booking_steps.contact.street_label')" :showLabel="true" :required="true"
                     v-model="contact.street" :feedback="booking.errors['contact.street']" :placeholder="$t('booking_steps.contact.street_placeholder')"
                     @keyup="booking.clearErrors('contact.street')" />
@@ -72,7 +72,7 @@ const bookerOptions = computed(() => {
                     :placeholder="$t('booking_steps.contact.addition_placeholder')" v-model="contact.addition"
                     :feedback="booking.errors['contact.addition']" @keyup="booking.clearErrors('contact.addition')" />
             </div>
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6">
 
                 <Input type="text" name="postal_code" :label="$t('booking_steps.contact.postal_code_label')" :showLabel="true" :required="true"
                     v-model="contact.postal_code" :feedback="booking.errors['contact.postal_code']"
@@ -82,7 +82,7 @@ const bookerOptions = computed(() => {
                     v-model="contact.city" :placeholder="$t('booking_steps.contact.city_placeholder')" :feedback="booking.errors['contact.city']"
                     @keyup="booking.clearErrors('contact.city')" />
             </div>
-            <div class="grid grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6">
 
                 <Input type="tel" name="phone" :label="$t('booking_steps.contact.phone_label')" :showLabel="true" :required="true"
                     v-model="contact.phone" :feedback="booking.errors['contact.phone']" :placeholder="$t('booking_steps.contact.phone_placeholder')"

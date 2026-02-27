@@ -11,13 +11,13 @@ const props = defineProps({
 
 <template>
     <div class="space-y-6">
-        <template v-if="Object.keys(tripItems).length > 0">
+        <template v-if="tripItems && Object.keys(tripItems).length > 0">
             <template v-for="(categories, type) in tripItems" :key="type">
                 <!-- Type Section (Inclusief/Exclusief) -->
                 <div class="space-y-4">
-                    <h3 class="text-xl tablet:text-2xl font-bold text-brand-primary mb-4">
+                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-4">
                         {{ type }}
-                    </h3>
+                    </h4>
 
                     <!-- Categories within type -->
                     <div v-for="(items, category) in categories" :key="category"
@@ -36,7 +36,7 @@ const props = defineProps({
                                         class="w-5 h-5"
                                     />
                                 </div>
-                                <span class="text-sm tablet:text-base text-brand-primary leading-relaxed flex-1">
+                                <span class="text-sm tablet:text-base text-accent-text leading-relaxed flex-1">
                                     {{ tripItem.item }}
                                 </span>
                             </li>

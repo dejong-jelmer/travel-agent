@@ -45,6 +45,8 @@ class DatabaseSeeder extends Seeder
             ->withImages(10)
             ->withDestination()
             ->withAnItinerary()
+            ->withItems()
+            ->withPracticalInfo()
             ->withBlockedDates()
             ->create();
 

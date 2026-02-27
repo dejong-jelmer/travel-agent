@@ -39,17 +39,17 @@ function submit() {
 
 <template>
     <div class="max-w-6xl mx-auto px-4 py-12 phone:px-6 laptop:px-8">
-        <div class="bg-white rounded-lg p-8 phone:p-10 laptop:p-12 border border-brand-primary">
+        <div class="bg-white rounded-lg p-8 phone:p-10 laptop:p-12 border border-brand-secondary shadow-sm">
             <div class="text-center mb-8">
-                <h2 class="text-2xl phone:text-3xl laptop:text-4xl font-semibold text-brand-primary mb-4">
+                <SectionHeader class="py-0 pb-4">
                     {{ $t('newsletter.heading') }}
-                </h2>
-                <p class="text-base phone:text-lg text-black leading-relaxed">
+                </SectionHeader>
+                <p class="text-base phone:text-lg text-gray-600 leading-relaxed">
                     {{ $t('newsletter.description') }}
                 </p>
             </div>
             <form @submit.prevent="submit" class="space-y-4">
-                <div class="grid grid-cols-1 tablet:grid-cols-2 gap-x-6">
+                <div class="grid grid-cols-1 tablet:grid-cols-2 gap-x-6 gap-y-4">
                     <Input v-model="form.name" type="text" name="name" :placeholder="$t('newsletter.form.name_placeholder')"
                         :feedback="form.errors.name" @change="form.clearErrors('name')" />
                     <Input v-model="form.email" type="email" name="email" :placeholder="$t('newsletter.form.email_placeholder')"
@@ -63,7 +63,7 @@ function submit() {
                         <span>{{ form.processing ? $t('newsletter.form.submitting') : $t('newsletter.form.submit') }}</span>
                     </span>
                 </Button>
-                <p class="text-sm text-brand-primary text-center mt-4">
+                <p class="text-sm text-gray-500 text-center mt-4">
                     {{ $t('newsletter.privacy') }}
                 </p>
             </form>

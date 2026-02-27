@@ -28,7 +28,7 @@ const emit = defineEmits(['update:modelValue'])
 </script>
 <template>
     <div class="grid gap-1">
-        <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
+        <Label class="text-accent-text" v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
         <input v-bind="$attrs" :type="type" :id="name" :value="modelValue" @input="emit('update:modelValue', $event.target.value)"

@@ -44,7 +44,7 @@ function submit() {
 
 <template>
     <div
-        class="grid gap-y-12 laptop:gap-y-24 px-6 tablet:px-24 py-12 tablet:py-24  laptop:border-2 laptop:border-brand-primary/20 laptop:rounded-2xl laptop:shadow-xl backdrop-blur-sm">
+        class="grid gap-y-8 laptop:gap-y-16 px-4 tablet:px-12 laptop:px-24 py-12 laptop:border-2 laptop:border-brand-primary/20 laptop:rounded-2xl laptop:shadow-xl backdrop-blur-sm">
 
         <!-- Header sectie -->
         <div class="text-center">
@@ -66,7 +66,7 @@ function submit() {
                     <span class="inline-flex items-center gap-2 mt-2">
                         <AtSign class="w-5 h-5 text-accent-primary" />
                         <span class="hidden tablet:inline-flex">{{ $t('forms.contact.email') }}</span>
-                        <span class="font-bold text-brand-secondary">
+                        <span class="font-bold text-accent-link">
                             <a class="email-field default-link"
                                 href="#" v-html="contact.mail.display"></a>
                         </span>

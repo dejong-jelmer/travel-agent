@@ -2,7 +2,7 @@
 
 @section('content')
     {{-- Alert Header --}}
-    <div style="background:#fbfbf7;border-left:4px solid #f0972d;padding:20px;margin:30px 0;">
+    <div style="background:#fbfbf7;border-left:4px solid #f59e0b;padding:20px;margin:30px 0;">
         <h2 style="margin:0 0 8px 0;font-size:26px;font-weight:700;">Nieuwe Boeking Ontvangen</h2>
         <p style="margin:0;font-size:15px;opacity:0.95;">
             Er is zojuist een nieuwe boeking binnengekomen die uw aandacht vereist
@@ -10,7 +10,7 @@
     </div>
 
     {{-- Booking Reference --}}
-    <div style="background:#fbfbf7;border-left:4px solid #2F3E46;padding:20px;margin:30px 0;">
+    <div style="background:#fbfbf7;border-left:4px solid #30547e;padding:20px;margin:30px 0;">
         <p style="margin:0 0 8px 0;font-size:13px;text-transform:uppercase;opacity:0.8;letter-spacing:0.5px;">
             Boekingsnummer
         </p>
@@ -27,7 +27,7 @@
 
     {{-- Trip & Timing Details --}}
     <h3
-        style="color:#2F3E46;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
+        style="color:#30547e;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
         Reis Details
     </h3>
 
@@ -38,7 +38,7 @@
                     style="margin:0 0 8px 0;font-size:13px;color:#AFCB98;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                     Gekozen Reis
                 </p>
-                <p style="margin:0 0 15px 0;font-size:22px;font-weight:700;color:#2F3E46;">
+                <p style="margin:0 0 15px 0;font-size:22px;font-weight:700;color:#30547e;">
                     {{ $booking->trip->name }}
                 </p>
                 @if ($booking->trip->destinations->isNotEmpty())
@@ -53,12 +53,12 @@
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:30px;">
         <tr>
             <td width="48%" style="padding-right:10px;">
-                <div style="background:#fbfbf7;padding:18px;height:100%;border-left:4px solid #f0972d;">
+                <div style="background:#fbfbf7;padding:18px;height:100%;border-left:4px solid #f59e0b;">
                     <p
                         style="margin:0 0 8px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                         Vertrekdatum
                     </p>
-                    <p style="margin:0;font-size:18px;font-weight:700;color:#2F3E46;">
+                    <p style="margin:0;font-size:18px;font-weight:700;color:#30547e;">
                         {{ $booking->departure_date_formatted }}
                     </p>
                     <p style="margin:5px 0 0 0;font-size:13px;color:#A3BCCB;">
@@ -68,12 +68,12 @@
             </td>
             <td width="4%"></td>
             <td width="48%" style="padding-left:10px;">
-                <div style="background:#fbfbf7;padding:18px;height:100%;border-left:4px solid #f0972d;">
+                <div style="background:#fbfbf7;padding:18px;height:100%;border-left:4px solid #f59e0b;">
                     <p
                         style="margin:0 0 8px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                         Duur
                     </p>
-                    <p style="margin:0;font-size:18px;font-weight:700;color:#2F3E46;">
+                    <p style="margin:0;font-size:18px;font-weight:700;color:#30547e;">
                         {{ $booking->trip->duration }} dagen
                     </p>
                     <p style="margin:5px 0 0 0;font-size:13px;color:#A3BCCB;">
@@ -86,45 +86,45 @@
 
     {{-- Main Booker (Contact Person) --}}
     <h3
-        style="color:#2F3E46;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
+        style="color:#30547e;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
         Hoofdboeker & Contactpersoon
     </h3>
 
     <table width="100%" cellpadding="0" cellspacing="0"
-        style="margin-bottom:30px;background:#FFF8F3;padding:20px;border:2px solid #f0972d;">
+        style="margin-bottom:30px;background:#fbfbf7;padding:20px;border:2px solid #f59e0b;">
         <tr>
             <td width="50%" style="padding-right:15px;border-right:2px solid #fbfbf7;">
-                <p style="margin:0 0 6px 0;font-size:12px;color:#f0972d;font-weight:700;text-transform:uppercase;">
+                <p style="margin:0 0 6px 0;font-size:12px;color:#f59e0b;font-weight:700;text-transform:uppercase;">
                     Naam
                 </p>
-                <p style="margin:0 0 18px 0;font-size:18px;font-weight:700;color:#2F3E46;">
+                <p style="margin:0 0 18px 0;font-size:18px;font-weight:700;color:#30547e;">
                     {{ $booking->mainBooker->full_name }}
                 </p>
 
-                <p style="margin:0 0 6px 0;font-size:12px;color:#f0972d;font-weight:700;text-transform:uppercase;">
+                <p style="margin:0 0 6px 0;font-size:12px;color:#f59e0b;font-weight:700;text-transform:uppercase;">
                     Geboortedatum
                 </p>
-                <p style="margin:0;font-size:15px;color:#2F3E46;">
+                <p style="margin:0;font-size:15px;color:#30547e;">
                     {{ $booking->mainBooker->birthdate_formatted }}
                 </p>
             </td>
             <td width="50%" style="padding-left:15px;">
-                <p style="margin:0 0 6px 0;font-size:12px;color:#f0972d;font-weight:700;text-transform:uppercase;">
+                <p style="margin:0 0 6px 0;font-size:12px;color:#f59e0b;font-weight:700;text-transform:uppercase;">
                     E-mail
                 </p>
-                <p style="margin:0 0 18px 0;font-size:15px;color:#2F3E46;">
+                <p style="margin:0 0 18px 0;font-size:15px;color:#30547e;">
                     <a href="mailto:{{ $booking->contact->email }}"
-                        style="color:#2F3E46;text-decoration:none;font-weight:600;">
+                        style="color:#30547e;text-decoration:none;font-weight:600;">
                         {{ $booking->contact->email }}
                     </a>
                 </p>
 
-                <p style="margin:0 0 6px 0;font-size:12px;color:#f0972d;font-weight:700;text-transform:uppercase;">
+                <p style="margin:0 0 6px 0;font-size:12px;color:#f59e0b;font-weight:700;text-transform:uppercase;">
                     Telefoon
                 </p>
-                <p style="margin:0;font-size:15px;color:#2F3E46;">
+                <p style="margin:0;font-size:15px;color:#30547e;">
                     <a href="tel:{{ $booking->contact->phone }}"
-                        style="color:#2F3E46;text-decoration:none;font-weight:600;">
+                        style="color:#30547e;text-decoration:none;font-weight:600;">
                         {{ $booking->contact->phone }}
                     </a>
                 </p>
@@ -138,7 +138,7 @@
                 <p style="margin:0 0 6px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;">
                     Adres
                 </p>
-                <p style="margin:0;font-size:15px;color:#2F3E46;white-space:pre-line;line-height:1.6;">
+                <p style="margin:0;font-size:15px;color:#30547e;white-space:pre-line;line-height:1.6;">
                     {{ $booking->contact->address }}</p>
             </td>
         </tr>
@@ -146,7 +146,7 @@
 
     {{-- All Travelers --}}
     <h3
-        style="color:#2F3E46;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
+        style="color:#30547e;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
         Alle Reizigers ({{ $booking->travelers->count() }}
         {{ $booking->travelers->count() === 1 ? 'persoon' : 'personen' }})
     </h3>
@@ -156,22 +156,22 @@
             <tr>
                 <td style="padding-bottom:12px;">
                     <table width="100%" cellpadding="0" cellspacing="0"
-                        style="background:{{ $traveler->id === $booking->main_booker_id ? '#FFF8F3' : '#fbfbf7' }};
+                        style="background:{{ $traveler->id === $booking->main_booker_id ? '#fbfbf7' : '#fbfbf7' }};
                            padding:16px;
-                           border-left:4px solid {{ $traveler->id === $booking->main_booker_id ? '#f0972d' : '#AFCB98' }};">
+                           border-left:4px solid {{ $traveler->id === $booking->main_booker_id ? '#f59e0b' : '#AFCB98' }};">
                         <tr>
                             <td width="45">
                                 <div
-                                    style="width:38px;height:38px;background:{{ $traveler->id === $booking->main_booker_id ? '#f0972d' : '#AFCB98' }};border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:700;font-size:16px;text-align:center;line-height:38px;">
+                                    style="width:38px;height:38px;background:{{ $traveler->id === $booking->main_booker_id ? '#f59e0b' : '#AFCB98' }};border-radius:50%;display:flex;align-items:center;justify-content:center;color:#FFFFFF;font-weight:700;font-size:16px;text-align:center;line-height:38px;">
                                     {{ $index + 1 }}
                                 </div>
                             </td>
                             <td>
-                                <p style="margin:0 0 2px 0;font-size:16px;font-weight:700;color:#2F3E46;">
+                                <p style="margin:0 0 2px 0;font-size:16px;font-weight:700;color:#30547e;">
                                     {{ $traveler->full_name }}
                                     @if ($traveler->id === $booking->main_booker_id)
                                         <span
-                                            style="background:#f0972d;color:#FFFFFF;font-size:10px;padding:4px 10px;border-radius:12px;margin-left:8px;font-weight:700;text-transform:uppercase;">
+                                            style="background:#f59e0b;color:#FFFFFF;font-size:10px;padding:4px 10px;border-radius:12px;margin-left:8px;font-weight:700;text-transform:uppercase;">
                                             Hoofdboeker
                                         </span>
                                     @endif
@@ -197,18 +197,18 @@
                     <p style="margin:0 0 5px 0;font-size:13px;color:#AFCB98;font-weight:700;text-transform:uppercase;">
                         Volwassenen
                     </p>
-                    <p style="margin:0;font-size:28px;font-weight:700;color:#2F3E46;">
+                    <p style="margin:0;font-size:28px;font-weight:700;color:#30547e;">
                         {{ $booking->adults->count() }}
                     </p>
                 </div>
             </td>
             <td width="4%"></td>
             <td width="48%" style="padding-left:10px;">
-                <div style="background:#FFF8F3;padding:16px;text-align:center;border:2px solid #f0972d;">
-                    <p style="margin:0 0 5px 0;font-size:13px;color:#f0972d;font-weight:700;text-transform:uppercase;">
+                <div style="background:#fbfbf7;padding:16px;text-align:center;border:2px solid #f59e0b;">
+                    <p style="margin:0 0 5px 0;font-size:13px;color:#f59e0b;font-weight:700;text-transform:uppercase;">
                         Kinderen
                     </p>
-                    <p style="margin:0;font-size:28px;font-weight:700;color:#2F3E46;">
+                    <p style="margin:0;font-size:28px;font-weight:700;color:#30547e;">
                         {{ $booking->children->count() }}
                     </p>
                 </div>
@@ -218,7 +218,7 @@
 
     {{-- Additional Info --}}
     <h3
-        style="color:#2F3E46;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
+        style="color:#30547e;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
         Aanvullende Informatie
     </h3>
 
@@ -228,7 +228,7 @@
                 <table width="100%" cellpadding="8" cellspacing="0">
                     <tr>
                         <td width="50%" style="font-size:14px;color:#A3BCCB;">
-                            <strong style="color:#2F3E46;">Voorwaarden geaccepteerd:</strong>
+                            <strong style="color:#30547e;">Voorwaarden geaccepteerd:</strong>
                         </td>
                         <td width="50%" style="font-size:14px;">
                             @if ($booking->has_accepted_conditions)
@@ -238,7 +238,7 @@
                                 </span>
                             @else
                                 <span
-                                    style="background:#e63946;color:#FFFFFF;padding:4px 12px;border-radius:12px;font-weight:700;font-size:12px;">
+                                    style="background:#dc3545;color:#FFFFFF;padding:4px 12px;border-radius:12px;font-weight:700;font-size:12px;">
                                     NEE
                                 </span>
                             @endif
@@ -246,7 +246,7 @@
                     </tr>
                     <tr>
                         <td style="font-size:14px;color:#A3BCCB;">
-                            <strong style="color:#2F3E46;">Bevestigd door admin:</strong>
+                            <strong style="color:#30547e;">Bevestigd door admin:</strong>
                         </td>
                         <td style="font-size:14px;">
                             @if ($booking->has_confirmed)
@@ -256,7 +256,7 @@
                                 </span>
                             @else
                                 <span
-                                    style="background:#f4a261;color:#FFFFFF;padding:4px 12px;border-radius:12px;font-weight:700;font-size:12px;">
+                                    style="background:#f59e0b;color:#FFFFFF;padding:4px 12px;border-radius:12px;font-weight:700;font-size:12px;">
                                     WACHT OP BEVESTIGING
                                 </span>
                             @endif
@@ -264,7 +264,7 @@
                     </tr>
                     <tr>
                         <td style="font-size:14px;color:#A3BCCB;">
-                            <strong style="color:#2F3E46;">Status:</strong>
+                            <strong style="color:#30547e;">Status:</strong>
                         </td>
                     </tr>
                 </table>
@@ -273,11 +273,11 @@
     </table>
 
     {{-- Action Required Box --}}
-    <div style="background:#fbfbf7;border-left:4px solid #f4a261;padding:20px;margin:30px 0;">
-        <h3 style="color:#2F3E46;font-size:18px;margin:0 0 12px 0;font-weight:700;">
+    <div style="background:#fbfbf7;border-left:4px solid #f59e0b;padding:20px;margin:30px 0;">
+        <h3 style="color:#30547e;font-size:18px;margin:0 0 12px 0;font-weight:700;">
             Actie Vereist
         </h3>
-        <ul style="margin:0;padding:0 0 0 20px;color:#2F3E46;line-height:1.8;">
+        <ul style="margin:0;padding:0 0 0 20px;color:#30547e;line-height:1.8;">
             <li style="margin-bottom:8px;">
                 <strong>Controleer de boekingsgegevens</strong> op volledigheid en juistheid
             </li>
@@ -296,7 +296,7 @@
     {{-- Quick Action Button (repeated) --}}
     <div style="margin:35px 0;text-align:center;">
         <a href="{{ route('admin.bookings.edit', $booking) }}"
-            style="display:inline-block;background:#2F3E46;color:#FFFFFF;padding:18px 40px;text-decoration:none;font-size:17px;font-weight:700;box-shadow:0 4px 6px rgba(0,0,0,0.15);">
+            style="display:inline-block;background:#30547e;color:#FFFFFF;padding:18px 40px;text-decoration:none;font-size:17px;font-weight:700;box-shadow:0 4px 6px rgba(0,0,0,0.15);">
             Ga naar Boeking in Admin Panel →
         </a>
     </div>

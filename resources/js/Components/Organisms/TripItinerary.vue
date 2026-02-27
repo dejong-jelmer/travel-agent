@@ -1,7 +1,10 @@
 <script setup>
 import placeholder from '@/../images/placeholder.png';
-import { Camera, MapPinned, BedDouble, UtensilsCrossed, Route, AlertTriangle, TrainFront, ArrowLeftRight, Ship, Bus } from 'lucide-vue-next';
+import { Camera, BedDouble, AlertTriangle } from 'lucide-vue-next';
 import { ref } from 'vue'
+import { useMq } from 'vue3-mq'
+
+const mq = useMq()
 
 // LigtBox
 const lightboxRef = ref(null)
@@ -38,16 +41,16 @@ const props = defineProps({
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-1">
                         {{ itinerary.title }}
                     </h4>
-                    <div v-if="itinerary.location" class="flex items-center gap-2 text-sm text-brand-light">
-                        <MapPinned class="w-4 h-4" />
-                        <span>{{ itinerary.location }}</span>
+                    <div v-if="itinerary.accommodation" class="flex items-center gap-2 text-sm text-brand-light">
+                        <BedDouble class="w-4 h-4" />
+                        <span>{{ $t('trip_itinerary.accommodation_text') }} {{ itinerary.accommodation }}</span>
                     </div>
                 </div>
                 <div class="mb-4">
                     <div v-if="itinerary.image?.public_url"
                         class="flex flex-col tablet:flex-row gap-4 items-start tablet:items-center">
                         <div class="flex-1 min-w-0">
-                            <p class="text-brand-primary leading-relaxed text-sm tablet:text-base">
+                            <p class="text-accent-text leading-relaxed text-sm tablet:text-base">
                                 {{ itinerary.description }}
                             </p>
                         </div>
@@ -68,64 +71,43 @@ const props = defineProps({
                     </div>
                 </div>
 
-                <div class="grid grid-cols-1 tablet:flex flex-wrap gap-4 mb-4">
+                <!-- Mobile/tablet: accordions -->
+                <div v-if="mq.phone || mq.tablet" class="space-y-2 mb-4">
+                    <Accordion v-if="itinerary.activities?.length" :default-open="false">
+                        <template #header>
+                            <span class="flex items-center gap-2 text-sm">
+                                <Camera class="w-4 h-4 text-accent-primary" />
+                                {{ $t('trip_itinerary.activities') }}
+                            </span>
+                        </template>
+                        <ul class="space-y-1">
+                            <li v-for="activity in itinerary.activities" :key="activity"
+                                class="text-sm text-accent-text flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                {{ activity }}
+                            </li>
+                        </ul>
+                    </Accordion>
+
+                </div>
+
+                <!-- Laptop+: bestaand flex-grid -->
+                <div v-else class="grid grid-cols-1 tablet:flex flex-wrap gap-4 mb-4">
                     <div v-if="itinerary.activities?.length" class="flex-1 min-w-0">
                         <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
+                            class="text-sm font-medium text-brand-primary mb-2 flex laptop:justify-center gap-2 border-b border-gray-200 pb-2 px-2">
                             <Camera class="w-4 h-4 text-accent-primary" />
                             {{ $t('trip_itinerary.activities') }}
                         </h5>
                         <ul class="space-y-1 px-2">
                             <li v-for="activity in itinerary.activities" :key="activity"
-                                class="text-sm text-brand-primary flex items-start gap-2">
+                                class="text-sm text-accent-text flex items-start gap-2">
                                 <span class="w-1.5 h-1.5 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
                                 {{ activity }}
                             </li>
                         </ul>
                     </div>
 
-                    <div v-if="itinerary.accommodation" class="flex-1 min-w-0">
-                        <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
-                            <BedDouble class="w-4 h-4 text-accent-primary" />
-                            {{ $t('trip_itinerary.accommodation') }}
-                        </h5>
-                        <p class="text-sm text-brand-primary px-2">{{ $t('trip_itinerary.accommodation_text') }} {{
-                            itinerary.accommodation }}</p>
-                    </div>
-
-                    <div v-if="itinerary.meals?.length" class="flex-1 min-w-0">
-                        <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
-                            <UtensilsCrossed class="w-4 h-4 text-accent-primary" />
-                            {{ $t('trip_itinerary.meals') }}
-                        </h5>
-                        <div class="flex flex-wrap md:grid gap-2 px-2 justify-center">
-                            <Pill class="w-fit min-w-[115px]" type="sage" v-for="meal in itinerary.meals_formatted"
-                                :key="meal">
-                                <EnumIcon :enum="meal.value" class="text-white mr-2 w-4 h-4 flex-none" />
-                                <span class="text-center flex-grow w-full">
-                                    {{ meal.label }}
-                                </span>
-                            </Pill>
-                        </div>
-                    </div>
-                    <div v-if="itinerary.transport?.length" class="flex-1 min-w-0">
-                        <h5
-                            class="text-sm font-medium text-brand-primary mb-2 flex items-center gap-2 border-b border-gray-200 pb-2 px-2">
-                            <Route class="w-4 h-4 text-accent-primary" />
-                            {{ $t('trip_itinerary.transport') }}
-                        </h5>
-                        <div class="flex flex-wrap md:grid gap-2 px-2 justify-center">
-                            <Pill class="w-fit min-w-[115px]" v-for="mode in itinerary.transport_formatted" :key="mode"
-                                type="accent">
-                                <EnumIcon :enum="mode.value" class="text-white mr-2 w-4 h-4 flex-none" />
-                                <span class="text-center flex-grow w-full">
-                                    {{ mode.label }}
-                                </span>
-                            </Pill>
-                        </div>
-                    </div>
                 </div>
 
                 <div v-if="itinerary.remark"

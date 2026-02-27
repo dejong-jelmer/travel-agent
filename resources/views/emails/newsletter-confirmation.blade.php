@@ -20,7 +20,7 @@
 
     <div style="margin: 30px 0; text-align: center;">
         <a href="{{ route('newsletter.subscription.confirm', $subscriber->confirmation_token) }}"
-           style="font-size: 16px; background-color: #2F3E46; color: #F2F4F3; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">
+           style="font-size: 16px; background-color: #30547e; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 6px; display: inline-block;">
            Aanmeldig afronden
         </a>
     </div>

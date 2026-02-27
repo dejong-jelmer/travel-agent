@@ -18,7 +18,7 @@ const year = new Date().getFullYear();
         <!-- Logo + Slogan -->
         <div class="text-left">
           <div class="flex justify-start">
-            <Logo class="text-brand-secondary w-[192px] h-[62px]" />
+            <LogoWhite />
           </div>
           <p
             class="max-w-md mx-auto mt-6 leading-relaxed text-left text-brand-secondary"
@@ -150,7 +150,11 @@ const year = new Date().getFullYear();
 
       <!-- Bottom section -->
       <div class="pt-6 mt-12 border-t border-gray-800">
-        <div class="text-center tablet:flex tablet:justify-between tablet:text-left">
+        <div class="flex flex-col tablet:flex-row tablet:justify-between gap-4 tablet:gap-0 text-center tablet:text-left">
+          <p class="text-sm text-white">
+            &copy; {{ year }} {{ companyName }}
+          </p>
+
           <p class="text-sm text-gray-400">
             <span class="block tablet:inline">{{ $t('footer.all_rights') }}</span>
             &nbsp;
@@ -167,10 +171,6 @@ const year = new Date().getFullYear();
             >
                 {{ $t('footer.privacy') }}
             </Link>
-          </p>
-
-          <p class="mt-4 text-sm text-white tablet:order-first tablet:mt-0">
-            &copy; {{ year }} {{ companyName }}
           </p>
         </div>
       </div>
