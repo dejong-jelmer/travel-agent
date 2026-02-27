@@ -13,7 +13,6 @@ use App\Models\Trip;
 use App\Models\TripItem;
 use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
 
 /**
