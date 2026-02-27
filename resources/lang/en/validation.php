@@ -43,6 +43,13 @@ return [
         'travelers.children.*.birthdate' => 'Invalid date of birth.',
 
         // Main booker
-        'main_booker.birthdate.before' => 'The main booker must be at least 18 years old.',
+        'main_booker' => [
+            'too_young' => 'The main booker must be at least 18 years old.',
+        ],
+        'itinerary' => [
+            'days' => [
+                'overlap' => 'These travel day(s) overlap with an existing itinerary item.',
+            ],
+        ],
     ],
 ];

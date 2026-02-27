@@ -2,17 +2,13 @@
 
 namespace App\Services\Validation;
 
-use App\Enums\Meal;
-use App\Enums\Transport;
-use Illuminate\Validation\Rule;
-
 class ItineraryValidationRules
 {
     public static function basic(): array
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'location' => ['string', 'max:255'],
+            'day_to' => ['nullable', 'integer', 'min:1', 'gt:day_from'],
             'description' => ['required', 'string'],
         ];
     }
@@ -21,26 +17,9 @@ class ItineraryValidationRules
     {
         return [
             'accommodation' => ['nullable', 'string', 'max:255'],
-            'activities' => ['nullable', 'max:255'],
+            'activities' => ['nullable', 'array'],
+            'activities.*' => ['nullable', 'max:255', 'distinct'],
             'remark' => ['nullable', 'string', 'max:255'],
-        ];
-    }
-
-    public static function options(): array
-    {
-        return [
-            'meals' => ['array'],
-            'meals.*' => [
-                'required',
-                'string',
-                Rule::enum(Meal::class),
-            ],
-            'transport' => ['array'],
-            'transport.*' => [
-                'required',
-                'string',
-                Rule::enum(Transport::class),
-            ],
         ];
     }
 

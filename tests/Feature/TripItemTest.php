@@ -46,7 +46,6 @@ class TripItemTest extends TestCase
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
-            'duration' => fake()->numberBetween(5, 14),
             'price' => randomPrice(500, 5000),
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [UploadedFile::fake()->image('img.jpg')],

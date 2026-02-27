@@ -14,13 +14,12 @@ return new class extends Migration
         Schema::create('itineraries', function (Blueprint $table) {
             $table->id();
             $table->foreignId('trip_id')->constrained('trips')->onDelete('cascade');
+            $table->integer('day_from');
+            $table->integer('day_to')->nullable();
             $table->string('title');
-            $table->string('location')->nullable();
             $table->text('description');
             $table->string('accommodation')->nullable();
             $table->json('activities')->nullable();
-            $table->json('meals')->nullable();
-            $table->json('transport')->nullable();
             $table->string('remark')->nullable();
             $table->unsignedTinyInteger('order')->default(0);
             $table->softDeletes();

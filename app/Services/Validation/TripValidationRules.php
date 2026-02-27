@@ -2,6 +2,7 @@
 
 namespace App\Services\Validation;
 
+use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Services\Traits\MergesRules;
@@ -16,12 +17,8 @@ class TripValidationRules
         return self::mergeRules([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
-            'highlights' => ['required', 'array'],
-            'highlights.*' => [
-                'nullable',
-                'string',
-                'max:255',
-            ],
+            'highlights' => ['nullable', 'array'],
+            'highlights.*' => ['nullable', 'max:255', 'distinct'],
             'description' => ['required', 'string'],
         ], $additions);
     }
@@ -30,7 +27,6 @@ class TripValidationRules
     {
         return [
             'price' => ['required', 'numeric', 'between:-999999.99,999999.99'],
-            'duration' => ['required', 'integer', 'min:0'],
         ];
     }
 
@@ -55,6 +51,18 @@ class TripValidationRules
     {
         return [
             'destinations' => ['required', 'array'],
+        ];
+    }
+
+    public static function transport(): array
+    {
+        return [
+            'transport' => ['array'],
+            'transport.*' => [
+                'required',
+                'string',
+                Rule::enum(Transport::class),
+            ],
         ];
     }
 

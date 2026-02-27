@@ -22,9 +22,9 @@ function updateOrder(orderedItinerary) {
                 <IconLink type="info" v-tippy="'Voeg het dagschema toe'" icon="Plus"
                     :href="route('admin.trips.itineraries.create', trip)" />
             </div>
-            <SortableBlocks :blocks="trip.itineraries" @update:order="updateOrder" class="grid gap-y-10">
+            <SortableBlocks :blocks="trip.itineraries" @update:order="updateOrder" class="space-y-6">
                 <template v-slot:default="slotProps">
-                    <Itinerary :isAdmin="!!user.id" :itinerary="slotProps.block" />
+                    <TripItinerary :isAdmin="!!user.id" :itinerary="slotProps.block" />
                 </template>
             </SortableBlocks>
         </div>

@@ -4,7 +4,9 @@ import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
 
-const WEEKDAY_LABELS = ['Zo', 'Ma', 'Di', 'Wo', 'Do', 'Vr', 'Za']
+const weekdaysTranslated = computed(() => {
+    return t('common.weekdays').split('_')
+})
 
 const props = defineProps({
     trip: Object,
@@ -230,7 +232,6 @@ function displayDate(entry) {
                     </section>
                 </div>
 
-                <!-- Rechterkolom: Prijs & Duur + Instellingen + Bestemmingen -->
                 <div class="laptop:col-start-3 space-y-8">
                     <!-- Settings Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
@@ -302,6 +303,23 @@ function displayDate(entry) {
                         </div>
                     </section>
 
+                    <!-- Transport Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.transport.title') }}</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.transport.subtitle') }}</p>
+                        </div>
+                        <div class="p-6">
+                            <div v-if="trip.transport_formatted?.length" class="flex flex-wrap gap-2">
+                                <Pill v-for="mode in trip.transport_formatted" :key="mode.value" type="primary" variant="transparent">
+                                    <EnumIcon :enum="mode.value" class="w-4 h-4 mr-1.5 flex-none" />
+                                    {{ mode.label }}
+                                </Pill>
+                            </div>
+                            <p v-else class="text-sm text-gray-700/30">{{ t('admin.trips.show.transport.empty') }}</p>
+                        </div>
+                    </section>
+
                     <!-- Availability Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
@@ -321,7 +339,7 @@ function displayDate(entry) {
                                                 ? 'bg-status-error/10 border-status-error text-status-error'
                                                 : 'bg-white border-gray-200 text-gray-700/30'"
                                         >
-                                            {{ WEEKDAY_LABELS[day % 7] }}
+                                            {{ weekdaysTranslated[day % 7] }}
                                         </span>
                                     </div>
                                 </div>

@@ -72,7 +72,7 @@ Route::prefix('admin')
         Route::resource('/trips', AdminTripController::class)->except(['update']);
         Route::post('/trips/update/{trip}', [AdminTripController::class, 'update'])->name('trips.update');
 
-        // Product resource Itinerary routes
+        // Trip resource Itinerary routes
         Route::resource('trips.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
         Route::patch('/trips/{trip}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('trips.itineraries.order');
 

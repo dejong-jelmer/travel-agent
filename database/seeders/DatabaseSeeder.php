@@ -48,6 +48,7 @@ class DatabaseSeeder extends Seeder
             ->withItems()
             ->withPracticalInfo()
             ->withBlockedDates()
+            ->withTransport()
             ->create();
 
         Booking::factory(125)

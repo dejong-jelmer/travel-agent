@@ -1,12 +1,13 @@
 <script setup>
 import { computed, markRaw } from 'vue';
-import { TrainFront, Ship, Bus, Car, ArrowLeftRight, Plane, Coffee, Sandwich, HandPlatter, Circle } from 'lucide-vue-next';
+import { TrainFront, Ship, Bus, Car, ArrowLeftRight, Plane, Circle } from 'lucide-vue-next';
 
 const props = defineProps({
     enum: {
         type: String,
-        required: true,
-        validator: (value) => ['train', 'ferry', 'bus', 'taxi', 'transfer', 'airplane', 'breakfast', 'lunch', 'dinner'].includes(value)
+        required: false,
+        default: null,
+        validator: (value) => ['train', 'ferry', 'bus', 'taxi', 'transfer', 'airplane'].includes(value)
     }
 });
 
@@ -17,9 +18,6 @@ const enumIcons = {
     taxi: markRaw(Car),
     transfer: markRaw(ArrowLeftRight),
     airplane: markRaw(Plane),
-    breakfast: markRaw(Coffee),
-    lunch: markRaw(Sandwich),
-    dinner: markRaw(HandPlatter)
 };
 
 const currentIcon = computed(() => {

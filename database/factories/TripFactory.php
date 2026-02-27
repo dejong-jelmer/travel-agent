@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\ImageRelation;
+use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
 use App\Models\Destination;
@@ -12,7 +13,6 @@ use App\Models\Trip;
 use App\Models\TripItem;
 use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Database\Eloquent\Factories\Sequence;
 use Illuminate\Support\Str;
 
 /**
@@ -42,7 +42,6 @@ class TripFactory extends Factory
             'slug' => $this->generateSlug($city),
             'description' => $this->generateDescription($city),
             'price' => randomPrice(995, 12000),
-            'duration' => $duration,
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
@@ -102,16 +101,25 @@ class TripFactory extends Factory
         return $this->afterCreating(function (Trip $trip) {
             Itinerary::factory()
                 ->withImage()
-                ->withMeals()
-                ->withTransport()
                 ->withRemarks()
                 ->withActivities()
-                ->count($trip->duration)
-                ->sequence(fn (Sequence $sequence) => [
-                    'order' => $sequence->index + 1,
-                ])
+                ->count(fake()->numberBetween(6, 14))
+                ->withIncrementingDays()
+                ->withIncrementingOrder()
                 ->create(['trip_id' => $trip->id]);
+
+            $trip->recalculateDuration();
         });
+    }
+
+    /**
+     * Add mode of transport to Trip
+     */
+    public function withTransport(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'transport' => fake()->randomElements([Transport::Train, Transport::Ferry], fake()->numberBetween(1, 2)),
+        ]);
     }
 
     /**
@@ -129,12 +137,13 @@ class TripFactory extends Factory
                     $destination->country_code,
                 );
                 $city = fake($locale)->city();
+                $duration = fake()->numberBetween(6, 14);
 
                 $trip->update([
                     'name' => $city,
                     'slug' => $this->generateSlug($city, $destination->name),
                     'description' => $this->generateDescription($city, $destination->name),
-                    'meta_title' => $this->generateMetaTitle($city, $trip->duration, $destination->name),
+                    'meta_title' => $this->generateMetaTitle($city, $duration, $destination->name),
                 ]);
             }
         });

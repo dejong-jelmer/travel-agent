@@ -15,6 +15,10 @@ const props = defineProps({
     itinerary: {
         type: Object,
         required: true
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 })
 </script>
@@ -24,26 +28,36 @@ const props = defineProps({
         <div class="absolute left-4 top-16 bottom-0 w-0.5 bg-accent-sage/30"></div>
 
         <!-- Itinerary item -->
-        <div class="relative flex gap-3 tablet:gap-6 pb-8 last:pb-0">
+        <div class="group relative flex gap-3 tablet:gap-6 pb-8 last:pb-0">
             <!-- Timeline marker -->
             <div class="relative flex-shrink-0">
-                <!-- Day number cirkel -->
+                <!-- Day cirkel -->
                 <div
                     class="w-8 h-8 bg-accent-earth rounded-full flex items-center justify-center shadow-sm relative ring-offset-2 ring-2 ring-accent-primary/30">
-                    <span class="text-sm font-bold text-white">{{ itinerary.order }}</span>
+                    <span class="text-sm font-bold text-white"></span>
                 </div>
             </div>
 
             <!-- Content -->
             <div class="flex-1 pt-2 min-w-0">
                 <!-- Header -->
-                <div class="mb-4">
-                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-1">
-                        {{ itinerary.title }}
-                    </h4>
-                    <div v-if="itinerary.accommodation" class="flex items-center gap-2 text-sm text-brand-light">
-                        <BedDouble class="w-4 h-4" />
-                        <span>{{ $t('trip_itinerary.accommodation_text') }} {{ itinerary.accommodation }}</span>
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-1">
+                            <span class="font-caveat text-accent-earth text-xl tablet:text-2xl mr-5">{{ $t('trip_itinerary.day') }} {{ itinerary.day_from }} <span v-if="itinerary.day_to"> - {{ itinerary.day_to }}</span> </span>{{ itinerary.title }}
+                        </h4>
+                        <div v-if="itinerary.accommodation" class="flex items-center gap-2 text-sm text-brand-light">
+                            <BedDouble class="w-4 h-4" />
+                            <span>{{ $t('trip_itinerary.accommodation_text') }} {{ itinerary.accommodation }}</span>
+                        </div>
+                    </div>
+                    <!-- Admin Controls -->
+                    <div v-if="isAdmin" class="flex gap-2 ml-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
+                        <IconLink type="info" icon="Pencil" :href="route('admin.itineraries.edit', itinerary)"
+                            v-tippy="$t('itinerary.edit')" />
+                        <IconLink type="delete" icon="Trash2" :href="route('admin.itineraries.destroy', itinerary)"
+                            method="delete" :showConfirm="true" :prompt="$t('itinerary.delete_confirm')"
+                            v-tippy="$t('itinerary.delete')" />
                     </div>
                 </div>
                 <div class="mb-4">

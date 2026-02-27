@@ -22,7 +22,7 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const weekdaystranslated = computed(() => {
+const weekdaysTranslated = computed(() => {
     return t('common.weekdays').split('_').map((label, index) => ({ value: index, label }))
 })
 
@@ -99,7 +99,7 @@ function displayDate(entry) {
             <Label>{{ t('forms.trip.fields.blocked_dates.weekdays_label') }}</Label>
             <p class="text-xs text-gray-700/30 mt-1 mb-3">{{ t('forms.trip.fields.blocked_dates.weekdays_help') }}</p>
             <div class="flex flex-wrap gap-2">
-                <button v-for="day in weekdaystranslated" :key="day.value" type="button" @click="toggleWeekday(day.value)"
+                <button v-for="day in weekdaysTranslated" :key="day.value" type="button" @click="toggleWeekday(day.value)"
                     class="px-3 py-1.5 rounded-md text-sm font-medium border transition-colors" :class="weekdays.includes(day.value)
                         ? 'bg-status-error/10 border-status-error text-status-error'
                         : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300'">

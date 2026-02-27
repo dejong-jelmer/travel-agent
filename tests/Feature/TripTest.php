@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
 use App\Models\Destination;
 use App\Models\Image;
+use App\Models\Itinerary;
 use App\Models\Trip;
 use App\Models\TripItem;
 use App\Models\User;
@@ -71,10 +73,11 @@ class TripTest extends TestCase
     public function test_admin_can_create_a_new_trip(): void
     {
         $tripData = [
+            'trip_id' => null,
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
-            'duration' => fake()->randomDigit(),
+            'transport' => [Transport::Train->value],
             'price' => randomPrice(500, 5000),
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [
@@ -95,10 +98,14 @@ class TripTest extends TestCase
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
         $this->assertEquals($tripData['slug'], $trip->slug);
+        $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals($tripData['price'], $trip->price);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
         $this->assertTrue($trip->published_at->isSameSecond($tripData['published_at']));
         $this->assertCount(2, $trip->destinations);
+
+        $expectedTransport = collect($tripData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedTransport, $trip->transport);
 
         // Assert hero image with hash-based storage
         $heroImage = $trip->heroImage;
@@ -140,10 +147,11 @@ class TripTest extends TestCase
     {
         $trip = Trip::factory()->create();
         $updateData = [
+            'trip_id' => $trip->id,
             'name' => 'Updated trip name',
             'slug' => fake()->slug(),
             'description' => fake()->text(),
-            'duration' => fake()->randomDigit(),
+            'transport' => array_column([Transport::Bus, Transport::Airplane], 'value'),
             'price' => randomPrice(),
             'heroImage' => UploadedFile::fake()->image('updated-featured.jpg'),
             'images' => [
@@ -165,11 +173,13 @@ class TripTest extends TestCase
         $this->assertEquals($updateData['name'], $trip->name);
         $this->assertEquals($updateData['description'], $trip->description);
         $this->assertEquals($updateData['slug'], $trip->slug);
-        $this->assertEquals($updateData['duration'], $trip->duration);
         $this->assertEquals($updateData['price'], $trip->price);
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
         $this->assertEquals($updateData['meta_description'], $trip->meta_description);
+
+        $expectedTransport = collect($updateData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
+        $this->assertEqualsCanonicalizing($expectedTransport, $trip->transport);
 
         // Assert featured image with hash-based storage
         $heroImage = $trip->heroImage;
@@ -408,7 +418,6 @@ class TripTest extends TestCase
             'name' => $trip->name,
             'slug' => $trip->slug,
             'description' => $trip->description,
-            'duration' => $trip->duration,
             'price' => $trip->price,
             'published_at' => $trip->published_at->toDateTimeString(),
             'destinations' => $this->destinations->modelKeys(),
@@ -416,6 +425,69 @@ class TripTest extends TestCase
             'meta_title' => $trip->meta_title,
             'meta_description' => $trip->meta_description,
         ], $overrides);
+    }
+
+    // Duration auto-calculation tests
+
+    public function test_new_trip_has_zero_duration_without_itineraries(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $this->assertEquals(0, $trip->duration);
+    }
+
+    public function test_duration_is_set_from_day_from_when_itinerary_is_created(): void
+    {
+        $trip = Trip::factory()->create();
+
+        Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 3, 'day_to' => null]);
+
+        $this->assertEquals(3, $trip->fresh()->duration);
+    }
+
+    public function test_duration_uses_day_to_when_set(): void
+    {
+        $trip = Trip::factory()->create();
+
+        Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 2, 'day_to' => 5]);
+
+        $this->assertEquals(5, $trip->fresh()->duration);
+    }
+
+    public function test_duration_reflects_max_across_all_itineraries(): void
+    {
+        $trip = Trip::factory()->create();
+
+        Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 1, 'day_to' => null]);
+        Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 2, 'day_to' => 4]);
+
+        $this->assertEquals(4, $trip->fresh()->duration);
+    }
+
+    public function test_duration_recalculates_when_highest_itinerary_is_deleted(): void
+    {
+        $trip = Trip::factory()->create();
+
+        Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 1, 'day_to' => null, 'order' => 1]);
+        $highest = Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 2, 'day_to' => 4, 'order' => 2]);
+
+        $this->assertEquals(4, $trip->fresh()->duration);
+
+        $highest->delete();
+
+        $this->assertEquals(1, $trip->fresh()->duration);
+    }
+
+    public function test_duration_recalculates_when_itinerary_is_updated(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $itinerary = Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 1, 'day_to' => 3]);
+        $this->assertEquals(3, $trip->fresh()->duration);
+
+        $itinerary->update(['day_to' => 7]);
+
+        $this->assertEquals(7, $trip->fresh()->duration);
     }
 
     public function test_admin_can_softdelete_a_trip(): void

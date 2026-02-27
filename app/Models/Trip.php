@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Transport;
 use App\Enums\Trip\PracticalInfo;
+use App\Models\Traits\CastsStringArray;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
@@ -25,11 +26,12 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection $image_paths
  * @property string $destinations_formatted
  * @property Image|null $heroImage
- * @property array $transport_modes_formatted
+ * @property array<int, array{value: string, label: string}> $transport_formatted
  */
 class Trip extends Model
 {
-    use HasFactory,
+    use CastsStringArray,
+        HasFactory,
         HasFormattedDates,
         ManagesImages,
         SoftDeletes,
@@ -46,7 +48,7 @@ class Trip extends Model
         'slug',
         'description',
         'price',
-        'duration',
+        'transport',
         'featured',
         'published_at',
         'highlights',
@@ -62,11 +64,12 @@ class Trip extends Model
         'destinations_formatted',
         'published_at_formatted',
         'og_image_url',
-        'transport_modes_formatted',
+        'transport_formatted',
     ];
 
     protected $casts = [
         'price' => 'decimal:2',
+        'transport' => 'array',
         'highlights' => 'array',
         'practical_info' => 'array',
         'blocked_dates' => 'array',
@@ -169,6 +172,16 @@ class Trip extends Model
         return $this->hasMany(Itinerary::class)->orderBy('order');
     }
 
+    public function recalculateDuration(): void
+    {
+        $max = $this->itineraries()
+            ->selectRaw('MAX(COALESCE(day_to, day_from)) as max_day')
+            ->value('max_day');
+
+        $this->duration = $max ?? 0;
+        $this->saveQuietly();
+    }
+
     /**
      * Get the raw database value for the price attribute .
      *
@@ -255,6 +268,23 @@ class Trip extends Model
     }
 
     /**
+     * Get transport modes with translated labels.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array, never>
+     */
+    public function transportFormatted(): Attribute
+    {
+        return Attribute::get(
+            fn () => collect($this->transport ?? [])
+                ->map(fn (string $value) => [
+                    'value' => $value,
+                    'label' => Transport::from($value)->label(),
+                ])
+                ->toArray()
+        );
+    }
+
+    /**
      * Get the trip highlights
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
@@ -262,15 +292,7 @@ class Trip extends Model
     protected function highlights(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => ! is_null($value)
-                ? json_encode(
-                    collect(
-                        ! is_array($value)
-                            ? array_map('trim', explode(',', $value))
-                            : $value,
-                    )->filter(fn ($item) => ! is_null($item) && $item !== '')->values()->all()
-                )
-                : '[]'
+            set: fn ($value) => $this->castStringArray($value)
         );
     }
 
@@ -295,25 +317,5 @@ class Trip extends Model
             },
             set: fn ($value) => json_encode($value ?? [])
         );
-    }
-
-    /**
-     * Get all unique modes of transports from Itinerary
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{value: string, label: string}>, never>
-     */
-    public function transportModesFormatted(): Attribute
-    {
-        return Attribute::get(function () {
-            return $this->itineraries
-                ->flatMap(fn ($itinerary) => $itinerary->transport ?? [])
-                ->unique(fn ($transport) => $transport->value)
-                ->map(fn (Transport $transport) => [
-                    'value' => $transport->value,
-                    'label' => $transport->label(),
-                ])
-                ->values()
-                ->all();
-        });
     }
 }

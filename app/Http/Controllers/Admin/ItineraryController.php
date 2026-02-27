@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
-use App\Enums\Meal;
-use App\Enums\Transport;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateItineraryRequest;
@@ -51,8 +49,6 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Trip/Itinerary/Create', [
             'trip' => $trip,
-            'meals' => Meal::options(),
-            'transport' => Transport::options(),
             'title' => $this->pageTitle('itinerary.title_create'),
         ]);
     }
@@ -84,8 +80,6 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Trip/Itinerary/Edit', [
             'itinerary' => $itinerary->load('image'),
-            'meals' => Meal::options(),
-            'transport' => Transport::options(),
             'title' => $this->pageTitle('itinerary.title_edit'),
         ]);
     }
@@ -116,7 +110,6 @@ class ItineraryController extends Controller
     public function destroy(Itinerary $itinerary): RedirectResponse
     {
         $trip = $itinerary->trip;
-        $itineraryTitle = $itinerary->title;
         Itinerary::destroy($itinerary->id);
 
         return redirect()

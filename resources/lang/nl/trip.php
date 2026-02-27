@@ -80,4 +80,14 @@ return [
             'accommodation' => 'Logies',
         ],
     ],
+
+    // Transport
+    'transport' => [
+        'train' => 'Trein',
+        'ferry' => 'Veerboot',
+        'bus' => 'Bus',
+        'taxi' => 'Taxi',
+        'transfer' => 'Transfer',
+        'airplane' => 'Vliegtuig',
+    ],
 ];

@@ -3,10 +3,9 @@
 namespace Database\Factories;
 
 use App\Enums\ImageRelation;
-use App\Enums\Meal;
-use App\Enums\Transport;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Itinerary>
@@ -15,7 +14,7 @@ class ItineraryFactory extends Factory
 {
     private const TITLE_PREFIXES = ['Aankomst in ', 'Verblijf in ', 'Vertrek uit '];
 
-    private const ACTIVITIES = ['Check-in hotel', 'Stadswandeling', 'Museumbezoek', 'Fietstocht', 'Boottocht'];
+    private const ACTIVITIES = ['Stadswandeling', 'Museumbezoek', 'Fietstocht', 'Boottocht'];
 
     private const REMARKS = [
         'Museum toegang niet inbegrepen in de prijs',
@@ -34,9 +33,24 @@ class ItineraryFactory extends Factory
         return [
             'title' => fake()->randomElement(self::TITLE_PREFIXES).fake()->city(),
             'description' => fake()->paragraph(3),
-            'location' => fake()->city().', '.fake()->country(),
+            'day_from' => 1,
+            'day_to' => null,
             'accommodation' => fake()->company().' '.'Hotel',
         ];
+    }
+
+    public function withIncrementingDays(): static
+    {
+        return $this->sequence(
+            fn (Sequence $sequence) => ['day_from' => $sequence->index + 1]
+        );
+    }
+
+    public function withIncrementingOrder(): static
+    {
+        return $this->sequence(
+            fn (Sequence $sequence) => ['order' => $sequence->index + 1]
+        );
     }
 
     public function withImage(): static
@@ -47,24 +61,10 @@ class ItineraryFactory extends Factory
         );
     }
 
-    public function withMeals(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'meals' => fake()->optional()->randomElements(Meal::cases(), fake()->numberBetween(1, 2)) ?? [],
-        ]);
-    }
-
-    public function withTransport(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'transport' => fake()->randomElements([Transport::Train, Transport::Ferry], fake()->numberBetween(1, 2)),
-        ]);
-    }
-
     public function withRemarks(): static
     {
         return $this->state(fn (array $attributes) => [
-            'remark' => fake()->optional()->randomElement(self::REMARKS),
+            'remark' => fake()->optional(0.1)->randomElement(self::REMARKS),
         ]);
     }
 
