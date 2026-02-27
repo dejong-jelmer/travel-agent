@@ -42,7 +42,7 @@ class UpdateItineraryRequest extends FormRequest
                     'min:1',
                     new NoOverlappingItineraryDays(
                         tripId: $this->trip_id,
-                        excludeId: $this->route('itinerary')?->id // null bij create
+                        excludeId: $this->route('itinerary')?->id
                     ),
                 ],
             ],
