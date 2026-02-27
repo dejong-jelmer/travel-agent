@@ -18,7 +18,7 @@ class TripValidationRules
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
             'highlights' => ['nullable', 'array'],
-            'highlights.*' => ['string', 'max:255', 'distinct'],
+            'highlights.*' => ['nullable', 'max:255', 'distinct'],
             'description' => ['required', 'string'],
         ], $additions);
     }

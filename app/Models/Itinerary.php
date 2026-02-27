@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Traits\CastsStringArray;
 use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,7 +14,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  */
 class Itinerary extends Model
 {
-    use HasFactory,
+    use CastsStringArray,
+        HasFactory,
         ManagesImages,
         SoftDeletes;
 
@@ -77,15 +79,7 @@ class Itinerary extends Model
     protected function activities(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => ! is_null($value)
-                ? json_encode(
-                    collect(
-                        ! is_array($value)
-                            ? array_map('trim', explode(',', $value))
-                            : $value,
-                    )->filter(fn ($item) => ! is_null($item) && $item !== '')->values()->all()
-                )
-                : '[]'
+            set: fn ($value) => $this->castStringArray($value)
         );
     }
 }

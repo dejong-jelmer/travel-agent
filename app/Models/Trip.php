@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Transport;
 use App\Enums\Trip\PracticalInfo;
+use App\Models\Traits\CastsStringArray;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
@@ -29,7 +30,8 @@ use Illuminate\Support\Str;
  */
 class Trip extends Model
 {
-    use HasFactory,
+    use CastsStringArray,
+        HasFactory,
         HasFormattedDates,
         ManagesImages,
         SoftDeletes,
@@ -290,15 +292,7 @@ class Trip extends Model
     protected function highlights(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => ! is_null($value)
-                ? json_encode(
-                    collect(
-                        ! is_array($value)
-                            ? array_map('trim', explode(',', $value))
-                            : $value,
-                    )->filter(fn ($item) => ! is_null($item) && $item !== '')->values()->all()
-                )
-                : '[]'
+            set: fn ($value) => $this->castStringArray($value)
         );
     }
 
