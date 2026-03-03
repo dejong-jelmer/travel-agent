@@ -47,7 +47,6 @@ class Trip extends Model
         'name',
         'slug',
         'description',
-        'price',
         'transport',
         'featured',
         'published_at',
@@ -68,7 +67,6 @@ class Trip extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
         'transport' => 'array',
         'highlights' => 'array',
         'practical_info' => 'array',
@@ -82,7 +80,13 @@ class Trip extends Model
 
     protected $searchableRelations = ['destinations.name'];
 
-    protected $sortable = ['id', 'name', 'price', 'duration', 'published_at', 'destinations'];
+    protected $sortable = [
+        'id',
+        'name',
+        'duration',
+        'published_at',
+        'destinations',
+    ];
 
     protected $sortableBelongsToMany = [
         'destinations' => [
@@ -182,15 +186,32 @@ class Trip extends Model
         $this->saveQuietly();
     }
 
+    public function prices(): HasMany
+    {
+        return $this->hasMany(TripPrice::class);
+    }
+
     /**
-     * Get the raw database value for the price attribute .
+     * Get the lowest base price per person across all price rows.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<float|null, never>
+     */
+    protected function startingFromPrice(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->prices->min('base_price_pp')
+        );
+    }
+
+    /**
+     * Get the formatted starting price for display purposes.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function priceFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => number_format((float) $this->price, 0, ',', '.')
+            get: fn () => number_format((float) $this->starting_from_price / 100, 0, ',', '.')
         );
     }
 

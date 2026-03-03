@@ -11,6 +11,7 @@ use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
 use App\Models\TripItem;
+use App\Models\TripPrice;
 use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -41,7 +42,6 @@ class TripFactory extends Factory
             'name' => $city,
             'slug' => $this->generateSlug($city),
             'description' => $this->generateDescription($city),
-            'price' => randomPrice(995, 12000),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
@@ -197,5 +197,13 @@ class TripFactory extends Factory
                 ],
             ]);
         });
+    }
+
+    public function withPrices(): static
+    {
+        return $this->has(
+            TripPrice::factory()->count(2),
+            'prices'
+        );
     }
 }

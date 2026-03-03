@@ -51,5 +51,8 @@ return [
                 'overlap' => 'These travel day(s) overlap with an existing itinerary item.',
             ],
         ],
+        'departure_date' => [
+            'blocked' => 'It is not possible to start this trip on the chosen departure date.',
+        ],
     ],
 ];

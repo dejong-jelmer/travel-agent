@@ -51,5 +51,8 @@ return [
                 'overlap' => 'Deze reisdag(en) overlappen met een bestaand itinerary item.',
             ],
         ],
+        'departure_date' => [
+            'blocked' => 'Het is niet mogelijk deze reis aan te vangen op de gekozen vertrekdatum.',
+        ],
     ],
 ];

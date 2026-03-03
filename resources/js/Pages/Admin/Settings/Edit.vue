@@ -12,6 +12,9 @@ const form = useForm({
     booking_season_end: props.settings.booking_season_end
         ? new Date(props.settings.booking_season_end + 'T00:00:00')
         : null,
+    booking_fee: props.settings.booking_fee ?? null,
+    guarantee_fund: props.settings.guarantee_fund ?? null,
+    emergency_fund: props.settings.emergency_fund ?? null,
 });
 
 function submit() {
@@ -54,6 +57,49 @@ function submit() {
                                 v-model="form.booking_season_end"
                                 :min-date="new Date()"
                                 :feedback="form.errors.booking_season_end"
+                            />
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Fees Section -->
+                <div class="space-y-8">
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">
+                                {{ t('forms.settings.sections.fees') }}
+                            </h2>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <Input
+                                type="number"
+                                name="booking_fee"
+                                v-model="form.booking_fee"
+                                :label="t('forms.settings.fields.booking_fee.label')"
+                                :placeholder="t('forms.settings.fields.booking_fee.help')"
+                                :feedback="form.errors.booking_fee"
+                                step="0.50"
+                                min="0"
+                            />
+                            <Input
+                                type="number"
+                                name="guarantee_fund"
+                                v-model="form.guarantee_fund"
+                                :label="t('forms.settings.fields.guarantee_fund.label')"
+                                :placeholder="t('forms.settings.fields.guarantee_fund.help')"
+                                :feedback="form.errors.guarantee_fund"
+                                step="0.50"
+                                min="0"
+                            />
+                            <Input
+                                type="number"
+                                name="emergency_fund"
+                                v-model="form.emergency_fund"
+                                :label="t('forms.settings.fields.emergency_fund.label')"
+                                :placeholder="t('forms.settings.fields.emergency_fund.help')"
+                                :feedback="form.errors.emergency_fund"
+                                step="0.50"
+                                min="0"
                             />
                         </div>
                     </section>

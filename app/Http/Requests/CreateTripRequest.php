@@ -27,7 +27,7 @@ class CreateTripRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         //  Default to empty array's on null
-        emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'blocked_dates']);
+        emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'prices', 'blocked_dates']);
 
         $this->merge([
             'slug' => Str::slug($this->slug),
@@ -45,7 +45,7 @@ class CreateTripRequest extends FormRequest
             TripValidationRules::basic([
                 'slug' => Rule::unique('trips', 'slug'),
             ]),
-            TripValidationRules::pricing(),
+            TripValidationRules::prices(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),
             TripValidationRules::destinations(),

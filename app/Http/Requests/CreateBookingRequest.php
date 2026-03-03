@@ -58,6 +58,15 @@ class CreateBookingRequest extends FormRequest
                 'departure_date' => $departureDateRules,
                 'has_confirmed' => ['accepted'],
                 'has_accepted_conditions' => ['accepted'],
+                'travelers' => [
+                    'array',
+                    function (string $attribute, mixed $value, \Closure $fail) {
+                        $total = count($value['adults'] ?? []) + count($value['children'] ?? []);
+                        if ($total < 1 || $total > 6) {
+                            $fail(__('validation.between.numeric', ['attribute' => $attribute, 'min' => 1, 'max' => 6]));
+                        }
+                    },
+                ],
                 'travelers.*.*.full_name' => ['required', 'string', 'min:3', 'max:255'],
             ],
             BookingValidationRules::contact(),

@@ -67,8 +67,6 @@ const format = (date) =>
                 <CalendarDays class="ml-1 h-5 w-auto text-accent-primary" />
             </template>
         </VueDatePicker>
-        <template v-if="!!feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

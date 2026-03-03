@@ -3,13 +3,14 @@
 namespace App\Services;
 
 use App\DTO\CreateBookingData;
+use App\DTO\TripPriceData;
 use App\DTO\UpdateBookingData;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 
 class BookingService
 {
-    public function create(CreateBookingData $bookingData): Booking
+    public function create(CreateBookingData $bookingData, TripPriceData $prices): Booking
     {
         // Get Data from DTO
         $contactData = $bookingData->contact->toArray();
@@ -21,6 +22,10 @@ class BookingService
             'departure_date' => $bookingData->date,
             'has_accepted_conditions' => $bookingData->has_accepted_conditions,
             'has_confirmed' => $bookingData->has_confirmed,
+            'trip_price_id' => $prices->tripPriceId,
+            'price_per_person' => $prices->perPerson->getAmount(),
+            'single_supplement' => $prices->singleSupplement->getAmount(),
+            'total_price' => $prices->total->getAmount(),
         ]);
 
         // Create booking contact details
@@ -109,5 +114,10 @@ class BookingService
                 }
             }
         }
+    }
+
+    public function getTotalTravellers(array $travelers): int
+    {
+        return count($travelers[TravelerType::Adult->value]) + count($travelers[TravelerType::Child->value]);
     }
 }

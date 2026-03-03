@@ -21,6 +21,9 @@ class SettingsController extends Controller
             'title' => $this->pageTitle('setting.title_edit'),
             'settings' => [
                 SettingKey::BookingSeasonEnd->value => Setting::get(SettingKey::BookingSeasonEnd),
+                SettingKey::BookingFee->value => Setting::get(SettingKey::BookingFee),
+                SettingKey::GuaranteeFund->value => Setting::get(SettingKey::GuaranteeFund),
+                SettingKey::EmergencyFund->value => Setting::get(SettingKey::EmergencyFund),
             ],
         ]);
     }
@@ -29,6 +32,9 @@ class SettingsController extends Controller
     {
         $validated = $request->validated();
         Setting::set(SettingKey::BookingSeasonEnd, $validated[SettingKey::BookingSeasonEnd->value]);
+        Setting::set(SettingKey::BookingFee, $validated[SettingKey::BookingFee->value] ?? null);
+        Setting::set(SettingKey::GuaranteeFund, $validated[SettingKey::GuaranteeFund->value] ?? null);
+        Setting::set(SettingKey::EmergencyFund, $validated[SettingKey::EmergencyFund->value] ?? null);
 
         return redirect()->route('admin.settings.edit')
             ->with('success', __('setting.updated'));

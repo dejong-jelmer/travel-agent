@@ -9,6 +9,7 @@ use App\Models\Booking;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;
 use App\Models\Trip;
+use App\Models\TripPrice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -28,19 +29,28 @@ class BookingFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'trip_id' => Trip::factory(),
+            'trip_price_id' => 0,
             'departure_date' => fake()->dateTimeBetween('now', '+5 months'),
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
             'status' => $statuses['status'],
             'payment_status' => $statuses['payment_status'],
+            'price_per_person' => 0,
+            'single_supplement' => 0,
+            'total_price' => 0,
         ];
     }
 
     public function configure(): static
     {
         return $this->afterCreating(function (Booking $booking) {
+            $tripPrice = TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
             $year = now()->format('Y');
             $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->trip_price_id = $tripPrice->id;
+            $booking->price_per_person = $tripPrice->base_price_pp;
+            $booking->single_supplement = $tripPrice->single_supplement;
+            $booking->total_price = $tripPrice->base_price_pp;
         });
     }
 
@@ -94,9 +104,42 @@ class BookingFactory extends Factory
         ]);
     }
 
-    public function withTravelers(): static
+    /**
+     * Attach travelers to the booking and calculate the total price.
+     *
+     * When $adults or $children are not provided, a random count is used.
+     * The price is calculated based on price_per_person and, for a single
+     * adult, the single_supplement.
+     *
+     * @param  int|null  $adults  Number of adults (default: 1–4)
+     * @param  int|null  $children  Number of children (default: 0–2)
+     */
+    public function withTravelers(?int $adults = null, ?int $children = null): static
     {
-        return $this->withAdultTravelers()->withChildTravelers();
+        return $this->afterCreating(function (Booking $booking) use ($adults, $children) {
+            $adultCount = $adults ?? rand(1, 4);
+            $childCount = $children ?? rand(0, 2);
+
+            $adults = BookingTraveler::factory()->new()->adult()->count($adultCount)->make();
+            $booking->travelers()->saveMany($adults);
+
+            $children = $childCount > 0
+                ? BookingTraveler::factory()->new()->child()->count($childCount)->make()
+                : collect();
+
+            if ($children->isNotEmpty()) {
+                $booking->travelers()->saveMany($children);
+            }
+
+            $adultPrice = $adultCount === 1
+                ? $booking->price_per_person + $booking->single_supplement
+                : $booking->price_per_person * $adultCount;
+
+            $booking->total_price = $adultPrice + ($booking->price_per_person * $childCount);
+            $booking->save();
+
+            $this->setMainBookerWithContact($booking, $adults->random());
+        });
     }
 
     /**
@@ -120,8 +163,6 @@ class BookingFactory extends Factory
                     'type' => TravelerType::Adult,
                     'birthdate' => fake()->dateTimeBetween('-80 years', '-18 years')->format('Y-m-d'),
                 ]);
-
-            $this->setMainBookerWithContact($booking, $adults->random());
         });
     }
 
@@ -133,7 +174,7 @@ class BookingFactory extends Factory
     public function withChildTravelers(?int $count = null): static
     {
         return $this->afterCreating(function (Booking $booking) use ($count) {
-            BookingTraveler::factory()
+            $childeren = BookingTraveler::factory()
                 ->count($count ?? fake()->numberBetween(0, 3))
                 ->create([
                     'booking_id' => $booking->id,

@@ -1,5 +1,4 @@
 <script setup>
-import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
 
 const props = defineProps({
     name: String,
@@ -74,8 +73,6 @@ const isSelected = (value) => {
                 {{ option[optionValue] }}
             </option>
         </select>
-        <template v-if="feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

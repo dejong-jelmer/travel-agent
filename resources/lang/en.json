@@ -227,6 +227,29 @@
                     "label": "Price per person",
                     "placeholder": "e.g. 1499"
                 },
+                "prices": {
+                    "season": "Season {n}",
+                    "add": "Add season",
+                    "empty": "No price seasons added yet",
+                    "base_price_pp": {
+                        "label": "Price per person",
+                        "placeholder": "e.g. 1299"
+                    },
+                    "single_supplement": {
+                        "label": "Single supplement",
+                        "placeholder": "e.g. 200"
+                    },
+                    "valid_from": {
+                        "label": "Valid from"
+                    },
+                    "valid_until": {
+                        "label": "Valid until"
+                    },
+                    "label": {
+                        "label": "Season type",
+                        "placeholder": "Select season..."
+                    }
+                },
                 "duration": {
                     "label": "Duration (days)",
                     "placeholder": "e.g. 14",
@@ -447,10 +470,25 @@
         "settings": {
             "heading": "Global Settings",
             "subheading": "Configure global booking rules",
+            "sections": {
+                "fees": "Fees"
+            },
             "fields": {
                 "booking_season_end": {
                     "label": "End of booking season",
                     "help": "Bookings cannot be made beyond this date. Leave empty for no upper limit."
+                },
+                "booking_fee": {
+                    "label": "Booking fee",
+                    "help": "Fixed fee per booking in euros."
+                },
+                "guarantee_fund": {
+                    "label": "Guarantee fund",
+                    "help": "Contribution to the guarantee fund per person in euros."
+                },
+                "emergency_fund": {
+                    "label": "Emergency fund",
+                    "help": "Contribution to the emergency fund per person in euros."
                 }
             },
             "submit": {
@@ -505,15 +543,19 @@
         },
         "trip": {
             "heading": "Book trip - {tripName}",
-            "intro": "How nice that you want to book the trip <strong class=\"text-brand-primary\">{tripName}</strong>. We will go through a few steps to ensure the booking goes smoothly.",
+            "intro": "How nice that you want to book the trip {tripName}. We will go through a few steps to ensure the booking goes smoothly.",
             "notice_heading": "Please note:",
-            "notice_text": "This is a <strong>booking request</strong>. We will first check whether we can meet all wishes and whether there is sufficient availability. After sending, we will contact you within <strong>two working days</strong> to confirm the booking.",
+            "notice_text": "This is a {booking_request}. We will first check whether we can meet all wishes and whether there is sufficient availability. After sending, we will contact you within {two_working_days} to confirm the booking.",
+            "booking_request": "booking request",
+            "two_working_days": "two working days",
             "trip_label": "Trip",
             "price_from": "From",
             "per_person": "p.p.",
-            "choose_date": "Choose a <strong>date</strong> for departure",
+            "choose_date": "Choose a {date} for departure",
+            "date": "date",
             "no_date_chosen": "No date chosen",
-            "choose_number": "Choose the <strong>number</strong> of travelers",
+            "choose_number": "Choose the {number} of travelers",
+            "number": "number",
             "participants_label": "Participants:",
             "person_singular": "person",
             "person_plural": "people",
@@ -556,8 +598,16 @@
             "no_travelers": "No travelers entered yet.",
             "contact_info_heading": "Contact information",
             "confirm_data": "I confirm the accuracy of my details and finalize my booking.",
-            "accept_terms": "I confirm that the <a :href=\"route('terms')\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"default-link\">terms and conditions</a> apply to this trip.",
-            "errors_found": "There are {count} error(s) found:"
+            "accept_terms": "I confirm that the {terms_link} apply to this trip.",
+            "terms_link": "terms and conditions",
+            "errors_found": "There are {count} error(s) found:",
+            "costs_heading": "Costs",
+            "trip_price": "Trip price",
+            "booking_fee": "Booking fee",
+            "guarantee_fund": "Guarantee fund",
+            "emergency_fund": "Emergency fund",
+            "single_supplement": "Single supplement",
+            "costs_total": "Total"
         }
     },
     "hero": {
@@ -903,6 +953,8 @@
                     "title": "Price",
                     "subtitle": "Costs",
                     "price_per_person": "Price per person",
+                    "seasons": "Price seasons",
+                    "no_prices": "No price seasons configured",
                     "duration": "Duration",
                     "days": "{duration} days"
                 },
@@ -986,7 +1038,16 @@
                 "travelers": "Travel party",
                 "travelers_subheader": "Travel party overview",
                 "booking_status": "Booking status",
-                "payment_status": "Payment status"
+                "payment_status": "Payment status",
+                "status_info": "Current booking and payment status",
+                "created_at": "Created on",
+                "pricing": {
+                    "title": "Pricing",
+                    "subtitle": "Prices as recorded at the time of booking",
+                    "price_per_person": "Price per person",
+                    "single_supplement": "Single supplement",
+                    "total": "Total"
+                }
             }
         },
         "destinations": {

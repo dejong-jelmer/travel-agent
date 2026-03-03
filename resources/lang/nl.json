@@ -227,6 +227,29 @@
                     "label": "Prijs per persoon",
                     "placeholder": "bijv. 1499"
                 },
+                "prices": {
+                    "season": "Seizoen {n}",
+                    "add": "Seizoen toevoegen",
+                    "empty": "Nog geen prijsseizoen toegevoegd",
+                    "base_price_pp": {
+                        "label": "Prijs per persoon",
+                        "placeholder": "bijv. 1299"
+                    },
+                    "single_supplement": {
+                        "label": "Eenpersoonstoeslag",
+                        "placeholder": "bijv. 200"
+                    },
+                    "valid_from": {
+                        "label": "Geldig vanaf"
+                    },
+                    "valid_until": {
+                        "label": "Geldig tot"
+                    },
+                    "label": {
+                        "label": "Seizoenstype",
+                        "placeholder": "Selecteer seizoen..."
+                    }
+                },
                 "duration": {
                     "label": "Duur (dagen)",
                     "placeholder": "bijv. 14",
@@ -447,10 +470,25 @@
         "settings": {
             "heading": "Globale Instellingen",
             "subheading": "Configureer globale boekingsregels",
+            "sections": {
+                "fees": "Kosten"
+            },
             "fields": {
                 "booking_season_end": {
                     "label": "Einde boekingsseizoen",
                     "help": "Er kunnen geen boekingen worden gemaakt na deze datum. Laat leeg voor geen bovengrens."
+                },
+                "booking_fee": {
+                    "label": "Boekingskost",
+                    "help": "Vaste kost per boeking in euro."
+                },
+                "guarantee_fund": {
+                    "label": "Garantiefonds",
+                    "help": "Bijdrage aan het garantiefonds per persoon in euro."
+                },
+                "emergency_fund": {
+                    "label": "Calamiteitenfonds",
+                    "help": "Bijdrage aan het noodfonds per persoon in euro."
                 }
             },
             "submit": {
@@ -505,15 +543,19 @@
         },
         "trip": {
             "heading": "Reis boeken - {tripName}",
-            "intro": "Wat leuk dat je de reis <strong class=\"text-brand-primary\">{tripName}</strong> wilt gaan boeken. We gaan een aantal stappen doorlopen om te zorgen dat de boeking goed doorkomt.",
+            "intro": "Wat leuk dat je de reis {tripName} wilt gaan boeken. We gaan een aantal stappen doorlopen om te zorgen dat de boeking goed doorkomt.",
             "notice_heading": "Let op:",
-            "notice_text": "Dit is een <strong>boekingsaanvraag</strong>. We kijken eerst of we aan alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen we binnen <strong>twee werkdagen</strong> contact met u op om de boeking te bevestigen.",
+            "notice_text": "Dit is een {booking_request}. We kijken eerst of we aan alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen we binnen {two_working_days} contact met u op om de boeking te bevestigen.",
+            "booking_request": "boekingsaanvraag",
+            "two_working_days": "twee werkdagen",
             "trip_label": "Reis",
             "price_from": "Vanaf",
             "per_person": "p.p.",
-            "choose_date": "Kies een <strong>datum</strong> voor vertrek",
+            "choose_date": "Kies een {date} voor vertrek",
+            "date": "datum",
             "no_date_chosen": "Geen datum gekozen",
-            "choose_number": "Kies het <strong>aantal</strong> reizigers",
+            "number": "aantal",
+            "choose_number": "Kies het {number} reizigers",
             "participants_label": "Deelnemers:",
             "person_singular": "persoon",
             "person_plural": "personen",
@@ -556,8 +598,16 @@
             "no_travelers": "Nog geen reizigers ingevoerd.",
             "contact_info_heading": "Contact informatie",
             "confirm_data": "Ik bevestig de juistheid van mijn gegevens en maak mijn boeking definitief.",
-            "accept_terms": "Ik bevestig dat de <a :href=\"route('terms')\" target=\"_blank\" rel=\"noopener noreferrer\" class=\"default-link\">algemene voorwaarden</a> van toepassing zijn op deze reis.",
-            "errors_found": "Er zijn {count} fout(en) gevonden:"
+            "accept_terms": "Ik bevestig dat de {terms_link} van toepassing zijn op deze reis.",
+            "terms_link": "algemene voorwaarden",
+            "errors_found": "Er zijn {count} fout(en) gevonden:",
+            "costs_heading": "Kosten",
+            "trip_price": "Reissom",
+            "booking_fee": "Boekingskost",
+            "guarantee_fund": "Garantiefonds",
+            "emergency_fund": "Calamiteitenfonds",
+            "single_supplement": "Eenpersoonstoeslag",
+            "costs_total": "Totaal"
         }
     },
     "hero": {
@@ -904,6 +954,8 @@
                     "title": "Prijs",
                     "subtitle": "Kosten",
                     "price_per_person": "Prijs per persoon",
+                    "seasons": "Prijsseizoenen",
+                    "no_prices": "Geen prijsseizoenen geconfigureerd",
                     "duration": "Duur",
                     "days": "{duration} dagen"
                 },
@@ -987,7 +1039,16 @@
                 "travelers": "Reisgezelschap",
                 "travelers_subheader": "Overzicht van alle reizigers",
                 "booking_status": "Boekingstatus",
-                "payment_status": "Betaalstatus"
+                "payment_status": "Betaalstatus",
+                "status_info": "Huidige boekings- en betaalstatus",
+                "created_at": "Aangemaakt op",
+                "pricing": {
+                    "title": "Prijsoverzicht",
+                    "subtitle": "Prijzen zoals vastgelegd bij het boeken",
+                    "price_per_person": "Prijs per persoon",
+                    "single_supplement": "Eenpersoonstoeslag",
+                    "total": "Totaal"
+                }
             }
         },
         "destinations": {

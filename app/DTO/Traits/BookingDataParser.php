@@ -23,11 +23,14 @@ trait BookingDataParser
         $mainBookerFullName = self::getMainBookerFullName($adults, $mainBookerIndex);
         $mainBooker = ['name' => $mainBookerFullName, 'index' => $mainBookerIndex];
 
+        $adultTravelers = BookingTravelerData::manyFromArray($adults);
+        $childTravelers = BookingTravelerData::manyFromArray($children);
+
         return [
             'main_booker' => $mainBooker,
             'travelers' => [
-                TravelerType::Adult->value => BookingTravelerData::manyFromArray($adults),
-                TravelerType::Child->value => BookingTravelerData::manyFromArray($children),
+                TravelerType::Adult->value => $adultTravelers,
+                TravelerType::Child->value => $childTravelers,
             ],
             'contact' => BookingContactData::fromArray($mainBookerFullName, $validated['contact']),
         ];

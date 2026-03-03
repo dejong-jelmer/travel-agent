@@ -56,7 +56,7 @@ class ItineraryFactory extends Factory
     public function withImage(): static
     {
         return $this->has(
-            Image::factory()->primary(),
+            Image::factory()->count(2),
             ImageRelation::Image->value
         );
     }

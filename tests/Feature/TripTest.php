@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\PriceLabel;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -78,7 +79,6 @@ class TripTest extends TestCase
             'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
             'transport' => [Transport::Train->value],
-            'price' => randomPrice(500, 5000),
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [
                 UploadedFile::fake()->image('image1.jpg'),
@@ -89,6 +89,15 @@ class TripTest extends TestCase
             'published_at' => now(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
+            'prices' => [
+                [
+                    'base_price_pp' => fake()->numberBetween(899, 1999),
+                    'single_supplement' => fake()->numberBetween(150, 500),
+                    'valid_from' => now(),
+                    'valid_until' => now()->addMonths(12),
+                    'label' => PriceLabel::High_season->value,
+                ],
+            ],
         ];
 
         $response = $this->post(route('admin.trips.store'), $tripData);
@@ -99,13 +108,19 @@ class TripTest extends TestCase
         $this->assertEquals($tripData['name'], $trip->name);
         $this->assertEquals($tripData['slug'], $trip->slug);
         $this->assertEquals($tripData['description'], $trip->description);
-        $this->assertEquals($tripData['price'], $trip->price);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
         $this->assertTrue($trip->published_at->isSameSecond($tripData['published_at']));
         $this->assertCount(2, $trip->destinations);
 
         $expectedTransport = collect($tripData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
         $this->assertEqualsCanonicalizing($expectedTransport, $trip->transport);
+
+        // Assert prices
+        $this->assertEquals(($tripData['prices'][0]['base_price_pp'] * 100), $trip->prices->first()->base_price_pp);
+        $this->assertEquals(($tripData['prices'][0]['single_supplement'] * 100), $trip->prices->first()->single_supplement);
+        $this->assertEquals($tripData['prices'][0]['label'], $trip->prices->first()->label->value);
+        $this->assertTrue($trip->prices->first()->valid_from->isSameDay($tripData['prices'][0]['valid_from']));
+        $this->assertTrue($trip->prices->first()->valid_until->isSameDay($tripData['prices'][0]['valid_until']));
 
         // Assert hero image with hash-based storage
         $heroImage = $trip->heroImage;
@@ -152,7 +167,6 @@ class TripTest extends TestCase
             'slug' => fake()->slug(),
             'description' => fake()->text(),
             'transport' => array_column([Transport::Bus, Transport::Airplane], 'value'),
-            'price' => randomPrice(),
             'heroImage' => UploadedFile::fake()->image('updated-featured.jpg'),
             'images' => [
                 UploadedFile::fake()->image('new1.jpg'),
@@ -163,6 +177,15 @@ class TripTest extends TestCase
             'published_at' => now()->addDay(fake()->randomDigit())->startOfDay()->toDateTimeString(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
+            'prices' => [
+                [
+                    'base_price_pp' => fake()->numberBetween(899, 1999),
+                    'single_supplement' => fake()->numberBetween(150, 500),
+                    'valid_from' => now(),
+                    'valid_until' => now()->addMonths(12),
+                    'label' => PriceLabel::High_season->value,
+                ],
+            ],
         ];
 
         $response = $this->post(route('admin.trips.update', $trip), $updateData);
@@ -173,13 +196,19 @@ class TripTest extends TestCase
         $this->assertEquals($updateData['name'], $trip->name);
         $this->assertEquals($updateData['description'], $trip->description);
         $this->assertEquals($updateData['slug'], $trip->slug);
-        $this->assertEquals($updateData['price'], $trip->price);
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
         $this->assertEquals($updateData['meta_description'], $trip->meta_description);
 
         $expectedTransport = collect($updateData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
         $this->assertEqualsCanonicalizing($expectedTransport, $trip->transport);
+
+        // Assert prices
+        $this->assertEquals(($updateData['prices'][0]['base_price_pp'] * 100), $trip->prices->first()->base_price_pp);
+        $this->assertEquals(($updateData['prices'][0]['single_supplement'] * 100), $trip->prices->first()->single_supplement);
+        $this->assertEquals($updateData['prices'][0]['label'], $trip->prices->first()->label->value);
+        $this->assertTrue($trip->prices->first()->valid_from->isSameDay($updateData['prices'][0]['valid_from']));
+        $this->assertTrue($trip->prices->first()->valid_until->isSameDay($updateData['prices'][0]['valid_until']));
 
         // Assert featured image with hash-based storage
         $heroImage = $trip->heroImage;
@@ -262,7 +291,6 @@ class TripTest extends TestCase
     }
 
     // Blocked dates validation tests
-
     public function test_trip_update_accepts_a_single_blocked_date(): void
     {
         $trip = Trip::factory()->create();
@@ -418,12 +446,20 @@ class TripTest extends TestCase
             'name' => $trip->name,
             'slug' => $trip->slug,
             'description' => $trip->description,
-            'price' => $trip->price,
             'published_at' => $trip->published_at->toDateTimeString(),
             'destinations' => $this->destinations->modelKeys(),
             'highlights' => ['highlight 1'],
             'meta_title' => $trip->meta_title,
             'meta_description' => $trip->meta_description,
+            'prices' => [
+                [
+                    'base_price_pp' => fake()->numberBetween(899, 1999),
+                    'single_supplement' => fake()->numberBetween(150, 500),
+                    'valid_from' => now(),
+                    'valid_until' => now()->addMonths(12),
+                    'label' => PriceLabel::High_season->value,
+                ],
+            ],
         ], $overrides);
     }
 

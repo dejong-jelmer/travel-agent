@@ -93,7 +93,7 @@ function submit() {
                                 <p class="text-sm text-brand-primary/60">{{ $t('forms.contact.your_details_subheading') }}</p>
                             </div>
 
-                            <Input type="text" name="name" :label="$t('forms.contact.name_label')" :required="false" :show-label="false"
+                            <Input type="text" name="name" :placeholder="$t('forms.contact.name_label')" :required="false" :show-label="false"
                                 v-model="form.name" :feedback="errors?.name"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
                             <Input type="email" name="email" :label="$t('forms.contact.email_label')" :required="false" :show-label="false"

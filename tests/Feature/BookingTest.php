@@ -28,13 +28,14 @@ class BookingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->trip = Trip::factory()->create();
+        $this->trip = Trip::factory()->withPrices()->create();
     }
 
+    // @toDo App\Exceptions\NoPriceAvailableException: No prices available for trip id: "1" on departure date: "2026-06-01"
+    // create Trip with Prices
     public function test_it_can_create_a_booking_with_travelers_and_contact()
     {
         $payload = $this->generateBookingPayload();
-
         $response = $this->post(route('bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
@@ -48,6 +49,8 @@ class BookingTest extends TestCase
         $this->assertRedirectIsCorrect($response, $booking);
     }
 
+    // @toDo App\Exceptions\NoPriceAvailableException: No prices available for trip id: "1" on departure date: "2026-06-01"
+    // create Trip with Prices
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
     {
         $admin = User::factory()->admin()->create();

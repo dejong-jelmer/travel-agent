@@ -32,7 +32,7 @@ class HomeTest extends TestCase
         $response->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
             ->has('trips', 1)
             ->where('trips.0.id', $trip->id)
-            ->where('trips.0.price', $trip->price)
+            ->where('trips.0.name', $trip->name)
         );
         $this->assertDatabaseHas('destination_trip', [
             'trip_id' => $trip->id,
@@ -66,7 +66,7 @@ class HomeTest extends TestCase
             ->where('trip.name', $trip->name)
             ->where('trip.slug', $trip->slug)
             ->where('trip.duration', $trip->duration)
-            ->where('trip.price', $trip->price)
+            ->where('trip.description', $trip->description)
             ->where('trip.featured', $trip->featured)
             ->where('trip.published_at', $trip->published_at->toISOString())
         );

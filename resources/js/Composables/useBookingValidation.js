@@ -17,7 +17,7 @@ import i18n from '@/plugins/i18n.js';
 const { isValidDate } = useDateFormatter();
 
 /** Minimum length for most string fields (names, city, street) */
-const DEFAULT_MIN_STRING_LENGTH = 3;
+const DEFAULT_MIN_STRING_LENGTH = 2;
 
 /** Minimum length for nationality field (2-letter destination codes) */
 const MIN_NATIONALITY_LENGTH = 2;
@@ -71,7 +71,7 @@ export function useBookingValidation() {
                     t('validation.fields.first_name'),
                     DEFAULT_MIN_STRING_LENGTH,
                     t('validation.errors.missing', { field: t('validation.fields.first_name') }),
-                    t('validation.errors.too_short')
+                    t('validation.errors.too_short', { field: t('validation.fields.first_name'), min: DEFAULT_MIN_STRING_LENGTH })
                 );
                 if (firstNameError)
                     errors[`${basePath}.first_name`] = firstNameError;
@@ -81,7 +81,7 @@ export function useBookingValidation() {
                     t('validation.fields.last_name'),
                     DEFAULT_MIN_STRING_LENGTH,
                     t('validation.errors.missing', { field: t('validation.fields.last_name') }),
-                    t('validation.errors.too_short')
+                    t('validation.errors.too_short', { field: t('validation.fields.last_name'), min: DEFAULT_MIN_STRING_LENGTH })
                 );
                 if (lastNameError)
                     errors[`${basePath}.last_name`] = lastNameError;
@@ -96,7 +96,7 @@ export function useBookingValidation() {
                     t('validation.fields.nationality'),
                     MIN_NATIONALITY_LENGTH,
                     t('validation.errors.missing', { field: t('validation.fields.nationality') }),
-                    t('validation.errors.too_short')
+                    t('validation.errors.too_short', { field: t('validation.fields.nationality'), min: MIN_NATIONALITY_LENGTH })
                 );
                 if (nationalityError)
                     errors[`${basePath}.nationality`] = nationalityError;
@@ -129,7 +129,7 @@ export function useBookingValidation() {
             t('validation.fields.street_name'),
             DEFAULT_MIN_STRING_LENGTH,
             t('validation.errors.missing', { field: t('validation.fields.street_name') }),
-            t('validation.errors.too_short')
+            t('validation.errors.too_short', { field: t('validation.fields.street_name'), min: MIN_NATIONALITY_LENGTH })
         );
         if (streetError) errors["contact.street"] = streetError;
 
@@ -143,7 +143,7 @@ export function useBookingValidation() {
             t('validation.fields.postal_code'),
             postalCodeRegex,
             t('validation.errors.missing', { field: t('validation.fields.postal_code') }),
-            t('validation.errors.invalid_postal_code')
+            t('validation.errors.invalid_postal_code', { field: t('validation.fields.postal_code') })
         );
 
         if (postalCodeError) errors["contact.postal_code"] = postalCodeError;
@@ -153,7 +153,7 @@ export function useBookingValidation() {
             t('validation.fields.city'),
             DEFAULT_MIN_STRING_LENGTH,
             t('validation.errors.missing', { field: t('validation.fields.city') }),
-            t('validation.errors.too_short')
+            t('validation.errors.too_short', { field: t('validation.fields.city'), min: DEFAULT_MIN_STRING_LENGTH })
         );
 
         if (cityError) errors["contact.city"] = cityError;
@@ -163,7 +163,7 @@ export function useBookingValidation() {
             t('validation.fields.email'),
             emailRegex,
             t('validation.errors.missing', { field: t('validation.fields.email') }),
-            t('validation.errors.invalid')
+            t('validation.errors.invalid', { field: t('validation.fields.email') })
         );
 
         if (emailError) errors["contact.email"] = emailError;
@@ -173,7 +173,7 @@ export function useBookingValidation() {
             t('validation.fields.phone'),
             phoneRegex,
             t('validation.errors.missing', { field: t('validation.fields.phone') }),
-            t('validation.errors.invalid')
+            t('validation.errors.invalid', { field: t('validation.fields.phone') })
         );
 
         if (phoneError) errors["contact.phone"] = phoneError;

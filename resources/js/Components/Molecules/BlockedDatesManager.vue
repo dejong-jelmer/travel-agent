@@ -2,7 +2,6 @@
 import { computed, ref } from 'vue'
 import { Plus } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
-import FormFeedback from '../Atoms/FormFeedback.vue'
 import { useDateFormatter } from '@/Composables/useDateFormatter'
 
 const { toDateString } = useDateFormatter()
@@ -115,7 +114,7 @@ function displayDate(entry) {
 
             <!-- Existing dates list -->
             <div v-if="dates.length" class="space-y-2 mb-3">
-                <template v-for="(entry, index) in dates" :key="index">
+                <div v-for="(entry, index) in dates" :key="index">
                     <div
                         class="flex items-center justify-between p-2 bg-gray-50 rounded-md border border-gray-200 group">
                         <span class="text-sm text-gray-700">{{ displayDate(entry) }}</span>
@@ -123,7 +122,7 @@ function displayDate(entry) {
                     </div>
                     <FormFeedback v-if="errors[`blocked_dates.dates.${index}`]"
                         :message="errors[`blocked_dates.dates.${index}`]" />
-                </template>
+                </div>
             </div>
 
             <!-- Add buttons -->

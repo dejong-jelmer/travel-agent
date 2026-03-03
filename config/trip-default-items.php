@@ -15,7 +15,6 @@ return [
         ItemCategory::AdditionalCost->value => [
             'trip.item.additional_cost.fees.booking',
             'trip.item.additional_cost.fees.guarantee_fund',
-            'trip.item.additional_cost.fees.emergency_fund',
         ],
         ItemCategory::CostsToConsider->value => [
             'trip.item.costs_to_consider.additional_meals',

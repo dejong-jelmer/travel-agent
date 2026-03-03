@@ -11,11 +11,25 @@ const weekdaysTranslated = computed(() => {
 const props = defineProps({
     trip: Object,
     tripItems: Object,
+    priceLabelOptions: Array,
     practicalSections: Object,
     required: true,
 });
 
 const { t } = useI18n();
+
+const labelMap = computed(() =>
+    Object.fromEntries((props.priceLabelOptions ?? []).map(o => [o.id, o.name]))
+)
+
+function formatPrice(cents) {
+    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cents / 100)
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return '-'
+    return new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(dateStr + 'T00:00:00'))
+}
 
 const blockedWeekdays = computed(() =>
     (props.trip.blocked_dates?.weekdays ?? []).map(Number)
@@ -171,7 +185,7 @@ function displayDate(entry) {
                                                 {{ label }}
                                             </h4>
                                             <div
-                                                class="text-sm tablet:text-base text-brand-primary leading-relaxed whitespace-pre-line">
+                                                class="text-sm tablet:text-base text-accent-text leading-relaxed whitespace-pre-line">
                                                 {{ trip.practical_info[key] }}
                                             </div>
                                         </div>
@@ -261,24 +275,38 @@ function displayDate(entry) {
                     <!-- Pricing & Duration Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
-                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.pricing.title') }}
-                            </h2>
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.pricing.title') }}</h2>
                             <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.pricing.subtitle') }}</p>
                         </div>
                         <div class="p-6 space-y-4">
+                            <!-- Duration -->
                             <div>
-                                <label class="text-sm font-medium text-gray-700">{{
-                                    t('admin.trips.show.pricing.price_per_person') }}</label>
-                                <p class="mt-1 text-2xl font-semibold text-gray-900">{{ trip.price_formatted }}</p>
+                                <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.pricing.duration') }}</label>
+                                <p class="mt-1 text-xl text-gray-900">{{ t('admin.trips.show.pricing.days', { duration: trip.duration }) }}</p>
                             </div>
-                            <div>
-                                <label class="text-sm font-medium text-gray-700">{{
-                                    t('admin.trips.show.pricing.duration') }}</label>
-                                <p class="mt-1 text-xl text-gray-900">{{ t('admin.trips.show.pricing.days', {
-                                    duration:
-                                        trip.duration
-                                }) }}</p>
+
+                            <!-- Price rows -->
+                            <div v-if="trip.prices?.length" class="space-y-3">
+                                <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.pricing.seasons') }}</label>
+                                <div v-for="(row, index) in trip.prices" :key="row.id ?? index"
+                                    class="rounded-md border border-gray-200 overflow-hidden">
+                                    <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
+                                        <span class="text-sm font-semibold text-gray-700">{{ labelMap[row.label] ?? row.label }}</span>
+                                        <span class="text-xs text-gray-500">{{ formatDate(row.valid_from) }} — {{ formatDate(row.valid_until) }}</span>
+                                    </div>
+                                    <div class="grid grid-cols-2 divide-x divide-gray-200">
+                                        <div class="px-4 py-3">
+                                            <p class="text-xs text-gray-500">{{ t('forms.trip.fields.prices.base_price_pp.label') }}</p>
+                                            <p class="mt-0.5 text-lg font-semibold text-gray-900">{{ formatPrice(row.base_price_pp) }}</p>
+                                        </div>
+                                        <div class="px-4 py-3">
+                                            <p class="text-xs text-gray-500">{{ t('forms.trip.fields.prices.single_supplement.label') }}</p>
+                                            <p class="mt-0.5 text-lg font-semibold text-gray-900">{{ formatPrice(row.single_supplement) }}</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                            <p v-else class="text-sm text-gray-700/40">{{ t('admin.trips.show.pricing.no_prices') }}</p>
                         </div>
                     </section>
 

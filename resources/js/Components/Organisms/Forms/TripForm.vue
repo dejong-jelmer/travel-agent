@@ -13,6 +13,7 @@ const props = defineProps({
     typeOptions: Object,
     transportOptions: Object,
     categoryOptions: Object,
+    priceLabelOptions: Object,
     practicalSections: Object,
 });
 
@@ -179,7 +180,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Media Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.tabs.media') }}</h2>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.tabs.media') }} *</h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.media.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
@@ -247,14 +248,11 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.pricing.subtitle') }}</p>
                     </div>
                     <div class="p-6">
-                        <div class="grid grid-cols-1 gap-6">
-                            <Input type="text" name="price" :label="t('forms.trip.fields.price.label')" :required="true"
-                                v-model="form.price" :feedback="form.errors.price" :placeholder="t('forms.trip.fields.price.placeholder')">
-                            <template #prefix>
-                                <span class="text-gray-700/30">€</span>
-                            </template>
-                            </Input>
-                        </div>
+                        <TripPricesManager
+                            v-model="form.prices"
+                            :errors="form.errors"
+                            :price-label-options="priceLabelOptions"
+                        />
                     </div>
                 </section>
 

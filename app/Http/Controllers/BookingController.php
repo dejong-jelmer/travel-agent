@@ -9,6 +9,7 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
+use App\Services\PriceCalculatorService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
@@ -17,10 +18,16 @@ class BookingController extends Controller
 {
     use HasPageMetadata;
 
-    public function store(CreateBookingRequest $request, BookingService $bookingService): RedirectResponse|JsonResponse
+    public function __construct(private BookingService $bookingService, private PriceCalculatorService $priceCalculator) {}
+
+    public function store(CreateBookingRequest $request): RedirectResponse|JsonResponse
     {
         $bookingData = CreateBookingData::fromRequest($request);
-        $booking = $bookingService->create($bookingData);
+        $totalTravelers = $this->bookingService->getTotalTravellers($bookingData->travelers);
+
+        $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
+
+        $booking = $this->bookingService->create($bookingData, $prices);
         event(new BookingCreated($booking));
         session()->flash('booking_uuid', $booking->uuid);
 
