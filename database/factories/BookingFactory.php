@@ -4,6 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
+use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingContact;
@@ -38,6 +39,7 @@ class BookingFactory extends Factory
             'price_per_person' => 0,
             'single_supplement' => 0,
             'total_price' => 0,
+            'fees_and_funds' => [],
         ];
     }
 
@@ -51,6 +53,12 @@ class BookingFactory extends Factory
             $booking->price_per_person = $tripPrice->base_price_pp;
             $booking->single_supplement = $tripPrice->single_supplement;
             $booking->total_price = $tripPrice->base_price_pp;
+            $booking->fees_and_funds = [
+                SettingKey::BookingFee->value => 25000,
+                SettingKey::EmergencyFund->value => 1000,
+                SettingKey::GuaranteeFund->value => 2500,
+            ];
+            $booking->saveQuietly();
         });
     }
 

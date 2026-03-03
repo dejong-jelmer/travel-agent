@@ -95,7 +95,7 @@ class TripTest extends TestCase
                     'single_supplement' => fake()->numberBetween(150, 500),
                     'valid_from' => now(),
                     'valid_until' => now()->addMonths(12),
-                    'label' => PriceLabel::High_season->value,
+                    'label' => PriceLabel::HighSeason->value,
                 ],
             ],
         ];
@@ -183,7 +183,7 @@ class TripTest extends TestCase
                     'single_supplement' => fake()->numberBetween(150, 500),
                     'valid_from' => now(),
                     'valid_until' => now()->addMonths(12),
-                    'label' => PriceLabel::High_season->value,
+                    'label' => PriceLabel::HighSeason->value,
                 ],
             ],
         ];
@@ -457,7 +457,7 @@ class TripTest extends TestCase
                     'single_supplement' => fake()->numberBetween(150, 500),
                     'valid_from' => now(),
                     'valid_until' => now()->addMonths(12),
-                    'label' => PriceLabel::High_season->value,
+                    'label' => PriceLabel::HighSeason->value,
                 ],
             ],
         ], $overrides);

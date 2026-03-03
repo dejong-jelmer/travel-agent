@@ -23,8 +23,8 @@ class PriceCalculatorService
     {
         $currency = new Currency(self::CURRENCY);
         $bookingFee = new Money((int) round(floatval(Setting::get(SettingKey::BookingFee, 0)) * 100), $currency);
-        $guaranteeFund = new Money((int) round(floatval(Setting::get(SettingKey::GuaranteeFund, 0)) * 100), $currency);
         $emergencyFund = new Money((int) round(floatval(Setting::get(SettingKey::EmergencyFund, 0)) * 100), $currency);
+        $guaranteeFund = new Money((int) round(floatval(Setting::get(SettingKey::GuaranteeFund, 0)) * 100), $currency);
 
         $priceRow = $this->resolvePriceRow($trip, $departureDate);
 

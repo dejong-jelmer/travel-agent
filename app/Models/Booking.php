@@ -53,6 +53,7 @@ class Booking extends Model
         'price_per_person',
         'single_supplement',
         'total_price',
+        'fees_and_funds',
     ];
 
     protected $casts = [
@@ -61,6 +62,7 @@ class Booking extends Model
         'departure_date' => 'date',
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
+        'fees_and_funds' => 'array',
     ];
 
     protected $appends = [
@@ -68,7 +70,7 @@ class Booking extends Model
         'created_at_formatted',
         'status_label',
         'payment_status_label',
-        'traveler_count',
+        'total_travelers',
     ];
 
     protected $attributes = [
@@ -262,11 +264,11 @@ class Booking extends Model
     }
 
     /**
-     * Get the booking travelerCount.
+     * Get the total traverellers for this booking .
      *
      * @return Attribute<int, never>
      */
-    protected function travelerCount(): Attribute
+    protected function totalTravelers(): Attribute
     {
         return Attribute::make(
             get: fn () => $this->travelers->count(),

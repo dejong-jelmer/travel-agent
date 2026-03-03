@@ -26,6 +26,7 @@ return new class extends Migration
             $table->unsignedInteger('price_per_person');
             $table->unsignedInteger('single_supplement');
             $table->unsignedInteger('total_price');
+            $table->json('fees_and_funds');
             $table->softDeletes();
             $table->timestamps();
         });

@@ -11,6 +11,7 @@ use App\Models\BookingTraveler;
 use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
+use App\Services\PriceCalculatorService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
@@ -46,6 +47,7 @@ class BookingTest extends TestCase
         $this->assertBookingWasCreatedCorrectly($booking, $payload);
         $this->assertTravelersWereCreatedCorrectly($booking, $payload);
         $this->assertContactWasCreatedCorrectly($booking, $payload);
+        $this->assertPricesWhereSetCorrectly($response, $booking);
         $this->assertRedirectIsCorrect($response, $booking);
     }
 
@@ -382,6 +384,24 @@ class BookingTest extends TestCase
     private function assertContactWasUpdatedCorrectly(Booking $booking, array $payload): void
     {
         $this->assertContactWasCreatedCorrectly($booking, $payload);
+    }
+
+    private function assertPricesWhereSetCorrectly($response, Booking $booking): void
+    {
+        $prices = app(PriceCalculatorService::class)->forTrip($this->trip, $booking->total_travelers, $booking->departure_date);
+
+        $this->assertEquals($prices->tripPriceId, $booking->trip_price_id);
+        $this->assertEquals($prices->perPerson->getAmount(), $booking->price_per_person);
+        $this->assertEquals($prices->singleSupplement->getAmount(), $booking->single_supplement);
+        $this->assertEquals($prices->grandTotal->getAmount(), $booking->total_price);
+        $this->assertEquals(
+            [
+                SettingKey::BookingFee->value => $prices->bookingFee->getAmount(),
+                SettingKey::EmergencyFund->value => $prices->emergencyFund->getAmount(),
+                SettingKey::GuaranteeFund->value => $prices->guaranteeFund->getAmount(),
+            ],
+            $booking->fees_and_funds
+        );
     }
 
     private function assertRedirectIsCorrect($response, Booking $booking): void

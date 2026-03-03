@@ -5,6 +5,7 @@ namespace App\Services;
 use App\DTO\CreateBookingData;
 use App\DTO\TripPriceData;
 use App\DTO\UpdateBookingData;
+use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 
@@ -26,6 +27,11 @@ class BookingService
             'price_per_person' => $prices->perPerson->getAmount(),
             'single_supplement' => $prices->singleSupplement->getAmount(),
             'total_price' => $prices->total->getAmount(),
+            'fees_and_funds' => [
+                SettingKey::BookingFee->value => $prices->bookingFee->getAmount(),
+                SettingKey::EmergencyFund->value => $prices->emergencyFund->getAmount(),
+                SettingKey::GuaranteeFund->value => $prices->guaranteeFund->getAmount(),
+            ],
         ]);
 
         // Create booking contact details

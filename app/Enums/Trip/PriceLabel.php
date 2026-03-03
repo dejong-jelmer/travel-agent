@@ -10,9 +10,9 @@ enum PriceLabel: string
     use HasTranslatableLabel,
         Selectable;
 
-    case Low_season = 'low_season';
-    case High_season = 'high_season';
-    case Mid_season = 'mid_season';
+    case LowSeason = 'low_season';
+    case HighSeason = 'high_season';
+    case MidSeason = 'mid_season';
 
     protected function getLabelKey(): string
     {
