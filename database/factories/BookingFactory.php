@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\SettingKey;
-use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;

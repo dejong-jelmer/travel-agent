@@ -42,7 +42,6 @@ class PriceCalculatorService
             ->add($feesAndFunds[SettingKey::GuaranteeFund->value])
             ->add($feesAndFunds[SettingKey::EmergencyFund->value]);
 
-
         return new TripPriceData(
             tripPriceId: $priceRow->id,
             perPerson: $perPerson,

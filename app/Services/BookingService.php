@@ -29,9 +29,9 @@ class BookingService
             'base_total_price' => $prices->baseTotal->getAmount(),
             'grand_total_price' => $prices->baseTotal->getAmount(),
             'fees_and_funds' => [
-                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee]->getAmount(),
-                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::BookingFee]->getAmount(),
-                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::BookingFee]->getAmount(),
+                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
+                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
+                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::GuaranteeFund->value]->getAmount(),
             ],
         ]);
 
