@@ -188,6 +188,11 @@ function formatPrice(cents) {
                                 <span class="text-sm font-medium text-gray-700">{{ t('admin.booking.show.pricing.single_supplement') }}</span>
                                 <span class="font-semibold text-gray-900">{{ formatPrice(booking.single_supplement) }}</span>
                             </div>
+                            <div v-for="(amount, key) in booking.fees_and_funds" :key="key"
+                                class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">{{ t(`booking_steps.overview.${key}`) }}</span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(amount) }}</span>
+                            </div>
                             <div class="flex items-center justify-between p-4 bg-primary-default/5 rounded-lg border border-primary-default/20">
                                 <span class="text-sm font-semibold text-gray-700">{{ t('admin.booking.show.pricing.total') }}</span>
                                 <span class="text-lg font-bold text-primary-default">{{ formatPrice(booking.total_price) }}</span>

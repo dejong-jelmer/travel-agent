@@ -6,6 +6,7 @@ use App\Enums\ImageRelation;
 use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\PriceLabel;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -201,9 +202,20 @@ class TripFactory extends Factory
 
     public function withPrices(): static
     {
-        return $this->has(
-            TripPrice::factory()->count(2),
-            'prices'
-        );
+        return $this->afterCreating(function (Trip $trip) {
+            $seasons = [PriceLabel::LowSeason, PriceLabel::MidSeason, PriceLabel::HighSeason];
+
+            foreach ($seasons as $index => $season) {
+                $validFrom = now()->addMonths($index * 4);
+                $validUntil = $validFrom->copy()->addMonths(4)->subDay();
+
+                TripPrice::factory()->create([
+                    'trip_id' => $trip->id,
+                    'valid_from' => $validFrom->format('Y-m-d'),
+                    'valid_until' => $validUntil->format('Y-m-d'),
+                    'label' => $season,
+                ]);
+            }
+        });
     }
 }

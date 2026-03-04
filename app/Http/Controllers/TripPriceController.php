@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\SettingKey;
 use App\Exceptions\NoPriceAvailableException;
 use App\Models\Trip;
 use App\Services\PriceCalculatorService;
@@ -26,11 +27,11 @@ class TripPriceController extends Controller
 
         return response()->json([
             'price_per_person' => $prices ? $prices->perPerson->getAmount() / 100 : 0,
-            'total_price' => $prices ? $prices->total->getAmount() / 100 : 0,
+            'total_price' => $prices ? $prices->baseTotal->getAmount() / 100 : 0,
             'single_supplement' => $prices ? $prices->singleSupplement->getAmount() / 100 : 0,
-            'booking_fee' => $prices ? $prices->bookingFee->getAmount() / 100 : 0,
-            'guarantee_fund' => $prices ? $prices->guaranteeFund->getAmount() / 100 : 0,
-            'emergency_fund' => $prices ? $prices->emergencyFund->getAmount() / 100 : 0,
+            'booking_fee' => $prices ? $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount() / 100 : 0,
+            'guarantee_fund' => $prices ? $prices->feesAndFunds[SettingKey::GuaranteeFund->value]->getAmount() / 100 : 0,
+            'emergency_fund' => $prices ? $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount() / 100 : 0,
             'grand_total' => $prices ? $prices->grandTotal->getAmount() / 100 : 0,
         ], 200);
     }

@@ -10,10 +10,8 @@ readonly class TripPriceData
         public int $tripPriceId,
         public Money $perPerson,
         public Money $singleSupplement,
-        public Money $total,
-        public Money $bookingFee,
-        public Money $guaranteeFund,
-        public Money $emergencyFund,
+        public Money $baseTotal,
         public Money $grandTotal,
+        public array $feesAndFunds
     ) {}
 }

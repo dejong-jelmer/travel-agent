@@ -33,7 +33,7 @@ Object.entries(flash).forEach(([type, message]) => {
 
     <SeoHead />
     <main>
-        <Topbar class="z-50" />
+        <!-- <Topbar class="z-50" /> -->
         <Nav class="z-50 sticky top-0 inset-x-0" />
         <slot name="hero"></slot>
         <slot></slot>

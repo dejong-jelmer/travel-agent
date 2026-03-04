@@ -22,9 +22,10 @@ class PriceCalculatorService
     public function forTrip(Trip $trip, int $persons, Carbon $departureDate): TripPriceData
     {
         $currency = new Currency(self::CURRENCY);
-        $bookingFee = new Money((int) round(floatval(Setting::get(SettingKey::BookingFee, 0)) * 100), $currency);
-        $emergencyFund = new Money((int) round(floatval(Setting::get(SettingKey::EmergencyFund, 0)) * 100), $currency);
-        $guaranteeFund = new Money((int) round(floatval(Setting::get(SettingKey::GuaranteeFund, 0)) * 100), $currency);
+
+        $feesAndFunds[SettingKey::BookingFee->value] = new Money((int) round(floatval(Setting::get(SettingKey::BookingFee, 0)) * 100), $currency);
+        $feesAndFunds[SettingKey::GuaranteeFund->value] = new Money((int) round(floatval(Setting::get(SettingKey::GuaranteeFund, 0)) * 100), $currency);
+        $feesAndFunds[SettingKey::EmergencyFund->value] = new Money((int) round(floatval(Setting::get(SettingKey::EmergencyFund, 0)) * 100), $currency);
 
         $priceRow = $this->resolvePriceRow($trip, $departureDate);
 
@@ -36,17 +37,19 @@ class PriceCalculatorService
         $supplement = $persons === 1 ? new Money((int) $priceRow->single_supplement, $currency) : new Money(0, $currency);
         $baseTotal = $perPerson->multiply($persons);
 
-        $grandTotal = $baseTotal->add($supplement)->add($bookingFee)->add($guaranteeFund)->add($emergencyFund);
+        $grandTotal = $baseTotal->add($supplement)
+            ->add($feesAndFunds[SettingKey::BookingFee->value])
+            ->add($feesAndFunds[SettingKey::GuaranteeFund->value])
+            ->add($feesAndFunds[SettingKey::EmergencyFund->value]);
+
 
         return new TripPriceData(
             tripPriceId: $priceRow->id,
             perPerson: $perPerson,
             singleSupplement: $supplement,
-            total: $baseTotal,
-            bookingFee: $bookingFee,
-            guaranteeFund: $guaranteeFund,
-            emergencyFund: $emergencyFund,
+            baseTotal: $baseTotal,
             grandTotal: $grandTotal,
+            feesAndFunds: $feesAndFunds
         );
     }
 

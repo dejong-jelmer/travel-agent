@@ -26,11 +26,12 @@ class BookingService
             'trip_price_id' => $prices->tripPriceId,
             'price_per_person' => $prices->perPerson->getAmount(),
             'single_supplement' => $prices->singleSupplement->getAmount(),
-            'total_price' => $prices->total->getAmount(),
+            'base_total_price' => $prices->baseTotal->getAmount(),
+            'grand_total_price' => $prices->baseTotal->getAmount(),
             'fees_and_funds' => [
-                SettingKey::BookingFee->value => $prices->bookingFee->getAmount(),
-                SettingKey::EmergencyFund->value => $prices->emergencyFund->getAmount(),
-                SettingKey::GuaranteeFund->value => $prices->guaranteeFund->getAmount(),
+                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee]->getAmount(),
+                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::BookingFee]->getAmount(),
+                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::BookingFee]->getAmount(),
             ],
         ]);
 
