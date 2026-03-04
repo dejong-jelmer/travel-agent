@@ -52,7 +52,8 @@ class Booking extends Model
         'trip_price_id',
         'price_per_person',
         'single_supplement',
-        'total_price',
+        'base_total_price',
+        'grand_total_price',
         'fees_and_funds',
     ];
 

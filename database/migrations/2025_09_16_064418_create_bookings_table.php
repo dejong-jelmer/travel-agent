@@ -25,7 +25,8 @@ return new class extends Migration
             $table->string('payment_status', 20)->index();
             $table->unsignedInteger('price_per_person');
             $table->unsignedInteger('single_supplement');
-            $table->unsignedInteger('total_price');
+            $table->unsignedInteger('base_total_price');
+            $table->unsignedInteger('grand_total_price');
             $table->json('fees_and_funds');
             $table->softDeletes();
             $table->timestamps();

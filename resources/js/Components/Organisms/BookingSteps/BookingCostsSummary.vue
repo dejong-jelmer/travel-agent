@@ -44,7 +44,7 @@ const totalPrice = computed(() => fmt(asyncTripPrices.value?.grand_total ?? 0))
             {{ $t('booking_steps.overview.costs_heading') }}
         </h2>
         <div class="grid gap-1 ml-4">
-            <div v-if="isLoadingPrices || asyncTripPrices?.total_price > 0" class="flex items-center">
+            <div v-if="isLoadingPrices || asyncTripPrices?.base_total_price > 0" class="flex items-center">
                 <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
                 <span class="flex-1 flex items-center gap-2">
                     <span>{{ $t('booking_steps.overview.trip_price') }}</span>
@@ -53,7 +53,7 @@ const totalPrice = computed(() => fmt(asyncTripPrices.value?.grand_total ?? 0))
                     <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                     <span class="font-bold">
                         <LoaderCircle v-if="isLoadingPrices" class="size-5 animate-spin" />
-                        <span v-else>€ {{ fmt(asyncTripPrices?.total_price) }}</span>
+                        <span v-else>€ {{ fmt(asyncTripPrices?.base_total_price) }}</span>
                     </span>
                 </span>
             </div>
