@@ -28,24 +28,20 @@ class BookingController extends Controller
         $bookingData = CreateBookingData::fromRequest($request);
         $totalTravelers = $this->bookingService->getTotalTravellers($bookingData->travelers);
 
-        $prices = $this->attempt(
-            fn () => $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date),
-            'No prices available',
-            'booking.error.no_prices_available',
-            $bookingData
-        );
-        if ($prices instanceof RedirectResponse) {
-            return $prices;
+        try {
+            $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
+        } catch (Exception $e) {
+            $this->handleBookingError($e, 'No prices available', $bookingData);
+
+            return back()->withErrors(['message' => __('booking.error.no_prices_available')]);
         }
 
-        $booking = $this->attempt(
-            fn () => $this->bookingService->create($bookingData, $prices),
-            'Booking create failed',
-            'booking.error.create_failed',
-            $bookingData
-        );
-        if ($booking instanceof RedirectResponse) {
-            return $booking;
+        try {
+            $booking = $this->bookingService->create($bookingData, $prices);
+        } catch (Exception $e) {
+            $this->handleBookingError($e, 'Booking create failed', $bookingData);
+
+            return back()->withErrors(['message' => __('booking.error.create_failed')]);
         }
 
         event(new BookingCreated($booking));
@@ -73,19 +69,13 @@ class BookingController extends Controller
         ]);
     }
 
-    private function attempt(callable $action, string $errorContext, string $errorKey, CreateBookingData $data): mixed
+    private function handleBookingError(Exception $e, string $context, CreateBookingData $data): void
     {
-        try {
-            return $action();
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            event(new BookingFailed($e->getMessage(), $errorContext, [
-                'email' => $data->contact->email,
-                'trip_name' => $data->trip->name,
-                'date' => $data->date->format('d-m-Y'),
-            ]));
-
-            return back()->withErrors(['message' => __($errorKey)]);
-        }
+        Log::error($e->getMessage());
+        event(new BookingFailed($e->getMessage(), $context, [
+            'email' => $data->contact->email,
+            'trip_name' => $data->trip->name,
+            'date' => $data->date->format('d-m-Y'),
+        ]));
     }
 }
