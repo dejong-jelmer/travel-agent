@@ -86,11 +86,13 @@ class TripController extends Controller
             $trip->destinations()->sync($destinations);
         }
 
-        // Sync trip items
-        $this->tripItemService::syncTripItems($trip, $request->input('items'));
+        DB::transaction(function () use ($trip, $request) {
+            // Sync trip items
+            $this->tripItemService::syncTripItems($trip, $request->input('items'));
 
-        // Sync trip prices
-        $this->syncPrices($trip, $request->input('prices', []));
+            // Sync trip prices
+            $this->syncPrices($trip, $request->input('prices', []));
+        });
 
         return redirect()->route('admin.trips.show', $trip)->with('success', __('trip.created'));
     }

@@ -10,6 +10,7 @@ use App\Support\MoneyHelper;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
+use Money\Money;
 
 class TripPriceController extends Controller
 {
@@ -49,7 +50,7 @@ class TripPriceController extends Controller
         ]);
     }
 
-    private function formatAmount($money): float
+    private function formatAmount(Money $money): float
     {
         return $money->getAmount() / MoneyHelper::CENTS_PER_UNIT;
     }

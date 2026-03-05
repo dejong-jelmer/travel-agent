@@ -32,7 +32,7 @@ class BookingController extends Controller
         try {
             $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
         } catch (NoPriceAvailableException $e) {
-            Log::error($e->getMessage(), $bookingData->toArray());
+            Log::error($e->getMessage());
             event(new BookingFailed($e->getMessage(), 'Geen prijzen beschikbaar', $bookingData));
 
             return back()->withErrors(['message' => __('booking.error.no_prices_available')]);
@@ -41,7 +41,7 @@ class BookingController extends Controller
         try {
             $booking = $this->bookingService->create($bookingData, $prices);
         } catch (Exception $e) {
-            Log::error($e->getMessage(), $bookingData->toArray());
+            Log::error($e->getMessage());
             event(new BookingFailed($e->getMessage(), 'Boeking aanmaken mislukt', $bookingData));
 
             return back()->withErrors(['message' => __('booking.error.create_failed')]);
