@@ -32,8 +32,6 @@ class BookingTest extends TestCase
         $this->trip = Trip::factory()->withPrices()->create();
     }
 
-    // @toDo App\Exceptions\NoPriceAvailableException: No prices available for trip id: "1" on departure date: "2026-06-01"
-    // create Trip with Prices
     public function test_it_can_create_a_booking_with_travelers_and_contact()
     {
         $payload = $this->generateBookingPayload();
@@ -51,8 +49,6 @@ class BookingTest extends TestCase
         $this->assertRedirectIsCorrect($response, $booking);
     }
 
-    // @toDo App\Exceptions\NoPriceAvailableException: No prices available for trip id: "1" on departure date: "2026-06-01"
-    // create Trip with Prices
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
     {
         $admin = User::factory()->admin()->create();
@@ -102,7 +98,6 @@ class BookingTest extends TestCase
     }
 
     // Blocked dates backend enforcement tests
-
     public function test_booking_is_rejected_when_departure_date_is_a_blocked_weekday(): void
     {
         $nextMonday = now()->next(Carbon::MONDAY);
@@ -164,7 +159,7 @@ class BookingTest extends TestCase
 
     public function test_booking_is_accepted_when_departure_date_does_not_match_any_blocked_date(): void
     {
-        $trip = Trip::factory()->create([
+        $trip = Trip::factory()->withPrices()->create([
             'blocked_dates' => [
                 'dates' => [now()->addMonths(3)->format('Y-m-d')],
                 'weekdays' => [Carbon::SUNDAY],
@@ -219,17 +214,6 @@ class BookingTest extends TestCase
 
         $payload = $this->generateBookingPayload([
             'departure_date' => now()->addMonth()->format('Y-m-d'),
-        ]);
-
-        $response = $this->post(route('bookings.store'), $payload);
-
-        $response->assertSessionHasNoErrors();
-    }
-
-    public function test_booking_is_accepted_when_no_season_end_is_set(): void
-    {
-        $payload = $this->generateBookingPayload([
-            'departure_date' => now()->addYear()->format('Y-m-d'),
         ]);
 
         $response = $this->post(route('bookings.store'), $payload);

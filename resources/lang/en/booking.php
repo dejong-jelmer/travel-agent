@@ -13,6 +13,10 @@ return [
     'created' => 'Your booking was successful! You will receive a confirmation email with more details about your upcoming trip.',
     'updated' => 'Booking :reference has been successfully updated.',
     'deleted' => 'Booking :reference has been deleted.',
+    'error' => [
+        'no_prices_available' => 'There are no prices available for this trip. Please try again later.',
+        'create_failed' => 'Something went wrong while creating your booking. Please try again later.',
+    ],
 
     // Status
     'status' => [

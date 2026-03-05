@@ -14,6 +14,11 @@ return [
     'updated' => 'Boeking :reference is succesvol aangepast.',
     'deleted' => 'Boeking :reference is verwijderd.',
 
+    'error' => [
+        'no_prices_available' => 'Er zijn geen prijzen beschikbaar voor deze reis. Probeer het later opnieuw.',
+        'create_failed' => 'Er is iets misgegaan bij het aanmaken van je boeking. Probeer het later opnieuw.',
+    ],
+
     // Status
     'status' => [
         'new' => 'Nieuw',

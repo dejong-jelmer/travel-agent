@@ -47,7 +47,7 @@ Route::get('/nieuwsbrief/afmelden/{token}', [SubscriptionController::class, 'uns
 Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.show');
 
 // Trip prices
-Route::get('trips/{trip}/prices', [TripPriceController::class, 'getPrices'])->name('trips.prices');
+Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
 
 // Booking routes
 Route::post('/boekingen', [BookingController::class, 'store'])

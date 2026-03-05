@@ -5,13 +5,17 @@ namespace App\Http\Controllers;
 use App\DTO\CreateBookingData;
 use App\Enums\ModelAction;
 use App\Events\BookingCreated;
+use App\Events\BookingFailed;
+use App\Exceptions\NoPriceAvailableException;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
 use App\Services\PriceCalculatorService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -25,9 +29,24 @@ class BookingController extends Controller
         $bookingData = CreateBookingData::fromRequest($request);
         $totalTravelers = $this->bookingService->getTotalTravellers($bookingData->travelers);
 
-        $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
+        try {
+            $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
+        } catch (NoPriceAvailableException $e) {
+            Log::error($e->getMessage(), $bookingData->toArray());
+            event(new BookingFailed($e->getMessage(), 'Geen prijzen beschikbaar', $bookingData));
 
-        $booking = $this->bookingService->create($bookingData, $prices);
+            return back()->withErrors(['message' => __('booking.error.no_prices_available')]);
+        }
+
+        try {
+            $booking = $this->bookingService->create($bookingData, $prices);
+        } catch (Exception $e) {
+            Log::error($e->getMessage(), $bookingData->toArray());
+            event(new BookingFailed($e->getMessage(), 'Boeking aanmaken mislukt', $bookingData));
+
+            return back()->withErrors(['message' => __('booking.error.create_failed')]);
+        }
+
         event(new BookingCreated($booking));
         session()->flash('booking_uuid', $booking->uuid);
 

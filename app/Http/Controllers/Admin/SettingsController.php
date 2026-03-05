@@ -31,7 +31,7 @@ class SettingsController extends Controller
     public function update(UpdateSettingsRequest $request): RedirectResponse
     {
         $validated = $request->validated();
-        Setting::set(SettingKey::BookingSeasonEnd, $validated[SettingKey::BookingSeasonEnd->value]);
+        Setting::set(SettingKey::BookingSeasonEnd, $validated[SettingKey::BookingSeasonEnd->value] ?? null);
         Setting::set(SettingKey::BookingFee, $validated[SettingKey::BookingFee->value] ?? null);
         Setting::set(SettingKey::GuaranteeFund, $validated[SettingKey::GuaranteeFund->value] ?? null);
         Setting::set(SettingKey::EmergencyFund, $validated[SettingKey::EmergencyFund->value] ?? null);

@@ -18,6 +18,7 @@ use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\TripItemService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -150,25 +151,34 @@ class TripController extends Controller
             $trip->destinations()->sync($destinations);
         }
 
-        // Sync trip items - delete all and recreate
-        $trip->items()->delete();
-        $this->tripItemService::syncTripItems($trip, $request->input('items'));
+        DB::transaction(function () use ($trip, $request) {
+            // Sync trip items - delete all and recreate
+            $trip->items()->delete();
+            $this->tripItemService::syncTripItems($trip, $request->input('items'));
 
-        // Sync trip prices
-        $this->syncPrices($trip, $request->input('prices', []));
+            // Sync trip prices
+            $this->syncPrices($trip, $request->input('prices', []));
+        });
 
         return redirect()->route('admin.trips.show', $trip)
             ->with('success', __('trip.updated'));
     }
 
+    private const CENTS_PER_UNIT = 100;
+
+    /**
+     * Delete all existing prices for a trip and recreate them from the given array.
+     *
+     * @param  array<int, array{base_price_pp: numeric, single_supplement: numeric, valid_from: string, valid_until: string, label: string}>  $prices
+     */
     private function syncPrices(Trip $trip, array $prices): void
     {
         $trip->prices()->delete();
 
         foreach ($prices as $price) {
             $trip->prices()->create([
-                'base_price_pp' => (int) round($price['base_price_pp'] * 100),
-                'single_supplement' => (int) round($price['single_supplement'] * 100),
+                'base_price_pp' => (int) round($price['base_price_pp'] * self::CENTS_PER_UNIT),
+                'single_supplement' => (int) round($price['single_supplement'] * self::CENTS_PER_UNIT),
                 'valid_from' => $price['valid_from'],
                 'valid_until' => $price['valid_until'],
                 'label' => $price['label'],
