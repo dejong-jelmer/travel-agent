@@ -6,7 +6,6 @@ use App\DTO\CreateBookingData;
 use App\Enums\ModelAction;
 use App\Events\BookingCreated;
 use App\Events\BookingFailed;
-use App\Exceptions\NoPriceAvailableException;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateBookingRequest;
 use App\Models\Booking;
@@ -29,23 +28,21 @@ class BookingController extends Controller
         $bookingData = CreateBookingData::fromRequest($request);
         $totalTravelers = $this->bookingService->getTotalTravellers($bookingData->travelers);
 
-        try {
-            $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
-        } catch (NoPriceAvailableException $e) {
-            Log::error($e->getMessage());
-            event(new BookingFailed($e->getMessage(), 'Geen prijzen beschikbaar', $bookingData));
+        $prices = $this->attempt(
+            fn () => $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date),
+            'No prices available',
+            'booking.error.no_prices_available',
+            $bookingData->contact?->email ?? null
+        );
+        if ($prices instanceof RedirectResponse) return $prices;
 
-            return back()->withErrors(['message' => __('booking.error.no_prices_available')]);
-        }
-
-        try {
-            $booking = $this->bookingService->create($bookingData, $prices);
-        } catch (Exception $e) {
-            Log::error($e->getMessage());
-            event(new BookingFailed($e->getMessage(), 'Boeking aanmaken mislukt', $bookingData));
-
-            return back()->withErrors(['message' => __('booking.error.create_failed')]);
-        }
+        $booking = $this->attempt(
+            fn () => $this->bookingService->create($bookingData, $prices),
+            'Booking create failed',
+            'booking.error.create_failed',
+            $bookingData->contact?->email ?? null
+        );
+        if ($booking instanceof RedirectResponse) return $booking;
 
         event(new BookingCreated($booking));
         session()->flash('booking_uuid', $booking->uuid);
@@ -70,5 +67,17 @@ class BookingController extends Controller
                 'mainBooker',
             ]),
         ]);
+    }
+
+    private function attempt(callable $action, string $errorContext, string $errorKey, string $email): mixed
+    {
+        try {
+            return $action();
+        } catch (Exception $e) {
+            Log::error($e->getMessage());
+            event(new BookingFailed($e->getMessage(), $errorContext, $email));
+
+            return back()->withErrors(['message' => __($errorKey)]);
+        }
     }
 }

@@ -26,20 +26,23 @@
     </div>
 
     {{-- Attempted Booking Details --}}
-    <h3 style="color:#30547e;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
+    <h3
+        style="color:#30547e;font-size:20px;margin:35px 0 15px 0;padding-bottom:12px;border-bottom:3px solid #AFCB98;font-weight:700;">
         Geprobeerde Boeking
     </h3>
 
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:25px;">
         <tr>
             <td style="background:#fbfbf7;padding:20px;border-left:4px solid #AFCB98;">
-                <p style="margin:0 0 8px 0;font-size:13px;color:#AFCB98;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
+                <p
+                    style="margin:0 0 8px 0;font-size:13px;color:#AFCB98;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                     Reis
                 </p>
                 <p style="margin:0 0 15px 0;font-size:22px;font-weight:700;color:#30547e;">
                     {{ $event->bookingData->trip->name }}
                 </p>
-                <p style="margin:0 0 8px 0;font-size:13px;color:#AFCB98;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
+                <p
+                    style="margin:0 0 8px 0;font-size:13px;color:#AFCB98;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                     Vertrekdatum
                 </p>
                 <p style="margin:0;font-size:18px;font-weight:700;color:#30547e;">
@@ -53,7 +56,8 @@
         <tr>
             <td width="48%" style="padding-right:10px;">
                 <div style="background:#fbfbf7;padding:18px;border-left:4px solid #f59e0b;">
-                    <p style="margin:0 0 8px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
+                    <p
+                        style="margin:0 0 8px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                         Tijdstip
                     </p>
                     <p style="margin:0;font-size:15px;font-weight:700;color:#30547e;">
@@ -64,7 +68,8 @@
             <td width="4%"></td>
             <td width="48%" style="padding-left:10px;">
                 <div style="background:#fbfbf7;padding:18px;border-left:4px solid #f59e0b;">
-                    <p style="margin:0 0 8px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
+                    <p
+                        style="margin:0 0 8px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                         Aantal reizigers
                     </p>
                     <p style="margin:0;font-size:15px;font-weight:700;color:#30547e;">
@@ -76,26 +81,20 @@
     </table>
 
     {{-- Contact Details --}}
-    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:30px;background:#fbfbf7;padding:20px;border:2px solid #f59e0b;">
+    <table width="100%" cellpadding="0" cellspacing="0"
+        style="margin-bottom:30px;background:#fbfbf7;padding:20px;border:2px solid #f59e0b;">
         <tr>
             <td width="50%" style="padding-right:15px;border-right:2px solid #f0ede8;">
                 <p style="margin:0 0 6px 0;font-size:12px;color:#f59e0b;font-weight:700;text-transform:uppercase;">
                     E-mail klant
                 </p>
                 <p style="margin:0;font-size:15px;color:#30547e;">
-                    <a href="mailto:{{ $event->bookingData->contact->email }}" style="color:#30547e;text-decoration:none;font-weight:600;">
-                        {{ $event->bookingData->contact->email }}
-                    </a>
-                </p>
-            </td>
-            <td width="50%" style="padding-left:15px;">
-                <p style="margin:0 0 6px 0;font-size:12px;color:#f59e0b;font-weight:700;text-transform:uppercase;">
-                    Telefoon klant
-                </p>
-                <p style="margin:0;font-size:15px;color:#30547e;">
-                    <a href="tel:{{ $event->bookingData->contact->phone }}" style="color:#30547e;text-decoration:none;font-weight:600;">
-                        {{ $event->bookingData->contact->phone }}
-                    </a>
+                    @if ($event->customerEmail)
+                        <a href="mailto:{{ $event->customerEmail }}"
+                            style="color:#30547e;text-decoration:none;font-weight:600;">
+                            {{ $event->customerEmail }}
+                        </a>
+                    @endif
                 </p>
             </td>
         </tr>
@@ -108,12 +107,14 @@
         </h3>
         <ul style="margin:0;padding:0 0 0 20px;color:#30547e;line-height:1.8;">
             <li style="margin-bottom:8px;"><strong>Controleer de server logs</strong> voor meer technische details</li>
-            <li style="margin-bottom:8px;"><strong>Neem contact op met de klant</strong> om de boeking handmatig te verwerken</li>
+            <li style="margin-bottom:8px;"><strong>Neem contact op met de klant</strong> om de boeking handmatig te
+                verwerken</li>
             <li><strong>Onderzoek de oorzaak</strong> van de fout om herhaling te voorkomen</li>
         </ul>
     </div>
 
-    <p style="margin:30px 0 0 0;padding:20px;background:#fbfbf7;font-size:13px;color:#A3BCCB;text-align:center;line-height:1.6;">
+    <p
+        style="margin:30px 0 0 0;padding:20px;background:#fbfbf7;font-size:13px;color:#A3BCCB;text-align:center;line-height:1.6;">
         Dit is een automatische foutmelding. Controleer de logs voor volledige stacktrace.
     </p>
 @endsection

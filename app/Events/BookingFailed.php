@@ -14,6 +14,6 @@ class BookingFailed
     public function __construct(
         public string $errorMessage,
         public string $errorContext,
-        public CreateBookingData $bookingData,
+        public ?string $customerEmail = null,
     ) {}
 }
