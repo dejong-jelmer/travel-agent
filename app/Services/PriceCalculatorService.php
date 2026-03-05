@@ -8,6 +8,7 @@ use App\Exceptions\NoPriceAvailableException;
 use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\TripPrice;
+use App\Support\MoneyHelper;
 use Carbon\Carbon;
 use Money\Currency;
 use Money\Money;
@@ -23,9 +24,9 @@ class PriceCalculatorService
     {
         $currency = new Currency(self::CURRENCY);
 
-        $feesAndFunds[SettingKey::BookingFee->value] = new Money((int) round(floatval(Setting::get(SettingKey::BookingFee, 0)) * 100), $currency);
-        $feesAndFunds[SettingKey::GuaranteeFund->value] = new Money((int) round(floatval(Setting::get(SettingKey::GuaranteeFund, 0)) * 100), $currency);
-        $feesAndFunds[SettingKey::EmergencyFund->value] = new Money((int) round(floatval(Setting::get(SettingKey::EmergencyFund, 0)) * 100), $currency);
+        $feesAndFunds[SettingKey::BookingFee->value] = new Money(MoneyHelper::toCents(Setting::get(SettingKey::BookingFee, 0)), $currency);
+        $feesAndFunds[SettingKey::GuaranteeFund->value] = new Money(MoneyHelper::toCents(Setting::get(SettingKey::GuaranteeFund, 0)), $currency);
+        $feesAndFunds[SettingKey::EmergencyFund->value] = new Money(MoneyHelper::toCents(Setting::get(SettingKey::EmergencyFund, 0)), $currency);
 
         $priceRow = $this->resolvePriceRow($trip, $departureDate);
 

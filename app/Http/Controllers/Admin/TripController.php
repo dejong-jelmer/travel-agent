@@ -17,6 +17,7 @@ use App\Models\Destination;
 use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\TripItemService;
+use App\Support\MoneyHelper;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -164,8 +165,6 @@ class TripController extends Controller
             ->with('success', __('trip.updated'));
     }
 
-    private const CENTS_PER_UNIT = 100;
-
     /**
      * Delete all existing prices for a trip and recreate them from the given array.
      *
@@ -177,8 +176,8 @@ class TripController extends Controller
 
         foreach ($prices as $price) {
             $trip->prices()->create([
-                'base_price_pp' => (int) round($price['base_price_pp'] * self::CENTS_PER_UNIT),
-                'single_supplement' => (int) round($price['single_supplement'] * self::CENTS_PER_UNIT),
+                'base_price_pp' => MoneyHelper::toCents($price['base_price_pp']),
+                'single_supplement' => MoneyHelper::toCents($price['single_supplement']),
                 'valid_from' => $price['valid_from'],
                 'valid_until' => $price['valid_until'],
                 'label' => $price['label'],

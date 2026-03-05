@@ -8,6 +8,7 @@ use App\Models\Traits\CastsStringArray;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
+use App\Support\MoneyHelper;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -211,7 +212,7 @@ class Trip extends Model
     protected function priceFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => number_format((float) $this->starting_from_price / 100, 0, ',', '.')
+            get: fn () => number_format((float) $this->starting_from_price / MoneyHelper::CENTS_PER_UNIT, 0, ',', '.')
         );
     }
 

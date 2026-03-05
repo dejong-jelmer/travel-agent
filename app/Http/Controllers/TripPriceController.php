@@ -6,14 +6,13 @@ use App\Enums\SettingKey;
 use App\Exceptions\NoPriceAvailableException;
 use App\Models\Trip;
 use App\Services\PriceCalculatorService;
+use App\Support\MoneyHelper;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
 
 class TripPriceController extends Controller
 {
-    private const CENTS_PER_UNIT = 100;
-
     public function __construct(private PriceCalculatorService $priceCalculator) {}
 
     /**
@@ -24,7 +23,7 @@ class TripPriceController extends Controller
     public function __invoke(Trip $trip): JsonResponse
     {
         $validated = request()->validate([
-            'travelers' => ['required', 'integer', 'min:1', 'max:50'],
+            'travelers' => ['required', 'integer', 'min:1', 'max:6'],
             'date' => ['required', 'date_format:Y-m-d'],
         ]);
 
@@ -52,6 +51,6 @@ class TripPriceController extends Controller
 
     private function formatAmount($money): float
     {
-        return $money->getAmount() / self::CENTS_PER_UNIT;
+        return $money->getAmount() / MoneyHelper::CENTS_PER_UNIT;
     }
 }
