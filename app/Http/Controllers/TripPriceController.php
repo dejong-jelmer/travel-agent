@@ -50,8 +50,8 @@ class TripPriceController extends Controller
         ]);
     }
 
-    private function formatAmount(Money $money): float
+    private function formatAmount(Money $money): string
     {
-        return $money->getAmount() / MoneyHelper::CENTS_PER_UNIT;
+        return bcdiv((string) $money->getAmount(), (string) MoneyHelper::CENTS_PER_UNIT, 2);
     }
 }

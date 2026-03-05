@@ -6,6 +6,7 @@ use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PriceLabel;
+use App\Rules\NoOverlappingPricePeriods;
 use App\Services\Traits\MergesRules;
 use Illuminate\Validation\Rule;
 
@@ -27,7 +28,7 @@ class TripValidationRules
     public static function prices(): array
     {
         return [
-            'prices' => ['nullable', 'array'],
+            'prices' => ['nullable', 'array', new NoOverlappingPricePeriods],
             'prices.*.base_price_pp' => ['required', 'numeric', 'min:0'],
             'prices.*.single_supplement' => ['required', 'numeric', 'min:0'],
             'prices.*.valid_from' => ['required', 'date'],

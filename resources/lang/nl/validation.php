@@ -46,6 +46,9 @@ return [
         'main_booker' => [
             'too_young' => 'De hoofdboeker moet minimaal 18 jaar oud zijn.',
         ],
+        'prices' => [
+            'overlap' => 'De prijsperiodes mogen elkaar niet overlappen.',
+        ],
         'itinerary' => [
             'days' => [
                 'overlap' => 'Deze reisdag(en) overlappen met een bestaand itinerary item.',
