@@ -16,8 +16,11 @@ import i18n from '@/plugins/i18n.js';
 
 const { isValidDate } = useDateFormatter();
 
-/** Minimum length for most string fields (names, city, street) */
-const DEFAULT_MIN_STRING_LENGTH = 2;
+/** Minimum length for most string fields (, city, street) */
+const MIN_FRIST_NAME_LENGTH = 2;
+
+/** Minimum length for most string fields (last names, city, street) */
+const DEFAULT_MIN_STRING_LENGTH = 3;
 
 /** Minimum length for nationality field (2-letter destination codes) */
 const MIN_NATIONALITY_LENGTH = 2;
@@ -69,9 +72,9 @@ export function useBookingValidation() {
                 const firstNameError = validateStringField(
                     traveler.first_name,
                     t('validation.fields.first_name'),
-                    DEFAULT_MIN_STRING_LENGTH,
+                    MIN_FRIST_NAME_LENGTH,
                     t('validation.errors.missing', { field: t('validation.fields.first_name') }),
-                    t('validation.errors.too_short', { field: t('validation.fields.first_name'), min: DEFAULT_MIN_STRING_LENGTH })
+                    t('validation.errors.too_short', { field: t('validation.fields.first_name'), min: MIN_FRIST_NAME_LENGTH })
                 );
                 if (firstNameError)
                     errors[`${basePath}.first_name`] = firstNameError;

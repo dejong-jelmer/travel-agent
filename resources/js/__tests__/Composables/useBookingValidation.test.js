@@ -157,7 +157,7 @@ describe("useBookingValidation", () => {
 
             it("should return error when first_name is too short", () => {
                 const bookingData = createBookingData({
-                    adults: [createValidTraveler({ first_name: "Jo" })],
+                    adults: [createValidTraveler({ first_name: "J" })],
                 });
 
                 const errors = validator.validateTravelersStep(bookingData);
