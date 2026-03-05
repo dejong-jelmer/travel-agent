@@ -2,7 +2,6 @@
 
 namespace App\Events;
 
-use App\DTO\CreateBookingData;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;

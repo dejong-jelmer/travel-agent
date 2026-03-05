@@ -34,7 +34,9 @@ class BookingController extends Controller
             'booking.error.no_prices_available',
             $bookingData->contact?->email ?? null
         );
-        if ($prices instanceof RedirectResponse) return $prices;
+        if ($prices instanceof RedirectResponse) {
+            return $prices;
+        }
 
         $booking = $this->attempt(
             fn () => $this->bookingService->create($bookingData, $prices),
@@ -42,7 +44,9 @@ class BookingController extends Controller
             'booking.error.create_failed',
             $bookingData->contact?->email ?? null
         );
-        if ($booking instanceof RedirectResponse) return $booking;
+        if ($booking instanceof RedirectResponse) {
+            return $booking;
+        }
 
         event(new BookingCreated($booking));
         session()->flash('booking_uuid', $booking->uuid);
