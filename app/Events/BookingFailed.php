@@ -13,6 +13,6 @@ class BookingFailed
     public function __construct(
         public string $errorMessage,
         public string $errorContext,
-        public ?string $customerEmail = null,
+        public ?array $bookingDetails = [],
     ) {}
 }

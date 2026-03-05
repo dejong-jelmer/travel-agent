@@ -32,7 +32,7 @@ class BookingController extends Controller
             fn () => $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date),
             'No prices available',
             'booking.error.no_prices_available',
-            $bookingData->contact?->email ?? null
+            $bookingData
         );
         if ($prices instanceof RedirectResponse) {
             return $prices;
@@ -42,7 +42,7 @@ class BookingController extends Controller
             fn () => $this->bookingService->create($bookingData, $prices),
             'Booking create failed',
             'booking.error.create_failed',
-            $bookingData->contact?->email ?? null
+            $bookingData
         );
         if ($booking instanceof RedirectResponse) {
             return $booking;
@@ -73,13 +73,17 @@ class BookingController extends Controller
         ]);
     }
 
-    private function attempt(callable $action, string $errorContext, string $errorKey, string $email): mixed
+    private function attempt(callable $action, string $errorContext, string $errorKey, CreateBookingData $data): mixed
     {
         try {
             return $action();
         } catch (Exception $e) {
             Log::error($e->getMessage());
-            event(new BookingFailed($e->getMessage(), $errorContext, $email));
+            event(new BookingFailed($e->getMessage(), $errorContext, [
+                'email' => $data->contact->email,
+                'trip_name' => $data->trip->name,
+                'date' => $data->date->format('d-m-Y'),
+            ]));
 
             return back()->withErrors(['message' => __($errorKey)]);
         }

@@ -39,14 +39,14 @@
                     Reis
                 </p>
                 <p style="margin:0 0 15px 0;font-size:22px;font-weight:700;color:#30547e;">
-                    {{ $event->bookingData->trip->name }}
+                    {{ $event->bookingDetails['trip_name'] }}
                 </p>
                 <p
                     style="margin:0 0 8px 0;font-size:13px;color:#AFCB98;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
                     Vertrekdatum
                 </p>
                 <p style="margin:0;font-size:18px;font-weight:700;color:#30547e;">
-                    {{ $event->bookingData->date->format('d-m-Y') }}
+                    {{ $event->bookingDetails['date'] }}
                 </p>
             </td>
         </tr>
@@ -65,18 +65,6 @@
                     </p>
                 </div>
             </td>
-            <td width="4%"></td>
-            <td width="48%" style="padding-left:10px;">
-                <div style="background:#fbfbf7;padding:18px;border-left:4px solid #f59e0b;">
-                    <p
-                        style="margin:0 0 8px 0;font-size:12px;color:#A3BCCB;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;">
-                        Aantal reizigers
-                    </p>
-                    <p style="margin:0;font-size:15px;font-weight:700;color:#30547e;">
-                        {{ count($event->bookingData->travelers) }}
-                    </p>
-                </div>
-            </td>
         </tr>
     </table>
 
@@ -89,10 +77,10 @@
                     E-mail klant
                 </p>
                 <p style="margin:0;font-size:15px;color:#30547e;">
-                    @if ($event->customerEmail)
-                        <a href="mailto:{{ $event->customerEmail }}"
+                    @if ($event->bookingDetails['email'])
+                        <a href="mailto:{{ $event->bookingDetails['email'] }}"
                             style="color:#30547e;text-decoration:none;font-weight:600;">
-                            {{ $event->customerEmail }}
+                            {{ $event->bookingDetails['email'] }}
                         </a>
                     @endif
                 </p>

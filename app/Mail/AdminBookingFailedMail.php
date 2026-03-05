@@ -18,7 +18,7 @@ class AdminBookingFailedMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Mislukte Boeking: {$this->event->bookingData->trip->name}",
+            subject: "Mislukte Boeking: {$this->event->bookingDetails['trip_name']}",
         );
     }
 
