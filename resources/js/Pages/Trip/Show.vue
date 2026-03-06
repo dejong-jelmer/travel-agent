@@ -41,7 +41,6 @@ const openLightbox = (index) => {
 
 // Booking data
 const booking = useBooking(props.trip)
-fillBookingWithDummyData(booking.booking)
 
 const departure_date = toRef(booking.booking, 'departure_date')
 const participants = toRef(booking.booking, 'participants')
