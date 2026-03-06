@@ -2,7 +2,6 @@
 import { ref, toRef, watch, computed } from 'vue'
 import { Clock, TrainFront, MapPinned, ChevronRight, Map, ListChecks, Info, Globe, Route } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
-import { fillBookingWithDummyData } from '@/Composables/useBookingDevFill.js'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
