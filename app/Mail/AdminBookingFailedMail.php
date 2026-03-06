@@ -13,12 +13,21 @@ class AdminBookingFailedMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public BookingFailed $event) {}
+    public string $errorMessage;
+    public string $errorContext;
+    public ?array $bookingDetails;
+
+    public function __construct(BookingFailed $event)
+    {
+        $this->errorMessage = $event->getErrorMessage();
+        $this->errorContext = $event->getErrorContext();
+        $this->bookingDetails = $event->getBookingDetails();
+    }
 
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: "Mislukte Boeking: {$this->event->bookingDetails['trip_name']}",
+            subject: "Mislukte Boeking: {$this->bookingDetails['trip_name']}",
         );
     }
 

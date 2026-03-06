@@ -11,8 +11,14 @@ class BookingFailed
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
     public function __construct(
-        public string $errorMessage,
-        public string $errorContext,
-        public ?array $bookingDetails = [],
+        private string $errorMessage,
+        private string $errorContext,
+        private ?array $bookingDetails = [],
     ) {}
+
+    public function getErrorMessage(): string { return $this->errorMessage; }
+
+    public function getErrorContext(): string { return $this->errorContext; }
+
+    public function getBookingDetails(): ?array { return $this->bookingDetails; }
 }
