@@ -2,6 +2,7 @@
 import { ref, toRef, watch, computed } from 'vue'
 import { Clock, TrainFront, MapPinned, ChevronRight, Map, ListChecks, Info, Globe, Route } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
+import { fillBookingWithDummyData } from '@/Composables/useBookingDevFill.js'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
@@ -41,6 +42,7 @@ const openLightbox = (index) => {
 
 // Booking data
 const booking = useBooking(props.trip)
+fillBookingWithDummyData(booking.booking)
 
 const departure_date = toRef(booking.booking, 'departure_date')
 const participants = toRef(booking.booking, 'participants')
@@ -280,14 +282,14 @@ const tabIcons = {
                                     <DatePicker v-model="departure_date" :min-date="new Date()"
                                         :max-date="booking.constraints.value?.maxDate ?? null"
                                         :disabled-dates="booking.disabledDates.value" />
-                                    <PersonPicker v-model="participants" :min-adults="1" :min-children="0"
-                                        :max-adults="6" :max-children="4" />
+                                    <PersonPicker v-model="participants" />
                                     <Button @click="bookingModalOpen = true"
                                         class="w-full flex justify-center items-center group">
                                         {{ t('trip_show.sidebar.book_now') }}
                                         <ChevronRight
                                             class=" group-hover:translate-x-2 transition-transform duration-300" />
                                     </Button>
+                                    <BookingCostsSummary :booking="booking.booking" />
                                     <p class="text-sm text-brand-light text-center mt-4">
                                         {{ t('trip_show.sidebar.contact_info') }}
                                     </p>

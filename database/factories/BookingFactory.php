@@ -4,11 +4,12 @@ namespace Database\Factories;
 
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
-use App\Enums\TravelerType;
+use App\Enums\SettingKey;
 use App\Models\Booking;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;
 use App\Models\Trip;
+use App\Models\TripPrice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -28,19 +29,36 @@ class BookingFactory extends Factory
         return [
             'uuid' => fake()->uuid(),
             'trip_id' => Trip::factory(),
+            'trip_price_id' => 0,
             'departure_date' => fake()->dateTimeBetween('now', '+5 months'),
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
             'status' => $statuses['status'],
             'payment_status' => $statuses['payment_status'],
+            'price_per_person' => 0,
+            'single_supplement' => 0,
+            'base_total_price' => 0,
+            'grand_total_price' => 0,
+            'fees_and_funds' => [],
         ];
     }
 
     public function configure(): static
     {
         return $this->afterCreating(function (Booking $booking) {
+            $tripPrice = TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
             $year = now()->format('Y');
             $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->trip_price_id = $tripPrice->id;
+            $booking->price_per_person = $tripPrice->base_price_pp;
+            $booking->single_supplement = $tripPrice->single_supplement;
+            $booking->base_total_price = $tripPrice->base_price_pp;
+            $booking->fees_and_funds = [
+                SettingKey::BookingFee->value => 2500,
+                SettingKey::EmergencyFund->value => 1000,
+                SettingKey::GuaranteeFund->value => 250,
+            ];
+            $booking->saveQuietly();
         });
     }
 
@@ -94,52 +112,41 @@ class BookingFactory extends Factory
         ]);
     }
 
-    public function withTravelers(): static
-    {
-        return $this->withAdultTravelers()->withChildTravelers();
-    }
-
     /**
-     * Create adult traveler(s) for the booking
+     * Attach travelers to the booking and calculate the total price.
      *
-     * @param  int|null  $count  Number of adult travelers (min: 1, default: random 1-2)
+     * When $adults or $children are not provided, a random count is used.
+     * The price is calculated based on price_per_person and, for a single
+     * adult, the single_supplement.
      *
-     * @throws \InvalidArgumentException
+     * @param  int|null  $adults  Number of adults (default: 1–4)
+     * @param  int|null  $children  Number of children (default: 0–2)
      */
-    public function withAdultTravelers(?int $count = null): static
+    public function withTravelers(?int $adults = null, ?int $children = null): static
     {
-        if ($count !== null && $count < 1) {
-            throw new \InvalidArgumentException('Booking requires at least 1 adult traveler');
-        }
+        return $this->afterCreating(function (Booking $booking) use ($adults, $children) {
+            $adultCount = $adults ?? rand(1, 4);
+            $childCount = $children ?? rand(0, 2);
 
-        return $this->afterCreating(function (Booking $booking) use ($count) {
-            $adults = BookingTraveler::factory()
-                ->count($count ?? fake()->numberBetween(1, 2))
-                ->create([
-                    'booking_id' => $booking->id,
-                    'type' => TravelerType::Adult,
-                    'birthdate' => fake()->dateTimeBetween('-80 years', '-18 years')->format('Y-m-d'),
-                ]);
+            $adults = BookingTraveler::factory()->new()->adult()->count($adultCount)->make();
+            $booking->travelers()->saveMany($adults);
+
+            $children = $childCount > 0
+                ? BookingTraveler::factory()->new()->child()->count($childCount)->make()
+                : collect();
+
+            if ($children->isNotEmpty()) {
+                $booking->travelers()->saveMany($children);
+            }
+
+            $adultPrice = $adultCount === 1
+                ? $booking->price_per_person + $booking->single_supplement
+                : $booking->price_per_person * $adultCount;
+
+            $booking->base_total_price = $adultPrice + ($booking->price_per_person * $childCount);
+            $booking->saveQuietly();
 
             $this->setMainBookerWithContact($booking, $adults->random());
-        });
-    }
-
-    /**
-     * Create child traveler(s) for the booking
-     *
-     * @param  int|null  $count  Number of child travelers (min: 0, default: random 0-3)
-     */
-    public function withChildTravelers(?int $count = null): static
-    {
-        return $this->afterCreating(function (Booking $booking) use ($count) {
-            BookingTraveler::factory()
-                ->count($count ?? fake()->numberBetween(0, 3))
-                ->create([
-                    'booking_id' => $booking->id,
-                    'type' => TravelerType::Child,
-                    'birthdate' => fake()->dateTimeBetween('-12 years', 'now')->format('Y-m-d'),
-                ]);
         });
     }
 
@@ -152,7 +159,7 @@ class BookingFactory extends Factory
     private function setMainBookerWithContact(Booking $booking, BookingTraveler $mainBooker): void
     {
         $booking->main_booker_id = $mainBooker->id;
-        $booking->save();
+        $booking->saveQuietly();
 
         BookingContact::factory()->create([
             'booking_id' => $booking->id,

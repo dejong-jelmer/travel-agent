@@ -29,4 +29,20 @@ class BookingTravelerFactory extends Factory
             'nationality' => fake()->country(),
         ];
     }
+
+    public function adult(): static
+    {
+        return $this->state(fn () => [
+            'type' => TravelerType::Adult->value,
+            'birthdate' => fake()->dateTimeBetween('-80 years', '-18 years')->format('Y-m-d'),
+        ]);
+    }
+
+    public function child(): static
+    {
+        return $this->state(fn () => [
+            'type' => TravelerType::Child->value,
+            'birthdate' => fake()->dateTimeBetween('-12 years', 'now')->format('Y-m-d'),
+        ]);
+    }
 }

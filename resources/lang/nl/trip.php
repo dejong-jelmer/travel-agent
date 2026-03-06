@@ -38,9 +38,9 @@ return [
         ],
         'additional_cost' => [
             'fees' => [
-                'booking' => 'Boekingskosten  - €27,50 per boeking',
-                'guarantee_fund' => 'STO garantiefonds - €10 per boeking',
-                'emergency_fund' => 'Calamiteitenfonds - €2,50 per boeking',
+                'booking' => 'Boekingskosten - :amount per boeking',
+                'guarantee_fund' => 'STO garantiefonds - :amount per boeking',
+                'emergency_fund' => 'Calamiteitenfonds - :amount per boeking',
             ],
         ],
         'costs_to_consider' => [

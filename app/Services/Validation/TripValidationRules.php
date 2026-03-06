@@ -5,6 +5,8 @@ namespace App\Services\Validation;
 use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\PriceLabel;
+use App\Rules\NoOverlappingPricePeriods;
 use App\Services\Traits\MergesRules;
 use Illuminate\Validation\Rule;
 
@@ -23,10 +25,15 @@ class TripValidationRules
         ], $additions);
     }
 
-    public static function pricing(): array
+    public static function prices(): array
     {
         return [
-            'price' => ['required', 'numeric', 'between:-999999.99,999999.99'],
+            'prices' => ['nullable', 'array', new NoOverlappingPricePeriods],
+            'prices.*.base_price_pp' => ['required', 'numeric', 'min:0'],
+            'prices.*.single_supplement' => ['required', 'numeric', 'min:0'],
+            'prices.*.valid_from' => ['required', 'date'],
+            'prices.*.valid_until' => ['required', 'date', 'after_or_equal:prices.*.valid_from'],
+            'prices.*.label' => ['required', 'string', Rule::enum(PriceLabel::class)],
         ];
     }
 

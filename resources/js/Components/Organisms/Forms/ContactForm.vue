@@ -54,15 +54,6 @@ function submit() {
                 <p class="text-left text-base tablet:text-lg text-brand-primary leading-relaxed">
                     {{ $t('forms.contact.intro') }}
                     <br />
-                    <span class="inline-flex items-center gap-2 mt-4">
-                    <Phone class="w-5 h-5 text-accent-primary" />
-                        <span class="hidden tablet:inline-flex">{{ $t('forms.contact.call') }}</span>
-                        <span class="font-bold text-brand-primary">
-                            <a class="tel-field default-link"
-                                href="#">+3112345678</a>
-                        </span>
-                    </span>
-                    <br />
                     <span class="inline-flex items-center gap-2 mt-2">
                         <AtSign class="w-5 h-5 text-accent-primary" />
                         <span class="hidden tablet:inline-flex">{{ $t('forms.contact.email') }}</span>
@@ -93,13 +84,13 @@ function submit() {
                                 <p class="text-sm text-brand-primary/60">{{ $t('forms.contact.your_details_subheading') }}</p>
                             </div>
 
-                            <Input type="text" name="name" :label="$t('forms.contact.name_label')" :required="false" :show-label="false"
+                            <Input type="text" name="name" :placeholder="$t('forms.contact.name_label')" :required="false" :show-label="false"
                                 v-model="form.name" :feedback="errors?.name"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
-                            <Input type="email" name="email" :label="$t('forms.contact.email_label')" :required="false" :show-label="false"
+                            <Input type="email" name="email" :placeholder="$t('forms.contact.email_label')" :required="false" :show-label="false"
                                 v-model="form.email" :feedback="errors?.email"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
-                            <Input type="phone" name="phone" :label="$t('forms.contact.phone_label')"
+                            <Input type="phone" name="phone" :placeholder="$t('forms.contact.phone_label')"
                                 :required="false" :show-label="false" v-model="form.phone"
                                 :feedback="errors?.phone"
                                 class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />

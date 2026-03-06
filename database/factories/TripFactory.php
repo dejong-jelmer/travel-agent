@@ -6,11 +6,13 @@ use App\Enums\ImageRelation;
 use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\PriceLabel;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
 use App\Models\TripItem;
+use App\Models\TripPrice;
 use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
@@ -41,7 +43,6 @@ class TripFactory extends Factory
             'name' => $city,
             'slug' => $this->generateSlug($city),
             'description' => $this->generateDescription($city),
-            'price' => randomPrice(995, 12000),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
@@ -196,6 +197,25 @@ class TripFactory extends Factory
                     'weekdays' => fake()->randomElements(range(0, 6)),
                 ],
             ]);
+        });
+    }
+
+    public function withPrices(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            $seasons = [PriceLabel::LowSeason, PriceLabel::MidSeason, PriceLabel::HighSeason];
+
+            foreach ($seasons as $index => $season) {
+                $validFrom = now()->addMonths($index * 4);
+                $validUntil = $validFrom->copy()->addMonths(4)->subDay();
+
+                TripPrice::factory()->create([
+                    'trip_id' => $trip->id,
+                    'valid_from' => $validFrom->format('Y-m-d'),
+                    'valid_until' => $validUntil->format('Y-m-d'),
+                    'label' => $season,
+                ]);
+            }
         });
     }
 }

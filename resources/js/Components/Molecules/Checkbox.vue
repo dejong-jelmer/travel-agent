@@ -27,8 +27,6 @@ const props = defineProps({
                 <slot></slot>
             </span>
         </label>
-        <template v-if="feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

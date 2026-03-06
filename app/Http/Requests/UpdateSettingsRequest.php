@@ -16,6 +16,9 @@ class UpdateSettingsRequest extends FormRequest
     {
         return [
             'booking_season_end' => ['nullable', 'date', 'after_or_equal:today'],
+            'booking_fee' => ['nullable', 'numeric', 'min:0'],
+            'guarantee_fund' => ['nullable', 'numeric', 'min:0'],
+            'emergency_fund' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 }

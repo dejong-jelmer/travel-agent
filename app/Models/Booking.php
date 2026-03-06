@@ -49,16 +49,21 @@ class Booking extends Model
         'has_confirmed',
         'status',
         'payment_status',
+        'trip_price_id',
+        'price_per_person',
+        'single_supplement',
+        'base_total_price',
+        'grand_total_price',
+        'fees_and_funds',
     ];
 
     protected $casts = [
         'has_accepted_conditions' => 'boolean',
         'has_confirmed' => 'boolean',
-        'departure_date' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'departure_date' => 'date',
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
+        'fees_and_funds' => 'array',
     ];
 
     protected $appends = [
@@ -66,6 +71,7 @@ class Booking extends Model
         'created_at_formatted',
         'status_label',
         'payment_status_label',
+        'total_travelers',
     ];
 
     protected $attributes = [
@@ -203,7 +209,8 @@ class Booking extends Model
     public function destinations(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
-            $this->trip(), (new Trip)->destinations()
+            $this->trip(),
+            (new Trip)->destinations()
         );
     }
 
@@ -255,5 +262,17 @@ class Booking extends Model
     protected function paymentStatusLabel(): Attribute
     {
         return Attribute::get(fn () => $this->payment_status->label());
+    }
+
+    /**
+     * Get the total traverellers for this booking .
+     *
+     * @return Attribute<int, never>
+     */
+    protected function totalTravelers(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->travelers->count(),
+        );
     }
 }

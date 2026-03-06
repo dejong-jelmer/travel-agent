@@ -7,6 +7,7 @@ const props = defineProps({
     typeOptions: Object,
     categoryOptions: Object,
     transportOptions: Object,
+    priceLabelOptions: Object,
     practicalSections: Object,
 });
 
@@ -25,6 +26,14 @@ const form = useForm({
     heroImage: props.trip.hero_image?.public_url ?? null,
     images: props.trip.image_paths ?? [],
     items: props.trip.items ?? [],
+    prices: props.trip.prices?.map(p => ({
+        id: p.id,
+        base_price_pp: p.base_price_pp / 100,
+        single_supplement: p.single_supplement / 100,
+        valid_from: p.valid_from,
+        valid_until: p.valid_until,
+        label: p.label,
+    })) ?? [],
     practical_info: initializePracticalInfo(),
     blocked_dates: JSON.parse(JSON.stringify(props.trip.blocked_dates ?? { dates: [], weekdays: [] })),
 });
@@ -43,6 +52,7 @@ function submit() {
             :type-options="typeOptions"
             :category-options="categoryOptions"
             :transport-options="transportOptions"
+            :price-label-options="priceLabelOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

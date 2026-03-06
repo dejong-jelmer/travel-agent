@@ -6,6 +6,7 @@ const props = defineProps({
     typeOptions: Object,
     categoryOptions: Object,
     transportOptions: Object,
+    priceLabelOptions: Object,
     practicalSections: Object,
 });
 
@@ -22,7 +23,6 @@ const form = useForm({
     name: "",
     slug: "",
     description: "",
-    price: "",
     duration: "",
     transport: [],
     destinations: [],
@@ -32,6 +32,7 @@ const form = useForm({
     published_at: new Date(),
     highlights: [],
     items: [],
+    prices: [],
     blocked_dates: { dates: [], weekdays: [] },
     practical_info: initializePracticalInfo(),
 });
@@ -49,6 +50,7 @@ function submit() {
             :type-options="typeOptions"
             :category-options="categoryOptions"
             :transport-options="transportOptions"
+            :price-label-options="priceLabelOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

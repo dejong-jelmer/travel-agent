@@ -34,8 +34,6 @@ const emit = defineEmits(['update:modelValue'])
         <input v-bind="$attrs" :type="type" :id="name" :value="modelValue" @input="emit('update:modelValue', $event.target.value)"
             class="form-input" :class="!!feedback ? 'ring-[2px] ring-status-error ring-offset-2 bg-status-error/20' : ''"
             :placeholder="placeholder" :required="required" />
-        <template v-if="!!feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

@@ -14,6 +14,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Newsletter\SubscriptionController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\TripPriceController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -44,6 +45,9 @@ Route::get('/nieuwsbrief/afmelden/{token}', [SubscriptionController::class, 'uns
 
 // Trips
 Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.show');
+
+// Trip prices
+Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
 
 // Booking routes
 Route::post('/boekingen', [BookingController::class, 'store'])

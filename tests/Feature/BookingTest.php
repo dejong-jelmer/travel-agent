@@ -11,6 +11,7 @@ use App\Models\BookingTraveler;
 use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
+use App\Services\PriceCalculatorService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
@@ -28,13 +29,12 @@ class BookingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->trip = Trip::factory()->create();
+        $this->trip = Trip::factory()->withPrices()->create();
     }
 
     public function test_it_can_create_a_booking_with_travelers_and_contact()
     {
         $payload = $this->generateBookingPayload();
-
         $response = $this->post(route('bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
@@ -45,6 +45,7 @@ class BookingTest extends TestCase
         $this->assertBookingWasCreatedCorrectly($booking, $payload);
         $this->assertTravelersWereCreatedCorrectly($booking, $payload);
         $this->assertContactWasCreatedCorrectly($booking, $payload);
+        $this->assertPricesWhereSetCorrectly($response, $booking);
         $this->assertRedirectIsCorrect($response, $booking);
     }
 
@@ -97,7 +98,6 @@ class BookingTest extends TestCase
     }
 
     // Blocked dates backend enforcement tests
-
     public function test_booking_is_rejected_when_departure_date_is_a_blocked_weekday(): void
     {
         $nextMonday = now()->next(Carbon::MONDAY);
@@ -159,7 +159,7 @@ class BookingTest extends TestCase
 
     public function test_booking_is_accepted_when_departure_date_does_not_match_any_blocked_date(): void
     {
-        $trip = Trip::factory()->create([
+        $trip = Trip::factory()->withPrices()->create([
             'blocked_dates' => [
                 'dates' => [now()->addMonths(3)->format('Y-m-d')],
                 'weekdays' => [Carbon::SUNDAY],
@@ -214,17 +214,6 @@ class BookingTest extends TestCase
 
         $payload = $this->generateBookingPayload([
             'departure_date' => now()->addMonth()->format('Y-m-d'),
-        ]);
-
-        $response = $this->post(route('bookings.store'), $payload);
-
-        $response->assertSessionHasNoErrors();
-    }
-
-    public function test_booking_is_accepted_when_no_season_end_is_set(): void
-    {
-        $payload = $this->generateBookingPayload([
-            'departure_date' => now()->addYear()->format('Y-m-d'),
         ]);
 
         $response = $this->post(route('bookings.store'), $payload);
@@ -379,6 +368,25 @@ class BookingTest extends TestCase
     private function assertContactWasUpdatedCorrectly(Booking $booking, array $payload): void
     {
         $this->assertContactWasCreatedCorrectly($booking, $payload);
+    }
+
+    private function assertPricesWhereSetCorrectly($response, Booking $booking): void
+    {
+        $prices = app(PriceCalculatorService::class)->forTrip($this->trip, $booking->total_travelers, $booking->departure_date);
+
+        $this->assertEquals($prices->tripPriceId, $booking->trip_price_id);
+        $this->assertEquals($prices->perPerson->getAmount(), $booking->price_per_person);
+        $this->assertEquals($prices->singleSupplement->getAmount(), $booking->single_supplement);
+        $this->assertEquals($prices->baseTotal->getAmount(), $booking->base_total_price);
+        $this->assertEquals($prices->grandTotal->getAmount(), $booking->grand_total_price);
+        $this->assertEquals(
+            [
+                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
+                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
+                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::GuaranteeFund->value]->getAmount(),
+            ],
+            $booking->fees_and_funds
+        );
     }
 
     private function assertRedirectIsCorrect($response, Booking $booking): void

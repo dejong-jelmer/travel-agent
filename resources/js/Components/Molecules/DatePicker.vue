@@ -7,7 +7,6 @@ import '@vuepic/vue-datepicker/dist/main.css'
 
 const page = usePage();
 
-
 const props = defineProps({
     modelValue: {
         type: [Date, String, null],
@@ -46,7 +45,8 @@ const model = computed({
 const locale = computed(() => { return page.props.locale })
 
 const format = (date) =>
-    new Intl.DateTimeFormat('nl-NL', {
+
+    new Intl.DateTimeFormat(locale.value, {
         day: '2-digit',
         month: 'long',
         year: 'numeric',
@@ -67,8 +67,6 @@ const format = (date) =>
                 <CalendarDays class="ml-1 h-5 w-auto text-accent-primary" />
             </template>
         </VueDatePicker>
-        <template v-if="!!feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

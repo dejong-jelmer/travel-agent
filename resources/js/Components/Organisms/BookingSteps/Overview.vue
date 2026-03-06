@@ -1,9 +1,10 @@
 <script setup>
-import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
+import { Briefcase, Calendar, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
 import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+
 const { formattedDate } = useDateFormatter();
 
-const props = defineProps({
+defineProps({
     booking: {
         type: Object,
         required: true
@@ -33,11 +34,12 @@ const props = defineProps({
                     </div>
 
                     <div class="flex items-center">
-                        <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
+                        <Train class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
-                            <span>{{ $t('booking_steps.overview.total_price') }}</span>
+                            <span>{{ $t('booking_steps.overview.departure_date') }}</span>
                             <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                            <span class="font-bold">€ {{ booking.trip.price_formatted }}</span>
+                            <span class="font-bold">{{ formattedDate(booking.departure_date) ||
+                                $t('booking_steps.overview.no_date_chosen') }}</span>
                         </span>
                     </div>
 
@@ -46,21 +48,16 @@ const props = defineProps({
                         <span class="flex-1 flex items-center gap-2">
                             <span>{{ $t('booking_steps.overview.total_duration') }}</span>
                             <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                            <span class="font-bold">{{ booking.trip.duration }} {{ $t('booking_steps.overview.days') }}</span>
-                        </span>
-                    </div>
-
-                    <div class="flex items-center">
-                        <Train class="inline w-4 h-4 mr-2 text-brand-light" />
-                        <span class="flex-1 flex items-center gap-2">
-                            <span>{{ $t('booking_steps.overview.departure_date') }}</span>
-                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                            <span class="font-bold">{{ formattedDate(booking.departure_date) || $t('booking_steps.overview.no_date_chosen') }}</span>
+                            <span class="font-bold">{{ booking.trip.duration }} {{ $t('booking_steps.overview.days')
+                                }}</span>
                         </span>
                     </div>
                 </div>
 
             </section>
+
+            <!-- Kosten -->
+            <BookingCostsSummary :booking="booking" />
 
             <!-- Reizigers -->
             <section>
@@ -146,8 +143,16 @@ const props = defineProps({
                     </Checkbox>
                 </span>
                 <span @click="booking.clearErrors('has_accepted_conditions')">
-                    <Checkbox v-model="booking.has_accepted_conditions" :feedback="booking.errors.has_accepted_conditions">
-                        <span v-html="$t('booking_steps.overview.accept_terms')"></span>
+                    <Checkbox v-model="booking.has_accepted_conditions"
+                        :feedback="booking.errors.has_accepted_conditions">
+                        <i18n-t keypath="booking_steps.overview.accept_terms" tag="span">
+                            <template #terms_link>
+                                <a :href="route('terms')" target="_blank" rel="noopener noreferrer"
+                                    class="default-link">
+                                    {{ $t('booking_steps.overview.terms_link') }}
+                                </a>
+                            </template>
+                        </i18n-t>
                     </Checkbox>
                 </span>
             </section>

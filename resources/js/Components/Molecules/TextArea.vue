@@ -41,6 +41,6 @@ defineProps({
             :required="required"
         >
         </textarea>
-        <FormFeedback :message="feedback" />
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

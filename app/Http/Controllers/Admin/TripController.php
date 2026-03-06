@@ -7,6 +7,7 @@ use App\Enums\Transport;
 use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\PriceLabel;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
@@ -16,7 +17,9 @@ use App\Models\Destination;
 use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\TripItemService;
+use App\Support\MoneyHelper;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -57,6 +60,7 @@ class TripController extends Controller
             'typeOptions' => ItemType::options(),
             'categoryOptions' => ItemCategory::options(),
             'transportOptions' => Transport::options(),
+            'priceLabelOptions' => PriceLabel::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
@@ -82,8 +86,13 @@ class TripController extends Controller
             $trip->destinations()->sync($destinations);
         }
 
-        // Sync trip items
-        $this->tripItemService::syncTripItems($trip, $request->input('items'));
+        DB::transaction(function () use ($trip, $request) {
+            // Sync trip items
+            $this->tripItemService->syncTripItems($trip, $request->input('items'));
+
+            // Sync trip prices
+            $this->syncPrices($trip, $request->input('prices', []));
+        });
 
         return redirect()->route('admin.trips.show', $trip)->with('success', __('trip.created'));
     }
@@ -94,8 +103,9 @@ class TripController extends Controller
     public function show(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Show', [
-            'trip' => $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'items']),
+            'trip' => $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'items', 'prices']),
             'tripItems' => $this->tripItemService::aggregate($trip),
+            'priceLabelOptions' => PriceLabel::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_show'),
         ]);
@@ -107,11 +117,12 @@ class TripController extends Controller
     public function edit(Trip $trip): Response
     {
         return Inertia::render('Admin/Trip/Edit', [
-            'trip' => $trip->load(['heroImage', 'images', 'destinations', 'items']),
+            'trip' => $trip->load(['heroImage', 'images', 'destinations', 'items', 'prices']),
             'destinations' => Destination::all(),
             'typeOptions' => ItemType::options(),
             'categoryOptions' => ItemCategory::options(),
             'transportOptions' => Transport::options(),
+            'priceLabelOptions' => PriceLabel::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),
         ]);
@@ -143,12 +154,37 @@ class TripController extends Controller
             $trip->destinations()->sync($destinations);
         }
 
-        // Sync trip items - delete all and recreate
-        $trip->items()->delete();
-        $this->tripItemService::syncTripItems($trip, $request->input('items'));
+        DB::transaction(function () use ($trip, $request) {
+            // Sync trip items - delete all and recreate
+            $trip->items()->delete();
+            $this->tripItemService->syncTripItems($trip, $request->input('items'));
+
+            // Sync trip prices
+            $this->syncPrices($trip, $request->input('prices', []));
+        });
 
         return redirect()->route('admin.trips.show', $trip)
             ->with('success', __('trip.updated'));
+    }
+
+    /**
+     * Delete all existing prices for a trip and recreate them from the given array.
+     *
+     * @param  array<int, array{base_price_pp: numeric, single_supplement: numeric, valid_from: string, valid_until: string, label: string}>  $prices
+     */
+    private function syncPrices(Trip $trip, array $prices): void
+    {
+        $trip->prices()->delete();
+
+        foreach ($prices as $price) {
+            $trip->prices()->create([
+                'base_price_pp' => MoneyHelper::toCents($price['base_price_pp']),
+                'single_supplement' => MoneyHelper::toCents($price['single_supplement']),
+                'valid_from' => $price['valid_from'],
+                'valid_until' => $price['valid_until'],
+                'label' => $price['label'],
+            ]);
+        }
     }
 
     /**

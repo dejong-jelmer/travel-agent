@@ -2,7 +2,6 @@
 import { ref, computed, watch } from 'vue';
 import { Combobox, ComboboxInput, ComboboxButton, ComboboxOptions, ComboboxOption } from '@headlessui/vue';
 import { ChevronUpDownIcon, CheckIcon } from '@heroicons/vue/20/solid';
-import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
 
 const props = defineProps({
     modelValue: String,
@@ -114,8 +113,6 @@ watch(selectedCountry, () => {
             </div>
         </Combobox>
 
-        <template v-if="feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

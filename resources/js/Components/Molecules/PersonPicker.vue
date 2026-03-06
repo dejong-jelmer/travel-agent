@@ -8,9 +8,10 @@ const props = defineProps({
         default: () => ({ adults: 1, children: 0 })
     },
     minAdults: { type: Number, default: 1 },
-    maxAdults: { type: Number, default: 8 },
+    maxAdults: { type: Number, default: 6 },
     minChildren: { type: Number, default: 0 },
-    maxChildren: { type: Number, default: 8 }
+    maxChildren: { type: Number, default: 5 },
+    maxTotal: { type: Number, default: 6 },
 })
 const open = ref(false)
 // Emits
@@ -27,7 +28,10 @@ const children = computed({
     set: (val) => emit('update:modelValue', { ...props.modelValue, children: val })
 })
 
+const total = computed(() => adults.value + children.value)
+
 const increment = (key) => {
+    if (total.value >= props.maxTotal) return
     if (key === 'adults' && adults.value < props.maxAdults) adults.value++
     if (key === 'children' && children.value < props.maxChildren) children.value++
 }
@@ -56,7 +60,7 @@ const decrement = (key) => {
                         −
                     </button>
                     <span class="w-6 text-center text-lg font-semibold">{{ adults }}</span>
-                    <button @click="increment('adults')" :disabled="adults.value >= maxAdults"
+                    <button @click="increment('adults')" :disabled="adults >= maxAdults || total >= maxTotal"
                         class="w-8 h-8 flex items-center justify-center rounded-full border border-brand-primary text-brand-primary disabled:opacity-40">
                         +
                     </button>
@@ -73,7 +77,7 @@ const decrement = (key) => {
                         −
                     </button>
                     <span class="w-6 text-center text-lg font-semibold">{{ children }}</span>
-                    <button @click="increment('children')"
+                    <button @click="increment('children')" :disabled="children >= maxChildren || total >= maxTotal"
                         class="w-8 h-8 flex items-center justify-center rounded-full border border-brand-primary text-brand-primary disabled:opacity-40">
                         +
                     </button>

@@ -38,9 +38,9 @@ return [
         ],
         'additional_cost' => [
             'fees' => [
-                'booking' => 'Booking fee - €27.50 per booking',
-                'guarantee_fund' => 'STO guarantee fund - €10 per booking',
-                'emergency_fund' => 'Emergency fund - €2.50 per booking',
+                'booking' => 'Booking fee - :amount per booking',
+                'guarantee_fund' => 'STO guarantee fund - :amount per booking',
+                'emergency_fund' => 'Emergency fund - :amount per booking',
             ],
         ],
         'costs_to_consider' => [
