@@ -14,7 +14,9 @@ class AdminBookingFailedMail extends Mailable
     use Queueable, SerializesModels;
 
     public string $errorMessage;
+
     public string $errorContext;
+
     public ?array $bookingDetails;
 
     public function __construct(BookingFailed $event)

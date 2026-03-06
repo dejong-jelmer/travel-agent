@@ -88,7 +88,7 @@ class TripController extends Controller
 
         DB::transaction(function () use ($trip, $request) {
             // Sync trip items
-            $this->tripItemService::syncTripItems($trip, $request->input('items'));
+            $this->tripItemService->syncTripItems($trip, $request->input('items'));
 
             // Sync trip prices
             $this->syncPrices($trip, $request->input('prices', []));
@@ -157,7 +157,7 @@ class TripController extends Controller
         DB::transaction(function () use ($trip, $request) {
             // Sync trip items - delete all and recreate
             $trip->items()->delete();
-            $this->tripItemService::syncTripItems($trip, $request->input('items'));
+            $this->tripItemService->syncTripItems($trip, $request->input('items'));
 
             // Sync trip prices
             $this->syncPrices($trip, $request->input('prices', []));

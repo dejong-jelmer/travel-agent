@@ -16,9 +16,18 @@ class BookingFailed
         private ?array $bookingDetails = [],
     ) {}
 
-    public function getErrorMessage(): string { return $this->errorMessage; }
+    public function getErrorMessage(): string
+    {
+        return $this->errorMessage;
+    }
 
-    public function getErrorContext(): string { return $this->errorContext; }
+    public function getErrorContext(): string
+    {
+        return $this->errorContext;
+    }
 
-    public function getBookingDetails(): ?array { return $this->bookingDetails; }
+    public function getBookingDetails(): ?array
+    {
+        return $this->bookingDetails;
+    }
 }

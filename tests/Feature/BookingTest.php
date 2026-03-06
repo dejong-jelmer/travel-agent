@@ -377,7 +377,8 @@ class BookingTest extends TestCase
         $this->assertEquals($prices->tripPriceId, $booking->trip_price_id);
         $this->assertEquals($prices->perPerson->getAmount(), $booking->price_per_person);
         $this->assertEquals($prices->singleSupplement->getAmount(), $booking->single_supplement);
-        $this->assertEquals($prices->grandTotal->getAmount(), $booking->base_total_price);
+        $this->assertEquals($prices->baseTotal->getAmount(), $booking->base_total_price);
+        $this->assertEquals($prices->grandTotal->getAmount(), $booking->grand_total_price);
         $this->assertEquals(
             [
                 SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),

@@ -60,6 +60,8 @@ function updateDateField(index, field, value) {
 
 <template>
     <div class="space-y-4">
+        <FormFeedback v-if="errors?.prices" :message="errors.prices" />
+
         <!-- Existing price rows -->
         <div v-if="prices.length" class="space-y-3">
             <div v-for="(row, index) in prices" :key="index"

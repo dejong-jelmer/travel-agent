@@ -137,7 +137,7 @@ class TripItemService
      *
      * @param  array  $items  Flat array of trip items
      */
-    public static function syncTripItems(Trip $trip, array $items): void
+    public function syncTripItems(Trip $trip, array $items): void
     {
         foreach ($items as $itemData) {
             // Skip items without content

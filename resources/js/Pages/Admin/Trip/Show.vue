@@ -1,5 +1,6 @@
 <script setup>
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
+import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { computed } from 'vue';
@@ -7,6 +8,8 @@ import { computed } from 'vue';
 const weekdaysTranslated = computed(() => {
     return t('common.weekdays').split('_')
 })
+
+const page = usePage();
 
 const props = defineProps({
     trip: Object,
@@ -17,18 +20,21 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const locale = computed(() => { return page.props.locale })
 
 const labelMap = computed(() =>
     Object.fromEntries((props.priceLabelOptions ?? []).map(o => [o.id, o.name]))
 )
 
 function formatPrice(cents) {
-    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cents / 100)
+    return new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cents / 100)
 }
 
 function formatDate(dateStr) {
     if (!dateStr) return '-'
-    return new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(dateStr + 'T00:00:00'))
+    const d = new Date(dateStr.substring(0, 10) + 'T00:00:00')
+    if (isNaN(d.getTime())) return '-'
+    return new Intl.DateTimeFormat(locale.value, { day: '2-digit', month: 'long', year: 'numeric' }).format(d)
 }
 
 const blockedWeekdays = computed(() =>
@@ -45,10 +51,10 @@ const hasAvailabilityRestrictions = computed(() =>
 
 function displayDate(entry) {
     if (typeof entry === 'string') {
-        return new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(entry + 'T00:00:00'))
+        return new Intl.DateTimeFormat(locale.value, { day: '2-digit', month: 'long', year: 'numeric' }).format(new Date(entry.substring(0, 10) + 'T00:00:00'))
     }
     if (entry.start && entry.end) {
-        const fmt = (d) => new Intl.DateTimeFormat('nl-NL', { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d + 'T00:00:00'))
+        const fmt = (d) => new Intl.DateTimeFormat(locale.value, { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d.substring(0, 10) + 'T00:00:00'))
         return `${fmt(entry.start)} — ${fmt(entry.end)}`
     }
     return ''
