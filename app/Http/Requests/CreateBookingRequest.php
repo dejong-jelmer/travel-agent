@@ -17,6 +17,10 @@ class CreateBookingRequest extends FormRequest
 {
     use ValidatesMainBooker;
 
+    private const MIN_TRAVELERS = 1;
+
+    private const MAX_TRAVELERS = 6;
+
     public function authorize(): bool
     {
         return true;
@@ -62,8 +66,8 @@ class CreateBookingRequest extends FormRequest
                     'array',
                     function (string $attribute, mixed $value, \Closure $fail) {
                         $total = count($value['adults'] ?? []) + count($value['children'] ?? []);
-                        if ($total < 1 || $total > 6) {
-                            $fail(__('validation.between.numeric', ['attribute' => $attribute, 'min' => 1, 'max' => 6]));
+                        if ($total < self::MIN_TRAVELERS || $total > self::MAX_TRAVELERS) {
+                            $fail(__('validation.between.numeric', ['attribute' => $attribute, 'min' => self::MIN_TRAVELERS, 'max' => self::MAX_TRAVELERS]));
                         }
                     },
                 ],

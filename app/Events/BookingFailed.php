@@ -13,7 +13,7 @@ class BookingFailed
     public function __construct(
         private string $errorMessage,
         private string $errorContext,
-        private ?array $bookingDetails = [],
+        private array $bookingDetails = [],
     ) {}
 
     public function getErrorMessage(): string

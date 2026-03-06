@@ -9,12 +9,12 @@ use Exception;
 class NoPriceAvailableException extends Exception
 {
     public function __construct(
-        private readonly int $trip_id,
+        private readonly int $tripId,
         private readonly string $departureDate,
         string $message = '',
     ) {
         parent::__construct(
-            $message ?: "No prices available for trip id: \"{$this->trip_id}\" on departure date: \"{$this->departureDate}\"."
+            $message ?: "No prices available for trip id: \"{$this->tripId}\" on departure date: \"{$this->departureDate}\"."
         );
     }
 
