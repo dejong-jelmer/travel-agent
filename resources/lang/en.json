@@ -611,7 +611,8 @@
         }
     },
     "hero": {
-        "title": "Because we travel"
+        "title": "Human...",
+        "sub_title": "Because we travel"
     },
     "footer": {
         "contact": "Contact",

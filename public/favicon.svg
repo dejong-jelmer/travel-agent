@@ -1,0 +1,15 @@
+<svg width="236" height="125" viewBox="0 0 236 125" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <style>
+    .circle { fill: #F59E0B; stroke: none; }
+    .line  { stroke: #2D5F6E; }
+    @media (prefers-color-scheme: dark) {
+      .circle { stroke: #F5F0E8; }
+      .line   { stroke: #F5F0E8; }
+    }
+  </style>
+  <path class="circle" d="M173.5 7.5C203.876 7.5 228.5 32.1243 228.5 62.5C228.5 92.8757 203.876 117.5 173.5 117.5C143.124 117.5 118.5 92.8757 118.5 62.5C118.5 32.1243 143.124 7.5 173.5 7.5Z"/>
+  <path class="line" d="M93 54L81 99" stroke-width="4" stroke-linecap="round"/>
+  <path class="line" d="M132 53L144 98" stroke-width="4" stroke-linecap="round"/>
+  <path class="line" d="M16 102C84.5013 33.5526 151.103 34.4489 216 102" stroke-width="8" stroke-linecap="round"/>
+  <path class="line" d="M7 105C81.3239 92.9211 153.586 93.0792 224 105" stroke-width="8" stroke-linecap="round"/>
+</svg>

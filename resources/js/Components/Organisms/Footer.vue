@@ -18,7 +18,7 @@ const year = new Date().getFullYear();
         <!-- Logo + Slogan -->
         <div class="text-left">
           <div class="flex justify-start">
-            <LogoWhite />
+            <LogoWhite class="w-[200px] h-[100px]" />
           </div>
           <p
             class="max-w-md mx-auto mt-6 leading-relaxed text-left text-brand-secondary"

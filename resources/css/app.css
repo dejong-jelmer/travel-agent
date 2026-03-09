@@ -56,6 +56,38 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "CormorantGaramond";
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-VariableFont_wght.ttf') format('truetype');
+    font-weight: 125 950;
+    font-stretch: 75% 125%;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "CormorantGaramond";
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: 125 950;
+    font-stretch: 75% 125%;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url('../fonts/nunito/Nunito-VariableFont_wght.ttf') format('truetype');
+    font-weight: 125 950;
+    font-stretch: 75% 125%;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url('../fonts/nunito/Nunito-Italic-VariableFont_wght.ttf') format('truetype');
+    font-weight: 125 950;
+    font-stretch: 75% 125%;
+    font-style: italic;
+}
+
 html {
     overflow-x: clip;
 }

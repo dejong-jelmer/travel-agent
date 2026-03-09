@@ -611,7 +611,8 @@
         }
     },
     "hero": {
-        "title": "We zijn meer mens omdat we reizen."
+        "title": "Meer mens...",
+        "sub_title": "Omdat we reizen"
     },
     "footer": {
         "contact": "Contact",

@@ -24,7 +24,7 @@ const links = computed(() => ({
             <div class="hover:drop-shadow-xl hover:scale-[1.01] transition-all ease-in duration-200">
                 <Link :href="'/'" class="block">
                     <Logo
-                        class="" />
+                        class="w-[200px] h-[100px]" />
                 </Link>
             </div>
 
