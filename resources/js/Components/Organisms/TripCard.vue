@@ -33,7 +33,7 @@ const props = defineProps({ trip: Object });
                 </h3>
 
                 <!-- Tagline / beschrijving -->
-                <p class="text-sm text-accent-text line-clamp-2 leading-relaxed">
+                <p class="text-sm text-brand-text line-clamp-2 leading-relaxed">
                     {{ trip.tagline || trip.description }}
                 </p>
 

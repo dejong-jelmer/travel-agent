@@ -5,11 +5,11 @@
 
         <!-- Drop zone -->
         <div class="border-2 border-dashed rounded-lg p-8 transition-colors cursor-pointer"
-            :class="isDragging ? 'border-accent-link bg-accent-link/5' : 'border-gray-300 hover:border-gray-400'"
+            :class="isDragging ? 'border-brand-link bg-brand-link/5' : 'border-gray-300 hover:border-gray-400'"
             @click="triggerFileInput" @dragover.prevent="isDragging = true" @dragenter.prevent="isDragging = true"
             @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop">
             <div class="flex flex-col items-center justify-center space-y-2">
-                <div class="text-accent-link font-medium">
+                <div class="text-brand-link font-medium">
                     {{ isDragging ?
                         (multiple ? $t('image_uploader.drop_zone.drop_multiple') :
                             $t('image_uploader.drop_zone.drop_single')) :

@@ -44,15 +44,10 @@ export default {
                     primary: "#2d5f6e",
                     accent: "#f59e0b",
                     secondary: "#f5f0e8",
-                    tertiary: "#ccf6ff",
-                    light: "#a3bccb",
-                },
-                accent: {
-                    primary: "#f59e0b",
                     text: "#1e2d3d",
-                    sage: "#afcb98",
+                    light: "#a3bccb",
+                    subtle: "#afcb98",
                     earth: "#dcc7aa",
-                    terracotta: "#b17c65",
                     link: "#82b2ca",
                 },
                 // Status feedback colors

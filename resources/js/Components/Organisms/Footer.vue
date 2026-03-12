@@ -160,14 +160,14 @@ const year = new Date().getFullYear();
             &nbsp;
             <Link
               :href="route('terms')"
-              class="inline-block text-accent-link underline transition hover:text-accent-link/75"
+              class="inline-block text-brand-link underline transition hover:text-brand-link/75"
             >
               {{ $t('footer.conditions') }}
             </Link>
             &nbsp;<span>&middot;</span>&nbsp;
             <Link
               :href="route('privacy')"
-              class="inline-block text-accent-link underline transition hover:text-accent-link/75"
+              class="inline-block text-brand-link underline transition hover:text-brand-link/75"
             >
                 {{ $t('footer.privacy') }}
             </Link>

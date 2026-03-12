@@ -64,7 +64,7 @@ const format = (date) =>
             :disabled-dates="disabledDates"
             :state="!!feedback ? false : null" arrow-navigation auto-apply>
             <template #input-icon>
-                <CalendarDays class="ml-1 h-5 w-auto text-accent-primary" />
+                <CalendarDays class="ml-1 h-5 w-auto text-brand-accent" />
             </template>
         </VueDatePicker>
         <FormFeedback v-if="feedback" :message="feedback" />

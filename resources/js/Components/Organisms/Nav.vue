@@ -18,7 +18,7 @@ const links = computed(() => ({
 </script>
 
 <template>
-    <nav class="bg-white backdrop-blur-lg border-b border-accent-primary">
+    <nav class="bg-white backdrop-blur-lg border-b border-brand-accent">
         <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto h-20 laptop:h-24 px-6 laptop:px-8 flex items-center justify-between">
             <!-- Logo -->
             <div class="hover:drop-shadow-xl hover:scale-[1.01] transition-all ease-in duration-200">

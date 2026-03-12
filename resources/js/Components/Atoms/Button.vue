@@ -9,7 +9,7 @@ defineProps({
 })
 const colorClass = {
     primary: 'bg-brand-primary',
-    accent: 'bg-accent-primary'
+    accent: 'bg-brand-accent'
 }
 </script>
 <template>

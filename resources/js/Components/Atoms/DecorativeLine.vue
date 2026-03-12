@@ -1,7 +1,7 @@
 <template>
-    <section class="relative">
+    <div class="relative">
         <div
-            class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-accent-primary to-transparent">
+            class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent">
         </div>
-    </section>
+    </div>
 </template>

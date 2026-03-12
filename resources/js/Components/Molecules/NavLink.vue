@@ -18,7 +18,7 @@ const props = defineProps({
     }
 });
 
-const defaultClass = 'relative transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-accent-primary after:transition-all after:duration-300 hover:after:w-full';
+const defaultClass = 'relative transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-brand-accent after:transition-all after:duration-300 hover:after:w-full';
 
 const variants = {
     desktop: 'text-brand-primary text-sm laptop:text-base',

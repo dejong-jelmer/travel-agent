@@ -42,7 +42,7 @@ const participantSummary = computed(() => {
                 </template>
             </i18n-t>
             <div class="bg-accent-sand/20 border border-accent-sand rounded-lg p-4">
-                <p class="text-sm text-accent-text">
+                <p class="text-sm text-brand-text">
                     <strong>{{ $t('booking_steps.trip.notice_heading') }}&nbsp;</strong>
                     <i18n-t keypath="booking_steps.trip.notice_text" tag="span">
                         <template #booking_request>
@@ -56,7 +56,7 @@ const participantSummary = computed(() => {
             </div>
         </div>
 
-        <hr class="border-accent-sage/20">
+        <hr class="border-brand-subtle/20">
 
         <div class="space-y-3">
             <!-- Reis -->
@@ -65,7 +65,7 @@ const participantSummary = computed(() => {
                     $t('booking_steps.trip.trip_label') }}</p>
                 <div class="flex justify-between items-baseline">
                     <p class="text-brand-primary font-bold">{{ booking.trip.name }}</p>
-                    <p class="text-sm text-accent-text shrink-0 ml-4">{{ $t('booking_steps.trip.price_from') }}
+                    <p class="text-sm text-brand-text shrink-0 ml-4">{{ $t('booking_steps.trip.price_from') }}
                         <strong>€ {{
                             booking.trip.price_formatted }},-</strong> {{ $t('booking_steps.trip.per_person') }}
                     </p>
@@ -82,7 +82,7 @@ const participantSummary = computed(() => {
                             </template>
                         </i18n-t>
                     </p>
-                    <span class="text-sm text-accent-text">{{ formattedDate(booking.departure_date) ||
+                    <span class="text-sm text-brand-text">{{ formattedDate(booking.departure_date) ||
                         $t('booking_steps.trip.no_date_chosen') }}</span>
                 </div>
                 <DatePicker v-model="departure_date" :min-date="new Date()" :max-date="constraints?.maxDate ?? null"
@@ -100,7 +100,7 @@ const participantSummary = computed(() => {
                             </template>
                         </i18n-t>
                     </p>
-                    <span class="text-sm text-accent-text">
+                    <span class="text-sm text-brand-text">
                         {{ participantSummary.adults }} {{ participantSummary.adultLabel }}<span
                             v-if="participantSummary.children"> &middot; {{ participantSummary.children }} {{
                                 participantSummary.childLabel }}</span>

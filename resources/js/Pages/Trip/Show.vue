@@ -78,9 +78,6 @@ const tabIcons = {
                 <div class="h-[calc(100vh-140px)] relative">
                     <div class="absolute inset-0 bg-cover bg-center"
                         :style="`background-image: url(${trip.hero_image?.public_url})`"></div>
-                    <!-- Overlay -->
-                    <div class="absolute inset-0 ">
-                    </div>
 
                     <!-- Hero Content -->
                     <div class="absolute bottom-4 tablet:bottom-8 left-0 right-0">
@@ -96,16 +93,16 @@ const tabIcons = {
                                 <!-- Trip Meta Info -->
                                 <div class="flex flex-wrap gap-3 tablet:gap-6 text-white">
                                     <!-- Price -->
-                                    <div class="flex items-center gap-2 bg-accent-primary px-4 py-2 rounded-full">
+                                    <div class="flex items-center gap-2 bg-brand-accent px-4 py-2 rounded-full">
                                         <span class="text-lg">{{ t('trip_show.hero.from_price', {
                                             price:
                                                 trip.price_formatted
                                         })
-                                        }} {{ $t('trip_show.hero.per_person') }}</span>
+                                            }} {{ $t('trip_show.hero.per_person') }}</span>
                                     </div>
 
                                     <!-- Duration -->
-                                    <div class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
+                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
                                         <Clock class="w-5 h-5" />
                                         <span class="font-medium">{{ t('trip_show.hero.days', {
                                             duration: trip.duration
@@ -113,18 +110,20 @@ const tabIcons = {
                                     </div>
 
                                     <!-- Transport -->
-                                    <div class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
+                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
                                         <Route class="h-5 w-5 flex-none" />
-                                        <EnumIcon v-for="mode in trip.transport_formatted.slice(0, 4)" :key="mode.value"
-                                            :enum="mode.value" v-tippy="mode.label"
-                                            class="text-white w-4 h-4 flex-none" />
+                                        <div class="inline-flex items-center space-x-1" v-for="mode in trip.transport_formatted.slice(0, 4)" :key="mode.value">
+                                            <EnumIcon :enum="mode.value" v-tippy="mode.label"
+                                                class="text-secondary w-4 h-4 flex-none" />
+                                            <span>{{ mode.label }}</span>
+                                        </div>
                                         <span v-if="trip.transport_formatted.length > 4" class="text-xs text-white">
                                             +{{ trip.transport_formatted.length - 4 }}
                                         </span>
                                     </div>
 
                                     <!-- Destination -->
-                                    <div class="flex items-center gap-2 bg-brand-light px-4 py-2 rounded-full">
+                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
                                         <MapPinned class="w-5 h-5" />
                                         <span class="font-medium">{{ trip.destinations_formatted }}</span>
                                     </div>
@@ -159,17 +158,17 @@ const tabIcons = {
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
                             </div>
-                            <p class="text-lg text-accent-text leading-relaxed">
+                            <p class="text-lg text-brand-text leading-relaxed">
                                 {{ trip.description }}
                             </p>
                         </div>
 
                         <!-- Highlights -->
-                        <div class="border-t border-accent-primary/20 pt-8">
+                        <div class="border-t border-brand-accent/20 pt-8">
                             <ul class="space-y-4">
                                 <template v-for="(highlight, index) in trip.highlights" :key="index">
                                     <li class="flex items-start gap-3">
-                                        <span class="w-2 h-2 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                        <span class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
                                         <span class="text-brand-primary">{{ highlight }}</span>
                                     </li>
                                 </template>
@@ -179,14 +178,14 @@ const tabIcons = {
 
                     <!-- Tabs Section -->
                     <div ref="tabsSection"
-                        class="bg-white rounded-2xl shadow-sm border border-accent-primary/20 overflow-hidden scroll-mt-[125px]">
+                        class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 overflow-hidden scroll-mt-[125px]">
                         <!-- Tab Headers -->
-                        <div class="hidden laptop:block border-b border-accent-primary/20">
+                        <div class="hidden laptop:block border-b border-brand-accent/20">
                             <nav class="flex overflow-x-auto">
                                 <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
                                     'flex-1 px-6 py-4 text-center font-medium whitespace-nowrap transition-colors',
                                     activeTab === tab.id
-                                        ? 'text-brand-primary bg-accent-earth/10 border-b-2 border-accent-primary'
+                                        ? 'text-brand-primary bg-brand-earth/10 border-b-2 border-brand-accent'
                                         : 'text-brand-light hover:text-brand-primary hover:bg-white'
                                 ]">
                                     {{ tab.label }}
@@ -217,7 +216,7 @@ const tabIcons = {
                                             {{ label }}
                                         </h4>
                                         <div
-                                            class="text-sm tablet:text-base text-accent-text leading-relaxed whitespace-pre-line">
+                                            class="text-sm tablet:text-base text-brand-text leading-relaxed whitespace-pre-line">
                                             {{ trip.practical_info[key] }}
                                         </div>
                                     </div>
@@ -242,8 +241,8 @@ const tabIcons = {
                 <div class="laptop:col-span-1">
                     <div class="sticky top-6 space-y-6">
                         <!-- Booking Card -->
-                        <div class="bg-white rounded-2xl shadow-lg border border-accent-primary/20 overflow-hidden">
-                            <div class=" bg-accent-primary p-4">
+                        <div class="bg-white rounded-2xl shadow-lg border border-brand-accent/20 overflow-hidden">
+                            <div class=" bg-brand-accent p-4">
                                 <h3 class="text-xl font-bold text-white">
                                     {{ t('trip_show.sidebar.trip_overview') }}
                                 </h3>
@@ -256,7 +255,7 @@ const tabIcons = {
                                     <div class="flex justify-between items-center">
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.from') }}</span>
                                         <span class="font-medium text-brand-primary"><strong> € {{ trip.price_formatted
-                                        }},-
+                                                }},-
                                             </strong> {{ t('trip_show.sidebar.per_person') }}</span>
                                     </div>
                                     <div class="flex justify-between items-center">
@@ -266,14 +265,14 @@ const tabIcons = {
                                     </div>
                                     <div class="flex justify-between items-center">
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.transport') }}</span>
-                                        <span class="font-medium text-accent-text flex items-center gap-1">
+                                        <span class="font-medium text-brand-text flex items-center gap-1">
                                             <EnumIcon v-for="mode in trip.transport_formatted" :key="mode.value"
                                                 :enum="mode.value" v-tippy="mode.label"
                                                 class="text-brand-primary w-4 h-4 flex-none" />
                                         </span>
                                     </div>
                                 </div>
-                                <div class="border-t border-accent-primary/20 pt-6 space-y-6">
+                                <div class="border-t border-brand-accent/20 pt-6 space-y-6">
                                     <h3 class="text-xl font-bold text-brand-primary">
                                         {{ t('trip_show.sidebar.book_this_trip') }}
                                     </h3>
@@ -303,22 +302,22 @@ const tabIcons = {
                         <TripExtraInfo />
 
                         <!-- Trust Indicators -->
-                        <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-accent-primary/20">
+                        <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-brand-accent/20">
                             <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_us') }}
                             </h4>
                             <ul class="space-y-3 text-sm">
                                 <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-accent-text">{{ t('trip_show.sidebar.sustainable_travel')
-                                    }}</span>
+                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
+                                    <span class="text-brand-text">{{ t('trip_show.sidebar.sustainable_travel')
+                                        }}</span>
                                 </li>
                                 <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-accent-text">{{ t('trip_show.sidebar.small_personal') }}</span>
+                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
+                                    <span class="text-brand-text">{{ t('trip_show.sidebar.small_personal') }}</span>
                                 </li>
                                 <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-accent-primary rounded-full"></span>
-                                    <span class="text-accent-text">{{ t('trip_show.sidebar.carefree_travel') }}</span>
+                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
+                                    <span class="text-brand-text">{{ t('trip_show.sidebar.carefree_travel') }}</span>
                                 </li>
                             </ul>
                         </div>
@@ -333,7 +332,7 @@ const tabIcons = {
             <div class="flex items-center gap-1 px-2 py-2">
                 <button v-for="tab in tabs" :key="tab.id" @click="selectTab(tab.id)"
                     class="flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg transition-colors" :class="activeTab === tab.id
-                        ? 'text-brand-primary bg-accent-earth/10'
+                        ? 'text-brand-primary bg-brand-earth/10'
                         : 'text-brand-light hover:text-brand-primary'">
                     <component :is="tabIcons[tab.id]" class="w-5 h-5" />
                     <span class="text-xs hidden tablet:inline">{{ tab.label }}</span>

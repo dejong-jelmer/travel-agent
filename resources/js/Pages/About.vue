@@ -10,29 +10,32 @@ const { t, tm } = useI18n()
     <Layout>
 
         <!-- Intro section -->
-        <section class="section relative overflow-hidden floating-elements">
-            <div class="absolute top-0 left-0 w-full h-2 decorative-line"></div>
-            <div class="absolute top-16 left-8 w-4 h-4 bg-accent-sage/20 rounded-full"></div>
-            <div class="absolute top-32 right-24 w-2 h-2 bg-accent-primary/30 rounded-full"></div>
-            <div class="absolute bottom-24 left-16 w-3 h-3 bg-accent-terracotta/15 rounded-full"></div>
-
-            <article class="relative">
+        <section class="relative overflow-hidden">
+            <article class="relative py-12 table:py-24">
                 <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
 
                     <div class="text-center">
                         <SectionHeader>{{ t('about.page_title') }}</SectionHeader>
-                        <h1 class="text-3xl laptop:text-5xl font-bold text-brand-primary max-w-2xl mx-auto leading-tight">
-                            {{ t('about.tagline') }}
-                        </h1>
+
                     </div>
 
-                    <div class="mt-12 laptop:mt-16 overflow-hidden">
-                        <img :src="teaserImage" :alt="t('about.image_alt')"
-                            class="w-full laptop:w-1/2 laptop:float-right laptop:ml-8 laptop:mb-4 mb-6 h-auto rounded-2xl shadow-lg object-cover" />
+                    <div class="mt-6 laptop:mt-8 overflow-hidden">
+                        <!-- <img :src="teaserImage" :alt="t('about.image_alt')"
+                            class="w-full laptop:w-1/2 laptop:float-right laptop:ml-8 laptop:mb-4 mb-6 h-auto rounded-2xl shadow-lg object-cover" /> -->
                         <div class="space-y-4">
-                            <p v-for="(paragraph, i) in tm('about.intro_paragraph')" :key="i"
-                                class="text-lg laptop:text-xl text-accent-text leading-relaxed">
+                            <h1
+                                class="text-base laptop:text-xl font-bold text-brand-primary leading-tight">
+                                {{ t('about.tagline') }}
+                            </h1>
+                            <p v-for="(paragraph, i) in tm('about.mission_statement')" :key="i"
+                                class="text-sm laptop:text-base text-brand-text leading-relaxed">
                                 {{ paragraph }}
+                            </p>
+                            <h1 class="text-base laptop:text-xl text-left font-bold text-brand-primary leading-tight">
+                                {{ t('about.why_title') }}
+                            </h1>
+                            <p class="text-sm laptop:text-base text-brand-text leading-relaxed">
+                                {{ $t('about.why_statement') }}
                             </p>
                         </div>
                     </div>
@@ -42,12 +45,10 @@ const { t, tm } = useI18n()
         </section>
 
         <!-- Values section -->
-        <section class="section relative overflow-hidden bg-brand-secondary">
-            <div class="absolute top-0 left-0 w-full h-2 decorative-line"></div>
-            <div class="absolute top-20 right-12 w-4 h-4 bg-accent-sage/20 rounded-full"></div>
-            <div class="absolute bottom-20 left-12 w-3 h-3 bg-accent-primary/20 rounded-full"></div>
+        <section class="relative overflow-hidden bg-brand-secondary">
+            <DecorativeLine />
 
-            <article class="relative py-12 desktop:py-24">
+            <article class="relative py-12 table:py-24">
                 <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
                     <USP />
                 </div>
@@ -55,18 +56,16 @@ const { t, tm } = useI18n()
         </section>
 
         <!-- Team section -->
-        <section class="section relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-2 decorative-line"></div>
-            <div class="absolute top-16 right-16 w-4 h-4 bg-accent-sage/20 rounded-full"></div>
-            <div class="absolute top-40 left-8 w-2 h-2 bg-accent-primary/30 rounded-full"></div>
-            <div class="absolute bottom-16 right-8 w-3 h-3 bg-accent-terracotta/15 rounded-full"></div>
+        <section class="relative overflow-hidden">
+            <DecorativeLine />
 
-            <article class="relative py-12 desktop:py-24">
+            <article class="relative py-12 table:py-24">
                 <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
 
                     <div class="text-center">
                         <SectionHeader>{{ t('about.team.section_header') }}</SectionHeader>
-                        <h2 class="text-2xl laptop:text-4xl font-bold text-brand-primary max-w-2xl mx-auto leading-tight">
+                        <h2
+                            class="text-xl laptop:text-2xl font-bold text-brand-primary max-w-2xl mx-auto leading-tight">
                             {{ t('about.team.heading') }}
                         </h2>
                     </div>
@@ -77,13 +76,16 @@ const { t, tm } = useI18n()
                                 class="w-full h-72 object-cover rounded-t-2xl" />
                             <div class="p-6">
                                 <div class="flex items-center gap-2.5 mb-1">
-                                    <div class="w-1.5 h-1.5 rounded-full bg-accent-primary"></div>
-                                    <span class="text-sm font-medium text-accent-primary">{{ t('about.team.member.role') }}</span>
+                                    <div class="w-1.5 h-1.5 rounded-full bg-brand-accent"></div>
+                                    <span class="text-sm font-medium text-brand-accent">{{ t('about.team.member.role')
+                                    }}</span>
                                 </div>
-                                <h3 class="text-xl font-bold text-brand-primary mb-3 group-hover:text-accent-primary transition-colors duration-300">
+                                <h3
+                                    class="text-xl font-bold text-brand-primary mb-3 group-hover:text-brand-accent transition-colors duration-300">
                                     {{ t('about.team.member.name') }}
                                 </h3>
-                                <p class="text-brand-primary leading-relaxed text-sm">{{ t('about.team.member.bio') }}</p>
+                                <p class="text-brand-primary leading-relaxed text-sm">{{ t('about.team.member.bio') }}
+                                </p>
                             </div>
                         </Card>
                     </div>

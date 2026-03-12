@@ -10,7 +10,7 @@ trait HasPageMetadata
      */
     protected function pageTitle(string $key): string
     {
-        return __($key).' | '.config('app.name');
+        return __("{$key}.title").' | '.config('app.name');
     }
 
     /**

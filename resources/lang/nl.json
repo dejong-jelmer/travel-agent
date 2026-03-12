@@ -21,7 +21,7 @@
     "topbar_text": "Ga duurzaam op reis",
     "nav": {
         "contact": "Contact",
-        "about": "Over ons"
+        "about": "Over mij"
     },
     "trip_card": {
         "days": "reisdagen",
@@ -84,15 +84,15 @@
         }
     },
     "newsletter": {
-        "heading": "Blijf op de hoogte",
-        "description": "Schrijf je in voor onze nieuwsbrief en ontvang alle nieuwste updates over onze reizen.",
+        "heading": "Nooit een route missen",
+        "description": "Inspiratie, verhalen en nieuwe routes — rechtstreeks in je inbox. Geen spam, wel de meest interessante plekken van Europa.",
         "form": {
-            "name_placeholder": "Uw voornaam (optioneel)",
-            "email_placeholder": "uw.email{'@'}voorbeeld.nl",
+            "name_placeholder": "Je voornaam (optioneel)",
+            "email_placeholder": "jouw.email{'@'}voorbeeld.nl",
             "submitting": "Bezig met verzenden...",
-            "submit": "Inschrijven"
+            "submit": "Schrijf je in"
         },
-        "privacy": "We respecteren uw privacy. U kunt zich op elk moment uitschrijven.",
+        "privacy": "Ik respecteren je privacy. Je kunt zich op elk moment uitschrijven.",
         "subscription": {
             "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
             "error": "Er is een fout opgetreden bij het verwerken van je inschrijving. Probeer het later opnieuw."
@@ -109,22 +109,26 @@
         "birthdate_placeholder": "DD-MM-JJJJ"
     },
     "usp": {
-        "section_header": "Kiezen voor ons",
-        "intro": "Onze unieke aanpak combineert comfort, cultuur en duurzaamheid voor een reiservaring die verder gaat dan toerisme.",
-        "sustainable": {
-            "title": "Duurzaam",
-            "description": "Reis comfortabel en ontspannen door Europa's mooiste landschappen. Geen stress van vliegvelden, wel het plezier van de reis zelf.",
-            "highlight": "Gemiddeld 75% minder CO₂"
+        "section_header": "Kiezen voor Omdat We Reizen",
+        "intro": "Omdat We Reizen is er voor reizigers die cultuur willen beleven in plaats van bekijken, die bewust kiezen voor de trein, en die liever ergens aankomen dan ergens landen",
+        "routes": {
+            "title": "Wij kennen de weg",
+            "description": "Onze routes zijn routes die we zelf hebben gereden. Geen folders, geen aannames — echte kennis van elk perron, elke stad en elk restaurant dat de moeite waard is.",
+            "highlight": "Persoonlijk samengesteld"
         },
-        "with_story": {
-            "title": "Met een verhaal",
-            "description": "Ontdek de fascinerende verhalen achter elke bestemming. Onze reizen brengen geschiedenis tot leven met verhalen en bijzondere achtergronden bij elke bestemming.",
+        "train": {
+            "title": "De reis begint op het perron",
+            "description": "Geen vliegveld, geen wachtrij, geen verloren uren. Bij ons is de treinreis zelf onderdeel van de beleving — je arriveert uitgerust, nieuwsgierig en al een beetje onderweg in het verhaal.",
+            "highlight": "Gemiddeld 75% minder CO₂ dan vliegen"
+        },
+        "unique": {
+            "title": "Unieke bestemmingen",
+            "description": "Wij kiezen geen bestemmingen omdat ze populair zijn. We kiezen ze omdat ze iets te vertellen hebben — en omdat wij dat verhaal kunnen vertellen.",
             "highlight": "Unieke achtergronden bij elke reis"
         },
-        "carefree": {
-            "title": "Zorgeloos",
-            "description": "Wij regelen alles van A tot Z. Jij hoeft alleen maar te genieten van je duurzame avontuur door Europa.",
-            "highlight": "24/7 Nederlandse reisondersteuning"
+        "cta": {
+            "text": "Klaar voor jouw volgende avontuur?",
+            "link": "Ontdek alle reizen"
         }
     },
     "forms": {
@@ -142,20 +146,20 @@
         },
         "contact": {
             "heading": "Contact",
-            "intro": "Als je vragen hebt of meer wilt weten neem contact op via één van de onderstaaden methoden.",
+            "intro": "Benieuwd naar een reis of heb je een vraag? We vertellen het je graag.",
             "call": "Bel",
             "email": "Stuur een mail naar",
             "or_use_form": "Of gebruik het contactformulier hieronder.",
-            "your_details_heading": "Uw gegevens",
-            "your_details_subheading": "Hoe kunnen we u bereiken?",
-            "your_message_heading": "Uw bericht",
-            "your_message_subheading": "Waarmee kunnen we u helpen?",
+            "your_details_heading": "Jouw gegevens",
+            "your_details_subheading": "Hoe kunnen we je bereiken?",
+            "your_message_heading": "Jouw bericht",
+            "your_message_subheading": "Waarmee kunnen we je helpen?",
             "name_label": "Naam",
-            "email_label": "Uw Emailadres",
-            "phone_label": "Uw telefoonnummer (optioneel)",
+            "email_label": "Jouw Emailadres",
+            "phone_label": "Jouw telefoonnummer (optioneel)",
             "message_label": "Bericht",
             "submit_button": "Verstuur bericht",
-            "success": "Bedankt! Uw bericht is succesvol verstuurd."
+            "success": "Bedankt! Je bericht is succesvol verstuurd."
         },
         "trip": {
             "edit_heading": "Bewerk Reis",
@@ -447,7 +451,7 @@
                 "help": "Verstuur een test email naar uw eigen email adres om te controleren hoe de nieuwsbrief eruit ziet.",
                 "button": "Verstuur test email",
                 "sending": "Bezig met verzenden...",
-                "save_first": "Sla eerst de campagne op voordat u een test email verstuurt."
+                "save_first": "Sla eerst de campagne op voordatjeeen test email verstuurt."
             },
             "status": {
                 "title": "Status & Planning",
@@ -545,7 +549,7 @@
             "heading": "Reis boeken - {tripName}",
             "intro": "Wat leuk dat je de reis {tripName} wilt gaan boeken. We gaan een aantal stappen doorlopen om te zorgen dat de boeking goed doorkomt.",
             "notice_heading": "Let op:",
-            "notice_text": "Dit is een {booking_request}. We kijken eerst of we aan alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen we binnen {two_working_days} contact met u op om de boeking te bevestigen.",
+            "notice_text": "Dit is een {booking_request}. We kijken eerst of we aan alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen we binnen {two_working_days} contact metjeop om de boeking te bevestigen.",
             "booking_request": "boekingsaanvraag",
             "two_working_days": "twee werkdagen",
             "trip_label": "Reis",
@@ -619,7 +623,7 @@
         "all_rights": "Alle rechten voorbehouden.",
         "conditions": "Algemene voorwaarden",
         "privacy": "Privacybeleid",
-        "slogan": "Voor duurzame reizen met een verhaal."
+        "slogan": "Meer mens... Omdat we riezen"
     },
     "booking_step_labels": {
         "trip": "Reis",
@@ -685,10 +689,10 @@
         }
     },
     "about": {
-        "page_title": "Over ons",
+        "page_title": "Mijn doel",
         "image_alt": "Historische (trein)reizen in Europa",
         "team": {
-            "section_header": "Ontmoet het team",
+            "section_header": "Mijn verhaal",
             "heading": "De persoon achter jouw reis",
             "member": {
                 "name": "Jelmer de Jong",
@@ -696,23 +700,25 @@
                 "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             }
         },
-        "intro_paragraph": [
-            "Onze missie is om jou een zorgeloze reis te bezorgen waar je met plezier en vervulling op terug zal kijken — lang nadat je weer thuis bent.",
-            "Wij geloven dat reizen meer is dan een bestemming. Het gaat om de mensen die je ontmoet, de culturen die je raken en de verhalen die je meeneemt. Daarom brengen wij reizigers, culturen en verhalen op een duurzame manier bij elkaar, met respect voor de wereld om ons heen en de mensen die er deel van uitmaken.",
-            "Duurzaam reizen is niet alleen weggelegd voor de trein-hobbyist of de overtuigde duurzaamheidsfanaat — het is voor iedereen die wil genieten van een reis die ergens toe bijdraagt. Wij geloven dat duurzaam reizen de toekomst heeft, en de trein is voor ons de logische en vanzelfsprekende keuze. Niet als compromis, maar als de mooiste manier om onderweg te zijn.",
-            "Wij willen dat jij geïnspireerd raakt — door de boeiende verhalen achter een plek, de rijke culturen die je verwelkomen en de prachtige landschappen die aan je voorbijglijden. Maar inspiratie begint pas als je hoofd vrij is. Daarom nemen wij de planning, organisatie en alle zorgen volledig uit handen, zodat jij de ruimte hebt om te genieten van de reis, de bestemming en de mensen met wie je reist.",
-            "Wij zijn pas tevreden als jij rijker thuiskomt dan je vertrok — rijker in ervaringen, inzichten en herinneringen."
+        "tagline": "Meer dan een bestemming",
+        "mission_statement": [
+            "Mijn doel is om jou een reis te bezorgen waar je met plezier en vervulling op terug zal kijken — lang nadat je weer thuis bent.",
+            "Ik geloof dat reizen meer is dan een bestemming. Het gaat om de mensen die je ontmoet, de culturen die je raken en de verhalen die je meeneemt. Daarom breng ik reizigers, culturen en verhalen op een duurzame manier bij elkaar — met respect voor de wereld om ons heen en de mensen die er deel van uitmaken.",
+            "Duurzaam reizen is niet alleen weggelaten voor de trein-hobbyist of de overtuigde duurzaamheidsfanaat — het is voor iedereen die wil genieten van een reis die ergens toe bijdraagt. Ik geloof dat de trein de toekomst heeft. Niet als compromis, maar als de mooiste manier om onderweg te zijn.",
+            "Ik wil dat jij geïnspireerd raakt — door de verhalen achter een plek, de culturen die je verwelkomen en de landschappen die aan je voorbijglijden. Maar inspiratie begint pas als je hoofd vrij is. Daarom neem ik de planning en organisatie volledig uit handen, zodat jij de ruimte hebt om te genieten van de reis en alles wat je onderweg tegenkomt.",
+            "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok — rijker in ervaringen, inzichten en herinneringen."
         ],
-        "tagline": "Meer dan een bestemming"
+        "why_title": "Waarom ik begon met Omdat We Reizen",
+        "why_statement": "Reizen is voor mij anders dan vakantie. Het is het zelfde verschil tussen literatuur en lectuur, muziek... muzak. Het is loskomen uit je bubbel, mensen ontmoeten die anders denken, culturen leren kennen die je perspectief verschuiven. Het is de verruiming die je even — of voorgoed — een beetje meer mens maakt. Dat gevoel wil ik doorgeven. Niet met vliegtickets en all-inclusive, maar met routes die je raken en verhalen die bijblijven."
     },
     "home": {
-        "our_trips_heading": "Onze reizen",
+        "our_trips_heading": "De reizen",
         "no_trips": {
-            "message_start": "Omdat we hard aan het werk zijn om onze eerste reizen op te zetten, kunt u momenteel nog geen reizen boeken. Kijk op onze",
+            "message_start": "Omdat we hard aan het werk zijn om onze eerste reizen op te zetten, kuntjemomenteel nog geen reizen boeken. Kijk op onze",
             "blog_link": "blog",
             "message_middle": "voor informatie over recente activiteiten of bekijk de",
-            "about_link": "over ons",
-            "message_middle2": "pagina om meer te weten te komen over Omdat we reizen. U kunt ook contact opnemen via ons",
+            "about_link": "over mij",
+            "message_middle2": "pagina om meer te weten te komen over Omdat we reizen. Je kan ook contact opnemen via het",
             "contact_link": "contactformulier"
         }
     },
@@ -765,7 +771,7 @@
             "title": "Je bent ingeschreven!",
             "message": "Bedankt voor het bevestigen van je aanmelding. Je ontvangt vanaf nu onze nieuwsbrief met de laatste updates, tips en exclusieve content.",
             "box_title": "Wat kun je verwachten?",
-            "updates": "Regelmatige updates over ons nieuwste reisaanbod",
+            "updates": "Regelmatige updates over mijn nieuwste reisaanbod",
             "exclusive_content": "Exclusieve content en verhalen",
             "unsubscribe_anytime": "Je kunt je altijd weer uitschrijven"
         },
@@ -798,7 +804,7 @@
             "main_booker": "Hoofdboeker"
         },
         "booking_reference": {
-            "label": "Uw boekingsnummer",
+            "label": "Je boekingsnummer",
             "save_message": "Bewaar dit nummer voor uw administratie en eventuele correspondentie."
         },
         "contact_details": {
@@ -811,8 +817,8 @@
         "next_steps": {
             "title": "Volgende stappen",
             "confirmation_email": "U ontvangt een bevestigingsmail met alle details van uw reis",
-            "contact_soon": "We nemen binnenkort contact met u op voor de definitieve bevestiging",
-            "questions": "Heeft u vragen? Neem gerust contact met ons op"
+            "contact_soon": "We nemen binnenkort contact metjeop voor de definitieve bevestiging",
+            "questions": "Heb je vragen? Neem gerust contact met ons op"
         },
         "back_to_home": "Terug naar homepagina"
     },
@@ -820,9 +826,9 @@
         "login": {
             "title": "Inloggen",
             "email_label": "Email",
-            "email_placeholder": "Vul uw email in",
+            "email_placeholder": "Vul je email in",
             "password_label": "Wachtwoord",
-            "password_placeholder": "Vul uw wachtwoord in",
+            "password_placeholder": "Vul je wachtwoord in",
             "submit_button": "Inloggen"
         }
     },

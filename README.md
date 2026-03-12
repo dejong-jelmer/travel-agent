@@ -226,8 +226,9 @@ HTTP Request
 **Example Flow:**
 ```php
 CreateBookingRequest
-  → StoreBookingData::fromRequest()
-  → BookingService::store()
+  → CreateBookingData::fromRequest()
+  → PriceCalculatorService::forTrip()
+  → BookingService::create()
   → Booking::create()
   → response()->booking($booking, ModelAction::Created)
 ```
@@ -236,23 +237,33 @@ CreateBookingRequest
 
 #### Data Transfer Objects (DTOs)
 Located in `app/DTO/`:
-- `StoreBookingData` / `UpdateBookingData` - Main booking operations
+- `CreateBookingData` / `UpdateBookingData` - Main booking operations
 - `BookingContactData` / `BookingTravelerData` - Nested structures
+- `TripPriceData` - Price calculation results
 - Uses `ArrayableDTO` trait for serialization
 - Uses `BookingDataParser` trait for parsing validated data
 
 #### Service Layer
 Located in `app/Services/`:
 - `BookingService` - Create/update bookings with travelers
+- `PriceCalculatorService` - Calculate trip prices per date and traveler count
 - `ContactDetailsService` - Format contact information
 - `PhoneNumberService` - Phone validation/formatting
 - `AntiSpamEmailService` - Spam detection logic
+- `CountryService` / `DestinationService` - Geographic data
+- `NewsletterCampaignService` - Newsletter campaign management
+- `TripItemService` - Trip item management
+- `DataTableService` - Admin datatable queries
+- `SystemHealthService` - System health checks
 
 #### Event-Driven Email System
 ```
 BookingCreated Event
   → SendBookingConfirmationEmail Listener
   → NotifyAdminOfNewBooking Listener
+
+BookingFailed Event
+  → logs failure details and notifies admin
 
 NewsletterSubscriptionRequested Event
   → SendNewsletterConfirmationEmail Listener
@@ -288,6 +299,8 @@ resources/js/
 
 **Global Shared Data** (configured in `AppServiceProvider`):
 - Flash messages (`success`, `error`)
+- `adminStats` - new bookings count (only on admin routes)
+- `settings` - all `Setting` model key-value pairs
 - Auto-generated breadcrumbs via `Breadcrumbs::generate()`
 
 **Auto-registered Components:**
@@ -297,31 +310,34 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 
 **Tailwind Breakpoints** (`resources/js/screens.js`):
 ```js
-{ phone: '0px', tablet: '600px', laptop: '900px', desktop: '1200px', wide: '1800px' }
+{ phone: '0px', tablet: '600px', laptop: '900px', desktop: '1200px', wide: '1350px' }
 ```
+
+**Custom Fonts** (see `tailwind.config.js`):
+- `font-poppins` - Primary UI font
+- `font-caveat` - Handwritten accent font
+- `font-cormorant` - Serif display font
+- `font-nunito` - Secondary UI font
 
 **Custom Color Palette** (see `tailwind.config.js`):
 
 *Semantic color system for sustainable travel aesthetic:*
 
 - **Brand Identity**
-  - `brand.primary` (#30547e) - Primary dark blue-gray for text and headings
-  - `brand.secondary` (#f0f4f7) - Off-white/cream for backgrounds
-  - `brand.tertiary` (#ccf6ff) - Light cyan accent
-  - `brand.light` (#a3bccb) - Soft blue for subtle text and borders
-
-- **Accent Colors** (Nature/Sustainability focus)
-  - `accent.primary` (#f59e0b) - Warm orange for primary CTAs and highlights
-  - `accent.sage` (#afcb98) - Sage green for success and eco-friendly elements
-  - `accent.earth` (#dcc7aa) - Earth/sand tone for warmth
-  - `accent.terracotta` (#b17c65) - Terracotta for contrast and emphasis
-  - `accent.link` (#82b2ca) - Soft blue for links
+  - `brand.primary` (#2d5f6e) - Main brand color (teal)
+  - `brand.accent` (#f59e0b) - Accent/highlight color (amber)
+  - `brand.secondary` (#f5f0e8) - Light background
+  - `brand.text` (#1e2d3d) - Primary text
+  - `brand.light` (#a3bccb) - Light brand tint
+  - `brand.subtle` (#afcb98) - Subtle green
+  - `brand.earth` (#dcc7aa) - Warm earth tone
+  - `brand.link` (#82b2ca) - Link color
 
 - **Status Feedback**
   - `status.error` (#dc3545) - Error states and validation failures
   - `status.success` (#198754) - Success states and confirmations
   - `status.warning` (#ffc107) - Warning states and alerts
-  - `status.info` (#0d6efd) - Informatieve states
+  - `status.info` (#0d6efd) - Informational states
 
 **Rate Limiting:**
 Custom `frontend-form-actions` limiter: 25 requests/min per IP

@@ -20,7 +20,7 @@ class HomeController extends Controller
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'title' => $this->pageTitle('home.home'),
+            'title' => $this->pageTitle('home.home_seo'),
             'trips' => Trip::with(['destinations', 'heroImage'])->published()->featured()->get(),
             'seo' => $this->pageSeo('home.home_seo'),
         ]);
@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function about(): Response
     {
         return Inertia::render('About', [
-            'title' => $this->pageTitle('home.about'),
+            'title' => $this->pageTitle('home.about_seo'),
             'seo' => $this->pageSeo('home.about_seo'),
         ]);
     }
@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function contact(): Response
     {
         return Inertia::render('Contact', [
-            'title' => $this->pageTitle('home.contact'),
+            'title' => $this->pageTitle('home.contact_seo'),
             'seo' => $this->pageSeo('home.contact_seo'),
         ]);
     }
@@ -75,7 +75,7 @@ class HomeController extends Controller
     public function privacy(): Response
     {
         return Inertia::render('Privacy', [
-            'title' => $this->pageTitle('home.privacy_statement'),
+            'title' => $this->pageTitle('home.privacy_seo'),
             'seo' => $this->pageSeo('home.privacy_seo'),
         ]);
     }
@@ -83,7 +83,7 @@ class HomeController extends Controller
     public function terms(): Response
     {
         return Inertia::render('Terms', [
-            'title' => $this->pageTitle('home.conditions'),
+            'title' => $this->pageTitle('home.terms_seo'),
             'seo' => $this->pageSeo('home.terms_seo'),
         ]);
     }

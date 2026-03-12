@@ -84,8 +84,8 @@
         }
     },
     "newsletter": {
-        "heading": "Stay up to date",
-        "description": "Subscribe to our newsletter and receive all the latest updates about our trips.",
+        "heading": "Never miss a route",
+        "description": "Inspiration, stories, and new routes — straight to your inbox. No spam, just the most most interesting places in Europe.",
         "form": {
             "name_placeholder": "Your first name (optional)",
             "email_placeholder": "your.email{'@'}example.com",
@@ -110,21 +110,25 @@
     },
     "usp": {
         "section_header": "why choose us",
-        "intro": "Our unique approach combines comfort, culture and sustainability for a travel experience that goes beyond tourism.",
-        "sustainable": {
-            "title": "Sustainable",
-            "description": "Travel comfortably and relaxed through Europe's most beautiful landscapes. No stress from airports, just the pleasure of the journey itself.",
-            "highlight": "Average 75% less CO₂"
+        "intro": "Omdat We Reizen is for travelers who want to experience culture rather than observe it, who consciously choose the train, and who prefer arriving somewhere over landing somewhere",
+        "routes": {
+            "title": "You ride along, we know the way",
+            "description": "Our routes are routes we've traveled ourselves. No brochures, no assumptions — real knowledge of every platform, every city, and every restaurant worth visiting.",
+            "highlight": "Personally curated"
         },
-        "with_story": {
-            "title": "With a story",
-            "description": "Discover the fascinating stories behind each destination. Our trips bring history to life with stories and special backgrounds at every destination.",
-            "highlight": "Unique insights with every trip"
+        "train": {
+            "title": "The journey begins on the platform",
+            "description": "No airport, no queues, no wasted hours. With us, the train journey itself is part of the experience — you arrive rested, curious, and already a little immersed in the story.",
+            "highlight": "On average 75% less CO₂ than flying"
         },
-        "carefree": {
-            "title": "Carefree",
-            "description": "We arrange everything from A to Z. You just need to enjoy your sustainable adventure through Europe.",
-            "highlight": "24/7 Travel support"
+        "unique": {
+            "title": "Destinations you won't find on Google",
+            "description": "We don't choose destinations because they're popular. We choose them because they have something to tell — and because we can tell that story.",
+            "highlight": "Unique stories behind every trip"
+        },
+        "cta": {
+            "text": "Ready for your next adventure?",
+            "link": "Discover all trips"
         }
     },
     "forms": {
@@ -685,10 +689,10 @@
         }
     },
     "about": {
-        "page_title": "About us",
+        "page_title": "My goal",
         "image_alt": "Historical (train) journeys in Europe",
         "team": {
-            "section_header": "Meet the team",
+            "section_header": "My storry",
             "heading": "The person behind your journey",
             "member": {
                 "name": "Jelmer de Jong",
@@ -696,13 +700,15 @@
                 "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             }
         },
-        "intro_paragraph": [
-            "Our mission is to give you a carefree journey that you will look back on with joy and fulfillment — long after you've returned home.",
-            "We believe that travel is more than a destination. It's about the people you meet, the cultures that move you, and the stories you bring home. That's why we bring travelers, cultures, and stories together in a sustainable way, with respect for the world around us and the people who are part of it.",
-            "Sustainable travel isn't reserved for the train enthusiast or the committed sustainability advocate — it's for everyone who wants to enjoy a trip that actually contributes something. We believe that sustainable travel is the future, and the train is, for us, the logical and natural choice. Not as a compromise, but as the most beautiful way to be on the move.",
-            "We want you to feel inspired — by the fascinating stories behind a place, the rich cultures that welcome you, and the breathtaking landscapes that drift past your window. But inspiration only begins when your mind is free. That's why we take care of all the planning, organisation, and worries, so that you have the space to enjoy the journey, the destination, and the people you travel with.",
-            "We are only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
+        "mission_statement": [
+            "My goal is to give you a trip you'll look back on with joy and fulfillment — long after you're back home.",
+            "I believe travel is more than a destination. It's about the people you meet, the cultures that move you, and the stories you take with you. That's why I bring travelers, cultures, and stories together in a sustainable way — with respect for the world around us and the people who are part of it.",
+            "Sustainable travel isn't reserved for train enthusiasts or committed sustainability advocates — it's for anyone who wants to enjoy a trip that contributes to something meaningful. I believe the train is the future. Not as a compromise, but as the most beautiful way to travel.",
+            "I want you to feel inspired — by the stories behind a place, the cultures that welcome you, and the landscapes that glide past your window. But inspiration only begins when your mind is free. That's why I take care of all the planning and organization, so you have the space to enjoy the journey and everything you encounter along the way.",
+            "I'm only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
         ],
+        "why_title": "Why I started Omdat We Reizen",
+        "why_statement": "For me, traveling is different from vacation. It's the same difference between literature and reading, music... muzak. It's about breaking out of your bubble, meeting people who think differently, exploring cultures, shifting your perspective. It's the expansion that makes you even—or permanently—a little more human. I want to share that feeling. Not with plane tickets and all-inclusive packages, but with routes that touch you and stories that stay with you.",
         "tagline": "More than a destination"
     },
     "home": {
@@ -712,7 +718,7 @@
             "blog_link": "blog",
             "message_middle": "for information about recent activities or visit the",
             "about_link": "about us",
-            "message_middle2": "page to learn more about Because We Travel. You can also contact us via our",
+            "message_middle2": "page to learn more about Omdat We Reizen. You can also contact us via our",
             "contact_link": "contact form"
         }
     },

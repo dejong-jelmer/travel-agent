@@ -64,7 +64,7 @@ function formatPrice(cents) {
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.trip') }}</dt>
                                 <dd class="text-sm col-span-2">
                                     <DefaultLink :href="route('admin.trips.show', booking.trip)"
-                                        class="text-gray-900 hover:text-accent-link">
+                                        class="text-gray-900 hover:text-brand-link">
                                         {{ booking.trip?.name }} - {{ booking.trip?.destinations_formatted }}
                                     </DefaultLink>
                                 </dd>
