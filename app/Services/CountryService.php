@@ -90,7 +90,7 @@ class CountryService
     /**
      * Extract unique, translated countries from a collection of trips.
      *
-     * @param  Collection<int, \App\Models\Trip>  $trips
+     * @param  Collection<int, \App\Models\Trip>  $trips  Published trips with 'destinations.country' eager-loaded
      * @return array<int, array{code: string, name: string, en_name: string}>
      */
     public function getCountriesForTrips(Collection $trips): array

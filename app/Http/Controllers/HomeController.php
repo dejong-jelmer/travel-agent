@@ -80,10 +80,10 @@ class HomeController extends Controller
         $trips = Trip::with(['destinations.country', 'heroImage', 'prices'])->published()->get();
 
         return Inertia::render('Trip/Index', [
-            'title'     => $this->pageTitle('home.trips_seo'),
-            'trips'     => $trips,
+            'title' => $this->pageTitle('home.trips_seo'),
+            'trips' => $trips,
             'countries' => $this->countryService->getCountriesForTrips($trips),
-            'seo'       => $this->pageSeo('home.trips_seo'),
+            'seo' => $this->pageSeo('home.trips_seo'),
         ]);
     }
 

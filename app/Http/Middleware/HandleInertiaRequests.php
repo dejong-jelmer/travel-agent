@@ -74,6 +74,13 @@ class HandleInertiaRequests extends Middleware
             ],
         ]);
     }
+
+    /**
+     * Inertia hook: whether to encrypt the browser history state.
+     * Enabled in production to prevent sensitive prop data from being readable in browser history.
+     *
+     * @see https://inertiajs.com/history-encryption
+     */
     public function encryptHistory(): bool
     {
         return app()->isProduction();

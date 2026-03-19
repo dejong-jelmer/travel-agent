@@ -10,6 +10,7 @@ use App\Models\Trip;
 use App\Responses\BookingResponse;
 use App\Services\CountryService;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
@@ -46,8 +47,9 @@ class AppServiceProvider extends ServiceProvider
                 ? ['newBookingsCount' => Booking::new()->count()]
                 : null,
             'settings' => fn () => Setting::pluck('value', 'key')->all(),
-            'navCountries' => fn () => $this->app->make(CountryService::class)->getCountriesForTrips(
+            'navCountries' => fn () => Cache::remember('nav_countries', 3600, fn () => $this->app->make(CountryService::class)->getCountriesForTrips(
                 Trip::with('destinations.country')->published()->get()
+            )
             ),
         ]);
 
