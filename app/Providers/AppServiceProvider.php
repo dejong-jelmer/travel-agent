@@ -6,7 +6,9 @@ use App\Enums\ModelAction;
 use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Models\Setting;
+use App\Models\Trip;
 use App\Responses\BookingResponse;
+use App\Services\CountryService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -44,6 +46,9 @@ class AppServiceProvider extends ServiceProvider
                 ? ['newBookingsCount' => Booking::new()->count()]
                 : null,
             'settings' => fn () => Setting::pluck('value', 'key')->all(),
+            'navCountries' => fn () => $this->app->make(CountryService::class)->getCountriesForTrips(
+                Trip::with('destinations.country')->published()->get()
+            ),
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());

@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Http\Resources\CountryResource;
 use App\Models\Country;
+use Illuminate\Support\Collection;
 
 class CountryService
 {
@@ -84,6 +85,25 @@ class CountryService
     public static function resetUniquePool(): void
     {
         self::$availableCountries = null;
+    }
+
+    /**
+     * Extract unique, translated countries from a collection of trips.
+     *
+     * @param  Collection<int, \App\Models\Trip>  $trips
+     * @return array<int, array{code: string, name: string, en_name: string}>
+     */
+    public function getCountriesForTrips(Collection $trips): array
+    {
+        $countries = $trips
+            ->flatMap(fn ($trip) => $trip->destinations)
+            ->map(fn ($dest) => $dest->country)
+            ->filter()
+            ->unique('code')
+            ->sortBy(fn ($country) => $country->getTranslatedName(app()->getLocale()))
+            ->values();
+
+        return CountryResource::collection($countries)->resolve();
     }
 
     /**

@@ -11,7 +11,11 @@ return [
     ],
     'contact_seo' => [
         'title' => 'Contact opnemen',
-        'description' => 'Questions about a trip or need personalized advice? I\'d be happy to help you plan your sustainable train journey through Europe.',
+        'description' => 'Heeft u vragen over een reis of wilt u persoonlijk advies? Ik help u graag bij het plannen van uw duurzame treinreis door Europa.',
+    ],
+    'trips_seo' => [
+        'title' => 'Onze reizen',
+        'description' => 'Een overzicht van al onze duurzame treinreizen door Europa.',
     ],
     'privacy_seo' => [
         'title' => 'Privacyverklaring',

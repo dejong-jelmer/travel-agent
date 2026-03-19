@@ -1,9 +1,9 @@
 <script setup>
 import { CheckCircle } from 'lucide-vue-next';
 
-import routesImage from '@/../images/route.jpg';
-import trainImage from '@/../images/train.jpg';
-import uniqueImage from '@/../images/unique.jpg';
+import routesImage from '@/../images/route.webp';
+import trainImage from '@/../images/train.webp';
+import uniqueImage from '@/../images/unique.webp';
 
 const usps = [
     {
@@ -76,7 +76,7 @@ const usps = [
             <div class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-brand-subtle/20">
                 <span class="text-brand-primary font-medium">{{ $t('usp.cta.text') }}</span>
                 <div class="w-px h-4 bg-brand-subtle/30"></div>
-                <DefaultLink>{{ $t('usp.cta.link') }} →</DefaultLink>
+                <DefaultLink :href="route('trips')">{{ $t('usp.cta.link') }} →</DefaultLink>
             </div>
         </div>
 

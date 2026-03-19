@@ -20,8 +20,26 @@
     },
     "topbar_text": "Ga duurzaam op reis",
     "nav": {
+        "trips": "Reizen",
+        "all_trips": "Alle reizen",
         "contact": "Contact",
         "about": "Over mij"
+    },
+    "trips": {
+        "title": "Alle reizen",
+        "subtitle": "Ontdek onze duurzame treinreizen door Europa.",
+        "result_singular": "reis gevonden",
+        "result_plural": "reizen gevonden",
+        "filter_title": "Filters",
+        "clear_filter": "Wis filter",
+        "clear_all": "Wis alles",
+        "filter_destination": "Bestemming",
+        "filter_transport": "Vervoer",
+        "filter_duration": "Reisdagen",
+        "filter_price": "Vanaf prijs",
+        "filter_days_unit": "dagen",
+        "empty_title": "Geen reizen gevonden",
+        "empty_body": "Er zijn geen reizen die overeenkomen met uw selectie. Pas uw filters aan."
     },
     "trip_card": {
         "days": "reisdagen",
@@ -92,7 +110,7 @@
             "submitting": "Bezig met verzenden...",
             "submit": "Schrijf je in"
         },
-        "privacy": "Ik respecteren je privacy. Je kunt zich op elk moment uitschrijven.",
+        "privacy": "We respecteren je privacy. Je kunt zich op elk moment uitschrijven.",
         "subscription": {
             "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
             "error": "Er is een fout opgetreden bij het verwerken van je inschrijving. Probeer het later opnieuw."
@@ -616,7 +634,8 @@
     },
     "hero": {
         "title": "Meer mens...",
-        "sub_title": "Omdat we reizen"
+        "sub_title": "Omdat we reizen",
+        "cta": "Bekijk de reizen"
     },
     "footer": {
         "contact": "Contact",
@@ -689,30 +708,41 @@
         }
     },
     "about": {
+        "hero": {
+            "title": "Over mij",
+            "sub_title": "Het verhaal achter de reizen."
+        },
         "page_title": "Mijn doel",
         "image_alt": "Historische (trein)reizen in Europa",
         "team": {
-            "section_header": "Mijn verhaal",
-            "heading": "De persoon achter jouw reis",
             "member": {
                 "name": "Jelmer de Jong",
-                "role": "Founder & treinreisspecialist",
+                "role": "Founder & organisator van jouw treinreis",
                 "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             }
         },
+        "pullquote": "Niet aankomen. Beleven.",
         "tagline": "Meer dan een bestemming",
         "mission_statement": [
             "Mijn doel is om jou een reis te bezorgen waar je met plezier en vervulling op terug zal kijken — lang nadat je weer thuis bent.",
             "Ik geloof dat reizen meer is dan een bestemming. Het gaat om de mensen die je ontmoet, de culturen die je raken en de verhalen die je meeneemt. Daarom breng ik reizigers, culturen en verhalen op een duurzame manier bij elkaar — met respect voor de wereld om ons heen en de mensen die er deel van uitmaken.",
-            "Duurzaam reizen is niet alleen weggelaten voor de trein-hobbyist of de overtuigde duurzaamheidsfanaat — het is voor iedereen die wil genieten van een reis die ergens toe bijdraagt. Ik geloof dat de trein de toekomst heeft. Niet als compromis, maar als de mooiste manier om onderweg te zijn.",
+            "Duurzaam reizen is niet alleen weggelegd voor de trein-hobbyist of de overtuigde duurzaamheidsfanaat — het is voor iedereen die wil genieten van een reis die ergens toe bijdraagt. Ik geloof dat de trein de toekomst heeft. Niet als compromis, maar als de mooiste manier om onderweg te zijn.",
             "Ik wil dat jij geïnspireerd raakt — door de verhalen achter een plek, de culturen die je verwelkomen en de landschappen die aan je voorbijglijden. Maar inspiratie begint pas als je hoofd vrij is. Daarom neem ik de planning en organisatie volledig uit handen, zodat jij de ruimte hebt om te genieten van de reis en alles wat je onderweg tegenkomt.",
             "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok — rijker in ervaringen, inzichten en herinneringen."
         ],
         "why_title": "Waarom ik begon met Omdat We Reizen",
         "why_statement": "Reizen is voor mij anders dan vakantie. Het is het zelfde verschil tussen literatuur en lectuur, muziek... muzak. Het is loskomen uit je bubbel, mensen ontmoeten die anders denken, culturen leren kennen die je perspectief verschuiven. Het is de verruiming die je even — of voorgoed — een beetje meer mens maakt. Dat gevoel wil ik doorgeven. Niet met vliegtickets en all-inclusive, maar met routes die je raken en verhalen die bijblijven."
     },
+    "contact": {
+        "hero_tagline": "Nieuwsgierig naar een route? Of gewoon een vraag? Ik hoor het graag."
+    },
     "home": {
         "our_trips_heading": "De reizen",
+        "contact_cta": {
+            "heading": "Heb je een vraag?",
+            "body": "Ik vertel je graag meer over de routes, de planning of gewoon wat je te wachten staat.",
+            "button": "Neem contact op"
+        },
         "no_trips": {
             "message_start": "Omdat we hard aan het werk zijn om onze eerste reizen op te zetten, kuntjemomenteel nog geen reizen boeken. Kijk op onze",
             "blog_link": "blog",

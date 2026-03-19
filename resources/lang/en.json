@@ -20,8 +20,26 @@
     },
     "topbar_text": "Travel sustainably",
     "nav": {
+        "trips": "Trips",
+        "all_trips": "All trips",
         "contact": "Contact",
         "about": "About us"
+    },
+    "trips": {
+        "title": "All trips",
+        "subtitle": "Discover our sustainable train journeys across Europe.",
+        "result_singular": "trip found",
+        "result_plural": "trips found",
+        "filter_title": "Filters",
+        "clear_filter": "Clear filter",
+        "clear_all": "Clear all",
+        "filter_destination": "Destination",
+        "filter_transport": "Transport",
+        "filter_duration": "Travel days",
+        "filter_price": "Starting price",
+        "filter_days_unit": "days",
+        "empty_title": "No trips found",
+        "empty_body": "No trips match your current selection. Try adjusting your filters."
     },
     "trip_card": {
         "days": "days",
@@ -616,7 +634,8 @@
     },
     "hero": {
         "title": "Human...",
-        "sub_title": "Because we travel"
+        "sub_title": "Because we travel",
+        "cta": "View the trips"
     },
     "footer": {
         "contact": "Contact",
@@ -689,14 +708,17 @@
         }
     },
     "about": {
+        "hero": {
+            "title": "About me",
+            "sub_title": "The story behind the trips."
+        },
         "page_title": "My goal",
         "image_alt": "Historical (train) journeys in Europe",
+        "pullquote": "Not arriving. Experiencing.",
         "team": {
-            "section_header": "My storry",
-            "heading": "The person behind your journey",
             "member": {
                 "name": "Jelmer de Jong",
-                "role": "Founder & train travel specialist",
+                "role": "Founder & organisator of your traintrip",
                 "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             }
         },
@@ -711,8 +733,16 @@
         "why_statement": "For me, traveling is different from vacation. It's the same difference between literature and reading, music... muzak. It's about breaking out of your bubble, meeting people who think differently, exploring cultures, shifting your perspective. It's the expansion that makes you even—or permanently—a little more human. I want to share that feeling. Not with plane tickets and all-inclusive packages, but with routes that touch you and stories that stay with you.",
         "tagline": "More than a destination"
     },
+    "contact": {
+        "hero_tagline": "Curious about a route? Or just a question? I'd love to hear from you."
+    },
     "home": {
         "our_trips_heading": "Our trips",
+        "contact_cta": {
+            "heading": "Have a question?",
+            "body": "I'd love to tell you more about the routes, the planning, or simply what awaits you.",
+            "button": "Get in touch"
+        },
         "no_trips": {
             "message_start": "Because we are working hard to set up our first trips, you cannot book any trips yet. Check out our",
             "blog_link": "blog",

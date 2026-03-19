@@ -13,6 +13,10 @@ return [
         'title' => 'Contact',
         'description' => 'Questions about our trips? Contact us for personal advice on sustainable train journeys through Europe.',
     ],
+    'trips_seo' => [
+        'title' => 'Our trips',
+        'description' => 'An overview of all our sustainable train journeys through Europe.',
+    ],
     'privacy_seo' => [
         'title' => 'Privacy Statement',
         'description' => 'Read how we handle your personal data. Our privacy statement for sustainable train journeys through Europe.',

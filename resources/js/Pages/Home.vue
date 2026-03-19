@@ -1,7 +1,8 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import newsletterImage from '@/../images/verona.jpg';
-import contactImage from '@/../images/contact/ludo-photos-south-station-4927286_1920.jpg';
+import newsletterImage from '@/../images/verona.webp';
+import contactImage from '@/../images/contact/ludo-photos-south-station-4927286_1920.webp';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     trips: Array,
@@ -17,10 +18,16 @@ const { t } = useI18n()
             <Hero />
         </template>
         <main>
+            <!-- USP: eerst het waarom, dan de reizen -->
             <DecorativeLine />
-            <section class="relative overflow-hidden">
-                <!-- Trips -->
-                <article class="relative py-12 table:py-24">
+            <section class="relative py-12 tablet:py-24">
+                <USP />
+            </section>
+
+            <!-- Trips -->
+            <DecorativeLine />
+            <section id="trips" class="relative overflow-hidden scroll-mt-12">
+                <article class="relative py-12 tablet:py-24">
                     <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
                         <div class="text-center">
                             <SectionHeader>{{ t('home.our_trips_heading') }}</SectionHeader>
@@ -51,22 +58,48 @@ const { t } = useI18n()
                         </template>
                     </div>
                 </article>
+
                 <!-- Newsletter -->
-                <article class="relative bg-no-repeat bg-center bg-cover"  :style="`background-image: url(${newsletterImage})`">
+                <article class="relative bg-no-repeat bg-center bg-cover"
+                    :style="`background-image: url(${newsletterImage})`">
                     <Newsletter />
+                    <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent"></div>
                 </article>
             </section>
-            <!-- USP -->
-            <DecorativeLine />
-            <section class="relative py-12 table:py-24">
-                <USP></USP>
+
+            <!-- Pullquote rustpunt -->
+            <section class="relative bg-brand-secondary py-16 tablet:py-24 px-4 text-center">
+                <div class="max-w-2xl mx-auto">
+                    <div class="font-cormorant text-8xl laptop:text-9xl leading-none text-brand-accent/30 select-none mb-2">"</div>
+                    <p class="font-cormorant italic text-4xl laptop:text-6xl text-brand-primary leading-snug -mt-8">
+                        {{ t('about.pullquote') }}
+                    </p>
+                    <p class="mt-6 font-poppins text-sm text-brand-light tracking-widest uppercase">
+                        — Omdat We Reizen
+                    </p>
+                </div>
+                <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent"></div>
             </section>
-            <DecorativeLine />
-            <section class="relative bg-no-repeat bg-center bg-cover tablet:py-24 px-4" :style="`background-image: url(${contactImage})`">
-                <section id="contact"
-                    class="max-w-screen-wide laptop:max-w-screen-desktop scroll-mt-12 mx-auto h-auto">
-                    <ContactForm :contact="contact" />
-                </section>
+
+            <!-- Contact CTA-banner -->
+            <section id="contact" class="relative bg-no-repeat bg-center bg-cover"
+                :style="`background-image: url(${contactImage})`">
+                <div class="absolute inset-0 bg-brand-text/55"></div>
+                <div
+                    class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4 py-20 tablet:py-28 text-center">
+                    <h2 class="text-3xl laptop:text-4xl font-cormorant font-bold text-white leading-tight mb-4">
+                        {{ t('home.contact_cta.heading') }}
+                    </h2>
+                    <p class="text-white/80 font-poppins text-base laptop:text-lg max-w-xl mx-auto mb-8">
+                        {{ t('home.contact_cta.body') }}
+                    </p>
+                    <Link :href="route('contact')">
+                        <Button
+                            class="">
+                            {{ t('home.contact_cta.button') }} →
+                        </Button>
+                    </Link>
+                </div>
             </section>
         </main>
     </Layout>

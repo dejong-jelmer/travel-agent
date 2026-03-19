@@ -249,7 +249,7 @@ class Trip extends Model
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg')) // @phpstan-ignore nullsafe.neverNull
+            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/contact.webp')) // @phpstan-ignore nullsafe.neverNull
         );
     }
 

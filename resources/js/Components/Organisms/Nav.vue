@@ -1,9 +1,22 @@
 <script setup>
 import { useI18n } from 'vue-i18n';
-import { Link } from "@inertiajs/vue3";
+import { Link, usePage } from "@inertiajs/vue3";
 import { computed } from 'vue';
+import { route } from 'ziggy-js';
 
 const { t } = useI18n();
+const page = usePage();
+
+const navCountries = computed(() => page.props.navCountries ?? []);
+
+// Dropdown items: "All trips" first, then one entry per country
+const tripItems = computed(() => [
+    { label: t('nav.all_trips'), href: route('trips') },
+    ...navCountries.value.map(c => ({
+        label: c.name,
+        href: `${route('trips')}?land=${c.code}`,
+    })),
+]);
 
 const links = computed(() => ({
     contact: {
@@ -30,12 +43,25 @@ const links = computed(() => ({
 
             <!-- Desktop Navigation Links -->
             <div class="hidden tablet:flex items-center gap-x-8 laptop:gap-x-12">
+                <NavDropdown
+                    :label="$t('nav.trips')"
+                    :href="route('trips')"
+                    :items="tripItems"
+                    variant="desktop"
+                />
                 <NavLink v-for="link in links" :key="link.label" :href="link.path" :label="link.label" variant="desktop" />
             </div>
 
             <!-- Mobile Menu -->
             <MobileMenu class="tablet:hidden">
                 <template #default="{ closeMenu }">
+                    <NavDropdown
+                        :label="$t('nav.trips')"
+                        :href="route('trips')"
+                        :items="tripItems"
+                        variant="mobile"
+                        @close="closeMenu"
+                    />
                     <NavLink v-for="link in links" :key="link.label" :href="link.path" :label="link.label" variant="mobile"
                         @click="closeMenu" />
                 </template>

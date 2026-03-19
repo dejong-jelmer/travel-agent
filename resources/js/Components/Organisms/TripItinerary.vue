@@ -1,5 +1,5 @@
 <script setup>
-import placeholder from '@/../images/placeholder.png';
+import placeholder from '@/../images/placeholder.webp';
 import { Camera, BedDouble, AlertTriangle } from 'lucide-vue-next';
 import { ref } from 'vue'
 import { useMq } from 'vue3-mq'

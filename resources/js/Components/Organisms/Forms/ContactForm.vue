@@ -28,7 +28,7 @@ function submit() {
         honeypot.value.validate();
         resetObject(errors);
         axios
-            .post(route("contact"), form)
+            .post(route("submit.contact"), form)
             .then((response) => {
                 toast.success($t('forms.contact.success'));
                 resetObject(form);
