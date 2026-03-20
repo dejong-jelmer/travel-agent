@@ -1,6 +1,13 @@
 import './bootstrap';
 import '../css/app.css';
-import { createApp, h } from 'vue'
+import { createApp, h, defineAsyncComponent } from 'vue'
+
+// Only heavy admin-only components are loaded async
+const ASYNC_COMPONENTS = [
+    'BookingForm', 'TripForm', 'DestinationForm', 'CampaignForm', 'ItineraryForm',
+    'DataTable', 'SortableBlocks', 'ImageUploader', 'TripPricesManager',
+    'TripItemsTab', 'BlockedDatesManager', 'LightBox',
+]
 import { createInertiaApp } from '@inertiajs/vue3'
 import { ZiggyVue } from 'ziggy-js';
 import VueTippy from 'vue-tippy'
@@ -46,11 +53,15 @@ createInertiaApp({
                     placement: 'right'
                 }
             });
-            // Register components globally
+            // Register components globally; heavy admin components are loaded async
             function registerComponents(glob) {
-                Object.entries(glob).forEach(([path, definition]) => {
+                Object.entries(glob).forEach(([path, load]) => {
                     const name = path.split('/').pop().replace(/\.[^/.]+$/, '')
-                    app.component(name, definition.default)
+                    if (ASYNC_COMPONENTS.includes(name)) {
+                        app.component(name, defineAsyncComponent(load))
+                    } else {
+                        app.component(name, load.default ?? load)
+                    }
                 });
             }
 

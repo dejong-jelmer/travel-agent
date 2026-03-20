@@ -10,6 +10,11 @@
     <link rel="icon" type="image/png" sizes="96x96" href="/lightmode/favicon-96x96.png">
     <link rel="apple-touch-icon" href="/lightmode/apple-touch-icon.png">
     <link rel="manifest" href="/lightmode/site.webmanifest">
+    <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ Vite::asset('resources/fonts/nunito/Nunito-Light.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ Vite::asset('resources/fonts/nunito/Nunito-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ Vite::asset('resources/images/hero-poster.webp') }}" as="image" type="image/webp">
     @routes
     @vite('resources/js/app.js')
     @inertiaHead

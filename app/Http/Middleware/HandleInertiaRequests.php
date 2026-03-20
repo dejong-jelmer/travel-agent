@@ -83,6 +83,6 @@ class HandleInertiaRequests extends Middleware
      */
     public function encryptHistory(): bool
     {
-        return app()->isProduction();
+        return ! app()->isLocal();
     }
 }

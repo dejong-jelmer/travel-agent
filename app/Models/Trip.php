@@ -103,7 +103,7 @@ class Trip extends Model
     {
         parent::boot();
 
-        $clearNavCache = fn () => \Illuminate\Support\Facades\Cache::forget('nav_countries');
+        $clearNavCache = fn () => \Illuminate\Support\Facades\Cache::forget(config('cache.keys.nav_countries'));
         static::saved($clearNavCache);
         static::deleted($clearNavCache);
         static::restored($clearNavCache);

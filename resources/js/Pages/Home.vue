@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import newsletterImage from '@/../images/verona.webp';
 import contactImage from '@/../images/contact/ludo-photos-south-station-4927286_1920.webp';
@@ -10,6 +11,28 @@ const props = defineProps({
 });
 
 const { t } = useI18n()
+
+const newsletterRef = ref(null)
+const contactRef = ref(null)
+const newsletterLoaded = ref(false)
+const contactLoaded = ref(false)
+
+onMounted(async () => {
+    await nextTick()
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target === newsletterRef.value) newsletterLoaded.value = true
+                if (entry.target === contactRef.value) contactLoaded.value = true
+                observer.unobserve(entry.target)
+            }
+        })
+    }, { rootMargin: '200px' })
+
+    if (newsletterRef.value) observer.observe(newsletterRef.value)
+    if (contactRef.value) observer.observe(contactRef.value)
+})
 </script>
 
 <template>
@@ -18,7 +41,6 @@ const { t } = useI18n()
             <Hero />
         </template>
         <main>
-            <!-- USP: eerst het waarom, dan de reizen -->
             <DecorativeLine />
             <section class="relative py-12 tablet:py-24">
                 <USP />
@@ -27,7 +49,7 @@ const { t } = useI18n()
             <!-- Trips -->
             <DecorativeLine />
             <section id="trips" class="relative overflow-hidden scroll-mt-12">
-                <article class="relative py-12 tablet:py-24">
+                <article class="relative py-12 tablet:py-24 phone:px-6 laptop:px-8">
                     <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
                         <div class="text-center">
                             <SectionHeader>{{ t('home.our_trips_heading') }}</SectionHeader>
@@ -60,8 +82,8 @@ const { t } = useI18n()
                 </article>
 
                 <!-- Newsletter -->
-                <article class="relative bg-no-repeat bg-center bg-cover"
-                    :style="`background-image: url(${newsletterImage})`">
+                <article ref="newsletterRef" class="relative bg-no-repeat bg-center bg-cover bg-brand-secondary"
+                    :style="newsletterLoaded ? `background-image: url(${newsletterImage})` : ''">
                     <Newsletter />
                     <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent"></div>
                 </article>
@@ -82,8 +104,8 @@ const { t } = useI18n()
             </section>
 
             <!-- Contact CTA-banner -->
-            <section id="contact" class="relative bg-no-repeat bg-center bg-cover"
-                :style="`background-image: url(${contactImage})`">
+            <section ref="contactRef" id="contact" class="relative bg-no-repeat bg-center bg-cover bg-brand-text"
+                :style="contactLoaded ? `background-image: url(${contactImage})` : ''">
                 <div class="absolute inset-0 bg-brand-text/55"></div>
                 <div
                     class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4 py-20 tablet:py-28 text-center">

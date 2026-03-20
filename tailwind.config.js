@@ -58,7 +58,7 @@ export default {
                     info: "#0d6efd",
                 },
             },
-            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
+            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1350px'}
             keyframes: {
                 "slide-left-right": {
                     "0%, 100%": { transform: "translateX(0px)" },

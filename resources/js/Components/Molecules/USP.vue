@@ -27,7 +27,7 @@ const usps = [
 ];
 </script>
 <template>
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto phone:px-6 laptop:px-8">
 
         <!-- Header -->
         <div class="text-center mb-12">

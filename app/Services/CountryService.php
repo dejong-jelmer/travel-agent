@@ -95,10 +95,12 @@ class CountryService
      */
     public function getCountriesForTrips(Collection $trips): array
     {
-        $countries = $trips
-            ->flatMap(fn ($trip) => $trip->destinations)
-            ->map(fn ($dest) => $dest->country)
-            ->filter()
+        /** @var \Illuminate\Support\Collection<int, \App\Models\Destination> $destinations */
+        $destinations = $trips->flatMap(fn ($trip) => $trip->destinations);
+
+        $countries = $destinations
+            ->map(fn (\App\Models\Destination $dest) => $dest->country)
+            ->filter(fn ($country) => $country !== null)
             ->unique('code')
             ->sortBy(fn ($country) => $country->getTranslatedName(app()->getLocale()))
             ->values();

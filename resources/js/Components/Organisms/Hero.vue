@@ -1,17 +1,25 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import heroVideo from '@/../videos/home-hero.mp4';
+import heroImage from '@/../images/hero-poster.webp';
+import { useMq } from 'vue3-mq';
 
 const { t } = useI18n();
+const mq = useMq();
 
 const videoRef = ref(null)
 const visibleTitle = ref(false)
 const visibleSubTitle = ref(false)
 const visibleCta = ref(false)
+const prefersReducedMotion = ref(false)
+
+const showVideo = computed(() => mq.tablet || mq.laptop || mq.desktop || mq.wide)
 
 onMounted(() => {
-    if (videoRef.value) {
+    prefersReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+    if (videoRef.value && !prefersReducedMotion.value) {
         videoRef.value.playbackRate = 0.8
     }
     setTimeout(() => {
@@ -28,8 +36,9 @@ onMounted(() => {
 
 <template>
     <div class="relative h-[calc(100vh-100px)] flex px-6 overflow-hidden">
-        <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" :src="heroVideo" autoplay
+        <video v-if="showVideo" ref="videoRef" :poster="heroImage" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" preload="none" :src="heroVideo" :autoplay="!prefersReducedMotion"
             muted loop playsinline />
+        <img v-else :src="heroImage" class="absolute inset-0 w-full h-full object-cover" alt="" />
 
         <!-- Overlay -->
         <div class="absolute inset-0 bg-brand-text/30"></div>

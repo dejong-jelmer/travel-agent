@@ -72,7 +72,8 @@ const missionPromise = missionParagraphs[4]
                         <!-- Foto -->
                         <div class="relative w-full laptop:w-2/5 flex-shrink-0">
                             <img :src="meImage" :alt="t('about.team.member.name')"
-                                class="w-full max-w-sm mx-auto laptop:max-w-none rounded-2xl shadow-lg object-right object-cover aspect-[3/4]" />
+                                class="w-full max-w-sm mx-auto laptop:max-w-none rounded-2xl shadow-lg object-right object-cover aspect-[3/4]"
+                                loading="lazy" />
                             <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
                             <div class="absolute bottom-0 left-0 right-0 z-10 px-6 pb-8">
                                 <h1 class="text-2xl laptop:text-3xl font-cormorant font-bold text-white leading-tight">

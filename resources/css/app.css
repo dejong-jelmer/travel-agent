@@ -5,87 +5,101 @@
 /* Regular */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-Regular.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 /* Bold */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-Bold.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: bold;
+    font-display: swap;
 }
 
 /* SemiBold */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-SemiBold.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-SemiBold.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 /* Italic variants */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-Italic.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-Italic.woff2') format('woff2');
     font-weight: 400;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-SemiBoldItalic.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-SemiBoldItalic.woff2') format('woff2');
     font-weight: 600;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-BoldItalic.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-BoldItalic.woff2') format('woff2');
     font-weight: 700;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Caveat";
-    src: url('../fonts/caveat/Caveat-VariableFont_wght.ttf') format('truetype');
-    font-weight: 125 950;
-    font-stretch: 75% 125%;
+    src: url('../fonts/caveat/Caveat-Regular.woff2') format('woff2');
+    font-weight: 100 900;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "CormorantGaramond";
-    src: url('../fonts/cormorant_garamond/CormorantGaramond-VariableFont_wght.ttf') format('truetype');
-    font-weight: 125 950;
-    font-stretch: 75% 125%;
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-SemiBold.woff2') format('woff2');
+    font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "CormorantGaramond";
-    src: url('../fonts/cormorant_garamond/CormorantGaramond-Italic-VariableFont_wght.ttf') format('truetype');
-    font-weight: 125 950;
-    font-stretch: 75% 125%;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "Nunito";
-    src: url('../fonts/nunito/Nunito-VariableFont_wght.ttf') format('truetype');
-    font-weight: 125 950;
-    font-stretch: 75% 125%;
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-Bold.woff2') format('woff2');
+    font-weight: 700;
     font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "CormorantGaramond";
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Nunito";
-    src: url('../fonts/nunito/Nunito-Italic-VariableFont_wght.ttf') format('truetype');
-    font-weight: 125 950;
-    font-stretch: 75% 125%;
-    font-style: italic;
+    src: url('../fonts/nunito/Nunito-Regular.woff2') format('woff2');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url('../fonts/nunito/Nunito-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
 }
 
 html {
