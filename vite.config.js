@@ -22,6 +22,7 @@ export default defineConfig(({ mode }) => {
             globals: true,
             environment: "happy-dom",
             pool: "vmThreads",
+            setupFiles: ["./resources/js/__tests__/setup.js"],
         },
         resolve: {
             alias: {

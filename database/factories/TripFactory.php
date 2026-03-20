@@ -2,7 +2,18 @@
 
 namespace Database\Factories;
 
-use App\Models\Country;
+use App\Enums\ImageRelation;
+use App\Enums\Transport;
+use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\PriceLabel;
+use App\Models\Destination;
+use App\Models\Image;
+use App\Models\Itinerary;
+use App\Models\Trip;
+use App\Models\TripItem;
+use App\Models\TripPrice;
+use App\Services\CountryService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -11,6 +22,13 @@ use Illuminate\Support\Str;
  */
 class TripFactory extends Factory
 {
+    private const HIGHLIGHTS = [
+        'Romantische treinrit door de Alpen met adembenemende uitzichten',
+        'Bezoek aan historische kastelen en unieke UNESCO werelderfgoed locaties',
+        'Lokale culinaire ervaringen en wijnproeverijen',
+        'Duurzaam reizen per trein',
+    ];
+
     /**
      * Define the model's default state.
      *
@@ -18,28 +36,186 @@ class TripFactory extends Factory
      */
     public function definition(): array
     {
-        $country = Country::inRandomOrder()->first();
-        while ($country === null) {
-            Country::factory()->create();
-            $country = Country::inRandomOrder()->first();
-        }
         $city = fake()->city();
-        $text = fake()->paragraph();
-        $duration = fake()->randomDigit();
-        while ($duration < 4) {
-            $duration = fake()->randomDigit();
-        }
+        $duration = fake()->numberBetween(6, 14);
 
         return [
             'name' => $city,
-            'slug' => Str::slug("bijzondere-reis-naar-{$city}-{$country->name}"),
-            'description' => "Bijzondere reis, waar u het mooie {$city} bezoek in {$country->name}. {$text}",
-            'price' => randomPrice(),
-            'duration' => $duration,
+            'slug' => $this->generateSlug($city),
+            'description' => $this->generateDescription($city),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
-            'meta_title' => Str::substr("Reis naar {$city} | $duration dagen | {$country->name}", 0, 60),
+            'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
+            'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
+            'blocked_dates' => null,
         ];
+    }
+
+    private function generateSlug(string $city, ?string $destination = null): string
+    {
+        if ($destination) {
+            return Str::slug("reis-naar-{$city}-{$destination}");
+        }
+
+        return Str::slug("reis-naar-{$city}");
+    }
+
+    private function generateDescription(string $city, ?string $destination = null): string
+    {
+        $intro = $destination
+            ? "Ontdek het prachtige {$city} in {$destination}. "
+            : "Ontdek het prachtige {$city}. ";
+
+        $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes. ';
+
+        return $intro.$secondLine.fake()->paragraph();
+    }
+
+    private function generateMetaTitle(string $city, int $duration, ?string $destination = null): string
+    {
+        $title = $destination
+            ? "Reis naar {$city}, {$destination} | {$duration} dagen"
+            : "Reis naar {$city} | {$duration} dagen";
+
+        return Str::substr($title, 0, 60);
+    }
+
+    public function withHeroImage(): static
+    {
+        return $this->has(
+            Image::factory()->primary(),
+            ImageRelation::HeroImage->value
+        );
+    }
+
+    public function withImages(int $count = 3): static
+    {
+        return $this->has(
+            Image::factory()->count($count),
+            ImageRelation::Images->value
+        );
+    }
+
+    public function withAnItinerary(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            Itinerary::factory()
+                ->withImage()
+                ->withRemarks()
+                ->withActivities()
+                ->count(fake()->numberBetween(6, 14))
+                ->withIncrementingDays()
+                ->withIncrementingOrder()
+                ->create(['trip_id' => $trip->id]);
+
+            $trip->recalculateDuration();
+        });
+    }
+
+    /**
+     * Add mode of transport to Trip
+     */
+    public function withTransport(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'transport' => fake()->randomElements([Transport::Train, Transport::Ferry], fake()->numberBetween(1, 2)),
+        ]);
+    }
+
+    /**
+     * Attach random destination from existing pool
+     * Requires destinations to be seeded first (via DestinationSeeder)
+     */
+    public function withDestination(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            if ($destination = Destination::inRandomOrder()->first()) {
+                $trip->destinations()->attach($destination);
+
+                // Get locale from CountryService using country_code and region
+                $locale = CountryService::getLocaleByCountryCode(
+                    $destination->country_code,
+                );
+                $city = fake($locale)->city();
+                $duration = fake()->numberBetween(6, 14);
+
+                $trip->update([
+                    'name' => $city,
+                    'slug' => $this->generateSlug($city, $destination->name),
+                    'description' => $this->generateDescription($city, $destination->name),
+                    'meta_title' => $this->generateMetaTitle($city, $duration, $destination->name),
+                ]);
+            }
+        });
+    }
+
+    public function withItems(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            foreach ([ItemCategory::Transport, ItemCategory::Accommodation, ItemCategory::AdditionalCost] as $category) {
+                TripItem::create([
+                    'trip_id' => $trip->id,
+                    'type' => $category->type(),
+                    'category' => $category,
+                    'item' => fake()->sentence(),
+                ]);
+            }
+        });
+    }
+
+    /**
+     * Update trip with 'practical infromation' section headers
+     * defined in App\Enums\Trip\PracticalInfo
+     */
+    public function withPracticalInfo(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            $trip->update([
+                'practical_info' => collect(PracticalInfo::cases())
+                    ->mapWithKeys(fn ($case) => [
+                        $case->value => fake()->text(fake()->numberBetween(50, 250)),
+                    ])
+                    ->all(),
+            ]);
+        });
+    }
+
+    /**
+     * Update trip with 'blocked_dates'
+     */
+    public function withBlockedDates(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            $trip->update([
+                'blocked_dates' => [
+                    'dates' => [
+                        now()->addDays(fake()->numberBetween(1, 10))->format('Y-m-d'),
+                        now()->addDays(fake()->numberBetween(10, 30))->format('Y-m-d'),
+                        ['start' => now()->addDays(fake()->numberBetween(40, 80))->format('Y-m-d'), 'end' => now()->addDays(fake()->numberBetween(81, 105))->format('Y-m-d')],
+                    ],
+                    'weekdays' => fake()->randomElements(range(0, 6)),
+                ],
+            ]);
+        });
+    }
+
+    public function withPrices(): static
+    {
+        return $this->afterCreating(function (Trip $trip) {
+            $seasons = [PriceLabel::LowSeason, PriceLabel::MidSeason, PriceLabel::HighSeason];
+
+            foreach ($seasons as $index => $season) {
+                $validFrom = now()->addMonths($index * 4);
+                $validUntil = $validFrom->copy()->addMonths(4)->subDay();
+
+                TripPrice::factory()->create([
+                    'trip_id' => $trip->id,
+                    'valid_from' => $validFrom->format('Y-m-d'),
+                    'valid_until' => $validUntil->format('Y-m-d'),
+                    'label' => $season,
+                ]);
+            }
+        });
     }
 }

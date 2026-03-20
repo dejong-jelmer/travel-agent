@@ -3,23 +3,36 @@
 namespace App\Services;
 
 use App\DTO\CreateBookingData;
+use App\DTO\TripPriceData;
 use App\DTO\UpdateBookingData;
+use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 
 class BookingService
 {
-    public function create(CreateBookingData $bookingData): Booking
+    public function create(CreateBookingData $bookingData, TripPriceData $prices): Booking
     {
         // Get Data from DTO
         $contactData = $bookingData->contact->toArray();
         $travelersData = $bookingData->travelers;
 
         // Create booking
+        /** @var Booking $booking */
         $booking = $bookingData->trip->bookings()->create([
             'departure_date' => $bookingData->date,
             'has_accepted_conditions' => $bookingData->has_accepted_conditions,
             'has_confirmed' => $bookingData->has_confirmed,
+            'trip_price_id' => $prices->tripPriceId,
+            'price_per_person' => $prices->perPerson->getAmount(),
+            'single_supplement' => $prices->singleSupplement->getAmount(),
+            'base_total_price' => $prices->baseTotal->getAmount(),
+            'grand_total_price' => $prices->baseTotal->getAmount(),
+            'fees_and_funds' => [
+                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
+                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
+                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::GuaranteeFund->value]->getAmount(),
+            ],
         ]);
 
         // Create booking contact details
@@ -67,10 +80,11 @@ class BookingService
         return $booking;
     }
 
-    private function storeTravelers(Booking $booking, array $data, int $mainBookerIndex)
+    private function storeTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $type => $travelers) {
             foreach ($travelers as $index => $travelerData) {
+                /** @var \App\Models\BookingTraveler $travelerModel */
                 $travelerModel = $booking->travelers()->create([
                     'type' => TravelerType::fromKey($type),
                     'first_name' => $travelerData['first_name'],
@@ -86,10 +100,11 @@ class BookingService
         }
     }
 
-    private function updateTravelers(Booking $booking, array $data, int $mainBookerIndex)
+    private function updateTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $travelers) {
             foreach ($travelers as $index => $travelerData) {
+                /** @var \App\Models\BookingTraveler $travelerModel */
                 $travelerModel = $booking->travelers()->updateOrCreate(
                     ['id' => $travelerData['id']],
                     [
@@ -106,5 +121,10 @@ class BookingService
                 }
             }
         }
+    }
+
+    public function getTotalTravellers(array $travelers): int
+    {
+        return count($travelers[TravelerType::Adult->value]) + count($travelers[TravelerType::Child->value]);
     }
 }

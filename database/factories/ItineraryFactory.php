@@ -2,15 +2,27 @@
 
 namespace Database\Factories;
 
-use App\Enums\Meal;
-use App\Enums\Transport;
+use App\Enums\ImageRelation;
+use App\Models\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Database\Eloquent\Factories\Sequence;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Itinerary>
  */
 class ItineraryFactory extends Factory
 {
+    private const TITLE_PREFIXES = ['Aankomst in ', 'Verblijf in ', 'Vertrek uit '];
+
+    private const ACTIVITIES = ['Stadswandeling', 'Museumbezoek', 'Fietstocht', 'Boottocht'];
+
+    private const REMARKS = [
+        'Museum toegang niet inbegrepen in de prijs',
+        'Lunch niet inbegrepen',
+        'Tickets moeten voor 08:00 opgehaald worden op de locatie',
+        'Museumbezoek is optioneel',
+    ];
+
     /**
      * Define the model's default state.
      *
@@ -19,29 +31,47 @@ class ItineraryFactory extends Factory
     public function definition(): array
     {
         return [
-            'title' => fake()->randomElement([
-                'Aankomst in ',
-                'Verblijf in ',
-                'Vertrek uit ',
-            ]).fake()->city,
+            'title' => fake()->randomElement(self::TITLE_PREFIXES).fake()->city(),
             'description' => fake()->paragraph(3),
-            'location' => fake()->city.', '.fake()->country,
-            'activities' => fake()->optional()->randomElements([
-                'Check-in hotel',
-                'Stadswandeling',
-                'Museumbezoek',
-                'Fietstocht',
-                'Boottocht',
-            ], rand(0, 4)),
-            'accommodation' => fake()->company.' Hotel',
-            'meals' => fake()->optional()->randomElements(Meal::cases(), rand(0, 2)),
-            'transport' => fake()->optional()->randomElements(Transport::cases(), rand(0, 4)),
-            'remark' => fake()->optional()->randomElement([
-                'Museum toegang niet inbegrepen in de prijs',
-                'Lunch niet inbegrepen',
-                'Tickets moeten voor 08:00 opgehaald worden op de locatie',
-                'Museumbezoek is optioneel',
-            ]),
+            'day_from' => 1,
+            'day_to' => null,
+            'accommodation' => fake()->company().' '.'Hotel',
         ];
+    }
+
+    public function withIncrementingDays(): static
+    {
+        return $this->sequence(
+            fn (Sequence $sequence) => ['day_from' => $sequence->index + 1]
+        );
+    }
+
+    public function withIncrementingOrder(): static
+    {
+        return $this->sequence(
+            fn (Sequence $sequence) => ['order' => $sequence->index + 1]
+        );
+    }
+
+    public function withImage(): static
+    {
+        return $this->has(
+            Image::factory()->count(2),
+            ImageRelation::Image->value
+        );
+    }
+
+    public function withRemarks(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'remark' => fake()->optional(0.1)->randomElement(self::REMARKS),
+        ]);
+    }
+
+    public function withActivities(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'activities' => fake()->optional()->randomElements(self::ACTIVITIES, fake()->numberBetween(1, 4)) ?? [],
+        ]);
     }
 }

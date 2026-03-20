@@ -1,8 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
+import { computed } from 'vue'
+import { usePage } from '@inertiajs/vue3';
 import VueDatePicker from '@vuepic/vue-datepicker'
 import { CalendarDays } from 'lucide-vue-next'
 import '@vuepic/vue-datepicker/dist/main.css'
+
+const page = usePage();
 
 const props = defineProps({
     modelValue: {
@@ -21,6 +24,15 @@ const props = defineProps({
         type: [String, Array],
         required: false,
     },
+    enableTimePicker: {
+        type: Boolean,
+        default: false,
+        required: false,
+    },
+    disabledDates: {
+        type: [Array, Function],
+        default: null,
+    },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -30,25 +42,31 @@ const model = computed({
     set: (val) => emit('update:modelValue', val),
 })
 
+const locale = computed(() => { return page.props.locale })
+
 const format = (date) =>
-    new Intl.DateTimeFormat('nl-NL', {
+
+    new Intl.DateTimeFormat(locale.value, {
         day: '2-digit',
         month: 'long',
         year: 'numeric',
+        ...(props.enableTimePicker ? {
+            hour: "numeric",
+            minute: "numeric",
+        } : {})
     }).format(date)
 </script>
 
 <template>
     <div>
-        <VueDatePicker v-model="model" locale="nl" placeholder="Kies een datum" :enable-time-picker="false"
+        <VueDatePicker v-model="model" :locale="locale" :placeholder="$t('date_picker.placeholder')" :enable-time-picker="enableTimePicker"
             teleport="body" :format="format" :min-date="props.minDate || null" :max-date="props.maxDate || null"
-            arrow-navigation auto-apply :state="!!feedback ? false : null">
+            :disabled-dates="disabledDates"
+            :state="!!feedback ? false : null" arrow-navigation auto-apply>
             <template #input-icon>
-                <CalendarDays class="ml-1 h-5 w-auto text-accent-primary" />
+                <CalendarDays class="ml-1 h-5 w-auto text-brand-accent" />
             </template>
         </VueDatePicker>
-        <template v-if="!!feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

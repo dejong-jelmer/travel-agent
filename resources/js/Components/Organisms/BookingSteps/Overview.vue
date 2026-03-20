@@ -1,9 +1,10 @@
 <script setup>
-import { Briefcase, Calendar, Euro, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
+import { Briefcase, Calendar, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
 import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+
 const { formattedDate } = useDateFormatter();
 
-const props = defineProps({
+defineProps({
     booking: {
         type: Object,
         required: true
@@ -13,65 +14,61 @@ const props = defineProps({
 
 <template>
     <div key="overview" class="space-y-6">
-        <h2 class="text-xl font-bold text-brand-primary">Bekijken & bevestigen</h2>
-        <hr class="border-accent-sage/20">
+        <h2 class="text-xl font-bold text-brand-primary">{{ $t('booking_steps.overview.heading') }}</h2>
+        <hr class="border-brand-subtle/20">
 
         <div class="p-6 bg-white rounded-2xl shadow-md space-y-6">
             <!-- Reis -->
-            <section class="w-[80%]">
+            <section class="w-full">
                 <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
-                    Een samenvatting van je reis
+                    {{ $t('booking_steps.overview.summary_heading') }}
                 </h2>
                 <div class="grid gap-1 ml-4">
                     <div class="flex items-center">
                         <Briefcase class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
-                            <span>Reis</span>
+                            <span>{{ $t('booking_steps.overview.trip_label') }}</span>
                             <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
                             <strong>{{ booking.trip.name }}</strong>
                         </span>
                     </div>
 
                     <div class="flex items-center">
-                        <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
+                        <Train class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
-                            <span>Totale reissom</span>
+                            <span>{{ $t('booking_steps.overview.departure_date') }}</span>
                             <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                            <span class="font-bold">€ {{ booking.trip.price }}</span>
+                            <span class="font-bold">{{ formattedDate(booking.departure_date) ||
+                                $t('booking_steps.overview.no_date_chosen') }}</span>
                         </span>
                     </div>
 
                     <div class="flex items-center">
                         <Calendar class="inline w-4 h-4 mr-2 text-brand-light" />
                         <span class="flex-1 flex items-center gap-2">
-                            <span>Totale reisduur</span>
+                            <span>{{ $t('booking_steps.overview.total_duration') }}</span>
                             <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                            <span class="font-bold">{{ booking.trip.duration }} dagen</span>
-                        </span>
-                    </div>
-
-                    <div class="flex items-center">
-                        <Train class="inline w-4 h-4 mr-2 text-brand-light" />
-                        <span class="flex-1 flex items-center gap-2">
-                            <span>Vertrek datum</span>
-                            <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                            <span class="font-bold">{{ formattedDate(booking.departure_date) || 'Geen datum gekozen' }}</span>
+                            <span class="font-bold">{{ booking.trip.duration }} {{ $t('booking_steps.overview.days')
+                                }}</span>
                         </span>
                     </div>
                 </div>
 
             </section>
 
+            <!-- Kosten -->
+            <BookingCostsSummary :booking="booking" />
+
             <!-- Reizigers -->
             <section>
                 <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
-                    <Users class="w-5 h-5 text-brand-light" /> Reizigers
+                    <Users class="w-5 h-5 text-brand-light" /> {{ $t('booking_steps.overview.travelers_heading') }}
                 </h2>
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-3 ml-4">
                     <!-- Volwassenen -->
                     <div v-if="booking.travelers.adults.length">
                         <h3 class="font-medium text-brand-light">
-                            Volwassenen ({{ booking.participants.adults }})
+                            {{ $t('booking_steps.overview.adults_label') }} ({{ booking.participants.adults }})
                         </h3>
                         <ul class="ml-4 mt-1 space-y-0.5 list-disc">
                             <li v-for="(adult, i) in booking.travelers.adults" :key="i">
@@ -84,7 +81,7 @@ const props = defineProps({
                     <!-- Kinderen -->
                     <div v-if="booking.travelers.children.length">
                         <h3 class="font-medium text-brand-light">
-                            Kinderen ({{ booking.participants.children }})
+                            {{ $t('booking_steps.overview.children_label') }} ({{ booking.participants.children }})
                         </h3>
                         <ul class="ml-4 mt-1 space-y-0.5 list-disc">
                             <li v-for="(child, i) in booking.travelers.children" :key="i">
@@ -97,14 +94,14 @@ const props = defineProps({
 
                 <p v-if="!booking.travelers.adults.length && !booking.travelers.children.length"
                     class="text-gray-500 mt-2">
-                    Nog geen reizigers ingevoerd.
+                    {{ $t('booking_steps.overview.no_travelers') }}
                 </p>
             </section>
 
             <!-- Contact -->
             <section>
                 <h2 class="text-xl font-semibold text-brand-primary mb-3 flex items-center gap-2">
-                    <Mail class="w-5 h-5 text-brand-light" /> Contact informatie
+                    <Mail class="w-5 h-5 text-brand-light" /> {{ $t('booking_steps.overview.contact_info_heading') }}
                 </h2>
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-2 ml-4">
 
@@ -142,24 +139,27 @@ const props = defineProps({
                 <!-- Bevestiging -->
                 <span @click="booking.clearErrors('has_confirmed')">
                     <Checkbox v-model="booking.has_confirmed" :feedback="booking.errors.has_confirmed">
-                        Ik bevestig de juistheid van mijn gegevens en maak mijn boeking definitief.
+                        {{ $t('booking_steps.overview.confirm_data') }}
                     </Checkbox>
                 </span>
                 <span @click="booking.clearErrors('has_accepted_conditions')">
-                    <Checkbox v-model="booking.has_accepted_conditions" :feedback="booking.errors.has_accepted_conditions">
-                        Ik bevestig dat de
-                        <a :href="route('terms')" target="_blank" rel="noopener noreferrer"
-                            class="default-link">
-                            algemene voorwaarden
-                        </a>
-                        van toepassing zijn op deze reis.
+                    <Checkbox v-model="booking.has_accepted_conditions"
+                        :feedback="booking.errors.has_accepted_conditions">
+                        <i18n-t keypath="booking_steps.overview.accept_terms" tag="span">
+                            <template #terms_link>
+                                <a :href="route('terms')" target="_blank" rel="noopener noreferrer"
+                                    class="default-link">
+                                    {{ $t('booking_steps.overview.terms_link') }}
+                                </a>
+                            </template>
+                        </i18n-t>
                     </Checkbox>
                 </span>
             </section>
         </div>
         <div v-if="Object.keys(booking.errors).length > 0" class="mb-4 p-4 bg-red-50 border border-red-200 rounded-lg">
             <h3 class="text-sm font-semibold text-red-800 mb-2">
-                Er zijn {{ Object.keys(booking.errors).length }} fout(en) gevonden:
+                {{ $t('booking_steps.overview.errors_found', { count: Object.keys(booking.errors).length }) }}
             </h3>
             <ul class="text-sm text-red-700 space-y-1">
                 <li v-for="(error, key) in booking.errors" :key="key">

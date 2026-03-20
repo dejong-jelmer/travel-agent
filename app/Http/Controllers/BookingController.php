@@ -5,22 +5,45 @@ namespace App\Http\Controllers;
 use App\DTO\CreateBookingData;
 use App\Enums\ModelAction;
 use App\Events\BookingCreated;
+use App\Events\BookingFailed;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateBookingRequest;
 use App\Models\Booking;
 use App\Services\BookingService;
+use App\Services\PriceCalculatorService;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 
 class BookingController extends Controller
 {
     use HasPageMetadata;
 
-    public function store(CreateBookingRequest $request, BookingService $bookingService): RedirectResponse|JsonResponse
+    public function __construct(private BookingService $bookingService, private PriceCalculatorService $priceCalculator) {}
+
+    public function store(CreateBookingRequest $request): RedirectResponse|JsonResponse
     {
         $bookingData = CreateBookingData::fromRequest($request);
-        $booking = $bookingService->create($bookingData);
+        $totalTravelers = $this->bookingService->getTotalTravellers($bookingData->travelers);
+
+        try {
+            $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
+        } catch (Exception $e) {
+            $this->handleBookingError($e, 'No prices available', $bookingData);
+
+            return back()->withErrors(['message' => __('booking.error.no_prices_available')]);
+        }
+
+        try {
+            $booking = $this->bookingService->create($bookingData, $prices);
+        } catch (Exception $e) {
+            $this->handleBookingError($e, 'Booking create failed', $bookingData);
+
+            return back()->withErrors(['message' => __('booking.error.create_failed')]);
+        }
+
         event(new BookingCreated($booking));
         session()->flash('booking_uuid', $booking->uuid);
 
@@ -37,12 +60,22 @@ class BookingController extends Controller
         return Inertia::render('Booking/Received', [
             'title' => $this->pageTitle('booking.title_received'),
             'booking' => $booking->load([
-                'trip.countries',
+                'trip.destinations',
                 'trip.heroImage',
                 'travelers',
                 'contact',
                 'mainBooker',
             ]),
         ]);
+    }
+
+    private function handleBookingError(Exception $e, string $context, CreateBookingData $data): void
+    {
+        Log::error($e->getMessage());
+        event(new BookingFailed($e->getMessage(), $context, [
+            'email' => $data->contact->email,
+            'trip_name' => $data->trip->name,
+            'date' => $data->date->format('d-m-Y'),
+        ]));
     }
 }

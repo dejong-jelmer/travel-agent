@@ -4,11 +4,14 @@ namespace Tests\Feature;
 
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
+use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 use App\Models\BookingTraveler;
+use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
+use App\Services\PriceCalculatorService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
@@ -26,13 +29,12 @@ class BookingTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->trip = Trip::factory()->create();
+        $this->trip = Trip::factory()->withPrices()->create();
     }
 
     public function test_it_can_create_a_booking_with_travelers_and_contact()
     {
         $payload = $this->generateBookingPayload();
-
         $response = $this->post(route('bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
@@ -43,12 +45,13 @@ class BookingTest extends TestCase
         $this->assertBookingWasCreatedCorrectly($booking, $payload);
         $this->assertTravelersWereCreatedCorrectly($booking, $payload);
         $this->assertContactWasCreatedCorrectly($booking, $payload);
+        $this->assertPricesWhereSetCorrectly($response, $booking);
         $this->assertRedirectIsCorrect($response, $booking);
     }
 
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
     {
-        $admin = User::factory()->create();
+        $admin = User::factory()->admin()->create();
         $this->actingAs($admin);
 
         $booking = $this->createBookingWithTravelersAndContact();
@@ -92,6 +95,130 @@ class BookingTest extends TestCase
         $booking->update(['main_booker_id' => $traveler->id]);
 
         $this->assertTrue($booking->mainBooker->is($traveler));
+    }
+
+    // Blocked dates backend enforcement tests
+    public function test_booking_is_rejected_when_departure_date_is_a_blocked_weekday(): void
+    {
+        $nextMonday = now()->next(Carbon::MONDAY);
+
+        $trip = Trip::factory()->create([
+            'blocked_dates' => ['dates' => [], 'weekdays' => [Carbon::MONDAY]],
+        ]);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $nextMonday->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_rejected_when_departure_date_is_a_blocked_specific_date(): void
+    {
+        $blockedDate = now()->addMonth();
+
+        $trip = Trip::factory()->create([
+            'blocked_dates' => ['dates' => [$blockedDate->format('Y-m-d')], 'weekdays' => []],
+        ]);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $blockedDate->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_rejected_when_departure_date_falls_within_a_blocked_range(): void
+    {
+        $rangeStart = now()->addMonth();
+        $rangeEnd = now()->addMonths(2);
+        $dateInRange = now()->addMonth()->addDays(7);
+
+        $trip = Trip::factory()->create([
+            'blocked_dates' => [
+                'dates' => [['start' => $rangeStart->format('Y-m-d'), 'end' => $rangeEnd->format('Y-m-d')]],
+                'weekdays' => [],
+            ],
+        ]);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $dateInRange->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_accepted_when_departure_date_does_not_match_any_blocked_date(): void
+    {
+        $trip = Trip::factory()->withPrices()->create([
+            'blocked_dates' => [
+                'dates' => [now()->addMonths(3)->format('Y-m-d')],
+                'weekdays' => [Carbon::SUNDAY],
+            ],
+        ]);
+
+        $availableDate = now()->next(Carbon::MONDAY)->addMonths(4);
+
+        $payload = $this->generateBookingPayload([
+            'trip' => ['id' => $trip->id],
+            'departure_date' => $availableDate->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    // Booking season end constraint tests
+
+    public function test_booking_is_rejected_when_departure_date_exceeds_season_end(): void
+    {
+        $seasonEnd = now()->addMonths(2);
+        Setting::set(SettingKey::BookingSeasonEnd, $seasonEnd->format('Y-m-d'));
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => $seasonEnd->addDay()->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('departure_date');
+    }
+
+    public function test_booking_is_accepted_when_departure_date_is_on_season_end(): void
+    {
+        $seasonEnd = now()->addMonths(2);
+        Setting::set(SettingKey::BookingSeasonEnd, $seasonEnd->format('Y-m-d'));
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => $seasonEnd->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasNoErrors();
+    }
+
+    public function test_booking_is_accepted_when_departure_date_is_before_season_end(): void
+    {
+        Setting::set(SettingKey::BookingSeasonEnd, now()->addMonths(3)->format('Y-m-d'));
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => now()->addMonth()->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('bookings.store'), $payload);
+
+        $response->assertSessionHasNoErrors();
     }
 
     // Helper Methods
@@ -243,9 +370,28 @@ class BookingTest extends TestCase
         $this->assertContactWasCreatedCorrectly($booking, $payload);
     }
 
+    private function assertPricesWhereSetCorrectly($response, Booking $booking): void
+    {
+        $prices = app(PriceCalculatorService::class)->forTrip($this->trip, $booking->total_travelers, $booking->departure_date);
+
+        $this->assertEquals($prices->tripPriceId, $booking->trip_price_id);
+        $this->assertEquals($prices->perPerson->getAmount(), $booking->price_per_person);
+        $this->assertEquals($prices->singleSupplement->getAmount(), $booking->single_supplement);
+        $this->assertEquals($prices->baseTotal->getAmount(), $booking->base_total_price);
+        $this->assertEquals($prices->grandTotal->getAmount(), $booking->grand_total_price);
+        $this->assertEquals(
+            [
+                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
+                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
+                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::GuaranteeFund->value]->getAmount(),
+            ],
+            $booking->fees_and_funds
+        );
+    }
+
     private function assertRedirectIsCorrect($response, Booking $booking): void
     {
-        $response->assertRedirect(route('booking.received', ['booking' => $booking->uuid]));
+        $response->assertRedirect(route('bookings.received', ['booking' => $booking->uuid]));
     }
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array

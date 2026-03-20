@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Traits\ValidatesBlockedDateRanges;
 use App\Services\Validation\TripValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -10,12 +11,14 @@ use Illuminate\Validation\Rule;
 
 class UpdateTripRequest extends FormRequest
 {
+    use ValidatesBlockedDateRanges;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     /**
@@ -23,6 +26,21 @@ class UpdateTripRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        //  Default to empty array's on null
+        emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'prices', 'blocked_dates']);
+
+        // Normalize blocked_dates sub-fields: FormData omits empty arrays,
+        // so explicitly default dates and weekdays to [] when absent.
+        $blockedDates = $this->input('blocked_dates');
+        if (is_array($blockedDates)) {
+            $this->merge([
+                'blocked_dates' => [
+                    'dates' => array_values($blockedDates['dates'] ?? []),
+                    'weekdays' => $blockedDates['weekdays'] ?? [],
+                ],
+            ]);
+        }
+
         $this->merge([
             'slug' => Str::slug($this->slug),
         ]);
@@ -39,12 +57,16 @@ class UpdateTripRequest extends FormRequest
             TripValidationRules::basic([
                 'slug' => Rule::unique('trips', 'slug')->ignore($this->trip),
             ]),
-            TripValidationRules::pricing(),
+            TripValidationRules::prices(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),
-            TripValidationRules::countries(),
+            TripValidationRules::destinations(),
+            TripValidationRules::transport(),
             TripValidationRules::heroImageUpdate(),
             TripValidationRules::imagesUpdate(),
+            TripValidationRules::items(),
+            TripValidationRules::practicalInfo(),
+            TripValidationRules::blockedDates(),
         );
     }
 }

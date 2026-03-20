@@ -1,38 +1,25 @@
-<script setup>
-import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
-</script>
-
 <template>
     <div>
         <!-- Hidden file input -->
-        <input
-            ref="fileInput"
-            type="file"
-            :multiple="multiple"
-            accept="image/*"
-            class="hidden"
-            @change="handleFiles"
-        />
+        <input ref="fileInput" type="file" :multiple="multiple" accept="image/*" class="hidden" @change="handleFiles" />
 
         <!-- Drop zone -->
-        <div
-            class="border-2 border-dashed rounded-lg p-8 transition-colors cursor-pointer"
-            :class="isDragging ? 'border-accent-link bg-accent-link/5' : 'border-gray-300 hover:border-gray-400'"
-            @click="triggerFileInput"
-            @dragover.prevent="isDragging = true"
-            @dragenter.prevent="isDragging = true"
-            @dragleave.prevent="isDragging = false"
-            @drop.prevent="handleDrop"
-        >
+        <div class="border-2 border-dashed rounded-lg p-8 transition-colors cursor-pointer"
+            :class="isDragging ? 'border-brand-link bg-brand-link/5' : 'border-gray-300 hover:border-gray-400'"
+            @click="triggerFileInput" @dragover.prevent="isDragging = true" @dragenter.prevent="isDragging = true"
+            @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop">
             <div class="flex flex-col items-center justify-center space-y-2">
-                <div class="text-accent-link font-medium">
+                <div class="text-brand-link font-medium">
                     {{ isDragging ?
-                        (multiple ? 'Laat afbeeldingen los om te uploaden' : 'Laat afbeelding los om te uploaden') :
-                        (label || (multiple ? 'Klik hier of sleep afbeeldingen hierheen' : 'Klik hier of sleep een afbeelding hierheen'))
+                        (multiple ? $t('image_uploader.drop_zone.drop_multiple') :
+                            $t('image_uploader.drop_zone.drop_single')) :
+                        (label || (multiple ? $t('image_uploader.drop_zone.click_or_drag_multiple') :
+                            $t('image_uploader.drop_zone.click_or_drag_single')))
                     }}
                 </div>
                 <div class="text-sm text-gray-500">
-                    {{ multiple ? 'Meerdere afbeeldingen toegestaan' : 'Eén afbeelding toegestaan' }}
+                    {{ multiple ? $t('image_uploader.drop_zone.multiple_allowed') :
+                        $t('image_uploader.drop_zone.single_allowed') }}
                 </div>
             </div>
 
@@ -42,95 +29,68 @@ import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
             </div>
 
             <!-- Error message from form request validation -->
-            <template v-if="feedback">
-                <FormFeedback :message="feedback" />
-            </template>
+            <FormFeedback v-if="feedback" :message="feedback" />
 
             <!-- Preview Section -->
             <div v-if="hasImages" class="mt-4">
                 <!-- Large preview (single mode only) -->
                 <div v-if="!multiple && previewSize === 'large'" class="relative">
-                    <img
-                        v-if="!imageLoadError && singleImageData.url"
-                        :src="singleImageData.url"
-                        alt="Preview"
-                        class="max-w-full h-auto rounded-lg shadow-md"
-                        @error="handleImageError(0)"
-                        @load="handleImageLoad(0)"
-                    />
+                    <img v-if="!imageLoadError && singleImageData.url" :src="singleImageData.url" alt="Preview"
+                        class="max-w-full h-auto rounded-lg shadow-md" @error="handleImageError(0)"
+                        @load="handleImageLoad(0)" />
 
                     <!-- Fallback for broken image -->
-                    <div
-                        v-else-if="imageLoadError"
-                        class="p-4 bg-gray-100 rounded-lg text-gray-600"
-                    >
+                    <div v-else-if="imageLoadError" class="p-4 bg-gray-100 rounded-lg text-gray-600">
                         <p class="text-sm">{{ imageLoadError }}</p>
                     </div>
 
                     <!-- Remove button -->
-                    <button
-                        v-if="singleImageData.url"
-                        type="button"
+                    <button v-if="singleImageData.url" type="button"
                         class="absolute -top-2 -right-2 w-8 h-8 bg-status-error text-white rounded-full flex items-center justify-center text-sm font-bold hover:bg-red-600 hover:scale-110 transition-all shadow-md z-10"
-                        @click.stop="removeImage(0)"
-                        aria-label="Verwijder afbeelding"
-                    >
+                        @click.stop="removeImage(0)" :aria-label="$t('image_uploader.preview.remove_image')">
                         ✕
                     </button>
 
                     <!-- File info (only in large mode) -->
                     <div v-if="singleImageFile" class="mt-4 space-y-1 text-sm">
-                        <p>Bestandsnaam: {{ singleImageFile.name }}</p>
-                        <p :class="{'text-status-error': sizeExceedsMax(singleImageFile.size)}">
-                            Bestandsgrootte: {{ formatBytes(singleImageFile.size) }}
+                        <p>{{ $t('image_uploader.file_info.filename') }}: {{ singleImageFile.name }}</p>
+                        <p :class="{ 'text-status-error': sizeExceedsMax(singleImageFile.size) }">
+                            {{ $t('image_uploader.file_info.filesize') }}: {{ formatBytes(singleImageFile.size) }}
                         </p>
                         <p v-if="sizeExceedsMax(singleImageFile.size)" class="text-status-error">
-                            Maximale bestandsgrootte is {{ formatBytes(imageConfig.max_size, true) }}
+                            {{ $t('image_uploader.file_info.max_size_exceeded', {
+                                maxSize:
+                                    formatBytes(imageConfig.max_size, true) }) }}
                         </p>
-                        <p>Bestandstype: {{ singleImageFile.type }}</p>
+                        <p>{{ $t('image_uploader.file_info.filetype') }}: {{ singleImageFile.type }}</p>
                     </div>
                 </div>
 
                 <!-- Thumbnail grid (multiple mode or thumbnail preference) -->
                 <div v-else class="flex flex-wrap justify-center gap-2">
-                    <div
-                        v-for="(imageData, index) in previewImagesData"
-                        :key="index"
-                        class="relative w-24 h-24"
-                    >
+                    <div v-for="(imageData, index) in previewImagesData" :key="index" class="relative w-24 h-24">
                         <!-- Normal image -->
-                        <img
-                            v-if="!imageData.error && imageData.url"
-                            :src="imageData.url"
-                            class="w-full h-full object-cover rounded-lg shadow"
-                            @error="handleImageError(index)"
-                            @load="handleImageLoad(index)"
-                        />
+                        <img v-if="!imageData.error && imageData.url" :src="imageData.url"
+                            class="w-full h-full object-cover rounded-lg shadow" @error="handleImageError(index)"
+                            @load="handleImageLoad(index)" />
 
                         <!-- Fallback for broken image -->
-                        <div
-                            v-else-if="imageData.error"
-                            class="w-full h-full bg-gray-100 rounded-lg shadow flex flex-col items-center justify-center text-gray-500 text-xs p-1"
-                        >
+                        <div v-else-if="imageData.error"
+                            class="w-full h-full bg-gray-100 rounded-lg shadow flex flex-col items-center justify-center text-gray-500 text-xs p-1">
                             <div class="text-lg">📷</div>
-                            <div class="text-center leading-3">Kan afbeelding niet laden</div>
+                            <div class="text-center leading-3">{{ $t('image_uploader.errors.cannot_load_image') }}</div>
                         </div>
 
                         <!-- Loading state -->
-                        <div
-                            v-else-if="imageData.loading"
-                            class="w-full h-full bg-gray-200 rounded-lg shadow flex items-center justify-center text-gray-500 text-xs animate-pulse"
-                        >
-                            Laden...
+                        <div v-else-if="imageData.loading"
+                            class="w-full h-full bg-gray-200 rounded-lg shadow flex items-center justify-center text-gray-500 text-xs animate-pulse">
+                            {{ $t('image_uploader.preview.loading') }}
                         </div>
 
                         <!-- Remove button -->
-                        <button
-                            type="button"
+                        <button type="button"
                             class="absolute -top-2 -right-2 w-6 h-6 bg-status-error text-white rounded-full flex items-center justify-center text-sm font-bold hover:bg-red-600 hover:scale-110 transition-all shadow-md z-10"
-                            @click.stop="removeImage(index)"
-                            aria-label="Verwijder afbeelding"
-                        >
+                            @click.stop="removeImage(index)" :aria-label="$t('image_uploader.preview.remove_image')">
                             ✕
                         </button>
                     </div>
@@ -261,7 +221,7 @@ export default {
                 this.cachedObjectUrls.set(item, url);
                 return url;
             } catch (error) {
-                console.warn('Kon preview URL niet maken:', error);
+                console.warn(this.$t('image_uploader.console.could_not_create_url'), error);
                 return null;
             }
         },
@@ -329,14 +289,14 @@ export default {
                 // Validate files
                 const validFiles = files.filter(file => {
                     if (!file.type.startsWith('image/')) {
-                        console.warn(`Bestand ${file.name} is geen afbeelding`);
+                        console.warn(this.$t('image_uploader.console.not_an_image', { filename: file.name }));
                         return false;
                     }
                     return true;
                 });
 
                 if (validFiles.length !== files.length) {
-                    this.errorMessage = 'Sommige bestanden zijn geen geldige afbeeldingen en zijn overgeslagen.';
+                    this.errorMessage = this.$t('image_uploader.errors.invalid_files');
                 }
 
                 if (validFiles.length > 0) {
@@ -356,8 +316,8 @@ export default {
                     this.emitUpdate();
                 }
             } catch (error) {
-                console.error('Fout bij verwerken van bestanden:', error);
-                this.errorMessage = 'Er is een fout opgetreden bij het uploaden van de bestanden.';
+                console.error(this.$t('image_uploader.console.processing_error'), error);
+                this.errorMessage = this.$t('image_uploader.errors.upload_error');
             }
         },
         handleFiles(event) {
@@ -368,14 +328,14 @@ export default {
                 // Validate files
                 const validFiles = files.filter(file => {
                     if (!file.type.startsWith('image/')) {
-                        console.warn(`Bestand ${file.name} is geen afbeelding`);
+                        console.warn(this.$t('image_uploader.console.not_an_image', { filename: file.name }));
                         return false;
                     }
                     return true;
                 });
 
                 if (validFiles.length !== files.length) {
-                    this.errorMessage = 'Sommige bestanden zijn geen geldige afbeeldingen en zijn overgeslagen.';
+                    this.errorMessage = this.$t('image_uploader.errors.invalid_files');
                 }
 
                 if (validFiles.length > 0) {
@@ -396,8 +356,8 @@ export default {
                 // Reset input
                 event.target.value = '';
             } catch (error) {
-                console.error('Fout bij verwerken van bestanden:', error);
-                this.errorMessage = 'Er is een fout opgetreden bij het uploaden van de bestanden.';
+                console.error(this.$t('image_uploader.console.processing_error'), error);
+                this.errorMessage = this.$t('image_uploader.errors.upload_error');
             }
         },
         handleFileChange(file) {
@@ -412,8 +372,8 @@ export default {
                 this.errorMessage = '';
                 this.imageLoadError = null;
             } catch (error) {
-                console.error('Fout bij verwerken van bestand:', error);
-                this.errorMessage = 'Fout bij verwerken van het bestand.';
+                console.error(this.$t('image_uploader.console.processing_error'), error);
+                this.errorMessage = this.$t('image_uploader.errors.processing_error');
                 this.uploadedImages = [];
                 this.imageStates = [];
             }
@@ -437,13 +397,13 @@ export default {
                 }
 
             } catch (error) {
-                console.error('Fout bij verwijderen van afbeelding:', error);
+                console.error(this.$t('image_uploader.console.remove_error'), error);
             }
         },
         handleImageError(index) {
-            console.warn(`Afbeelding ${index} kon niet worden geladen`);
+            console.warn(this.$t('image_uploader.console.could_not_load', { index }));
             if (!this.multiple && this.previewSize === 'large') {
-                this.imageLoadError = 'Afbeelding kon niet worden geladen';
+                this.imageLoadError = this.$t('image_uploader.errors.image_load_error');
             } else {
                 this.setImageState(index, { loading: false, error: true });
             }
@@ -492,7 +452,7 @@ export default {
                     hasChanges: this.hasChanges
                 });
             } catch (error) {
-                console.error('Fout bij emit update:', error);
+                console.error(this.$t('image_uploader.console.emit_error'), error);
             }
         },
         formatBytes(bytes, isKb = false, decimals = 2) {
@@ -517,7 +477,7 @@ export default {
             });
             this.cachedObjectUrls.clear();
         } catch (error) {
-            console.error('Fout bij cleanup:', error);
+            console.error(this.$t('image_uploader.console.cleanup_error'), error);
         }
     }
 };

@@ -98,7 +98,7 @@ trait ManagesImages
                 'original_name' => $upload->getClientOriginalName(),
                 'is_primary' => $isPrimary,
                 'mime_type' => $upload->getClientMimeType(),
-                'size' => $upload->getSize() ?? 0,
+                'size' => $upload->getSize() ?: 0,
             ];
         }
 

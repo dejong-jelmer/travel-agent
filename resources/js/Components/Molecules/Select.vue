@@ -1,10 +1,16 @@
 <script setup>
-import FormFeedback from "@/Components/Atoms/FormFeedback.vue";
-import { computed } from 'vue';
 
 const props = defineProps({
     name: String,
     label: String,
+    optionKey: {
+        type: String,
+        default: 'id',
+    },
+    optionValue: {
+        type: String,
+        default: 'name',
+    },
     modelValue: {
         type: [String, Array],
         required: true,
@@ -47,30 +53,6 @@ const handleChange = (event) => {
     emit("update:modelValue", value);
 };
 
-const normalizedOptions = computed(() => {
-    if (Array.isArray(props.options)) {
-        return props.options.map(option => {
-            if (typeof option === 'object' && option !== null) {
-                return {
-                    value: option.id,
-                    label: option.name
-                };
-            }
-            return {
-                value: option,
-                label: option
-            };
-        });
-    } else if (typeof props.options === 'object') {
-        return Object.entries(props.options).map(([value, label]) => ({
-            value,
-            label
-        }));
-    }
-
-    return [];
-});
-
 const isSelected = (value) => {
     if (!props.modelValue) return false;
     return Array.isArray(props.modelValue)
@@ -80,19 +62,17 @@ const isSelected = (value) => {
 
 </script>
 <template>
-    <div class="grid gap-1">
-        <Label v-if="(label && showLabel) || $slots.label" :for="name" :required="required">
+    <div class="flex flex-col gap-1 w-full">
+        <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <select class="form-input" :id="name" :required="required" :multiple="multiple" @change="handleChange">
+        <select v-bind="$attrs" :class="['form-input', $attrs.class]" :id="props.name" :required="required" :multiple="multiple" @change="handleChange">
             <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
-            <option v-for="(option, index) in normalizedOptions" :selected="isSelected(option['value'])" :key="index"
-                :value="option.value">
-                {{ option.label }}
+            <option v-for="(option, index) in options" :selected="isSelected(option['id'])" :key="index"
+                :value="option[optionKey]" :disabled="option.disabled ?? false" >
+                {{ option[optionValue] }}
             </option>
         </select>
-        <template v-if="feedback">
-            <FormFeedback :message="feedback" />
-        </template>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

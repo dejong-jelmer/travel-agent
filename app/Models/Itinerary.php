@@ -2,38 +2,37 @@
 
 namespace App\Models;
 
-use App\Casts\MealCast;
-use App\Casts\TransportCast;
+use App\Models\Traits\CastsStringArray;
 use App\Models\Traits\ManagesImages;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * @property Trip $trip
+ */
 class Itinerary extends Model
 {
-    use HasFactory,
+    use CastsStringArray,
+        HasFactory,
         ManagesImages,
         SoftDeletes;
 
     protected $fillable = [
         'trip_id',
         'title',
-        'location',
+        'day_from',
+        'day_to',
         'description',
         'accommodation',
         'activities',
-        'meals',
-        'transport',
-        'highlights',
         'remark',
         'order',
     ];
 
     protected $casts = [
         'activities' => 'array',
-        'meals' => MealCast::class,
-        'transport' => TransportCast::class,
     ];
 
     protected static function boot()
@@ -42,6 +41,10 @@ class Itinerary extends Model
         static::deleting(fn ($itinerary) => $itinerary->image()->delete());
         static::deleted(fn ($itinerary) => $itinerary->reOrder());
         static::restoring(fn ($itinerary) => $itinerary->image()->withTrashed()->restore());
+
+        static::saved(fn ($itinerary) => $itinerary->trip->recalculateDuration());
+        static::deleted(fn ($itinerary) => $itinerary->trip->recalculateDuration());
+        static::restored(fn ($itinerary) => $itinerary->trip->recalculateDuration());
     }
 
     public function trip()
@@ -68,16 +71,15 @@ class Itinerary extends Model
         }
     }
 
+    /**
+     * Get the itinerary activities
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array|null, string>
+     */
     protected function activities(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => ! is_null($value)
-                ? json_encode(
-                    ! is_array($value)
-                        ? array_map('trim', explode(',', $value))
-                        : $value
-                )
-                : null
+            set: fn ($value) => $this->castStringArray($value)
         );
     }
 }

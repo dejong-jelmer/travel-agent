@@ -2,9 +2,9 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    for: {
+    forField: {
         type: String,
-        required: true
+        required: false
     },
     required: {
         type: Boolean,
@@ -44,7 +44,7 @@ const labelClasses = computed(() => {
 </script>
 
 <template>
-    <label :for="for" :class="labelClasses">
+    <label :for="forField" :class="labelClasses">
         <slot /><span v-if="required" class="ml-0.5">*</span>
     </label>
 </template>

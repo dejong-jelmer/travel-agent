@@ -1,67 +1,84 @@
 <script setup>
-import { EllipsisVertical } from 'lucide-vue-next';
-import { reactive } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-defineProps({
+const props = defineProps({
     trips: Object,
+    filters: Object,
+    totalTrips: Number
 });
-const showActions = reactive({});
+
+const { t } = useI18n();
+
+const columns = [
+    { key: 'id', label: t('admin.trips.index.table_headers.id'), sortable: true },
+    { key: 'image', label: t('admin.trips.index.table_headers.image'), sortable: false },
+    { key: 'name', label: t('admin.trips.index.table_headers.product'), sortable: true },
+    { key: 'destinations', label: t('admin.trips.index.table_headers.destinations'), sortable: true },
+    { key: 'duration', label: t('admin.trips.index.table_headers.days'), sortable: true },
+    { key: 'actions', label: t('admin.trips.index.table_headers.actions'), sortable: false },
+];
 
 </script>
+
 <template>
-    <Admin :links="trips.links">
-        <template v-if="trips.data.length > 0">
-            <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
-                <table class="w-full border-collapse">
-                    <thead>
-                        <tr class="bg-gray-200 text-gray-700 uppercase text-sm leading-normal">
-                            <th class="py-4 px-6 text-center">#</th>
-                            <th class="py-4 px-6 text-center">Product</th>
-                            <th class="py-4 px-6 text-center">Land(en)</th>
-                            <th class="py-4 px-6 text-center">Prijs</th>
-                            <th class="py-4 px-6 text-center">Dagen</th>
-                            <th class="py-4 px-6 text-center">Acties</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-gray-600 text-sm divide-y divide-gray-200">
-                        <tr v-for="(trip, index) in trips.data" :key="index" class="hover:bg-gray-100 transition">
-                            <td class="py-4 px-6 text-center">{{ trip.id }}</td>
-                            <td class="py-4 px-6 text-center">{{ trip.name }}</td>
-                            <td class="py-4 px-6 text-center">{{ trip.formatted_countries }}</td>
-                            <td class="py-4 px-6 text-center">€ {{ trip.price }}</td>
-                            <td class="py-4 px-6 text-center">{{ trip.duration }}</td>
-                            <td class="py-4 px-6 text-center space-y-2">
-                                <div class="w-fit mx-auto" v-tippy="`Meer opties`">
-                                    <button class="info-button"
-                                        @click="showActions[trip.id] = !showActions[trip.id]">
-                                        <EllipsisVertical class="h-5" />
-                                    </button>
-                                </div>
-                                <div v-if="showActions[trip.id]" class="space-y-2">
-                                    <IconLink class="mx-auto" icon="Eye" :href="route('admin.trips.show', { trip })"
-                                        v-tippy="'Bekijk reis'" />
-                                    <IconLink class="mx-auto" icon="Pencil" :href="route('admin.trips.edit', trip)"
-                                        v-tippy="'Bewerk reis'" />
-                                    <IconLink class="mx-auto" icon="Route" :href="trip.itineraries?.length ?
-                                        route('admin.trips.itineraries.index', trip)
-                                        : route('admin.trips.itineraries.create', trip)"
-                                        v-tippy="'Bekijk reisplan van deze reis'" />
-                                    <IconLink class="mx-auto" type="delete" icon="Trash2"
-                                        :href="route('admin.trips.destroy', trip)" method="delete" :showConfirm="true"
-                                        prompt="Weet je zeker dat je deze reis wilt verwijderen?"
-                                        v-tippy="'Verwijder reis!'" />
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+    <Admin>
+        <div class="w-full flex flex-col tablet:flex-row justify-between mb-6">
+            <h1 class="text-3xl font-bold mb-4 tablet:mb-0">{{ t('admin.trips.index.title') }}</h1>
+            <IconLink v-tippy="t('admin.trips.actions.create')" icon="Plus" type="info"
+                :href="route('admin.trips.create')" />
+        </div>
+        <template v-if="totalTrips > 0">
+            <DataTable :data="trips.data" :columns="columns" :links="trips.links" :current-sort="filters.sort"
+                :current-direction="filters.direction" :current-search="filters.search" :searchable="totalTrips > 0"
+                :search-placeholder="t('admin.trips.index.search_placeholder')"
+                :empty-message="filters.search
+                    ? t('admin.trips.index.no_trips_found_with_search', { search: filters.search })
+                    : t('admin.trips.index.no_trips_found')">
+
+                <!-- Custom cell for image -->
+                <template #cell-image="{ row }">
+                    <div class="flex justify-center">
+                        <Thumbnail :imageUrl="row.hero_image?.public_url || ''" :alt="row.name" />
+                    </div>
+                </template>
+
+                <!-- Custom cell for destinations -->
+                <template #cell-destinations="{ row }">
+                    {{ row.destinations_formatted }}
+                </template>
+
+                <!-- Custom cell for actions -->
+                <template #cell-actions="{ row }">
+                    <DropdownMenu>
+                        <template #default="{ MenuItem }">
+                            <component :is="MenuItem">
+                                <IconLink icon="Eye" :href="route('admin.trips.show', row)"
+                                    v-tippy="t('admin.trips.actions.view')" />
+                            </component>
+                            <component :is="MenuItem">
+                                <IconLink icon="Pencil" :href="route('admin.trips.edit', row)"
+                                    v-tippy="t('admin.trips.actions.edit')" />
+                            </component>
+                            <component :is="MenuItem">
+                                <IconLink icon="Route" :href="row.itineraries?.length
+                                    ? route('admin.trips.itineraries.index', row)
+                                    : route('admin.trips.itineraries.create', row)"
+                                    v-tippy="t('admin.trips.actions.itinerary')" />
+                            </component>
+                            <component :is="MenuItem">
+                                <IconLink type="delete" icon="Trash2" :href="route('admin.trips.destroy', row)"
+                                    method="delete" :showConfirm="true"
+                                    :prompt="t('admin.trips.actions.delete_confirm')"
+                                    v-tippy="t('admin.trips.actions.delete')" />
+                            </component>
+                        </template>
+                    </DropdownMenu>
+                </template>
+            </DataTable>
         </template>
         <template v-else>
             <div class="p-5">
-                <p>Er zijn nog geen reizen klik <DefaultLink :href="route('admin.trips.create')">hier</DefaultLink> om
-                    een reis toe te voegen.
-                </p>
+                <p>{{ t('admin.trips.index.no_trips') }}</p>
             </div>
         </template>
     </Admin>

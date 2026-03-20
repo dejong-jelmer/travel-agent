@@ -12,13 +12,21 @@ class Breadcrumbs
 
     public const DASH_ROUTE = ['route' => 'admin.dashboard'];
 
-    public const COUNT_LABEL = ['label' => 'country.title_index'];
+    public const DEST_LABEL = ['label' => 'destination.title_index'];
 
-    public const COUNT_ROUTE = ['route' => 'admin.countries.index'];
+    public const DEST_ROUTE = ['route' => 'admin.destinations.index'];
 
     public const BOOKING_LABEL = ['label' => 'booking.title_index'];
 
     public const BOOKING_ROUTE = ['route' => 'admin.bookings.index'];
+
+    public const SUBSCRIBER_LABEL = ['label' => 'newsletter.subscriber.title_index'];
+
+    public const SUBSCRIBER_ROUTE = ['route' => 'admin.newsletter.subscribers.index'];
+
+    public const CAMPAIGN_LABEL = ['label' => 'newsletter.campaign.title_index'];
+
+    public const CAMPAIGN_ROUTE = ['route' => 'admin.newsletter.campaigns.index'];
 
     public static function generate(): array
     {
@@ -61,15 +69,37 @@ class Breadcrumbs
             'admin.bookings.show' => self::bookingShow(),
             'admin.bookings.edit' => self::bookingEdit(),
 
-            // Countries
-            'admin.countries.index' => [
+            // Destination
+            'admin.destinations.index' => [
                 self::dashboardCrumb(),
-                [...self::translateLabel(self::COUNT_LABEL), 'route' => null],
+                [...self::translateLabel(self::DEST_LABEL), 'route' => null],
             ],
-            'admin.countries.create' => [
+            'admin.destinations.create' => [
                 self::dashboardCrumb(),
-                [...self::translateLabel(self::COUNT_LABEL), ...self::COUNT_ROUTE],
-                ['label' => __('country.title_create'), 'route' => null],
+                [...self::translateLabel(self::DEST_LABEL), ...self::DEST_ROUTE],
+                ['label' => __('destination.title_create'), 'route' => null],
+            ],
+
+            // Newsletter subscriber
+            'admin.newsletter.subscribers.index' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::SUBSCRIBER_LABEL), ...self::SUBSCRIBER_ROUTE],
+            ],
+            'admin.newsletter.subscribers.create' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::SUBSCRIBER_LABEL), ...self::SUBSCRIBER_ROUTE],
+                ['label' => __('newsletter.subscriber.title_create'), 'route' => null],
+            ],
+
+            // Newsletter campaign
+            'admin.newsletter.campaigns.index' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::CAMPAIGN_LABEL), ...self::CAMPAIGN_ROUTE],
+            ],
+            'admin.newsletter.campaigns.create' => [
+                self::dashboardCrumb(),
+                [...self::translateLabel(self::CAMPAIGN_LABEL), ...self::CAMPAIGN_ROUTE],
+                ['label' => __('newsletter.campaign.title_create'), 'route' => null],
             ],
 
             default => [],
@@ -83,7 +113,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => null],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => null],
         ];
     }
 
@@ -94,7 +124,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('trip.title_edit'), 'route' => null],
         ];
     }
@@ -127,7 +157,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('itinerary.title_index'), 'route' => null],
         ];
     }
@@ -140,7 +170,7 @@ class Breadcrumbs
         return [
             self::dashboardCrumb(),
             self::tripCrumb(),
-            ['label' => $trip?->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
+            ['label' => $trip->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
             ['label' => __('itinerary.title_index'), 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
             ['label' => __('itinerary.title_edit'), 'route' => null],
         ];

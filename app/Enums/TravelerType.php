@@ -2,12 +2,20 @@
 
 namespace App\Enums;
 
+use App\Enums\Traits\HasTranslatableLabel;
 use Illuminate\Support\Str;
 
 enum TravelerType: string
 {
+    use HasTranslatableLabel;
+
     case Adult = 'adult';
     case Child = 'child';
+
+    protected function getLabelKey(): string
+    {
+        return 'trip.traveler';
+    }
 
     public static function values(): array
     {
@@ -28,14 +36,6 @@ enum TravelerType: string
         return match ($this) {
             self::Child => 'children',
             default => Str::plural($this->value),
-        };
-    }
-
-    public function label(): string
-    {
-        return match ($this) {
-            self::Adult => 'Volwassene',
-            self::Child => 'Kind',
         };
     }
 }

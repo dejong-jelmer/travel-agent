@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\TravelerType;
+use App\Models\Traits\HasFormattedDates;
+use App\Models\Traits\Sortable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -16,13 +18,28 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
+use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
+/**
+ * @property Trip $trip
+ * @property BookingContact $contact
+ * @property BookingTraveler $mainBooker
+ */
 class Booking extends Model
 {
     use HasFactory,
-        SoftDeletes;
+        HasFormattedDates,
+        HasRelationships,
+        SoftDeletes,
+        Sortable;
 
-    protected $perPage = 10;
+    protected array $formattedDates = [
+        'departure_date' => ['format' => 'dddd LL'],
+        'created_at' => ['format' => 'dddd LL - HH:mm'],
+    ];
+
+    protected $perPage = 15;
 
     protected $fillable = [
         'trip_id',
@@ -32,26 +49,67 @@ class Booking extends Model
         'has_confirmed',
         'status',
         'payment_status',
+        'trip_price_id',
+        'price_per_person',
+        'single_supplement',
+        'base_total_price',
+        'grand_total_price',
+        'fees_and_funds',
     ];
 
     protected $casts = [
         'has_accepted_conditions' => 'boolean',
         'has_confirmed' => 'boolean',
-        'departure_date' => 'datetime',
-        'created_at' => 'datetime',
-        'updated_at' => 'datetime',
+        'departure_date' => 'date',
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
+        'fees_and_funds' => 'array',
     ];
 
     protected $appends = [
         'departure_date_formatted',
         'created_at_formatted',
+        'status_label',
+        'payment_status_label',
+        'total_travelers',
     ];
 
     protected $attributes = [
         'status' => Status::New->value,
         'payment_status' => PaymentStatus::Pending->value,
+    ];
+
+    // Sortable properties
+    protected $searchable = ['reference'];
+
+    protected $searchableRelations = ['trip.name', 'destinations.destinations.name'];
+
+    protected $filterable = ['status', 'payment_status'];
+
+    protected $sortable = ['id', 'reference', 'status', 'payment_status', 'departure_date', 'trip', 'destinations'];
+
+    protected $sortableBelongsTo = [
+        'trip' => [
+            'table' => 'trips',
+            'foreign_key' => 'trip_id',
+            'column' => 'name',
+        ],
+    ];
+
+    protected $sortableBelongsToMany = [
+        'destinations' => [
+            'relation' => 'destinations',
+            'column' => 'name',
+            'pivot_table' => 'destination_trip',
+            'pivot_foreign_key' => 'trip_id',
+            'pivot_related_key' => 'destination_id',
+            'join_key' => 'trip_id',
+        ],
+    ];
+
+    protected $defaultSort = [
+        'column' => 'id',
+        'direction' => 'desc',
     ];
 
     protected static function booted()
@@ -94,20 +152,12 @@ class Booking extends Model
 
     protected function departureDateFormatted(): Attribute
     {
-        return Attribute::get(
-            fn () => $this->departure_date
-                ? ucfirst($this->departure_date->locale('nl')->isoFormat('dddd D MMMM YYYY'))
-                : null
-        );
+        return Attribute::get(fn () => $this->getFormattedDate('departure_date'));
     }
 
     protected function createdAtFormatted(): Attribute
     {
-        return Attribute::get(
-            fn () => $this->created_at
-                ? $this->created_at->isoFormat('DD-MM-YYYY')
-                : null
-        );
+        return Attribute::get(fn () => $this->getFormattedDate('created_at'));
     }
 
     protected static function boot()
@@ -156,6 +206,14 @@ class Booking extends Model
         return $this->hasMany(BookingChange::class);
     }
 
+    public function destinations(): HasManyDeep
+    {
+        return $this->hasManyDeepFromRelations(
+            $this->trip(),
+            (new Trip)->destinations()
+        );
+    }
+
     /**
      * Scope a query to only include new bookings.
      */
@@ -184,5 +242,37 @@ class Booking extends Model
             now()->startOfDay(),
             now()->addMonth()->endOfDay(),
         ]);
+    }
+
+    /**
+     * Get the status label.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function statusLabel(): Attribute
+    {
+        return Attribute::get(fn () => $this->status->label());
+    }
+
+    /**
+     * Get the payment_status label.
+     *
+     * @return Attribute<string, never>
+     */
+    protected function paymentStatusLabel(): Attribute
+    {
+        return Attribute::get(fn () => $this->payment_status->label());
+    }
+
+    /**
+     * Get the total traverellers for this booking .
+     *
+     * @return Attribute<int, never>
+     */
+    protected function totalTravelers(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->travelers->count(),
+        );
     }
 }

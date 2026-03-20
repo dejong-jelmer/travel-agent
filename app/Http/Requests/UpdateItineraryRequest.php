@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Rules\NoOverlappingItineraryDays;
 use App\Services\Validation\ItineraryValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -13,24 +14,16 @@ class UpdateItineraryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     /**
-     * Prepare the request for validation, default to empty array on null
+     * Prepare the request for validation
      */
     protected function prepareForValidation(): void
     {
-        if ($this->input('meals') === null) {
-            $this->merge([
-                'meals' => [],
-            ]);
-        }
-        if ($this->input('transport') === null) {
-            $this->merge([
-                'transport' => [],
-            ]);
-        }
+        //  Default to empty array's on null
+        emptyFormRequestToArray($this, 'activities');
     }
 
     /**
@@ -41,9 +34,20 @@ class UpdateItineraryRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
+            [
+                'trip_id' => ['required', 'exists:trips,id'],
+                'day_from' => [
+                    'required',
+                    'integer',
+                    'min:1',
+                    new NoOverlappingItineraryDays(
+                        tripId: $this->trip_id,
+                        excludeId: $this->route('itinerary')?->id
+                    ),
+                ],
+            ],
             ItineraryValidationRules::basic(),
             ItineraryValidationRules::details(),
-            ItineraryValidationRules::options(),
             ItineraryValidationRules::imageUpdate(),
         );
     }

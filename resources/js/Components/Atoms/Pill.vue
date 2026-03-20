@@ -14,8 +14,8 @@ const props = defineProps({
 const divClass = {
     filled: {
         primary: 'bg-brand-primary/20',
-        accent: 'bg-accent-primary/20',
-        sage: 'bg-accent-sage/20',
+        accent: 'bg-brand-accent',
+        sage: 'bg-brand-subtle',
         success: 'bg-status-success',
         error: 'bg-status-error',
         warning: 'bg-status-warning',
@@ -23,8 +23,8 @@ const divClass = {
     },
     transparent: {
         primary: 'border border-brand-primary bg-brand-primary/10',
-        accent: 'border border-accent-primary bg-accent-primary/10',
-        sage: 'border border-accent-sage bg-accent-sage/10',
+        accent: 'border border-brand-accent bg-brand-accent/10',
+        sage: 'border border-brand-subtle bg-brand-subtle/10',
         success: 'border border-status-success bg-status-success/10',
         error: 'border border-status-error bg-status-error/10',
         warning: 'border border-status-warning bg-status-warning/10',
@@ -34,8 +34,8 @@ const divClass = {
 const spanClass = {
     filled: {
         primary: 'text-brand-primary',
-        accent: 'text-accent-primary',
-        sage: 'text-accent-sage',
+        accent: 'text-white',
+        sage: 'text-white',
         success: 'text-white',
         error: 'text-white',
         warning: 'text-white',
@@ -43,8 +43,8 @@ const spanClass = {
     },
     transparent: {
         primary: 'text-brand-primary',
-        accent: 'text-accent-primary',
-        sage: 'text-accent-sage',
+        accent: 'text-brand-accent',
+        sage: 'text-brand-subtle',
         success: 'text-status-success',
         error: 'text-status-error',
         warning: 'text-status-warning',
@@ -53,9 +53,9 @@ const spanClass = {
 }
 </script>
 <template>
-    <div :class="['flex px-4 py-1 rounded-full min-w-fit items-center', divClass[props.variant][props.type]]">
+    <div :class="['flex px-4 py-1 rounded-full', divClass[props.variant][props.type]]">
         <span
-            :class="['text-xs w-full font-medium flex items-center', spanClass[props.variant][props.type]]">
+            :class="['text-xs font-medium flex w-full', spanClass[props.variant][props.type]]">
             <slot></slot>
         </span>
     </div>

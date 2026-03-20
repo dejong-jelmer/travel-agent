@@ -26,7 +26,7 @@ const updateValue = (val) => {
     >
       <input
         type="radio"
-        :name="name"
+        :name="props.name"
         :value="index"
         :checked="isChecked(index)"
         @change="() => updateValue(index)"

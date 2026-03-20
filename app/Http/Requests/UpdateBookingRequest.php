@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
-use App\Http\Requests\Concerns\ValidatesMainBooker;
+use App\Http\Requests\Traits\ValidatesMainBooker;
 use App\Services\Validation\BookingValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +16,7 @@ class UpdateBookingRequest extends FormRequest
 
     public function authorize(): bool
     {
-        return Auth::user()?->role === 'admin' || false;
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     public function rules(): array
@@ -26,12 +26,12 @@ class UpdateBookingRequest extends FormRequest
                 'status' => [
                     'required',
                     'string',
-                    Rule::in(Status::values()),
+                    Rule::enum(Status::class),
                 ],
                 'payment_status' => [
                     'required',
                     'string',
-                    Rule::in(PaymentStatus::values()),
+                    Rule::enum(PaymentStatus::class),
                 ],
             ],
             [

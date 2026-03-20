@@ -1,7 +1,7 @@
 // Composables/useTypeWriter.js
 import { ref, onMounted } from 'vue';
 
-export function useTypeWriter(strings = [], speed = 100, pause = 1500) {
+export function useTypeWriter(strings = [], speed = 150, pause = 1500) {
   const output = ref('');
   const index = ref(0);
   const charIndex = ref(0);

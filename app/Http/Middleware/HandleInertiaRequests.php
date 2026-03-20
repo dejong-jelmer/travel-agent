@@ -40,10 +40,13 @@ class HandleInertiaRequests extends Middleware
         $contactService = app(ContactDetailsService::class);
 
         return array_merge(parent::share($request), [
+            'locale' => app()->getLocale(),
+            'locales' => availableLocales() ?: ['nl', 'en'],
             'auth' => [
                 'user' => Auth::user(),
             ],
             'config' => [
+                'seo' => config('seo'),
                 'images' => config('images'),
             ],
             'contact' => [
@@ -70,5 +73,16 @@ class HandleInertiaRequests extends Middleware
                 },
             ],
         ]);
+    }
+
+    /**
+     * Inertia hook: whether to encrypt the browser history state.
+     * Enabled in production to prevent sensitive prop data from being readable in browser history.
+     *
+     * @see https://inertiajs.com/history-encryption
+     */
+    public function encryptHistory(): bool
+    {
+        return ! app()->isLocal();
     }
 }

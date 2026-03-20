@@ -15,13 +15,16 @@
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "mailjet/laravel-mailjet": "^3.1",
+        "moneyphp/money": "^4.8",
         "propaganistas/laravel-phone": "^5.3",
         "spatie/laravel-backup": "^9.3",
+        "staudenmeir/eloquent-has-many-deep": "^1.21",
         "tightenco/ziggy": "^2.5"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.6",
         "fakerphp/faker": "^1.23",
+        "larastan/larastan": "^3.9",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.21",
         "laravel/sail": "^1.26",

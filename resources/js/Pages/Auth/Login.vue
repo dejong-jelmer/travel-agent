@@ -1,13 +1,14 @@
 <script setup>
 import { useForm } from "@inertiajs/vue3";
 import { reactive } from "vue";
+import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
     message: String,
     error: Boolean,
 });
 
-const loginMsg = `Omdat we moeten inloggen` || "Login";
+const { t } = useI18n();
 
 const form = reactive({
     email: '',
@@ -33,32 +34,33 @@ function handleLogin() {
             </div>
             <h2
                 class="text-2xl font-bold mb-6 text-center text-white"
-                v-text="`${loginMsg}`"
-            ></h2>
+            >
+                {{ t('auth.login.title') }}
+            </h2>
             <form @submit.prevent="handleLogin">
                 <div class="mb-4">
-                    <label for="email" class="block text-sm font-medium text-white"
-                        >Email</label
-                    >
+                    <label for="email" class="block text-sm font-medium text-white">
+                        {{ t('auth.login.email_label') }}
+                    </label>
                     <input
                         type="email"
                         id="email"
                         v-model="form.email"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Enter your email"
+                        :placeholder="t('auth.login.email_placeholder')"
                         required
                     />
                 </div>
                 <div class="mb-6">
-                    <label for="password" class="block text-sm font-medium text-white"
-                        >Password</label
-                    >
+                    <label for="password" class="block text-sm font-medium text-white">
+                        {{ t('auth.login.password_label') }}
+                    </label>
                     <input
                         type="password"
                         id="password"
                         v-model="form.password"
                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                        placeholder="Enter your password"
+                        :placeholder="t('auth.login.password_placeholder')"
                         required
                     />
                 </div>
@@ -66,7 +68,7 @@ function handleLogin() {
                     type="submit"
                     class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
                 >
-                    Login
+                    {{ t('auth.login.submit_button') }}
                 </button>
             </form>
         </div>

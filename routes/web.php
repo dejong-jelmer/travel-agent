@@ -1,15 +1,20 @@
 <?php
 
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\ItineraryController;
+use App\Http\Controllers\Admin\Newsletter\CampaignController;
+use App\Http\Controllers\Admin\Newsletter\SubscriberController;
+use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TripController as AdminTripController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\NewsletterController;
+use App\Http\Controllers\LocaleController;
+use App\Http\Controllers\Newsletter\SubscriptionController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\TripPriceController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -17,37 +22,46 @@ use Inertia\Inertia;
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
-Route::get('/contact', [HomeController::class, 'contact']);
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
 Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
+
+// Switch locale
+Route::post('/locale/switch', [LocaleController::class, 'switch'])
+    ->middleware('throttle:10,1')
+    ->name('locale.switch');
 
 // contact form
 Route::post('/contact', [HomeController::class, 'submitContact'])
     ->middleware('throttle:frontend-form-actions')
-    ->name('contact');
+    ->name('submit.contact');
 
-// Newsletter
-Route::post('/nieuwsbrief/aanmelden', [NewsletterController::class, 'subscribe'])
+// Newsletter subscription routes
+Route::post('/nieuwsbrief/aanmelden', [SubscriptionController::class, 'subscribe'])
     ->middleware('throttle:frontend-form-actions')
-    ->name('newsletter.subscribe');
-Route::get('/nieuwsbrief/bevestigen/{token}', [NewsletterController::class, 'confirm'])->name('newsletter.confirm');
-Route::get('/nieuwsbrief/afmelden/{token}', [NewsletterController::class, 'unsubscribe'])->name('newsletter.unsubscribe');
+    ->name('newsletter.subscription.subscribe');
+Route::get('/nieuwsbrief/bevestigen/{token}', [SubscriptionController::class, 'confirm'])->name('newsletter.subscription.confirm');
+Route::get('/nieuwsbrief/afmelden/{token}', [SubscriptionController::class, 'unsubscribe'])->name('newsletter.subscription.unsubscribe');
 
 // Trips
-Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trip.show');
+Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.show');
+
+// Trip prices
+Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
 
 // Booking routes
 Route::post('/boekingen', [BookingController::class, 'store'])
     ->middleware('throttle:frontend-form-actions')
     ->name('bookings.store');
-Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'received'])->middleware('nocache')->name('booking.received');
+Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'received'])->middleware('nocache')->name('bookings.received');
 
 // Admin routes
-Route::get('/admin/login', function () {
+Route::get('admin/login', function () {
     return Inertia::render('Auth/Login', [
         'title' => __('auth.title_login').' - '.config('app.name'),
     ]);
-})->middleware('guest')->name('admin');
+})->middleware('guest');
 
 Route::get('admin/', fn () => Auth::check() ? to_route('admin.dashboard') : to_route('admin.login'));
 Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
@@ -59,23 +73,46 @@ Route::prefix('admin')
         Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
         Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
 
-        // Trip routes
+        // Trip resource routes
         Route::resource('/trips', AdminTripController::class)->except(['update']);
         Route::post('/trips/update/{trip}', [AdminTripController::class, 'update'])->name('trips.update');
 
-        // Product Itinerary routes
+        // Trip resource Itinerary routes
         Route::resource('trips.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
         Route::patch('/trips/{trip}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('trips.itineraries.order');
 
-        // Itinerary routes
+        // Itinerary resource routes
         Route::resource('itineraries', ItineraryController::class)->only(['edit', 'destroy']);
         Route::post('/itineraries/{itinerary}', [ItineraryController::class, 'update'])->name('itineraries.update');
 
-        // Country routes
-        Route::resource('countries', CountryController::class)->except(['show', 'edit', 'update']);
+        // Destination resource routes
+        Route::resource('destinations', DestinationController::class)->except(['show']);
 
-        // Booking routes
+        // Settings routes (singleton resource)
+        Route::get('settings', [SettingsController::class, 'edit'])->name('settings.edit');
+        Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
+
+        // Booking resource routes
         Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);
+
+        // Newsletter routes
+        Route::prefix('newsletter')
+            ->name('newsletter.')
+            ->group(function () {
+                // Newsletter subscriber resource routes
+                Route::resource('subscribers', SubscriberController::class)->only(['index', 'destroy']);
+                Route::get('/subscribers/{subscriber}/resend-confirmation/', [SubscriberController::class, 'resendConfirmation'])->name('subscribers.resend');
+
+                // Newsletter campaign resource routes
+                Route::resource('campaigns', CampaignController::class)->except(['update', 'show']);
+                Route::post('/campaigns/update/{campaign}', [CampaignController::class, 'update'])->name('campaigns.update');
+
+                // Send campaign routes
+                Route::post('campaigns/{campaign}/send-test', [CampaignController::class, 'sendTest'])
+                    ->name('campaigns.send-test');
+                Route::post('campaigns/{campaign}/send', [CampaignController::class, 'send'])
+                    ->name('campaigns.send');
+            });
     });
 
 // Test production health check

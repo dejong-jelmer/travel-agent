@@ -16,15 +16,19 @@ return new class extends Migration
             $table->string('slug');
             $table->string('name');
             $table->text('description');
-            $table->decimal('price', 8, 2)->default(0.00)->nullable(false);
-            $table->integer('duration');
+            $table->integer('duration')->nullable();
+            $table->json('transport')->nullable();
             $table->boolean('featured')->default(true);
             $table->dateTime('published_at');
+            $table->json('highlights')->nullable();
+            $table->json('practical_info')->nullable();
+            $table->json('blocked_dates')->nullable();
             $table->string('meta_title', 60)->nullable();
             $table->text('meta_description', 160)->nullable();
             $table->softDeletes();
             $table->timestamps();
 
+            $table->index(['published_at', 'deleted_at']);
         });
     }
 

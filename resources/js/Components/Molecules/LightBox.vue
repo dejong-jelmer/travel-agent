@@ -30,4 +30,3 @@ defineExpose({ open })
         :zoom-disabled="true"
         @hide="lightboxVisible = false" />
 </template>
-ipt>

@@ -7,7 +7,7 @@ use App\DTO\Traits\BookingDataParser;
 use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Http\Request;
+use Illuminate\Foundation\Http\FormRequest;
 
 class CreateBookingData implements Arrayable
 {
@@ -26,7 +26,7 @@ class CreateBookingData implements Arrayable
     /**
      * Create from validated request
      */
-    public static function fromRequest(Request $request): self
+    public static function fromRequest(FormRequest $request): self
     {
         $validated = $request->validated();
         $parsed = self::parseValidatedData($validated);

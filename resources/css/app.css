@@ -5,61 +5,101 @@
 /* Regular */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-Regular.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
 }
 
 /* Bold */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-Bold.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-Bold.woff2') format('woff2');
     font-weight: 700;
     font-style: bold;
+    font-display: swap;
 }
 
 /* SemiBold */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-SemiBold.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-SemiBold.woff2') format('woff2');
     font-weight: 600;
     font-style: normal;
+    font-display: swap;
 }
 
 /* Italic variants */
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-Italic.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-Italic.woff2') format('woff2');
     font-weight: 400;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-SemiBoldItalic.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-SemiBoldItalic.woff2') format('woff2');
     font-weight: 600;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
     font-family: "Poppins";
-    src: url('../fonts/poppins/Poppins-BoldItalic.ttf') format('truetype');
+    src: url('../fonts/poppins/Poppins-BoldItalic.woff2') format('woff2');
     font-weight: 700;
     font-style: italic;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: 'Tahu';
-    src: url('../fonts/Tahu!.ttf') format('truetype');
-    font-weight: normal;
+    font-family: "Caveat";
+    src: url('../fonts/caveat/Caveat-Regular.woff2') format('woff2');
+    font-weight: 100 900;
     font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
-    font-family: "SpecialElite";
-    src: url('../fonts/SpecialElite-Regular.ttf') format('truetype');
+    font-family: "CormorantGaramond";
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-SemiBold.woff2') format('woff2');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "CormorantGaramond";
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "CormorantGaramond";
+    src: url('../fonts/cormorant_garamond/CormorantGaramond-Italic.woff2') format('woff2');
+    font-weight: 400;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url('../fonts/nunito/Nunito-Regular.woff2') format('woff2');
     font-weight: 400;
     font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: "Nunito";
+    src: url('../fonts/nunito/Nunito-Light.woff2') format('woff2');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
 }
 
 html {
@@ -70,102 +110,14 @@ body {
     overflow-x: visible;
 }
 
-/* Background */
-.bg-gradient-organic {
-    background: linear-gradient(135deg,
-            #F2F4F3 0%,
-            rgba(175, 203, 152, 0.08) 25%,
-            rgba(163, 188, 203, 0.06) 50%,
-            rgba(220, 199, 170, 0.04) 75%,
-            #F2F4F3 100%);
-}
-
-.bg-gradient-reverse {
-    background: linear-gradient(45deg,
-            #F2F4F3 0%,
-            rgba(175, 203, 152, 0.08) 25%,
-            rgba(163, 188, 203, 0.06) 50%,
-            rgba(220, 199, 170, 0.04) 75%,
-            #F2F4F3 100%);
-}
-
-
-.bg-gradient-subtle {
-    background: linear-gradient(180deg,
-            #F2F4F3 0%,
-            rgba(175, 203, 152, 0.1) 100%);
-}
-
-.floating-elements::before {
-    content: '';
-    position: absolute;
-    top: 10%;
-    right: 15%;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(175, 203, 152, 0.1) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: float 6s ease-in-out infinite;
-}
-
-.floating-elements::after {
-    content: '';
-    position: absolute;
-    bottom: 20%;
-    left: 10%;
-    width: 80px;
-    height: 80px;
-    background: radial-gradient(circle, rgba(212, 160, 23, 0.08) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: float 8s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-
-    0%,
-    100% {
-        transform: translateY(0px);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
-}
-
-.decorative-line {
-    background: linear-gradient(90deg,
-            transparent 0%,
-            #eb9928 50%,
-            transparent 100%);
-}
-
-.organic-shape {
-    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
-}
-
-.middle-organic-shape {
-    clip-path: polygon(0 15%, 100% 0, 100% 85%, 0 100%);
-}
-
-.reverse-organic-shape {
-    /* clip-path: polygon(100% 15%, 0 0, 0 85%, 100% 100%); */
-
-    clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%);
-}
-
-/* end background */
 
 @layer components {
     .form-input {
-        @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-accent-link focus:border-accent-link;
+        @apply w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-1 focus:ring-brand-link focus:border-brand-link disabled:bg-gray-100 disabled:text-gray-400 disabled:cursor-not-allowed;
     }
 
     .info-button {
         @apply bg-transparent p-2 rounded-lg border border-brand-primary hover:bg-gray-300;
-    }
-
-    .section {
-        @apply py-[150px] laptop:py-40 px-2 wide:px-40;
     }
 
     a.email-field:not(.has-icon)>span:nth-child(4) {
@@ -186,11 +138,11 @@ body {
     }
 
     .default-link {
-        @apply text-accent-link font-medium underline-offset-4 hover:underline;
+        @apply text-brand-link font-medium underline-offset-4 hover:underline;
     }
 
     .contact-button {
-        @apply flex-1 bg-white text-accent-link hover:bg-brand-secondary border border-accent-link font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2;
+        @apply flex-1 bg-white text-brand-link hover:bg-brand-secondary border border-brand-link font-medium py-2 px-4 rounded-lg transition-colors duration-300 flex items-center justify-center gap-2;
     }
 
     /* Override VueDatePicker error class */

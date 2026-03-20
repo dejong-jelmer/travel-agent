@@ -26,7 +26,7 @@ class BookingTravelerData implements Arrayable
     public static function fromArray(array $data, $toArray = true): self|array
     {
         $traveler = new self(
-            $data['id'] ?? null,
+            isset($data['id']) ? (int) $data['id'] : null,
             $data['first_name'],
             $data['last_name'],
             $data['full_name'] ?? null,

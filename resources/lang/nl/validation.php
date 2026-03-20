@@ -13,6 +13,8 @@ return [
         'departure_date.required' => 'Selecteer een vertrekdatum.',
         'departure_date.date' => 'De geselecteerde datum is ongeldig.',
         'departure_date.after' => 'De vertrekdatum kan niet in het verleden liggen.',
+        'departure_date.blocked' => 'De geselecteerde vertrekdatum is niet beschikbaar voor deze reis.',
+        'date_range_end' => 'De einddatum moet op of na de startdatum liggen.',
         'has_confirmed.accepted' => 'Je moet nog akkoord gaan.',
         'has_accepted_conditions.accepted' => 'Je moet nog akkoord gaan met de algemene voorwaarde.',
 
@@ -39,5 +41,21 @@ return [
         'travelers.children.*.birthdate.after_or_equal' => 'Voor kinderen geldt een maximum leeftijd van 12 jaar, kinderen vanaf 12 jaar en ouder tellen mee als volwassenen.',
         'travelers.children.*.birthdate.before' => 'De geboortedatum kan niet in de toekomst liggen.',
         'travelers.children.*.birthdate' => 'Ongeldige geboortedatum.',
+
+        // Main booker
+        'main_booker' => [
+            'too_young' => 'De hoofdboeker moet minimaal 18 jaar oud zijn.',
+        ],
+        'prices' => [
+            'overlap' => 'De prijsperiodes mogen elkaar niet overlappen.',
+        ],
+        'itinerary' => [
+            'days' => [
+                'overlap' => 'Deze reisdag(en) overlappen met een bestaand itinerary item.',
+            ],
+        ],
+        'departure_date' => [
+            'blocked' => 'Het is niet mogelijk deze reis aan te vangen op de gekozen vertrekdatum.',
+        ],
     ],
 ];

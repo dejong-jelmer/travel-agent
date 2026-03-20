@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Http\Requests\Traits\ValidatesBlockedDateRanges;
 use App\Services\Validation\TripValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
@@ -10,12 +11,14 @@ use Illuminate\Validation\Rule;
 
 class CreateTripRequest extends FormRequest
 {
+    use ValidatesBlockedDateRanges;
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return Auth::check();
+        return Auth::user()?->isAdmin() ?? false;
     }
 
     /**
@@ -23,6 +26,9 @@ class CreateTripRequest extends FormRequest
      */
     protected function prepareForValidation(): void
     {
+        //  Default to empty array's on null
+        emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'prices', 'blocked_dates']);
+
         $this->merge([
             'slug' => Str::slug($this->slug),
         ]);
@@ -39,12 +45,16 @@ class CreateTripRequest extends FormRequest
             TripValidationRules::basic([
                 'slug' => Rule::unique('trips', 'slug'),
             ]),
-            TripValidationRules::pricing(),
+            TripValidationRules::prices(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),
-            TripValidationRules::countries(),
+            TripValidationRules::destinations(),
+            TripValidationRules::transport(),
             TripValidationRules::heroImageStore(),
             TripValidationRules::imagesStore(),
+            TripValidationRules::items(),
+            TripValidationRules::practicalInfo(),
+            TripValidationRules::blockedDates(),
         );
     }
 }

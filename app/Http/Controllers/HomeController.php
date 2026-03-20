@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
+use App\Services\CountryService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -17,11 +18,13 @@ class HomeController extends Controller
 {
     use HasPageMetadata;
 
+    public function __construct(private readonly CountryService $countryService) {}
+
     public function home(): Response
     {
         return Inertia::render('Home', [
-            'title' => $this->pageTitle('home.home'),
-            'trips' => Trip::with(['countries', 'heroImage'])->published()->featured()->get(),
+            'title' => $this->pageTitle('home.home_seo'),
+            'trips' => Trip::with(['destinations', 'heroImage'])->published()->featured()->get(),
             'seo' => $this->pageSeo('home.home_seo'),
         ]);
     }
@@ -29,7 +32,7 @@ class HomeController extends Controller
     public function about(): Response
     {
         return Inertia::render('About', [
-            'title' => $this->pageTitle('home.about'),
+            'title' => $this->pageTitle('home.about_seo'),
             'seo' => $this->pageSeo('home.about_seo'),
         ]);
     }
@@ -37,7 +40,7 @@ class HomeController extends Controller
     public function contact(): Response
     {
         return Inertia::render('Contact', [
-            'title' => $this->pageTitle('home.contact'),
+            'title' => $this->pageTitle('home.contact_seo'),
             'seo' => $this->pageSeo('home.contact_seo'),
         ]);
     }
@@ -72,10 +75,22 @@ class HomeController extends Controller
         ], 200);
     }
 
+    public function trips(): Response
+    {
+        $trips = Trip::with(['destinations.country', 'heroImage', 'prices'])->published()->get();
+
+        return Inertia::render('Trip/Index', [
+            'title' => $this->pageTitle('home.trips_seo'),
+            'trips' => $trips,
+            'countries' => $this->countryService->getCountriesForTrips($trips),
+            'seo' => $this->pageSeo('home.trips_seo'),
+        ]);
+    }
+
     public function privacy(): Response
     {
         return Inertia::render('Privacy', [
-            'title' => $this->pageTitle('home.privacy_statement'),
+            'title' => $this->pageTitle('home.privacy_seo'),
             'seo' => $this->pageSeo('home.privacy_seo'),
         ]);
     }
@@ -83,7 +98,7 @@ class HomeController extends Controller
     public function terms(): Response
     {
         return Inertia::render('Terms', [
-            'title' => $this->pageTitle('home.conditions'),
+            'title' => $this->pageTitle('home.terms_seo'),
             'seo' => $this->pageSeo('home.terms_seo'),
         ]);
     }

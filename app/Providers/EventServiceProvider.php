@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Events\BookingCreated;
+use App\Events\BookingFailed;
+use App\Listeners\NotifyAdminOfFailedBooking;
 use App\Listeners\NotifyAdminOfNewBooking;
 use App\Listeners\SendBookingConfirmationEmail;
 use Illuminate\Support\ServiceProvider;
@@ -13,6 +15,9 @@ class EventServiceProvider extends ServiceProvider
         BookingCreated::class => [
             SendBookingConfirmationEmail::class,
             NotifyAdminOfNewBooking::class,
+        ],
+        BookingFailed::class => [
+            NotifyAdminOfFailedBooking::class,
         ],
     ];
 

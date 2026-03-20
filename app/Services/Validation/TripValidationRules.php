@@ -2,23 +2,38 @@
 
 namespace App\Services\Validation;
 
+use App\Enums\Transport;
+use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\ItemType;
+use App\Enums\Trip\PriceLabel;
+use App\Rules\NoOverlappingPricePeriods;
+use App\Services\Traits\MergesRules;
+use Illuminate\Validation\Rule;
+
 class TripValidationRules
 {
+    use MergesRules;
+
     public static function basic(array $additions = []): array
     {
         return self::mergeRules([
             'name' => ['required', 'string', 'max:255'],
             'slug' => ['required', 'string', 'max:255'],
+            'highlights' => ['nullable', 'array'],
+            'highlights.*' => ['nullable', 'max:255', 'distinct'],
             'description' => ['required', 'string'],
         ], $additions);
-
     }
 
-    public static function pricing(): array
+    public static function prices(): array
     {
         return [
-            'price' => ['required', 'numeric', 'between:-999999.99,999999.99'],
-            'duration' => ['required', 'integer', 'min:0'],
+            'prices' => ['nullable', 'array', new NoOverlappingPricePeriods],
+            'prices.*.base_price_pp' => ['required', 'numeric', 'min:0'],
+            'prices.*.single_supplement' => ['required', 'numeric', 'min:0'],
+            'prices.*.valid_from' => ['required', 'date'],
+            'prices.*.valid_until' => ['required', 'date', 'after_or_equal:prices.*.valid_from'],
+            'prices.*.label' => ['required', 'string', Rule::enum(PriceLabel::class)],
         ];
     }
 
@@ -39,10 +54,22 @@ class TripValidationRules
         ];
     }
 
-    public static function countries(): array
+    public static function destinations(): array
     {
         return [
-            'countries' => ['required', 'array'],
+            'destinations' => ['required', 'array'],
+        ];
+    }
+
+    public static function transport(): array
+    {
+        return [
+            'transport' => ['array'],
+            'transport.*' => [
+                'required',
+                'string',
+                Rule::enum(Transport::class),
+            ],
         ];
     }
 
@@ -77,19 +104,38 @@ class TripValidationRules
         ];
     }
 
-    private static function mergeRules(array $base, array $additions): array
+    public static function items(): array
     {
-        foreach ($additions as $key => $rules) {
-            if (isset($base[$key])) {
-                $base[$key] = array_merge(
-                    $base[$key],
-                    is_array($rules) ? $rules : [$rules]
-                );
-            } else {
-                $base[$key] = is_array($rules) ? $rules : [$rules];
-            }
-        }
+        return [
+            'items' => ['nullable', 'array'],
+            'items.*.type' => ['required', 'string', Rule::enum(ItemType::class)],
+            'items.*.category' => ['required', 'string', Rule::enum(ItemCategory::class)],
+            'items.*.item' => ['required', 'string', 'max:255'],
+        ];
+    }
 
-        return $base;
+    public static function practicalInfo(): array
+    {
+        return [
+            'practical_info' => ['nullable', 'array'],
+            'practical_info.*' => ['nullable', 'string', 'max:1020'],
+        ];
+    }
+
+    public static function blockedDates(): array
+    {
+        return [
+            'blocked_dates' => ['nullable', 'array'],
+            'blocked_dates.dates' => ['nullable', 'array'],
+            'blocked_dates.dates.*' => Rule::anyOf([
+                ['array', 'in_array_keys:start,end'],
+                ['nullable', 'date', 'after_or_equal:today'],
+            ]),
+            'blocked_dates.dates.*.start' => ['nullable', 'date', 'after_or_equal:today'],
+            'blocked_dates.dates.*.end' => ['nullable', 'date'],
+
+            'blocked_dates.weekdays' => ['nullable', 'array'],
+            'blocked_dates.weekdays.*' => ['integer', 'between:0,6'],
+        ];
     }
 }

@@ -12,9 +12,12 @@ class AntiSpamEmailService
 
     public function __construct(protected string $email)
     {
-        [$localPart, $domain] = explode('@', $this->email);
-        $this->localPart = $localPart;
-        [$this->domain, $this->tld] = explode('.', $domain);
+        $parts = explode('@', $this->email, 2);
+        $this->localPart = $parts[0];
+        $domain = $parts[1] ?? '';
+        $domainParts = explode('.', $domain, 2);
+        $this->domain = $domainParts[0];
+        $this->tld = $domainParts[1] ?? '';
     }
 
     public function isValid($email): bool

@@ -69,9 +69,7 @@ class BookingTraveler extends Model
     protected function birthdateFormatted(): Attribute
     {
         return Attribute::get(
-            fn () => $this->birthdate
-                ? $this->birthdate->isoFormat('DD-MM-YYYY')
-                : null
+            fn () => $this->birthdate->isoFormat('DD-MM-YYYY')
         );
     }
 }

@@ -3,6 +3,7 @@ import screens from "./resources/js/screens.js";
 
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: "media",
     content: [
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./storage/framework/views/*.php",
@@ -13,14 +14,23 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                tahu: ["Tahu", "system-ui", ...defaultTheme.fontFamily.sans],
                 poppins: [
                     "Poppins",
                     "system-ui",
                     ...defaultTheme.fontFamily.sans,
                 ],
-                elite: [
-                    "SpecialElite",
+                caveat: [
+                    "Caveat",
+                    "system-ui",
+                    ...defaultTheme.fontFamily.sans,
+                ],
+                cormorant: [
+                    "CormorantGaramond",
+                    "system-ui",
+                    ...defaultTheme.fontFamily.sans,
+                ],
+                nunito: [
+                    "Nunito",
                     "system-ui",
                     ...defaultTheme.fontFamily.sans,
                 ],
@@ -31,27 +41,24 @@ export default {
             colors: {
                 // Brand identity colors
                 brand: {
-                    primary: "#2F3E46",
-                    secondary: "#F0F4F7",
-                    tertiary: "#ccf6ff",
-                    light: "#A3BCCB"
-                },
-                accent: {
-                    primary: "#f0972d",
-                    sage: "#AFCB98",
-                    earth: "#DCC7AA",
-                    terracotta: "#B17C65",
-                    link: "#82b2ca"
+                    primary: "#2d5f6e",
+                    accent: "#f59e0b",
+                    secondary: "#f5f0e8",
+                    text: "#1e2d3d",
+                    light: "#a3bccb",
+                    subtle: "#afcb98",
+                    earth: "#dcc7aa",
+                    link: "#82b2ca",
                 },
                 // Status feedback colors
                 status: {
                     error: "#dc3545",
                     success: "#198754",
                     warning: "#ffc107",
-                    info: "#0d6efd"
+                    info: "#0d6efd",
                 },
             },
-            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
+            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1350px'}
             keyframes: {
                 "slide-left-right": {
                     "0%, 100%": { transform: "translateX(0px)" },

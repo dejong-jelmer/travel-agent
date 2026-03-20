@@ -3,9 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\Booking;
-use App\Models\Country;
-use App\Models\Image;
-use App\Models\Itinerary;
+use App\Models\NewsletterCampaign;
+use App\Models\NewsletterSubscriber;
 use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -29,29 +28,34 @@ class DatabaseSeeder extends Seeder
             $disk->delete($files);
         }
 
-        $countries = Country::factory(10)->create();
+        // Newsletters
+        NewsletterSubscriber::factory(250)->create();
+        NewsletterCampaign::factory(5)->withHeroImage()->create();
 
-        User::factory()->create([
-            'name' => 'Tester',
-            'email' => 'test@mail.com',
-        ]);
+        // Admin
+        User::factory()->admin()->create();
 
-        Trip::factory(8)
-            ->has(Booking::factory(), 'bookings')
-            ->has(Image::factory()->count(3), 'images')
-            ->create()->each(function ($trip) use ($countries) {
-                $trip->images()->inRandomOrder()->first()->update(['is_primary' => true]);
-                $trip->countries()->attach(
-                    $countries->random(rand(1, 3))->modelKeys()
-                );
-                for ($i = 1; $i <= $trip->duration; $i++) {
-                    Itinerary::factory()
-                        ->has(Image::factory(), 'image')
-                        ->create([
-                            'trip_id' => $trip->id,
-                            'order' => $i,
-                        ]);
-                }
-            });
+        // Seed destinations first
+        $this->call(CountrySeeder::class);
+        $this->call(DestinationSeeder::class);
+        $this->call(SettingsSeeder::class);
+
+        // Trips
+        $trips = Trip::factory(25)
+            ->withHeroImage()
+            ->withImages(10)
+            ->withDestination()
+            ->withAnItinerary()
+            ->withItems()
+            ->withPracticalInfo()
+            ->withBlockedDates()
+            ->withTransport()
+            ->withPrices()
+            ->create();
+
+        Booking::factory(75)
+            ->recycle($trips)
+            ->withTravelers()
+            ->create();
     }
 }

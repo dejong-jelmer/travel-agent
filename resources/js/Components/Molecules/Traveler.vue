@@ -1,5 +1,5 @@
 <script setup>
-import { toRef } from 'vue';
+import { toRef, computed } from 'vue';
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -7,7 +7,7 @@ const props = defineProps({
     label: { type: String, required: true }
 });
 
-const travelers = toRef(props.booking.travelers, props.type);
+const travelers = computed(() => props.booking.travelers?.[props.type] || []);
 </script>
 
 <template>
