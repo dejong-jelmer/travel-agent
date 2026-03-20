@@ -714,7 +714,6 @@
         },
         "page_title": "My goal",
         "image_alt": "Historical (train) journeys in Europe",
-        "pullquote": "Not arriving. Experiencing.",
         "team": {
             "member": {
                 "name": "Jelmer de Jong",
@@ -722,6 +721,8 @@
                 "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
             }
         },
+        "pullquote": "Train routes that move you. Stories that stay with you.",
+        "tagline": "More than a destination",
         "mission_statement": [
             "My goal is to give you a trip you'll look back on with joy and fulfillment — long after you're back home.",
             "I believe travel is more than a destination. It's about the people you meet, the cultures that move you, and the stories you take with you. That's why I bring travelers, cultures, and stories together in a sustainable way — with respect for the world around us and the people who are part of it.",
@@ -730,8 +731,7 @@
             "I'm only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
         ],
         "why_title": "Why I started Omdat We Reizen",
-        "why_statement": "For me, traveling is different from vacation. It's the same difference between literature and reading, music... muzak. It's about breaking out of your bubble, meeting people who think differently, exploring cultures, shifting your perspective. It's the expansion that makes you even—or permanently—a little more human. I want to share that feeling. Not with plane tickets and all-inclusive packages, but with routes that touch you and stories that stay with you.",
-        "tagline": "More than a destination"
+        "why_statement": "To me, traveling is different from a vacation. It is the same difference between literature and reading material. It is breaking out of your bubble, discovering places that broaden your horizons. It is the broadening that makes you a little more human, for a moment—or forever. I want to pass on that feeling. With train routes that touch you and stories that stay with you."
     },
     "contact": {
         "hero_tagline": "Curious about a route? Or just a question? I'd love to hear from you."
@@ -755,7 +755,8 @@
     "trip_show": {
         "hero": {
             "from_price": "From €{price},-",
-            "days": "{duration} days"
+            "days": "{duration} days",
+            "per_person": "p.p."
         },
         "about_trip": "About this trip",
         "tabs": {
