@@ -1,0 +1,35 @@
+{
+  "name": "Omdat We Reizen",
+  "short_name": "o w reizen",
+  "description": "Ontdek Europa per trein. Persoonlijk samengestelde routes met verhaal, cultuur en advies. Niet aankomen — beleven.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f5f0e8",
+  "theme_color": "#2d5f6e",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/lightmode/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lightmode/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "travel"
+  ],
+  "lang": "nl",
+  "dir": "ltr"
+}

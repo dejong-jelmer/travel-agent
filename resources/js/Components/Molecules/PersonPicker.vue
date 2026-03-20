@@ -45,7 +45,7 @@ const decrement = (key) => {
     <div class="relative space-y-2" >
         <div class="relative" @click="open = !open">
             <span class="absolute inset-y-0 left-0 flex items-center text-gray-400">
-                <UserPlus class="ml-1 h-5 w-auto text-accent-primary" />
+                <UserPlus class="ml-1 h-5 w-auto text-brand-accent" />
             </span>
             <input readonly :value="`${modelValue.adults} ${$t('person_picker.adults', modelValue.adults)} - ${modelValue.children || ''} ${$t('person_picker.children', modelValue.children)}`" type="text"
                 class="w-full pl-10 pr-3 py-2 pt-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none cursor-pointer" />

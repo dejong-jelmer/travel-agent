@@ -92,14 +92,14 @@ function handleSubmit() {
 </script>
 
 <template>
-    <div class="bg-white rounded-2xl shadow-sm border border-accent-sage/20 overflow-hidden">
-        <div class="px-6 pb-4 border-b border-accent-sage/20">
+    <div class="bg-white rounded-2xl shadow-sm border border-brand-subtle/20 overflow-hidden">
+        <div class="px-6 pb-4 border-b border-brand-subtle/20">
             <div class="flex justify-between mb-2 pt-4">
                 <button v-for="(step, index) in stepStates" :key="step.id" type="button" @click="goToStep(index)"
                     :disabled="step.isLocked" :data-testid="`step-button-${step.id}`"
                     class="inline-flex items-center gap-1.5 text-xs tablet:text-sm font-medium transition-all relative group" :class="[
                         step.isActive && 'text-brand-primary font-bold scale-105',
-                        step.isCompleted && 'text-accent-primary font-bold',
+                        step.isCompleted && 'text-brand-accent font-bold',
                         step.isAccessible && !step.isActive && !step.isCompleted && 'text-brand-light hover:text-brand-primary cursor-pointer',
                         step.isLocked && 'text-brand-light/30 cursor-not-allowed'
                     ]">
@@ -134,7 +134,7 @@ function handleSubmit() {
                     :disabled-dates="disabledDates" v-bind="currentStep.props" />
             </Transition>
         </div>
-        <div class="flex justify-between items-center px-6 py-4 border-t border-accent-sage/20 bg-white">
+        <div class="flex justify-between items-center px-6 py-4 border-t border-brand-subtle/20 bg-white">
             <button type="button" data-testid="prev-button"
                 class="px-4 py-2 rounded-xl text-brand-primary hover:bg-neutral-100 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="isFirstStep" @click="prevStep">
@@ -142,14 +142,14 @@ function handleSubmit() {
             </button>
 
             <button v-if="!isLastStep" type="button" data-testid="next-button"
-                class="px-6 py-2 rounded-xl bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:hover:text-brand-primary disabled:hover:bg-accent-earth disabled:opacity-40 disabled:cursor-not-allowed"
+                class="px-6 py-2 rounded-xl bg-brand-accent text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:hover:text-brand-primary disabled:hover:bg-brand-earth disabled:opacity-40 disabled:cursor-not-allowed"
                 :disabled="booking.processing" @click="handleNext">
                 {{ $t('forms.booking.button_next') }}
             </button>
 
             <button v-else type="button" data-testid="submit-button"
                 v-tippy="canSubmit ? $t('forms.booking.button_submit_tooltip') : null"
-                class="px-6 py-2 rounded-xl inline-flex gap-2 items-center bg-accent-primary text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:opacity-40 disabled:hover:bg-accent-primary disabled:hover:text-white disabled:cursor-not-allowed"
+                class="px-6 py-2 rounded-xl inline-flex gap-2 items-center bg-brand-accent text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:opacity-40 disabled:hover:bg-brand-accent disabled:hover:text-white disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
                 <LoaderCircle v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
                 <span>{{ booking.processing ? $t('forms.booking.submitting') : $t('forms.booking.button_submit') }}</span>

@@ -69,8 +69,8 @@ const { t } = useI18n()
                                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4">
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <CalendarDays class="w-5 h-5 text-accent-primary" />
+                                            class="w-10 h-10 bg-white border border-brand-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <CalendarDays class="w-5 h-5 text-brand-accent" />
                                         </div>
                                         <div>
                                             <p
@@ -84,8 +84,8 @@ const { t } = useI18n()
 
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <Clock class="w-5 h-5 text-accent-primary" />
+                                            class="w-10 h-10 bg-white border border-brand-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <Clock class="w-5 h-5 text-brand-accent" />
                                         </div>
                                         <div>
                                             <p
@@ -99,8 +99,8 @@ const { t } = useI18n()
 
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <TrainFront class="w-5 h-5 text-accent-primary" />
+                                            class="w-10 h-10 bg-white border border-brand-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <TrainFront class="w-5 h-5 text-brand-accent" />
                                         </div>
                                         <div>
                                             <p
@@ -114,8 +114,8 @@ const { t } = useI18n()
 
                                     <div class="flex items-start gap-3">
                                         <div
-                                            class="w-10 h-10 bg-white border border-accent-primary rounded-lg flex items-center justify-center flex-shrink-0">
-                                            <UserCheck class="w-5 h-5 text-accent-primary" />
+                                            class="w-10 h-10 bg-white border border-brand-accent rounded-lg flex items-center justify-center flex-shrink-0">
+                                            <UserCheck class="w-5 h-5 text-brand-accent" />
                                         </div>
                                         <div>
                                             <p
@@ -135,7 +135,7 @@ const { t } = useI18n()
                         <div class="bg-white rounded-xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
                             <h3
                                 class="text-lg laptop:text-xl font-bold text-brand-primary mb-4 flex items-center gap-2">
-                                <UserCheck class="w-5 h-5 text-accent-primary" />
+                                <UserCheck class="w-5 h-5 text-brand-accent" />
                                 {{ t('booking_received.travelers_card.title') }}
                             </h3>
                             <div class="space-y-3">
@@ -143,7 +143,7 @@ const { t } = useI18n()
                                     class="flex items-center justify-between p-4 bg-white rounded-lg border border-brand-light/20">
                                     <div class="flex items-center gap-3">
                                         <div
-                                            class="w-10 h-10 bg-accent-sage/30 rounded-full flex items-center justify-center">
+                                            class="w-10 h-10 bg-brand-subtle/30 rounded-full flex items-center justify-center">
                                             <span class="text-sm font-bold text-brand-primary">{{ index + 1 }}</span>
                                         </div>
                                         <div>
@@ -161,9 +161,9 @@ const { t } = useI18n()
                     <!-- Right Column: Summary & Contact -->
                     <div class="space-y-6">
                         <!-- Booking Reference Card -->
-                        <div class="bg-brand-secondary border-2 border-accent-primary rounded-xl p-6">
+                        <div class="bg-brand-secondary border-2 border-brand-accent rounded-xl p-6">
                             <p class="text-xs text-brand-primary font-medium uppercase tracking-wide mb-2">{{ t('booking_received.booking_reference.label') }}</p>
-                            <p class="text-2xl laptop:text-3xl font-bold text-accent-primary mb-3">
+                            <p class="text-2xl laptop:text-3xl font-bold text-brand-accent mb-3">
                                 {{ booking.reference }}
                             </p>
                             <p class="text-sm text-brand-primary">
@@ -199,21 +199,21 @@ const { t } = useI18n()
                         </div>
 
                         <!-- Next Steps Card -->
-                        <div class="bg-accent-sage/10 border border-accent-sage/30 rounded-xl p-6">
+                        <div class="bg-brand-subtle/10 border border-brand-subtle/30 rounded-xl p-6">
                             <h3 class="text-lg font-bold text-brand-primary mb-3 flex items-center gap-2">
                                 {{ t('booking_received.next_steps.title') }}
                             </h3>
                             <ul class="space-y-3 text-sm text-brand-primary">
                                 <li class="flex items-start gap-2">
-                                    <span class="w-1.5 h-1.5 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="w-1.5 h-1.5 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
                                     <span>{{ t('booking_received.next_steps.confirmation_email') }}</span>
                                 </li>
                                 <li class="flex items-start gap-2">
-                                    <span class="w-1.5 h-1.5 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="w-1.5 h-1.5 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
                                     <span>{{ t('booking_received.next_steps.contact_soon') }}</span>
                                 </li>
                                 <li class="flex items-start gap-2">
-                                    <span class="w-1.5 h-1.5 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                    <span class="w-1.5 h-1.5 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
                                     <span>{{ t('booking_received.next_steps.questions') }}</span>
                                 </li>
                             </ul>

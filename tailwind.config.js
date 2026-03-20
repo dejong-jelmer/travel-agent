@@ -3,6 +3,7 @@ import screens from "./resources/js/screens.js";
 
 /** @type {import('tailwindcss').Config} */
 export default {
+    darkMode: "media",
     content: [
         "./vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php",
         "./storage/framework/views/*.php",
@@ -22,7 +23,17 @@ export default {
                     "Caveat",
                     "system-ui",
                     ...defaultTheme.fontFamily.sans,
-                ]
+                ],
+                cormorant: [
+                    "CormorantGaramond",
+                    "system-ui",
+                    ...defaultTheme.fontFamily.sans,
+                ],
+                nunito: [
+                    "Nunito",
+                    "system-ui",
+                    ...defaultTheme.fontFamily.sans,
+                ],
             },
             fontSize: {
                 "2xs": "10px",
@@ -30,28 +41,24 @@ export default {
             colors: {
                 // Brand identity colors
                 brand: {
-                    primary: "#30547e",
-                    secondary: "#d6e4ef",
-                    tertiary: "#ccf6ff",
-                    light: "#a3bccb"
-                },
-                accent: {
-                    primary: "#f59e0b",
+                    primary: "#2d5f6e",
+                    accent: "#f59e0b",
+                    secondary: "#f5f0e8",
                     text: "#1e2d3d",
-                    sage: "#afcb98",
+                    light: "#a3bccb",
+                    subtle: "#afcb98",
                     earth: "#dcc7aa",
-                    terracotta: "#b17c65",
-                    link: "#82b2ca"
+                    link: "#82b2ca",
                 },
                 // Status feedback colors
                 status: {
                     error: "#dc3545",
                     success: "#198754",
                     warning: "#ffc107",
-                    info: "#0d6efd"
+                    info: "#0d6efd",
                 },
             },
-            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1800px'}
+            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1350px'}
             keyframes: {
                 "slide-left-right": {
                     "0%, 100%": { transform: "translateX(0px)" },

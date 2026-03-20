@@ -38,7 +38,7 @@ const handleBirthdateInput = (event) => {
 
 <template>
     <div class="space-y-2 p-4 border rounded-lg">
-        <p class="font-bold text-accent-text">{{ label }} {{ index + 1 }}</p>
+        <p class="font-bold text-brand-text">{{ label }} {{ index + 1 }}</p>
         <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6">
             <Input
                 type="text"

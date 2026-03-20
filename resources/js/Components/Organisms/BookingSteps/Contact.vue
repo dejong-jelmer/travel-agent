@@ -48,7 +48,7 @@ const bookerOptions = computed(() => {
 <template>
     <div key="contact" class="space-y-6">
         <h2 class="text-xl font-bold text-brand-primary">{{ $t('booking_steps.contact.heading') }}</h2>
-        <hr class="border-accent-sage/20">
+        <hr class="border-brand-subtle/20">
 
         <div class="space-y-2 p-4 border rounded-lg">
             <div v-if="bookerOptions.length > 1" class="mb-5">

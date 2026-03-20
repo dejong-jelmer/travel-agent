@@ -1,5 +1,9 @@
 <script setup>
+import { ref, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
+import newsletterImage from '@/../images/verona.webp';
+import contactImage from '@/../images/contact/ludo-photos-south-station-4927286_1920.webp';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     trips: Array,
@@ -7,6 +11,28 @@ const props = defineProps({
 });
 
 const { t } = useI18n()
+
+const newsletterRef = ref(null)
+const contactRef = ref(null)
+const newsletterLoaded = ref(false)
+const contactLoaded = ref(false)
+
+onMounted(async () => {
+    await nextTick()
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                if (entry.target === newsletterRef.value) newsletterLoaded.value = true
+                if (entry.target === contactRef.value) contactLoaded.value = true
+                observer.unobserve(entry.target)
+            }
+        })
+    }, { rootMargin: '200px' })
+
+    if (newsletterRef.value) observer.observe(newsletterRef.value)
+    if (contactRef.value) observer.observe(contactRef.value)
+})
 </script>
 
 <template>
@@ -15,15 +41,16 @@ const { t } = useI18n()
             <Hero />
         </template>
         <main>
-            <section class="relative overflow-hidden floating-elements">
-                <DecorativeLine />
-                <!-- Geometric shapes -->
-                <div class="absolute top-16 left-8 w-4 h-4 bg-brand-primary rounded-full"></div>
-                <div class="absolute top-32 right-24 w-2 h-2 bg-brand-secondary rounded-full"></div>
-                <div class="absolute bottom-24 left-16 w-3 h-3 bg-brand-tertiary rounded-full"></div>
-                <!-- Trips -->
-                <article class="relative py-10 laptop:py-16 desktop:py-24">
-                    <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
+            <DecorativeLine />
+            <section class="relative py-12 tablet:py-24">
+                <USP />
+            </section>
+
+            <!-- Trips -->
+            <DecorativeLine />
+            <section id="trips" class="relative overflow-hidden scroll-mt-12">
+                <article class="relative py-12 tablet:py-24 phone:px-6 laptop:px-8">
+                    <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
                         <div class="text-center">
                             <SectionHeader>{{ t('home.our_trips_heading') }}</SectionHeader>
                         </div>
@@ -33,7 +60,12 @@ const { t } = useI18n()
                                     <div class="text-center">
                                         <p
                                             class="text-base sm:text-lg desktop:text-xl text-brand-primary leading-relaxed">
-                                            {{ t('home.no_trips.message_start') }} <DefaultLink :href="'/blog'">{{ t('home.no_trips.blog_link') }}</DefaultLink>, {{ t('home.no_trips.message_middle') }} <DefaultLink :href="'/over-ons'">{{ t('home.no_trips.about_link') }}</DefaultLink> {{ t('home.no_trips.message_middle2') }} <DefaultLink :href="'/contact'">{{ t('home.no_trips.contact_link') }}</DefaultLink>.
+                                            {{ t('home.no_trips.message_start') }} <DefaultLink :href="'/blog'">{{
+                                                t('home.no_trips.blog_link') }}</DefaultLink>, {{
+                                                    t('home.no_trips.message_middle') }} <DefaultLink :href="'/over-ons'">{{
+                                                t('home.no_trips.about_link') }}</DefaultLink> {{
+                                                    t('home.no_trips.message_middle2') }} <DefaultLink :href="'/contact'">{{
+                                                t('home.no_trips.contact_link') }}</DefaultLink>.
                                         </p>
                                     </div>
                                 </div>
@@ -48,39 +80,48 @@ const { t } = useI18n()
                         </template>
                     </div>
                 </article>
+
                 <!-- Newsletter -->
-                <article class="relative bg-brand-secondary">
+                <article ref="newsletterRef" class="relative bg-no-repeat bg-center bg-cover bg-brand-secondary"
+                    :style="newsletterLoaded ? `background-image: url(${newsletterImage})` : ''">
                     <Newsletter />
+                    <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent"></div>
                 </article>
             </section>
-            <!-- USP -->
-            <section class="section relative px-4 laptop:px-16">
-                <DecorativeLine />
-                <!-- Geometric shapes -->
-                <div class="absolute top-16 left-8 w-4 h-4 bg-brand-primary/20 rounded-full"></div>
-                <div class="absolute top-5 right-24 w-2 h-2 bg-brand-secondary/30 rounded-full"></div>
-                <div class="absolute bottom-24 left-16 w-3 h-3 bg-brand-tertiary/15 rounded-full"></div>
-                <USP></USP>
-            </section>
-            <section class="relative bg-gradient-reverse">
-                <DecorativeLine />
-                <!-- Subtle geometric shapes -->
-                <div class="absolute top-16 left-8 w-4 h-4 bg-brand-primary/20 rounded-full"></div>
-                <div class="absolute top-32 right-24 w-2 h-2 bg-brand-secondary/30 rounded-full"></div>
-                <div class="absolute bottom-24 left-16 w-3 h-3 bg-brand-tertiary/15 rounded-full"></div>
-                <!-- Decorative natural shapes -->
-                <div class="absolute inset-0 overflow-hidden">
-                    <div class="absolute top-1/4 -left-32 w-64 h-64 bg-brand-primary/20 rounded-full"></div>
-                    <div class="absolute bottom-1/3 -right-24 w-48 h-48 bg-brand-tertiary/20 rounded-full"></div>
-                </div>
 
-                <!-- Subtle texture overlay -->
-                <div class="absolute inset-0 opacity-5"
-                    style="background-image: radial-gradient(circle at 1px 1px, #A3BCCB 1px, transparent 0); background-size: 20px 20px;">
+            <!-- Pullquote rustpunt -->
+            <section class="relative bg-brand-secondary py-16 tablet:py-24 px-4 text-center">
+                <div class="max-w-2xl mx-auto">
+                    <div class="font-cormorant text-8xl laptop:text-9xl leading-none text-brand-accent/30 select-none mb-2">"</div>
+                    <p class="font-cormorant italic text-4xl laptop:text-6xl text-brand-primary leading-snug -mt-8">
+                        {{ t('about.pullquote') }}
+                    </p>
+                    <p class="mt-6 font-poppins text-sm text-brand-light tracking-widest uppercase">
+                        — Omdat We Reizen
+                    </p>
                 </div>
-                <section id="contact" class="max-w-screen-wide laptop:max-w-screen-desktop scroll-mt-12 mx-auto h-auto pt-8 pb-24 px-1 laptop:px-8">
-                    <ContactForm :contact="contact" />
-                </section>
+                <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent"></div>
+            </section>
+
+            <!-- Contact CTA-banner -->
+            <section ref="contactRef" id="contact" class="relative bg-no-repeat bg-center bg-cover bg-brand-text"
+                :style="contactLoaded ? `background-image: url(${contactImage})` : ''">
+                <div class="absolute inset-0 bg-brand-text/55"></div>
+                <div
+                    class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4 py-20 tablet:py-28 text-center">
+                    <h2 class="text-3xl laptop:text-4xl font-cormorant font-bold text-white leading-tight mb-4">
+                        {{ t('home.contact_cta.heading') }}
+                    </h2>
+                    <p class="text-white/80 font-poppins text-base laptop:text-lg max-w-xl mx-auto mb-8">
+                        {{ t('home.contact_cta.body') }}
+                    </p>
+                    <Link :href="route('contact')">
+                        <Button
+                            class="">
+                            {{ t('home.contact_cta.button') }} →
+                        </Button>
+                    </Link>
+                </div>
             </section>
         </main>
     </Layout>

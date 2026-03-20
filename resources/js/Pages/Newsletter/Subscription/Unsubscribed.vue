@@ -22,19 +22,19 @@ const { t } = useI18n()
 
         <template #list-items>
             <li class="flex items-center gap-2">
-                <span class="w-2 h-2 bg-accent-primary rounded-full flex-shrink-0"></span>
+                <span class="w-2 h-2 bg-brand-accent rounded-full flex-shrink-0"></span>
                 <span class="text-brand-primary">
                     {{ t('newsletter_subscription.unsubscribed.no_more_emails') }}
                 </span>
             </li>
             <li class="flex items-center gap-2">
-                <span class="w-2 h-2 bg-accent-primary rounded-full flex-shrink-0"></span>
+                <span class="w-2 h-2 bg-brand-accent rounded-full flex-shrink-0"></span>
                 <span class="text-brand-primary">
                     {{ t('newsletter_subscription.unsubscribed.resubscribe_anytime') }}
                 </span>
             </li>
             <li class="flex items-center gap-2">
-                <span class="w-2 h-2 bg-accent-primary rounded-full flex-shrink-0"></span>
+                <span class="w-2 h-2 bg-brand-accent rounded-full flex-shrink-0"></span>
                 <span class="text-brand-primary">
                     {{ t('newsletter_subscription.unsubscribed.contact_us') }}
                 </span>

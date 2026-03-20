@@ -102,6 +102,12 @@ class Trip extends Model
     protected static function booted(): void
     {
         parent::boot();
+
+        $clearNavCache = fn () => \Illuminate\Support\Facades\Cache::forget(config('cache.keys.nav_countries'));
+        static::saved($clearNavCache);
+        static::deleted($clearNavCache);
+        static::restored($clearNavCache);
+
         static::deleting(function ($trip) {
             $trip->images()->delete();
             $trip->heroImage()->delete();
@@ -249,7 +255,7 @@ class Trip extends Model
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image', 'images/og_image.jpg')) // @phpstan-ignore nullsafe.neverNull
+            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image')) // @phpstan-ignore nullsafe.neverNull
         );
     }
 

@@ -1,23 +1,21 @@
 <?php
 
 return [
-    'home' => 'Historic journeys with an eye to the future',
-    'about' => 'About us',
-    'contact' => 'Contact',
-    'privacy_statement' => 'Privacy Statement',
-    'conditions' => 'Terms and Conditions',
-
     'home_seo' => [
-        'title' => 'Sustainable travel through Europe by train',
-        'description' => 'Discover Europe sustainably by train. Small-scale trips to historic destinations with respect for nature and culture.',
+        'title' => 'Sustainable railtravel through Europe',
+        'description' => 'Discover Europe by train. Personalized routes with stories, culture, and advice. Don\'t just arrive — experience.',
     ],
     'about_seo' => [
-        'title' => 'About us - Sustainable travel with passion',
-        'description' => 'Learn more about our mission and vision on sustainable travel. Discover why we believe in small-scale, authentic trips through Europe by train.',
+        'title' => 'About me',
+        'description' => 'I create sustainable train journeys through Europe — routes I\'ve travelled myself, with the stories that go with them.',
     ],
     'contact_seo' => [
-        'title' => 'Contact - Get in touch with us',
+        'title' => 'Contact',
         'description' => 'Questions about our trips? Contact us for personal advice on sustainable train journeys through Europe.',
+    ],
+    'trips_seo' => [
+        'title' => 'Our trips',
+        'description' => 'An overview of all our sustainable train journeys through Europe.',
     ],
     'privacy_seo' => [
         'title' => 'Privacy Statement',

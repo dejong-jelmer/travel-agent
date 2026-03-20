@@ -29,8 +29,8 @@ class DatabaseSeeder extends Seeder
         }
 
         // Newsletters
-        NewsletterSubscriber::factory(1500)->create();
-        NewsletterCampaign::factory(15)->withHeroImage()->create();
+        NewsletterSubscriber::factory(250)->create();
+        NewsletterCampaign::factory(5)->withHeroImage()->create();
 
         // Admin
         User::factory()->admin()->create();
@@ -41,7 +41,7 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsSeeder::class);
 
         // Trips
-        $trips = Trip::factory(50)
+        $trips = Trip::factory(25)
             ->withHeroImage()
             ->withImages(10)
             ->withDestination()
@@ -53,7 +53,7 @@ class DatabaseSeeder extends Seeder
             ->withPrices()
             ->create();
 
-        Booking::factory(125)
+        Booking::factory(75)
             ->recycle($trips)
             ->withTravelers()
             ->create();

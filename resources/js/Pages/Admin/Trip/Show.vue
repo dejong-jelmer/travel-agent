@@ -191,7 +191,7 @@ function displayDate(entry) {
                                                 {{ label }}
                                             </h4>
                                             <div
-                                                class="text-sm tablet:text-base text-accent-text leading-relaxed whitespace-pre-line">
+                                                class="text-sm tablet:text-base text-brand-text leading-relaxed whitespace-pre-line">
                                                 {{ trip.practical_info[key] }}
                                             </div>
                                         </div>

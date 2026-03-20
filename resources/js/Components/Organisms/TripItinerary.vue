@@ -1,5 +1,5 @@
 <script setup>
-import placeholder from '@/../images/placeholder.png';
+import placeholder from '@/../images/placeholder.webp';
 import { Camera, BedDouble, AlertTriangle } from 'lucide-vue-next';
 import { ref } from 'vue'
 import { useMq } from 'vue3-mq'
@@ -25,7 +25,7 @@ const props = defineProps({
 <template>
     <div class="relative">
         <!-- Timeline (vertical) -->
-        <div class="absolute left-4 top-16 bottom-0 w-0.5 bg-accent-sage/30"></div>
+        <div class="absolute left-4 top-16 bottom-0 w-0.5 bg-brand-subtle/30"></div>
 
         <!-- Itinerary item -->
         <div class="group relative flex gap-3 tablet:gap-6 pb-8 last:pb-0">
@@ -33,7 +33,7 @@ const props = defineProps({
             <div class="relative flex-shrink-0">
                 <!-- Day cirkel -->
                 <div
-                    class="w-8 h-8 bg-accent-earth rounded-full flex items-center justify-center shadow-sm relative ring-offset-2 ring-2 ring-accent-primary/30">
+                    class="w-8 h-8 bg-brand-earth rounded-full flex items-center justify-center shadow-sm relative ring-offset-2 ring-2 ring-brand-accent/30">
                     <span class="text-sm font-bold text-white"></span>
                 </div>
             </div>
@@ -44,7 +44,7 @@ const props = defineProps({
                 <div class="flex items-start justify-between mb-4">
                     <div class="flex-1 min-w-0">
                         <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-1">
-                            <span class="font-caveat text-accent-earth text-xl tablet:text-2xl mr-5">{{ $t('trip_itinerary.day') }} {{ itinerary.day_from }} <span v-if="itinerary.day_to"> - {{ itinerary.day_to }}</span> </span>{{ itinerary.title }}
+                            <span class="font-caveat text-brand-earth text-xl tablet:text-2xl mr-5">{{ $t('trip_itinerary.day') }} {{ itinerary.day_from }} <span v-if="itinerary.day_to"> - {{ itinerary.day_to }}</span> </span>{{ itinerary.title }}
                         </h4>
                         <div v-if="itinerary.accommodation" class="flex items-center gap-2 text-sm text-brand-light">
                             <BedDouble class="w-4 h-4" />
@@ -64,12 +64,12 @@ const props = defineProps({
                     <div v-if="itinerary.image?.public_url"
                         class="flex flex-col tablet:flex-row gap-4 items-start tablet:items-center">
                         <div class="flex-1 min-w-0">
-                            <p class="text-accent-text leading-relaxed text-sm tablet:text-base">
+                            <p class="text-brand-text leading-relaxed text-sm tablet:text-base">
                                 {{ itinerary.description }}
                             </p>
                         </div>
                         <div class="flex-shrink-0 w-full tablet:w-32 laptop:w-40">
-                            <div class="rounded-lg overflow-hidden shadow-sm border border-accent-sage/20">
+                            <div class="rounded-lg overflow-hidden shadow-sm border border-brand-subtle/20">
                                 <img :src="itinerary.image?.public_url ?? placeholder" :alt="itinerary.title"
                                     loading="lazy"
                                     class="w-full h-24 tablet:h-12 laptop:h-24 object-cover cursor-zoom-in"
@@ -90,14 +90,14 @@ const props = defineProps({
                     <Accordion v-if="itinerary.activities?.length" :default-open="false">
                         <template #header>
                             <span class="flex items-center gap-2 text-sm">
-                                <Camera class="w-4 h-4 text-accent-primary" />
+                                <Camera class="w-4 h-4 text-brand-accent" />
                                 {{ $t('trip_itinerary.activities') }}
                             </span>
                         </template>
                         <ul class="space-y-1">
                             <li v-for="activity in itinerary.activities" :key="activity"
-                                class="text-sm text-accent-text flex items-start gap-2">
-                                <span class="w-1.5 h-1.5 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                class="text-sm text-brand-text flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
                                 {{ activity }}
                             </li>
                         </ul>
@@ -110,13 +110,13 @@ const props = defineProps({
                     <div v-if="itinerary.activities?.length" class="flex-1 min-w-0">
                         <h5
                             class="text-sm font-medium text-brand-primary mb-2 flex laptop:justify-center gap-2 border-b border-gray-200 pb-2 px-2">
-                            <Camera class="w-4 h-4 text-accent-primary" />
+                            <Camera class="w-4 h-4 text-brand-accent" />
                             {{ $t('trip_itinerary.activities') }}
                         </h5>
                         <ul class="space-y-1 px-2">
                             <li v-for="activity in itinerary.activities" :key="activity"
-                                class="text-sm text-accent-text flex items-start gap-2">
-                                <span class="w-1.5 h-1.5 bg-accent-sage rounded-full mt-2 flex-shrink-0"></span>
+                                class="text-sm text-brand-text flex items-start gap-2">
+                                <span class="w-1.5 h-1.5 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
                                 {{ activity }}
                             </li>
                         </ul>

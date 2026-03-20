@@ -31,13 +31,20 @@ const updateVisibleItems = () => {
     }
 };
 
+let resizeTimer = null
+const debouncedResize = () => {
+    clearTimeout(resizeTimer)
+    resizeTimer = setTimeout(updateVisibleItems, 100)
+}
+
 onMounted(() => {
     updateVisibleItems();
-    window.addEventListener("resize", updateVisibleItems);
+    window.addEventListener("resize", debouncedResize, { passive: true });
 });
 
 onBeforeUnmount(() => {
-    window.removeEventListener("resize", updateVisibleItems);
+    window.removeEventListener("resize", debouncedResize);
+    clearTimeout(resizeTimer)
 });
 
 const prevSlide = () => {

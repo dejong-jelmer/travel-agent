@@ -16,7 +16,7 @@ const form = useForm({
 })
 
 function submit() {
-    if(!form.isDirty) return;
+    if (!form.isDirty) return;
     form.clearErrors()
     try {
         honeypot.value.validate()
@@ -44,25 +44,31 @@ function submit() {
                 <SectionHeader class="py-0 pb-4">
                     {{ $t('newsletter.heading') }}
                 </SectionHeader>
-                <p class="text-base phone:text-lg text-gray-600 leading-relaxed">
+                <p class="text-left text-sm laptop:text-base text-gray-600 leading-relaxed">
                     {{ $t('newsletter.description') }}
                 </p>
             </div>
-            <form @submit.prevent="submit" class="space-y-4">
+            <form @submit.prevent="submit" class="space-y-8">
                 <div class="grid grid-cols-1 tablet:grid-cols-2 gap-x-6 gap-y-4">
-                    <Input v-model="form.name" type="text" name="name" :placeholder="$t('newsletter.form.name_placeholder')"
-                        :feedback="form.errors.name" @change="form.clearErrors('name')" />
-                    <Input v-model="form.email" type="email" name="email" :placeholder="$t('newsletter.form.email_placeholder')"
-                        :feedback="form.errors.email" @change="form.clearErrors('email')" />
+                    <Input v-model="form.name" type="text" name="name"
+                        :placeholder="$t('newsletter.form.name_placeholder')" :feedback="form.errors.name"
+                        @change="form.clearErrors('name')" />
+                    <Input v-model="form.email" type="email" name="email"
+                        :placeholder="$t('newsletter.form.email_placeholder')" :feedback="form.errors.email"
+                        @change="form.clearErrors('email')" />
                     <!-- Setup the honeypot -->
                     <vue-honeypot ref="honeypot" />
                 </div>
-                <Button :disabled="form.processing" class="w-full" color="primary">
-                    <span class="flex justify-center space-x-2">
-                        <LoaderCircle v-if="form.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
-                        <span>{{ form.processing ? $t('newsletter.form.submitting') : $t('newsletter.form.submit') }}</span>
-                    </span>
-                </Button>
+                <div class="w-full flex justify-center">
+
+                    <Button :disabled="form.processing" class="w-auto" color="accent">
+                        <span class="flex justify-center space-x-2">
+                            <LoaderCircle v-if="form.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
+                            <span>{{ form.processing ? $t('newsletter.form.submitting') : $t('newsletter.form.submit')
+                                }}</span>
+                        </span>
+                    </Button>
+                </div>
                 <p class="text-sm text-gray-500 text-center mt-4">
                     {{ $t('newsletter.privacy') }}
                 </p>

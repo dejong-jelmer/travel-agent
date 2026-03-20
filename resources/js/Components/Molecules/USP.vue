@@ -1,81 +1,85 @@
 <script setup>
-import { Leaf, Castle, Handshake } from 'lucide-vue-next';
+import { CheckCircle } from 'lucide-vue-next';
+
+import routesImage from '@/../images/route.webp';
+import trainImage from '@/../images/train.webp';
+import uniqueImage from '@/../images/unique.webp';
 
 const usps = [
     {
-        icon: Leaf,
-        titleKey: 'usp.sustainable.title',
-        descriptionKey: 'usp.sustainable.description',
-        highlightKey: 'usp.sustainable.highlight'
+        image: routesImage,
+        titleKey: 'usp.routes.title',
+        descriptionKey: 'usp.routes.description',
+        highlightKey: 'usp.routes.highlight'
     },
     {
-        icon: Castle,
-        titleKey: 'usp.with_story.title',
-        descriptionKey: 'usp.with_story.description',
-        highlightKey: 'usp.with_story.highlight'
+        image: trainImage,
+        titleKey: 'usp.train.title',
+        descriptionKey: 'usp.train.description',
+        highlightKey: 'usp.train.highlight'
     },
     {
-        icon: Handshake,
-        titleKey: 'usp.carefree.title',
-        descriptionKey: 'usp.carefree.description',
-        highlightKey: 'usp.carefree.highlight'
+        image: uniqueImage,
+        titleKey: 'usp.unique.title',
+        descriptionKey: 'usp.unique.description',
+        highlightKey: 'usp.unique.highlight'
     }
 ];
 </script>
 <template>
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-6xl mx-auto phone:px-6 laptop:px-8">
+
+        <!-- Header -->
         <div class="text-center mb-12">
-            <div class="text-center">
-                <SectionHeader>{{ $t('usp.section_header') }}</SectionHeader>
-            </div>
-            <p class="text-accent-text text-lg mt-2 laptop:text-xl max-w-2xl mx-auto leading-relaxed">
+            <SectionHeader>{{ $t('usp.section_header') }}</SectionHeader>
+            <p class="text-brand-text text-sm laptop:text-base text-left max-w-2xl mx-auto leading-relaxed">
                 {{ $t('usp.intro') }}
             </p>
         </div>
 
-        <!-- USP Cards met staggered layout -->
-
+        <!-- USP Cards -->
         <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
-            <Card v-for="(usp, index) in usps" :key="index" class="p-8 relative overflow-hidden">
-                <div class="relative mb-6">
-                    <div class="w-16 h-16 rounded-2xl flex items-center justify-center border border-brand-primary/20">
-                        <component :is="usp.icon"
-                            class="h-8 w-8 text-brand-primary group-hover:text-accent-primary transition-colors duration-300" />
-                    </div>
-                    <div
-                        class="absolute -bottom-1 -right-1 w-4 h-4 bg-accent-sage rounded-full border-2 border-brand-secondary">
-                    </div>
+            <Card
+                v-for="(usp, index) in usps"
+                :key="index"
+                class="relative overflow-hidden group flex flex-col"
+            >
+                <!-- Header afbeelding -->
+                <div class="h-48 overflow-hidden">
+                    <img :src="usp.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
                 </div>
-                <h3
-                    class="text-xl font-bold text-brand-primary mb-3 group-hover:text-accent-primary transition-colors duration-300 relative">
+
+                <div class="p-6 flex flex-col flex-1">
+                <!-- Titel -->
+                <h3 class="text-base laptop:text-xl font-bold text-brand-primary mb-3 group-hover:text-brand-accent transition-colors duration-300">
                     {{ $t(usp.titleKey) }}
                 </h3>
 
-                <p class="text-accent-text leading-relaxed mb-6 relative">
+                <!-- Beschrijving -->
+                <p class="text-brand-text text-sm laptop:text-base leading-relaxed mb-6 flex-1">
                     {{ $t(usp.descriptionKey) }}
                 </p>
-                <div class="flex items-center gap-2.5 pt-4 border-t border-brand-primary/20 relative">
-                    <div
-                        class="w-1.5 h-1.5 rounded-full bg-accent-primary group-hover:scale-125 transition-transform duration-300">
-                    </div>
-                    <span
-                        class="text-sm text-brand-light font-medium group-hover:text-accent-primary transition-colors duration-300">
+
+                <!-- Highlight -->
+                <div class="flex items-center gap-2.5 pt-4 border-t border-brand-primary/20">
+                    <CheckCircle class="w-4 h-4 text-brand-accent flex-shrink-0" />
+                    <span class="text-sm text-brand-light font-medium group-hover:text-brand-accent transition-colors duration-300">
                         {{ $t(usp.highlightKey) }}
                     </span>
+                </div>
                 </div>
             </Card>
         </div>
 
         <!-- Bottom CTA -->
-        <!-- <div class="text-center mt-12">
-            <div
-                class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-accent-sage/20">
-                <span class="text-brand-primary font-medium">Klaar voor jouw volgende avontuur?</span>
-                <div class="w-px h-4 bg-accent-sage/30"></div>
-                <DefaultLink>
-                    Ontdek alle reizen →
-                </DefaultLink>
+        <div class="text-center mt-12">
+            <div class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-brand-subtle/20">
+                <span class="text-brand-primary font-medium">{{ $t('usp.cta.text') }}</span>
+                <div class="w-px h-4 bg-brand-subtle/30"></div>
+                <DefaultLink :href="route('trips')">{{ $t('usp.cta.link') }} →</DefaultLink>
             </div>
-        </div> -->
+        </div>
+
     </div>
 </template>
+

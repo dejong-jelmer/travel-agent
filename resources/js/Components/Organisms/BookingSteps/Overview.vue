@@ -15,7 +15,7 @@ defineProps({
 <template>
     <div key="overview" class="space-y-6">
         <h2 class="text-xl font-bold text-brand-primary">{{ $t('booking_steps.overview.heading') }}</h2>
-        <hr class="border-accent-sage/20">
+        <hr class="border-brand-subtle/20">
 
         <div class="p-6 bg-white rounded-2xl shadow-md space-y-6">
             <!-- Reis -->

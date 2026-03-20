@@ -1,5 +1,5 @@
 <script setup>
-import placeholder from '@/../images/placeholder.png';
+import placeholder from '@/../images/placeholder.webp';
 import { computed } from 'vue'
 import { Head, usePage } from '@inertiajs/vue3'
 

@@ -21,7 +21,7 @@ const props = defineProps({
 
                     <!-- Categories within type -->
                     <div v-for="(items, category) in categories" :key="category"
-                         class="bg-white rounded-lg border border-accent-primary/20 p-4 tablet:p-6">
+                         class="bg-white rounded-lg border border-brand-accent/20 p-4 tablet:p-6">
                         <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-4">
                             {{ category }}
                         </h4>
@@ -36,7 +36,7 @@ const props = defineProps({
                                         class="w-5 h-5"
                                     />
                                 </div>
-                                <span class="text-sm tablet:text-base text-accent-text leading-relaxed flex-1">
+                                <span class="text-sm tablet:text-base text-brand-text leading-relaxed flex-1">
                                     {{ tripItem.item }}
                                 </span>
                             </li>
@@ -47,7 +47,7 @@ const props = defineProps({
         </template>
 
         <!-- Empty State -->
-        <div v-else class="bg-white rounded-lg border border-accent-primary/20 p-6 tablet:p-8 text-center">
+        <div v-else class="bg-white rounded-lg border border-brand-accent/20 p-6 tablet:p-8 text-center">
             <p class="text-brand-light">
                 {{ $t('trip_show.tab_content.inclusive_placeholder') }}
             </p>

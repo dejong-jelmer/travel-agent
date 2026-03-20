@@ -22,7 +22,8 @@ use Inertia\Inertia;
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
-Route::get('/contact', [HomeController::class, 'contact']);
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
 Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
 
@@ -34,7 +35,7 @@ Route::post('/locale/switch', [LocaleController::class, 'switch'])
 // contact form
 Route::post('/contact', [HomeController::class, 'submitContact'])
     ->middleware('throttle:frontend-form-actions')
-    ->name('contact');
+    ->name('submit.contact');
 
 // Newsletter subscription routes
 Route::post('/nieuwsbrief/aanmelden', [SubscriptionController::class, 'subscribe'])
