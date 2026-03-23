@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->date('birthdate');
             $table->string('nationality');
+            $table->text('special_requests')->nullable();
             $table->timestamps();
         });
     }

@@ -23,11 +23,15 @@ return new class extends Migration
             $table->boolean('has_confirmed')->default(false);
             $table->string('status', 20)->index();
             $table->string('payment_status', 20)->index();
+            $table->unsignedSmallInteger('total_adults');
+            $table->unsignedSmallInteger('total_children');
             $table->unsignedInteger('price_per_person');
             $table->unsignedInteger('single_supplement');
             $table->unsignedInteger('base_total_price');
             $table->unsignedInteger('grand_total_price');
             $table->json('fees_and_funds');
+            $table->text('internal_notes')->nullable();
+            $table->timestamp('anonymized_at')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

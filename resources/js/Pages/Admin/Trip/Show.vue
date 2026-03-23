@@ -27,7 +27,7 @@ const labelMap = computed(() =>
 )
 
 function formatPrice(cents) {
-    return new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cents / 100)
+    return new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100)
 }
 
 function formatDate(dateStr) {

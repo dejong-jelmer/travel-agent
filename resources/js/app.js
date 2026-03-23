@@ -54,23 +54,30 @@ createInertiaApp({
                 }
             });
             // Register components globally; heavy admin components are loaded async
-            function registerComponents(glob) {
-                Object.entries(glob).forEach(([path, load]) => {
-                    const name = path.split('/').pop().replace(/\.[^/.]+$/, '')
-                    if (ASYNC_COMPONENTS.includes(name)) {
-                        app.component(name, defineAsyncComponent(load))
-                    } else {
-                        app.component(name, load.default ?? load)
+            const getName = (path) => path.split('/').pop().replace(/\.[^/.]+$/, '')
+
+            // Eagerly register all non-async components
+            const eagerGlobs = [
+                import.meta.glob('./Components/**/*.vue', { eager: true }),
+                import.meta.glob('./Templates/*.vue', { eager: true }),
+                import.meta.glob('./Icons/*.vue', { eager: true }),
+            ]
+            for (const glob of eagerGlobs) {
+                for (const [path, module] of Object.entries(glob)) {
+                    const name = getName(path)
+                    if (!ASYNC_COMPONENTS.includes(name)) {
+                        app.component(name, module.default ?? module)
                     }
-                });
+                }
             }
 
-            const components = import.meta.glob('./Components/**/*.vue', { eager: true })
-            registerComponents(components)
-            const templates = import.meta.glob('./Templates/*.vue', { eager: true })
-            registerComponents(templates)
-            const icons = import.meta.glob('./Icons/*.vue', { eager: true })
-            registerComponents(icons)
+            // Lazily register async components (loader is a function → defineAsyncComponent works correctly)
+            for (const [path, loader] of Object.entries(import.meta.glob('./Components/**/*.vue'))) {
+                const name = getName(path)
+                if (ASYNC_COMPONENTS.includes(name)) {
+                    app.component(name, defineAsyncComponent(loader))
+                }
+            }
 
 
             app.mount(el);

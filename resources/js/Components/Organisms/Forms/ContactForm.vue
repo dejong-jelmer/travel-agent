@@ -120,6 +120,13 @@ function submit() {
                         </div>
                     </div>
                 </div>
+                <i18n-t keypath="forms.contact.privacy" tag="p" class="text-sm text-gray-500 text-center mt-6">
+                    <template #link>
+                        <DefaultLink :href="route('privacy')" class="underline hover:text-gray-700">
+                            {{ $t('forms.contact.privacy_link') }}
+                        </DefaultLink>
+                    </template>
+                </i18n-t>
             </form>
         </div>
     </div>

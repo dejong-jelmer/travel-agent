@@ -20,6 +20,7 @@ class BookingTraveler extends Model
         'last_name',
         'birthdate',
         'nationality',
+        'special_requests',
     ];
 
     protected $appends = [

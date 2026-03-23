@@ -17,7 +17,8 @@ const travelers = computed(() => props.booking.travelers?.[props.type] || []);
                 first_name: booking.errors[`travelers.${type}.${index}.first_name`],
                 last_name: booking.errors[`travelers.${type}.${index}.last_name`],
                 birthdate: booking.errors[`travelers.${type}.${index}.birthdate`],
-                nationality: booking.errors[`travelers.${type}.${index}.nationality`]
+                nationality: booking.errors[`travelers.${type}.${index}.nationality`],
+                special_requests: booking.errors[`travelers.${type}.${index}.special_requests`]
             }" @clear-error="(field) => booking.clearErrors(`travelers.${type}.${index}.${field}`)" />
     </div>
 </template>

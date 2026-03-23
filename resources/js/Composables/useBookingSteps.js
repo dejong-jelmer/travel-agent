@@ -218,15 +218,12 @@ export function useBookingSteps(booking) {
 
     // Computed: which steps are clickable
     const stepStates = computed(() => {
-        const maxAllowed = getMaxAllowedStep();
-
         return steps.value.map((step, index) => ({
             ...step,
             isActive: index === activeStep.value,
             isCompleted: index < activeStep.value,
-            isAccessible:
-                index <= Math.max(highestReachedStep.value, maxAllowed),
-            isLocked: index > Math.max(highestReachedStep.value, maxAllowed),
+            isAccessible: index <= highestReachedStep.value,
+            isLocked: index > highestReachedStep.value,
         }));
     });
 

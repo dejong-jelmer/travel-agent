@@ -23,6 +23,7 @@ class BookingValidationRules
             'travelers.*.*.first_name' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.*.*.last_name' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.*.*.nationality' => ['required', 'string', 'min:2', 'max:255'],
+            'travelers.*.*.special_requests' => ['nullable', 'string', 'max:1000'],
             'travelers.adults.*.birthdate' => [
                 'required',
                 'date_format:d-m-Y',

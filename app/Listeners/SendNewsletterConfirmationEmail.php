@@ -27,7 +27,7 @@ class SendNewsletterConfirmationEmail
         $address = $subscriber->email;
 
         try {
-            Mail::to($address)->send(
+            Mail::to($address)->queue(
                 new NewsletterConfirmation($subscriber)
             );
         } catch (Throwable $e) {

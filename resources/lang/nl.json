@@ -15,6 +15,7 @@
     "booker": {
         "birthdate": "Geboortedatum",
         "nationality": "Nationaliteit",
+        "special_requests": "Bijzonderheden",
         "adults": "Volwassene | Volwassenen",
         "children": "Kind | Kinderen"
     },
@@ -110,10 +111,12 @@
             "submitting": "Bezig met verzenden...",
             "submit": "Schrijf je in"
         },
-        "privacy": "We respecteren je privacy. Je kan je op elk moment weer uitschrijven.",
+        "privacy": "We respecteren je privacy. Je kan je op elk moment uitschrijven. Lees onze {link}.",
+        "privacy_link": "privacyverklaring",
         "subscription": {
             "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
-            "error": "Er is een fout opgetreden bij het verwerken van je inschrijving. Probeer het later opnieuw."
+            "error": "Er is een fout opgetreden bij het verwerken van je inschrijving. Probeer het later opnieuw.",
+            "already_subscribed": "Je bent al ingeschreven voor onze nieuwsbrief. Geniet van de updates!"
         }
     },
     "traveler_form": {
@@ -124,7 +127,9 @@
         "nationality": "Nationaliteit",
         "nationality_placeholder": "Nationaliteit (volgens paspoort)",
         "birthdate": "Geboortedatum",
-        "birthdate_placeholder": "DD-MM-JJJJ"
+        "birthdate_placeholder": "DD-MM-JJJJ",
+        "special_requests": "Bijzonderheden",
+        "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen..."
     },
     "usp": {
         "section_header": "Kiezen voor Omdat We Reizen",
@@ -177,7 +182,9 @@
             "phone_label": "Jouw telefoonnummer (optioneel)",
             "message_label": "Bericht",
             "submit_button": "Verstuur bericht",
-            "success": "Bedankt! Je bericht is succesvol verstuurd."
+            "success": "Bedankt! Je bericht is succesvol verstuurd.",
+            "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees onze {link}.",
+            "privacy_link": "privacyverklaring"
         },
         "trip": {
             "edit_heading": "Bewerk Reis",
@@ -1054,6 +1061,8 @@
                 "edit_contact": "Beheer contactpersoon",
                 "travelers": "Reisgezelschap",
                 "edit_travelers": "Beheer reizigers",
+                "internal_notes_label": "Interne notities",
+                "internal_notes_placeholder": "Voeg interne notities toe...",
                 "edit_booking_status": "Beheer boekingsstatus",
                 "booking_status_placeholder": "Selecteer een boekingstatus",
                 "booking_status_label": "Boekingstatus",
@@ -1079,6 +1088,7 @@
                 "payment_status": "Betaalstatus",
                 "status_info": "Huidige boekings- en betaalstatus",
                 "created_at": "Aangemaakt op",
+                "internal_notes": "Interne notities",
                 "pricing": {
                     "title": "Prijsoverzicht",
                     "subtitle": "Prijzen zoals vastgelegd bij het boeken",

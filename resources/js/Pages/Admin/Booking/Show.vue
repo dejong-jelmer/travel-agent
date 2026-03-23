@@ -15,7 +15,7 @@ const totalTravelers = computed(() =>
 )
 
 function formatPrice(cents) {
-    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cents / 100)
+    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100)
 }
 </script>
 
@@ -76,6 +76,10 @@ function formatPrice(cents) {
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.created_at') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.created_at_formatted }}</dd>
+                            </div>
+                            <div v-if="booking.internal_notes" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.internal_notes') }}</dt>
+                                <dd class="text-sm text-gray-900 col-span-2 whitespace-pre-line">{{ booking.internal_notes }}</dd>
                             </div>
                         </dl>
                     </section>
@@ -195,7 +199,7 @@ function formatPrice(cents) {
                             </div>
                             <div class="flex items-center justify-between p-4 bg-primary-default/5 rounded-lg border border-primary-default/20">
                                 <span class="text-sm font-semibold text-gray-700">{{ t('admin.booking.show.pricing.total') }}</span>
-                                <span class="text-lg font-bold text-primary-default">{{ formatPrice(booking.total_price) }}</span>
+                                <span class="text-lg font-bold text-primary-default">{{ formatPrice(booking.grand_total_price) }}</span>
                             </div>
                         </div>
                     </section>
