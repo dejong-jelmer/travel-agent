@@ -1,5 +1,5 @@
 // Composables/useBooking.js
-import { watch, reactive, readonly, computed, watchEffect } from "vue";
+import { watch, reactive, readonly, computed } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 
 // Constants buiten state
@@ -148,24 +148,26 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         }
     );
 
-    // Auto-cleanup stale errors (safety net)
-    watchEffect(() => {
-        const currentErrors = Object.keys(booking.errors);
+    // Auto-cleanup stale errors when travelers are removed
+    watch(
+        () => [booking.travelers.adults.length, booking.travelers.children.length],
+        () => {
+            const currentErrors = Object.keys(booking.errors);
 
-        currentErrors.forEach(errorKey => {
-            const travelerMatch = errorKey.match(/^travelers\.(adults|children)\.(\d+)\./);
+            currentErrors.forEach(errorKey => {
+                const travelerMatch = errorKey.match(/^travelers\.(adults|children)\.(\d+)\./);
 
-            if (travelerMatch) {
-                const [, type, indexStr] = travelerMatch;
-                const index = parseInt(indexStr, 10);
+                if (travelerMatch) {
+                    const [, type, indexStr] = travelerMatch;
+                    const index = parseInt(indexStr, 10);
 
-                // Check if this traveler still exists
-                if (!booking.travelers[type] || !booking.travelers[type][index]) {
-                    booking.clearErrors(errorKey);
+                    if (!booking.travelers[type]?.[index]) {
+                        booking.clearErrors(errorKey);
+                    }
                 }
-            }
-        });
-    });
+            });
+        }
+    );
 
     const page = usePage();
 
