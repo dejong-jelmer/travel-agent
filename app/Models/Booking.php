@@ -212,7 +212,7 @@ class Booking extends Model
             return $this->total_adults ?? 0;
         }
 
-        return $this->adults->count();
+        return $this->adults()->count();
     }
 
     /**
@@ -226,7 +226,7 @@ class Booking extends Model
             return $this->total_children ?? 0;
         }
 
-        return $this->children->count();
+        return $this->children()->count();
     }
 
     public function mainBooker(): BelongsTo
