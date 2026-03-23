@@ -113,6 +113,10 @@ class DestinationTest extends TestCase
     {
         $destination = Destination::factory()->withTravelInfo()->create();
 
+        $originalCountryCode = $destination->country_code;
+        $originalRegion = $destination->region;
+        $originalTravelInfo = $destination->travel_info;
+
         $travelInfo = collect(TravelInfo::cases())
             ->mapWithKeys(fn ($case) => [
                 $case->value => fake()->text(fake()->numberBetween(50, 250)),
@@ -129,8 +133,9 @@ class DestinationTest extends TestCase
         $response->assertSessionHasErrors('travel_info');
 
         $destination->refresh();
-        $this->assertNotEquals('GB', $destination->country_code);
-        $this->assertNotEquals('Wales', $destination->region);
+        $this->assertEquals($originalCountryCode, $destination->country_code);
+        $this->assertEquals($originalRegion, $destination->region);
+        $this->assertEquals($originalTravelInfo, $destination->travel_info);
     }
 
     public function test_admin_can_destroy_a_destination_without_trips(): void
