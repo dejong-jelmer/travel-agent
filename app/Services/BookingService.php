@@ -39,7 +39,7 @@ class BookingService
             'price_per_person' => $prices->perPerson->getAmount(),
             'single_supplement' => $prices->singleSupplement->getAmount(),
             'base_total_price' => $prices->baseTotal->getAmount(),
-            'grand_total_price' => $prices->baseTotal->getAmount(),
+            'grand_total_price' => $prices->grandTotal->getAmount(),
             'fees_and_funds' => [
                 SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
                 SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
