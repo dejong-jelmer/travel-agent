@@ -8,6 +8,7 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\Newsletter\SubscribeRequest;
 use App\Models\NewsletterSubscriber;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -21,26 +22,34 @@ class SubscriptionController extends Controller
         $validated = $request->validated();
         $hours = config('newsletter.subscription.confirmation_expires_after');
 
-        $existing = NewsletterSubscriber::where('email', $validated['email'])
-            ->whereNull('unsubscribed_at')
-            ->first();
+        DB::transaction(function () use ($validated, $hours): void {
+            // Lock the row for this email (if it exists) for the duration of the transaction.
+            // This prevents a concurrent request from inserting or confirming a record between
+            // our existence check and the updateOrCreate, eliminating the race condition.
+            $existing = NewsletterSubscriber::where('email', $validated['email'])
+                ->lockForUpdate()
+                ->first();
 
-        if ($existing?->confirmed_at !== null) {
-            throw ValidationException::withMessages([
-                'already_subscribed' => true,
-            ]);
-        }
+            if ($existing !== null
+                && $existing->confirmed_at !== null
+                && $existing->unsubscribed_at === null
+            ) {
+                throw ValidationException::withMessages([
+                    'already_subscribed' => true,
+                ]);
+            }
 
-        $subscriber = NewsletterSubscriber::updateOrCreate(
-            ['email' => $validated['email']],
-            [
-                'name' => $validated['name'] ?? null,
-                'subscribed_at' => now(),
-                'confirmation_expires_at' => now()->addHours($hours),
-            ]
-        );
+            $subscriber = NewsletterSubscriber::updateOrCreate(
+                ['email' => $validated['email']],
+                [
+                    'name' => $validated['name'] ?? null,
+                    'subscribed_at' => now(),
+                    'confirmation_expires_at' => now()->addHours($hours),
+                ]
+            );
 
-        event(new NewsletterSubscriptionRequested($subscriber));
+            event(new NewsletterSubscriptionRequested($subscriber));
+        });
 
         return back();
     }
