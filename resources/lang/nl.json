@@ -15,6 +15,7 @@
     "booker": {
         "birthdate": "Geboortedatum",
         "nationality": "Nationaliteit",
+        "special_requests": "Bijzonderheden",
         "adults": "Volwassene | Volwassenen",
         "children": "Kind | Kinderen"
     },
@@ -126,7 +127,9 @@
         "nationality": "Nationaliteit",
         "nationality_placeholder": "Nationaliteit (volgens paspoort)",
         "birthdate": "Geboortedatum",
-        "birthdate_placeholder": "DD-MM-JJJJ"
+        "birthdate_placeholder": "DD-MM-JJJJ",
+        "special_requests": "Bijzonderheden",
+        "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen..."
     },
     "usp": {
         "section_header": "Kiezen voor Omdat We Reizen",
@@ -1058,6 +1061,8 @@
                 "edit_contact": "Beheer contactpersoon",
                 "travelers": "Reisgezelschap",
                 "edit_travelers": "Beheer reizigers",
+                "internal_notes_label": "Interne notities",
+                "internal_notes_placeholder": "Voeg interne notities toe...",
                 "edit_booking_status": "Beheer boekingsstatus",
                 "booking_status_placeholder": "Selecteer een boekingstatus",
                 "booking_status_label": "Boekingstatus",
@@ -1083,6 +1088,7 @@
                 "payment_status": "Betaalstatus",
                 "status_info": "Huidige boekings- en betaalstatus",
                 "created_at": "Aangemaakt op",
+                "internal_notes": "Interne notities",
                 "pricing": {
                     "title": "Prijsoverzicht",
                     "subtitle": "Prijzen zoals vastgelegd bij het boeken",

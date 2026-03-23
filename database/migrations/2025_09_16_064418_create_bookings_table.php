@@ -30,6 +30,7 @@ return new class extends Migration
             $table->unsignedInteger('base_total_price');
             $table->unsignedInteger('grand_total_price');
             $table->json('fees_and_funds');
+            $table->text('internal_notes')->nullable();
             $table->timestamp('anonymized_at')->nullable();
             $table->softDeletes();
             $table->timestamps();

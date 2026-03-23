@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Booking;
+use App\Models\BookingChange;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;
 use Illuminate\Console\Command;
@@ -42,38 +43,43 @@ class AnonymizeOldBookings extends Command
         ));
 
         if ($dryRun) {
-            $bookings->each(fn(Booking $booking) => $this->line(
-                "  - Booking #{$booking->id} ({$booking->created_at->format('Y-m-d')})"
-            ));
+            $bookings->each(function (Booking $booking): void {
+                $this->line("  - Booking #{$booking->id} ({$booking->created_at->format('Y-m-d')})");
+            });
 
             return self::SUCCESS;
         }
 
-        $anonymized = 0;
+        $bookingIds = $bookings->pluck('id');
 
-        foreach ($bookings as $booking) {
-            try {
-                DB::transaction(function () use ($booking) {
-                    $booking->update(['anonymized_at' => now()]);
-                    $booking->travelers()->delete();
-                    $booking->contact()->delete();
+        try {
+            DB::transaction(function () use ($bookingIds) {
+                Booking::whereIn('id', $bookingIds)
+                    ->update([
+                        'anonymized_at' => now(),
+                        'internal_notes' => null,
+                    ]);
 
-                    // Delete all change logs of traveler and contact data for this booking
-                    $booking->changes()
-                        ->whereIn('model_type', [
+                BookingTraveler::whereIn('booking_id', $bookingIds)->delete();
+                BookingContact::whereIn('booking_id', $bookingIds)->delete();
+
+                // Delete all change logs of traveler and contact data for these bookings
+                BookingChange::whereIn('booking_id', $bookingIds)
+                    ->where(function ($query) {
+                        $query->whereIn('model_type', [
                             BookingTraveler::class,
                             BookingContact::class,
-                        ])
-                        ->delete();
-                });
+                        ])->orWhere('field', 'internal_notes');
+                    })
+                    ->delete();
+            });
+        } catch (\Throwable $e) {
+            $this->error("Anonymization failed: {$e->getMessage()}");
 
-                $anonymized++;
-            } catch (\Throwable $e) {
-                $this->error("Error on booking #{$booking->id}: {$e->getMessage()}");
-            }
+            return self::FAILURE;
         }
 
-        $this->info("{$anonymized} booking(s) successfully anonymized.");
+        $this->info("{$bookings->count()} booking(s) successfully anonymized.");
 
         return self::SUCCESS;
     }

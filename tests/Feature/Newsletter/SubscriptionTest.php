@@ -32,7 +32,7 @@ class SubscriptionTest extends TestCase
     {
         $response = $this->createNewTestSubscriber();
 
-        $response->assertStatus(200);
+        $response->assertStatus(302);
 
         $this->assertDatabaseHas('newsletter_subscribers', [
             'email' => $this->email,

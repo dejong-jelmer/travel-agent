@@ -15,6 +15,7 @@
     "booker": {
         "birthdate": "Date of birth",
         "nationality": "Nationality",
+        "special_requests": "Special requests",
         "adults": "Adult | Adults",
         "children": "Child | Children"
     },
@@ -126,7 +127,9 @@
         "nationality": "Nationality",
         "nationality_placeholder": "Nationality (according passport)",
         "birthdate": "Date of birth",
-        "birthdate_placeholder": "DD-MM-YYYY"
+        "birthdate_placeholder": "DD-MM-YYYY",
+        "special_requests": "Special requests",
+        "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs..."
     },
     "usp": {
         "section_header": "why choose us",
@@ -1058,6 +1061,8 @@
                 "edit_contact": "Manage contact person",
                 "travelers": "Travel party",
                 "edit_travelers": "Manage travelers",
+                "internal_notes_label": "Internal notes",
+                "internal_notes_placeholder": "Add internal notes...",
                 "edit_booking_status": "Manage booking status",
                 "booking_status_placeholder": "Select a booking status",
                 "booking_status_label": "Booking status",
@@ -1083,6 +1088,7 @@
                 "payment_status": "Payment status",
                 "status_info": "Current booking and payment status",
                 "created_at": "Created on",
+                "internal_notes": "Internal notes",
                 "pricing": {
                     "title": "Pricing",
                     "subtitle": "Prices as recorded at the time of booking",

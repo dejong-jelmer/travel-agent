@@ -1,7 +1,19 @@
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
-    contact: Object
+    contact: Object,
+    newsletterRetentionMonths: {
+        type: Number,
+        default: 3,
+    },
 });
+
+const retentionLabel = computed(() =>
+    props.newsletterRetentionMonths === 1
+        ? '1 maand'
+        : `${props.newsletterRetentionMonths} maanden`
+);
 </script>
 <template>
     <Layout>
@@ -149,7 +161,7 @@ const props = defineProps({
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Nieuwsbriefgegevens:</p>
-                                        <p class="text-gray-700">tot uitschrijving; na uitschrijving worden gegevens binnen 3 maanden verwijderd</p>
+                                        <p class="text-gray-700">tot uitschrijving; na uitschrijving worden gegevens binnen {{ retentionLabel }} verwijderd</p>
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Boekingsgegevens:</p>

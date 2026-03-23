@@ -92,6 +92,7 @@ class HomeController extends Controller
         return Inertia::render('Privacy', [
             'title' => $this->pageTitle('home.privacy_seo'),
             'seo' => $this->pageSeo('home.privacy_seo'),
+            'newsletterRetentionMonths' => (int) config('newsletter.subscription.retention_months', 3),
         ]);
     }
 

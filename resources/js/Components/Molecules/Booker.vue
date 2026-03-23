@@ -12,6 +12,7 @@ defineProps({
         <div class="text-brand-primary">
             <p><span class="font-medium">{{ $t('booker.birthdate') }}:</span> {{ booker.birthdate_formatted }}</p>
             <p><span class="font-medium">{{ $t('booker.nationality') }}:</span> {{ booker.nationality }}</p>
+            <p v-if="booker.special_requests"><span class="font-medium">{{ $t('booker.special_requests') }}:</span> {{ booker.special_requests }}</p>
         </div>
     </Accordion>
 </template>

@@ -25,23 +25,23 @@ class PurgeUnsubscribedSubscribers extends Command
     /**
      * Execute the console command.
      */
-    public function handle(): void
+    public function handle(): int
     {
+        $retentionMonths = (int) config('newsletter.subscription.retention_months', 3);
+
         $count = NewsletterSubscriber::unsubscribed()
-            ->where('unsubscribed_at', '<=', now()->subMonths(3))
-            ->count();
+            ->where('unsubscribed_at', '<=', now()->subMonths($retentionMonths))
+            ->delete();
 
         if ($count === 0) {
             $this->info('No subscribers to purge.');
 
-            return;
+            return self::SUCCESS;
         }
 
-        NewsletterSubscriber::unsubscribed()
-            ->where('unsubscribed_at', '<=', now()->subMonths(3))
-            ->delete();
-
         $this->info("Purged {$count} unsubscribed subscriber(s).");
-        Log::info("Purged {$count} unsubscribed newsletter subscriber(s) older than 3 months.");
+        Log::info("Purged {$count} unsubscribed newsletter subscriber(s) older than {$retentionMonths} months.");
+
+        return self::SUCCESS;
     }
 }

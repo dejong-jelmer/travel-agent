@@ -57,6 +57,7 @@ class Booking extends Model
         'base_total_price',
         'grand_total_price',
         'fees_and_funds',
+        'internal_notes',
         'anonymized_at',
     ];
 
@@ -120,7 +121,7 @@ class Booking extends Model
     {
         static::created(function ($booking) {
             $year = now()->format('Y');
-            $booking->reference = "{$year}-" . str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
             $booking->saveQuietly();
         });
 
@@ -156,12 +157,12 @@ class Booking extends Model
 
     protected function departureDateFormatted(): Attribute
     {
-        return Attribute::get(fn() => $this->getFormattedDate('departure_date'));
+        return Attribute::get(fn () => $this->getFormattedDate('departure_date'));
     }
 
     protected function createdAtFormatted(): Attribute
     {
-        return Attribute::get(fn() => $this->getFormattedDate('created_at'));
+        return Attribute::get(fn () => $this->getFormattedDate('created_at'));
     }
 
     protected static function boot()
@@ -190,31 +191,41 @@ class Booking extends Model
         return $this->travelers()->where('type', TravelerType::Adult->value);
     }
 
+    /**
+     * Child travelers for this booking.
+     *
+     * @return HasMany<BookingTraveler, Booking>
+     */
     public function children(): HasMany
     {
         return $this->travelers()->where('type', TravelerType::Child->value);
     }
+
     /**
-     * Returns the number of adults.
+     * Returns the number of adult travelers.
      * After anonymization: from the saved column.
-     * Before anonymization: live from travelers.
+     * Before anonymization: live count from the travelers relation.
      */
     public function getAdultsCount(): int
     {
         if ($this->isAnonymized()) {
             return $this->total_adults ?? 0;
         }
+
         return $this->adults()->count();
     }
 
     /**
      * Returns the number of child travelers.
+     * After anonymization: from the saved column.
+     * Before anonymization: live count from the travelers relation.
      */
     public function getChildrenCount(): int
     {
         if ($this->isAnonymized()) {
             return $this->total_children ?? 0;
         }
+
         return $this->children()->count();
     }
 
@@ -233,6 +244,9 @@ class Booking extends Model
         return $this->hasMany(BookingChange::class);
     }
 
+    /**
+     * The destinations reachable via this booking's trip.
+     */
     public function destinations(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
@@ -241,6 +255,9 @@ class Booking extends Model
         );
     }
 
+    /**
+     * Whether this booking's personal data has been anonymized.
+     */
     public function isAnonymized(): bool
     {
         return $this->anonymized_at !== null;
@@ -283,7 +300,7 @@ class Booking extends Model
      */
     protected function statusLabel(): Attribute
     {
-        return Attribute::get(fn() => $this->status->label());
+        return Attribute::get(fn () => $this->status->label());
     }
 
     /**
@@ -293,7 +310,7 @@ class Booking extends Model
      */
     protected function paymentStatusLabel(): Attribute
     {
-        return Attribute::get(fn() => $this->payment_status->label());
+        return Attribute::get(fn () => $this->payment_status->label());
     }
 
     /**
@@ -304,7 +321,7 @@ class Booking extends Model
     protected function totalTravelers(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->isAnonymized()
+            get: fn () => $this->isAnonymized()
                 ? ($this->total_adults ?? 0) + ($this->total_children ?? 0)
                 : $this->travelers->count(),
         );
