@@ -85,6 +85,7 @@ const props = defineProps({
                                     <p class="text-gray-700 mb-3">Bij aanmelding voor onze nieuwsbrief vragen we:</p>
                                     <ul class="list-disc pl-6 mb-4 text-gray-700">
                                         <li>E-mailadres</li>
+                                        <li>Naam (optioneel)</li>
                                     </ul>
                                     <div class="bg-blue-50 p-3 rounded">
                                         <p class="text-sm text-gray-700"><strong>Doel:</strong> om je periodiek
@@ -111,7 +112,9 @@ const props = defineProps({
                                         <p class="text-sm text-gray-700"><strong>Doel:</strong> om jouw reis correct te
                                             kunnen organiseren en uitvoeren.</p>
                                         <p class="text-sm text-gray-700"><strong>Grondslag:</strong> uitvoering van de
-                                            overeenkomst.</p>
+                                            overeenkomst. Voor dieetwensen en medische bijzonderheden geldt aanvullend
+                                            uitdrukkelijke toestemming (AVG art. 9 lid 2a), die apart wordt gevraagd bij
+                                            het boekingsproces.</p>
                                     </div>
                                 </div>
                             </section>
@@ -127,8 +130,11 @@ const props = defineProps({
                                 <ul class="list-disc pl-6 text-gray-700 space-y-2">
                                     <li>Reisdienstverleners zoals vervoerders, hotels of lokale gidsen</li>
                                     <li>Garantie- of waarborgfondsen STO Garant en het Calamiteitenfonds</li>
-                                    <li>IT-dienstverleners die onze website, e-mailsystemen of boekingsplatformen
-                                        ondersteunen</li>
+                                    <li><strong>Mailjet</strong> — voor het verzenden van e-mails (boekingsbevestigingen,
+                                        nieuwsbrief), gevestigd in de EU. Met Mailjet is een verwerkersovereenkomst
+                                        afgesloten.</li>
+                                    <li><strong>Greenhost</strong> — voor het hosten van onze website, gevestigd in
+                                        Nederland. Met Greenhost is een verwerkersovereenkomst afgesloten.</li>
                                 </ul>
                             </section>
 
@@ -143,11 +149,11 @@ const props = defineProps({
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Nieuwsbriefgegevens:</p>
-                                        <p class="text-gray-700">tot uitschrijving</p>
+                                        <p class="text-gray-700">tot uitschrijving; na uitschrijving worden gegevens binnen 3 maanden verwijderd</p>
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Boekingsgegevens:</p>
-                                        <p class="text-gray-700">7 jaar (wettelijke bewaarplicht voor administratie)</p>
+                                        <p class="text-gray-700">Boekingsgegevens worden 7 jaar bewaard op basis van de wettelijke bewaarplicht voor administratie. Na deze termijn worden persoonsgegevens geanonimiseerd.</p>
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Medische/dieetgegevens:</p>
@@ -236,9 +242,13 @@ const props = defineProps({
                                     <ul class="list-disc text-gray-700 pl-4 leading-relaxed mb-2">
                                         <li>
                                             Onze website gebruikt alleen functionele cookies, die nodig zijn om de site goed
-                                            te laten werken.
+                                            te laten werken:
+                                            <ul class="list-disc pl-6 mt-1 space-y-1">
+                                                <li><strong>Sessiecookie</strong> — onthoudt je sessie tijdens het bezoek (bijv. inlogstatus).</li>
+                                                <li><strong>CSRF-cookie</strong> — beschermt formulieren tegen kwaadaardige verzoeken van buitenaf.</li>
+                                            </ul>
                                         </li>
-                                        <li>
+                                        <li class="mt-2">
                                             Wij gebruiken <strong>geen</strong> analytische cookies en/of tracking cookies van derden.
                                         </li>
                                     </ul>

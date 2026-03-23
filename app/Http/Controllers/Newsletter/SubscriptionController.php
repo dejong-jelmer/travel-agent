@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\Newsletter\SubscribeRequest;
 use App\Models\NewsletterSubscriber;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -14,10 +16,20 @@ class SubscriptionController extends Controller
 {
     use HasPageMetadata;
 
-    public function subscribe(SubscribeRequest $request): void
+    public function subscribe(SubscribeRequest $request): RedirectResponse
     {
         $validated = $request->validated();
         $hours = config('newsletter.subscription.confirmation_expires_after');
+
+        $existing = NewsletterSubscriber::where('email', $validated['email'])
+            ->whereNull('unsubscribed_at')
+            ->first();
+
+        if ($existing?->confirmed_at !== null) {
+            throw ValidationException::withMessages([
+                'already_subscribed' => true,
+            ]);
+        }
 
         $subscriber = NewsletterSubscriber::updateOrCreate(
             ['email' => $validated['email']],
@@ -29,6 +41,8 @@ class SubscriptionController extends Controller
         );
 
         event(new NewsletterSubscriptionRequested($subscriber));
+
+        return back();
     }
 
     public function confirm(string $token): Response

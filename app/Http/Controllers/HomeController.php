@@ -58,7 +58,7 @@ class HomeController extends Controller
         );
 
         try {
-            Mail::to($address)->send(
+            Mail::to($address)->queue(
                 new AdminContactFormNotificationMail($contact)
             );
         } catch (\Throwable $e) {

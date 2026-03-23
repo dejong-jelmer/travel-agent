@@ -49,12 +49,15 @@ class Booking extends Model
         'has_confirmed',
         'status',
         'payment_status',
+        'total_adults',
+        'total_children',
         'trip_price_id',
         'price_per_person',
         'single_supplement',
         'base_total_price',
         'grand_total_price',
         'fees_and_funds',
+        'anonymized_at',
     ];
 
     protected $casts = [
@@ -64,6 +67,7 @@ class Booking extends Model
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
+        'anonymized_at' => 'datetime',
     ];
 
     protected $appends = [
@@ -116,7 +120,7 @@ class Booking extends Model
     {
         static::created(function ($booking) {
             $year = now()->format('Y');
-            $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
+            $booking->reference = "{$year}-" . str_pad($booking->id, 6, '0', STR_PAD_LEFT);
             $booking->saveQuietly();
         });
 
@@ -152,12 +156,12 @@ class Booking extends Model
 
     protected function departureDateFormatted(): Attribute
     {
-        return Attribute::get(fn () => $this->getFormattedDate('departure_date'));
+        return Attribute::get(fn() => $this->getFormattedDate('departure_date'));
     }
 
     protected function createdAtFormatted(): Attribute
     {
-        return Attribute::get(fn () => $this->getFormattedDate('created_at'));
+        return Attribute::get(fn() => $this->getFormattedDate('created_at'));
     }
 
     protected static function boot()
@@ -190,6 +194,29 @@ class Booking extends Model
     {
         return $this->travelers()->where('type', TravelerType::Child->value);
     }
+    /**
+     * Returns the number of adults.
+     * After anonymization: from the saved column.
+     * Before anonymization: live from travelers.
+     */
+    public function getAdultsCount(): int
+    {
+        if ($this->isAnonymized()) {
+            return $this->total_adults ?? 0;
+        }
+        return $this->adults()->count();
+    }
+
+    /**
+     * Returns the number of child travelers.
+     */
+    public function getChildrenCount(): int
+    {
+        if ($this->isAnonymized()) {
+            return $this->total_children ?? 0;
+        }
+        return $this->children()->count();
+    }
 
     public function mainBooker(): BelongsTo
     {
@@ -212,6 +239,11 @@ class Booking extends Model
             $this->trip(),
             (new Trip)->destinations()
         );
+    }
+
+    public function isAnonymized(): bool
+    {
+        return $this->anonymized_at !== null;
     }
 
     /**
@@ -251,7 +283,7 @@ class Booking extends Model
      */
     protected function statusLabel(): Attribute
     {
-        return Attribute::get(fn () => $this->status->label());
+        return Attribute::get(fn() => $this->status->label());
     }
 
     /**
@@ -261,7 +293,7 @@ class Booking extends Model
      */
     protected function paymentStatusLabel(): Attribute
     {
-        return Attribute::get(fn () => $this->payment_status->label());
+        return Attribute::get(fn() => $this->payment_status->label());
     }
 
     /**
@@ -272,7 +304,9 @@ class Booking extends Model
     protected function totalTravelers(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->travelers->count(),
+            get: fn() => $this->isAnonymized()
+                ? ($this->total_adults ?? 0) + ($this->total_children ?? 0)
+                : $this->travelers->count(),
         );
     }
 }

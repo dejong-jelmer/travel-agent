@@ -35,6 +35,8 @@ class BookingFactory extends Factory
             'has_confirmed' => true,
             'status' => $statuses['status'],
             'payment_status' => $statuses['payment_status'],
+            'total_adults' => 0,
+            'total_children' => 0,
             'price_per_person' => 0,
             'single_supplement' => 0,
             'base_total_price' => 0,
@@ -127,6 +129,9 @@ class BookingFactory extends Factory
         return $this->afterCreating(function (Booking $booking) use ($adults, $children) {
             $adultCount = $adults ?? rand(1, 4);
             $childCount = $children ?? rand(0, 2);
+
+            $booking->total_adults = $adultCount;
+            $booking->total_children = $childCount;
 
             $adults = BookingTraveler::factory()->new()->adult()->count($adultCount)->make();
             $booking->travelers()->saveMany($adults);

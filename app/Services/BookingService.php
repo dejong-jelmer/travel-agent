@@ -17,12 +17,17 @@ class BookingService
         $contactData = $bookingData->contact->toArray();
         $travelersData = $bookingData->travelers;
 
+        $totalAdults = $this->getTotalAdults($bookingData->travelers);
+        $totalChildren = $this->getTotalChildren($bookingData->travelers);
+
         // Create booking
         /** @var Booking $booking */
         $booking = $bookingData->trip->bookings()->create([
             'departure_date' => $bookingData->date,
             'has_accepted_conditions' => $bookingData->has_accepted_conditions,
             'has_confirmed' => $bookingData->has_confirmed,
+            'total_adults' => $totalAdults,
+            'total_children' => $totalChildren,
             'trip_price_id' => $prices->tripPriceId,
             'price_per_person' => $prices->perPerson->getAmount(),
             'single_supplement' => $prices->singleSupplement->getAmount(),
@@ -121,6 +126,16 @@ class BookingService
                 }
             }
         }
+    }
+
+    public function getTotalAdults(array $travelers): int
+    {
+        return count($travelers[TravelerType::Adult->value]);
+    }
+
+    public function getTotalChildren(array $travelers): int
+    {
+        return count($travelers[TravelerType::Child->value]);
     }
 
     public function getTotalTravellers(array $travelers): int

@@ -110,10 +110,12 @@
             "submitting": "Submitting...",
             "submit": "Subscribe"
         },
-        "privacy": "We respect your privacy. You can unsubscribe at any time.",
+        "privacy": "We respect your privacy. You can unsubscribe at any time. Read our {link}.",
+        "privacy_link": "privacy policy",
         "subscription": {
             "success": "Thank you for subscribing! Please confirm your subscription via the email we just sent to {email}.",
-            "error": "An error occurred while processing your subscription. Please try again later."
+            "error": "An error occurred while processing your subscription. Please try again later.",
+            "already_subscribed": "You are already subscribed to our newsletter. Enjoy the updates!"
         }
     },
     "traveler_form": {
@@ -177,7 +179,9 @@
             "phone_label": "Your phone number (optional)",
             "message_label": "Message",
             "submit_button": "Send message",
-            "success": "Thank you! Your message has been sent successfully."
+            "success": "Thank you! Your message has been sent successfully.",
+            "privacy": "Your data will only be used to respond to your message. Read our {link}.",
+            "privacy_link": "privacy policy"
         },
         "trip": {
             "edit_heading": "Edit Trip",

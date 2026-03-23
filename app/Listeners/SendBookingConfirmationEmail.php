@@ -28,7 +28,7 @@ class SendBookingConfirmationEmail
         try {
             // Send confirmation email to the main booker
             Mail::to($event->booking->contact->email)
-                ->send(new BookingConfirmationMail($event->booking));
+                ->queue(new BookingConfirmationMail($event->booking));
         } catch (\Throwable $e) {
             Log::error('Booking confirmation mail failed: '.$e->getMessage(), [
                 'booking_id' => $event->booking->id,
