@@ -17,7 +17,8 @@ import {
     NewspaperIcon,
     UsersIcon,
     PencilSquareIcon,
-    Cog6ToothIcon
+    Cog6ToothIcon,
+    DocumentTextIcon
 } from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 
@@ -38,6 +39,7 @@ const collapsedSections = ref({
 const collapsedItems = ref({
     trips: false,
     destinations: false,
+    blog_posts: false,
 })
 
 // Menu structuur met categorieën
@@ -121,6 +123,23 @@ const menuGroups = computed(() => [
                     {
                         label: t('admin_menu.items.new_campaign'),
                         path: new URL(route('admin.newsletter.campaigns.create'), window.location.origin).pathname,
+                        icon: PlusIcon,
+                    },
+                ]
+            },
+            {
+                id: 'blog_posts',
+                label: t('admin_menu.items.blog'),
+                icon: DocumentTextIcon,
+                children: [
+                    {
+                        label: t('admin_menu.items.all_blog_posts'),
+                        path: new URL(route('admin.posts.index'), window.location.origin).pathname,
+                        icon: DocumentTextIcon,
+                    },
+                    {
+                        label: t('admin_menu.items.new_blog_post'),
+                        path: new URL(route('admin.posts.create'), window.location.origin).pathname,
                         icon: PlusIcon,
                     },
                 ]

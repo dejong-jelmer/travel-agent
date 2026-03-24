@@ -60,7 +60,7 @@ onMounted(async () => {
                                     <div class="text-center">
                                         <p
                                             class="text-base sm:text-lg desktop:text-xl text-brand-primary leading-relaxed">
-                                            {{ t('home.no_trips.message_start') }} <DefaultLink :href="route('blog')">{{
+                                            {{ t('home.no_trips.message_start') }} <DefaultLink :href="route('blog.index')">{{
                                                 t('home.no_trips.blog_link') }}</DefaultLink>, {{
                                                     t('home.no_trips.message_middle') }} <DefaultLink :href="route('about')">{{
                                                 t('home.no_trips.about_link') }}</DefaultLink> {{

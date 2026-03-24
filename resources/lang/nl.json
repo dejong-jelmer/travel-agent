@@ -24,7 +24,8 @@
         "trips": "Reizen",
         "all_trips": "Alle reizen",
         "contact": "Contact",
-        "about": "Over mij"
+        "about": "Over mij",
+        "blog": "Blog"
     },
     "trips": {
         "title": "Alle reizen",
@@ -41,6 +42,24 @@
         "filter_days_unit": "dagen",
         "empty_title": "Geen reizen gevonden",
         "empty_body": "Er zijn geen reizen die overeenkomen met uw selectie. Pas uw filters aan."
+    },
+    "blog_post": {
+        "status": {
+            "draft": "Concept",
+            "published": "Gepubliceerd"
+        }
+    },
+    "blog": {
+        "title_index": "Blog",
+        "title_show": "Blog",
+        "blog_seo": {
+            "title": "Blog",
+            "description": "Lees onze laatste blogposts over duurzaam reizen per trein door Europa."
+        },
+        "index": {
+            "title": "Blog",
+            "no_posts": "Er zijn nog geen blogposts gepubliceerd."
+        }
     },
     "trip_card": {
         "days": "reisdagen",
@@ -562,6 +581,39 @@
                 "create": "Bestemming aanmaken",
                 "update": "Bestemming bijwerken"
             }
+        },
+        "blog_post": {
+            "new_heading": "Nieuwe blogpost aanmaken",
+            "edit_heading": "Blogpost bewerken",
+            "subheading": "Vul de gegevens van de blogpost in",
+            "sections": {
+                "content": {
+                    "title": "Inhoud",
+                    "subtitle": "Titel, excerpt en body van de blogpost"
+                },
+                "image": {
+                    "title": "Uitgelichte afbeelding"
+                },
+                "status": {
+                    "title": "Status"
+                },
+                "meta": {
+                    "title": "SEO",
+                    "subtitle": "Zoekmachine optimalisatie"
+                }
+            },
+            "fields": {
+                "title": "Titel",
+                "excerpt": "Excerpt",
+                "body": "Inhoud",
+                "meta_title": "Meta titel",
+                "meta_description": "Meta omschrijving",
+                "status": "Status"
+            },
+            "submit": {
+                "create": "Blogpost aanmaken",
+                "update": "Blogpost bijwerken"
+            }
         }
     },
     "booking_steps": {
@@ -709,6 +761,9 @@
             "subscribers": "Abonnees",
             "campaigns": "Campagnes",
             "new_campaign": "Nieuwe Campagne",
+            "blog": "Blog",
+            "all_blog_posts": "Alle Blogposts",
+            "new_blog_post": "Nieuwe Blogpost",
             "home": "Home",
             "settings": "Instellingen",
             "logout": "Uitloggen"
@@ -1025,6 +1080,47 @@
                     "select_category": "Selecteer een category...",
                     "description": "Omschrijving"
                 }
+            }
+        },
+        "blog_posts": {
+            "title_index": "Blogposts",
+            "title_create": "Nieuwe blogpost",
+            "title_edit": "Blogpost bewerken",
+            "title_show": "Blogpost bekijken",
+            "created": "Blogpost succesvol aangemaakt.",
+            "updated": "Blogpost succesvol bijgewerkt.",
+            "deleted": "Blogpost succesvol verwijderd.",
+            "actions": {
+                "view": "Bekijk op website",
+                "edit": "Bewerk deze blogpost",
+                "create": "Maak een blogpost aan",
+                "delete": "Verwijder blogpost",
+                "delete_confirm": "Weet je zeker dat je deze blogpost wilt verwijderen?"
+            },
+            "index": {
+                "title": "Blogposts",
+                "search_placeholder": "Zoek op titel...",
+                "table_headers": {
+                    "title": "Titel",
+                    "status": "Status",
+                    "published_at": "Publicatiedatum",
+                    "actions": "Acties"
+                },
+                "no_posts": "Je hebt nog geen blogposts aangemaakt.",
+                "no_posts_found": "Geen blogposts gevonden.",
+                "no_posts_found_with_search": "Geen blogposts gevonden met de zoekopdracht: \"{search}\"."
+            },
+            "status": {
+                "published": "Gepubliceerd",
+                "draft": "Concept"
+            },
+            "show": {
+                "excerpt": "Excerpt",
+                "body": "Inhoud",
+                "status": "Status",
+                "published_at": "Publicatiedatum",
+                "created_at": "Aangemaakt op",
+                "featured_image": "Uitgelichte afbeelding"
             }
         },
         "booking": {
