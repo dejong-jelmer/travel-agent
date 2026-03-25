@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\BlogPost\Status;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,8 +20,9 @@ return new class extends Migration
             $table->string('excerpt', 500)->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
-            $table->string('status')->default('draft');
+            $table->string('status')->default(Status::Draft->value)->index();
             $table->timestamp('published_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -211,7 +211,7 @@ class BlogPostTest extends TestCase
         $response = $this->delete(route('admin.posts.destroy', $post));
 
         $response->assertRedirect(route('admin.posts.index'));
-        $this->assertDatabaseMissing('blog_posts', ['id' => $post->id]);
+        $this->assertSoftDeleted('blog_posts', ['id' => $post->id]);
     }
 
     // Validation

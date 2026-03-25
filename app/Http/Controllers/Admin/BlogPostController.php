@@ -85,25 +85,22 @@ class BlogPostController extends Controller
     public function update(UpdateBlogPostRequest $request, BlogPost $post): RedirectResponse
     {
         $validated = $request->safe()->except(['featured_image', 'slug']);
-        $status = Status::from($request->input('status'));
+        $status = Status::from($validated['status']);
         $slug = $this->generateUniqueSlug($request->input('title'), $post->id);
 
         $post->fill(array_merge($validated, [
             'slug' => $slug,
             'published_at' => match (true) {
                 $status === Status::Published && ! $post->published_at => now(),
-                $status !== Status::Published => null,
                 default => $post->published_at,
             },
         ]));
         $post->save();
 
-        if ($request->has('featured_image')) {
-            $post->syncImages(
-                $request->hasFile('featured_image') ? $request->file('featured_image') : $request->input('featured_image'),
-                ImageRelation::HeroImage,
-                true
-            );
+        if ($request->hasFile('featured_image')) {
+            $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
+        } elseif ($request->filled('featured_image')) {
+            $post->syncImages($request->input('featured_image'), ImageRelation::HeroImage, true);
         }
 
         return redirect()->route('admin.posts.show', $post)

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property Image|null $heroImage
@@ -17,6 +18,7 @@ class BlogPost extends Model
 {
     use HasFactory,
         ManagesImages,
+        SoftDeletes,
         Sortable;
 
     protected $fillable = [
