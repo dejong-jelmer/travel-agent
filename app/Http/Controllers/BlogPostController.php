@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\BlogPost\Status;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\BlogPost;
 use Inertia\Inertia;
@@ -28,6 +29,10 @@ class BlogPostController extends Controller
     public function show(BlogPost $post): Response
     {
         $post->load('heroImage');
+
+        if ($post->status !== Status::Published) {
+            abort(404);
+        }
 
         return Inertia::render('Blog/Show', [
             'post' => $post,

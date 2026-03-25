@@ -48,10 +48,16 @@ class BlogPostController extends Controller
     public function store(CreateBlogPostRequest $request): RedirectResponse
     {
         $validated = $request->safe()->except(['featured_image']);
-        $status = Status::from($request->input('status'));
+        $status = Status::from($validated['status']);
+
+        $slug = Str::slug($request->title);
+
+        if (BlogPost::where('slug', $slug)->exists()) {
+            $slug .= '-'.Str::random(5);
+        }
 
         $post = BlogPost::create(array_merge($validated, [
-            'slug' => Str::slug($request->title),
+            'slug' => $slug,
             'published_at' => $status === Status::Published ? now() : null,
         ]));
 
@@ -86,7 +92,7 @@ class BlogPostController extends Controller
         $status = Status::from($request->input('status'));
 
         $post->fill(array_merge($validated, [
-            'published_at' => $status === Status::Published ? ($post->published_at ?? now()) : null,
+            'published_at' => $status === Status::Published && ! $post->published_at ? now() : $post->published_at,
         ]));
         $post->save();
 

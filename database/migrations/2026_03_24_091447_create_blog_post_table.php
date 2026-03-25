@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('slug')->unique();
             $table->longText('body');
-            $table->string('excerpt')->nullable();
+            $table->string('excerpt', 500)->nullable();
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('status')->default('draft');

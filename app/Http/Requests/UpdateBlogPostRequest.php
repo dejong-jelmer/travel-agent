@@ -3,9 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Services\Validation\BlogPostValidationRules;
+use App\Services\Validation\ImageValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rule;
 
 class UpdateBlogPostRequest extends FormRequest
 {
@@ -16,8 +16,8 @@ class UpdateBlogPostRequest extends FormRequest
 
     public function rules(): array
     {
-        return BlogPostValidationRules::basicUpdate([
-            'slug' => ['required', 'string', 'max:255', Rule::unique('blog_posts', 'slug')->ignore($this->route('post')->id)],
+        return BlogPostValidationRules::basic([
+            'featured_image' => array_merge(['nullable'], ImageValidationRules::baseImageOrString()),
         ]);
     }
 }

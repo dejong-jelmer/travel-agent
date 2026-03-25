@@ -45,7 +45,7 @@ class BlogPostFactory extends Factory
         ]);
     }
 
-    public function scheduledForFuture(): static
+    public function scheduled(): static
     {
         return $this->state(fn () => [
             'status' => Status::Published,
