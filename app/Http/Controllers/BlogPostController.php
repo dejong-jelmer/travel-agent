@@ -26,19 +26,18 @@ class BlogPostController extends Controller
         ]);
     }
 
-    public function show(BlogPost $post): Response
+    public function show(string $slug): Response
     {
-        $post->load('heroImage');
-
-        if ($post->status !== Status::Published) {
-            abort(404);
-        }
+        $post = BlogPost::published()
+            ->where('slug', $slug)
+            ->firstOrFail()
+            ->load('heroImage');
 
         return Inertia::render('Blog/Show', [
             'post' => $post,
             'title' => $this->pageTitle('blog.title_show'),
             'seo' => $this->pageSeo('blog.blog_seo', [
-                'title' => ($post->meta_title ?: $post->title).' | '.config('app.name'),
+                'title' => ($post->meta_title ?: $post->title) . ' | ' . config('app.name'),
                 'description' => $post->meta_description ?: $post->excerpt,
                 'og_image' => $post->heroImage?->public_url,
             ]),

@@ -14,6 +14,35 @@ use RuntimeException;
 trait ManagesImages
 {
     /**
+     * Boot the trait and register a deleting event to clean up associated images.
+     *
+     * For models with SoftDeletes, images are only purged on forceDelete.
+     * For models without SoftDeletes, images are purged on every delete.
+     */
+    public static function bootManagesImages(): void
+    {
+        static::deleting(function ($model) {
+            if (! method_exists($model, 'isForceDeleting') || $model->isForceDeleting()) {
+                $model->purgeImages();
+            }
+        });
+    }
+
+    /**
+     * Delete all associated images from storage and database.
+     */
+    public function purgeImages(): void
+    {
+        $images = $this->morphMany(\App\Models\Image::class, 'imageable')->withTrashed()->get();
+
+        $paths = $images->pluck('path')->toArray();
+
+        $this->deleteStorageFiles($paths);
+
+        $this->morphMany(\App\Models\Image::class, 'imageable')->withTrashed()->forceDelete();
+    }
+
+    /**
      * Sync images - add new, keep existing, and remove deleted images.
      *
      * Uses two-phase commit to ensure atomicity and avoid race conditions:

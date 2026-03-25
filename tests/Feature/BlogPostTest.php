@@ -193,9 +193,10 @@ class BlogPostTest extends TestCase
 
         $response = $this->post(route('admin.posts.update', $post), array_merge($updateData, ['_method' => 'PUT']));
 
+        $post->refresh();
         $response->assertRedirect(route('admin.posts.show', $post));
 
-        $heroImage = $post->refresh()->heroImage;
+        $heroImage = $post->heroImage;
         $this->assertNotNull($heroImage);
         $this->assertEquals('new-hero.jpg', $heroImage->original_name);
         Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$heroImage->path}");
@@ -235,18 +236,18 @@ class BlogPostTest extends TestCase
         $response->assertSessionHasErrors(['status']);
     }
 
-    public function test_update_requires_unique_slug(): void
+    public function test_store_generates_unique_slug_for_duplicate_titles(): void
     {
-        $existingPost = BlogPost::factory()->create(['slug' => 'existing-slug']);
-        $post = BlogPost::factory()->create();
+        BlogPost::factory()->create(['slug' => 'my-title']);
 
-        $updateData = $this->validBlogPostData([
-            'slug' => 'existing-slug',
-        ]);
+        $postData = $this->validBlogPostData(['title' => 'My Title']);
 
-        $response = $this->put(route('admin.posts.update', $post), $updateData);
+        $response = $this->post(route('admin.posts.store'), $postData);
 
-        $response->assertSessionHasErrors(['slug']);
+        $response->assertRedirect(route('admin.posts.index'));
+
+        $newPost = BlogPost::where('slug', '!=', 'my-title')->firstOrFail();
+        $this->assertStringStartsWith('my-title-', $newPost->slug);
     }
 
     // Frontend Index
@@ -270,7 +271,7 @@ class BlogPostTest extends TestCase
     public function test_blog_index_excludes_future_published_posts(): void
     {
         BlogPost::factory()->published()->create();
-        BlogPost::factory()->scheduledForFuture()->create();
+        BlogPost::factory()->scheduled()->create();
 
         $response = $this->get(route('blog.index'));
 

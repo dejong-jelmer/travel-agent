@@ -50,11 +50,7 @@ class BlogPostController extends Controller
         $validated = $request->safe()->except(['featured_image']);
         $status = Status::from($validated['status']);
 
-        $slug = Str::slug($request->title);
-
-        if (BlogPost::where('slug', $slug)->exists()) {
-            $slug .= '-'.Str::random(5);
-        }
+        $slug = $this->generateUniqueSlug($request->title);
 
         $post = BlogPost::create(array_merge($validated, [
             'slug' => $slug,
@@ -88,11 +84,17 @@ class BlogPostController extends Controller
 
     public function update(UpdateBlogPostRequest $request, BlogPost $post): RedirectResponse
     {
-        $validated = $request->safe()->except(['featured_image']);
+        $validated = $request->safe()->except(['featured_image', 'slug']);
         $status = Status::from($request->input('status'));
+        $slug = $this->generateUniqueSlug($request->input('title'), $post->id);
 
         $post->fill(array_merge($validated, [
-            'published_at' => $status === Status::Published && ! $post->published_at ? now() : $post->published_at,
+            'slug' => $slug,
+            'published_at' => match (true) {
+                $status === Status::Published && ! $post->published_at => now(),
+                $status !== Status::Published => null,
+                default => $post->published_at,
+            },
         ]));
         $post->save();
 
@@ -114,5 +116,19 @@ class BlogPostController extends Controller
 
         return redirect()->route('admin.posts.index')
             ->with('success', __('blog.posts.deleted'));
+    }
+
+    private function generateUniqueSlug(string $title, ?int $ignoreId = null): string
+    {
+        $slug = Str::slug($title);
+        $originalSlug = $slug;
+        $counter = 1;
+
+        while (BlogPost::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
+            $slug = "{$originalSlug}-{$counter}";
+            $counter++;
+        }
+
+        return $slug;
     }
 }
