@@ -101,6 +101,8 @@ class BlogPostController extends Controller
             $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
         } elseif ($request->filled('featured_image')) {
             $post->syncImages($request->input('featured_image'), ImageRelation::HeroImage, true);
+        } elseif ($request->has('featured_image') && is_null($request->input('featured_image'))) {
+            $post->heroImage?->delete();
         }
 
         return redirect()->route('admin.posts.show', $post)

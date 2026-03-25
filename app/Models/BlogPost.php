@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\BlogPost\Status;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
+use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -58,7 +59,11 @@ class BlogPost extends Model
         return $this->morphOne(Image::class, 'imageable')->where('is_primary', true);
     }
 
-    public function scopePublished(Builder $query): void
+    /**
+     * Scope a query to only include new bookings.
+     */
+    #[Scope]
+    protected function published(Builder $query): void
     {
         $query->where('status', Status::Published)
             ->whereNotNull('published_at')
