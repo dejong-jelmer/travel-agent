@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\BlogPost\Status;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\BlogPost;
 use Inertia\Inertia;
@@ -37,7 +36,7 @@ class BlogPostController extends Controller
             'post' => $post,
             'title' => $this->pageTitle('blog.title_show'),
             'seo' => $this->pageSeo('blog.blog_seo', [
-                'title' => ($post->meta_title ?: $post->title) . ' | ' . config('app.name'),
+                'title' => ($post->meta_title ?: $post->title).' | '.config('app.name'),
                 'description' => $post->meta_description ?: $post->excerpt,
                 'og_image' => $post->heroImage?->public_url,
             ]),
