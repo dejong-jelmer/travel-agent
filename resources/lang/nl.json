@@ -15,10 +15,7 @@
     "booker": {
         "birthdate": "Geboortedatum",
         "nationality": "Nationaliteit",
-<<<<<<< HEAD
         "special_requests": "Bijzonderheden",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         "adults": "Volwassene | Volwassenen",
         "children": "Kind | Kinderen"
     },
@@ -27,12 +24,8 @@
         "trips": "Reizen",
         "all_trips": "Alle reizen",
         "contact": "Contact",
-<<<<<<< HEAD
         "about": "Over mij",
         "blog": "Blog"
-=======
-        "about": "Over mij"
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     },
     "trips": {
         "title": "Alle reizen",
@@ -50,7 +43,6 @@
         "empty_title": "Geen reizen gevonden",
         "empty_body": "Er zijn geen reizen die overeenkomen met uw selectie. Pas uw filters aan."
     },
-<<<<<<< HEAD
     "blog_post": {
         "status": {
             "draft": "Concept",
@@ -69,8 +61,6 @@
             "no_posts": "Er zijn nog geen blogposts gepubliceerd."
         }
     },
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     "trip_card": {
         "days": "reisdagen",
         "sustainable_travel": "Duurzaam reizen",
@@ -140,19 +130,12 @@
             "submitting": "Bezig met verzenden...",
             "submit": "Schrijf je in"
         },
-<<<<<<< HEAD
         "privacy": "We respecteren je privacy. Je kan je op elk moment uitschrijven. Lees onze {link}.",
         "privacy_link": "privacyverklaring",
         "subscription": {
             "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
             "error": "Er is een fout opgetreden bij het verwerken van je inschrijving. Probeer het later opnieuw.",
             "already_subscribed": "Je bent al ingeschreven voor onze nieuwsbrief. Geniet van de updates!"
-=======
-        "privacy": "We respecteren je privacy. Je kan je op elk moment weer uitschrijven.",
-        "subscription": {
-            "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
-            "error": "Er is een fout opgetreden bij het verwerken van je inschrijving. Probeer het later opnieuw."
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         }
     },
     "traveler_form": {
@@ -163,13 +146,9 @@
         "nationality": "Nationaliteit",
         "nationality_placeholder": "Nationaliteit (volgens paspoort)",
         "birthdate": "Geboortedatum",
-<<<<<<< HEAD
         "birthdate_placeholder": "DD-MM-JJJJ",
         "special_requests": "Bijzonderheden",
         "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen..."
-=======
-        "birthdate_placeholder": "DD-MM-JJJJ"
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     },
     "usp": {
         "section_header": "Kiezen voor Omdat We Reizen",
@@ -222,13 +201,9 @@
             "phone_label": "Jouw telefoonnummer (optioneel)",
             "message_label": "Bericht",
             "submit_button": "Verstuur bericht",
-<<<<<<< HEAD
             "success": "Bedankt! Je bericht is succesvol verstuurd.",
             "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees onze {link}.",
             "privacy_link": "privacyverklaring"
-=======
-            "success": "Bedankt! Je bericht is succesvol verstuurd."
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         },
         "trip": {
             "edit_heading": "Bewerk Reis",
@@ -606,7 +581,6 @@
                 "create": "Bestemming aanmaken",
                 "update": "Bestemming bijwerken"
             }
-<<<<<<< HEAD
         },
         "blog_post": {
             "new_heading": "Nieuwe blogpost aanmaken",
@@ -640,8 +614,6 @@
                 "create": "Blogpost aanmaken",
                 "update": "Blogpost bijwerken"
             }
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         }
     },
     "booking_steps": {
@@ -789,12 +761,9 @@
             "subscribers": "Abonnees",
             "campaigns": "Campagnes",
             "new_campaign": "Nieuwe Campagne",
-<<<<<<< HEAD
             "blog": "Blog",
             "all_blog_posts": "Alle Blogposts",
             "new_blog_post": "Nieuwe Blogpost",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             "home": "Home",
             "settings": "Instellingen",
             "logout": "Uitloggen"
@@ -1113,7 +1082,6 @@
                 }
             }
         },
-<<<<<<< HEAD
         "blog_posts": {
             "title_index": "Blogposts",
             "title_create": "Nieuwe blogpost",
@@ -1155,8 +1123,6 @@
                 "featured_image": "Uitgelichte afbeelding"
             }
         },
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         "booking": {
             "actions": {
                 "show": "Bekijk deze boeking",
@@ -1191,11 +1157,8 @@
                 "edit_contact": "Beheer contactpersoon",
                 "travelers": "Reisgezelschap",
                 "edit_travelers": "Beheer reizigers",
-<<<<<<< HEAD
                 "internal_notes_label": "Interne notities",
                 "internal_notes_placeholder": "Voeg interne notities toe...",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                 "edit_booking_status": "Beheer boekingsstatus",
                 "booking_status_placeholder": "Selecteer een boekingstatus",
                 "booking_status_label": "Boekingstatus",
@@ -1221,10 +1184,7 @@
                 "payment_status": "Betaalstatus",
                 "status_info": "Huidige boekings- en betaalstatus",
                 "created_at": "Aangemaakt op",
-<<<<<<< HEAD
                 "internal_notes": "Interne notities",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                 "pricing": {
                     "title": "Prijsoverzicht",
                     "subtitle": "Prijzen zoals vastgelegd bij het boeken",

@@ -57,11 +57,8 @@ class DatabaseSeeder extends Seeder
             ->recycle($trips)
             ->withTravelers()
             ->create();
-<<<<<<< HEAD
 
         // Blog posts
         $this->call(BlogPostSeeder::class);
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     }
 }

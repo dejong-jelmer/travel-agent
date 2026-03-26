@@ -17,12 +17,8 @@ import {
     NewspaperIcon,
     UsersIcon,
     PencilSquareIcon,
-<<<<<<< HEAD
     Cog6ToothIcon,
     DocumentTextIcon
-=======
-    Cog6ToothIcon
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 } from '@heroicons/vue/24/outline'
 import { useI18n } from 'vue-i18n'
 
@@ -43,10 +39,7 @@ const collapsedSections = ref({
 const collapsedItems = ref({
     trips: false,
     destinations: false,
-<<<<<<< HEAD
     blog_posts: false,
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 })
 
 // Menu structuur met categorieën
@@ -134,7 +127,6 @@ const menuGroups = computed(() => [
                     },
                 ]
             },
-<<<<<<< HEAD
             {
                 id: 'blog_posts',
                 label: t('admin_menu.items.blog'),
@@ -152,8 +144,6 @@ const menuGroups = computed(() => [
                     },
                 ]
             },
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         ]
     },
     {

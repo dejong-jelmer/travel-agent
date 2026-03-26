@@ -11,7 +11,6 @@ use App\Models\Booking;
 
 class BookingService
 {
-<<<<<<< HEAD
     /**
      * Create a new booking with contact details and travelers from validated DTO data.
      *
@@ -19,8 +18,6 @@ class BookingService
      * @param  TripPriceData  $prices  Calculated price breakdown for the trip and date.
      * @return Booking The newly created booking model.
      */
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     public function create(CreateBookingData $bookingData, TripPriceData $prices): Booking
     {
         // Get Data from DTO
@@ -36,20 +33,13 @@ class BookingService
             'departure_date' => $bookingData->date,
             'has_accepted_conditions' => $bookingData->has_accepted_conditions,
             'has_confirmed' => $bookingData->has_confirmed,
-<<<<<<< HEAD
             'total_adults' => $totalAdults,
             'total_children' => $totalChildren,
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             'trip_price_id' => $prices->tripPriceId,
             'price_per_person' => $prices->perPerson->getAmount(),
             'single_supplement' => $prices->singleSupplement->getAmount(),
             'base_total_price' => $prices->baseTotal->getAmount(),
-<<<<<<< HEAD
             'grand_total_price' => $prices->grandTotal->getAmount(),
-=======
-            'grand_total_price' => $prices->baseTotal->getAmount(),
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             'fees_and_funds' => [
                 SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
                 SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
@@ -110,7 +100,6 @@ class BookingService
         return $booking;
     }
 
-<<<<<<< HEAD
     /**
      * Persist all travelers for a new booking and assign the main booker.
      *
@@ -118,8 +107,6 @@ class BookingService
      * @param  array  $data  Travelers keyed by type (adults/children), each an array of traveler fields.
      * @param  int  $mainBookerIndex  Zero-based index of the adult traveler designated as main booker.
      */
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     private function storeTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $type => $travelers) {
@@ -141,7 +128,6 @@ class BookingService
         }
     }
 
-<<<<<<< HEAD
     /**
      * Update or create travelers on an existing booking and reassign the main booker if needed.
      *
@@ -149,8 +135,6 @@ class BookingService
      * @param  array  $data  Travelers keyed by type (adults/children), each an array of traveler fields.
      * @param  int  $mainBookerIndex  Zero-based index of the adult traveler designated as main booker.
      */
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     private function updateTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $travelers) {
@@ -175,7 +159,6 @@ class BookingService
         }
     }
 
-<<<<<<< HEAD
     /**
      * Count travelers of a specific type from a raw travelers array.
      *
@@ -197,10 +180,5 @@ class BookingService
     {
         return $this->getTotalByType($travelers, TravelerType::Adult)
             + $this->getTotalByType($travelers, TravelerType::Child);
-=======
-    public function getTotalTravellers(array $travelers): int
-    {
-        return count($travelers[TravelerType::Adult->value]) + count($travelers[TravelerType::Child->value]);
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     }
 }

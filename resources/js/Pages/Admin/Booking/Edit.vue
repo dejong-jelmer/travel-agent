@@ -70,7 +70,6 @@ function submit() {
                                 <label class="text-sm font-medium text-gray-700">{{
                                     $t('admin.booking.show.departure_date') }}</label>
                                 <p class="mt-1 text-gray-900">{{ db_booking.departure_date_formatted || '[No date]' }}</p>
-<<<<<<< HEAD
                             </div>
                             <div>
                                 <TextArea v-model="booking.internal_notes" name="internal_notes"
@@ -78,8 +77,6 @@ function submit() {
                                     :placeholder="$t('admin.booking.edit.internal_notes_placeholder')"
                                     :rows="4"
                                     :feedback="booking.errors.internal_notes" />
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                             </div>
                         </div>
                     </section>

@@ -16,10 +16,7 @@ use App\Http\Requests\UpdateTripRequest;
 use App\Models\Destination;
 use App\Models\Trip;
 use App\Services\DataTableService;
-<<<<<<< HEAD
 use App\Services\SlugService;
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 use App\Services\TripItemService;
 use App\Support\MoneyHelper;
 use Illuminate\Http\RedirectResponse;
@@ -80,7 +77,6 @@ class TripController extends Controller
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
         $validatedFields = $request->safe()->except(['heroImage', 'images']);
         $destinations = $request->safe()->destinations ?? [];
-<<<<<<< HEAD
 
         $trip->fill(
             array_merge(
@@ -88,8 +84,6 @@ class TripController extends Controller
                 $validatedFields
             )
         );
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 
         $trip->save();
         $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);

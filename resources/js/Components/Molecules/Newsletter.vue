@@ -30,17 +30,12 @@ function submit() {
                 form.reset()
                 toast.success(t('newsletter.subscription.success', { "email": email }))
             },
-<<<<<<< HEAD
             onError: (errors) => {
                 if (errors.already_subscribed) {
                     alreadySubscribed.value = true
                 } else {
                     toast.error(t('newsletter.subscription.error'))
                 }
-=======
-            onError: () => {
-                toast.error(t('newsletter.subscription.error'))
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             }
         })
     } catch (error) { }
@@ -66,11 +61,7 @@ function submit() {
                         @change="form.clearErrors('name')" />
                     <Input v-model="form.email" type="email" name="email"
                         :placeholder="$t('newsletter.form.email_placeholder')" :feedback="form.errors.email"
-<<<<<<< HEAD
                         @change="form.clearErrors('email'); alreadySubscribed = false" />
-=======
-                        @change="form.clearErrors('email')" />
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                     <!-- Setup the honeypot -->
                     <vue-honeypot ref="honeypot" />
                 </div>
@@ -84,7 +75,6 @@ function submit() {
                         </span>
                     </Button>
                 </div>
-<<<<<<< HEAD
                 <div v-if="alreadySubscribed" class="flex justify-center mt-4">
                     <Pill type="success" variant="transparent">
                         {{ $t('newsletter.subscription.already_subscribed') }}
@@ -97,11 +87,6 @@ function submit() {
                         </DefaultLink>
                     </template>
                 </i18n-t>
-=======
-                <p class="text-sm text-gray-500 text-center mt-4">
-                    {{ $t('newsletter.privacy') }}
-                </p>
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             </form>
         </div>
     </div>

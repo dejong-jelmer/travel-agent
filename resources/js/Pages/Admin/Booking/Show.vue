@@ -15,11 +15,7 @@ const totalTravelers = computed(() =>
 )
 
 function formatPrice(cents) {
-<<<<<<< HEAD
     return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100)
-=======
-    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cents / 100)
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 }
 </script>
 
@@ -81,13 +77,10 @@ function formatPrice(cents) {
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.created_at') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.created_at_formatted }}</dd>
                             </div>
-<<<<<<< HEAD
                             <div v-if="booking.internal_notes" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.internal_notes') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2 whitespace-pre-line">{{ booking.internal_notes }}</dd>
                             </div>
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                         </dl>
                     </section>
 
@@ -206,11 +199,7 @@ function formatPrice(cents) {
                             </div>
                             <div class="flex items-center justify-between p-4 bg-primary-default/5 rounded-lg border border-primary-default/20">
                                 <span class="text-sm font-semibold text-gray-700">{{ t('admin.booking.show.pricing.total') }}</span>
-<<<<<<< HEAD
                                 <span class="text-lg font-bold text-primary-default">{{ formatPrice(booking.grand_total_price) }}</span>
-=======
-                                <span class="text-lg font-bold text-primary-default">{{ formatPrice(booking.total_price) }}</span>
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                             </div>
                         </div>
                     </section>
