@@ -19,7 +19,7 @@ class BlogPostFactory extends Factory
 
         return [
             'title' => $title,
-            'slug' => Str::slug($title).'-'.fake()->unique()->randomNumber(5),
+            'slug' => Str::slug($title),
             'body' => fake()->paragraphs(3, true),
             'excerpt' => fake()->text(200),
             'status' => Status::Draft,
