@@ -3,6 +3,7 @@ import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { useDateFormatter } from '@/Composables/useDateFormatter';
 import { computed } from 'vue';
 
 const weekdaysTranslated = computed(() => {
@@ -21,20 +22,14 @@ const props = defineProps({
 
 const { t } = useI18n();
 const locale = computed(() => { return page.props.locale })
+const { formattedDate } = useDateFormatter();
 
 const labelMap = computed(() =>
     Object.fromEntries((props.priceLabelOptions ?? []).map(o => [o.id, o.name]))
 )
 
 function formatPrice(cents) {
-    return new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(cents / 100)
-}
-
-function formatDate(dateStr) {
-    if (!dateStr) return '-'
-    const d = new Date(dateStr.substring(0, 10) + 'T00:00:00')
-    if (isNaN(d.getTime())) return '-'
-    return new Intl.DateTimeFormat(locale.value, { day: '2-digit', month: 'long', year: 'numeric' }).format(d)
+    return new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100)
 }
 
 const blockedWeekdays = computed(() =>
@@ -298,7 +293,7 @@ function displayDate(entry) {
                                     class="rounded-md border border-gray-200 overflow-hidden">
                                     <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
                                         <span class="text-sm font-semibold text-gray-700">{{ labelMap[row.label] ?? row.label }}</span>
-                                        <span class="text-xs text-gray-500">{{ formatDate(row.valid_from) }} — {{ formatDate(row.valid_until) }}</span>
+                                        <span class="text-xs text-gray-500">{{ formattedDate(row.valid_from, { longDay: false, fallback: '-', locale: locale }) }} — {{ formattedDate(row.valid_until, { longDay: false, fallback: '-', locale: locale }) }}</span>
                                     </div>
                                     <div class="grid grid-cols-2 divide-x divide-gray-200">
                                         <div class="px-4 py-3">

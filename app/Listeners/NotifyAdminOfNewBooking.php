@@ -28,7 +28,7 @@ class NotifyAdminOfNewBooking
         $event->booking->load(['trip.destinations', 'mainBooker', 'travelers', 'contact']);
 
         try {
-            Mail::to($address)->send(
+            Mail::to($address)->queue(
                 new AdminBookingNotificationMail($event->booking)
             );
         } catch (\Throwable $e) {

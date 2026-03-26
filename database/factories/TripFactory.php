@@ -37,11 +37,13 @@ class TripFactory extends Factory
     public function definition(): array
     {
         $city = fake()->city();
+        $name = "Bijzondere reis naar {$city}";
+        $slug = Str::slug($name);
         $duration = fake()->numberBetween(6, 14);
 
         return [
-            'name' => $city,
-            'slug' => $this->generateSlug($city),
+            'name' => $name,
+            'slug' => $slug,
             'description' => $this->generateDescription($city),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
@@ -138,11 +140,13 @@ class TripFactory extends Factory
                     $destination->country_code,
                 );
                 $city = fake($locale)->city();
+                $name = "Bijzondere reis naar {$city} in {$destination->name}";
+                $slug = Str::slug($name);
                 $duration = fake()->numberBetween(6, 14);
 
                 $trip->update([
-                    'name' => $city,
-                    'slug' => $this->generateSlug($city, $destination->name),
+                    'name' => $name,
+                    'slug' => $slug,
                     'description' => $this->generateDescription($city, $destination->name),
                     'meta_title' => $this->generateMetaTitle($city, $duration, $destination->name),
                 ]);

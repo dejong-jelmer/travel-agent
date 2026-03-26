@@ -94,7 +94,7 @@ class HomeTest extends TestCase
         $response->assertStatus(200);
         $toAddress = config('contact.mail');
 
-        Mail::assertSent(AdminContactFormNotificationMail::class, function ($mail) use ($toAddress, $contactData) {
+        Mail::assertQueued(AdminContactFormNotificationMail::class, function ($mail) use ($toAddress, $contactData) {
             return $mail->hasTo($toAddress) &&
                    $mail->contact->name === $contactData['name'] &&
                    $mail->contact->email === $contactData['email'] &&

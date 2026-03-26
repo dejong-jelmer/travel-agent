@@ -346,4 +346,9 @@ class Trip extends Model
             set: fn ($value) => json_encode($value ?? [])
         );
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }

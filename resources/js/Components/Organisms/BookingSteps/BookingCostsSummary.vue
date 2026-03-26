@@ -1,7 +1,7 @@
 <script setup>
 import axios from "@/axios"
-import { computed, ref } from 'vue'
-import { computedAsync } from '@vueuse/core'
+import { computed, ref, watch } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
 import { Euro, LoaderCircle } from "lucide-vue-next"
 import { useDateFormatter } from '@/Composables/useDateFormatter.js'
 
@@ -21,21 +21,31 @@ const totalTravelers = computed(() =>
 )
 
 const isLoadingPrices = ref(false)
+const asyncTripPrices = ref(null)
 
-const asyncTripPrices = computedAsync(
-    () => axios.get(route("trips.prices", props.booking.trip), {
-        params: {
-            travelers: totalTravelers.value,
-            date: toDateString(props.booking.departure_date),
-        },
-    })
-        .then((response) => response.data)
-        .catch((error) => { console.error(error); return null }),
-    null,
-    { evaluating: isLoadingPrices }
-)
+const fetchPrices = useDebounceFn(async () => {
+    if (!props.booking.departure_date || !totalTravelers.value) return
+    isLoadingPrices.value = true
+    try {
+        const response = await axios.get(route("trips.prices", props.booking.trip), {
+            params: {
+                travelers: totalTravelers.value,
+                date: toDateString(props.booking.departure_date),
+            },
+        })
+        asyncTripPrices.value = response.data
+    } catch (error) {
+        console.error(error)
+        asyncTripPrices.value = null
+    } finally {
+        isLoadingPrices.value = false
+    }
+}, 400)
+
+watch([totalTravelers, () => props.booking.departure_date], fetchPrices, { immediate: true })
 
 const totalPrice = computed(() => fmt(asyncTripPrices.value?.grand_total ?? 0))
+
 </script>
 
 <template>

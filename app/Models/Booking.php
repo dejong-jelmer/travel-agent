@@ -49,12 +49,16 @@ class Booking extends Model
         'has_confirmed',
         'status',
         'payment_status',
+        'total_adults',
+        'total_children',
         'trip_price_id',
         'price_per_person',
         'single_supplement',
         'base_total_price',
         'grand_total_price',
         'fees_and_funds',
+        'internal_notes',
+        'anonymized_at',
     ];
 
     protected $casts = [
@@ -64,6 +68,7 @@ class Booking extends Model
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
+        'anonymized_at' => 'datetime',
     ];
 
     protected $appends = [
@@ -186,9 +191,42 @@ class Booking extends Model
         return $this->travelers()->where('type', TravelerType::Adult->value);
     }
 
+    /**
+     * Child travelers for this booking.
+     *
+     * @return HasMany<BookingTraveler, Booking>
+     */
     public function children(): HasMany
     {
         return $this->travelers()->where('type', TravelerType::Child->value);
+    }
+
+    /**
+     * Returns the number of adult travelers.
+     * After anonymization: from the saved column.
+     * Before anonymization: live count from the travelers relation.
+     */
+    public function getAdultsCount(): int
+    {
+        if ($this->isAnonymized()) {
+            return $this->total_adults ?? 0;
+        }
+
+        return $this->adults()->count();
+    }
+
+    /**
+     * Returns the number of child travelers.
+     * After anonymization: from the saved column.
+     * Before anonymization: live count from the travelers relation.
+     */
+    public function getChildrenCount(): int
+    {
+        if ($this->isAnonymized()) {
+            return $this->total_children ?? 0;
+        }
+
+        return $this->children()->count();
     }
 
     public function mainBooker(): BelongsTo
@@ -206,12 +244,23 @@ class Booking extends Model
         return $this->hasMany(BookingChange::class);
     }
 
+    /**
+     * The destinations reachable via this booking's trip.
+     */
     public function destinations(): HasManyDeep
     {
         return $this->hasManyDeepFromRelations(
             $this->trip(),
             (new Trip)->destinations()
         );
+    }
+
+    /**
+     * Whether this booking's personal data has been anonymized.
+     */
+    public function isAnonymized(): bool
+    {
+        return $this->anonymized_at !== null;
     }
 
     /**
@@ -272,7 +321,9 @@ class Booking extends Model
     protected function totalTravelers(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->travelers->count(),
+            get: fn () => $this->isAnonymized()
+                ? ($this->total_adults ?? 0) + ($this->total_children ?? 0)
+                : $this->travelers->count(),
         );
     }
 }

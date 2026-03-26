@@ -90,5 +90,14 @@ const handleBirthdateInput = (event) => {
                 @keyup="$emit('clearError', 'nationality')"
             />
         </div>
+        <TextArea
+            name="special_requests[]"
+            :label="$t('traveler_form.special_requests')"
+            :placeholder="$t('traveler_form.special_requests_placeholder')"
+            :rows="2"
+            v-model="traveler.special_requests"
+            :feedback="feedback?.special_requests"
+            @keyup="$emit('clearError', 'special_requests')"
+        />
     </div>
 </template>

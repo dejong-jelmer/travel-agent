@@ -21,7 +21,6 @@ const initializePracticalInfo = () => {
 
 const form = useForm({
     name: "",
-    slug: "",
     description: "",
     duration: "",
     transport: [],
@@ -35,6 +34,8 @@ const form = useForm({
     prices: [],
     blocked_dates: { dates: [], weekdays: [] },
     practical_info: initializePracticalInfo(),
+    meta_title: "",
+    meta_description: "",
 });
 
 function submit() {

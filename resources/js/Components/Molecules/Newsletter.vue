@@ -9,6 +9,7 @@ const t = (key, params) => i18n.global.t(key, params);
 
 const honeypot = ref(null)
 const toast = useToast()
+const alreadySubscribed = ref(false)
 
 const form = useForm({
     name: '',
@@ -24,12 +25,17 @@ function submit() {
             preserveScroll: true,
             timeout: 10000,
             onSuccess: () => {
+                alreadySubscribed.value = false
                 const email = form.email
                 form.reset()
                 toast.success(t('newsletter.subscription.success', { "email": email }))
             },
-            onError: () => {
-                toast.error(t('newsletter.subscription.error'))
+            onError: (errors) => {
+                if (errors.already_subscribed) {
+                    alreadySubscribed.value = true
+                } else {
+                    toast.error(t('newsletter.subscription.error'))
+                }
             }
         })
     } catch (error) { }
@@ -55,7 +61,7 @@ function submit() {
                         @change="form.clearErrors('name')" />
                     <Input v-model="form.email" type="email" name="email"
                         :placeholder="$t('newsletter.form.email_placeholder')" :feedback="form.errors.email"
-                        @change="form.clearErrors('email')" />
+                        @change="form.clearErrors('email'); alreadySubscribed = false" />
                     <!-- Setup the honeypot -->
                     <vue-honeypot ref="honeypot" />
                 </div>
@@ -69,9 +75,18 @@ function submit() {
                         </span>
                     </Button>
                 </div>
-                <p class="text-sm text-gray-500 text-center mt-4">
-                    {{ $t('newsletter.privacy') }}
-                </p>
+                <div v-if="alreadySubscribed" class="flex justify-center mt-4">
+                    <Pill type="success" variant="transparent">
+                        {{ $t('newsletter.subscription.already_subscribed') }}
+                    </Pill>
+                </div>
+                <i18n-t keypath="newsletter.privacy" tag="p" class="text-sm text-gray-500 text-center mt-4">
+                    <template #link>
+                        <DefaultLink :href="route('privacy')" class="underline hover:text-gray-700">
+                            {{ $t('newsletter.privacy_link') }}
+                        </DefaultLink>
+                    </template>
+                </i18n-t>
             </form>
         </div>
     </div>

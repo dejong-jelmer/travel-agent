@@ -3,6 +3,7 @@
 return [
     'subscription' => [
         'confirmation_expires_after' => 48,
+        'retention_months' => 3,  // Months after unsubscribe before data is purged
     ],
     'campaign' => [
         'chunk_size' => 50,

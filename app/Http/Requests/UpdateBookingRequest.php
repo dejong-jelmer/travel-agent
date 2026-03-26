@@ -33,6 +33,7 @@ class UpdateBookingRequest extends FormRequest
                     'string',
                     Rule::enum(PaymentStatus::class),
                 ],
+                'internal_notes' => ['nullable', 'string', 'max:5000'],
             ],
             [
                 'travelers.*.*.id' => ['required', 'integer', Rule::in($this->booking?->travelers?->modelKeys() ?? [])],

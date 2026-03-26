@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Newsletter;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class SubscribeRequest extends FormRequest
 {
@@ -30,8 +29,6 @@ class SubscribeRequest extends FormRequest
                 'required',
                 $emailValidation,
                 'max:100',
-                Rule::unique('newsletter_subscribers', 'email')
-                    ->whereNull('unsubscribed_at'),
             ],
         ];
     }

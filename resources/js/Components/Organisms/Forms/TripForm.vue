@@ -25,11 +25,6 @@ const destinationOptions = computed(() => (
 
 const { t } = useI18n();
 
-const imageErrors = computed(() =>
-    Object.keys(props.form.errors)
-        .filter((key) => key.startsWith('images.'))
-        .map((key) => props.form.errors[key])
-);
 const page = usePage();
 const seoConfig = page.props.config?.seo || {}
 
@@ -108,67 +103,80 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
 
                         <TabPanels>
                             <TabPanel class="p-6 space-y-6">
-                                <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
-                                    <Input type="text" name="name" :label="t('forms.trip.fields.name.label')" :required="true"
-                                        v-model="form.name" :feedback="form.errors.name"
-                                        :placeholder="t('forms.trip.fields.name.placeholder')" />
-                                    <Input type="text" name="slug" :label="t('forms.trip.fields.slug.label')" :required="true" v-model="form.slug"
-                                        :feedback="form.errors.slug" :placeholder="t('forms.trip.fields.slug.placeholder')" />
-                                </div>
-                                <TextArea name="description" :label="t('forms.trip.fields.description.label')" :required="true"
-                                    v-model="form.description" :feedback="form.errors.description"
+                                <Input type="text" name="name" :label="t('forms.trip.fields.name.label')"
+                                    :required="true" v-model="form.name" :feedback="form.errors.name"
+                                    :placeholder="t('forms.trip.fields.name.placeholder')" />
+
+                                <TextArea name="description" :label="t('forms.trip.fields.description.label')"
+                                    :required="true" v-model="form.description" :feedback="form.errors.description"
                                     :placeholder="t('forms.trip.fields.description.placeholder')" :rows="6" />
-                                <DynamicInputList :items="form.highlights" name="highlights" :label="t('forms.trip.fields.highlights.label')" :placeholder="t('forms.trip.fields.highlights.placeholder')" :feedback="form.errors" />
+                                <DynamicInputList :items="form.highlights" name="highlights"
+                                    :label="t('forms.trip.fields.highlights.label')"
+                                    :placeholder="t('forms.trip.fields.highlights.placeholder')"
+                                    :feedback="form.errors" />
                             </TabPanel>
 
                             <TabPanel class="p-6">
-                                <TripItemsTab :form="form" :type-options="typeOptions" :category-options="categoryOptions" />
+                                <TripItemsTab :form="form" :type-options="typeOptions"
+                                    :category-options="categoryOptions" />
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">
                                 <template v-for="(label, key) in practicalSections" :key="key">
-                                    <TextArea
-                                        :name="`practical_info.${key}`"
-                                        :label="label"
+                                    <TextArea :name="`practical_info.${key}`" :label="label"
                                         v-model="form.practical_info[key]"
-                                        :feedback="form.errors[`practical_info.${key}`]"
-                                        :rows="6"
-                                    />
+                                        :feedback="form.errors[`practical_info.${key}`]" :rows="6" />
                                 </template>
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">
                                 <div>
-                                    <Input type="text" name="meta_title" :label="t('forms.trip.fields.meta_title.label')" v-model="form.meta_title"
+                                    <Input type="text" name="meta_title"
+                                        :label="t('forms.trip.fields.meta_title.label')" v-model="form.meta_title"
                                         :feedback="form.errors.meta_title"
                                         :placeholder="t('forms.trip.fields.meta_title.placeholder')" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="metaTitleClass">
-                                            {{ t('forms.trip.fields.meta_title.characters', { current: metaTitleLength, max: META_TITLE_MAX_LENGTH }) }}
+                                            {{ t('forms.trip.fields.meta_title.characters', {
+                                                current: metaTitleLength,
+                                            max: META_TITLE_MAX_LENGTH
+                                            }) }}
                                         </span>
                                         <span v-if="metaTitleCharsLeft < 0" class="text-status-error font-semibold">
-                                            {{ t('forms.trip.character_counter.too_many', { count: Math.abs(metaTitleCharsLeft) }) }}
+                                            {{ t('forms.trip.character_counter.too_many', {
+                                                count:
+                                            Math.abs(metaTitleCharsLeft) }) }}
                                         </span>
                                         <span v-else-if="metaTitleCharsLeft <= 10" :class="metaTitleClass">
-                                            {{ t('forms.trip.character_counter.remaining', { count: metaTitleCharsLeft }) }}
+                                            {{ t('forms.trip.character_counter.remaining', {
+                                                count: metaTitleCharsLeft
+                                            }) }}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div>
-                                    <TextArea name="meta_description" :label="t('forms.trip.fields.meta_description.label')"
+                                    <TextArea name="meta_description"
+                                        :label="t('forms.trip.fields.meta_description.label')"
                                         v-model="form.meta_description" :feedback="form.errors.meta_description"
-                                        :placeholder="t('forms.trip.fields.meta_description.placeholder')"
-                                        :rows="4" />
+                                        :placeholder="t('forms.trip.fields.meta_description.placeholder')" :rows="4" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="metaDescriptionClass">
-                                            {{ t('forms.trip.fields.meta_description.characters', { current: metaDescriptionLength, max: META_DESCRIPTION_MAX_LENGTH }) }}
+                                            {{ t('forms.trip.fields.meta_description.characters', {
+                                                current:
+                                            metaDescriptionLength, max:
+                                            META_DESCRIPTION_MAX_LENGTH }) }}
                                         </span>
-                                        <span v-if="metaDescriptionCharsLeft < 0" class="text-status-error font-semibold">
-                                            {{ t('forms.trip.character_counter.too_many', { count: Math.abs(metaDescriptionCharsLeft) }) }}
+                                        <span v-if="metaDescriptionCharsLeft < 0"
+                                            class="text-status-error font-semibold">
+                                            {{ t('forms.trip.character_counter.too_many', {
+                                                count:
+                                            Math.abs(metaDescriptionCharsLeft) }) }}
                                         </span>
                                         <span v-else-if="metaDescriptionCharsLeft <= 20" :class="metaDescriptionClass">
-                                            {{ t('forms.trip.character_counter.remaining', { count: metaDescriptionCharsLeft }) }}
+                                            {{ t('forms.trip.character_counter.remaining', {
+                                                count:
+                                            metaDescriptionCharsLeft }) }}
                                         </span>
                                     </div>
                                 </div>
@@ -201,7 +209,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 {{ t('forms.trip.fields.gallery.label') }}
                             </label>
                             <ImageUploader v-model="form.images" :multiple="true"
-                                :label="t('forms.trip.fields.gallery.drop_label')" :feedback="imageErrors" />
+                                :label="t('forms.trip.fields.gallery.drop_label')" :feedback="form.errors.images" />
 
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.trip.fields.gallery.help') }}
@@ -215,14 +223,17 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Settings & Configuration Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.settings.title') }}</h2>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.settings.title') }}
+                        </h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.settings.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="p-4 bg-white rounded-lg border border-gray-200">
-                                    <Label for="published_at" :required="true">{{ t('forms.trip.fields.published_at.label') }}</Label>
+                                    <Label for="published_at" :required="true">{{
+                                        t('forms.trip.fields.published_at.label')
+                                        }}</Label>
                                     <DatePicker v-model="form.published_at" :feedback="form.errors.published_at" />
                                     <span class="block text-xs text-gray-700/30 mt-2">
                                         {{ t('forms.trip.fields.published_at.help') }}
@@ -230,7 +241,8 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 </div>
                                 <div class="flex items-center p-4 bg-white rounded-lg border border-gray-200">
                                     <Checkbox v-model="form.featured" name="featured" class="flex-1">
-                                        <span class="font-medium text-gray-700">{{ t('forms.trip.fields.featured.label') }}</span>
+                                        <span class="font-medium text-gray-700">{{ t('forms.trip.fields.featured.label')
+                                            }}</span>
                                         <span class="block text-xs text-gray-700/30 mt-1">
                                             {{ t('forms.trip.fields.featured.help') }}
                                         </span>
@@ -244,29 +256,28 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Pricing & Duration Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.pricing.title') }}</h2>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.pricing.title') }}
+                        </h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.pricing.subtitle') }}</p>
                     </div>
                     <div class="p-6">
-                        <TripPricesManager
-                            v-model="form.prices"
-                            :errors="form.errors"
-                            :price-label-options="priceLabelOptions"
-                        />
+                        <TripPricesManager v-model="form.prices" :errors="form.errors"
+                            :price-label-options="priceLabelOptions" />
                     </div>
                 </section>
 
                 <!-- Transport -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.transport.label') }} *</h2>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.transport.label') }} *
+                        </h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.transport.help') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
                             <Select name="transport" :show-label="false" v-model="form.transport" :multiple="true"
-                            :required="false" :options="transportOptions" :feedback="form.errors.transport"
-                            :placeholder="t('forms.trip.sections.transport.placeholder')" />
+                                :required="false" :options="transportOptions" :feedback="form.errors.transport"
+                                :placeholder="t('forms.trip.sections.transport.placeholder')" />
                         </div>
                     </div>
                 </section>
@@ -274,8 +285,10 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Linked destinations -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.destinations.title') }} *</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.destinations.subtitle') }}</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.destinations.title')
+                            }} *</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.destinations.subtitle') }}
+                        </p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
@@ -292,15 +305,14 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Availability / Blocked Dates -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
-                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.availability.title') }}</h2>
-                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.availability.subtitle') }}</p>
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.availability.title')
+                            }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.availability.subtitle') }}
+                        </p>
                     </div>
                     <div class="p-6">
-                        <BlockedDatesManager
-                            :modelValue="form.blocked_dates"
-                            :errors="form.errors"
-                            @update:modelValue="val => { form.blocked_dates = { dates: val.dates ?? [], weekdays: val.weekdays ?? [] } }"
-                        />
+                        <BlockedDatesManager :modelValue="form.blocked_dates" :errors="form.errors"
+                            @update:modelValue="val => { form.blocked_dates = { dates: val.dates ?? [], weekdays: val.weekdays ?? [] } }" />
                     </div>
                 </section>
 
@@ -308,7 +320,8 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
 
         </div>
         <!-- Footer Actions -->
-        <FormFooter :form="form" :label="form.id ? t('forms.trip.submit.update') : t('forms.trip.submit.create')" @submit="emit('submit')" />
+        <FormFooter :form="form" :label="form.id ? t('forms.trip.submit.update') : t('forms.trip.submit.create')"
+            @submit="emit('submit')" />
 
     </form>
 </template>

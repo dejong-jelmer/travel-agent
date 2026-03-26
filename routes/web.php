@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
@@ -9,6 +10,7 @@ use App\Http\Controllers\Admin\Newsletter\SubscriberController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TripController as AdminTripController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
@@ -21,11 +23,16 @@ use Inertia\Inertia;
 
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
-Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
+Route::get('/over-mij', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
+Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
+
+// Blog
+Route::get('/blog', [BlogPostController::class, 'index'])->name('blog.index');
+Route::get('/blog/{post:slug}', [BlogPostController::class, 'show'])->name('blog.show');
 
 // Switch locale
 Route::post('/locale/switch', [LocaleController::class, 'switch'])
@@ -113,6 +120,10 @@ Route::prefix('admin')
                 Route::post('campaigns/{campaign}/send', [CampaignController::class, 'send'])
                     ->name('campaigns.send');
             });
+
+        // Blog posts
+        Route::resource('posts', AdminBlogPostController::class);
+
     });
 
 // Test production health check

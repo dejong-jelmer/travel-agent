@@ -14,7 +14,7 @@ class NotifyAdminOfFailedBooking
         $address = config('booking.mail');
 
         try {
-            Mail::to($address)->send(new AdminBookingFailedMail($event));
+            Mail::to($address)->queue(new AdminBookingFailedMail($event));
         } catch (\Throwable $e) {
             Log::error('Admin booking failed notification mail could not be sent: '.$e->getMessage());
         }
