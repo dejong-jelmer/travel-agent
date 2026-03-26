@@ -6,8 +6,6 @@ use App\Http\Requests\Traits\ValidatesBlockedDateRanges;
 use App\Services\Validation\TripValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class UpdateTripRequest extends FormRequest
 {

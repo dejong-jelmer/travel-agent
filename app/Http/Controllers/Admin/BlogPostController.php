@@ -86,7 +86,7 @@ class BlogPostController extends Controller
     {
         $validated = $request->safe()->except(['featured_image', 'slug']);
         $status = Status::from($validated['status']);
-        $slug = $this->slugService::generateUniqueFor(new BlogPost(), $request->input('title'), $post->id);
+        $slug = $this->slugService::generateUniqueFor(new BlogPost, $request->input('title'), $post->id);
 
         $post->fill(array_merge($validated, [
             'slug' => $slug,
@@ -97,18 +97,12 @@ class BlogPostController extends Controller
         ]));
         $post->save();
 
-        if ($request->has('featured_image')) {
-            if (is_null($request->input('featured_image'))) {
-                $post->heroImage?->delete();
-            } else {
-                $post->syncImages(
-                    $request->hasFile('featured_image')
-                        ? $request->file('featured_image')
-                        : $request->input('featured_image'),
-                    ImageRelation::HeroImage,
-                    true,
-                );
-            }
+        if ($request->hasFile('featured_image')) {
+            $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
+        } elseif ($request->has('featured_image') && is_null($request->input('featured_image'))) {
+            $post->heroImage?->delete();
+        } elseif ($request->filled('featured_image')) {
+            $post->syncImages($request->input('featured_image'), ImageRelation::HeroImage, true);
         }
 
         return redirect()->route('admin.posts.show', $post)
