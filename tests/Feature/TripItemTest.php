@@ -110,16 +110,9 @@ class TripItemTest extends TestCase
         ];
 
         $response = $this->post(route('admin.trips.update', $this->trip), $this->baseTripData(['items' => $newItems]));
-<<<<<<< HEAD
         $this->trip->refresh();
         $response->assertRedirect(route('admin.trips.show', $this->trip));
 
-=======
-
-        $response->assertRedirect(route('admin.trips.show', $this->trip));
-
-        $this->trip->refresh();
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         $this->assertCount(3, $this->trip->items);
 
         $this->assertDatabaseMissing('trip_items', ['item' => 'Old item 1']);
@@ -136,10 +129,7 @@ class TripItemTest extends TestCase
         TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'category' => ItemCategory::AdditionalCost, 'item' => 'Item to remove 3']);
 
         $response = $this->post(route('admin.trips.update', $this->trip), $this->baseTripData(['items' => []]));
-<<<<<<< HEAD
         $this->trip->refresh();
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 
         $response->assertRedirect(route('admin.trips.show', $this->trip));
 

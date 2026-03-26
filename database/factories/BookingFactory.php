@@ -35,11 +35,8 @@ class BookingFactory extends Factory
             'has_confirmed' => true,
             'status' => $statuses['status'],
             'payment_status' => $statuses['payment_status'],
-<<<<<<< HEAD
             'total_adults' => 0,
             'total_children' => 0,
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             'price_per_person' => 0,
             'single_supplement' => 0,
             'base_total_price' => 0,
@@ -60,13 +57,8 @@ class BookingFactory extends Factory
             $booking->base_total_price = $tripPrice->base_price_pp;
             $booking->fees_and_funds = [
                 SettingKey::BookingFee->value => 2500,
-<<<<<<< HEAD
                 SettingKey::GuaranteeFund->value => 1000,
                 SettingKey::EmergencyFund->value => 250,
-=======
-                SettingKey::EmergencyFund->value => 1000,
-                SettingKey::GuaranteeFund->value => 250,
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             ];
             $booking->saveQuietly();
         });
@@ -154,14 +146,11 @@ class BookingFactory extends Factory
                 : $booking->price_per_person * $adultCount;
 
             $booking->base_total_price = $adultPrice + ($booking->price_per_person * $childCount);
-<<<<<<< HEAD
 
             // Update total travelers
             $booking->total_adults = $adultCount;
             $booking->total_children = $childCount;
 
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             $booking->saveQuietly();
 
             $this->setMainBookerWithContact($booking, $adults->random());

@@ -54,7 +54,6 @@ createInertiaApp({
                 }
             });
             // Register components globally; heavy admin components are loaded async
-<<<<<<< HEAD
             const getName = (path) => path.split('/').pop().replace(/\.[^/.]+$/, '')
 
             // Eagerly register all non-async components
@@ -70,17 +69,6 @@ createInertiaApp({
                         app.component(name, module.default ?? module)
                     }
                 }
-=======
-            function registerComponents(glob) {
-                Object.entries(glob).forEach(([path, load]) => {
-                    const name = path.split('/').pop().replace(/\.[^/.]+$/, '')
-                    if (ASYNC_COMPONENTS.includes(name)) {
-                        app.component(name, defineAsyncComponent(load))
-                    } else {
-                        app.component(name, load.default ?? load)
-                    }
-                });
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             }
 
             // Lazily register async components (loader is a function → defineAsyncComponent works correctly)

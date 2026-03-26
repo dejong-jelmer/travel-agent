@@ -34,11 +34,8 @@ const form = useForm({
     prices: [],
     blocked_dates: { dates: [], weekdays: [] },
     practical_info: initializePracticalInfo(),
-<<<<<<< HEAD
     meta_title: "",
     meta_description: "",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 });
 
 function submit() {

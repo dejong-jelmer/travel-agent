@@ -59,11 +59,7 @@ defineProps({
                     <!-- Footer Note -->
                     <p class="mt-8 text-sm text-brand-light text-center">
                         {{ $t('link.questions') }}
-<<<<<<< HEAD
                         <DefaultLink :href="route('contact')">
-=======
-                        <DefaultLink href="/contact">
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                             {{ $t('link.contact_us') }}
                         </DefaultLink>
                     </p>

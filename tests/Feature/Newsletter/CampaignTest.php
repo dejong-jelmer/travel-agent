@@ -174,11 +174,7 @@ class CampaignTest extends TestCase
         $response->assertRedirect();
         $response->assertSessionHas('success');
 
-<<<<<<< HEAD
         Mail::assertQueued(NewsletterCampaignMail::class, function ($mail) use ($admin, $campaign) {
-=======
-        Mail::assertSent(NewsletterCampaignMail::class, function ($mail) use ($admin, $campaign) {
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             return $mail->hasTo($admin->email) &&
                    $mail->campaign->id === $campaign->id;
         });

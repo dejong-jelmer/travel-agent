@@ -15,10 +15,7 @@
     "booker": {
         "birthdate": "Date of birth",
         "nationality": "Nationality",
-<<<<<<< HEAD
         "special_requests": "Special requests",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         "adults": "Adult | Adults",
         "children": "Child | Children"
     },
@@ -27,12 +24,8 @@
         "trips": "Trips",
         "all_trips": "All trips",
         "contact": "Contact",
-<<<<<<< HEAD
         "about": "About us",
         "blog": "Blog"
-=======
-        "about": "About us"
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     },
     "trips": {
         "title": "All trips",
@@ -50,7 +43,6 @@
         "empty_title": "No trips found",
         "empty_body": "No trips match your current selection. Try adjusting your filters."
     },
-<<<<<<< HEAD
     "blog_post": {
         "status": {
             "draft": "Draft",
@@ -69,8 +61,6 @@
             "no_posts": "No blog posts have been published yet."
         }
     },
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     "trip_card": {
         "days": "days",
         "sustainable_travel": "Sustainable travel",
@@ -140,19 +130,12 @@
             "submitting": "Submitting...",
             "submit": "Subscribe"
         },
-<<<<<<< HEAD
         "privacy": "We respect your privacy. You can unsubscribe at any time. Read our {link}.",
         "privacy_link": "privacy policy",
         "subscription": {
             "success": "Thank you for subscribing! Please confirm your subscription via the email we just sent to {email}.",
             "error": "An error occurred while processing your subscription. Please try again later.",
             "already_subscribed": "You are already subscribed to our newsletter. Enjoy the updates!"
-=======
-        "privacy": "We respect your privacy. You can unsubscribe at any time.",
-        "subscription": {
-            "success": "Thank you for subscribing! Please confirm your subscription via the email we just sent to {email}.",
-            "error": "An error occurred while processing your subscription. Please try again later."
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         }
     },
     "traveler_form": {
@@ -163,13 +146,9 @@
         "nationality": "Nationality",
         "nationality_placeholder": "Nationality (according passport)",
         "birthdate": "Date of birth",
-<<<<<<< HEAD
         "birthdate_placeholder": "DD-MM-YYYY",
         "special_requests": "Special requests",
         "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs..."
-=======
-        "birthdate_placeholder": "DD-MM-YYYY"
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     },
     "usp": {
         "section_header": "why choose us",
@@ -222,13 +201,9 @@
             "phone_label": "Your phone number (optional)",
             "message_label": "Message",
             "submit_button": "Send message",
-<<<<<<< HEAD
             "success": "Thank you! Your message has been sent successfully.",
             "privacy": "Your data will only be used to respond to your message. Read our {link}.",
             "privacy_link": "privacy policy"
-=======
-            "success": "Thank you! Your message has been sent successfully."
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         },
         "trip": {
             "edit_heading": "Edit Trip",
@@ -606,7 +581,6 @@
                 "create": "Create destination",
                 "update": "Update destination"
             }
-<<<<<<< HEAD
         },
         "blog_post": {
             "new_heading": "Create new blog post",
@@ -640,8 +614,6 @@
                 "create": "Create blog post",
                 "update": "Update blog post"
             }
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         }
     },
     "booking_steps": {
@@ -789,12 +761,9 @@
             "subscribers": "Subscribers",
             "campaigns": "Campaigns",
             "new_campaign": "New Campaigns",
-<<<<<<< HEAD
             "blog": "Blog",
             "all_blog_posts": "All Blog Posts",
             "new_blog_post": "New Blog Post",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             "home": "Home",
             "settings": "Settings",
             "logout": "Logout"
@@ -1113,7 +1082,6 @@
                 }
             }
         },
-<<<<<<< HEAD
         "blog_posts": {
             "title_index": "Blog Posts",
             "title_create": "New Blog Post",
@@ -1155,8 +1123,6 @@
                 "featured_image": "Featured image"
             }
         },
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         "booking": {
             "actions": {
                 "show": "View this booking",
@@ -1191,11 +1157,8 @@
                 "edit_contact": "Manage contact person",
                 "travelers": "Travel party",
                 "edit_travelers": "Manage travelers",
-<<<<<<< HEAD
                 "internal_notes_label": "Internal notes",
                 "internal_notes_placeholder": "Add internal notes...",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                 "edit_booking_status": "Manage booking status",
                 "booking_status_placeholder": "Select a booking status",
                 "booking_status_label": "Booking status",
@@ -1221,10 +1184,7 @@
                 "payment_status": "Payment status",
                 "status_info": "Current booking and payment status",
                 "created_at": "Created on",
-<<<<<<< HEAD
                 "internal_notes": "Internal notes",
-=======
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                 "pricing": {
                     "title": "Pricing",
                     "subtitle": "Prices as recorded at the time of booking",

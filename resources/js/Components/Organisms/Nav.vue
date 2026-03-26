@@ -21,7 +21,6 @@ const tripItems = computed(() => [
 const links = computed(() => ({
     contact: {
         label: t('nav.contact'),
-<<<<<<< HEAD
         path: route('contact'),
     },
     about: {
@@ -31,33 +30,18 @@ const links = computed(() => ({
     blog: {
         label: t('nav.blog'),
         path: route('blog.index'),
-=======
-        path: '/contact',
-    },
-    about: {
-        label: t('nav.about'),
-        path: '/over-ons',
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     }
 }));
 </script>
 
 <template>
-<<<<<<< HEAD
     <nav class="bg-white backdrop-blur-lg border-b border-brand-accent py-2">
-=======
-    <nav class="bg-white backdrop-blur-lg border-b border-brand-accent">
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto h-20 laptop:h-24 px-6 laptop:px-8 flex items-center justify-between">
             <!-- Logo -->
             <div class="hover:drop-shadow-xl hover:scale-[1.01] transition-all ease-in duration-200">
                 <Link :href="'/'" class="block">
                     <Logo
-<<<<<<< HEAD
                         class="w-[150px] laptop:w-[200px]" />
-=======
-                        class="w-[200px] h-[100px]" />
->>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                 </Link>
             </div>
 
