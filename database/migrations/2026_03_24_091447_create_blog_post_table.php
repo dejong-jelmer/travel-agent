@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('meta_title')->nullable();
             $table->string('meta_description')->nullable();
             $table->string('status')->default(Status::Draft->value)->index();
-            $table->timestamp('published_at')->nullable();
+            $table->timestamp('published_at')->nullable()->index();
             $table->softDeletes();
             $table->timestamps();
         });

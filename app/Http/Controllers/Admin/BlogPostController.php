@@ -11,8 +11,8 @@ use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateBlogPostRequest;
 use App\Models\BlogPost;
 use App\Services\DataTableService;
+use App\Services\SlugService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -20,7 +20,7 @@ class BlogPostController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private DataTableService $dataTableService) {}
+    public function __construct(private DataTableService $dataTableService, private SlugService $slugService) {}
 
     public function index(DataTableRequest $request): Response
     {
@@ -50,7 +50,7 @@ class BlogPostController extends Controller
         $validated = $request->safe()->except(['featured_image']);
         $status = Status::from($validated['status']);
 
-        $slug = $this->generateUniqueSlug($request->title);
+        $slug = $this->slugService::generateUniqueFor(new BlogPost, $validated['title']);
 
         $post = BlogPost::create(array_merge($validated, [
             'slug' => $slug,
@@ -86,7 +86,7 @@ class BlogPostController extends Controller
     {
         $validated = $request->safe()->except(['featured_image', 'slug']);
         $status = Status::from($validated['status']);
-        $slug = $this->generateUniqueSlug($request->input('title'), $post->id);
+        $slug = $this->slugService::generateUniqueFor(new BlogPost(), $request->input('title'), $post->id);
 
         $post->fill(array_merge($validated, [
             'slug' => $slug,
@@ -97,12 +97,18 @@ class BlogPostController extends Controller
         ]));
         $post->save();
 
-        if ($request->hasFile('featured_image')) {
-            $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
-        } elseif ($request->filled('featured_image')) {
-            $post->syncImages($request->input('featured_image'), ImageRelation::HeroImage, true);
-        } elseif ($request->has('featured_image') && is_null($request->input('featured_image'))) {
-            $post->heroImage?->delete();
+        if ($request->has('featured_image')) {
+            if (is_null($request->input('featured_image'))) {
+                $post->heroImage?->delete();
+            } else {
+                $post->syncImages(
+                    $request->hasFile('featured_image')
+                        ? $request->file('featured_image')
+                        : $request->input('featured_image'),
+                    ImageRelation::HeroImage,
+                    true,
+                );
+            }
         }
 
         return redirect()->route('admin.posts.show', $post)
@@ -115,19 +121,5 @@ class BlogPostController extends Controller
 
         return redirect()->route('admin.posts.index')
             ->with('success', __('blog.posts.deleted'));
-    }
-
-    private function generateUniqueSlug(string $title, ?int $ignoreId = null): string
-    {
-        $slug = Str::slug($title);
-        $originalSlug = $slug;
-        $counter = 1;
-
-        while (BlogPost::where('slug', $slug)->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))->exists()) {
-            $slug = "{$originalSlug}-{$counter}";
-            $counter++;
-        }
-
-        return $slug;
     }
 }

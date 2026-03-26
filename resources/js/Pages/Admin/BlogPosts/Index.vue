@@ -1,5 +1,8 @@
 <script setup>
+import { usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { useDateFormatter } from '@/Composables/useDateFormatter';
+import { computed } from 'vue';
 
 const props = defineProps({
     posts: Object,
@@ -8,6 +11,8 @@ const props = defineProps({
 });
 
 const { t } = useI18n();
+const locale = computed(() => usePage().props.locale);
+const { formattedDate } = useDateFormatter();
 
 const columns = [
     { key: 'title', label: t('admin.blog_posts.index.table_headers.title'), sortable: true },
@@ -16,14 +21,6 @@ const columns = [
     { key: 'actions', label: t('admin.blog_posts.index.table_headers.actions'), sortable: false },
 ];
 
-function formatDate(dateStr) {
-    if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleDateString('nl-NL', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-    });
-}
 </script>
 
 <template>
@@ -53,7 +50,7 @@ function formatDate(dateStr) {
 
                 <!-- Published at column -->
                 <template #cell-published_at="{ row }">
-                    {{ formatDate(row.published_at) }}
+                    {{ formattedDate(row.published_at, { longDay: false, fallback: '-', locale: locale }) }}
                 </template>
 
                 <!-- Actions column -->

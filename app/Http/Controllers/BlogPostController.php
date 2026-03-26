@@ -29,8 +29,8 @@ class BlogPostController extends Controller
     {
         $post = BlogPost::published()
             ->where('slug', $slug)
-            ->firstOrFail()
-            ->load('heroImage');
+            ->with('heroImage')
+            ->firstOrFail();
 
         return Inertia::render('Blog/Show', [
             'post' => $post,

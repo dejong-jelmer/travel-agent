@@ -67,17 +67,32 @@ export function useDateFormatter() {
     };
 
     function formattedDate(date, options = {}) {
-        const { longMonth = true, longDay = true, locale = "nl-NL" } = options;
+        const {
+            longMonth = true,
+            longDay = true,
+            locale = "nl-NL",
+            fallback = null,
+            hour = false,
+            minute = false,
+        } = options;
 
-        if (!date) return null;
-        const parsedDate = new Date(date);
+        if (!date) return fallback;
 
-        if (isNaN(parsedDate)) return null;
+        // Timezone-safe: append T00:00:00 to date-only strings (YYYY-MM-DD)
+        const dateStr = typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date)
+            ? date + 'T00:00:00'
+            : date;
+
+        const parsedDate = new Date(dateStr);
+
+        if (isNaN(parsedDate)) return fallback;
         return parsedDate.toLocaleDateString(locale, {
             ...(longDay && { weekday: "long" }),
             day: "numeric",
             month: longMonth ? "long" : "numeric",
             year: "numeric",
+            ...(hour && { hour: "2-digit" }),
+            ...(minute && { minute: "2-digit" }),
         });
     };
 

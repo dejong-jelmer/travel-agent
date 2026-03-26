@@ -1,23 +1,16 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { useDateFormatter } from '@/Composables/useDateFormatter';
+import { computed } from 'vue';
 
 const props = defineProps({
     blogPost: Object,
 });
 
 const { t } = useI18n();
-
-function formatDate(dateStr) {
-    if (!dateStr) return '-';
-    return new Date(dateStr).toLocaleDateString('nl-NL', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-    });
-}
+const locale = computed(() => usePage().props.locale);
+const { formattedDate } = useDateFormatter();
 </script>
 
 <template>
@@ -84,11 +77,11 @@ function formatDate(dateStr) {
                             </div>
                             <div v-if="blogPost.published_at" class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">{{ t('admin.blog_posts.show.published_at') }}</span>
-                                <span class="text-sm text-gray-700">{{ formatDate(blogPost.published_at) }}</span>
+                                <span class="text-sm text-gray-700">{{ formattedDate(blogPost.published_at, { longDay: false, fallback: '-', hour: true, minute: true, locale: locale }) }}</span>
                             </div>
                             <div class="flex items-center justify-between">
                                 <span class="text-sm text-gray-500">{{ t('admin.blog_posts.show.created_at') }}</span>
-                                <span class="text-sm text-gray-700">{{ formatDate(blogPost.created_at) }}</span>
+                                <span class="text-sm text-gray-700">{{ formattedDate(blogPost.created_at, { longDay: false, fallback: '-', hour: true, minute: true, locale: locale }) }}</span>
                             </div>
                         </div>
                     </section>

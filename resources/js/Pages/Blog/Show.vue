@@ -1,20 +1,16 @@
 <script setup>
+import { usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import { useDateFormatter } from '@/Composables/useDateFormatter';
+import { computed } from 'vue';
 
 const props = defineProps({
     post: Object,
 });
 
 const { t } = useI18n();
-
-function formatDate(dateStr) {
-    if (!dateStr) return '';
-    return new Date(dateStr).toLocaleDateString('nl-NL', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-    });
-}
+const locale = computed(() => usePage().props.locale);
+const { formattedDate } = useDateFormatter();
 </script>
 
 <template>
@@ -29,7 +25,7 @@ function formatDate(dateStr) {
         <article class="max-w-wide mx-auto px-4 py-12 laptop:py-20">
             <!-- Header -->
             <header class="max-w-3xl mx-auto text-center mb-10">
-                <time class="text-sm text-gray-500">{{ formatDate(post.published_at) }}</time>
+                <time class="text-sm text-gray-500">{{ formattedDate(post.published_at, { longDay: false, locale: locale }) }}</time>
                 <h1 class="text-4xl laptop:text-5xl font-bold font-cormorant text-brand-text mt-3">
                     {{ post.title }}
                 </h1>

@@ -7,22 +7,18 @@ use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PriceLabel;
 use App\Rules\NoOverlappingPricePeriods;
-use App\Services\Traits\MergesRules;
 use Illuminate\Validation\Rule;
 
 class TripValidationRules
 {
-    use MergesRules;
-
-    public static function basic(array $additions = []): array
+    public static function basic(): array
     {
-        return self::mergeRules([
+        return [
             'name' => ['required', 'string', 'max:255'],
-            'slug' => ['required', 'string', 'max:255'],
             'highlights' => ['nullable', 'array'],
             'highlights.*' => ['nullable', 'max:255', 'distinct'],
             'description' => ['required', 'string'],
-        ], $additions);
+        ];
     }
 
     public static function prices(): array

@@ -7,6 +7,7 @@ use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -21,6 +22,8 @@ class BlogPost extends Model
         ManagesImages,
         SoftDeletes,
         Sortable;
+
+    protected $perPage = 15;
 
     protected $fillable = [
         'title',
@@ -60,7 +63,7 @@ class BlogPost extends Model
     }
 
     /**
-     * Scope a query to only include new bookings.
+     * Scope a query to only include published posts.
      */
     #[Scope]
     protected function published(Builder $query): void
@@ -70,8 +73,15 @@ class BlogPost extends Model
             ->where('published_at', '<=', now());
     }
 
-    public function getIsPublishedAttribute(): bool
+    /**
+     * Get the total is_published attribute for this BlogPost .
+     *
+     * @return Attribute<bool, never>
+     */
+    public function isPublished(): Attribute
     {
-        return $this->status === Status::Published;
+        return Attribute::make(
+            get: fn () => $this->status === Status::Published
+        );
     }
 }
