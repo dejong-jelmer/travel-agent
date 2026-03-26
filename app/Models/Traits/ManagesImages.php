@@ -5,6 +5,7 @@ namespace App\Models\Traits;
 use App\Enums\ImageRelation;
 use BadMethodCallException;
 use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -13,6 +14,54 @@ use RuntimeException;
 
 trait ManagesImages
 {
+    /**
+     * Boot the trait and register a deleting event to clean up associated images.
+     *
+     * For models with SoftDeletes, images are only purged on forceDelete.
+     * For models without SoftDeletes, images are purged on every delete.
+     */
+    public static function bootManagesImages(): void
+    {
+        static::deleting(function ($model) {
+            if (! method_exists($model, 'isForceDeleting') || $model->isForceDeleting()) {
+                $model->purgeImages();
+            }
+        });
+    }
+
+    /**
+     * Delete all associated images from storage and database.
+     */
+    public function purgeImages(): void
+    {
+        $images = $this->morphMany(\App\Models\Image::class, 'imageable')->withTrashed()->get();
+
+        $paths = $images->pluck('path')->toArray();
+
+        $this->deleteStorageFiles($paths);
+
+        $this->morphMany(\App\Models\Image::class, 'imageable')->withTrashed()->forceDelete();
+    }
+
+    /**
+     * Handle an image field from a request: upload, keep existing, or delete.
+     *
+     * @param  Request  $request  The current HTTP request.
+     * @param  string  $field  The request field name (e.g. 'featured_image').
+     * @param  ImageRelation  $relation  The image relation enum.
+     * @param  bool  $isPrimary  Whether the image should be marked as primary.
+     */
+    public function syncImageFromRequest(Request $request, string $field, ImageRelation $relation, bool $isPrimary = false): void
+    {
+        if ($request->hasFile($field)) {
+            $this->syncImages($request->file($field), $relation, $isPrimary);
+        } elseif ($request->has($field) && is_null($request->input($field))) {
+            $relation->getRelation($this)->first()?->delete();
+        } elseif ($request->filled($field)) {
+            $this->syncImages($request->input($field), $relation, $isPrimary);
+        }
+    }
+
     /**
      * Sync images - add new, keep existing, and remove deleted images.
      *

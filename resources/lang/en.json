@@ -24,7 +24,8 @@
         "trips": "Trips",
         "all_trips": "All trips",
         "contact": "Contact",
-        "about": "About us"
+        "about": "About us",
+        "blog": "Blog"
     },
     "trips": {
         "title": "All trips",
@@ -41,6 +42,24 @@
         "filter_days_unit": "days",
         "empty_title": "No trips found",
         "empty_body": "No trips match your current selection. Try adjusting your filters."
+    },
+    "blog_post": {
+        "status": {
+            "draft": "Draft",
+            "published": "Published"
+        }
+    },
+    "blog": {
+        "title_index": "Blog",
+        "title_show": "Blog",
+        "blog_seo": {
+            "title": "Blog",
+            "description": "Read our latest blog posts about sustainable train travel across Europe."
+        },
+        "index": {
+            "title": "Blog",
+            "no_posts": "No blog posts have been published yet."
+        }
     },
     "trip_card": {
         "days": "days",
@@ -562,6 +581,39 @@
                 "create": "Create destination",
                 "update": "Update destination"
             }
+        },
+        "blog_post": {
+            "new_heading": "Create new blog post",
+            "edit_heading": "Edit blog post",
+            "subheading": "Fill in the blog post details",
+            "sections": {
+                "content": {
+                    "title": "Content",
+                    "subtitle": "Title, excerpt and body of the blog post"
+                },
+                "image": {
+                    "title": "Featured image"
+                },
+                "status": {
+                    "title": "Status"
+                },
+                "meta": {
+                    "title": "SEO",
+                    "subtitle": "Search engine optimization"
+                }
+            },
+            "fields": {
+                "title": "Title",
+                "excerpt": "Excerpt",
+                "body": "Content",
+                "meta_title": "Meta title",
+                "meta_description": "Meta description",
+                "status": "Status"
+            },
+            "submit": {
+                "create": "Create blog post",
+                "update": "Update blog post"
+            }
         }
     },
     "booking_steps": {
@@ -709,6 +761,9 @@
             "subscribers": "Subscribers",
             "campaigns": "Campaigns",
             "new_campaign": "New Campaigns",
+            "blog": "Blog",
+            "all_blog_posts": "All Blog Posts",
+            "new_blog_post": "New Blog Post",
             "home": "Home",
             "settings": "Settings",
             "logout": "Logout"
@@ -1025,6 +1080,47 @@
                     "select_category": "Selecteer een category...",
                     "description": "Omschrijving"
                 }
+            }
+        },
+        "blog_posts": {
+            "title_index": "Blog Posts",
+            "title_create": "New Blog Post",
+            "title_edit": "Edit Blog Post",
+            "title_show": "View Blog Post",
+            "created": "Blog post created successfully.",
+            "updated": "Blog post updated successfully.",
+            "deleted": "Blog post deleted successfully.",
+            "actions": {
+                "view": "View on website",
+                "edit": "Edit this blog post",
+                "create": "Create a blog post",
+                "delete": "Delete blog post",
+                "delete_confirm": "Are you sure you want to delete this blog post?"
+            },
+            "index": {
+                "title": "Blog Posts",
+                "search_placeholder": "Search by title...",
+                "table_headers": {
+                    "title": "Title",
+                    "status": "Status",
+                    "published_at": "Publication date",
+                    "actions": "Actions"
+                },
+                "no_posts": "You haven't created any blog posts yet.",
+                "no_posts_found": "No blog posts found.",
+                "no_posts_found_with_search": "No blog posts found matching: \"{search}\"."
+            },
+            "status": {
+                "published": "Published",
+                "draft": "Draft"
+            },
+            "show": {
+                "excerpt": "Excerpt",
+                "body": "Content",
+                "status": "Status",
+                "published_at": "Publication date",
+                "created_at": "Created at",
+                "featured_image": "Featured image"
             }
         },
         "booking": {

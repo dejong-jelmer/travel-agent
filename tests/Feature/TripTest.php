@@ -76,7 +76,6 @@ class TripTest extends TestCase
         $tripData = [
             'trip_id' => null,
             'name' => fake()->words(2, true),
-            'slug' => fake()->slug(),
             'description' => fake()->paragraph(),
             'transport' => [Transport::Train->value],
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
@@ -106,7 +105,6 @@ class TripTest extends TestCase
 
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
-        $this->assertEquals($tripData['slug'], $trip->slug);
         $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
         $this->assertTrue($trip->published_at->isSameSecond($tripData['published_at']));
@@ -164,7 +162,6 @@ class TripTest extends TestCase
         $updateData = [
             'trip_id' => $trip->id,
             'name' => 'Updated trip name',
-            'slug' => fake()->slug(),
             'description' => fake()->text(),
             'transport' => array_column([Transport::Bus, Transport::Airplane], 'value'),
             'heroImage' => UploadedFile::fake()->image('updated-featured.jpg'),
@@ -189,13 +186,11 @@ class TripTest extends TestCase
         ];
 
         $response = $this->post(route('admin.trips.update', $trip), $updateData);
-
-        $response->assertRedirect(route('admin.trips.show', $trip));
         $trip->refresh();
+        $response->assertRedirect(route('admin.trips.show', $trip));
 
         $this->assertEquals($updateData['name'], $trip->name);
         $this->assertEquals($updateData['description'], $trip->description);
-        $this->assertEquals($updateData['slug'], $trip->slug);
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
         $this->assertEquals($updateData['meta_description'], $trip->meta_description);
@@ -444,7 +439,6 @@ class TripTest extends TestCase
     {
         return array_merge([
             'name' => $trip->name,
-            'slug' => $trip->slug,
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),
             'destinations' => $this->destinations->modelKeys(),

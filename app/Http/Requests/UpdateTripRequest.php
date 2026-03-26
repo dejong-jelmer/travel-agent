@@ -6,8 +6,6 @@ use App\Http\Requests\Traits\ValidatesBlockedDateRanges;
 use App\Services\Validation\TripValidationRules;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
-use Illuminate\Validation\Rule;
 
 class UpdateTripRequest extends FormRequest
 {
@@ -40,10 +38,6 @@ class UpdateTripRequest extends FormRequest
                 ],
             ]);
         }
-
-        $this->merge([
-            'slug' => Str::slug($this->slug),
-        ]);
     }
 
     /**
@@ -54,9 +48,7 @@ class UpdateTripRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
-            TripValidationRules::basic([
-                'slug' => Rule::unique('trips', 'slug')->ignore($this->trip),
-            ]),
+            TripValidationRules::basic(),
             TripValidationRules::prices(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),

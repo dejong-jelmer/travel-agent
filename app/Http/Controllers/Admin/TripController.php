@@ -16,6 +16,7 @@ use App\Http\Requests\UpdateTripRequest;
 use App\Models\Destination;
 use App\Models\Trip;
 use App\Services\DataTableService;
+use App\Services\SlugService;
 use App\Services\TripItemService;
 use App\Support\MoneyHelper;
 use Illuminate\Http\RedirectResponse;
@@ -77,7 +78,13 @@ class TripController extends Controller
         $validatedFields = $request->safe()->except(['heroImage', 'images']);
         $destinations = $request->safe()->destinations ?? [];
 
-        $trip->fill($validatedFields);
+        $trip->fill(
+            array_merge(
+                ['slug' => SlugService::generateUniqueFor(Trip::class, $validatedFields['name'])],
+                $validatedFields
+            )
+        );
+
         $trip->save();
         $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
@@ -137,7 +144,12 @@ class TripController extends Controller
         $validatedFields = $request->safe()->except(['heroImage', 'images', 'destinations']);
         $destinations = $request->safe()->destinations ?? [];
 
-        $trip->fill($validatedFields);
+        $trip->fill(
+            array_merge(
+                ['slug' => SlugService::generateUniqueFor(Trip::class, $validatedFields['name'], $trip->id)],
+                $validatedFields
+            )
+        );
         $trip->save();
 
         // Sync heroImage (handles both existing paths and new uploads)
