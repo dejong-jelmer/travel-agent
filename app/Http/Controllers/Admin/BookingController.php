@@ -36,7 +36,7 @@ class BookingController extends Controller
 
         return Inertia::render('Admin/Booking/Index', [
             'bookings' => $bookings,
-            // 'totalBookings' => $bookings->total(),
+            'totalBookings' => Booking::count(),
             'filters' => $this->dataTableService->getSortFilters(Booking::filters()),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),

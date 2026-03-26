@@ -20,7 +20,7 @@ class BlogPostController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private DataTableService $dataTableService, private SlugService $slugService) {}
+    public function __construct(private DataTableService $dataTableService) {}
 
     public function index(DataTableRequest $request): Response
     {
@@ -50,7 +50,7 @@ class BlogPostController extends Controller
         $validated = $request->safe()->except(['featured_image']);
         $status = Status::from($validated['status']);
 
-        $slug = $this->slugService::generateUniqueFor(new BlogPost, $validated['title']);
+        $slug = SlugService::generateUniqueFor(BlogPost::class, $validated['title']);
 
         $post = BlogPost::create(array_merge($validated, [
             'slug' => $slug,
@@ -86,7 +86,7 @@ class BlogPostController extends Controller
     {
         $validated = $request->safe()->except(['featured_image', 'slug']);
         $status = Status::from($validated['status']);
-        $slug = $this->slugService::generateUniqueFor(new BlogPost, $request->input('title'), $post->id);
+        $slug = SlugService::generateUniqueFor(BlogPost::class, $request->input('title'), $post->id);
 
         $post->fill(array_merge($validated, [
             'slug' => $slug,
@@ -97,13 +97,7 @@ class BlogPostController extends Controller
         ]));
         $post->save();
 
-        if ($request->hasFile('featured_image')) {
-            $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
-        } elseif ($request->has('featured_image') && is_null($request->input('featured_image'))) {
-            $post->heroImage?->delete();
-        } elseif ($request->filled('featured_image')) {
-            $post->syncImages($request->input('featured_image'), ImageRelation::HeroImage, true);
-        }
+        $post->syncImageFromRequest($request, 'featured_image', ImageRelation::HeroImage, true);
 
         return redirect()->route('admin.posts.show', $post)
             ->with('success', __('blog.posts.updated'));

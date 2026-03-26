@@ -30,8 +30,7 @@ class TripController extends Controller
 
     public function __construct(
         private DataTableService $dataTableService,
-        private TripItemService $tripItemService,
-        private SlugService $slugService
+        private TripItemService $tripItemService
     ) {}
 
     /**
@@ -78,10 +77,10 @@ class TripController extends Controller
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
         $validatedFields = $request->safe()->except(['heroImage', 'images']);
         $destinations = $request->safe()->destinations ?? [];
-        // dd($validatedFields['prices']);
+
         $trip->fill(
             array_merge(
-                ['slug' => $this->slugService::generateUniqueFor(new Trip, $validatedFields['name'])],
+                ['slug' => SlugService::generateUniqueFor(Trip::class, $validatedFields['name'])],
                 $validatedFields
             )
         );
@@ -147,7 +146,7 @@ class TripController extends Controller
 
         $trip->fill(
             array_merge(
-                ['slug' => $this->slugService::generateUniqueFor(new Trip, $validatedFields['name'], $trip->id)],
+                ['slug' => SlugService::generateUniqueFor(Trip::class, $validatedFields['name'], $trip->id)],
                 $validatedFields
             )
         );
