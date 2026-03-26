@@ -149,7 +149,11 @@ class CampaignController extends Controller
             return back()->with('error', __('newsletter.campaign.no_email'));
         }
         try {
+<<<<<<< HEAD
             Mail::to($email)->queue(new NewsletterCampaignMail($campaign));
+=======
+            Mail::to($email)->send(new NewsletterCampaignMail($campaign));
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         } catch (Throwable $e) {
             Log::error('Error while sending test email of newsletter campaign', [
                 'campaign_id' => $campaign->id,

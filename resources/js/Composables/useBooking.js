@@ -1,5 +1,9 @@
 // Composables/useBooking.js
+<<<<<<< HEAD
 import { watch, reactive, readonly, computed } from "vue";
+=======
+import { watch, reactive, readonly, computed, watchEffect } from "vue";
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 import { useForm, usePage } from "@inertiajs/vue3";
 
 // Constants buiten state
@@ -170,6 +174,54 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             });
         }
     );
+
+    const page = usePage();
+
+    const constraints = computed(() => {
+        const seasonEnd = page.props.settings?.booking_season_end || null;
+        let maxDate;
+        if (seasonEnd) {
+            maxDate = new Date(seasonEnd + 'T00:00:00');
+        } else {
+            const d = new Date();
+            d.setFullYear(d.getFullYear() + 1);
+            maxDate = d;
+        }
+        return { maxDate };
+    });
+
+    const disabledDates = computed(() => {
+        const blocked = trip?.blocked_dates;
+        if (!blocked) return null;
+
+        const dates = blocked.dates ?? [];
+        const weekdays = (blocked.weekdays ?? []).map(Number);
+
+        if (!dates.length && !weekdays.length) return null;
+
+        return (date) => {
+            const d = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+
+            if (weekdays.length && weekdays.includes(d.getDay())) {
+                return true;
+            }
+
+            return dates.some((entry) => {
+                if (typeof entry === 'string') {
+                    const blockedDate = new Date(entry + 'T00:00:00');
+                    return d.getTime() === blockedDate.getTime();
+                }
+
+                if (entry.start && entry.end) {
+                    const start = new Date(entry.start + 'T00:00:00');
+                    const end = new Date(entry.end + 'T00:00:00');
+                    return d >= start && d <= end;
+                }
+
+                return false;
+            });
+        };
+    });
 
     const page = usePage();
 

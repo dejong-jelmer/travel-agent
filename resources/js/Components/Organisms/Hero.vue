@@ -44,7 +44,11 @@ onMounted(() => {
         <div class="absolute inset-0 bg-brand-text/30"></div>
 
         <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-fit mx-auto">
+<<<<<<< HEAD
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
+=======
+            <div class="absolute top-[80%] tablet:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                 <h1 class="text-brand-secondary font-nunito text-nowrap font-light text-4xl tablet:text-5xl laptop:text-7xl select-none text-center drop-shadow-lg">
                     <span :class="visibleTitle ? 'opacity-100' : 'opacity-0'" class="block tablet:inline transition-opacity duration-[2000ms] ease-in-out">{{ t('hero.title') }}</span>
                     <span class="hidden tablet:inline">&nbsp;</span>

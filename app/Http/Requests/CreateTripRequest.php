@@ -26,6 +26,13 @@ class CreateTripRequest extends FormRequest
     {
         //  Default to empty array's on null
         emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'prices', 'blocked_dates']);
+<<<<<<< HEAD
+=======
+
+        $this->merge([
+            'slug' => Str::slug($this->slug),
+        ]);
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     }
 
     /**
@@ -36,7 +43,13 @@ class CreateTripRequest extends FormRequest
     public function rules(): array
     {
         return array_merge(
+<<<<<<< HEAD
             TripValidationRules::basic(),
+=======
+            TripValidationRules::basic([
+                'slug' => Rule::unique('trips', 'slug'),
+            ]),
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             TripValidationRules::prices(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),

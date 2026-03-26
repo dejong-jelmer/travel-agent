@@ -25,6 +25,14 @@ const destinationOptions = computed(() => (
 
 const { t } = useI18n();
 
+<<<<<<< HEAD
+=======
+const imageErrors = computed(() =>
+    Object.keys(props.form.errors)
+        .filter((key) => key.startsWith('images.'))
+        .map((key) => props.form.errors[key])
+);
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 const page = usePage();
 const seoConfig = page.props.config?.seo || {}
 
@@ -103,6 +111,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
 
                         <TabPanels>
                             <TabPanel class="p-6 space-y-6">
+<<<<<<< HEAD
                                 <Input type="text" name="name" :label="t('forms.trip.fields.name.label')"
                                     :required="true" v-model="form.name" :feedback="form.errors.name"
                                     :placeholder="t('forms.trip.fields.name.placeholder')" />
@@ -119,24 +128,56 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                             <TabPanel class="p-6">
                                 <TripItemsTab :form="form" :type-options="typeOptions"
                                     :category-options="categoryOptions" />
+=======
+                                <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
+                                    <Input type="text" name="name" :label="t('forms.trip.fields.name.label')" :required="true"
+                                        v-model="form.name" :feedback="form.errors.name"
+                                        :placeholder="t('forms.trip.fields.name.placeholder')" />
+                                    <Input type="text" name="slug" :label="t('forms.trip.fields.slug.label')" :required="true" v-model="form.slug"
+                                        :feedback="form.errors.slug" :placeholder="t('forms.trip.fields.slug.placeholder')" />
+                                </div>
+                                <TextArea name="description" :label="t('forms.trip.fields.description.label')" :required="true"
+                                    v-model="form.description" :feedback="form.errors.description"
+                                    :placeholder="t('forms.trip.fields.description.placeholder')" :rows="6" />
+                                <DynamicInputList :items="form.highlights" name="highlights" :label="t('forms.trip.fields.highlights.label')" :placeholder="t('forms.trip.fields.highlights.placeholder')" :feedback="form.errors" />
+                            </TabPanel>
+
+                            <TabPanel class="p-6">
+                                <TripItemsTab :form="form" :type-options="typeOptions" :category-options="categoryOptions" />
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">
                                 <template v-for="(label, key) in practicalSections" :key="key">
+<<<<<<< HEAD
                                     <TextArea :name="`practical_info.${key}`" :label="label"
                                         v-model="form.practical_info[key]"
                                         :feedback="form.errors[`practical_info.${key}`]" :rows="6" />
+=======
+                                    <TextArea
+                                        :name="`practical_info.${key}`"
+                                        :label="label"
+                                        v-model="form.practical_info[key]"
+                                        :feedback="form.errors[`practical_info.${key}`]"
+                                        :rows="6"
+                                    />
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                                 </template>
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">
                                 <div>
+<<<<<<< HEAD
                                     <Input type="text" name="meta_title"
                                         :label="t('forms.trip.fields.meta_title.label')" v-model="form.meta_title"
+=======
+                                    <Input type="text" name="meta_title" :label="t('forms.trip.fields.meta_title.label')" v-model="form.meta_title"
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                                         :feedback="form.errors.meta_title"
                                         :placeholder="t('forms.trip.fields.meta_title.placeholder')" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="metaTitleClass">
+<<<<<<< HEAD
                                             {{ t('forms.trip.fields.meta_title.characters', {
                                                 current: metaTitleLength,
                                             max: META_TITLE_MAX_LENGTH
@@ -151,11 +192,21 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                             {{ t('forms.trip.character_counter.remaining', {
                                                 count: metaTitleCharsLeft
                                             }) }}
+=======
+                                            {{ t('forms.trip.fields.meta_title.characters', { current: metaTitleLength, max: META_TITLE_MAX_LENGTH }) }}
+                                        </span>
+                                        <span v-if="metaTitleCharsLeft < 0" class="text-status-error font-semibold">
+                                            {{ t('forms.trip.character_counter.too_many', { count: Math.abs(metaTitleCharsLeft) }) }}
+                                        </span>
+                                        <span v-else-if="metaTitleCharsLeft <= 10" :class="metaTitleClass">
+                                            {{ t('forms.trip.character_counter.remaining', { count: metaTitleCharsLeft }) }}
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                                         </span>
                                     </div>
                                 </div>
 
                                 <div>
+<<<<<<< HEAD
                                     <TextArea name="meta_description"
                                         :label="t('forms.trip.fields.meta_description.label')"
                                         v-model="form.meta_description" :feedback="form.errors.meta_description"
@@ -177,6 +228,21 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                             {{ t('forms.trip.character_counter.remaining', {
                                                 count:
                                             metaDescriptionCharsLeft }) }}
+=======
+                                    <TextArea name="meta_description" :label="t('forms.trip.fields.meta_description.label')"
+                                        v-model="form.meta_description" :feedback="form.errors.meta_description"
+                                        :placeholder="t('forms.trip.fields.meta_description.placeholder')"
+                                        :rows="4" />
+                                    <div class="mt-2 flex items-center justify-between text-xs">
+                                        <span :class="metaDescriptionClass">
+                                            {{ t('forms.trip.fields.meta_description.characters', { current: metaDescriptionLength, max: META_DESCRIPTION_MAX_LENGTH }) }}
+                                        </span>
+                                        <span v-if="metaDescriptionCharsLeft < 0" class="text-status-error font-semibold">
+                                            {{ t('forms.trip.character_counter.too_many', { count: Math.abs(metaDescriptionCharsLeft) }) }}
+                                        </span>
+                                        <span v-else-if="metaDescriptionCharsLeft <= 20" :class="metaDescriptionClass">
+                                            {{ t('forms.trip.character_counter.remaining', { count: metaDescriptionCharsLeft }) }}
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                                         </span>
                                     </div>
                                 </div>
@@ -209,7 +275,11 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 {{ t('forms.trip.fields.gallery.label') }}
                             </label>
                             <ImageUploader v-model="form.images" :multiple="true"
+<<<<<<< HEAD
                                 :label="t('forms.trip.fields.gallery.drop_label')" :feedback="form.errors.images" />
+=======
+                                :label="t('forms.trip.fields.gallery.drop_label')" :feedback="imageErrors" />
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.trip.fields.gallery.help') }}
@@ -223,17 +293,25 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Settings & Configuration Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
+<<<<<<< HEAD
                         <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.settings.title') }}
                         </h2>
+=======
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.settings.title') }}</h2>
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.settings.subtitle') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
                                 <div class="p-4 bg-white rounded-lg border border-gray-200">
+<<<<<<< HEAD
                                     <Label for="published_at" :required="true">{{
                                         t('forms.trip.fields.published_at.label')
                                         }}</Label>
+=======
+                                    <Label for="published_at" :required="true">{{ t('forms.trip.fields.published_at.label') }}</Label>
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                                     <DatePicker v-model="form.published_at" :feedback="form.errors.published_at" />
                                     <span class="block text-xs text-gray-700/30 mt-2">
                                         {{ t('forms.trip.fields.published_at.help') }}
@@ -241,8 +319,12 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 </div>
                                 <div class="flex items-center p-4 bg-white rounded-lg border border-gray-200">
                                     <Checkbox v-model="form.featured" name="featured" class="flex-1">
+<<<<<<< HEAD
                                         <span class="font-medium text-gray-700">{{ t('forms.trip.fields.featured.label')
                                             }}</span>
+=======
+                                        <span class="font-medium text-gray-700">{{ t('forms.trip.fields.featured.label') }}</span>
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                                         <span class="block text-xs text-gray-700/30 mt-1">
                                             {{ t('forms.trip.fields.featured.help') }}
                                         </span>
@@ -256,6 +338,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Pricing & Duration Section -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
+<<<<<<< HEAD
                         <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.pricing.title') }}
                         </h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.pricing.subtitle') }}</p>
@@ -263,21 +346,41 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     <div class="p-6">
                         <TripPricesManager v-model="form.prices" :errors="form.errors"
                             :price-label-options="priceLabelOptions" />
+=======
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.pricing.title') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.pricing.subtitle') }}</p>
+                    </div>
+                    <div class="p-6">
+                        <TripPricesManager
+                            v-model="form.prices"
+                            :errors="form.errors"
+                            :price-label-options="priceLabelOptions"
+                        />
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                     </div>
                 </section>
 
                 <!-- Transport -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
+<<<<<<< HEAD
                         <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.transport.label') }} *
                         </h2>
+=======
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.transport.label') }} *</h2>
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.transport.help') }}</p>
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
                             <Select name="transport" :show-label="false" v-model="form.transport" :multiple="true"
+<<<<<<< HEAD
                                 :required="false" :options="transportOptions" :feedback="form.errors.transport"
                                 :placeholder="t('forms.trip.sections.transport.placeholder')" />
+=======
+                            :required="false" :options="transportOptions" :feedback="form.errors.transport"
+                            :placeholder="t('forms.trip.sections.transport.placeholder')" />
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                         </div>
                     </div>
                 </section>
@@ -285,10 +388,15 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Linked destinations -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
+<<<<<<< HEAD
                         <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.destinations.title')
                             }} *</h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.destinations.subtitle') }}
                         </p>
+=======
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.destinations.title') }} *</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.destinations.subtitle') }}</p>
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
@@ -305,6 +413,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                 <!-- Availability / Blocked Dates -->
                 <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
+<<<<<<< HEAD
                         <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.availability.title')
                             }}</h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.availability.subtitle') }}
@@ -313,6 +422,17 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     <div class="p-6">
                         <BlockedDatesManager :modelValue="form.blocked_dates" :errors="form.errors"
                             @update:modelValue="val => { form.blocked_dates = { dates: val.dates ?? [], weekdays: val.weekdays ?? [] } }" />
+=======
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.trip.sections.availability.title') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.trip.sections.availability.subtitle') }}</p>
+                    </div>
+                    <div class="p-6">
+                        <BlockedDatesManager
+                            :modelValue="form.blocked_dates"
+                            :errors="form.errors"
+                            @update:modelValue="val => { form.blocked_dates = { dates: val.dates ?? [], weekdays: val.weekdays ?? [] } }"
+                        />
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                     </div>
                 </section>
 
@@ -320,8 +440,12 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
 
         </div>
         <!-- Footer Actions -->
+<<<<<<< HEAD
         <FormFooter :form="form" :label="form.id ? t('forms.trip.submit.update') : t('forms.trip.submit.create')"
             @submit="emit('submit')" />
+=======
+        <FormFooter :form="form" :label="form.id ? t('forms.trip.submit.update') : t('forms.trip.submit.create')" @submit="emit('submit')" />
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 
     </form>
 </template>
