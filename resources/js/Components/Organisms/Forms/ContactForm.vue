@@ -120,6 +120,7 @@ function submit() {
                         </div>
                     </div>
                 </div>
+<<<<<<< HEAD
                 <i18n-t keypath="forms.contact.privacy" tag="p" class="text-sm text-gray-500 text-center mt-6">
                     <template #link>
                         <DefaultLink :href="route('privacy')" class="underline hover:text-gray-700">
@@ -127,6 +128,8 @@ function submit() {
                         </DefaultLink>
                     </template>
                 </i18n-t>
+=======
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             </form>
         </div>
     </div>

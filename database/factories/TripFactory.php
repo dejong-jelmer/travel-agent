@@ -37,6 +37,7 @@ class TripFactory extends Factory
     public function definition(): array
     {
         $city = fake()->city();
+<<<<<<< HEAD
         $name = "Bijzondere reis naar {$city}";
         $slug = Str::slug($name);
         $duration = fake()->numberBetween(6, 14);
@@ -44,6 +45,13 @@ class TripFactory extends Factory
         return [
             'name' => $name,
             'slug' => $slug,
+=======
+        $duration = fake()->numberBetween(6, 14);
+
+        return [
+            'name' => $city,
+            'slug' => $this->generateSlug($city),
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             'description' => $this->generateDescription($city),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
@@ -140,6 +148,7 @@ class TripFactory extends Factory
                     $destination->country_code,
                 );
                 $city = fake($locale)->city();
+<<<<<<< HEAD
                 $name = "Bijzondere reis naar {$city} in {$destination->name}";
                 $slug = Str::slug($name);
                 $duration = fake()->numberBetween(6, 14);
@@ -147,6 +156,13 @@ class TripFactory extends Factory
                 $trip->update([
                     'name' => $name,
                     'slug' => $slug,
+=======
+                $duration = fake()->numberBetween(6, 14);
+
+                $trip->update([
+                    'name' => $city,
+                    'slug' => $this->generateSlug($city, $destination->name),
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
                     'description' => $this->generateDescription($city, $destination->name),
                     'meta_title' => $this->generateMetaTitle($city, $duration, $destination->name),
                 ]);

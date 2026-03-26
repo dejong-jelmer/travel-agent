@@ -76,6 +76,10 @@ class TripTest extends TestCase
         $tripData = [
             'trip_id' => null,
             'name' => fake()->words(2, true),
+<<<<<<< HEAD
+=======
+            'slug' => fake()->slug(),
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             'description' => fake()->paragraph(),
             'transport' => [Transport::Train->value],
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
@@ -105,6 +109,10 @@ class TripTest extends TestCase
 
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
+<<<<<<< HEAD
+=======
+        $this->assertEquals($tripData['slug'], $trip->slug);
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
         $this->assertTrue($trip->published_at->isSameSecond($tripData['published_at']));
@@ -191,6 +199,10 @@ class TripTest extends TestCase
 
         $this->assertEquals($updateData['name'], $trip->name);
         $this->assertEquals($updateData['description'], $trip->description);
+<<<<<<< HEAD
+=======
+        $this->assertEquals($updateData['slug'], $trip->slug);
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
         $this->assertEquals($updateData['meta_description'], $trip->meta_description);
@@ -439,6 +451,10 @@ class TripTest extends TestCase
     {
         return array_merge([
             'name' => $trip->name,
+<<<<<<< HEAD
+=======
+            'slug' => $trip->slug,
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),
             'destinations' => $this->destinations->modelKeys(),

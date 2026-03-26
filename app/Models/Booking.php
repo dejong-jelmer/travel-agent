@@ -49,16 +49,22 @@ class Booking extends Model
         'has_confirmed',
         'status',
         'payment_status',
+<<<<<<< HEAD
         'total_adults',
         'total_children',
+=======
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         'trip_price_id',
         'price_per_person',
         'single_supplement',
         'base_total_price',
         'grand_total_price',
         'fees_and_funds',
+<<<<<<< HEAD
         'internal_notes',
         'anonymized_at',
+=======
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     ];
 
     protected $casts = [
@@ -68,7 +74,10 @@ class Booking extends Model
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
+<<<<<<< HEAD
         'anonymized_at' => 'datetime',
+=======
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     ];
 
     protected $appends = [
@@ -329,9 +338,13 @@ class Booking extends Model
     protected function totalTravelers(): Attribute
     {
         return Attribute::make(
+<<<<<<< HEAD
             get: fn () => $this->isAnonymized()
                 ? ($this->total_adults ?? 0) + ($this->total_children ?? 0)
                 : $this->travelers->count(),
+=======
+            get: fn () => $this->travelers->count(),
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
         );
     }
 }

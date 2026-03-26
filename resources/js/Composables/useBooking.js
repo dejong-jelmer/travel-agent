@@ -1,5 +1,9 @@
 // Composables/useBooking.js
+<<<<<<< HEAD
 import { watch, reactive, readonly, computed } from "vue";
+=======
+import { watch, reactive, readonly, computed, watchEffect } from "vue";
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 import { useForm, usePage } from "@inertiajs/vue3";
 
 // Constants buiten state

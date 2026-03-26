@@ -35,7 +35,11 @@ function addRow() {
         single_supplement: '',
         valid_from: null,
         valid_until: null,
+<<<<<<< HEAD
         label: props.priceLabelOptions[0]?.id ?? '',
+=======
+        label: '',
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     }]
 }
 

@@ -23,6 +23,7 @@ use Inertia\Inertia;
 
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
+<<<<<<< HEAD
 Route::get('/over-mij', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
@@ -34,6 +35,14 @@ Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('ter
 Route::get('/blog', [BlogPostController::class, 'index'])->name('blog.index');
 Route::get('/blog/{post:slug}', [BlogPostController::class, 'show'])->name('blog.show');
 
+=======
+Route::get('/over-ons', [HomeController::class, 'about'])->name('about');
+Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
+Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
+Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
+Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
+
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
 // Switch locale
 Route::post('/locale/switch', [LocaleController::class, 'switch'])
     ->middleware('throttle:10,1')
@@ -120,10 +129,13 @@ Route::prefix('admin')
                 Route::post('campaigns/{campaign}/send', [CampaignController::class, 'send'])
                     ->name('campaigns.send');
             });
+<<<<<<< HEAD
 
         // Blog posts
         Route::resource('posts', AdminBlogPostController::class);
 
+=======
+>>>>>>> b9e884b3fa401a1a668de43a24b0f92b9502b33e
     });
 
 // Test production health check
