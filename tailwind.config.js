@@ -24,11 +24,6 @@ export default {
                     "system-ui",
                     ...defaultTheme.fontFamily.sans,
                 ],
-                cormorant: [
-                    "CormorantGaramond",
-                    "system-ui",
-                    ...defaultTheme.fontFamily.sans,
-                ],
                 nunito: [
                     "Nunito",
                     "system-ui",

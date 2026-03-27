@@ -316,7 +316,6 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 **Custom Fonts** (see `tailwind.config.js`):
 - `font-poppins` - Primary UI font
 - `font-caveat` - Handwritten accent font
-- `font-cormorant` - Serif display font
 - `font-nunito` - Secondary UI font
 
 **Custom Color Palette** (see `tailwind.config.js`):

@@ -41,7 +41,6 @@ onMounted(async () => {
             <Hero />
         </template>
         <main>
-            <DecorativeLine />
             <section class="relative py-12 tablet:py-24">
                 <USP />
             </section>
@@ -85,22 +84,20 @@ onMounted(async () => {
                 <article ref="newsletterRef" class="relative bg-no-repeat bg-center bg-cover bg-brand-secondary"
                     :style="newsletterLoaded ? `background-image: url(${newsletterImage})` : ''">
                     <Newsletter />
-                    <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent"></div>
                 </article>
             </section>
 
             <!-- Pullquote rustpunt -->
             <section class="relative bg-brand-secondary py-16 tablet:py-24 px-4 text-center">
                 <div class="max-w-2xl mx-auto">
-                    <div class="font-cormorant text-8xl laptop:text-9xl leading-none text-brand-accent/30 select-none mb-2">"</div>
-                    <p class="font-cormorant italic text-4xl laptop:text-6xl text-brand-primary leading-snug -mt-8">
+                    <div class="font-poppins text-6xl laptop:text-7xl leading-none text-brand-accent/30 select-none mb-2">"</div>
+                    <p class="font-poppins text-2xl laptop:text-3xl text-brand-primary leading-snug -mt-8">
                         {{ t('about.pullquote') }}
                     </p>
                     <p class="mt-6 font-poppins text-sm text-brand-light tracking-widest uppercase">
                         — Omdat We Reizen
                     </p>
                 </div>
-                <div class="absolute bottom-0 left-0 w-full h-2 bg-gradient-to-r from-transparent via-brand-accent to-transparent"></div>
             </section>
 
             <!-- Contact CTA-banner -->
@@ -109,7 +106,7 @@ onMounted(async () => {
                 <div class="absolute inset-0 bg-brand-text/55"></div>
                 <div
                     class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4 py-20 tablet:py-28 text-center">
-                    <h2 class="text-3xl laptop:text-4xl font-cormorant font-bold text-white leading-tight mb-4">
+                    <h2 class="text-3xl laptop:text-4xl font-poppins text-white leading-tight mb-4">
                         {{ t('home.contact_cta.heading') }}
                     </h2>
                     <p class="text-white/80 font-poppins text-base laptop:text-lg max-w-xl mx-auto mb-8">

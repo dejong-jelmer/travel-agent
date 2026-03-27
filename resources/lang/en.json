@@ -772,28 +772,29 @@
     "about": {
         "hero": {
             "title": "About me",
-            "sub_title": "The story behind the trips."
+            "sub_title": "The story behind the journeys."
         },
-        "page_title": "My goal",
-        "image_alt": "Historical (train) journeys in Europe",
-        "team": {
-            "member": {
-                "name": "Jelmer de Jong",
-                "role": "Founder & organisator of your traintrip",
-                "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            }
+        "image_alt": "Historic (train) travel in Europe",
+        "title": "Why I started",
+        "pullquote": "Journeys that move you. Stories that stay with you",
+        "founder": {
+            "name": "Jelmer de Jong",
+            "role": "Founder of Omdat We Reizen"
         },
-        "pullquote": "Journeys that move you. Stories that stay with you.",
-        "tagline": "More than a destination",
-        "mission_statement": [
-            "My goal is to give you a trip you'll look back on with joy and fulfillment — long after you're back home.",
-            "I believe travel is more than a destination. It's about the people you meet, the cultures that move you, and the stories you take with you. That's why I bring travelers, cultures, and stories together in a sustainable way — with respect for the world around us and the people who are part of it.",
-            "Sustainable travel isn't reserved for train enthusiasts or committed sustainability advocates — it's for anyone who wants to enjoy a trip that contributes to something meaningful. I believe the train is the future. Not as a compromise, but as the most beautiful way to travel.",
-            "I want you to feel inspired — by the stories behind a place, the cultures that welcome you, and the landscapes that glide past your window. But inspiration only begins when your mind is free. That's why I take care of all the planning and organization, so you have the space to enjoy the journey and everything you encounter along the way.",
-            "I'm only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
+        "statement": "For me, travel is different from a holiday. It's the same difference as between literature and fiction. It's stepping outside your bubble, discovering places that broaden your perspective. It's that sense of expansion that makes you feel — briefly or permanently — a little more human. That's what I want to pass on. Through train routes that move you and stories that stay with you.",
+        "my_story_label": "My story",
+        "mission_label": "My promise",
+        "my_story": [
+            "I've been planning travel for as long as I can remember. As a child I helped my parents research destinations, routes and accommodation. During my studies I planned trips for fellow students. When I'm not travelling, I'm planning the next one.",
+            "The moment I knew I wanted to do this for others was in Lascaux. Surrounded by cave paintings 18,000 years old, one thought immediately came to mind: my father has to see this. He's the one who gave me my fascination for art and history — this was his place. I organised the trip, researched everything, took care of every detail. The pleasure I got from that, and the look on his face when he stood there, told me more than years of thinking ever could have.",
+            "By training I'm a history teacher, after which I worked as a developer — and I've always been the person people turn to for travel advice. Omdat We Reizen is the thread I've watched run through my life all these years, finally in a place of its own.",
+            "Putting together a route is like assembling a puzzle. The big pieces come quickly: destination, transport, accommodation. Then come the small ones — the hotel's position relative to the station, the neighbourhood worth exploring, the museum most visitors skip. You shift things around, cut and rethink. With every step you travel the journey in your head. And then comes the moment when everything clicks. That feeling is exactly why I do this."
         ],
-        "why_title": "Why I started Omdat We Reizen",
-        "why_statement": "To me, traveling is different from a vacation. It is the same difference between literature and reading material. It is breaking out of your bubble, discovering places that broaden your horizons. It is the broadening that makes you a little more human, for a moment—or forever. I want to pass on that feeling. With train routes that touch you and stories that stay with you."
+        "mission_statement": [
+            "I believe travel is more than a destination. It's about the people you meet, the cultures that move you and the stories you take home.",
+            "Inspiration only starts when your mind is free. That's why I take care of all the planning — so you have the space to enjoy whatever you encounter along the way.",
+            "I'm only satisfied when you come home richer than you left — richer in experiences, insights and memories."
+        ]
     },
     "contact": {
         "hero_tagline": "Curious about a route? Or just a question? I'd love to hear from you."
