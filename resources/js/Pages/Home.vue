@@ -7,7 +7,6 @@ import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     trips: Array,
-    contact: Object,
 });
 
 const { t } = useI18n()
@@ -92,10 +91,10 @@ onMounted(async () => {
                 <div class="max-w-2xl mx-auto">
                     <div class="font-poppins text-6xl laptop:text-7xl leading-none text-brand-accent/30 select-none mb-2">"</div>
                     <p class="font-poppins text-2xl laptop:text-3xl text-brand-primary leading-snug -mt-8">
-                        {{ t('about.pullquote') }}
+                        {{ t('home.pullquote') }}
                     </p>
-                    <p class="mt-6 font-poppins text-sm text-brand-light tracking-widest uppercase">
-                        — Omdat We Reizen
+                    <p class="mt-6 font-poppins text-sm text-brand-light tracking-widest italic">
+                        — {{ t('home.pullquote_source') }}
                     </p>
                 </div>
             </section>

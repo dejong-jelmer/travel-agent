@@ -151,8 +151,7 @@
         "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs..."
     },
     "usp": {
-        "section_header": "why choose us",
-        "intro": "Omdat We Reizen is for travelers who want to experience culture rather than observe it, who consciously choose the train, and who prefer arriving somewhere over landing somewhere",
+        "intro": "I put together trips with care, a good story, and the train as the starting point.",
         "routes": {
             "title": "You ride along, we know the way",
             "description": "Our routes are routes we've traveled ourselves. No brochures, no assumptions — real knowledge of every platform, every city, and every restaurant worth visiting.",
@@ -160,13 +159,13 @@
         },
         "train": {
             "title": "The journey begins on the platform",
-            "description": "No airport, no queues, no wasted hours. With us, the train journey itself is part of the experience — you arrive rested, curious, and already a little immersed in the story.",
-            "highlight": "On average 75% less CO₂ than flying"
+            "description": "A departure hall where you can already feel the journey beginning. The train is not a means of transport — it is the first chapter. You arrive rested, curious, and already a little way into the story.",
+            "highlight": "Europe by train"
         },
         "unique": {
             "title": "Destinations you won't find on Google",
-            "description": "We don't choose destinations because they're popular. We choose them because they have something to tell — and because we can tell that story.",
-            "highlight": "Unique stories behind every trip"
+            "description": "I choose places that have something to say — and whose story I know myself. The city that stays with you long after you are home.",
+            "highlight": "Every trip has a story"
         },
         "cta": {
             "text": "Ready for your next adventure?",
@@ -781,19 +780,19 @@
             "name": "Jelmer de Jong",
             "role": "Founder of Omdat We Reizen"
         },
-        "statement": "For me, travel is different from a holiday. It's the same difference as between literature and fiction. It's stepping outside your bubble, discovering places that broaden your perspective. It's that sense of expansion that makes you feel — briefly or permanently — a little more human. That's what I want to pass on. Through train routes that move you and stories that stay with you.",
-        "my_story_label": "My story",
-        "mission_label": "My promise",
+        "story_label": "My story",
+        "conviction_label": "What travel means to me",
+        "promise_label": "My promise",
         "my_story": [
-            "I've been planning travel for as long as I can remember. As a child I helped my parents research destinations, routes and accommodation. During my studies I planned trips for fellow students. When I'm not travelling, I'm planning the next one.",
-            "The moment I knew I wanted to do this for others was in Lascaux. Surrounded by cave paintings 18,000 years old, one thought immediately came to mind: my father has to see this. He's the one who gave me my fascination for art and history — this was his place. I organised the trip, researched everything, took care of every detail. The pleasure I got from that, and the look on his face when he stood there, told me more than years of thinking ever could have.",
-            "By training I'm a history teacher, after which I worked as a developer — and I've always been the person people turn to for travel advice. Omdat We Reizen is the thread I've watched run through my life all these years, finally in a place of its own.",
-            "Putting together a route is like assembling a puzzle. The big pieces come quickly: destination, transport, accommodation. Then come the small ones — the hotel's position relative to the station, the neighbourhood worth exploring, the museum most visitors skip. You shift things around, cut and rethink. With every step you travel the journey in your head. And then comes the moment when everything clicks. That feeling is exactly why I do this."
+            "My fascination with travel has been there for as long as I can remember. When my father went on business trips, I would turn my piggy bank upside down to see if I had saved enough for a ticket, or I would try to fit inside his suitcase, hoping to tag along to those fascinating destinations he brought back souvenirs or foreign coins from.",
+            "I remember how later on I would take family, friends, fellow students, or even complete strangers along to that one special little restaurant in the alleyways of Budapest or Ghent.",
+            "Surrounded by prehistoric art from thousands of generations ago, in the caves of Lascaux, I realized I would never quite be the same person as before — something I had often experienced on my travels. The feeling of having become a little more human. I wanted to share that feeling, and I started organizing trips for others. The first was a trip to these caves with my father and brother, with whom I share a fascination for art and history. I researched it, organized the trip, arranged the details. The pleasure I found in that, and the satisfaction of sharing that place, told me more than years of deliberation ever could have. In Omdat We Reizen, the thread I had seen running through my life all those years finally fell into place.",
+            "Putting together a route is like solving a puzzle to me. The first pieces fall into place quickly: destination, transport, accommodation. But then come the details that make the trip special — the story you want to tell, the neighborhood where it all happens, the remarkable spots most people skip. You shuffle, scrap, and rethink. With every piece, it feels like you're already making the trip a little. And then comes the moment when the puzzle is complete, and everything fits... Omdat We Reizen."
         ],
-        "mission_statement": [
-            "I believe travel is more than a destination. It's about the people you meet, the cultures that move you and the stories you take home.",
-            "Inspiration only starts when your mind is free. That's why I take care of all the planning — so you have the space to enjoy whatever you encounter along the way.",
-            "I'm only satisfied when you come home richer than you left — richer in experiences, insights and memories."
+        "conviction": "To me, travel is different from a holiday. It's the difference between literature and light reading. It's breaking free from your bubble, discovering places that broaden your perspective — and making you, briefly or forever, a little more human. That feeling is what I want to pass on.",
+        "promise_statement": [
+            "Inspiration only begins when your mind is free. That's why I take care of all the planning — so you have the space to enjoy whatever you encounter along the way.",
+            "I'm only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
         ]
     },
     "contact": {
@@ -813,7 +812,9 @@
             "about_link": "about us",
             "message_middle2": "page to learn more about Omdat We Reizen. You can also contact us via our",
             "contact_link": "contact form"
-        }
+        },
+        "pullquote": "I will only be satisfied when you come home richer than you left.",
+        "pullquote_source": "Jelmer de Jong, founder of Omdat We Reizen."
     },
     "trip_show": {
         "hero": {
