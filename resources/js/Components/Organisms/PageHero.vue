@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-    <section class="relative overflow-hidden h-[calc(100vh-100px)] flex items-end"
+    <section class="relative overflow-hidden h-[calc(100vh-theme(spacing.header))] flex items-end"
         :style="`background-image: url(${image}); background-size: cover; background-position: center;`">
         <div class="absolute inset-0" :class="overlayClass"></div>
 

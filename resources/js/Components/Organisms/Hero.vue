@@ -35,7 +35,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="relative h-[calc(100vh-100px)] flex px-6 overflow-hidden">
+    <div class="relative h-[calc(100vh-theme(spacing.header))] flex px-6 overflow-hidden">
         <video v-if="showVideo" ref="videoRef" :poster="heroImage" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" preload="none" :src="heroVideo" :autoplay="!prefersReducedMotion"
             muted loop playsinline />
         <img v-else :src="heroImage" class="absolute inset-0 w-full h-full object-cover" alt="" />

@@ -122,15 +122,15 @@
         }
     },
     "newsletter": {
-        "heading": "Never miss a route",
-        "description": "Inspiration, stories, and new routes — straight to your inbox. No spam, just the most most interesting places in Europe.",
+        "heading": "Stay informed",
+        "description": "Inspiration, stories, and new routes — straight to your inbox.",
         "form": {
             "name_placeholder": "Your first name (optional)",
             "email_placeholder": "your.email{'@'}example.com",
             "submitting": "Submitting...",
             "submit": "Subscribe"
         },
-        "privacy": "We respect your privacy. You can unsubscribe at any time. Read our {link}.",
+        "privacy": "I respect your privacy. You can unsubscribe at any time. Read my {link}.",
         "privacy_link": "privacy policy",
         "subscription": {
             "success": "Thank you for subscribing! Please confirm your subscription via the email we just sent to {email}.",
@@ -201,7 +201,7 @@
             "message_label": "Message",
             "submit_button": "Send message",
             "success": "Thank you! Your message has been sent successfully.",
-            "privacy": "Your data will only be used to respond to your message. Read our {link}.",
+            "privacy": "Your data will only be used to respond to your message. Read my {link}.",
             "privacy_link": "privacy policy"
         },
         "trip": {

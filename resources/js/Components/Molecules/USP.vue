@@ -30,7 +30,7 @@ const usps = [
     <div class="max-w-6xl mx-auto phone:px-6 laptop:px-8">
 
         <!-- Header -->
-        <div class="text-center mb- laptop:mb-24">
+        <div class="text-center mb-12 laptop:mb-24">
             <p class="text-brand-text text-sm laptop:text-lg text-left max-w-2xl mx-auto leading-relaxed">
                 {{ $t('usp.intro') }}
             </p>

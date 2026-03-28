@@ -3,7 +3,6 @@ import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { useDateFormatter } from '@/Composables/useDateFormatter';
 import { computed } from 'vue';
-import Layout from '../../Templates/Layout.vue';
 
 const props = defineProps({
     posts: Object,

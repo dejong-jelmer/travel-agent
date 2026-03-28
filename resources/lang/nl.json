@@ -19,7 +19,7 @@
         "adults": "Volwassene | Volwassenen",
         "children": "Kind | Kinderen"
     },
-    "topbar_text": "Ga duurzaam op reis",
+    "topbar_text": "Duurzame treinreizen door Europa",
     "nav": {
         "trips": "Reizen",
         "all_trips": "Alle reizen",
@@ -122,15 +122,15 @@
         }
     },
     "newsletter": {
-        "heading": "Nooit een route missen",
-        "description": "Inspiratie, verhalen en nieuwe routes — rechtstreeks in je inbox. Geen spam, wel de meest interessante plekken van Europa.",
+        "heading": "Blijf op de hoogte",
+        "description": "Inspiratie, verhalen en nieuwe routes — rechtstreeks in je inbox.",
         "form": {
             "name_placeholder": "Je voornaam (optioneel)",
             "email_placeholder": "jouw.email{'@'}voorbeeld.nl",
             "submitting": "Bezig met verzenden...",
             "submit": "Schrijf je in"
         },
-        "privacy": "We respecteren je privacy. Je kan je op elk moment uitschrijven. Lees onze {link}.",
+        "privacy": "Ik respecteer je privacy. Je kan je op elk moment uitschrijven. Lees mijn {link}.",
         "privacy_link": "privacyverklaring",
         "subscription": {
             "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
@@ -202,7 +202,7 @@
             "message_label": "Bericht",
             "submit_button": "Verstuur bericht",
             "success": "Bedankt! Je bericht is succesvol verstuurd.",
-            "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees de {link}.",
+            "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees mijn {link}.",
             "privacy_link": "privacyverklaring"
         },
         "trip": {
