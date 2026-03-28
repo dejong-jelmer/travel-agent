@@ -76,11 +76,11 @@ const props = defineProps({
                                         Definities
                                     </h2>
                                     <div class="space-y-4">
-                                        <p><strong class="font-semibold">Organisator:</strong> Omdat we reizen. De
+                                        <p><strong class="font-semibold">Organisator:</strong> Omdat We Reizen. De
                                             handelaar die
                                             Reis samenstelt en deze – al dan niet via een doorverkoper – aanbiedt, en de
                                             handelaar
-                                            die een Gekoppeld Reisarrangement faciliteert. Omdat we reizen is een
+                                            die een Gekoppeld Reisarrangement faciliteert. Omdat We Reizen is een
                                             geregistreerde
                                             handelsnaam en ingeschreven bij de Kamer van Koophandel onder nummer:
                                             <strong>97092363</strong>.
@@ -227,7 +227,7 @@ const props = defineProps({
                                             informatie</strong></h3>
                                     <p class="mb-4 pl-4">De aangeboden Reis omvat de diensten zoals omschreven in de
                                         uitingen
-                                        van Omdat we reizen (offertes, publicaties, website). De inhoud van het aanbod
+                                        van Omdat We Reizen (offertes, publicaties, website). De inhoud van het aanbod
                                         wordt
                                         bepaald door de informatie verstrekt door of namens de Organisator vóór het
                                         sluiten

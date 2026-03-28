@@ -19,7 +19,7 @@
         "adults": "Volwassene | Volwassenen",
         "children": "Kind | Kinderen"
     },
-    "topbar_text": "Ga duurzaam op reis",
+    "topbar_text": "Duurzame treinreizen door Europa",
     "nav": {
         "trips": "Reizen",
         "all_trips": "Alle reizen",
@@ -122,15 +122,15 @@
         }
     },
     "newsletter": {
-        "heading": "Nooit een route missen",
-        "description": "Inspiratie, verhalen en nieuwe routes — rechtstreeks in je inbox. Geen spam, wel de meest interessante plekken van Europa.",
+        "heading": "Blijf op de hoogte",
+        "description": "Inspiratie, verhalen en nieuwe routes — rechtstreeks in je inbox.",
         "form": {
             "name_placeholder": "Je voornaam (optioneel)",
             "email_placeholder": "jouw.email{'@'}voorbeeld.nl",
             "submitting": "Bezig met verzenden...",
             "submit": "Schrijf je in"
         },
-        "privacy": "We respecteren je privacy. Je kan je op elk moment uitschrijven. Lees onze {link}.",
+        "privacy": "Ik respecteer je privacy. Je kan je op elk moment uitschrijven. Lees mijn {link}.",
         "privacy_link": "privacyverklaring",
         "subscription": {
             "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
@@ -151,22 +151,22 @@
         "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen..."
     },
     "usp": {
-        "section_header": "Kiezen voor Omdat We Reizen",
-        "intro": "Omdat We Reizen is er voor reizigers die cultuur willen beleven in plaats van bekijken, die bewust kiezen voor de trein, en die liever ergens aankomen dan ergens landen",
+        "section_header": "Waarom bij mij boeken",
+        "intro": "Ik stel reizen samen met aandacht, een goed verhaal en de trein als vertrekpunt.",
         "routes": {
-            "title": "Wij kennen de weg",
-            "description": "Onze routes zijn routes die we zelf hebben gereden. Geen folders, geen aannames — echte kennis van elk perron, elke stad en elk restaurant dat de moeite waard is.",
+            "title": "Ik ken de weg",
+            "description": "Elke route die je bij mij boekt, heb ik zelf gereden. Ik weet op welk perron je moet zijn, welke stadswijk de moeite waard is en waar je na aankomst het beste kunt eten.",
             "highlight": "Persoonlijk samengesteld"
         },
         "train": {
             "title": "De reis begint op het perron",
-            "description": "Geen vliegveld, geen wachtrij, geen verloren uren. Bij ons is de treinreis zelf onderdeel van de beleving — je arriveert uitgerust, nieuwsgierig en al een beetje onderweg in het verhaal.",
-            "highlight": "Gemiddeld 75% minder CO₂ dan vliegen"
+            "description": "Een vertrekhal waar je al voelt dat de reis begint. De trein is geen vervoersmiddel — het is het eerste hoofdstuk. Je arriveert uitgerust, nieuwsgierig en al een beetje onderweg in het verhaal.",
+            "highlight": "Per trein door Europa"
         },
         "unique": {
-            "title": "Unieke bestemmingen",
-            "description": "Wij kiezen geen bestemmingen omdat ze populair zijn. We kiezen ze omdat ze iets te vertellen hebben — en omdat wij dat verhaal kunnen vertellen.",
-            "highlight": "Unieke achtergronden bij elke reis"
+            "title": "Bestemmingen met een verhaal",
+            "description": "Ik kies plaatsen die iets te vertellen hebben — en waarvan ik dat verhaal zelf ken. De stad die je bijblijft lang nadat je thuis bent.",
+            "highlight": "Elke reis heeft een verhaal"
         },
         "cta": {
             "text": "Klaar voor jouw volgende avontuur?",
@@ -188,21 +188,21 @@
         },
         "contact": {
             "heading": "Contact",
-            "intro": "Benieuwd naar een reis of heb je een vraag? We vertellen het je graag.",
+            "intro": "Benieuwd naar een reis of heb je een vraag? Ik vertel het je graag.",
             "call": "Bel",
             "email": "Stuur een mail naar",
             "or_use_form": "Of gebruik het contactformulier hieronder.",
             "your_details_heading": "Jouw gegevens",
-            "your_details_subheading": "Hoe kunnen we je bereiken?",
+            "your_details_subheading": "Hoe kan ik je bereiken?",
             "your_message_heading": "Jouw bericht",
-            "your_message_subheading": "Waarmee kunnen we je helpen?",
+            "your_message_subheading": "Waarmee kan ik je helpen?",
             "name_label": "Naam",
             "email_label": "Jouw Emailadres",
             "phone_label": "Jouw telefoonnummer (optioneel)",
             "message_label": "Bericht",
             "submit_button": "Verstuur bericht",
             "success": "Bedankt! Je bericht is succesvol verstuurd.",
-            "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees onze {link}.",
+            "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees mijn {link}.",
             "privacy_link": "privacyverklaring"
         },
         "trip": {
@@ -693,7 +693,7 @@
     },
     "hero": {
         "title": "Meer mens...",
-        "sub_title": "Omdat we reizen",
+        "sub_title": "Omdat We Reizen",
         "cta": "Bekijk de reizen"
     },
     "footer": {
@@ -774,26 +774,26 @@
             "title": "Over mij",
             "sub_title": "Het verhaal achter de reizen."
         },
-        "page_title": "Mijn doel",
         "image_alt": "Historische (trein)reizen in Europa",
-        "team": {
-            "member": {
-                "name": "Jelmer de Jong",
-                "role": "Founder & organisator van jouw treinreis",
-                "bio": "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            }
+        "pullquote": "Reizen die je raken. Verhalen die bijblijven.",
+        "founder": {
+            "name": "Jelmer de Jong",
+            "role": "Oprichter van Omdat We Reizen"
         },
-        "pullquote": "Reizen die je raken. Verhalen die bijblijven",
-        "tagline": "Meer dan een bestemming",
-        "mission_statement": [
-            "Mijn doel is om jou een reis te bezorgen waar je met plezier en vervulling op terug zal kijken — lang nadat je weer thuis bent.",
-            "Ik geloof dat reizen meer is dan een bestemming. Het gaat om de mensen die je ontmoet, de culturen die je raken en de verhalen die je meeneemt. Daarom breng ik reizigers, culturen en verhalen op een duurzame manier bij elkaar — met respect voor de wereld om ons heen en de mensen die er deel van uitmaken.",
-            "Duurzaam reizen is niet alleen weggelegd voor de trein-hobbyist of de overtuigde duurzaamheidsfanaat — het is voor iedereen die wil genieten van een reis die ergens toe bijdraagt. Ik geloof dat de trein de toekomst heeft. Niet als compromis, maar als de mooiste manier om onderweg te zijn.",
-            "Ik wil dat jij geïnspireerd raakt — door de verhalen achter een plek, de culturen die je verwelkomen en de landschappen die aan je voorbijglijden. Maar inspiratie begint pas als je hoofd vrij is. Daarom neem ik de planning en organisatie volledig uit handen, zodat jij de ruimte hebt om te genieten van de reis en alles wat je onderweg tegenkomt.",
-            "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok — rijker in ervaringen, inzichten en herinneringen."
+        "story_label": "Mijn verhaal",
+        "conviction_label": "Wat reizen voor mij betekent",
+        "promise_label": "Mijn belofte",
+        "my_story": [
+            "Mijn fascinatie voor reizen is er al zolang ik me kan herinneren. Als mijn vader op reis ging voor zijn werk, keerde ik mijn spaarpot om te kijken of ik al genoeg gespaard had voor een ticket, of probeerde ik in zijn koffer te passen in de hoop zo mee te kunnen naar die fascinerende bestemmingen waar hij souvenirs of vreemde munten van meebracht.",
+            "Ik herinner me hoe ik later familie, vrienden, studiegenoten of zelfs wildvreemden op sleeptouw nam naar dat ene speciale restaurantje in de steegjes van Boedapest of Gent.",
+            "Omgeven door prehistorische kunst van duizenden generaties geleden, in de grotten van Lascaux, besefte ik dat ik nooit meer helemaal dezelfde persoon zou zijn als daarvoor — zoals ik vaak had meegemaakt op één van mijn reizen. Het gevoel dat ik een beetje meer mens geworden was. Dat gevoel wilde ik delen, en ik begon met het organiseren van reizen voor anderen. Als eerste een reis naar deze grotten met mijn vader en broer, met wie ik de fascinatie voor kunst en geschiedenis deel. Ik zocht het uit, organiseerde de reis, regelde de details. Het plezier dat ik daarin had, en de voldoening van het delen van die plek, zeiden me meer dan jarenlang nadenken ooit had kunnen doen. In Omdat We Reizen is de rode draad die ik al die jaren door mijn leven heb zien lopen, eindelijk op zijn plek.",
+            "Een route samenstellen is voor mij als het leggen van een puzzel. De eerste stukken zijn snel gelegd: bestemming, vervoer, accommodatie. Maar dan komen de details die de reis bijzonder maken — het verhaal dat je wilt vertellen, de wijk waar het gebeurt, de bijzondere plekjes die de meeste mensen overslaan. Je schuift, schrapt en bedenkt opnieuw. Bij ieder stukje is het alsof je de reis zelf al een beetje maakt. En dan is er het moment waarop de puzzel ligt, en alles klopt... Omdat We Reizen."
         ],
-        "why_title": "Waarom ik begon met Omdat We Reizen",
-        "why_statement": "Reizen is voor mij anders dan vakantie. Het is hetzelfde verschil tussen literatuur en lectuur. Het is loskomen uit je bubbel, plekken ontdekken die je blik verruimen. Het is de verruiming die je even — of voorgoed — een beetje meer mens maakt. Dat gevoel wil ik doorgeven. Met treinroutes die je raken en verhalen die bijblijven."
+        "conviction": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur. Het is loskomen uit je bubbel, plekken ontdekken die je blik verruimen — en je even, of voorgoed, een beetje meer mens maken. Dat gevoel wil ik doorgeven.",
+        "promise_statement": [
+            "Inspiratie begint pas als je hoofd vrij is. Daarom neem ik de planning volledig uit handen — zodat jij de ruimte hebt om te genieten van wat je onderweg tegenkomt.",
+            "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok — rijker in ervaringen, inzichten en herinneringen."
+        ]
     },
     "contact": {
         "hero_tagline": "Nieuwsgierig naar een route? Of gewoon een vraag? Ik hoor het graag."
@@ -810,9 +810,11 @@
             "blog_link": "blog",
             "message_middle": "voor informatie over recente activiteiten of bekijk de",
             "about_link": "over mij",
-            "message_middle2": "pagina om meer te weten te komen over Omdat we reizen. Je kan ook contact opnemen via het",
+            "message_middle2": "pagina om meer te weten te komen over Omdat We Reizen. Je kan ook contact opnemen via het",
             "contact_link": "contactformulier"
-        }
+        },
+        "pullquote": "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok.",
+        "pullquote_source": "Jelmer de Jong, oprichter Omdat We Reizen."
     },
     "trip_show": {
         "hero": {

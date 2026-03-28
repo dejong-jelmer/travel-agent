@@ -50,7 +50,7 @@ function submit() {
                 <SectionHeader class="py-0 pb-4">
                     {{ $t('newsletter.heading') }}
                 </SectionHeader>
-                <p class="text-left text-sm laptop:text-base text-gray-600 leading-relaxed">
+                <p class="text-center text-sm laptop:text-base text-gray-600 leading-relaxed">
                     {{ $t('newsletter.description') }}
                 </p>
             </div>

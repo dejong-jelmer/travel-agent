@@ -53,7 +53,7 @@ const retentionLabel = computed(() =>
                                 <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">1. Wie
                                     zijn wij?</h2>
                                 <p class="text-gray-700 leading-relaxed mb-4">
-                                    Deze privacyverklaring is van toepassing op de reisorganisatie Omdat we reizen,
+                                    Deze privacyverklaring is van toepassing op de reisorganisatie Omdat We Reizen,
                                     gevestigd op {{ contact.fullAddress }}, ingeschreven bij de Kamer van Koophandel
                                     onder nummer {{ contact.kvk }}.
                                 </p>

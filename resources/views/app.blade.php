@@ -23,8 +23,6 @@
     <meta name="theme-color" content="#1e2d3d" media="(prefers-color-scheme: dark)">
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ Vite::asset('resources/fonts/nunito/Nunito-Light.woff2') }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ Vite::asset('resources/fonts/nunito/Nunito-Regular.woff2') }}" as="font" type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/images/hero-poster.webp') }}" as="image" type="image/webp">
     @routes
     @vite('resources/js/app.js')
