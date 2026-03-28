@@ -35,7 +35,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="relative h-[calc(100vh-100px)] flex px-6 overflow-hidden">
+    <div class="relative h-[calc(100vh-theme(spacing.header))] flex px-6 overflow-hidden">
         <video v-if="showVideo" ref="videoRef" :poster="heroImage" class="absolute inset-0 w-full h-full object-cover scale-x-[-1]" preload="none" :src="heroVideo" :autoplay="!prefersReducedMotion"
             muted loop playsinline />
         <img v-else :src="heroImage" class="absolute inset-0 w-full h-full object-cover" alt="" />
@@ -45,7 +45,7 @@ onMounted(() => {
 
         <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-fit mx-auto">
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
-                <h1 class="text-brand-secondary font-nunito text-nowrap font-light text-4xl tablet:text-5xl laptop:text-7xl select-none text-center drop-shadow-lg">
+                <h1 class="text-brand-secondary font-poppins text-nowrap font-light text-2xl tablet:text-3xl laptop:text-5xl select-none text-center drop-shadow-lg">
                     <span :class="visibleTitle ? 'opacity-100' : 'opacity-0'" class="block tablet:inline transition-opacity duration-[2000ms] ease-in-out">{{ t('hero.title') }}</span>
                     <span class="hidden tablet:inline">&nbsp;</span>
                     <span :class="visibleSubTitle ? 'opacity-100' : 'opacity-0'" class="block tablet:inline transition-opacity duration-[2000ms] ease-in-out tracking-wider">{{ t('hero.sub_title') }}</span>

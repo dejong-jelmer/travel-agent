@@ -26,7 +26,7 @@ const { formattedDate } = useDateFormatter();
             <!-- Header -->
             <header class="max-w-3xl mx-auto text-center mb-10">
                 <time class="text-sm text-gray-500">{{ formattedDate(post.published_at, { longDay: false, locale: locale }) }}</time>
-                <h1 class="text-4xl laptop:text-5xl font-bold font-cormorant text-brand-text mt-3">
+                <h1 class="text-4xl laptop:text-5xl font-poppins text-brand-text mt-3">
                     {{ post.title }}
                 </h1>
                 <p v-if="post.excerpt" class="text-lg text-gray-600 mt-4">

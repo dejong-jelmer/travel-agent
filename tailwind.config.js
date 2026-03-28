@@ -23,20 +23,7 @@ export default {
                     "Caveat",
                     "system-ui",
                     ...defaultTheme.fontFamily.sans,
-                ],
-                cormorant: [
-                    "CormorantGaramond",
-                    "system-ui",
-                    ...defaultTheme.fontFamily.sans,
-                ],
-                nunito: [
-                    "Nunito",
-                    "system-ui",
-                    ...defaultTheme.fontFamily.sans,
-                ],
-            },
-            fontSize: {
-                "2xs": "10px",
+                ]
             },
             colors: {
                 // Brand identity colors
@@ -57,6 +44,9 @@ export default {
                     warning: "#ffc107",
                     info: "#0d6efd",
                 },
+            },
+            spacing: {
+                header: "100px",
             },
             screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1350px'}
             keyframes: {

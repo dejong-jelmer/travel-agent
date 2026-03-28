@@ -4,15 +4,14 @@ import { Leaf, Phone } from 'lucide-vue-next';
 <template>
     <div class="w-full bg-brand-secondary">
         <div
-            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 py-2 flex gap-x-3 laptop:gap-x-8 justify-between tablet:justify-start">
+            class="max-w-screen-desktop mx-auto px-6 py-2 flex justify-between">
             <div class="flex items-center gap-x-2 laptop:gap-x-3">
-                <Leaf class="h-5 laptop:h-6 text-brand-accent drop-shadow-sm" />
                 <p class="text-xs laptop:text-sm text-brand-primary">
                     {{ $t('topbar_text') }}
                 </p>
             </div>
             <div class="flex items-center gap-x-2 laptop:gap-x-3">
-                <Phone class="h-5 laptop:h-6 text-brand-accent drop-shadow-sm" />
+                <Phone class="h-5 text-brand-accent drop-shadow-sm" />
                 <a class="text-xs laptop:text-sm tel-field text-brand-primary underline-offset-4"></a>
             </div>
         </div>
