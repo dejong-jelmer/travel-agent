@@ -14,9 +14,8 @@ defineProps({
     <section class="relative overflow-hidden h-[calc(100vh-theme(spacing.header))] flex items-end"
         :style="`background-image: url(${image}); background-size: cover; background-position: center;`">
         <div class="absolute inset-0" :class="overlayClass" role="presentation"></div>
-
         <div
-            class="relative z-10 w-full max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4 pb-12 laptop:pb-20">
+            class="relative z-10 w-full max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 pb-12 laptop:pb-20">
             <h1 class="text-2xl laptop:text-5xl font-poppins text-white leading-tight">
                 {{ title }}
             </h1>

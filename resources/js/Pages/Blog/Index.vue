@@ -55,16 +55,20 @@ const { formattedDate } = useDateFormatter();
             <!-- Pagination -->
             <div v-if="posts.links && posts.last_page > 1" class="mt-12 flex justify-center">
                 <nav class="flex gap-2">
-                    <Link v-for="link in posts.links" :key="link.label"
-                        :href="link.url"
-                        class="px-4 py-2 rounded-lg text-sm"
-                        :class="{
-                            'bg-brand-primary text-white': link.active,
-                            'bg-white text-gray-700 hover:bg-gray-100': !link.active && link.url,
-                            'text-gray-400 cursor-default': !link.url,
-                        }"
-                        v-html="link.label"
-                        :preserve-scroll="true" />
+                    <template v-for="link in posts.links" :key="link.label">
+                        <span v-if="!link.url"
+                            class="px-4 py-2 rounded-lg text-sm text-gray-400 cursor-default"
+                            v-html="link.label" />
+                        <Link v-else
+                            :href="link.url"
+                            class="px-4 py-2 rounded-lg text-sm"
+                            :class="{
+                                'bg-brand-primary text-white': link.active,
+                                'bg-white text-gray-700 hover:bg-gray-100': !link.active,
+                            }"
+                            v-html="link.label"
+                            :preserve-scroll="true" />
+                    </template>
                 </nav>
             </div>
 

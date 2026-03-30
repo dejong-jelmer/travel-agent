@@ -7,6 +7,9 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
 import { ref, computed } from "vue";
 import BookingForm from "@/Components/Organisms/Forms/BookingForm.vue";
+import i18n from '@/plugins/i18n.js';
+
+const t = (key, params) => i18n.global.t(key, params);
 
 // ========================================
 // MOCK SETUP
@@ -27,7 +30,7 @@ const mockStepsData = {
     stepStates: ref([
         {
             id: "trip",
-            label: "Reis",
+            label: t('booking_step_labels.trip'),
             isActive: true,
             isCompleted: false,
             isAccessible: true,
@@ -35,7 +38,7 @@ const mockStepsData = {
         },
         {
             id: "travelers",
-            label: "Reisgezelschap",
+            label: t('booking_step_labels.travelers'),
             isActive: false,
             isCompleted: false,
             isAccessible: false,
@@ -43,7 +46,7 @@ const mockStepsData = {
         },
         {
             id: "contact",
-            label: "Contactgegevens",
+            label: t('booking_step_labels.contact'),
             isActive: false,
             isCompleted: false,
             isAccessible: false,
@@ -51,7 +54,7 @@ const mockStepsData = {
         },
         {
             id: "overview",
-            label: "Bekijken & bevestigen",
+            label: t('booking_step_labels.overview'),
             isActive: false,
             isCompleted: false,
             isAccessible: false,
@@ -65,25 +68,25 @@ vi.mock("@/Composables/useBookingSteps.js", () => ({
         steps: ref([
             {
                 id: "trip",
-                label: "Reis",
+                label: t('booking_step_labels.trip'),
                 fields: ["departure_date"],
                 validate: () => ({}),
             },
             {
                 id: "travelers",
-                label: "Reisgezelschap",
+                label: t('booking_step_labels.travelers'),
                 fields: ["travelers"],
                 validate: () => ({}),
             },
             {
                 id: "contact",
-                label: "Contactgegevens",
+                label: t('booking_step_labels.contact'),
                 fields: ["contact"],
                 validate: () => ({}),
             },
             {
                 id: "overview",
-                label: "Bekijken & bevestigen",
+                label: t('booking_step_labels.overview'),
                 fields: ["has_confirmed", "has_accepted_conditions"],
                 validate: () => ({}),
             },
@@ -91,7 +94,7 @@ vi.mock("@/Composables/useBookingSteps.js", () => ({
         stepStates: mockStepsData.stepStates,
         currentStep: computed(() => ({
             id: mockStepsData.currentStepId.value,
-            label: "Current Step",
+            label: t(`booking_step_labels.${mockStepsData.currentStepId.value}`),
             validate: () => ({}),
         })),
         nextStep: mockNextStep,
@@ -127,7 +130,7 @@ function resetStepStates() {
     mockStepsData.stepStates.value = [
         {
             id: "trip",
-            label: "Reis",
+            label: t('booking_step_labels.trip'),
             isActive: true,
             isCompleted: false,
             isAccessible: true,
@@ -135,7 +138,7 @@ function resetStepStates() {
         },
         {
             id: "travelers",
-            label: "Reisgezelschap",
+            label: t('booking_step_labels.travelers'),
             isActive: false,
             isCompleted: false,
             isAccessible: false,
@@ -143,7 +146,7 @@ function resetStepStates() {
         },
         {
             id: "contact",
-            label: "Contactgegevens",
+            label: t('booking_step_labels.contact'),
             isActive: false,
             isCompleted: false,
             isAccessible: false,
@@ -151,7 +154,7 @@ function resetStepStates() {
         },
         {
             id: "overview",
-            label: "Bekijken & bevestigen",
+            label: t('booking_step_labels.overview'),
             isActive: false,
             isCompleted: false,
             isAccessible: false,
@@ -280,10 +283,10 @@ describe("BookingForm - Complete Test Suite", () => {
         it("should render all step navigation buttons", () => {
             wrapper = mountComponent();
 
-            expect(wrapper.text()).toContain("Reis");
-            expect(wrapper.text()).toContain("Reisgezelschap");
-            expect(wrapper.text()).toContain("Contactgegevens");
-            expect(wrapper.text()).toContain("Bekijken & bevestigen");
+            expect(wrapper.text()).toContain(t('booking_step_labels.trip'));
+            expect(wrapper.text()).toContain(t('booking_step_labels.travelers'));
+            expect(wrapper.text()).toContain(t('booking_step_labels.contact'));
+            expect(wrapper.text()).toContain(t('booking_step_labels.overview'));
         });
 
         it("should render progress bar", () => {
@@ -301,9 +304,9 @@ describe("BookingForm - Complete Test Suite", () => {
             const nextButton = wrapper.find('[data-testid="next-button"]');
 
             expect(prevButton.exists()).toBe(true);
-            expect(prevButton.text()).toBe("Vorige");
+            expect(prevButton.text()).toBe(t('forms.booking.button_prev'));
             expect(nextButton.exists()).toBe(true);
-            expect(nextButton.text()).toBe("Volgende");
+            expect(nextButton.text()).toBe(t('forms.booking.button_next'));
         });
 
         it("should render 'Nu boeken' button on last step", () => {
@@ -315,7 +318,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
             expect(submitButton.exists()).toBe(true);
-            expect(submitButton.text()).toContain("Nu boeken");
+            expect(submitButton.text()).toContain(t('forms.booking.button_submit'));
         });
     });
 
@@ -489,7 +492,7 @@ describe("BookingForm - Complete Test Suite", () => {
             });
 
             const submitButton = wrapper.find('[data-testid="submit-button"]');
-            expect(submitButton.text()).toContain("Bezig met verzenden...");
+            expect(submitButton.text()).toContain(t('forms.booking.submitting'));
         });
 
         it("should disable submit button when processing", () => {
@@ -565,7 +568,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             expect(tooltip.exists()).toBe(true);
             expect(tooltip.text()).toContain(
-                "Vul eerst de vorige stappen in"
+                t('forms.booking.tooltip_locked')
             );
         });
     });
