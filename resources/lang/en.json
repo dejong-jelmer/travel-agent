@@ -25,7 +25,8 @@
         "all_trips": "All trips",
         "contact": "Contact",
         "about": "About us",
-        "blog": "Blog"
+        "blog": "Blog",
+        "home": "Home"
     },
     "trips": {
         "title": "All trips",
