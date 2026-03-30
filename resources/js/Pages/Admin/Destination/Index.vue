@@ -28,7 +28,7 @@ const columns = [
         <template v-if="totalDestinations > 0">
             <DataTable :data="destinations.data" :columns="columns" :links="destinations.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" searchable
-                :search-placeholder="t('admin.destinations.index.search_placeholder')"
+                :search-placeholder="t('admin.destinations.index.search_placeholder', { hellip: '&hellip;' })"
                 :empty-message="filters.search
                     ? t('admin.destinations.index.no_destinations_found_with_search', { search: filters.search })
                     : t('admin.destinations.index.no_destinations_found')">

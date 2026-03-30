@@ -102,7 +102,7 @@
             "cannot_load_image": "Kan afbeelding niet laden"
         },
         "preview": {
-            "loading": "Laden...",
+            "loading": "Laden{hellip}",
             "remove_image": "Verwijder afbeelding"
         },
         "file_info": {
@@ -127,7 +127,7 @@
         "form": {
             "name_placeholder": "Je voornaam (optioneel)",
             "email_placeholder": "jouw.email{'@'}voorbeeld.nl",
-            "submitting": "Bezig met verzenden...",
+            "submitting": "Bezig met verzenden{hellip}",
             "submit": "Schrijf je in"
         },
         "privacy": "Ik respecteer je privacy. Je kan je op elk moment uitschrijven. Lees mijn {link}.",
@@ -148,7 +148,7 @@
         "birthdate": "Geboortedatum",
         "birthdate_placeholder": "DD-MM-JJJJ",
         "special_requests": "Bijzonderheden",
-        "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen..."
+        "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen{hellip}"
     },
     "usp": {
         "section_header": "Waarom bij mij boeken",
@@ -184,7 +184,7 @@
             "button_next": "Volgende",
             "button_submit": "Nu boeken",
             "button_submit_tooltip": "Nu boeken met betalingsverplichting",
-            "submitting": "Bezig met verzenden..."
+            "submitting": "Bezig met verzenden{hellip}"
         },
         "contact": {
             "heading": "Contact",
@@ -242,7 +242,7 @@
                 },
                 "transport": {
                     "label": "Vervoer",
-                    "placeholder": "Selecteer vervoer...",
+                    "placeholder": "Selecteer vervoer{hellip}",
                     "help": "Selecteer de verschillende type van vervoer voor deze reis"
                 }
             },
@@ -257,7 +257,7 @@
                 },
                 "description": {
                     "label": "Omschrijving",
-                    "placeholder": "Beschrijf de reis...",
+                    "placeholder": "Beschrijf de reis{hellip}",
                     "characters": "{current} van {max} karakters gebruikt"
                 },
                 "hero_image": {
@@ -295,7 +295,7 @@
                     },
                     "label": {
                         "label": "Seizoenstype",
-                        "placeholder": "Selecteer seizoen..."
+                        "placeholder": "Selecteer seizoen{hellip}"
                     }
                 },
                 "duration": {
@@ -305,7 +305,7 @@
                 },
                 "destinations": {
                     "label": "Bestemmingen",
-                    "placeholder": "Selecteer bestemmingen...",
+                    "placeholder": "Selecteer bestemmingen{hellip}",
                     "help": "Selecteer de bestemmingen die bezocht worden tijdens deze reis"
                 },
                 "blocked_dates": {
@@ -322,7 +322,7 @@
                 },
                 "highlights": {
                     "label": "Hoogtepunten",
-                    "placeholder": "Voeg hoogtepunten toe...",
+                    "placeholder": "Voeg hoogtepunten toe{hellip}",
                     "help": "Voer unieke ervaringen en attracties van deze reis in"
                 },
                 "active": {
@@ -339,12 +339,12 @@
                 },
                 "meta_title": {
                     "label": "Meta Title",
-                    "placeholder": "SEO titel...",
+                    "placeholder": "SEO titel{hellip}",
                     "characters": "{current} van {max} karakters gebruikt"
                 },
                 "meta_description": {
                     "label": "Meta Description",
-                    "placeholder": "SEO beschrijving...",
+                    "placeholder": "SEO beschrijving{hellip}",
                     "characters": "{current} van {max} karakters gebruikt"
                 },
                 "og_image": {
@@ -397,7 +397,7 @@
                 },
                 "description": {
                     "label": "Omschrijving",
-                    "placeholder": "Beschrijf deze dag...",
+                    "placeholder": "Beschrijf deze dag{hellip}",
                     "characters": "{current} van {max} karakters gebruikt"
                 },
                 "remark": {
@@ -458,21 +458,21 @@
                 },
                 "preview_text": {
                     "label": "Preview tekst (optioneel)",
-                    "placeholder": "Deze tekst verschijnt in de email preview...",
+                    "placeholder": "Deze tekst verschijnt in de email preview{hellip}",
                     "help": "Preview tekst wordt getoond naast het onderwerp in email clients. Laat leeg voor automatisch genereren uit content."
                 },
                 "body": {
                     "label": "E-mailtekst",
-                    "placeholder": "Schrijf uw bericht...",
+                    "placeholder": "Schrijf uw bericht{hellip}",
                     "help": "Tip: HTML tags worden ondersteund voor opmaak."
                 },
                 "scheduled_at": {
                     "label": "Verzenddatum",
-                    "placeholder": "Selecteer datum en tijd..."
+                    "placeholder": "Selecteer datum en tijd{hellip}"
                 },
                 "status": {
                     "label": "Status",
-                    "placeholder": "Selecteer status..."
+                    "placeholder": "Selecteer status{hellip}"
                 },
                 "featured_trips": {
                     "label": "Uitgelichte reizen (optioneel)",
@@ -494,7 +494,7 @@
                 "title": "Test verzending",
                 "help": "Verstuur een test email naar uw eigen email adres om te controleren hoe de nieuwsbrief eruit ziet.",
                 "button": "Verstuur test email",
-                "sending": "Bezig met verzenden...",
+                "sending": "Bezig met verzenden{hellip}",
                 "save_first": "Sla eerst de campagne op voordatjeeen test email verstuurt."
             },
             "status": {
@@ -692,16 +692,16 @@
         }
     },
     "hero": {
-        "title": "Meer mens...",
+        "title": "Meer mens{hellip}",
         "sub_title": "Omdat We Reizen",
-        "cta": "Bekijk de reizen"
+        "cta": "Ontdek de reizen"
     },
     "footer": {
         "contact": "Contact",
         "all_rights": "Alle rechten voorbehouden.",
         "conditions": "Algemene voorwaarden",
         "privacy": "Privacybeleid",
-        "slogan": "Meer mens... Omdat we riezen"
+        "slogan": "Meer mens{hellip} Omdat we riezen"
     },
     "booking_step_labels": {
         "trip": "Reis",
@@ -787,7 +787,7 @@
             "Mijn fascinatie voor reizen is er al zolang ik me kan herinneren. Als mijn vader op reis ging voor zijn werk, keerde ik mijn spaarpot om te kijken of ik al genoeg gespaard had voor een ticket, of probeerde ik in zijn koffer te passen in de hoop zo mee te kunnen naar die fascinerende bestemmingen waar hij souvenirs of vreemde munten van meebracht.",
             "Ik herinner me hoe ik later familie, vrienden, studiegenoten of zelfs wildvreemden op sleeptouw nam naar dat ene speciale restaurantje in de steegjes van Boedapest of Gent.",
             "Omgeven door prehistorische kunst van duizenden generaties geleden, in de grotten van Lascaux, besefte ik dat ik nooit meer helemaal dezelfde persoon zou zijn als daarvoor — zoals ik vaak had meegemaakt op één van mijn reizen. Het gevoel dat ik een beetje meer mens geworden was. Dat gevoel wilde ik delen, en ik begon met het organiseren van reizen voor anderen. Als eerste een reis naar deze grotten met mijn vader en broer, met wie ik de fascinatie voor kunst en geschiedenis deel. Ik zocht het uit, organiseerde de reis, regelde de details. Het plezier dat ik daarin had, en de voldoening van het delen van die plek, zeiden me meer dan jarenlang nadenken ooit had kunnen doen. In Omdat We Reizen is de rode draad die ik al die jaren door mijn leven heb zien lopen, eindelijk op zijn plek.",
-            "Een route samenstellen is voor mij als het leggen van een puzzel. De eerste stukken zijn snel gelegd: bestemming, vervoer, accommodatie. Maar dan komen de details die de reis bijzonder maken — het verhaal dat je wilt vertellen, de wijk waar het gebeurt, de bijzondere plekjes die de meeste mensen overslaan. Je schuift, schrapt en bedenkt opnieuw. Bij ieder stukje is het alsof je de reis zelf al een beetje maakt. En dan is er het moment waarop de puzzel ligt, en alles klopt... Omdat We Reizen."
+            "Een route samenstellen is voor mij als het leggen van een puzzel. De eerste stukken zijn snel gelegd: bestemming, vervoer, accommodatie. Maar dan komen de details die de reis bijzonder maken — het verhaal dat je wilt vertellen, de wijk waar het gebeurt, de bijzondere plekjes die de meeste mensen overslaan. Je schuift, schrapt en bedenkt opnieuw. Bij ieder stukje is het alsof je de reis zelf al een beetje maakt. En dan is er het moment waarop de puzzel ligt, en alles klopt."
         ],
         "conviction": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur. Het is loskomen uit je bubbel, plekken ontdekken die je blik verruimen — en je even, of voorgoed, een beetje meer mens maken. Dat gevoel wil ik doorgeven.",
         "promise_statement": [
@@ -806,12 +806,12 @@
             "button": "Neem contact op"
         },
         "no_trips": {
-            "message_start": "Omdat we hard aan het werk zijn om onze eerste reizen op te zetten, kuntjemomenteel nog geen reizen boeken. Kijk op onze",
+            "message_start": "Ik werk op dit moment aan de eerste reizen. Binnenkort vind je hier treinreizen naar Europese bestemmingen, persoonlijk samengesteld en met een goed verhaal. Benieuwd waar ik mee bezig ben? Kijk op mijn",
             "blog_link": "blog",
-            "message_middle": "voor informatie over recente activiteiten of bekijk de",
+            "message_middle": "of lees meer op de",
             "about_link": "over mij",
-            "message_middle2": "pagina om meer te weten te komen over Omdat We Reizen. Je kan ook contact opnemen via het",
-            "contact_link": "contactformulier"
+            "message_middle2": "pagina. Wil je als eerste weten wanneer de eerste reis online staat? Schrijf je in voor mijn",
+            "newsletter_link": "nieuwsbrief"
         },
         "pullquote": "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok.",
         "pullquote_source": "Jelmer de Jong, oprichter Omdat We Reizen."
@@ -981,7 +981,7 @@
                     "jobs_in_queue": "{count} jobs in wachtrij"
                 },
                 "last_checked": "Laatste check: {time}",
-                "loading": "Systeem status wordt geladen..."
+                "loading": "Systeem status wordt geladen{hellip}"
             }
         },
         "trips": {
@@ -995,7 +995,7 @@
             },
             "index": {
                 "title": "Reizen",
-                "search_placeholder": "Zoek op reis of op bestemming...",
+                "search_placeholder": "Zoek op reis of op bestemming{hellip}",
                 "table_headers": {
                     "id": "#",
                     "image": "Afbeelding",
@@ -1079,7 +1079,7 @@
             },
             "edit": {
                 "items": {
-                    "select_category": "Selecteer een category...",
+                    "select_category": "Selecteer een category{hellip}",
                     "description": "Omschrijving"
                 }
             }
@@ -1101,7 +1101,7 @@
             },
             "index": {
                 "title": "Blogposts",
-                "search_placeholder": "Zoek op titel...",
+                "search_placeholder": "Zoek op titel{hellip}",
                 "table_headers": {
                     "title": "Titel",
                     "status": "Status",
@@ -1136,7 +1136,7 @@
                 "edit": "Wijzigingen opslaan"
             },
             "index": {
-                "search_placeholder": "Zoek op referentie, reis of op bestemming...",
+                "search_placeholder": "Zoek op referentie, reis of op bestemming{hellip}",
                 "filters": {
                     "status": "Status",
                     "payment_status": "Betaalstatus"
@@ -1160,7 +1160,7 @@
                 "travelers": "Reisgezelschap",
                 "edit_travelers": "Beheer reizigers",
                 "internal_notes_label": "Interne notities",
-                "internal_notes_placeholder": "Voeg interne notities toe...",
+                "internal_notes_placeholder": "Voeg interne notities toe{hellip}",
                 "edit_booking_status": "Beheer boekingsstatus",
                 "booking_status_placeholder": "Selecteer een boekingstatus",
                 "booking_status_label": "Boekingstatus",
@@ -1207,7 +1207,7 @@
                 "create": "Bestemming aanmaken"
             },
             "index": {
-                "search_placeholder": "Zoek op bestemmingnaam...",
+                "search_placeholder": "Zoek op bestemmingnaam{hellip}",
                 "title": "Bestemmingen overzicht",
                 "table_headers": {
                     "destinations": "Bestemmingen",
@@ -1243,7 +1243,7 @@
                     "delete_confirm": "Weet je zeker dat je deze nieuwsbrief campagne wilt verwijderen?"
                 },
                 "index": {
-                    "search_placeholder": "Zoek op onderwerp...",
+                    "search_placeholder": "Zoek op onderwerp{hellip}",
                     "title": "Nieuwsbrief Campagnes",
                     "table_headers": {
                         "subject": "Onderwerp",
@@ -1267,7 +1267,7 @@
                 },
                 "index": {
                     "title": "Nieuwsbrief Abonnees",
-                    "search_placeholder": "Zoek op naam of op email...",
+                    "search_placeholder": "Zoek op naam of op email{hellip}",
                     "table_headers": {
                         "name": "Naam",
                         "email": "E-mail",

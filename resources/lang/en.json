@@ -102,7 +102,7 @@
             "cannot_load_image": "Cannot load image"
         },
         "preview": {
-            "loading": "Loading...",
+            "loading": "Loading{hellip}",
             "remove_image": "Remove image"
         },
         "file_info": {
@@ -127,7 +127,7 @@
         "form": {
             "name_placeholder": "Your first name (optional)",
             "email_placeholder": "your.email{'@'}example.com",
-            "submitting": "Submitting...",
+            "submitting": "Submitting{hellip}",
             "submit": "Subscribe"
         },
         "privacy": "I respect your privacy. You can unsubscribe at any time. Read my {link}.",
@@ -148,7 +148,7 @@
         "birthdate": "Date of birth",
         "birthdate_placeholder": "DD-MM-YYYY",
         "special_requests": "Special requests",
-        "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs..."
+        "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs{hellip}"
     },
     "usp": {
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
@@ -183,7 +183,7 @@
             "button_next": "Next",
             "button_submit": "Book now",
             "button_submit_tooltip": "Book now with payment obligation",
-            "submitting": "Submitting..."
+            "submitting": "Submitting{hellip}"
         },
         "contact": {
             "heading": "Contact",
@@ -241,7 +241,7 @@
                 },
                 "transport": {
                     "label": "Transport",
-                    "placeholder": "Select transport...",
+                    "placeholder": "Select transport{hellip}",
                     "help": "Select the different modes of transportation for this trip"
                 }
             },
@@ -256,7 +256,7 @@
                 },
                 "description": {
                     "label": "Description",
-                    "placeholder": "Describe the trip...",
+                    "placeholder": "Describe the trip{hellip}",
                     "characters": "{current} of {max} characters used"
                 },
                 "hero_image": {
@@ -294,7 +294,7 @@
                     },
                     "label": {
                         "label": "Season type",
-                        "placeholder": "Select season..."
+                        "placeholder": "Select season{hellip}"
                     }
                 },
                 "duration": {
@@ -304,7 +304,7 @@
                 },
                 "destinations": {
                     "label": "Destination",
-                    "placeholder": "Select destinations...",
+                    "placeholder": "Select destinations{hellip}",
                     "help": "Select the destinations that will be visited during this trip"
                 },
                 "blocked_dates": {
@@ -321,7 +321,7 @@
                 },
                 "highlights": {
                     "label": "Highlights",
-                    "placeholder": "Add highlights...",
+                    "placeholder": "Add highlights{hellip}",
                     "help": "Enter unique experiences and attractions of this trip"
                 },
                 "active": {
@@ -338,12 +338,12 @@
                 },
                 "meta_title": {
                     "label": "Meta Title",
-                    "placeholder": "SEO title...",
+                    "placeholder": "SEO title{hellip}",
                     "characters": "{current} of {max} characters used"
                 },
                 "meta_description": {
                     "label": "Meta Description",
-                    "placeholder": "SEO description...",
+                    "placeholder": "SEO description{hellip}",
                     "characters": "{current} of {max} characters used"
                 },
                 "og_image": {
@@ -396,7 +396,7 @@
                 },
                 "description": {
                     "label": "Description",
-                    "placeholder": "Describe this day...",
+                    "placeholder": "Describe this day{hellip}",
                     "characters": "{current} of {max} characters used"
                 },
                 "remark": {
@@ -457,21 +457,21 @@
                 },
                 "preview_text": {
                     "label": "Preview text (optional)",
-                    "placeholder": "This text appears in the email preview...",
+                    "placeholder": "This text appears in the email preview{hellip}",
                     "help": "Preview text is shown next to the subject in email clients. Leave empty to auto-generate from content."
                 },
                 "body": {
                     "label": "Email text",
-                    "placeholder": "Write your message...",
+                    "placeholder": "Write your message{hellip}",
                     "help": "Tip: HTML tags are supported for formatting."
                 },
                 "scheduled_at": {
                     "label": "Send date",
-                    "placeholder": "Select date and time..."
+                    "placeholder": "Select date and time{hellip}"
                 },
                 "status": {
                     "label": "Status",
-                    "placeholder": "Select status..."
+                    "placeholder": "Select status{hellip}"
                 },
                 "featured_trips": {
                     "label": "Featured trips (optional)",
@@ -493,7 +493,7 @@
                 "title": "Test sending",
                 "help": "Send a test email to your own email address to check how the newsletter looks.",
                 "button": "Send test email",
-                "sending": "Sending...",
+                "sending": "Sending{hellip}",
                 "save_first": "Save the campaign first before sending a test email."
             },
             "status": {
@@ -691,7 +691,7 @@
         }
     },
     "hero": {
-        "title": "Human...",
+        "title": "More human{hellip}",
         "sub_title": "Because we travel",
         "cta": "View the trips"
     },
@@ -700,7 +700,7 @@
         "all_rights": "All rights reserverd.",
         "conditions": "Terms and conditions",
         "privacy": "Privacy policy",
-        "slogan": "For sustainable travel with a story"
+        "slogan": "More human{hellip} Omdat we riezen"
     },
     "booking_step_labels": {
         "trip": "Trip",
@@ -787,7 +787,7 @@
             "My fascination with travel has been there for as long as I can remember. When my father went on business trips, I would turn my piggy bank upside down to see if I had saved enough for a ticket, or I would try to fit inside his suitcase, hoping to tag along to those fascinating destinations he brought back souvenirs or foreign coins from.",
             "I remember how later on I would take family, friends, fellow students, or even complete strangers along to that one special little restaurant in the alleyways of Budapest or Ghent.",
             "Surrounded by prehistoric art from thousands of generations ago, in the caves of Lascaux, I realized I would never quite be the same person as before — something I had often experienced on my travels. The feeling of having become a little more human. I wanted to share that feeling, and I started organizing trips for others. The first was a trip to these caves with my father and brother, with whom I share a fascination for art and history. I researched it, organized the trip, arranged the details. The pleasure I found in that, and the satisfaction of sharing that place, told me more than years of deliberation ever could have. In Omdat We Reizen, the thread I had seen running through my life all those years finally fell into place.",
-            "Putting together a route is like solving a puzzle to me. The first pieces fall into place quickly: destination, transport, accommodation. But then come the details that make the trip special — the story you want to tell, the neighborhood where it all happens, the remarkable spots most people skip. You shuffle, scrap, and rethink. With every piece, it feels like you're already making the trip a little. And then comes the moment when the puzzle is complete, and everything fits... Omdat We Reizen."
+            "Putting together a route is like solving a puzzle to me. The first pieces fall into place quickly: destination, transport, accommodation. But then come the details that make the trip special — the story you want to tell, the neighborhood where it all happens, the remarkable spots most people skip. You shuffle, scrap, and rethink. With every piece, it feels like you're already making the trip a little. And then comes the moment when the puzzle is complete, and everything fits."
         ],
         "conviction": "To me, travel is different from a holiday. It's the difference between literature and light reading. It's breaking free from your bubble, discovering places that broaden your perspective — and making you, briefly or forever, a little more human. That feeling is what I want to pass on.",
         "promise_statement": [
@@ -806,12 +806,12 @@
             "button": "Get in touch"
         },
         "no_trips": {
-            "message_start": "Because we are working hard to set up our first trips, you cannot book any trips yet. Check out our",
+            "message_start": "I'm currently working on the first trips. Soon you will find train journeys to European destinations here, personally curated and each with a story to tell. Curious what I'm working on? Have a look at my",
             "blog_link": "blog",
-            "message_middle": "for information about recent activities or visit the",
-            "about_link": "about us",
-            "message_middle2": "page to learn more about Omdat We Reizen. You can also contact us via our",
-            "contact_link": "contact form"
+            "message_middle": "or learn more on the",
+            "about_link": "about me",
+            "message_middle2": "page. Want to be the first to know when the first trip goes live? Sign up for my",
+            "newsletter_link": "newsletter"
         },
         "pullquote": "I will only be satisfied when you come home richer than you left.",
         "pullquote_source": "Jelmer de Jong, founder of Omdat We Reizen."
@@ -981,7 +981,7 @@
                     "jobs_in_queue": "{count} jobs in queue"
                 },
                 "last_checked": "Last checked: {time}",
-                "loading": "System status is loading..."
+                "loading": "System status is loading{hellip}"
             }
         },
         "trips": {
@@ -995,7 +995,7 @@
             },
             "index": {
                 "title": "Trips",
-                "search_placeholder": "Search trips or destinations...",
+                "search_placeholder": "Search trips or destinations{hellip}",
                 "table_headers": {
                     "id": "#",
                     "image": "Image",
@@ -1079,7 +1079,7 @@
             },
             "edit": {
                 "items": {
-                    "select_category": "Selecteer een category...",
+                    "select_category": "Selecteer een category{hellip}",
                     "description": "Omschrijving"
                 }
             }
@@ -1101,7 +1101,7 @@
             },
             "index": {
                 "title": "Blog Posts",
-                "search_placeholder": "Search by title...",
+                "search_placeholder": "Search by title{hellip}",
                 "table_headers": {
                     "title": "Title",
                     "status": "Status",
@@ -1136,7 +1136,7 @@
                 "edit": "Save changes"
             },
             "index": {
-                "search_placeholder": "Search by reference, trip or destination...",
+                "search_placeholder": "Search by reference, trip or destination{hellip}",
                 "filters": {
                     "status": "Status",
                     "payment_status": "Payment status"
@@ -1160,7 +1160,7 @@
                 "travelers": "Travel party",
                 "edit_travelers": "Manage travelers",
                 "internal_notes_label": "Internal notes",
-                "internal_notes_placeholder": "Add internal notes...",
+                "internal_notes_placeholder": "Add internal notes{hellip}",
                 "edit_booking_status": "Manage booking status",
                 "booking_status_placeholder": "Select a booking status",
                 "booking_status_label": "Booking status",
@@ -1207,7 +1207,7 @@
                 "create": "Create destination"
             },
             "index": {
-                "search_placeholder": "Search on destination name...",
+                "search_placeholder": "Search on destination name{hellip}",
                 "title": "Bestemmingen overzicht",
                 "table_headers": {
                     "destinations": "Destination",
@@ -1243,7 +1243,7 @@
                     "delete_confirm": "Are you sure you want to delete this newsletter campaign?"
                 },
                 "index": {
-                    "search_placeholder": "Search on subject...",
+                    "search_placeholder": "Search on subject{hellip}",
                     "title": "Newsletter Campaigns",
                     "table_headers": {
                         "subject": "Subject",
@@ -1267,7 +1267,7 @@
                 },
                 "index": {
                     "title": "Newsletter Subscribers",
-                    "search_placeholder": "Search trips or destinations...",
+                    "search_placeholder": "Search trips or destinations{hellip}",
                     "table_headers": {
                         "name": "Name",
                         "email": "Email",

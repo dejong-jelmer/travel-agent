@@ -74,7 +74,7 @@ function submit() {
                             <div>
                                 <TextArea v-model="booking.internal_notes" name="internal_notes"
                                     :label="$t('admin.booking.edit.internal_notes_label')"
-                                    :placeholder="$t('admin.booking.edit.internal_notes_placeholder')"
+                                    :placeholder="$t('admin.booking.edit.internal_notes_placeholder', { hellip: '&hellip;' })"
                                     :rows="4"
                                     :feedback="booking.errors.internal_notes" />
                             </div>

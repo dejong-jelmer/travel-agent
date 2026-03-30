@@ -17,9 +17,8 @@ const missionStatement = tm('about.promise_statement')
                 overlay-class="bg-brand-accent/15" />
         </template>
         <!-- Story -->
-        <section class="relative overflow-hidden bg-brand-secondary">
-            <article class="relative py-12 laptop:py-24">
-                <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
+        <section class="bg-brand-secondary py-12 laptop:py-24">
+                <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8">
 
                     <div class="mt-8 flex flex-col laptop:flex-row gap-10 laptop:gap-16 items-start">
 
@@ -54,64 +53,54 @@ const missionStatement = tm('about.promise_statement')
                     </div>
 
                 </div>
-            </article>
         </section>
 
-
-
-        <section class="relative overflow-hidden py-12 laptop:py-24">
+        <section class="max-w-3xl mx-auto px-4 py-12 laptop:py-24 space-y-12 laptop:space-y-24">
             <!-- Conviction -->
-            <article class="">
-                <div class="max-w-3xl mx-auto px-4">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-4 h-px bg-brand-accent"></div>
-                        <span class="text-xs font-medium tracking-widest uppercase text-brand-primary">
-                            {{ t('about.conviction_label') }}
-                        </span>
-                    </div>
-                    <div class="mt-6 space-y-5">
-                        <p class="text-sm laptop:text-base text-brand-text leading-relaxed">
-                            {{ t('about.conviction') }}
-                        </p>
-                    </div>
+            <div>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-4 h-px bg-brand-accent"></div>
+                    <span class="text-xs font-medium tracking-widest uppercase text-brand-primary">
+                        {{ t('about.conviction_label') }}
+                    </span>
                 </div>
-            </article>
-             <div class="w-full text-center my-12 laptop:my-24">
+                <div class="mt-6 space-y-5">
+                    <p class="text-sm laptop:text-base text-brand-text leading-relaxed">
+                        {{ t('about.conviction') }}
+                    </p>
+                </div>
+            </div>
+
+            <!-- Pullquote -->
+            <div class="w-full text-center">
                 <p class="text-2xl laptop:text-4xl font-poppins text-brand-primary leading-tight">
                     {{ t('about.pullquote') }}
                 </p>
             </div>
-            <!-- Promise -->
-            <article class="mt-12 laptop:mt-24">
-                <div class="max-w-3xl mx-auto px-4">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div class="w-4 h-px bg-brand-accent"></div>
-                        <span class="text-xs font-medium tracking-widest uppercase text-brand-primary">
-                            {{ t('about.promise_label') }}
-                        </span>
-                    </div>
-                    <div class="mt-6 space-y-5">
-                        <p v-for="(paragraph, i) in missionStatement" :key="i"
-                            :class="i === missionStatement.length - 1
-                                ? 'text-base laptop:text-lg font-semibold text-brand-primary leading-relaxed mt-6'
-                                : 'text-sm laptop:text-base text-brand-text leading-relaxed'">
-                            {{ paragraph }}
-                        </p>
-                    </div>
 
+            <!-- Promise -->
+            <div>
+                <div class="flex items-center gap-2 mb-6">
+                    <div class="w-4 h-px bg-brand-accent"></div>
+                    <span class="text-xs font-medium tracking-widest uppercase text-brand-primary">
+                        {{ t('about.promise_label') }}
+                    </span>
                 </div>
-            </article>
+                <div class="mt-6 space-y-5">
+                    <p v-for="(paragraph, i) in missionStatement" :key="i"
+                        :class="i === missionStatement.length - 1
+                            ? 'text-base laptop:text-lg font-semibold text-brand-primary leading-relaxed mt-6'
+                            : 'text-sm laptop:text-base text-brand-text leading-relaxed'">
+                        {{ paragraph }}
+                    </p>
+                </div>
+            </div>
         </section>
 
         <!-- USP sectie -->
-        <section class="relative overflow-hidden bg-white">
-            <DecorativeLine />
-
-            <article class="relative py-12 laptop:py-24">
-                <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
-                    <USP />
-                </div>
-            </article>
+        <DecorativeLine />
+        <section class="bg-white py-12 laptop:py-24">
+            <USP />
         </section>
 
         <Newsletter />

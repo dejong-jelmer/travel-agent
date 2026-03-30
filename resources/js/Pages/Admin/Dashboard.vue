@@ -335,7 +335,7 @@ const stats = computed(() => [
                                 {{ t('admin.dashboard.system_status.last_checked', { time: lastCheckedTime }) }}
                             </span>
                             <span v-else>
-                                {{ t('admin.dashboard.system_status.loading') }}
+                                {{ t('admin.dashboard.system_status.loading', { hellip: '&hellip;' }) }}
                             </span>
                         </p>
                     </div>

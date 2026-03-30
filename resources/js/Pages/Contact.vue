@@ -18,12 +18,8 @@ const props = defineProps({
         </template>
 
         <!-- Form section -->
-        <section class="relative overflow-hidden">
-            <article class="relative py-12 laptop:py-24">
-                <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-4">
-                    <ContactForm :contact="contact" />
-                </div>
-            </article>
+        <section class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 py-12 laptop:py-24">
+            <ContactForm :contact="contact" />
         </section>
 
     </Layout>

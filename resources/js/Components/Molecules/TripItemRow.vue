@@ -45,7 +45,7 @@ const handleCategoryChange = (newCategory) => {
                 :required="true"
                 :options="categoryOptions"
                 :feedback="errors[`items.${index}.category`]"
-                :placeholder="$t('admin.trips.edit.items.select_category')"
+                :placeholder="$t('admin.trips.edit.items.select_category', { hellip: '&hellip;' })"
                 :show-label="false"
             />
         </div>

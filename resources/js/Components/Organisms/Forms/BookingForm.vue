@@ -152,7 +152,7 @@ function handleSubmit() {
                 class="px-6 py-2 rounded-xl inline-flex gap-2 items-center bg-brand-accent text-white font-medium hover:bg-white hover:text-brand-primary border border-transparent hover:border-brand-primary transition-all disabled:opacity-40 disabled:hover:bg-brand-accent disabled:hover:text-white disabled:cursor-not-allowed"
                 :disabled="!canSubmit || booking.processing" @click="handleSubmit">
                 <LoaderCircle v-if="booking.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
-                <span>{{ booking.processing ? $t('forms.booking.submitting') : $t('forms.booking.button_submit') }}</span>
+                <span>{{ booking.processing ? $t('forms.booking.submitting', { hellip: '&hellip;' }) : $t('forms.booking.button_submit') }}</span>
             </button>
         </div>
     </div>

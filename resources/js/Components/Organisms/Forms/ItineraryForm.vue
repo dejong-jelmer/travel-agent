@@ -51,7 +51,7 @@ const { t } = useI18n();
                             :placeholder="t('forms.itinerary.fields.title.placeholder')" />
                         <TextArea name="description" :label="t('forms.itinerary.fields.description.label')"
                             :required="true" v-model="form.description" :feedback="form.errors.description"
-                            :placeholder="t('forms.itinerary.fields.description.placeholder')" :rows="6" />
+                            :placeholder="t('forms.itinerary.fields.description.placeholder', { hellip: '&hellip;' })" :rows="6" />
                     </div>
                 </section>
                 <!-- Media Section -->

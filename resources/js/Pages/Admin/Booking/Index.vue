@@ -48,7 +48,7 @@ const currentFilters = computed(() => ({
             <DataTable :data="bookings.data" :columns="columns" :links="bookings.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" :filter-options="filterOptions"
                 :current-filters="currentFilters" searchable
-                :search-placeholder="t('admin.booking.index.search_placeholder')"
+                :search-placeholder="t('admin.booking.index.search_placeholder', { hellip: '&hellip;' })"
                 :empty-message="filters.search
                     ? t('admin.booking.index.no_bookings_found_with_search', { search: filters.search })
                     : t('admin.booking.index.no_bookings_found')">

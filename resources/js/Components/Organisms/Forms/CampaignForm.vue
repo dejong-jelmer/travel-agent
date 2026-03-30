@@ -124,7 +124,7 @@ function isTripSelected(tripId) {
                                     <Input type="text" name="preview_text" :label="t('forms.campaign.fields.preview_text.label')"
                                         :required="false" v-model="form.preview_text"
                                         :feedback="form.errors.preview_text"
-                                        :placeholder="t('forms.campaign.fields.preview_text.placeholder')" />
+                                        :placeholder="t('forms.campaign.fields.preview_text.placeholder', { hellip: '&hellip;' })" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="previewTextClass">
                                             {{ t('forms.campaign.character_counter.current', { current: previewTextLength, max: PREVIEW_TEXT_MAX_LENGTH }) }}
@@ -143,7 +143,7 @@ function isTripSelected(tripId) {
 
                                 <TextArea name="content" :label="t('forms.campaign.fields.body.label')" :required="true" v-model="form.content"
                                     :feedback="form.errors.content"
-                                    :placeholder="t('forms.campaign.fields.body.placeholder')"
+                                    :placeholder="t('forms.campaign.fields.body.placeholder', { hellip: '&hellip;' })"
                                     :rows="15" />
                                 <p class="text-xs text-gray-700/30">
                                     {{ t('forms.campaign.fields.body.help') }}
@@ -239,7 +239,7 @@ function isTripSelected(tripId) {
                                         {{ t('forms.campaign.test.help') }}
                                     </p>
                                     <Button type="button" @click="sendTestEmail" :disabled="!form?.id || sendingTest">
-                                        {{ sendingTest ? t('forms.campaign.test.sending') : t('forms.campaign.test.button') }}
+                                        {{ sendingTest ? t('forms.campaign.test.sending', { hellip: '&hellip;' }) : t('forms.campaign.test.button') }}
                                     </Button>
                                     <p v-if="!form?.id" class="text-xs text-blue-600 mt-2">
                                         {{ t('forms.campaign.test.save_first') }}
@@ -262,7 +262,7 @@ function isTripSelected(tripId) {
                         <div>
                             <Select name="status" :label="t('forms.campaign.fields.status.label')" v-model="form.status" :required="true"
                                 :options="statusOptions" :feedback="form.errors.status"
-                                :placeholder="t('forms.campaign.fields.status.placeholder')" />
+                                :placeholder="t('forms.campaign.fields.status.placeholder', { hellip: '&hellip;' })" />
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.campaign.status.help') }}
                             </p>
