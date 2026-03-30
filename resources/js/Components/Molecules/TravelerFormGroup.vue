@@ -53,11 +53,6 @@ const handleBirthdateInput = (event) => {
                 :feedback="feedback?.birthdate" @keyup="$emit('clearError', 'birthdate')" @input="handleBirthdateInput"
                 maxlength="10" />
 
-            <!-- <Input type="text" name="nationality[]" :label="$t('traveler_form.nationality')"
-                :placeholder="$t('traveler_form.nationality_placeholder')" :showLabel="true" :required="true"
-                v-model="traveler.nationality" :feedback="feedback?.nationality"
-                @keyup="$emit('clearError', 'nationality')" /> -->
-
             <CountrySelect v-model="traveler.nationality" :label="$t('traveler_form.nationality')"
                 :required="true" :feedback="feedback?.nationality"
                 :placeholder="$t('traveler_form.nationality_placeholder')"
