@@ -114,6 +114,7 @@ return [
     */
     'keys' => [
         'nav_countries' => 'nav_countries',
+        'countries' => 'countries',
     ],
 
 ];

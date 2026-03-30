@@ -54,7 +54,7 @@ class HomeController extends Controller
             name: $validated['name'],
             email: $validated['email'],
             text: $validated['text'],
-            phone: $validated['phone'],
+            phone: $validated['phone'] ?? null,
         );
 
         try {

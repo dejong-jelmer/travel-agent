@@ -40,64 +40,32 @@ const handleBirthdateInput = (event) => {
     <div class="space-y-2 p-4 border rounded-lg">
         <p class="font-bold text-brand-text">{{ label }} {{ index + 1 }}</p>
         <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6">
-            <Input
-                type="text"
-                name="first_name[]"
-                :label="$t('traveler_form.first_name_label')"
-                :showLabel="true"
-                :required="true"
-                v-model="traveler.first_name"
-                :placeholder="$t('traveler_form.first_name_placeholder')"
-                :feedback="feedback?.first_name"
-                @keyup="$emit('clearError', 'first_name')"
-            />
+            <Input type="text" name="first_name[]" :label="$t('traveler_form.first_name_label')" :showLabel="true"
+                :required="true" v-model="traveler.first_name" :placeholder="$t('traveler_form.first_name_placeholder')"
+                :feedback="feedback?.first_name" @keyup="$emit('clearError', 'first_name')" />
 
-            <Input
-                type="text"
-                name="last_name[]"
-                :label="$t('traveler_form.last_name_label')"
-                :showLabel="true"
-                :placeholder="$t('traveler_form.last_name_placeholder')"
-                :required="true"
-                v-model="traveler.last_name"
-                :feedback="feedback?.last_name"
-                @keyup="$emit('clearError', 'last_name')"
-            />
+            <Input type="text" name="last_name[]" :label="$t('traveler_form.last_name_label')" :showLabel="true"
+                :placeholder="$t('traveler_form.last_name_placeholder')" :required="true" v-model="traveler.last_name"
+                :feedback="feedback?.last_name" @keyup="$emit('clearError', 'last_name')" />
 
-            <Input
-                type="text"
-                name="birthdate[]"
-                :label="$t('traveler_form.birthdate')"
-                :showLabel="true"
-                :required="true"
-                v-model="traveler.birthdate"
-                :placeholder="$t('traveler_form.birthdate_placeholder')"
-                :feedback="feedback?.birthdate"
-                @keyup="$emit('clearError', 'birthdate')"
-                @input="handleBirthdateInput"
-                maxlength="10"
-            />
+            <Input type="text" name="birthdate[]" :label="$t('traveler_form.birthdate')" :showLabel="true"
+                :required="true" v-model="traveler.birthdate" :placeholder="$t('traveler_form.birthdate_placeholder')"
+                :feedback="feedback?.birthdate" @keyup="$emit('clearError', 'birthdate')" @input="handleBirthdateInput"
+                maxlength="10" />
 
-            <Input
-                type="text"
-                name="nationality[]"
-                :label="$t('traveler_form.nationality')"
+            <!-- <Input type="text" name="nationality[]" :label="$t('traveler_form.nationality')"
+                :placeholder="$t('traveler_form.nationality_placeholder')" :showLabel="true" :required="true"
+                v-model="traveler.nationality" :feedback="feedback?.nationality"
+                @keyup="$emit('clearError', 'nationality')" /> -->
+
+            <CountrySelect v-model="traveler.nationality" :label="$t('traveler_form.nationality')"
+                :required="true" :feedback="feedback?.nationality"
                 :placeholder="$t('traveler_form.nationality_placeholder')"
-                :showLabel="true"
-                :required="true"
-                v-model="traveler.nationality"
-                :feedback="feedback?.nationality"
-                @keyup="$emit('clearError', 'nationality')"
-            />
+                @keyup="$emit('clearError', 'nationality')" />
         </div>
-        <TextArea
-            name="special_requests[]"
-            :label="$t('traveler_form.special_requests')"
-            :placeholder="$t('traveler_form.special_requests_placeholder')"
-            :rows="2"
-            v-model="traveler.special_requests"
-            :feedback="feedback?.special_requests"
-            @keyup="$emit('clearError', 'special_requests')"
-        />
+        <TextArea name="special_requests[]" :label="$t('traveler_form.special_requests')"
+            :placeholder="$t('traveler_form.special_requests_placeholder')" :rows="2"
+            v-model="traveler.special_requests" :feedback="feedback?.special_requests"
+            @keyup="$emit('clearError', 'special_requests')" />
     </div>
 </template>
