@@ -33,7 +33,7 @@ const columns = [
         <template v-if="totalPosts > 0">
             <DataTable :data="posts.data" :columns="columns" :links="posts.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" :searchable="totalPosts > 0"
-                :search-placeholder="t('admin.blog_posts.index.search_placeholder', { hellip: '&hellip;' })"
+                :search-placeholder="t('admin.blog_posts.index.search_placeholder')"
                 :empty-message="filters.search
                     ? t('admin.blog_posts.index.no_posts_found_with_search', { search: filters.search })
                     : t('admin.blog_posts.index.no_posts_found')">

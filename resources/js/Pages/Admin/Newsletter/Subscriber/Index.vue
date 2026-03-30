@@ -52,7 +52,7 @@ const currentFilters = computed(() => ({
             :filter-options="filterOptions"
             :current-filters="currentFilters"
             searchable
-            :search-placeholder="t('admin.newsletter.subscribers.index.search_placeholder', { hellip: '&hellip;' })"
+            :search-placeholder="t('admin.newsletter.subscribers.index.search_placeholder')"
             :empty-message="filters.search
                     ? t('admin.newsletter.subscribers.index.no_subscribers_found_with_search', { search: filters.search })
                     : t('admin.newsletter.subscribers.index.no_subscribers_found')">

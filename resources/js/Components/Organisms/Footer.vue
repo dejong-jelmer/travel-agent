@@ -23,7 +23,7 @@ const year = new Date().getFullYear();
           <p
             class="max-w-md mx-auto mt-6 leading-relaxed text-left text-brand-secondary"
           >
-            {{ $t('footer.slogan', { hellip: '&hellip;' }) }}
+            {{ $t('footer.slogan') }}
           </p>
           <ul class="mt-5 space-y-4 text-sm">
             <li>

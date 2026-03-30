@@ -70,7 +70,7 @@ function submit() {
                     <Button :disabled="form.processing" class="w-auto" color="accent">
                         <span class="flex justify-center space-x-2">
                             <LoaderCircle v-if="form.processing" class="size-5 animate-spin" viewBox="0 0 24 24" />
-                            <span>{{ form.processing ? $t('newsletter.form.submitting', { hellip: '&hellip;' }) : $t('newsletter.form.submit')
+                            <span>{{ form.processing ? $t('newsletter.form.submitting') : $t('newsletter.form.submit')
                                 }}</span>
                         </span>
                     </Button>

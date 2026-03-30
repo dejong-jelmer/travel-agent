@@ -41,7 +41,7 @@ const filterOptions = computed(() => [
             <DataTable :data="campaigns.data" :columns="columns" :links="campaigns.links" :current-sort="filters.sort"
                 :current-direction="filters.direction" :current-search="filters.search" :filter-options="filterOptions"
                 searchable
-                :search-placeholder="t('admin.newsletter.campaigns.index.search_placeholder', { hellip: '&hellip;' })"
+                :search-placeholder="t('admin.newsletter.campaigns.index.search_placeholder')"
                 :empty-message="filters.search
                     ? t('admin.newsletter.campaigns.index.no_campaigns_found_with_search', { search: filters.search })
                     : t('admin.newsletter.campaigns.index.no_campaigns_found')">

@@ -102,7 +102,7 @@
             "cannot_load_image": "Cannot load image"
         },
         "preview": {
-            "loading": "Loading{hellip}",
+            "loading": "Loading…",
             "remove_image": "Remove image"
         },
         "file_info": {
@@ -127,7 +127,7 @@
         "form": {
             "name_placeholder": "Your first name (optional)",
             "email_placeholder": "your.email{'@'}example.com",
-            "submitting": "Submitting{hellip}",
+            "submitting": "Submitting…",
             "submit": "Subscribe"
         },
         "privacy": "I respect your privacy. You can unsubscribe at any time. Read my {link}.",
@@ -148,7 +148,7 @@
         "birthdate": "Date of birth",
         "birthdate_placeholder": "DD-MM-YYYY",
         "special_requests": "Special requests",
-        "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs{hellip}"
+        "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs…"
     },
     "usp": {
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
@@ -183,7 +183,7 @@
             "button_next": "Next",
             "button_submit": "Book now",
             "button_submit_tooltip": "Book now with payment obligation",
-            "submitting": "Submitting{hellip}"
+            "submitting": "Submitting…"
         },
         "contact": {
             "heading": "Contact",
@@ -241,7 +241,7 @@
                 },
                 "transport": {
                     "label": "Transport",
-                    "placeholder": "Select transport{hellip}",
+                    "placeholder": "Select transport…",
                     "help": "Select the different modes of transportation for this trip"
                 }
             },
@@ -256,7 +256,7 @@
                 },
                 "description": {
                     "label": "Description",
-                    "placeholder": "Describe the trip{hellip}",
+                    "placeholder": "Describe the trip…",
                     "characters": "{current} of {max} characters used"
                 },
                 "hero_image": {
@@ -294,7 +294,7 @@
                     },
                     "label": {
                         "label": "Season type",
-                        "placeholder": "Select season{hellip}"
+                        "placeholder": "Select season…"
                     }
                 },
                 "duration": {
@@ -304,7 +304,7 @@
                 },
                 "destinations": {
                     "label": "Destination",
-                    "placeholder": "Select destinations{hellip}",
+                    "placeholder": "Select destinations…",
                     "help": "Select the destinations that will be visited during this trip"
                 },
                 "blocked_dates": {
@@ -321,7 +321,7 @@
                 },
                 "highlights": {
                     "label": "Highlights",
-                    "placeholder": "Add highlights{hellip}",
+                    "placeholder": "Add highlights…",
                     "help": "Enter unique experiences and attractions of this trip"
                 },
                 "active": {
@@ -338,12 +338,12 @@
                 },
                 "meta_title": {
                     "label": "Meta Title",
-                    "placeholder": "SEO title{hellip}",
+                    "placeholder": "SEO title…",
                     "characters": "{current} of {max} characters used"
                 },
                 "meta_description": {
                     "label": "Meta Description",
-                    "placeholder": "SEO description{hellip}",
+                    "placeholder": "SEO description…",
                     "characters": "{current} of {max} characters used"
                 },
                 "og_image": {
@@ -396,7 +396,7 @@
                 },
                 "description": {
                     "label": "Description",
-                    "placeholder": "Describe this day{hellip}",
+                    "placeholder": "Describe this day…",
                     "characters": "{current} of {max} characters used"
                 },
                 "remark": {
@@ -457,21 +457,21 @@
                 },
                 "preview_text": {
                     "label": "Preview text (optional)",
-                    "placeholder": "This text appears in the email preview{hellip}",
+                    "placeholder": "This text appears in the email preview…",
                     "help": "Preview text is shown next to the subject in email clients. Leave empty to auto-generate from content."
                 },
                 "body": {
                     "label": "Email text",
-                    "placeholder": "Write your message{hellip}",
+                    "placeholder": "Write your message…",
                     "help": "Tip: HTML tags are supported for formatting."
                 },
                 "scheduled_at": {
                     "label": "Send date",
-                    "placeholder": "Select date and time{hellip}"
+                    "placeholder": "Select date and time…"
                 },
                 "status": {
                     "label": "Status",
-                    "placeholder": "Select status{hellip}"
+                    "placeholder": "Select status…"
                 },
                 "featured_trips": {
                     "label": "Featured trips (optional)",
@@ -493,7 +493,7 @@
                 "title": "Test sending",
                 "help": "Send a test email to your own email address to check how the newsletter looks.",
                 "button": "Send test email",
-                "sending": "Sending{hellip}",
+                "sending": "Sending…",
                 "save_first": "Save the campaign first before sending a test email."
             },
             "status": {
@@ -691,7 +691,7 @@
         }
     },
     "hero": {
-        "title": "More human{hellip}",
+        "title": "More human…",
         "sub_title": "Because we travel",
         "cta": "View the trips"
     },
@@ -700,7 +700,7 @@
         "all_rights": "All rights reserverd.",
         "conditions": "Terms and conditions",
         "privacy": "Privacy policy",
-        "slogan": "More human{hellip} Omdat we riezen"
+        "slogan": "More human… Omdat we riezen"
     },
     "booking_step_labels": {
         "trip": "Trip",
@@ -981,7 +981,7 @@
                     "jobs_in_queue": "{count} jobs in queue"
                 },
                 "last_checked": "Last checked: {time}",
-                "loading": "System status is loading{hellip}"
+                "loading": "System status is loading…"
             }
         },
         "trips": {
@@ -995,7 +995,7 @@
             },
             "index": {
                 "title": "Trips",
-                "search_placeholder": "Search trips or destinations{hellip}",
+                "search_placeholder": "Search trips or destinations…",
                 "table_headers": {
                     "id": "#",
                     "image": "Image",
@@ -1079,7 +1079,7 @@
             },
             "edit": {
                 "items": {
-                    "select_category": "Selecteer een category{hellip}",
+                    "select_category": "Selecteer een category…",
                     "description": "Omschrijving"
                 }
             }
@@ -1101,7 +1101,7 @@
             },
             "index": {
                 "title": "Blog Posts",
-                "search_placeholder": "Search by title{hellip}",
+                "search_placeholder": "Search by title…",
                 "table_headers": {
                     "title": "Title",
                     "status": "Status",
@@ -1136,7 +1136,7 @@
                 "edit": "Save changes"
             },
             "index": {
-                "search_placeholder": "Search by reference, trip or destination{hellip}",
+                "search_placeholder": "Search by reference, trip or destination…",
                 "filters": {
                     "status": "Status",
                     "payment_status": "Payment status"
@@ -1160,7 +1160,7 @@
                 "travelers": "Travel party",
                 "edit_travelers": "Manage travelers",
                 "internal_notes_label": "Internal notes",
-                "internal_notes_placeholder": "Add internal notes{hellip}",
+                "internal_notes_placeholder": "Add internal notes…",
                 "edit_booking_status": "Manage booking status",
                 "booking_status_placeholder": "Select a booking status",
                 "booking_status_label": "Booking status",
@@ -1207,7 +1207,7 @@
                 "create": "Create destination"
             },
             "index": {
-                "search_placeholder": "Search on destination name{hellip}",
+                "search_placeholder": "Search on destination name…",
                 "title": "Bestemmingen overzicht",
                 "table_headers": {
                     "destinations": "Destination",
@@ -1243,7 +1243,7 @@
                     "delete_confirm": "Are you sure you want to delete this newsletter campaign?"
                 },
                 "index": {
-                    "search_placeholder": "Search on subject{hellip}",
+                    "search_placeholder": "Search on subject…",
                     "title": "Newsletter Campaigns",
                     "table_headers": {
                         "subject": "Subject",
@@ -1267,7 +1267,7 @@
                 },
                 "index": {
                     "title": "Newsletter Subscribers",
-                    "search_placeholder": "Search trips or destinations{hellip}",
+                    "search_placeholder": "Search trips or destinations…",
                     "table_headers": {
                         "name": "Name",
                         "email": "Email",

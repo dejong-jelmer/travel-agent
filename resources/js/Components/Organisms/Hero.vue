@@ -47,7 +47,7 @@ onMounted(() => {
         <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-fit mx-auto">
             <div class="absolute top-[40%] laptop:top-[50%] left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
                 <h1 class="text-brand-secondary font-poppins text-nowrap font-light text-4xl laptop:text-5xl select-none text-center [text-shadow:_0_2px_4px_rgb(0_0_0_/_0.4)]">
-                    <span :class="visibleTitle ? 'opacity-100' : 'opacity-0'" class="block tablet:inline transition-opacity duration-[1200ms] ease-in-out tracking-wider">{{ t('hero.title', { hellip: '&hellip;' }) }}</span>
+                    <span :class="visibleTitle ? 'opacity-100' : 'opacity-0'" class="block tablet:inline transition-opacity duration-[1200ms] ease-in-out tracking-wider">{{ t('hero.title') }}</span>
                     <span class="hidden tablet:inline">&nbsp;</span>
                     <span :class="visibleSubTitle ? 'opacity-100' : 'opacity-0'" class="drop-shadow-2xl block tablet:inline transition-opacity duration-[1200ms] ease-in-out tracking-wider">{{ t('hero.sub_title') }}</span>
                 </h1>

@@ -109,10 +109,10 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
 
                                 <TextArea name="description" :label="t('forms.trip.fields.description.label')"
                                     :required="true" v-model="form.description" :feedback="form.errors.description"
-                                    :placeholder="t('forms.trip.fields.description.placeholder', { hellip: '&hellip;' })" :rows="6" />
+                                    :placeholder="t('forms.trip.fields.description.placeholder')" :rows="6" />
                                 <DynamicInputList :items="form.highlights" name="highlights"
                                     :label="t('forms.trip.fields.highlights.label')"
-                                    :placeholder="t('forms.trip.fields.highlights.placeholder', { hellip: '&hellip;' })"
+                                    :placeholder="t('forms.trip.fields.highlights.placeholder')"
                                     :feedback="form.errors" />
                             </TabPanel>
 
@@ -134,7 +134,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                     <Input type="text" name="meta_title"
                                         :label="t('forms.trip.fields.meta_title.label')" v-model="form.meta_title"
                                         :feedback="form.errors.meta_title"
-                                        :placeholder="t('forms.trip.fields.meta_title.placeholder', { hellip: '&hellip;' })" />
+                                        :placeholder="t('forms.trip.fields.meta_title.placeholder')" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="metaTitleClass">
                                             {{ t('forms.trip.fields.meta_title.characters', {
@@ -159,7 +159,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                     <TextArea name="meta_description"
                                         :label="t('forms.trip.fields.meta_description.label')"
                                         v-model="form.meta_description" :feedback="form.errors.meta_description"
-                                        :placeholder="t('forms.trip.fields.meta_description.placeholder', { hellip: '&hellip;' })" :rows="4" />
+                                        :placeholder="t('forms.trip.fields.meta_description.placeholder')" :rows="4" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="metaDescriptionClass">
                                             {{ t('forms.trip.fields.meta_description.characters', {
@@ -277,7 +277,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                         <div>
                             <Select name="transport" :show-label="false" v-model="form.transport" :multiple="true"
                                 :required="false" :options="transportOptions" :feedback="form.errors.transport"
-                                :placeholder="t('forms.trip.sections.transport.placeholder', { hellip: '&hellip;' })" />
+                                :placeholder="t('forms.trip.sections.transport.placeholder')" />
                         </div>
                     </div>
                 </section>
@@ -294,7 +294,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                         <div>
                             <Select name="destination" v-model="form.destinations" :multiple="true" :required="true"
                                 :options="destinationOptions" :feedback="form.errors.destinations"
-                                :placeholder="t('forms.trip.fields.destinations.placeholder', { hellip: '&hellip;' })" />
+                                :placeholder="t('forms.trip.fields.destinations.placeholder')" />
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.trip.fields.destinations.help') }}
                             </p>

@@ -84,7 +84,7 @@
                         <!-- Loading state -->
                         <div v-else-if="imageData.loading"
                             class="w-full h-full bg-gray-200 rounded-lg shadow flex items-center justify-center text-gray-500 text-xs animate-pulse">
-                            {{ $t('image_uploader.preview.loading', { hellip: '&hellip;' }) }}
+                            {{ $t('image_uploader.preview.loading') }}
                         </div>
 
                         <!-- Remove button -->

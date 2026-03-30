@@ -142,7 +142,7 @@ function updateDateField(index, field, value) {
                             @update:modelValue="updateField(index, 'label', $event)"
                             :options="priceLabelOptions"
                             :feedback="errors?.[`prices.${index}.label`]"
-                            :placeholder="t('forms.trip.fields.prices.label.placeholder', { hellip: '&hellip;' })"
+                            :placeholder="t('forms.trip.fields.prices.label.placeholder')"
                         />
                     </div>
                 </div>
