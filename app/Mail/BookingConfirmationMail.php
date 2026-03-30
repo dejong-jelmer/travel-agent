@@ -3,9 +3,11 @@
 namespace App\Mail;
 
 use App\Models\Booking;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
@@ -49,6 +51,13 @@ class BookingConfirmationMail extends Mailable
      */
     public function attachments(): array
     {
-        return [];
+        $pdf = Pdf::loadView('pdf.terms')->setPaper('a4');
+
+        return [
+            Attachment::fromData(
+                fn() => $pdf->output(),
+                'algemene-voorwaarden-omdat-we-reizen.pdf'
+            )->withMime('application/pdf'),
+        ];
     }
 }

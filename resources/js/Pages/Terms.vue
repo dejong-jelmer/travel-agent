@@ -1,7 +1,68 @@
 <script setup>
+import { ref } from 'vue';
+import { Download, Loader2 } from 'lucide-vue-next';
+
 const props = defineProps({
     contact: Object
 });
+
+const contentRef = ref(null);
+const isGenerating = ref(false);
+
+async function downloadPdf() {
+    if (isGenerating.value || !contentRef.value) return;
+
+    isGenerating.value = true;
+
+    try {
+        const html2pdf = (await import('html2pdf.js')).default;
+
+        const options = {
+            margin: [15, 15, 20, 15],
+            filename: 'Algemene-Voorwaarden-Omdat-We-Reizen.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: {
+                scale: 2,
+                useCORS: true,
+                letterRendering: true,
+            },
+            jsPDF: {
+                unit: 'mm',
+                format: 'a4',
+                orientation: 'portrait',
+            },
+            pagebreak: {
+                mode: ['avoid-all', 'css', 'legacy'],
+                avoid: ['h2', 'h3', 'tr'],
+            },
+        };
+
+        await html2pdf()
+            .set(options)
+            .from(contentRef.value)
+            .toPdf()
+            .get('pdf')
+            .then((pdf) => {
+                const totalPages = pdf.internal.getNumberOfPages();
+                for (let i = 1; i <= totalPages; i++) {
+                    pdf.setPage(i);
+                    pdf.setFontSize(9);
+                    pdf.setTextColor(150);
+                    pdf.text(
+                        `Pagina ${i} van ${totalPages}`,
+                        pdf.internal.pageSize.getWidth() / 2,
+                        pdf.internal.pageSize.getHeight() - 10,
+                        { align: 'center' }
+                    );
+                }
+            })
+            .save();
+    } catch (error) {
+        console.error('PDF generation failed:', error);
+    } finally {
+        isGenerating.value = false;
+    }
+}
 
 </script>
 <template>
@@ -9,7 +70,19 @@ const props = defineProps({
         <section class="section">
             <article>
                 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-                    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <!-- Download button (outside contentRef so it won't appear in the PDF) -->
+                    <div class="flex justify-end mb-4">
+                        <Button class="inline-flex gap-2 items-center"
+                            @click="downloadPdf"
+                            :disabled="isGenerating"
+
+                        >
+                            <Loader2 v-if="isGenerating" class="h-5 animate-spin" />
+                            <Download v-else class="h-5" />
+                        </Button>
+                    </div>
+
+                    <div ref="contentRef" class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <!-- Header -->
                         <header class="bg-brand-light text-white px-6 py-8">
                             <h1 class="text-3xl font-bold mb-2">Algemene Voorwaarden</h1>
@@ -156,11 +229,11 @@ const props = defineProps({
                                         Artikel 2 – Garantiefonds STO Garant</h2>
                                     <p class="mb-4">Om te voldoen aan de wettelijk verplichte garantiestelling maakt de
                                         Organisatie gebruik van STO Garant. U kunt dit controleren via de STO Garant
-                                        deelnemerspagina op <a href="https://sto-garant.nl/reizigers/aangesloten-organisaties" class="text-blue-500 hover:text-blue-800 hover:underline">sto-garant.nl</a>. Bij elk (reis)aanbod van de Organisator wordt
+                                        deelnemerspagina op <a href="https://sto-garant.nl/reizigers/aangesloten-organisaties" target="_blank" class="text-blue-500 hover:text-blue-800 hover:underline">sto-garant.nl</a>. Bij elk (reis)aanbod van de Organisator wordt
                                         duidelijk vermeld of de garantie van STO Garant van toepassing is. Binnen de
                                         grenzen
                                         van
-                                        de garantieregeling (te vinden op <a href="www.sto-garant.nl/downloads" class="text-blue-500 hover:text-blue-800 hover:underline">www.sto-garant.nl/downloads</a>) is de garantie
+                                        de garantieregeling (te vinden op <a href="https://www.sto-garant.nl/downloads" target="_blank" class="text-blue-500 hover:text-blue-800 hover:underline">www.sto-garant.nl/downloads</a>) is de garantie
                                         van
                                         STO
                                         Garant van toepassing. In de garantieregeling leest u wat de garantie inhoudt en
@@ -1471,3 +1544,10 @@ const props = defineProps({
         </section>
     </Layout>
 </template>
+
+<style scoped>
+/* PDF page break optimization */
+:deep(section) {
+    break-inside: avoid;
+}
+</style>

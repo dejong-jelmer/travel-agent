@@ -29,6 +29,7 @@ Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
 Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
+Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTerms'])->name('terms.download');
 
 // Blog
 Route::get('/blog', [BlogPostController::class, 'index'])->name('blog.index');

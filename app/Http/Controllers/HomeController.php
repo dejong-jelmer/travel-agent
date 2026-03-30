@@ -8,6 +8,7 @@ use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
 use App\Services\CountryService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -102,5 +103,12 @@ class HomeController extends Controller
             'title' => $this->pageTitle('home.terms_seo'),
             'seo' => $this->pageSeo('home.terms_seo'),
         ]);
+    }
+
+    public function downloadTerms(): HttpResponse
+    {
+        $pdf = Pdf::loadView('pdf.terms')->setPaper('a4');
+
+        return $pdf->download('algemene-voorwaarden-omdat-we-reizen.pdf');
     }
 }
