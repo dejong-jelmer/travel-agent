@@ -8,10 +8,12 @@ use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
 use App\Services\CountryService;
+use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller
@@ -102,5 +104,10 @@ class HomeController extends Controller
             'title' => $this->pageTitle('home.terms_seo'),
             'seo' => $this->pageSeo('home.terms_seo'),
         ]);
+    }
+
+    public function downloadTerms(TermsPdfService $termsPdf): BinaryFileResponse
+    {
+        return response()->download($termsPdf->path(), TermsPdfService::FILENAME);
     }
 }

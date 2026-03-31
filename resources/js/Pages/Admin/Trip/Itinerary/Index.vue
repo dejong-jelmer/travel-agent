@@ -1,17 +1,17 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
-import axios from '@/axios'
+import { fetchApi } from '@/fetchApi'
 const user = usePage().props.auth?.user ?? {};
 const props = defineProps({
     trip: Object,
 });
 
 function updateOrder(orderedItinerary) {
-    axios
-        .patch(route("admin.trips.itineraries.order", props.trip), {
-            itineraries: orderedItinerary,
-        })
-        .then((response) => console.log(response.data))
+    fetchApi(route("admin.trips.itineraries.order", props.trip), {
+        method: 'PATCH',
+        body: { itineraries: orderedItinerary },
+    })
+        .then((data) => console.log(data))
         .catch((error) => console.error(error));
 }
 </script>

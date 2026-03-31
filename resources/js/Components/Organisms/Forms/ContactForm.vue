@@ -1,6 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import axios from "@/axios";
+import { fetchApi } from "@/fetchApi";
 import { reactive, ref } from "vue";
 import { useToast } from "vue-toastification";
 import { Phone, AtSign, Pencil } from 'lucide-vue-next';
@@ -29,15 +29,14 @@ function submit() {
     try {
         honeypot.value.validate();
         resetObject(errors);
-        axios
-            .post(route("contact"), form)
-            .then((response) => {
+        fetchApi(route("submit.contact"), { method: 'POST', body: form })
+            .then(() => {
                 toast.success(t('forms.contact.success'));
                 resetObject(form);
             })
             .catch((error) => {
-                if (error.response && error.response.data && error.response.data.errors) {
-                    Object.assign(errors, error.response.data.errors);
+                if (error.response?.errors) {
+                    Object.assign(errors, error.response.errors);
                 }
             });
     } catch (error) { }

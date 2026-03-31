@@ -1,0 +1,44 @@
+<?php
+
+namespace App\Services;
+
+use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+
+class TermsPdfService
+{
+    public const FILENAME = 'algemene-voorwaarden-omdat-we-reizen.pdf';
+
+    private const STORAGE_PATH = 'terms/'.self::FILENAME;
+
+    public function path(): string
+    {
+        $disk = Storage::disk('local');
+
+        // Add locking to prevent race conditions
+        if (! $disk->exists(self::STORAGE_PATH)) {
+            Cache::lock('terms-pdf-generation', 10)->block(15, function () use ($disk) {
+                if (! $disk->exists(self::STORAGE_PATH)) { // @phpstan-ignore booleanNot.alwaysTrue
+                    $this->generate();
+                }
+            });
+        }
+
+        return $disk->path(self::STORAGE_PATH);
+    }
+
+    public function generate(): void
+    {
+        try {
+            $pdf = Pdf::loadView('pdf.terms')->setPaper('a4');
+            $output = $pdf->output();
+
+            Storage::disk('local')->put(self::STORAGE_PATH, $output);
+        } catch (\Exception $e) {
+            Log::error('PDF generation failed', ['error' => $e->getMessage()]);
+            throw $e;
+        }
+    }
+}
