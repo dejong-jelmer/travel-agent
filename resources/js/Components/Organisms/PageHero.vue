@@ -23,5 +23,7 @@ defineProps({
                 {{ subtitle }}
             </p>
         </div>
+
+        <ScrollIndicator :delay="800" />
     </section>
 </template>
