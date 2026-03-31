@@ -779,7 +779,7 @@
         "pullquote": "Journeys that move you. Stories that stay with you",
         "founder": {
             "name": "Jelmer de Jong",
-            "role": "Founder of Omdat We Reizen"
+            "role": "The person behind Omdat We Reizen"
         },
         "story_label": "My story",
         "conviction_label": "What travel means to me",
@@ -790,7 +790,7 @@
             "Surrounded by prehistoric art from thousands of generations ago, in the caves of Lascaux, I realized I would never quite be the same person as before — something I had often experienced on my travels. The feeling of having become a little more human. I wanted to share that feeling, and I started organizing trips for others. The first was a trip to these caves with my father and brother, with whom I share a fascination for art and history. I researched it, organized the trip, arranged the details. The pleasure I found in that, and the satisfaction of sharing that place, told me more than years of deliberation ever could have. In Omdat We Reizen, the thread I had seen running through my life all those years finally fell into place.",
             "Putting together a route is like solving a puzzle to me. The first pieces fall into place quickly: destination, transport, accommodation. But then come the details that make the trip special — the story you want to tell, the neighborhood where it all happens, the remarkable spots most people skip. You shuffle, scrap, and rethink. With every piece, it feels like you're already making the trip a little. And then comes the moment when the puzzle is complete, and everything fits."
         ],
-        "conviction": "To me, travel is different from a holiday. It's the difference between literature and light reading. It's breaking free from your bubble, discovering places that broaden your perspective — and making you, briefly or forever, a little more human. That feeling is what I want to pass on.",
+        "conviction": "To me, travel is different from a holiday. It's the difference between literature and a medical novel. It's breaking free from your bubble, discovering places that broaden your perspective — and making you, briefly or forever, a little more human. That feeling is what I want to pass on.",
         "promise_statement": [
             "Inspiration only begins when your mind is free. That's why I take care of all the planning — so you have the space to enjoy whatever you encounter along the way.",
             "I'm only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
@@ -814,8 +814,8 @@
             "message_middle2": "page. Want to be the first to know when the first trip goes live? Sign up for my",
             "newsletter_link": "newsletter"
         },
-        "pullquote": "I will only be satisfied when you come home richer than you left.",
-        "pullquote_source": "Jelmer de Jong, founder of Omdat We Reizen."
+        "pullquote": "For me, traveling is different from a vacation. It is the difference between literature and a medical novel.",
+        "pullquote_source": "Jelmer de Jong"
     },
     "trip_show": {
         "hero": {
