@@ -6,59 +6,23 @@ const props = defineProps({
     contact: Object
 });
 
-const contentRef = ref(null);
 const isGenerating = ref(false);
 
 async function downloadPdf() {
-    if (isGenerating.value || !contentRef.value) return;
-
+    if (isGenerating.value) return;
     isGenerating.value = true;
 
     try {
-        const html2pdf = (await import('html2pdf.js')).default;
-
-        const options = {
-            margin: [15, 15, 20, 15],
-            filename: 'Algemene-Voorwaarden-Omdat-We-Reizen.pdf',
-            image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: {
-                scale: 2,
-                useCORS: true,
-                letterRendering: true,
-            },
-            jsPDF: {
-                unit: 'mm',
-                format: 'a4',
-                orientation: 'portrait',
-            },
-            pagebreak: {
-                mode: ['avoid-all', 'css', 'legacy'],
-                avoid: ['h2', 'h3', 'tr'],
-            },
-        };
-
-        await html2pdf()
-            .set(options)
-            .from(contentRef.value)
-            .toPdf()
-            .get('pdf')
-            .then((pdf) => {
-                const totalPages = pdf.internal.getNumberOfPages();
-                for (let i = 1; i <= totalPages; i++) {
-                    pdf.setPage(i);
-                    pdf.setFontSize(9);
-                    pdf.setTextColor(150);
-                    pdf.text(
-                        `Pagina ${i} van ${totalPages}`,
-                        pdf.internal.pageSize.getWidth() / 2,
-                        pdf.internal.pageSize.getHeight() - 10,
-                        { align: 'center' }
-                    );
-                }
-            })
-            .save();
+        const response = await fetch(route('terms.download'));
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'algemene-voorwaarden-omdat-we-reizen.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
     } catch (error) {
-        console.error('PDF generation failed:', error);
+        console.error('PDF download failed:', error);
     } finally {
         isGenerating.value = false;
     }
@@ -70,7 +34,7 @@ async function downloadPdf() {
         <section class="section">
             <article>
                 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
-                    <!-- Download button (outside contentRef so it won't appear in the PDF) -->
+                    <!-- PDF Download button -->
                     <div class="flex justify-end mb-4">
                         <Button class="inline-flex gap-2 items-center"
                             @click="downloadPdf"
@@ -82,7 +46,7 @@ async function downloadPdf() {
                         </Button>
                     </div>
 
-                    <div ref="contentRef" class="bg-white shadow-lg rounded-lg overflow-hidden">
+                    <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <!-- Header -->
                         <header class="bg-brand-light text-white px-6 py-8">
                             <h1 class="text-3xl font-bold mb-2">Algemene Voorwaarden</h1>

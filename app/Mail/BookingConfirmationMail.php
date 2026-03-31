@@ -55,7 +55,7 @@ class BookingConfirmationMail extends Mailable
 
         return [
             Attachment::fromData(
-                fn() => $pdf->output(),
+                fn () => $pdf->output(),
                 'algemene-voorwaarden-omdat-we-reizen.pdf'
             )->withMime('application/pdf'),
         ];

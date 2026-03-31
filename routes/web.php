@@ -43,7 +43,7 @@ Route::post('/locale/switch', [LocaleController::class, 'switch'])
 // contact form
 Route::post('/contact', [HomeController::class, 'submitContact'])
     ->middleware('throttle:frontend-form-actions')
-    ->name('contact');
+    ->name('submit.contact');
 
 // Newsletter subscription routes
 Route::post('/nieuwsbrief/aanmelden', [SubscriptionController::class, 'subscribe'])
