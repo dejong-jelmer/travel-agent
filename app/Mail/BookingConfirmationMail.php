@@ -11,6 +11,7 @@ use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class BookingConfirmationMail extends Mailable
 {
@@ -51,10 +52,18 @@ class BookingConfirmationMail extends Mailable
      */
     public function attachments(): array
     {
-        return [
-            Attachment::fromPath(app(TermsPdfService::class)->path())
-                ->as(TermsPdfService::FILENAME)
-                ->withMime('application/pdf'),
-        ];
+        try {
+            return [
+                Attachment::fromPath(app(TermsPdfService::class)->path())
+                    ->as(TermsPdfService::FILENAME)
+                    ->withMime('application/pdf'),
+            ];
+        } catch (\Exception $e) {
+            Log::error('Failed to attach terms PDF to booking confirmation', [
+                'error' => $e->getMessage(),
+            ]);
+
+            return [];
+        }
     }
 }

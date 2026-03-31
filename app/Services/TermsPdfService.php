@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,11 +15,18 @@ class TermsPdfService
 
     public function path(): string
     {
-        if (! Storage::disk('local')->exists(self::STORAGE_PATH)) {
-            $this->generate();
+        $disk = Storage::disk('local');
+
+        // Add locking to prevent race conditions
+        if (! $disk->exists(self::STORAGE_PATH)) {
+            Cache::lock('terms-pdf-generation', 10)->block(15, function () use ($disk) {
+                if (! $disk->exists(self::STORAGE_PATH)) { // @phpstan-ignore booleanNot.alwaysTrue
+                    $this->generate();
+                }
+            });
         }
 
-        return Storage::disk('local')->path(self::STORAGE_PATH);
+        return $disk->path(self::STORAGE_PATH);
     }
 
     public function generate(): void
@@ -27,9 +35,7 @@ class TermsPdfService
             $pdf = Pdf::loadView('pdf.terms')->setPaper('a4');
             $output = $pdf->output();
 
-            if (! Storage::disk('local')->put(self::STORAGE_PATH, $output)) {
-                throw new \RuntimeException('Failed to save PDF to storage');
-            }
+            Storage::disk('local')->put(self::STORAGE_PATH, $output);
         } catch (\Exception $e) {
             Log::error('PDF generation failed', ['error' => $e->getMessage()]);
             throw $e;

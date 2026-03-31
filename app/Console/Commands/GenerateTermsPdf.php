@@ -13,10 +13,15 @@ class GenerateTermsPdf extends Command
 
     public function handle(TermsPdfService $termsPdfService): int
     {
-        $termsPdfService->generate();
+        try {
+            $termsPdfService->generate();
+            $this->info('Terms PDF generated successfully.');
 
-        $this->info('Terms PDF generated successfully.');
+            return self::SUCCESS;
+        } catch (\Exception $e) {
+            $this->error('Failed to generate PDF: '.$e->getMessage());
 
-        return self::SUCCESS;
+            return self::FAILURE;
+        }
     }
 }
