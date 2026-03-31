@@ -27,7 +27,7 @@ const usps = [
 ];
 </script>
 <template>
-    <div id="over-mijn-reizen" class="max-w-6xl mx-auto px-4 scroll-mt-36">
+    <div id="over-de-reizen" class="max-w-6xl mx-auto px-4 scroll-mt-36">
 
         <!-- Header -->
         <div class="text-center mb-12 laptop:mb-24">
