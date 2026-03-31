@@ -30,7 +30,7 @@ const { t } = useI18n()
             <li class="flex items-start">
                 <span class="text-status-success font-bold mr-2">✓</span>
                 <span class="text-brand-primary">
-                    {{ t('newsletter_subscription.confirmed.exclusive_content') }}
+                    {{ t('newsletter_subscription.confirmed.content') }}
                 </span>
             </li>
             <li class="flex items-start">

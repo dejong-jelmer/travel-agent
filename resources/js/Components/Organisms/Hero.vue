@@ -60,5 +60,7 @@ onMounted(() => {
                 </a>
             </div>
         </div>
+
+        <ScrollIndicator />
     </div>
 </template>

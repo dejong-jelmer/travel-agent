@@ -55,7 +55,7 @@
         "title_show": "Blog",
         "blog_seo": {
             "title": "Blog",
-            "description": "Read our latest blog posts about sustainable train travel across Europe."
+            "description": "Read my blog about sustainable rail travel in Europe."
         },
         "index": {
             "title": "Blog",
@@ -136,7 +136,7 @@
         "subscription": {
             "success": "Thank you for subscribing! Please confirm your subscription via the email we just sent to {email}.",
             "error": "An error occurred while processing your subscription. Please try again later.",
-            "already_subscribed": "You are already subscribed to our newsletter. Enjoy the updates!"
+            "already_subscribed": "You are already subscribed to the newsletter."
         }
     },
     "traveler_form": {
@@ -160,12 +160,12 @@
         },
         "train": {
             "title": "The journey begins on the platform",
-            "description": "A departure hall where you can already feel the journey beginning. The train is not a means of transport — it is the first chapter. You arrive rested, curious, and already a little way into the story.",
-            "highlight": "Europe by train"
+            "description": "A train station where you can already feel the journey beginning. The train is not just a means of transport — it is the first chapter. You arrive rested, curious, and already a little way into the story.",
+            "highlight": "Europe by rail"
         },
         "unique": {
             "title": "Destinations you won't find on Google",
-            "description": "I choose places that have something to say — and whose story I know myself. The city that stays with you long after you are home.",
+            "description": "I choose places that have something to say — and whose story I know myself. A destinations that stays with you long after you are home.",
             "highlight": "Every trip has a story"
         },
         "cta": {
@@ -454,7 +454,7 @@
                 },
                 "subject": {
                     "label": "Email subject",
-                    "placeholder": "e.g. Discover our summer trips!"
+                    "placeholder": "e.g. Discover the new single destination trips!"
                 },
                 "preview_text": {
                     "label": "Preview text (optional)",
@@ -701,7 +701,7 @@
         "all_rights": "All rights reserverd.",
         "conditions": "Terms and conditions",
         "privacy": "Privacy policy",
-        "slogan": "More human… Omdat we riezen"
+        "slogan": "Omdat we riezen… more human."
     },
     "booking_step_labels": {
         "trip": "Trip",
@@ -864,15 +864,15 @@
     "newsletter_subscription": {
         "confirmed": {
             "title": "You're subscribed!",
-            "message": "Thank you for confirming your subscription. You will now receive our newsletter with the latest updates, tips and exclusive content.",
+            "message": "Thank you for confirming your subscription.",
             "box_title": "What to expect?",
             "updates": "Regular updates about our latest travel offerings",
-            "exclusive_content": "Exclusive content and stories",
+            "content": "Personal experiances and stories",
             "unsubscribe_anytime": "You can always unsubscribe"
         },
         "unsubscribed": {
             "title": "You've been unsubscribed.",
-            "message": "You have successfully unsubscribed from our newsletter. You will no longer receive any emails from us, but you can always resubscribe if you want to stay informed about our latest travel offerings.",
+            "message": "You have successfully unsubscribed from my newsletter. You will no longer receive any emails from us.",
             "box_title": "What now?",
             "no_more_emails": "You will no longer receive newsletters from us",
             "resubscribe_anytime": "You can always resubscribe at a later time",
