@@ -25,7 +25,8 @@
         "all_trips": "Alle reizen",
         "contact": "Contact",
         "about": "Over mij",
-        "blog": "Blog"
+        "blog": "Blog",
+        "home": "Home"
     },
     "trips": {
         "title": "Alle reizen",
@@ -778,7 +779,7 @@
         "pullquote": "Reizen die je raken. Verhalen die bijblijven.",
         "founder": {
             "name": "Jelmer de Jong",
-            "role": "Oprichter van Omdat We Reizen"
+            "role": "De persoon achter Omdat We Reizen"
         },
         "story_label": "Mijn verhaal",
         "conviction_label": "Wat reizen voor mij betekent",
@@ -813,8 +814,8 @@
             "message_middle2": "pagina. Wil je als eerste weten wanneer de eerste reis online staat? Schrijf je in voor mijn",
             "newsletter_link": "nieuwsbrief"
         },
-        "pullquote": "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok.",
-        "pullquote_source": "Jelmer de Jong, oprichter Omdat We Reizen."
+        "pullquote": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur.",
+        "pullquote_source": "Jelmer de Jong"
     },
     "trip_show": {
         "hero": {

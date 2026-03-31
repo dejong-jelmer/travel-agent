@@ -117,7 +117,7 @@ function handleItemClick() {
         <!-- Accordion trigger -->
         <button
             @click="expanded = !expanded"
-            class="flex items-center justify-between w-full px-4 py-3 text-brand-primary text-base font-medium rounded-lg mx-auto my-1.5 max-w-[200px] hover:bg-brand-secondary transition-colors duration-200"
+            class="flex items-center justify-center gap-x-2 w-full px-4 py-3 text-brand-primary text-base font-medium rounded-lg mx-auto my-1.5 max-w-[200px] hover:bg-brand-secondary transition-colors duration-200"
         >
             <span>{{ label }}</span>
             <svg

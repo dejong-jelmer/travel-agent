@@ -19,6 +19,10 @@ const tripItems = computed(() => [
 ]);
 
 const links = computed(() => ({
+    home: {
+        label: t('nav.home'),
+        path: route('home'),
+    },
     contact: {
         label: t('nav.contact'),
         path: route('contact'),
@@ -53,7 +57,7 @@ const links = computed(() => ({
                     :items="tripItems"
                     variant="desktop"
                 />
-                <NavLink v-for="link in links" :key="link.label" :href="link.path" :label="link.label" variant="desktop" />
+                <NavLink v-for="link in links" v-show="link.path !== route('home')" :key="link.label" :href="link.path" :label="link.label" variant="desktop" />
             </div>
 
             <!-- Mobile Menu -->

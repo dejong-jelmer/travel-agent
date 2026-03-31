@@ -1,5 +1,5 @@
 <script setup>
-import axios from "@/axios"
+import { fetchApi } from "@/fetchApi"
 import { computed, ref, watch } from 'vue'
 import { useDebounceFn } from '@vueuse/core'
 import { Euro, LoaderCircle } from "lucide-vue-next"
@@ -27,13 +27,11 @@ const fetchPrices = useDebounceFn(async () => {
     if (!props.booking.departure_date || !totalTravelers.value) return
     isLoadingPrices.value = true
     try {
-        const response = await axios.get(route("trips.prices", props.booking.trip), {
-            params: {
-                travelers: totalTravelers.value,
-                date: toDateString(props.booking.departure_date),
-            },
+        const params = new URLSearchParams({
+            travelers: totalTravelers.value,
+            date: toDateString(props.booking.departure_date),
         })
-        asyncTripPrices.value = response.data
+        asyncTripPrices.value = await fetchApi(`${route("trips.prices", props.booking.trip)}?${params}`)
     } catch (error) {
         console.error(error)
         asyncTripPrices.value = null

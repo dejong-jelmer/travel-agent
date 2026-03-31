@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import { Combobox, ComboboxInput, ComboboxButton, ComboboxOptions, ComboboxOption } from '@headlessui/vue';
 import { ChevronUpDownIcon, CheckIcon } from '@heroicons/vue/20/solid';
 
@@ -18,7 +19,7 @@ const props = defineProps({
     placeholder: String,
     options: {
         type: Array,
-        required: true,
+        default: null,
     },
     showLabel: {
         type: Boolean,
@@ -28,17 +29,20 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue']);
 
+const page = usePage();
+const countries = computed(() => props.options ?? page.props.countries ?? []);
+
 const query = ref('');
 
 const selectedCountry = computed(() =>
-    props.options.find(c => c.code === props.modelValue) || null
+    countries.value.find(c => c.code === props.modelValue) || null
 );
 
 const filteredCountries = computed(() => {
-    if (!query.value) return props.options;
+    if (!query.value) return countries.value;
 
     const search = query.value.toLowerCase();
-    return props.options.filter(country =>
+    return countries.value.filter(country =>
         country.name.toLowerCase().includes(search) ||
         country.code.toLowerCase().includes(search)
     );

@@ -51,6 +51,7 @@ class AppServiceProvider extends ServiceProvider
                 Trip::with('destinations.country')->published()->get()
             )
             ),
+            'countries' => fn () => Cache::remember(config('cache.keys.countries'), 3600, fn () => CountryService::countries()),
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());

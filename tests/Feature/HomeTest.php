@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Destination;
 use App\Models\Trip;
+use App\Services\TermsPdfService;
 use Database\Seeders\CountrySeeder;
 use Faker\Generator;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -76,6 +77,23 @@ class HomeTest extends TestCase
             'destination_id' => $destination->id,
         ]);
         $response->assertStatus(200);
+    }
+
+    public function test_terms_page_returns_200()
+    {
+        $response = $this->get(route('terms'));
+
+        $response->assertStatus(200);
+        $response->assertInertia(fn (AssertableInertia $page) => $page->component('Terms'));
+    }
+
+    public function test_terms_pdf_download_returns_pdf()
+    {
+        $response = $this->get(route('terms.download'));
+
+        $response->assertStatus(200);
+        $response->assertHeader('Content-Type', 'application/pdf');
+        $response->assertDownload(TermsPdfService::FILENAME);
     }
 
     public function test_submit_contact_sends_contact_email()

@@ -6,19 +6,23 @@ use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\SettingKey;
 use App\Enums\TravelerType;
+use App\Events\BookingCreated;
+use App\Mail\AdminBookingNotificationMail;
+use App\Mail\BookingConfirmationMail;
 use App\Models\Booking;
 use App\Models\BookingTraveler;
 use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
 use App\Services\PriceCalculatorService;
+use App\Services\TermsPdfService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Event;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
 use Tests\TestCase;
-
-use function PHPSTORM_META\override;
 
 class BookingTest extends TestCase
 {
@@ -219,6 +223,60 @@ class BookingTest extends TestCase
         $response = $this->post(route('bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
+    }
+
+    // Event & Mail tests
+
+    public function test_booking_creation_dispatches_booking_created_event(): void
+    {
+        Event::fake([BookingCreated::class]);
+
+        $payload = $this->generateBookingPayload();
+
+        $this->post(route('bookings.store'), $payload);
+
+        Event::assertDispatched(BookingCreated::class, function ($event) {
+            return $event->booking instanceof Booking;
+        });
+    }
+
+    public function test_booking_created_event_queues_confirmation_email(): void
+    {
+        Mail::fake();
+
+        $payload = $this->generateBookingPayload();
+
+        $this->post(route('bookings.store'), $payload);
+
+        Mail::assertQueued(BookingConfirmationMail::class, function ($mail) use ($payload) {
+            return $mail->hasTo($payload['contact']['email']);
+        });
+    }
+
+    public function test_booking_created_event_queues_admin_notification_email(): void
+    {
+        Mail::fake();
+
+        $payload = $this->generateBookingPayload();
+
+        $this->post(route('bookings.store'), $payload);
+
+        $adminAddress = config('booking.mail');
+
+        Mail::assertQueued(AdminBookingNotificationMail::class, function ($mail) use ($adminAddress) {
+            return $mail->hasTo($adminAddress);
+        });
+    }
+
+    public function test_booking_confirmation_mail_has_terms_pdf_attachment(): void
+    {
+        $booking = Booking::factory()->for($this->trip, 'trip')->withTravelers(adults: 1)->create();
+
+        $mail = new BookingConfirmationMail($booking);
+        $attachments = $mail->attachments();
+
+        $this->assertCount(1, $attachments);
+        $this->assertSame(TermsPdfService::FILENAME, $attachments[0]->as);
     }
 
     // Helper Methods
