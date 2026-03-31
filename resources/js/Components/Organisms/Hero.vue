@@ -50,7 +50,7 @@ onMounted(() => {
                         class="drop-shadow-2xl block tablet:inline transition-opacity duration-[1200ms] ease-in-out tracking-wider">{{
                             t('hero.sub_title') }}</span>
                 </h1>
-                <a href="#reizen" :class="visibleCta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
+                <a href="#over-de-reizen" :class="visibleCta ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
                     class="transition-all duration-[1200ms] ease-out inline-flex items-center bg-brand-accent hover:bg-brand-accent/90 text-white font-poppins font-medium text-sm laptop:text-base px-7 py-3 rounded-full shadow-lg">
                     {{ t('hero.cta') }}
                     <ArrowDown class="h-4" />
