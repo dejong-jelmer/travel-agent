@@ -3,7 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Booking;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\TermsPdfService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Address;
@@ -51,13 +51,10 @@ class BookingConfirmationMail extends Mailable
      */
     public function attachments(): array
     {
-        $pdf = Pdf::loadView('pdf.terms')->setPaper('a4');
-
         return [
-            Attachment::fromData(
-                fn () => $pdf->output(),
-                'algemene-voorwaarden-omdat-we-reizen.pdf'
-            )->withMime('application/pdf'),
+            Attachment::fromPath(app(TermsPdfService::class)->path())
+                ->as(TermsPdfService::FILENAME)
+                ->withMime('application/pdf'),
         ];
     }
 }

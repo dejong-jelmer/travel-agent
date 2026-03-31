@@ -8,11 +8,12 @@ use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
 use App\Services\CountryService;
-use Barryvdh\DomPDF\Facade\Pdf;
+use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 use Inertia\Response;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
 
 class HomeController extends Controller
@@ -105,10 +106,8 @@ class HomeController extends Controller
         ]);
     }
 
-    public function downloadTerms(): HttpResponse
+    public function downloadTerms(TermsPdfService $termsPdf): BinaryFileResponse
     {
-        $pdf = Pdf::loadView('pdf.terms')->setPaper('a4');
-
-        return $pdf->download('algemene-voorwaarden-omdat-we-reizen.pdf');
+        return response()->download($termsPdf->path(), TermsPdfService::FILENAME);
     }
 }

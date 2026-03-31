@@ -29,7 +29,9 @@ Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
 Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
-Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTerms'])->name('terms.download');
+Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTerms'])
+    ->middleware('throttle:10,1')
+    ->name('terms.download');
 
 // Blog
 Route::get('/blog', [BlogPostController::class, 'index'])->name('blog.index');
@@ -124,7 +126,6 @@ Route::prefix('admin')
 
         // Blog posts
         Route::resource('posts', AdminBlogPostController::class);
-
     });
 
 // Test production health check
