@@ -131,7 +131,7 @@
             "submitting": "Submitting…",
             "submit": "Subscribe"
         },
-        "privacy": "I respect your privacy. You can unsubscribe at any time. Read my {link}.",
+        "privacy": "I respect your privacy. You can unsubscribe at any time. Read more in the {link}.",
         "privacy_link": "privacy policy",
         "subscription": {
             "success": "Thank you for subscribing! Please confirm your subscription via the email we just sent to {email}.",
@@ -165,7 +165,7 @@
         },
         "unique": {
             "title": "Destinations you won't find on Google",
-            "description": "I choose places that have something to say — and whose story I know myself. A destinations that stays with you long after you are home.",
+            "description": "I choose places that have something to say — and whose story I know myself. A destination that stays with you long after you are home.",
             "highlight": "Every trip has a story"
         },
         "cta": {
@@ -202,7 +202,7 @@
             "message_label": "Message",
             "submit_button": "Send message",
             "success": "Thank you! Your message has been sent successfully.",
-            "privacy": "Your data will only be used to respond to your message. Read my {link}.",
+            "privacy": "Your data will only be used to respond to your message. Read more in the {link}.",
             "privacy_link": "privacy policy"
         },
         "trip": {
