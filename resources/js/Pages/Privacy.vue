@@ -1,6 +1,9 @@
 <script setup>
 import { computed } from 'vue';
 
+const version = '1.2'
+const lastUpdated = 'maart 2026'
+
 const props = defineProps({
     contact: Object,
     newsletterRetentionMonths: {
@@ -24,7 +27,7 @@ const retentionLabel = computed(() =>
                         <!-- Header -->
                         <header class="bg-brand-light text-white px-6 py-8">
                             <h1 class="text-3xl font-bold mb-2">Privacyverklaring</h1>
-                            <p class="text-sm text-gray-600 mb-8">Versie: 1.1 | Laatste update: juni 2025</p>
+                            <p class="text-sm text-gray-600 mb-8">Versie: {{ version }} | Laatste update: {{ lastUpdated }}</p>
                         </header>
 
                         <!-- Content -->
@@ -39,7 +42,7 @@ const retentionLabel = computed(() =>
                                 <p class="text-gray-700 leading-relaxed mb-4">
                                     Zo maken we voor gegevensverwerking en -opslag uitsluitend gebruik van Europese
                                     diensten die voldoen aan de Europese privacy wetgeving en wordt onze website gehost
-                                    door een duurzame aanbieder uit Nederland (Greenhost).
+                                    door een duurzame aanbieder binnen de EU (Hetzner).
                                 </p>
                                 <p class="text-gray-700 leading-relaxed">
                                     In deze privacyverklaring leggen we uit welke persoonsgegevens wij verzamelen,
@@ -61,8 +64,8 @@ const retentionLabel = computed(() =>
                                     <p class="text-gray-700 font-medium mb-2">Voor vragen over privacy kun je contact
                                         opnemen via:</p>
                                     <p class="">E-mail: <a
-                                            class="email-field text-blue-600 underline hover:text-blue-800"
-                                            href="#" v-html="contact.mail.display"></a></p>
+                                            class="email-field text-blue-600 underline hover:text-blue-800" href="#"
+                                            v-html="contact.mail.display"></a></p>
                                 </div>
                             </section>
 
@@ -140,13 +143,55 @@ const retentionLabel = computed(() =>
                                     onze diensten. Dit gebeurt met:
                                 </p>
                                 <ul class="list-disc pl-6 text-gray-700 space-y-2">
-                                    <li>Reisdienstverleners zoals vervoerders, hotels of lokale gidsen</li>
-                                    <li>Garantie- of waarborgfondsen STO Garant en het Calamiteitenfonds</li>
-                                    <li><strong>Mailjet</strong> — voor het verzenden van e-mails (boekingsbevestigingen,
-                                        nieuwsbrief), gevestigd in de EU. Met Mailjet is een verwerkersovereenkomst
-                                        afgesloten.</li>
-                                    <li><strong>Greenhost</strong> — voor het hosten van onze website, gevestigd in
-                                        Nederland. Met Greenhost is een verwerkersovereenkomst afgesloten.</li>
+                                    <li>
+                                        <strong>Reisdienstverleners</strong> — zoals vervoerders, hotels of lokale
+                                        gidsen, voor zover
+                                        nodig om jouw reis uit te voeren.
+                                    </li>
+                                    <li>
+                                        <strong>STO Garant</strong> — als garantie- en waarborgfondsen waarmee
+                                        wij wettelijk verplicht samenwerken.
+                                    </li>
+                                    <li>
+                                        <strong>Hetzner Online GmbH</strong> — voor het hosten van onze website en
+                                        boekingsomgeving,
+                                        gevestigd in Duitsland. Met Hetzner is een verwerkersovereenkomst (DPA)
+                                        afgesloten. Meer informatie:
+                                        <a class="default-link" href="https://www.hetzner.com/legal/privacy-policy"
+                                            target="_blank" rel="noopener noreferrer nofollow">
+                                            hetzner.com/legal/privacy-policy</a>.
+                                    </li>
+                                    <li>
+                                        <strong>Laravel Forge</strong> (Laravel Holdings Inc.) — voor het beheer en de
+                                        configuratie van
+                                        onze webserver, gevestigd in de Verenigde Staten. Forge heeft via een beveiligde
+                                        SSH-verbinding toegang tot onze server. Deze relatie met de
+                                        Verenigde Staten is gewaarborgd op basis van de door de Europese Commissie
+                                        goedgekeurde standaardcontractbepalingen (SCC's). Voor Laravel's
+                                        privacyverklaring zie:
+                                        <a class="default-link" href="https://laravel.com/legal/privacy#privacy-policy"
+                                            target="_blank" rel="noopener noreferrer nofollow">
+                                            https://laravel.com/legal/privacy#privacy-policy
+                                        </a> Laravel's services (waaronder Forge) voldoen volledig aan de EU wetgeving
+                                        (AVG). Met Laravel is een verwerkersovereenkomst (DPA) afgesloten. Zie: <a
+                                            class="default-link" href=" https://trust.laravel.com/?product=forge"
+                                            target="_blank" rel="noopener noreferrer nofollow">
+                                            https://trust.laravel.com/?product=forge</a>.
+                                    </li>
+                                    <li>
+                                        <strong>Mailjet/Sinch</strong> — voor het verzenden van e-mails
+                                        (boekingsbevestigingen, nieuwsbrief). Mailjet is gevestigd in de EU. Het
+                                        moederbedrijf Sinch heeft een standaard verwerkersovereenkomst: <a
+                                            class="default-link" href="https://www.mailjet.com/legal/dpa/"
+                                            target="_blank" rel="noopener noreferrer nofollow">
+                                            verwerkersovereenkomst (DPA) van Sinch</a>.
+                                    </li>
+                                    <li>
+                                        <strong>TransIP B.V.</strong> — voor het beheer van onze domeinnaam en
+                                        e-maildomeinen, gevestigd
+                                        in Nederland. Met TransIP is een verwerkersovereenkomst afgesloten.
+                                    </li>
+
                                 </ul>
                             </section>
 
@@ -161,11 +206,14 @@ const retentionLabel = computed(() =>
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Nieuwsbriefgegevens:</p>
-                                        <p class="text-gray-700">tot uitschrijving; na uitschrijving worden gegevens binnen {{ retentionLabel }} verwijderd</p>
+                                        <p class="text-gray-700">tot uitschrijving; na uitschrijving worden gegevens
+                                            binnen {{ retentionLabel }} verwijderd</p>
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Boekingsgegevens:</p>
-                                        <p class="text-gray-700">Boekingsgegevens worden 7 jaar bewaard op basis van de wettelijke bewaarplicht voor administratie. Na deze termijn worden persoonsgegevens geanonimiseerd.</p>
+                                        <p class="text-gray-700">Boekingsgegevens worden 7 jaar bewaard op basis van de
+                                            wettelijke bewaarplicht voor administratie. Na deze termijn worden
+                                            persoonsgegevens geanonimiseerd.</p>
                                     </div>
                                     <div class="bg-gray-50 p-4 rounded-lg">
                                         <p class="font-medium text-gray-800">Medische/dieetgegevens:</p>
@@ -190,9 +238,8 @@ const retentionLabel = computed(() =>
                                 <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
                                     <p class="text-gray-700">
                                         Je kunt deze rechten uitoefenen door contact op te nemen via
-                                        <a
-                                            class="email-field text-blue-600 underline hover:text-blue-800"
-                                            href="#" v-html="contact.mail.display"></a>.
+                                        <a class="email-field text-blue-600 underline hover:text-blue-800" href="#"
+                                            v-html="contact.mail.display"></a>.
                                         Wij reageren binnen 30 dagen.
                                     </p>
                                 </div>
@@ -253,15 +300,21 @@ const retentionLabel = computed(() =>
                                 <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
                                     <ul class="list-disc text-gray-700 pl-4 leading-relaxed mb-2">
                                         <li>
-                                            Onze website gebruikt alleen functionele cookies, die nodig zijn om de site goed
+                                            Onze website gebruikt alleen functionele cookies, die nodig zijn om de site
+                                            goed
                                             te laten werken:
                                             <ul class="list-disc pl-6 mt-1 space-y-1">
-                                                <li><strong>Sessiecookie</strong> — onthoudt je sessie tijdens het bezoek (bijv. inlogstatus).</li>
-                                                <li><strong>CSRF-cookie</strong> — beschermt formulieren tegen kwaadaardige verzoeken van buitenaf.</li>
+                                                <li><strong>Sessiecookie</strong> — onthoudt je sessie tijdens het
+                                                    bezoek (bijv. bookingstatus).</li>
+                                                <li><strong>CSRF-cookie</strong> — beschermt formulieren tegen
+                                                    kwaadaardige verzoeken van buitenaf.</li>
+                                                <li><strong>Laravel cookie consent</strong> — onthoudt cookie-keuze.</li>
+
                                             </ul>
                                         </li>
                                         <li class="mt-2">
-                                            Wij gebruiken <strong>geen</strong> analytische cookies en/of tracking cookies van derden.
+                                            Wij gebruiken <strong>geen</strong> analytische cookies en/of tracking
+                                            cookies van derden.
                                         </li>
                                     </ul>
                                 </div>
@@ -294,7 +347,7 @@ const retentionLabel = computed(() =>
                             <!-- Footer -->
                             <footer class="border-t border-gray-200 pt-6 mt-8">
                                 <p class="text-sm text-gray-500 text-center">
-                                    <strong>Laatste update:</strong> juni 2025
+                                    <strong>Laatste update:</strong> {{ lastUpdated }}
                                 </p>
                             </footer>
                         </div>

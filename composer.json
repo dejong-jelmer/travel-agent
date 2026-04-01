@@ -19,6 +19,7 @@
         "moneyphp/money": "^4.8",
         "propaganistas/laravel-phone": "^5.3",
         "spatie/laravel-backup": "^9.3",
+        "spatie/laravel-cookie-consent": "^3.4",
         "staudenmeir/eloquent-has-many-deep": "^1.21",
         "tightenco/ziggy": "^2.5"
     },
