@@ -27,7 +27,7 @@ Route::get('/over-mij', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
 Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
-Route::get('/privacybeleid', [HomeController::class, 'privacy'])->name('privacy');
+Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
 Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTerms'])
     ->middleware('throttle:10,1')

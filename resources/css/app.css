@@ -70,6 +70,9 @@ body {
     overflow-x: visible;
 }
 
+.js-cookie-consent {
+    opacity: 1;
+}
 
 @layer components {
     .form-input {
@@ -95,6 +98,9 @@ body {
     a.email-field:not(.has-icon):hover,
     a.tel-field:not(.has-icon):hover {
         @apply underline;
+    }
+    .js-cookie-consent a#privacy_link {
+         @apply text-brand-link underline;
     }
 
     .default-link {
