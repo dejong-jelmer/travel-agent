@@ -131,7 +131,7 @@
             "submitting": "Bezig met verzenden…",
             "submit": "Schrijf je in"
         },
-        "privacy": "Ik respecteer je privacy. Je kan je op elk moment uitschrijven. Lees mijn {link}.",
+        "privacy": "Ik respecteer je privacy. Je kan je op elk moment uitschrijven. Lees meer in de {link}.",
         "privacy_link": "privacyverklaring",
         "subscription": {
             "success": "Bedankt voor je inschrijving! Bevestig je aanmelding via de e-mail die we zojuist hebben verstuurd naar {email}.",
@@ -165,7 +165,7 @@
         },
         "unique": {
             "title": "Bestemmingen met een verhaal",
-            "description": "Ik kies plaatsen die iets te vertellen hebben — en waarvan ik dat verhaal zelf ken. Een bestemmingen die je bijblijft lang nadat je thuis bent.",
+            "description": "Ik kies plaatsen die iets te vertellen hebben — en waarvan ik dat verhaal zelf ken. Een bestemming die je bijblijft lang nadat je thuis bent.",
             "highlight": "Elke reis heeft een verhaal"
         },
         "cta": {
@@ -202,7 +202,7 @@
             "message_label": "Bericht",
             "submit_button": "Verstuur bericht",
             "success": "Bedankt! Je bericht is succesvol verstuurd.",
-            "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees mijn {link}.",
+            "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees meer in de {link}.",
             "privacy_link": "privacyverklaring"
         },
         "trip": {
