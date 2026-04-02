@@ -18,6 +18,7 @@ class BookingTravelerData implements Arrayable
         public readonly Carbon $birthdate,
         public readonly string $nationality,
         public readonly ?string $special_requests,
+        public readonly ?bool $special_requests_consent,
     ) {}
 
     /**
@@ -34,6 +35,7 @@ class BookingTravelerData implements Arrayable
             Carbon::createFromFormat('d-m-Y', $data['birthdate']),
             $data['nationality'],
             $data['special_requests'] ?? null,
+            $data['special_requests_consent'] ?? false,
         );
 
         if ($toArray) {

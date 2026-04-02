@@ -3,6 +3,10 @@ const props = defineProps({
     modelValue: Boolean,
     name: String,
     label: String,
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
     feedback: {
         type: [String, Array],
         required: false,
@@ -11,9 +15,9 @@ const props = defineProps({
 </script>
 <template>
     <div>
-        <label class="flex items-center gap-x-2 cursor-pointer">
-            <input type="checkbox" :checked="modelValue" @change="$emit('update:modelValue', $event.target.checked)"
-                class="hidden peer" />
+        <label :class="['flex items-center gap-x-2', disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer']">
+            <input type="checkbox" :checked="modelValue" @change="!disabled && $emit('update:modelValue', $event.target.checked)"
+                :disabled="disabled" class="hidden peer" />
             <div
                 class="w-5 h-5 flex flex-none items-center justify-center border-2 border-brand-primary/30 rounded-md transition-all peer-checked:bg-white peer-checked:border-brand-primary">
                 <svg v-if="modelValue" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black"

@@ -10,7 +10,7 @@
     },
     "link": {
         "questions": "Any questions?",
-        "contact_us": "Contact us"
+        "contact_us": "Contact me"
     },
     "booker": {
         "birthdate": "Date of birth",
@@ -24,7 +24,7 @@
         "trips": "Trips",
         "all_trips": "All trips",
         "contact": "Contact",
-        "about": "About us",
+        "about": "About me",
         "blog": "Blog",
         "home": "Home"
     },
@@ -149,7 +149,8 @@
         "birthdate": "Date of birth",
         "birthdate_placeholder": "DD-MM-YYYY",
         "special_requests": "Special requests",
-        "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs…"
+        "special_requests_placeholder": "E.g. dietary requirements, allergies, mobility needs…",
+        "special_requests_consent": "I consent to the processing of the health and/or diet-related data provided by me for the purpose of my trip."
     },
     "usp": {
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
@@ -724,7 +725,8 @@
             "invalid_postal_code": "{field} is invalid — use the format 1234AB.",
             "invalid_birthdate": "Enter a valid date of birth.",
             "invalid_house_number": "House number must be a valid number greater than 0.",
-            "invalid_traveler_data": "Traveler information is invalid."
+            "invalid_traveler_data": "Traveler information is invalid.",
+            "missing_special_requests_consent": "You must give consent to process the special requests you entered."
         },
         "fields": {
             "first_name": "First name",
@@ -735,7 +737,8 @@
             "postal_code": "Postal code",
             "city": "City",
             "email": "Email address",
-            "phone": "Phone number"
+            "phone": "Phone number",
+            "special_requests": "Special requests"
         }
     },
     "admin_menu": {
@@ -846,8 +849,8 @@
             "train": "Train",
             "book_this_trip": "Book this trip",
             "book_now": "Book now",
-            "contact_info": "Or contact us for more information",
-            "why_choose_us": "Why choose us?",
+            "contact_info": "Or contact me for more information",
+            "why_choose_me": "Why choose me?",
             "sustainable_travel": "Sustainable travel",
             "small_personal": "Small & personal",
             "carefree_travel": "Carefree travel"
@@ -872,11 +875,11 @@
         },
         "unsubscribed": {
             "title": "You've been unsubscribed.",
-            "message": "You have successfully unsubscribed from my newsletter. You will no longer receive any emails from us.",
+            "message": "You have successfully unsubscribed from my newsletter. You will no longer receive any emails from me.",
             "box_title": "What now?",
-            "no_more_emails": "You will no longer receive newsletters from us",
+            "no_more_emails": "You will no longer receive newsletters",
             "resubscribe_anytime": "You can always resubscribe at a later time",
-            "contact_us": "For questions, feel free to contact us"
+            "contact_us": "For questions, feel free to contact me"
         }
     },
     "booking_received": {
@@ -911,9 +914,9 @@
         },
         "next_steps": {
             "title": "Next steps",
-            "confirmation_email": "You will receive a confirmation email with all details of your trip",
-            "contact_soon": "We will contact you soon for the final confirmation",
-            "questions": "Do you have questions? Feel free to contact us"
+            "confirmation_email": "You will receive a confirmation email with all details of your booking",
+            "contact_soon": "I will contact you soon for the final confirmation",
+            "questions": "Do you have questions? Feel free to contact me"
         },
         "back_to_home": "Back to homepage"
     },
@@ -1166,7 +1169,8 @@
                 "booking_status_placeholder": "Select a booking status",
                 "booking_status_label": "Booking status",
                 "payment_status_placeholder": "Select a payment status",
-                "payment_status_label": "Payment status"
+                "payment_status_label": "Payment status",
+                "return_date": "Return date"
             },
             "show": {
                 "booking": "Booking",

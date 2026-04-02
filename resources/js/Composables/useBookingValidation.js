@@ -28,6 +28,9 @@ const MIN_NATIONALITY_LENGTH = 2;
 /** Maximum length for most string fields */
 const DEFAULT_MAX_STRING_LENGTH = 255;
 
+/** Maximum length for special requests */
+const MAX_SPECIAL_REQUESTS_LENGTH = 1000;
+
 /**
  * Composable for validating booking form data across multiple steps.
  *
@@ -92,6 +95,18 @@ export function useBookingValidation() {
                 if (!traveler.birthdate || !isValidDate(traveler.birthdate)) {
                     errors[`${basePath}.birthdate`] =
                         t('validation.errors.invalid_birthdate');
+                }
+
+                const specialRequests = traveler.special_requests?.trim() || '';
+                if (specialRequests.length > MAX_SPECIAL_REQUESTS_LENGTH) {
+                    errors[`${basePath}.special_requests`] = t('validation.errors.too_long', {
+                        field: t('validation.fields.special_requests'),
+                        max: MAX_SPECIAL_REQUESTS_LENGTH
+                    });
+                }
+
+                if (specialRequests.length > 0 && !traveler.special_requests_consent) {
+                    errors[`${basePath}.special_requests_consent`] = t('validation.errors.missing_special_requests_consent');
                 }
 
                 const nationalityError = validateStringField(

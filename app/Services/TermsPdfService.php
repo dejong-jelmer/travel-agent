@@ -31,8 +31,14 @@ class TermsPdfService
 
     public function generate(): void
     {
+        $data = [
+            'kvk' => config('contact.kvk', '123456789'),
+            'version' => config('privacy.version', '1.1'),
+            'updated' => config('privacy.updated', now()->format('Y')),
+        ];
+
         try {
-            $pdf = Pdf::loadView('pdf.terms')->setPaper('a4');
+            $pdf = Pdf::loadView('pdf.terms', $data)->setPaper('a4');
             $output = $pdf->output();
 
             Storage::disk('local')->put(self::STORAGE_PATH, $output);

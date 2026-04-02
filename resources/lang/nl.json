@@ -10,7 +10,7 @@
     },
     "link": {
         "questions": "Heeft u nog vragen?",
-        "contact_us": "Neem contact met ons op"
+        "contact_us": "Neem contact op"
     },
     "booker": {
         "birthdate": "Geboortedatum",
@@ -149,7 +149,8 @@
         "birthdate": "Geboortedatum",
         "birthdate_placeholder": "DD-MM-JJJJ",
         "special_requests": "Bijzonderheden",
-        "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen…"
+        "special_requests_placeholder": "Bijv. dieetwensen, allergieën, mobiliteitsbeperkingen…",
+        "special_requests_consent": "Ik geef toestemming voor het verwerken van de door mij opgegeven gezondheids- en/of dieetgerelateerde gegevens ten behoeve van mijn reis."
     },
     "usp": {
         "intro": "Ik stel reizen samen met aandacht, een goed verhaal en de trein als vertrekpunt.",
@@ -724,7 +725,8 @@
             "invalid_postal_code": "{field} is ongeldig — gebruik het formaat 1234AB.",
             "invalid_birthdate": "Vul een geldige geboortedatum in.",
             "invalid_house_number": "Het huisnummer moet een geldig getal groter dan 0 zijn.",
-            "invalid_traveler_data": "Reizigersgegevens zijn ongeldig."
+            "invalid_traveler_data": "Reizigersgegevens zijn ongeldig.",
+            "missing_special_requests_consent": "Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden."
         },
         "fields": {
             "first_name": "Voornaam",
@@ -735,7 +737,8 @@
             "postal_code": "Postcode",
             "city": "Plaatsnaam",
             "email": "E-mail adres",
-            "phone": "Telefoonnummer"
+            "phone": "Telefoonnummer",
+            "special_requests": "Bijzonderheden"
         }
     },
     "admin_menu": {
@@ -846,7 +849,7 @@
             "book_this_trip": "Boek deze reis",
             "book_now": "Boek nu",
             "contact_info": "Of neem contact op voor meer informatie",
-            "why_choose_us": "Waarom kiezen voor ons?",
+            "why_choose_me": "Waarom kiezen mij?",
             "sustainable_travel": "Duurzaam reizen",
             "small_personal": "Kleinschalig & persoonlijk",
             "carefree_travel": "Zorgeloos op reis"
@@ -873,9 +876,9 @@
             "title": "Je bent uitgeschreven.",
             "message": "Je hebt je succesvol afgemeld voor de nieuwsbrief. Je ontvangt geen verdere e-mails meer.",
             "box_title": "Wat nu?",
-            "no_more_emails": "Je ontvangt geen nieuwsbrieven meer van ons",
+            "no_more_emails": "Je ontvangt geen nieuwsbrieven meer",
             "resubscribe_anytime": "Je kunt je altijd opnieuw inschrijven op een later moment",
-            "contact_us": "Voor vragen kun je contact met ons opnemen"
+            "contact_us": "Voor vragen kun je contact opnemen"
         }
     },
     "booking_received": {
@@ -910,9 +913,9 @@
         },
         "next_steps": {
             "title": "Volgende stappen",
-            "confirmation_email": "U ontvangt een bevestigingsmail met alle details van uw reis",
-            "contact_soon": "We nemen binnenkort contact metjeop voor de definitieve bevestiging",
-            "questions": "Heb je vragen? Neem gerust contact met ons op"
+            "confirmation_email": "U ontvangt een bevestigingsmail met alle details van uw boeking",
+            "contact_soon": "Ik neem binnenkort contact metjeop voor de definitieve bevestiging",
+            "questions": "Heb je vragen? Neem gerust contact met mij op"
         },
         "back_to_home": "Terug naar homepagina"
     },
@@ -1165,7 +1168,8 @@
                 "booking_status_placeholder": "Selecteer een boekingstatus",
                 "booking_status_label": "Boekingstatus",
                 "payment_status_placeholder": "Selecteer een betaalstatus",
-                "payment_status_label": "Betaalstatus"
+                "payment_status_label": "Betaalstatus",
+                "return_date": "Retourdatum"
             },
             "show": {
                 "booking": "Boeking",

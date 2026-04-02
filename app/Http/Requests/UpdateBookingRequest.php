@@ -34,6 +34,7 @@ class UpdateBookingRequest extends FormRequest
                     Rule::enum(PaymentStatus::class),
                 ],
                 'internal_notes' => ['nullable', 'string', 'max:5000'],
+                'return_date' => ['nullable', 'date', 'after_or_equal:'.$this->booking->departure_date->toDateString()],
             ],
             [
                 'travelers.*.*.id' => ['required', 'integer', Rule::in($this->booking?->travelers?->modelKeys() ?? [])],

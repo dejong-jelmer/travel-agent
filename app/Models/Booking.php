@@ -45,8 +45,11 @@ class Booking extends Model
         'trip_id',
         'main_booker_id',
         'departure_date',
+        'return_date',
         'has_accepted_conditions',
+        'conditions_accepted_at',
         'has_confirmed',
+        'confirmed_at',
         'status',
         'payment_status',
         'total_adults',
@@ -65,10 +68,13 @@ class Booking extends Model
         'has_accepted_conditions' => 'boolean',
         'has_confirmed' => 'boolean',
         'departure_date' => 'date',
+        'return_date' => 'date',
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
         'anonymized_at' => 'datetime',
+        'conditions_accepted_at' => 'datetime',
+        'confirmed_at' => 'datetime',
     ];
 
     protected $appends = [

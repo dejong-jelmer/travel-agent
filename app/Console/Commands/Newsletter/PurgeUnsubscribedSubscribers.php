@@ -27,7 +27,7 @@ class PurgeUnsubscribedSubscribers extends Command
      */
     public function handle(): int
     {
-        $retentionMonths = (int) config('newsletter.subscription.retention_months', 3);
+        $retentionMonths = (int) config('privacy.newsletter.subscription.retention_months', 3);
 
         $count = NewsletterSubscriber::unsubscribed()
             ->where('unsubscribed_at', '<=', now()->subMonths($retentionMonths))

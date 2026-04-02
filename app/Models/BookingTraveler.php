@@ -21,6 +21,9 @@ class BookingTraveler extends Model
         'birthdate',
         'nationality',
         'special_requests',
+        'special_requests_consent',
+        'special_requests_consent_at',
+        'special_requests_anonymized_at',
     ];
 
     protected $appends = [
@@ -31,6 +34,9 @@ class BookingTraveler extends Model
     protected $casts = [
         'type' => TravelerType::class,
         'birthdate' => 'date',
+        'special_requests_consent' => 'boolean',
+        'special_requests_consent_at' => 'datetime',
+        'special_requests_anonymized_at' => 'datetime',
     ];
 
     protected static function booted()

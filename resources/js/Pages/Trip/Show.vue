@@ -303,7 +303,7 @@ const tabIcons = {
 
                         <!-- Trust Indicators -->
                         <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-brand-accent/20">
-                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_us') }}
+                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_me') }}
                             </h4>
                             <ul class="space-y-3 text-sm">
                                 <li class="flex items-center gap-2">
