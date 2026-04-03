@@ -74,6 +74,10 @@ function formatPrice(cents) {
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.departure_date_formatted }}</dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.return_date') }}</dt>
+                                <dd class="text-sm text-gray-900 col-span-2">{{ booking.return_date_formatted }}</dd>
+                            </div>
+                            <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.created_at') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.created_at_formatted }}</dd>
                             </div>

@@ -41,6 +41,10 @@ return [
         'travelers.children.*.birthdate.after_or_equal' => 'Voor kinderen geldt een maximum leeftijd van 12 jaar, kinderen vanaf 12 jaar en ouder tellen mee als volwassenen.',
         'travelers.children.*.birthdate.before' => 'De geboortedatum kan niet in de toekomst liggen.',
         'travelers.children.*.birthdate' => 'Ongeldige geboortedatum.',
+        'travelers.*.*.special_requests.max' => 'Bijzonderheden mogen maximaal 1000 tekens bevatten.',
+        'travelers.*.*.special_requests_consent.required_with' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
+        'travelers.*.*.special_requests_consent.accepted' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
+        'special_requests_consent_required' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
 
         // Main booker
         'main_booker' => [

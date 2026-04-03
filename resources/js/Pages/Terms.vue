@@ -3,7 +3,11 @@ import { ref } from 'vue';
 import { Download, Loader2 } from 'lucide-vue-next';
 
 const props = defineProps({
-    contact: Object
+    contact: Object,
+    terms: {
+        type: Object,
+        default: { version: null, updated: null }
+    }
 });
 
 const isGenerating = ref(false);
@@ -48,9 +52,9 @@ async function downloadPdf() {
 
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <!-- Header -->
-                        <header class="bg-brand-light text-white px-6 py-8">
+                        <header class="bg-brand-primary text-white px-6 py-8">
                             <h1 class="text-3xl font-bold mb-2">Algemene Voorwaarden</h1>
-                            <p class="text-sm text-gray-600 mb-8">Versie: 1.1 | Laatste update: juni 2025</p>
+                            <p class="text-sm text-white/70 mb-8">Versie: {{ terms.version }} | Laatste update: {{ terms.updated }}</p>
                         </header>
 
                         <!-- Content -->
@@ -120,7 +124,7 @@ async function downloadPdf() {
                                             die een Gekoppeld Reisarrangement faciliteert. Omdat We Reizen is een
                                             geregistreerde
                                             handelsnaam en ingeschreven bij de Kamer van Koophandel onder nummer:
-                                            <strong>97092363</strong>.
+                                            <strong>{{ contact.kvk }}</strong>.
                                         </p>
                                         <p><strong class="font-semibold">Reiziger:</strong> Iedere persoon die met de
                                             Organisator
@@ -1508,10 +1512,3 @@ async function downloadPdf() {
         </section>
     </Layout>
 </template>
-
-<style scoped>
-/* PDF page break optimization */
-:deep(section) {
-    break-inside: avoid;
-}
-</style>

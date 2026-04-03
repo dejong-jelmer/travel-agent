@@ -20,7 +20,8 @@ const createTraveler = (data = {}) => {
         last_name: data.last_name || "",
         birthdate: data.birthdate_formatted || null,
         nationality: data.nationality || "",
-        special_requests: data.special_requests || "",
+        special_requests: data.special_requests || null,
+        special_requests_consent: data.special_requests_consent || false,
         get full_name() {
             return `${this.first_name} ${this.last_name}`.trim();
         },
@@ -53,6 +54,9 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         },
         departure_date: db_booking?.departure_date
             ? new Date(db_booking.departure_date)
+            : null,
+        return_date: db_booking?.return_date
+            ? new Date(db_booking.return_date)
             : null,
         travelers: {
             adults,

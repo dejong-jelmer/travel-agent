@@ -94,7 +94,13 @@ class HomeController extends Controller
         return Inertia::render('Privacy', [
             'title' => $this->pageTitle('home.privacy_seo'),
             'seo' => $this->pageSeo('home.privacy_seo'),
-            'newsletterRetentionMonths' => (int) config('newsletter.subscription.retention_months', 3),
+            'newsletterRetentionMonths' => (int) config('privacy.newsletter.subscription.retention_months', 3),
+            'bookingRetentionYears' => (int) config('privacy.booking.retention_years', 7),
+            'specialRequestsRetentionDays' => (int) config('privacy.booking.special_requests_retention_days', 7),
+            'privacy' => [
+                'version' => config('privacy.version'),
+                'updated' => config('privacy.updated'),
+            ],
         ]);
     }
 
@@ -103,6 +109,10 @@ class HomeController extends Controller
         return Inertia::render('Terms', [
             'title' => $this->pageTitle('home.terms_seo'),
             'seo' => $this->pageSeo('home.terms_seo'),
+            'terms' => [
+                'version' => config('terms.version'),
+                'updated' => config('terms.updated'),
+            ],
         ]);
     }
 

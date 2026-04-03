@@ -10,6 +10,7 @@ use App\Events\BookingCreated;
 use App\Mail\AdminBookingNotificationMail;
 use App\Mail\BookingConfirmationMail;
 use App\Models\Booking;
+use App\Models\BookingContact;
 use App\Models\BookingTraveler;
 use App\Models\Setting;
 use App\Models\Trip;
@@ -294,6 +295,7 @@ class BookingTest extends TestCase
                         'first_name' => fake()->firstName(),
                         'last_name' => fake()->lastName(),
                         'birthdate' => $this->generateBirthdate(TravelerType::Adult),
+                        'nationality' => fake()->country(),
                     ],
                 ],
                 'children' => [
@@ -301,6 +303,7 @@ class BookingTest extends TestCase
                         'first_name' => fake()->firstName(),
                         'last_name' => fake()->lastName(),
                         'birthdate' => $this->generateBirthdate(TravelerType::Child),
+                        'nationality' => fake()->country(),
                     ],
                 ],
             ],
@@ -311,12 +314,14 @@ class BookingTest extends TestCase
     {
         $numberOfAdults = $overrides['numberOfAdults'] ?? fake()->numberBetween(1, 4);
         $numberOfChildren = $overrides['numberOfChildren'] ?? fake()->numberBetween(0, 2);
+        $departureDate = fake()->dateTimeBetween('now', '+1 year');
 
         return array_merge([
             'trip' => ['id' => $this->trip->id],
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
-            'departure_date' => fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
+            'departure_date' => $departureDate->format('Y-m-d'),
+            'return_date' => Carbon::instance($departureDate)->addDays(7),
             'travelers' => [
                 'adults' => $this->generateTravelers($numberOfAdults, TravelerType::Adult),
                 'children' => $this->generateTravelers($numberOfChildren, TravelerType::Child),
@@ -326,23 +331,18 @@ class BookingTest extends TestCase
         ], $overrides);
     }
 
-    private function generateTravelers(int $count, TravelerType $type = TravelerType::Adult): array
+    private function generateTravelers(int $count, TravelerType $type): array
     {
-        $travelers = [];
-
-        for ($i = 0; $i < $count; $i++) {
-            $firstName = fake()->firstName();
-            $lastName = fake()->lastName();
-            $travelers[] = [
-                'first_name' => $firstName,
-                'last_name' => $lastName,
-                'full_name' => "{$firstName} {$lastName}",
-                'birthdate' => $this->generateBirthdate($type),
-                'nationality' => fake()->country(),
-            ];
-        }
-
-        return $travelers;
+        return BookingTraveler::factory()
+            ->count($count)
+            ->{$type->value}()
+            ->make()
+            ->map(fn ($t) => [
+                ...$t->only(['first_name', 'last_name', 'nationality']),
+                'full_name' => $t->full_name,
+                'birthdate' => Carbon::parse($t->birthdate)->format('d-m-Y'),
+            ])
+            ->all();
     }
 
     private function generateBirthdate(TravelerType $type): string
@@ -356,20 +356,15 @@ class BookingTest extends TestCase
 
     private function generateContactData(): array
     {
-        return [
-            'street' => fake()->streetName(),
-            'house_number' => (string) fake()->numberBetween(1, 999),
-            'addition' => fake()->optional()->bothify('?#'),
-            'postal_code' => fake()->postcode(),
-            'city' => fake()->city(),
-            'email' => fake()->safeEmail(),
-            'phone' => fake()->phoneNumber(),
-        ];
+        return BookingContact::factory()->make()->toArray();
     }
 
     private function createBookingWithTravelersAndContact(): Booking
     {
-        $payload = $this->generateBookingPayload();
+        $payload = $this->generateBookingPayload([
+            'numberOfAdults' => 2,
+            'numberOfChildren' => 1,
+        ]);
         $this->post(route('bookings.store'), $payload);
 
         return Booking::firstOrFail();
@@ -454,69 +449,39 @@ class BookingTest extends TestCase
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array
     {
-        $booking->load('travelers');
+        $booking->load('travelers', 'contact');
 
-        $adults = [];
-        $children = [];
+        $travelers = $booking->travelers->groupBy(fn ($t) => $t->type->value)
+            ->map(fn ($group) => $group->map(fn ($t) => [
+                'id' => $t->id,
+                'first_name' => $t->first_name,
+                'last_name' => $t->last_name,
+                'birthdate' => $t->birthdate->format('d-m-Y'),
+                'nationality' => $t->nationality,
+            ])->values()->all())
+            ->all();
 
-        foreach ($booking->travelers as $traveler) {
-            $travelerData = [
-                'id' => $traveler->id,
-                'first_name' => $traveler->first_name,
-                'last_name' => $traveler->last_name,
-                'birthdate' => $traveler->birthdate->format('d-m-Y'),
-                'nationality' => $traveler->nationality,
-            ];
-
-            match ($traveler->type) {
-                TravelerType::Adult => $adults[] = $travelerData,
-                TravelerType::Child => $children[] = $travelerData,
-            };
-        }
-
-        // Handle traveler overrides safely by limiting to actual traveler count
-        if (isset($overrides['travelers']['adults'])) {
-            $adultOverrides = $overrides['travelers']['adults'];
-            $adultCount = count($adults);
-
-            // Limit override array to actual count
-            if (count($adultOverrides) > $adultCount) {
-                $overrides['travelers']['adults'] = array_slice($adultOverrides, 0, $adultCount);
-            }
-        }
-
-        if (isset($overrides['travelers']['children'])) {
-            $childrenOverrides = $overrides['travelers']['children'];
-            $childrenCount = count($children);
-
-            // Limit override array to actual count
-            if (count($childrenOverrides) > $childrenCount) {
-                $overrides['travelers']['children'] = array_slice($childrenOverrides, 0, $childrenCount);
-            }
-        }
-
-        // Create the base payload
         $payload = [
             'trip' => ['id' => $booking->trip_id],
             'status' => Status::New->value,
             'payment_status' => PaymentStatus::Pending->value,
+            'return_date' => $booking->departure_date->addDays(7),
             'travelers' => [
-                'adults' => $adults,
-                'children' => $children,
+                'adults' => $travelers['adult'] ?? [],
+                'children' => $travelers['child'] ?? [],
             ],
             'main_booker' => $booking->main_booker_id ?? 0,
-            'contact' => [
-                'street' => $booking->contact->street,
-                'house_number' => $booking->contact->house_number,
-                'addition' => $booking->contact->addition,
-                'postal_code' => $booking->contact->postal_code,
-                'city' => $booking->contact->city,
-                'email' => $booking->contact->email,
-                'phone' => $booking->contact->phone,
-            ],
+            'contact' => $booking->contact->only([
+                'street',
+                'house_number',
+                'addition',
+                'postal_code',
+                'city',
+                'email',
+                'phone',
+            ]),
         ];
 
-        // Apply overrides recursively
         return array_replace_recursive($payload, $overrides);
     }
 }

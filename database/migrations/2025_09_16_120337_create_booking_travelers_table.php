@@ -20,6 +20,9 @@ return new class extends Migration
             $table->date('birthdate');
             $table->string('nationality');
             $table->text('special_requests')->nullable();
+            $table->boolean('special_requests_consent')->default(false);
+            $table->timestamp('special_requests_consent_at')->nullable();
+            $table->timestamp('special_requests_anonymized_at')->nullable();
             $table->timestamps();
         });
     }

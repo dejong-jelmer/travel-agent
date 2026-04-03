@@ -24,6 +24,16 @@ class BookingValidationRules
             'travelers.*.*.last_name' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.*.*.nationality' => ['required', 'string', 'min:2', 'max:255'],
             'travelers.*.*.special_requests' => ['nullable', 'string', 'max:1000'],
+            'travelers.*.*.special_requests_consent' => [
+                function (string $attribute, mixed $value, \Closure $fail) {
+                    $specialRequestsKey = str_replace('special_requests_consent', 'special_requests', $attribute);
+                    $specialRequests = data_get(request()->all(), $specialRequestsKey);
+
+                    if (filled($specialRequests) && ! $value) {
+                        $fail(__('validation.custom.special_requests_consent_required'));
+                    }
+                },
+            ],
             'travelers.adults.*.birthdate' => [
                 'required',
                 'date_format:d-m-Y',
