@@ -36,7 +36,6 @@ class Booking extends Model
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
-        'return_date' => ['format' => 'dddd LL'],
         'created_at' => ['format' => 'dddd LL - HH:mm'],
     ];
 

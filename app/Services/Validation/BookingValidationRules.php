@@ -29,7 +29,7 @@ class BookingValidationRules
                     $specialRequestsKey = str_replace('special_requests_consent', 'special_requests', $attribute);
                     $specialRequests = data_get(request()->all(), $specialRequestsKey);
 
-                    if (! empty($specialRequests) && ! $value) {
+                    if (filled($specialRequests) && ! $value) {
                         $fail(__('validation.custom.special_requests_consent_required'));
                     }
                 },

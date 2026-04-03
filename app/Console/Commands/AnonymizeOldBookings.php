@@ -19,7 +19,7 @@ class AnonymizeOldBookings extends Command
 
     public function handle(): int
     {
-        $years = (int) ($this->option('years') ?? config('privacy.booking.retention_years', 7));
+        $years = (int) ($this->option('years') ?? config('privacy.booking.retention_years'));
         $dryRun = $this->option('dry-run');
         $cutoffDate = now()->subYears($years);
 

@@ -150,6 +150,8 @@ class BookingService
     {
         foreach ($data as $travelers) {
             foreach ($travelers as $index => $travelerData) {
+                $existing = $booking->travelers()->find($travelerData['id']);
+
                 /** @var \App\Models\BookingTraveler $travelerModel */
                 $travelerModel = $booking->travelers()->updateOrCreate(
                     ['id' => $travelerData['id']],
@@ -160,7 +162,9 @@ class BookingService
                         'nationality' => $travelerData['nationality'],
                         'special_requests' => $travelerData['special_requests'] ?? null,
                         'special_requests_consent' => $travelerData['special_requests_consent'] ?? false,
-                        'special_requests_consent_at' => $travelerData['special_requests_consent'] ? now() : null,
+                        'special_requests_consent_at' => $travelerData['special_requests_consent']
+                            ? ($existing->special_requests_consent_at ?? now())
+                            : null,
                     ]
                 );
                 if ($mainBookerIndex === $index && $travelerModel->type === TravelerType::Adult) {
