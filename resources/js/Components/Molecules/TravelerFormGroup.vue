@@ -20,6 +20,10 @@ const props = defineProps({
     feedback: {
         type: Object,
         default: () => ({})
+    },
+    readonly: {
+        type: Boolean,
+        default: false
     }
 });
 
@@ -53,14 +57,21 @@ const handleBirthdateInput = (event) => {
                 :feedback="feedback?.birthdate" @keyup="$emit('clearError', 'birthdate')" @input="handleBirthdateInput"
                 maxlength="10" />
 
-            <CountrySelect v-model="traveler.nationality" :label="$t('traveler_form.nationality')"
-                :required="true" :feedback="feedback?.nationality"
-                :placeholder="$t('traveler_form.nationality_placeholder')"
+            <CountrySelect v-model="traveler.nationality" :label="$t('traveler_form.nationality')" :required="true"
+                :feedback="feedback?.nationality" :placeholder="$t('traveler_form.nationality_placeholder')"
                 @keyup="$emit('clearError', 'nationality')" />
         </div>
-        <TextArea name="special_requests[]" :label="$t('traveler_form.special_requests')"
-            :placeholder="$t('traveler_form.special_requests_placeholder')" :rows="2"
-            v-model="traveler.special_requests" :feedback="feedback?.special_requests"
-            @keyup="$emit('clearError', 'special_requests')" />
+        <div class="grid gap-4 tablet:gap-6">
+            <TextArea name="special_requests[]" :label="$t('traveler_form.special_requests')"
+                :placeholder="$t('traveler_form.special_requests_placeholder')" :rows="2"
+                v-model="traveler.special_requests" :feedback="feedback?.special_requests"
+                @keyup="$emit('clearError', 'special_requests')" />
+
+            <span v-if="traveler.special_requests?.length ?? false" @click="$emit('clearError', 'special_requests_consent')">
+                <Checkbox v-model="traveler.special_requests_consent" :disabled="readonly && traveler.special_requests_consent" :feedback="feedback?.special_requests_consent">
+                    {{ $t('traveler_form.special_requests_consent') }}
+                </Checkbox>
+            </span>
+        </div>
     </div>
 </template>

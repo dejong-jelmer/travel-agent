@@ -45,8 +45,11 @@ class Booking extends Model
         'trip_id',
         'main_booker_id',
         'departure_date',
+        'return_date',
         'has_accepted_conditions',
+        'conditions_accepted_at',
         'has_confirmed',
+        'confirmed_at',
         'status',
         'payment_status',
         'total_adults',
@@ -65,14 +68,18 @@ class Booking extends Model
         'has_accepted_conditions' => 'boolean',
         'has_confirmed' => 'boolean',
         'departure_date' => 'date',
+        'return_date' => 'date',
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
         'anonymized_at' => 'datetime',
+        'conditions_accepted_at' => 'datetime',
+        'confirmed_at' => 'datetime',
     ];
 
     protected $appends = [
         'departure_date_formatted',
+        'return_date_formatted',
         'created_at_formatted',
         'status_label',
         'payment_status_label',
@@ -158,6 +165,11 @@ class Booking extends Model
     protected function departureDateFormatted(): Attribute
     {
         return Attribute::get(fn () => $this->getFormattedDate('departure_date'));
+    }
+
+    protected function returnDateFormatted(): Attribute
+    {
+        return Attribute::get(fn () => $this->getFormattedDate('return_date'));
     }
 
     protected function createdAtFormatted(): Attribute

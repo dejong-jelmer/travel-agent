@@ -31,8 +31,11 @@ class BookingService
         /** @var Booking $booking */
         $booking = $bookingData->trip->bookings()->create([
             'departure_date' => $bookingData->date,
+            'return_date' => $bookingData->date->copy()->addDays($bookingData->trip->duration ?? 0),
             'has_accepted_conditions' => $bookingData->has_accepted_conditions,
+            'conditions_accepted_at' => $bookingData->has_accepted_conditions ? now() : null,
             'has_confirmed' => $bookingData->has_confirmed,
+            'confirmed_at' => $bookingData->has_confirmed ? now() : null,
             'total_adults' => $totalAdults,
             'total_children' => $totalChildren,
             'trip_price_id' => $prices->tripPriceId,
@@ -60,7 +63,7 @@ class BookingService
         ]);
 
         // Create the travelers
-        $this->storeTravelers($booking, $travelersData, $bookingData->main_booker['index']);
+        $this->createTravelers($booking, $travelersData, $bookingData->main_booker['index']);
 
         return $booking;
     }
@@ -75,11 +78,14 @@ class BookingService
     public function update(Booking $booking, UpdateBookingData $bookingData): Booking
     {
         // Update booking
-        $booking->update([
+        $updateData = [
             'status' => $bookingData->status,
             'payment_status' => $bookingData->payment_status,
             'internal_notes' => $bookingData->internal_notes,
-        ]);
+            'return_date' => $bookingData->return_date,
+        ];
+
+        $booking->update($updateData);
         // Get data from DTO
         $contactData = $bookingData->contact->toArray();
         $travelersData = $bookingData->travelers;
@@ -95,7 +101,7 @@ class BookingService
             'phone' => $contactData['phone'],
         ]);
 
-        $this->updateTravelers($booking, $travelersData, $bookingData->main_booker['index']);
+        $this->updateOrCreateTravelers($booking, $travelersData, $bookingData->main_booker['index']);
 
         return $booking;
     }
@@ -107,7 +113,7 @@ class BookingService
      * @param  array  $data  Travelers keyed by type (adults/children), each an array of traveler fields.
      * @param  int  $mainBookerIndex  Zero-based index of the adult traveler designated as main booker.
      */
-    private function storeTravelers(Booking $booking, array $data, int $mainBookerIndex): void
+    private function createTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $type => $travelers) {
             foreach ($travelers as $index => $travelerData) {
@@ -119,6 +125,8 @@ class BookingService
                     'birthdate' => $travelerData['birthdate'],
                     'nationality' => $travelerData['nationality'],
                     'special_requests' => $travelerData['special_requests'] ?? null,
+                    'special_requests_consent' => $travelerData['special_requests_consent'],
+                    'special_requests_consent_at' => $travelerData['special_requests_consent'] ? now() : null,
                 ]);
                 if ($mainBookerIndex === $index && $travelerModel->type === TravelerType::Adult) {
                     $booking->main_booker_id = $travelerModel->id;
@@ -135,10 +143,12 @@ class BookingService
      * @param  array  $data  Travelers keyed by type (adults/children), each an array of traveler fields.
      * @param  int  $mainBookerIndex  Zero-based index of the adult traveler designated as main booker.
      */
-    private function updateTravelers(Booking $booking, array $data, int $mainBookerIndex): void
+    private function updateOrCreateTravelers(Booking $booking, array $data, int $mainBookerIndex): void
     {
         foreach ($data as $travelers) {
             foreach ($travelers as $index => $travelerData) {
+                $existing = $booking->travelers()->find($travelerData['id']);
+
                 /** @var \App\Models\BookingTraveler $travelerModel */
                 $travelerModel = $booking->travelers()->updateOrCreate(
                     ['id' => $travelerData['id']],
@@ -148,6 +158,10 @@ class BookingService
                         'birthdate' => $travelerData['birthdate'],
                         'nationality' => $travelerData['nationality'],
                         'special_requests' => $travelerData['special_requests'] ?? null,
+                        'special_requests_consent' => $travelerData['special_requests_consent'] ?? false,
+                        'special_requests_consent_at' => $travelerData['special_requests_consent']
+                            ? ($existing->special_requests_consent_at ?? now())
+                            : null,
                     ]
                 );
                 if ($mainBookerIndex === $index && $travelerModel->type === TravelerType::Adult) {

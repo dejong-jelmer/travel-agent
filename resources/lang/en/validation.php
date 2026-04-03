@@ -41,6 +41,10 @@ return [
         'travelers.children.*.birthdate.after_or_equal' => 'For children, a maximum age of 12 years applies, children aged 12 and over count as adults.',
         'travelers.children.*.birthdate.before' => 'The date of birth cannot be in the future.',
         'travelers.children.*.birthdate' => 'Invalid date of birth.',
+        'travelers.*.*.special_requests.max' => 'Special requests may not exceed 1000 characters.',
+        'travelers.*.*.special_requests_consent.required_with' => 'You must give consent to process the special requests you entered.',
+        'travelers.*.*.special_requests_consent.accepted' => 'You must give consent to process the special requests you entered.',
+        'special_requests_consent_required' => 'You must give consent to process the special requests you entered.',
 
         // Main booker
         'main_booker' => [

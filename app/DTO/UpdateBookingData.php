@@ -20,6 +20,7 @@ class UpdateBookingData implements Arrayable
         public readonly array $travelers,
         public readonly BookingContactData $contact,
         public readonly ?string $internal_notes,
+        public readonly ?string $return_date,
     ) {}
 
     /**
@@ -37,6 +38,7 @@ class UpdateBookingData implements Arrayable
             travelers: $parsed['travelers'],
             contact: $parsed['contact'],
             internal_notes: $validated['internal_notes'] ?? null,
+            return_date: $validated['return_date'] ?? null,
         );
     }
 }
