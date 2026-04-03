@@ -334,6 +334,14 @@
                     "label": "Uitgelicht",
                     "help": "Moet deze reis worden uitgelicht op de homepage?"
                 },
+                "min_advance": {
+                    "label": "Minimale boekingstermijn",
+                    "help": "Hoe ver van tevoren moet een boeking worden gemaakt?",
+                    "units": {
+                        "days": "dagen",
+                        "weeks": "weken"
+                    }
+                },
                 "published_at": {
                     "label": "Publicatiedatum",
                     "help": "Vanaf wanneer de reis zichtbaar is op de website"

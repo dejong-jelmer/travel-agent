@@ -23,6 +23,7 @@ return new class extends Migration
             $table->json('highlights')->nullable();
             $table->json('practical_info')->nullable();
             $table->json('blocked_dates')->nullable();
+            $table->unsignedSmallInteger('min_advance_days')->nullable();
             $table->string('meta_title', 60)->nullable();
             $table->text('meta_description', 160)->nullable();
             $table->softDeletes();

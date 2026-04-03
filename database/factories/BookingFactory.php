@@ -52,7 +52,8 @@ class BookingFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (Booking $booking) {
-            $tripPrice = TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
+            $tripPrice = TripPrice::where('trip_id', $booking->trip_id)->inRandomOrder()->first()
+                ?? TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
             $year = now()->format('Y');
             $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
             $booking->trip_price_id = $tripPrice->id;

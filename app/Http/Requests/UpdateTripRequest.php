@@ -27,6 +27,11 @@ class UpdateTripRequest extends FormRequest
         //  Default to empty array's on null
         emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'prices', 'blocked_dates']);
 
+        // Cast FormData string to integer
+        if ($this->filled('min_advance_days')) {
+            $this->merge(['min_advance_days' => (int) $this->input('min_advance_days')]);
+        }
+
         // Normalize blocked_dates sub-fields: FormData omits empty arrays,
         // so explicitly default dates and weekdays to [] when absent.
         $blockedDates = $this->input('blocked_dates');

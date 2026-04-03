@@ -39,6 +39,7 @@ class TripValidationRules
             'active' => ['boolean'],
             'featured' => ['boolean'],
             'published_at' => ['required', 'date'],
+            'min_advance_days' => ['nullable', 'integer', 'min:0', 'max:730'],
         ];
     }
 
