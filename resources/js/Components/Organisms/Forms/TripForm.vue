@@ -48,7 +48,8 @@ const advanceUnitOptions = computed(() => [
 ])
 
 watch([minAdvanceValue, minAdvanceUnit], ([val, unit]) => {
-    props.form.min_advance_days = val ? Math.round(val * unitMultiplier[unit]) : null
+    const num = Number(val)
+    props.form.min_advance_days = num > 0 ? Math.round(num * unitMultiplier[unit]) : null
 })
 
 const { length: metaTitleLength, charsLeft: metaTitleCharsLeft, counterClass: metaTitleClass } = useCharacterCounter(

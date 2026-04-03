@@ -235,7 +235,9 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         const candidate = new Date(minDate);
         const limit = maxDate || new Date(minDate.getFullYear() + 1, minDate.getMonth(), minDate.getDate());
 
-        while (candidate <= limit) {
+        const maxIterations = 365;
+        let i = 0;
+        while (candidate <= limit && i++ < maxIterations) {
             if (!isDisabled || !isDisabled(candidate)) {
                 booking.departure_date = new Date(candidate);
                 break;

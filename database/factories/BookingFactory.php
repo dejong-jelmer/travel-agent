@@ -29,10 +29,12 @@ class BookingFactory extends Factory
 
         $departureDate = fake()->dateTimeBetween('now', '+5 months');
 
+        $trip = Trip::factory();
+
         return [
             'uuid' => fake()->uuid(),
-            'trip_id' => Trip::factory(),
-            'trip_price_id' => 0,
+            'trip_id' => $trip,
+            'trip_price_id' => TripPrice::factory()->for($trip),
             'departure_date' => $departureDate,
             'return_date' => Carbon::instance($departureDate)->addDays(7),
             'has_accepted_conditions' => true,
@@ -52,11 +54,18 @@ class BookingFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (Booking $booking) {
-            $tripPrice = TripPrice::where('trip_id', $booking->trip_id)->inRandomOrder()->first()
-                ?? TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
+            $tripPrice = $booking->tripPrice;
+
+            // Ensure the trip price belongs to the booking's trip.
+            // recycle() may assign a TripPrice from a different Trip.
+            if ($tripPrice->trip_id !== $booking->trip_id) {
+                $tripPrice = TripPrice::where('trip_id', $booking->trip_id)->first()
+                    ?? TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
+                $booking->trip_price_id = $tripPrice->id;
+            }
+
             $year = now()->format('Y');
             $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
-            $booking->trip_price_id = $tripPrice->id;
             $booking->price_per_person = $tripPrice->base_price_pp;
             $booking->single_supplement = $tripPrice->single_supplement;
             $booking->fees_and_funds = [
