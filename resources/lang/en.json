@@ -1179,6 +1179,7 @@
                 "reference": "Booking reference",
                 "trip": "Trip",
                 "departure_date": "Departure date",
+                "return_date": "Return date",
                 "contact": "Contact details",
                 "contact_info": "Contact person information",
                 "contact_name": "Name",

@@ -314,12 +314,14 @@ class BookingTest extends TestCase
     {
         $numberOfAdults = $overrides['numberOfAdults'] ?? fake()->numberBetween(1, 4);
         $numberOfChildren = $overrides['numberOfChildren'] ?? fake()->numberBetween(0, 2);
+        $departureDate = fake()->dateTimeBetween('now', '+1 year');
 
         return array_merge([
             'trip' => ['id' => $this->trip->id],
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
-            'departure_date' => fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
+            'departure_date' => $departureDate->format('Y-m-d'),
+            'return_date' => Carbon::instance($departureDate)->addDays(7),
             'travelers' => [
                 'adults' => $this->generateTravelers($numberOfAdults, TravelerType::Adult),
                 'children' => $this->generateTravelers($numberOfChildren, TravelerType::Child),

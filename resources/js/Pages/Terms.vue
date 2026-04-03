@@ -6,7 +6,7 @@ const props = defineProps({
     contact: Object,
     terms: {
         type: Object,
-        default: { version: '1.1', updated: 'april 2026' }
+        default: { version: null, updated: null }
     }
 });
 

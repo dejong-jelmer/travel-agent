@@ -32,9 +32,9 @@ class TermsPdfService
     public function generate(): void
     {
         $data = [
-            'kvk' => config('contact.kvk', '123456789'),
-            'version' => config('privacy.version', '1.1'),
-            'updated' => config('privacy.updated', now()->format('Y')),
+            'kvk' => config('contact.kvk'),
+            'version' => config('privacy.version'),
+            'updated' => config('privacy.updated'),
         ];
 
         try {

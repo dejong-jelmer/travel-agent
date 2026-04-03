@@ -1178,6 +1178,7 @@
                 "reference": "Boekingsreferentie",
                 "trip": "Reis",
                 "departure_date": "Vertrekdatum",
+                "return_date": "Retourdatum",
                 "contact": "Contactgegevens",
                 "contact_info": "Contactpersoon informatie",
                 "contact_name": "Naam",

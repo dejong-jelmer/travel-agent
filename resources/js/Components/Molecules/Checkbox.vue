@@ -16,7 +16,7 @@ const props = defineProps({
 <template>
     <div>
         <label :class="['flex items-center gap-x-2', disabled ? 'cursor-not-allowed opacity-50' : 'cursor-pointer']">
-            <input type="checkbox" :checked="modelValue" @change="!disabled && $emit('update:modelValue', $event.target.checked)"
+            <input type="checkbox" :checked="modelValue" @change="$emit('update:modelValue', $event.target.checked)"
                 :disabled="disabled" class="hidden peer" />
             <div
                 class="w-5 h-5 flex flex-none items-center justify-center border-2 border-brand-primary/30 rounded-md transition-all peer-checked:bg-white peer-checked:border-brand-primary">

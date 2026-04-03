@@ -36,6 +36,7 @@ class Booking extends Model
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
+        'return_date' => ['format' => 'dddd LL'],
         'created_at' => ['format' => 'dddd LL - HH:mm'],
     ];
 
@@ -79,6 +80,7 @@ class Booking extends Model
 
     protected $appends = [
         'departure_date_formatted',
+        'return_date_formatted',
         'created_at_formatted',
         'status_label',
         'payment_status_label',
@@ -164,6 +166,11 @@ class Booking extends Model
     protected function departureDateFormatted(): Attribute
     {
         return Attribute::get(fn () => $this->getFormattedDate('departure_date'));
+    }
+
+    protected function returnDateFormatted(): Attribute
+    {
+        return Attribute::get(fn () => $this->getFormattedDate('return_date'));
     }
 
     protected function createdAtFormatted(): Attribute

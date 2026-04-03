@@ -84,7 +84,7 @@ class AnonymizeSpecialRequestsTest extends TestCase
 
     public function test_it_skips_bookings_where_special_requests_are_already_null(): void
     {
-        $booking = $this->createBookingWithSpecialRequests([
+        $this->createBookingWithSpecialRequests([
             'return_date' => now()->subDays(8),
         ], [
             'special_requests' => null,
@@ -204,16 +204,5 @@ class AnonymizeSpecialRequestsTest extends TestCase
 
         $traveler = $booking->travelers->first()->fresh();
         $this->assertNotNull($traveler->special_requests);
-    }
-
-    public function test_it_handles_bookings_with_null_return_date(): void
-    {
-        $this->createBookingWithSpecialRequests([
-            'return_date' => null,
-        ]);
-
-        $this->artisan('bookings:anonymize-special-requests')
-            ->expectsOutput('No bookings found with special requests to anonymize.')
-            ->assertExitCode(0);
     }
 }

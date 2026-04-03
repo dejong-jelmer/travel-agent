@@ -44,6 +44,7 @@ return [
         'travelers.*.*.special_requests.max' => 'Special requests may not exceed 1000 characters.',
         'travelers.*.*.special_requests_consent.required_with' => 'You must give consent to process the special requests you entered.',
         'travelers.*.*.special_requests_consent.accepted' => 'You must give consent to process the special requests you entered.',
+        'special_requests_consent_required' => 'You must give consent to process the special requests you entered.',
 
         // Main booker
         'main_booker' => [

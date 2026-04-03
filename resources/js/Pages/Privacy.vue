@@ -17,7 +17,7 @@ const props = defineProps({
     },
     privacy: {
         type: Object,
-        default: { version: '1.1', updated: 'maart 2026' }
+        default: { version: null, updated: null }
     }
 });
 

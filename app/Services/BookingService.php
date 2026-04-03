@@ -78,12 +78,17 @@ class BookingService
     public function update(Booking $booking, UpdateBookingData $bookingData): Booking
     {
         // Update booking
-        $booking->update([
+        $updateData = [
             'status' => $bookingData->status,
             'payment_status' => $bookingData->payment_status,
             'internal_notes' => $bookingData->internal_notes,
-            'return_date' => $bookingData->return_date,
-        ]);
+        ];
+
+        if ($bookingData->return_date !== null) {
+            $updateData['return_date'] = $bookingData->return_date;
+        }
+
+        $booking->update($updateData);
         // Get data from DTO
         $contactData = $bookingData->contact->toArray();
         $travelersData = $bookingData->travelers;

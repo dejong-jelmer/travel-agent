@@ -98,8 +98,8 @@ class HomeController extends Controller
             'bookingRetentionYears' => (int) config('privacy.booking.retention_years', 7),
             'specialRequestsRetentionDays' => (int) config('privacy.booking.special_requests_retention_days', 7),
             'privacy' => [
-                'version' => config('privacy.version', '1.1'),
-                'updated' => config('privacy.updated', 'april 2026'),
+                'version' => config('privacy.version'),
+                'updated' => config('privacy.updated'),
             ],
         ]);
     }
@@ -110,8 +110,8 @@ class HomeController extends Controller
             'title' => $this->pageTitle('home.terms_seo'),
             'seo' => $this->pageSeo('home.terms_seo'),
             'terms' => [
-                'version' => config('terms.version', '1.1'),
-                'updated' => config('terms.updated', now()->format('Y')),
+                'version' => config('terms.version'),
+                'updated' => config('terms.updated'),
             ],
         ]);
     }

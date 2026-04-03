@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('trip_price_id');
             $table->foreignId('main_booker_id')->cascadeOnDelete()->nullable();
             $table->date('departure_date');
-            $table->date('return_date')->nullable();
+            $table->date('return_date');
             $table->boolean('has_accepted_conditions')->default(false);
             $table->timestamp('conditions_accepted_at')->nullable();
             $table->boolean('has_confirmed')->default(false);

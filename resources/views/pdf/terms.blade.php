@@ -135,7 +135,7 @@
 
     <div class="header">
         <h1>Algemene Voorwaarden</h1>
-        <p>Versie: {{ $version }} | Laatste update: {{ $updated }}</p>
+        <p>Versie: {{ $version ?? '-' }} | Laatste update: {{ $updated ?? '-' }}</p>
     </div>
 
     <div class="toc">
@@ -169,7 +169,7 @@
     {{-- Artikel 1 --}}
     <div class="article">
         <h2>Artikel 1 - Definities</h2>
-        <p><strong>Organisator:</strong> Omdat We Reizen. De handelaar die Reis samenstelt en deze – al dan niet via een doorverkoper – aanbiedt, en de handelaar die een Gekoppeld Reisarrangement faciliteert. Omdat We Reizen is een geregistreerde handelsnaam en ingeschreven bij de Kamer van Koophandel onder nummer: <strong>{{ $kvk }}</strong>.</p>
+        <p><strong>Organisator:</strong> Omdat We Reizen. De handelaar die Reis samenstelt en deze – al dan niet via een doorverkoper – aanbiedt, en de handelaar die een Gekoppeld Reisarrangement faciliteert. Omdat We Reizen is een geregistreerde handelsnaam en ingeschreven bij de Kamer van Koophandel onder nummer: <strong>{{ $kvk ?? '-' }}</strong>.</p>
         <p><strong>Reiziger:</strong> Iedere persoon die met de Organisator een Overeenkomst betreffende een Reis wil sluiten en iedere persoon die op grond van de Overeenkomst het recht heeft om te reizen.</p>
         <p><strong>Reisdienst:</strong> Personenvervoer, huur van een motorvoertuig of motorrijwiel, accommodatie of een andere toeristische dienst, voor zover deze diensten vallen binnen de definitie van artikel 7:500 sub a BW.</p>
         <p><strong>Reisdienstverlener:</strong> De dienstverlener die een onderdeel van de Reis uitvoert, zoals hulppersonen (accommodatieverschaffers/vervoerders/externe gidsen/etc.) van de Organisator.</p>

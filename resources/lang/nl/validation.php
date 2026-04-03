@@ -44,6 +44,7 @@ return [
         'travelers.*.*.special_requests.max' => 'Bijzonderheden mogen maximaal 1000 tekens bevatten.',
         'travelers.*.*.special_requests_consent.required_with' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
         'travelers.*.*.special_requests_consent.accepted' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
+        'special_requests_consent_required' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
 
         // Main booker
         'main_booker' => [
