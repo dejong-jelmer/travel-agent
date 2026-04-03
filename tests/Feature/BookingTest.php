@@ -465,6 +465,7 @@ class BookingTest extends TestCase
             'trip' => ['id' => $booking->trip_id],
             'status' => Status::New->value,
             'payment_status' => PaymentStatus::Pending->value,
+            'return_date' => $booking->departure_date->addDays(7),
             'travelers' => [
                 'adults' => $travelers['adult'] ?? [],
                 'children' => $travelers['child'] ?? [],

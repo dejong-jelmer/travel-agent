@@ -27,6 +27,7 @@ class AnonymizeSpecialRequests extends Command
             ->where('return_date', '<', $cutoffDate)
             ->whereNull('anonymized_at')
             ->whereHas('travelers', fn ($query) => $query->whereNotNull('special_requests')->whereNull('special_requests_anonymized_at'))
+            ->withCount(['travelers as special_requests_count' => fn ($query) => $query->whereNotNull('special_requests')->whereNull('special_requests_anonymized_at')])
             ->get();
 
         if ($bookings->isEmpty()) {
@@ -44,11 +45,9 @@ class AnonymizeSpecialRequests extends Command
 
         if ($dryRun) {
             $bookings->each(function (Booking $booking): void {
-                $travelerCount = $booking->travelers()
-                    ->whereNotNull('special_requests')
-                    ->whereNull('special_requests_anonymized_at')
-                    ->count();
-                $this->line("  - Booking #{$booking->id} ({$booking->reference}) — return: {$booking->return_date->format('Y-m-d')} — {$travelerCount} traveler(s)");
+                /** @var int $count Loaded via withCount */
+                $count = $booking->getAttribute('special_requests_count');
+                $this->line("  - Booking #{$booking->id} ({$booking->reference}) — return: {$booking->return_date->format('Y-m-d')} — {$count} traveler(s)");
             });
 
             return self::SUCCESS;
