@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\NewsletterCampaign;
 use App\Models\NewsletterSubscriber;
 use App\Models\Trip;
+use App\Models\TripPrice;
 use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -53,8 +54,11 @@ class DatabaseSeeder extends Seeder
             ->withPrices()
             ->create();
 
+        $tripPrices = TripPrice::whereIn('trip_id', $trips->pluck('id'))->get();
+
         Booking::factory(75)
             ->recycle($trips)
+            ->recycle($tripPrices)
             ->withTravelers()
             ->create();
 

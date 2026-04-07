@@ -276,7 +276,8 @@ const tabIcons = {
                                     <h3 class="text-xl font-bold text-brand-primary">
                                         {{ t('trip_show.sidebar.book_this_trip') }}
                                     </h3>
-                                    <DatePicker v-model="departure_date" :min-date="new Date()"
+                                    <DatePicker v-model="departure_date"
+                                        :min-date="booking.constraints.value?.minDate ?? new Date()"
                                         :max-date="booking.constraints.value?.maxDate ?? null"
                                         :disabled-dates="booking.disabledDates.value" />
                                     <PersonPicker v-model="participants" />

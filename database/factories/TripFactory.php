@@ -51,17 +51,9 @@ class TripFactory extends Factory
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
             'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
+            'min_advance_days' => fake()->numberBetween(21, 42),
             'blocked_dates' => null,
         ];
-    }
-
-    private function generateSlug(string $city, ?string $destination = null): string
-    {
-        if ($destination) {
-            return Str::slug("reis-naar-{$city}-{$destination}");
-        }
-
-        return Str::slug("reis-naar-{$city}");
     }
 
     private function generateDescription(string $city, ?string $destination = null): string

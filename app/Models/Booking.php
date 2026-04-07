@@ -192,6 +192,11 @@ class Booking extends Model
         return $this->belongsTo(Trip::class);
     }
 
+    public function tripPrice(): BelongsTo
+    {
+        return $this->belongsTo(TripPrice::class);
+    }
+
     public function travelers(): HasMany
     {
         return $this->hasMany(BookingTraveler::class)

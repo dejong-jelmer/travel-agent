@@ -334,6 +334,14 @@
                     "label": "Featured",
                     "help": "Should this trip be featured on the homepage?"
                 },
+                "min_advance": {
+                    "label": "Minimum booking lead time",
+                    "help": "How far in advance must a booking be made?",
+                    "units": {
+                        "days": "days",
+                        "weeks": "weeks"
+                    }
+                },
                 "published_at": {
                     "label": "Publication date",
                     "help": "From when the trip will be visible on the website"

@@ -54,6 +54,7 @@ class Trip extends Model
         'highlights',
         'practical_info',
         'blocked_dates',
+        'min_advance_days',
         'meta_title',
         'meta_description',
     ];
@@ -72,6 +73,7 @@ class Trip extends Model
         'highlights' => 'array',
         'practical_info' => 'array',
         'blocked_dates' => 'array',
+        'min_advance_days' => 'integer',
         'published_at' => 'datetime',
         'featured' => 'boolean',
     ];

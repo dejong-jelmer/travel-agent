@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\Trip\PriceLabel;
+use App\Models\Trip;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -21,6 +22,7 @@ class TripPriceFactory extends Factory
         $validUntil = now()->addMonths(12);
 
         return [
+            'trip_id' => Trip::factory(),
             'valid_from' => $validFrom->format('Y-m-d'),
             'valid_until' => $validUntil->format('Y-m-d'),
             'base_price_pp' => fake()->numberBetween(899, 1999) * 100,

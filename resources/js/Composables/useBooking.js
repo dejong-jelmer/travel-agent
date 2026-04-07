@@ -187,7 +187,12 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             d.setFullYear(d.getFullYear() + 1);
             maxDate = d;
         }
-        return { maxDate };
+
+        const advanceDays = trip?.min_advance_days ?? 0;
+        const minDate = new Date();
+        if (advanceDays > 0) minDate.setDate(minDate.getDate() + advanceDays);
+
+        return { minDate, maxDate };
     });
 
     const disabledDates = computed(() => {
@@ -222,6 +227,24 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             });
         };
     });
+
+    // Auto-select first available date when no departure_date is set
+    if (!booking.departure_date) {
+        const isDisabled = disabledDates.value;
+        const { minDate, maxDate } = constraints.value;
+        const candidate = new Date(minDate);
+        const limit = maxDate || new Date(minDate.getFullYear() + 1, minDate.getMonth(), minDate.getDate());
+
+        const maxIterations = 365;
+        let i = 0;
+        while (candidate <= limit && i++ < maxIterations) {
+            if (!isDisabled || !isDisabled(candidate)) {
+                booking.departure_date = new Date(candidate);
+                break;
+            }
+            candidate.setDate(candidate.getDate() + 1);
+        }
+    }
 
     return {
         booking,
