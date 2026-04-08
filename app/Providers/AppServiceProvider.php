@@ -47,11 +47,6 @@ class AppServiceProvider extends ServiceProvider
                 ? ['newBookingsCount' => Booking::new()->count()]
                 : null,
             'settings' => fn () => Setting::pluck('value', 'key')->all(),
-            'navCountries' => fn () => Cache::remember(config('cache.keys.nav_countries'), 3600, fn () => $this->app->make(CountryService::class)->getCountriesForTrips(
-                Trip::with('destinations.country')->published()->get()
-            )
-            ),
-            'countries' => fn () => Cache::remember(config('cache.keys.countries'), 3600, fn () => CountryService::countries()),
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());

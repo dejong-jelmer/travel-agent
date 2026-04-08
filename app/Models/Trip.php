@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Transport;
 use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\TripType;
 use App\Models\Traits\CastsStringArray;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
@@ -47,6 +48,7 @@ class Trip extends Model
     protected $fillable = [
         'name',
         'slug',
+        'intro',
         'description',
         'transport',
         'featured',
@@ -74,8 +76,9 @@ class Trip extends Model
         'practical_info' => 'array',
         'blocked_dates' => 'array',
         'min_advance_days' => 'integer',
-        'published_at' => 'datetime',
+        'published_at' => 'date',
         'featured' => 'boolean',
+        'type' => TripType::class,
     ];
 
     // Sortable properties

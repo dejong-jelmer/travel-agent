@@ -7,7 +7,6 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
-use App\Services\CountryService;
 use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -19,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class HomeController extends Controller
 {
     use HasPageMetadata;
-
-    public function __construct(private readonly CountryService $countryService) {}
 
     public function home(): Response
     {
@@ -75,18 +72,6 @@ class HomeController extends Controller
         return response()->json([
             'success' => true,
         ], 200);
-    }
-
-    public function trips(): Response
-    {
-        $trips = Trip::with(['destinations.country', 'heroImage', 'prices'])->published()->get();
-
-        return Inertia::render('Trip/Index', [
-            'title' => $this->pageTitle('home.trips_seo'),
-            'trips' => $trips,
-            'countries' => $this->countryService->getCountriesForTrips($trips),
-            'seo' => $this->pageSeo('home.trips_seo'),
-        ]);
     }
 
     public function privacy(): Response

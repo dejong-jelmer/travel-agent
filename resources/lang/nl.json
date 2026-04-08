@@ -22,15 +22,15 @@
     "topbar_text": "Duurzame treinreizen door Europa",
     "nav": {
         "trips": "Reizen",
-        "all_trips": "Alle reizen",
+        "all_trips": "De reizen",
         "contact": "Contact",
         "about": "Over mij",
         "blog": "Blog",
         "home": "Home"
     },
     "trips": {
-        "title": "Alle reizen",
-        "subtitle": "Ontdek onze duurzame treinreizen door Europa.",
+        "title": "Waar ga jij heen?",
+        "subtitle": "De bestemmingen die ik koos",
         "result_singular": "reis gevonden",
         "result_plural": "reizen gevonden",
         "filter_title": "Filters",
@@ -41,8 +41,7 @@
         "filter_duration": "Reisdagen",
         "filter_price": "Vanaf prijs",
         "filter_days_unit": "dagen",
-        "empty_title": "Geen reizen gevonden",
-        "empty_body": "Er zijn geen reizen die overeenkomen met uw selectie. Pas uw filters aan."
+        "empty_title": "Helaas zijn er nog geen reizen beschikbaar."
     },
     "blog_post": {
         "status": {
@@ -359,6 +358,10 @@
                 "og_image": {
                     "label": "OG Image",
                     "help": "Afbeelding voor social media delen (Open Graph)"
+                },
+                "intro": {
+                    "label": "Intro",
+                    "placeholder": "Schrijf een korte introductie…"
                 }
             },
             "submit": {
@@ -833,7 +836,7 @@
             "days": "{duration} dagen",
             "per_person": "p.p."
         },
-        "about_trip": "Over deze reis",
+        "about_trip": "Waarom {trip}",
         "tabs": {
             "itinerary": "Dag tot dag",
             "inclusive": "Inclusief & Exclusief",
@@ -1035,7 +1038,8 @@
                 "details": {
                     "name": "Naam",
                     "slug": "Slug",
-                    "description": "Beschrijving"
+                    "description": "Beschrijving",
+                    "intro": "Intro"
                 },
                 "items": {
                     "no_items": "Geen items",

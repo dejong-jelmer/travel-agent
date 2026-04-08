@@ -1,6 +1,5 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
-// import Swiper from "./Swiper.vue";
 import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { useMq } from "vue3-mq";
 const mq = useMq();
@@ -10,6 +9,7 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    visible: Number
 });
 
 const items = ref(props.items);
@@ -22,12 +22,13 @@ const currentTranslate = ref(0);
 const prevTranslate = ref(0);
 
 const updateVisibleItems = () => {
+    const max = props.visible ?? 3
     if (mq.wide || mq.desktop || mq.laptop) {
-        visibleItems.value = 3;
+        visibleItems.value = Math.min(3, max)
     } else if (mq.tablet) {
-        visibleItems.value = 2;
+        visibleItems.value = Math.min(2, max)
     } else {
-        visibleItems.value = 1;
+        visibleItems.value = 1
     }
 };
 
@@ -92,17 +93,9 @@ const endDrag = () => {
 };
 </script>
 <template>
-    <div class="relative w-full">
-        <div class="flex items-center justify-center overflow-hidden">
-            <template v-if="items.length > visibleItems">
-                <button
-                    @click="prevSlide"
-                    class="hidden tablet:block text-4xl font-thin text-brand-primary hover:text-light-blue transition-colors rotate-180"
-                >
-                    <ChevronRightIcon class="h-12 w-12" />
-                </button>
-            </template>
-            <div class="max-w-screen-wide laptop:max-w-screen-desktop w-full overflow-hidden">
+    <div class="flex items-center justify-center group">
+        <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-full">
+            <div class="overflow-hidden">
                 <div
                     ref="slider"
                     class="flex transition-transform duration-500 ease-in-out"
@@ -132,13 +125,18 @@ const endDrag = () => {
             </div>
             <template v-if="items.length > visibleItems">
                 <button
+                    @click="prevSlide"
+                    class="hidden tablet:block absolute left-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-white/80 hover:text-white p-1 bg-black/10 hover:bg-black/30 rounded-full"
+                >
+                    <ChevronRightIcon class="h-12 w-12 rotate-180" />
+                </button>
+                <button
                     @click="nextSlide"
-                    class="hidden tablet:block text-4xl font-thin text-brand-primary hover:text-light-blue transition-colors"
+                    class="hidden tablet:block absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity text-white/80 hover:text-white p-1 bg-black/10 hover:bg-black/30 rounded-full"
                 >
                     <ChevronRightIcon class="h-12 w-12" />
                 </button>
             </template>
         </div>
-        <!-- <Swiper :hasDragged="hasDragged" /> -->
     </div>
 </template>

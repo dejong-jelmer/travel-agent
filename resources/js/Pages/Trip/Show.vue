@@ -1,6 +1,6 @@
 <script setup>
 import { ref, toRef, watch, computed } from 'vue'
-import { Clock, TrainFront, MapPinned, ChevronRight, Map, ListChecks, Info, Globe, Route } from 'lucide-vue-next';
+import { Clock, MapPinned, ChevronRight, Map, ListChecks, Info, Globe, Route } from 'lucide-vue-next';
 import { useBooking } from '@/Composables/useBooking.js'
 import { useI18n } from 'vue-i18n'
 
@@ -33,7 +33,7 @@ const selectTab = (id) => {
 }
 // Modal
 const bookingModalOpen = ref(false)
-// LigtBox
+// LightBox
 const lightboxRef = ref(null)
 const openLightbox = (index) => {
     lightboxRef.value?.open(index)
@@ -60,6 +60,16 @@ const tabs = computed(() => [
     { id: 'general_info', label: t('trip_show.tabs.general_info') }
 ])
 
+const tripMeta = computed(() => ({
+    price: `${t('trip_show.hero.from_price', { price: props.trip.price_formatted })} ${t('trip_show.hero.per_person')}`,
+    data: [
+        props.trip.destinations_formatted,
+        t('trip_show.hero.days', {
+            duration: props.trip.duration
+        })
+    ]
+}))
+
 const tabIcons = {
     itinerary: Map,
     inclusive: ListChecks,
@@ -73,66 +83,9 @@ const tabIcons = {
     <Layout>
         <template v-slot:hero>
             <!-- Hero Section -->
-            <section class="relative overflow-hidden">
-                <!-- Background Image -->
-                <div class="h-[calc(100vh-140px)] relative">
-                    <div class="absolute inset-0 bg-cover bg-center"
-                        :style="`background-image: url(${trip.hero_image?.public_url})`"></div>
+            <PageHero overlay-class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-transparent"
+                :image="trip.hero_image?.public_url" :title="trip.name" :subtitle="trip.intro" :trip-meta="tripMeta" />
 
-                    <!-- Hero Content -->
-                    <div class="absolute bottom-4 tablet:bottom-8 left-0 right-0">
-                        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
-                            <div
-                                class="max-w-5xl p-4 tablet:p-6 mx-2 tablet:mx-4 laptop:mx-0 laptop:p-8 border border-white rounded-3xl bg-brand-primary/30 backdrop-blur-[2px]">
-                                <!-- Trip Title -->
-                                <h1
-                                    class="text-3xl tablet:text-5xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
-                                    {{ trip.name }}
-                                </h1>
-
-                                <!-- Trip Meta Info -->
-                                <div class="flex flex-wrap gap-3 tablet:gap-6 text-white">
-                                    <!-- Price -->
-                                    <div class="flex items-center gap-2 bg-brand-accent px-4 py-2 rounded-full">
-                                        <span class="text-lg">{{ t('trip_show.hero.from_price', {
-                                            price:
-                                                trip.price_formatted
-                                        })
-                                            }} {{ $t('trip_show.hero.per_person') }}</span>
-                                    </div>
-
-                                    <!-- Duration -->
-                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
-                                        <Clock class="w-5 h-5" />
-                                        <span class="font-medium">{{ t('trip_show.hero.days', {
-                                            duration: trip.duration
-                                        }) }}</span>
-                                    </div>
-
-                                    <!-- Transport -->
-                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
-                                        <Route class="h-5 w-5 flex-none" />
-                                        <div class="inline-flex items-center space-x-1" v-for="mode in trip.transport_formatted.slice(0, 4)" :key="mode.value">
-                                            <EnumIcon :enum="mode.value" v-tippy="mode.label"
-                                                class="text-secondary w-4 h-4 flex-none" />
-                                            <span>{{ mode.label }}</span>
-                                        </div>
-                                        <span v-if="trip.transport_formatted.length > 4" class="text-xs text-white">
-                                            +{{ trip.transport_formatted.length - 4 }}
-                                        </span>
-                                    </div>
-
-                                    <!-- Destination -->
-                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
-                                        <MapPinned class="w-5 h-5" />
-                                        <span class="font-medium">{{ trip.destinations_formatted }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </template>
         <DecorativeLine />
         <!-- Main Content -->
@@ -146,13 +99,13 @@ const tabIcons = {
                     <div class="bg-white rounded-2xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
                         <div class="mb-8">
                             <div class="w-full text-center">
-                                <SectionHeader>{{ t('trip_show.about_trip') }}</SectionHeader>
+                                <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
                             </div>
                             <div class="p-6">
-                                <Slider :items="trip.images">
+                                <Slider :items="trip.images" :visible="1">
                                     <template #default="{ item, index }">
                                         <img :src="item.public_url" alt="Trip image"
-                                            class="w-full h-36 tablet:h-48 rounded-md object-cover cursor-zoom-in"
+                                            class="w-full h-36 tablet:h-full  object-cover cursor-zoom-in"
                                             :key="index" loading="lazy" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>
@@ -262,14 +215,6 @@ const tabIcons = {
                                         <span class="text-brand-light">{{ t('trip_show.sidebar.duration') }}</span>
                                         <span class="font-medium text-brand-primary">{{ trip.duration }}
                                             {{ t('trip_show.sidebar.days_label') }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-brand-light">{{ t('trip_show.sidebar.transport') }}</span>
-                                        <span class="font-medium text-brand-text flex items-center gap-1">
-                                            <EnumIcon v-for="mode in trip.transport_formatted" :key="mode.value"
-                                                :enum="mode.value" v-tippy="mode.label"
-                                                class="text-brand-primary w-4 h-4 flex-none" />
-                                        </span>
                                     </div>
                                 </div>
                                 <div class="border-t border-brand-accent/20 pt-6 space-y-6">

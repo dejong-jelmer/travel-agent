@@ -45,6 +45,7 @@ class TripFactory extends Factory
         return [
             'name' => $name,
             'slug' => $slug,
+            'intro' => fake()->text(100),
             'description' => $this->generateDescription($city),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
@@ -62,7 +63,7 @@ class TripFactory extends Factory
             ? "Ontdek het prachtige {$city} in {$destination}. "
             : "Ontdek het prachtige {$city}. ";
 
-        $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes. ';
+        $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes.';
 
         return $intro.$secondLine.fake()->paragraph();
     }

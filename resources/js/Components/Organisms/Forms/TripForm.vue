@@ -128,6 +128,10 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                     :required="true" v-model="form.name" :feedback="form.errors.name"
                                     :placeholder="t('forms.trip.fields.name.placeholder')" />
 
+                                 <Input type="text" name="intro" :label="t('forms.trip.fields.intro.label')"
+                                    :required="true" v-model="form.intro" :feedback="form.errors.intro"
+                                    :placeholder="t('forms.trip.fields.intro.placeholder')" />
+
                                 <TextArea name="description" :label="t('forms.trip.fields.description.label')"
                                     :required="true" v-model="form.description" :feedback="form.errors.description"
                                     :placeholder="t('forms.trip.fields.description.placeholder')" :rows="6" />

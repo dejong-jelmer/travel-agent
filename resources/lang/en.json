@@ -29,8 +29,8 @@
         "home": "Home"
     },
     "trips": {
-        "title": "All trips",
-        "subtitle": "Discover our sustainable train journeys across Europe.",
+        "title": "Where would you go?",
+        "subtitle": "The destinations I chose",
         "result_singular": "trip found",
         "result_plural": "trips found",
         "filter_title": "Filters",
@@ -41,8 +41,7 @@
         "filter_duration": "Travel days",
         "filter_price": "Starting price",
         "filter_days_unit": "days",
-        "empty_title": "No trips found",
-        "empty_body": "No trips match your current selection. Try adjusting your filters."
+        "empty_title": "Unfortunately, there are no available trips yet."
     },
     "blog_post": {
         "status": {
@@ -359,6 +358,10 @@
                 "og_image": {
                     "label": "OG Image",
                     "help": "Image for social media sharing (Open Graph)"
+                },
+                "intro": {
+                    "label": "Intro",
+                    "placeholder": "Write a short introduction…"
                 }
             },
             "submit": {
@@ -1036,7 +1039,8 @@
                 "details": {
                     "name": "Name",
                     "slug": "Slug",
-                    "description": "Description"
+                    "description": "Description",
+                    "intro": "Intro"
                 },
                 "items": {
                     "no_items": "No items",
