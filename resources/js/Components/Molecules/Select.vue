@@ -57,7 +57,7 @@ const isSelected = (value) => {
     if (!props.modelValue) return false;
     return Array.isArray(props.modelValue)
         ? props.modelValue.includes(value)
-        : props.modelValue === value;
+        : props.modelValue == value;
 };
 
 </script>

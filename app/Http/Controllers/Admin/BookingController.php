@@ -54,7 +54,7 @@ class BookingController extends Controller
     public function create(): Response
     {
         return Inertia::render('Admin/Booking/Create', [
-            'trip' => Trip::first(),
+            'trips' => Trip::get(),
             'countries' => CountryService::countries(),
             'title' => $this->pageTitle('booking.title_create'),
         ]);

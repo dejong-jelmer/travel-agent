@@ -1226,6 +1226,11 @@
                     "single_supplement": "Eenpersoonstoeslag",
                     "total": "Totaal"
                 }
+            },
+            "create": {
+                "title": "Nieuwe boeking aanmaken",
+                "subtitle": "Selecteer een reis en vul de boekingsgegevens in.",
+                "select_trip": "Selecteer een reis"
             }
         },
         "destinations": {

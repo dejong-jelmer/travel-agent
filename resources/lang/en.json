@@ -1227,6 +1227,11 @@
                     "single_supplement": "Single supplement",
                     "total": "Total"
                 }
+            },
+            "create": {
+                "title": "Create new booking",
+                "subtitle": "Select a trip and fill in the booking details.",
+                "select_trip": "Select a trip"
             }
         },
         "destinations": {
