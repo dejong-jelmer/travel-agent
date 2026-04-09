@@ -203,7 +203,9 @@
             "submit_button": "Verstuur bericht",
             "success": "Bedankt! Je bericht is succesvol verstuurd.",
             "privacy": "Je gegevens worden uitsluitend gebruikt om je bericht te beantwoorden. Lees meer in de {link}.",
-            "privacy_link": "privacyverklaring"
+            "privacy_link": "privacyverklaring",
+            "trip_inquiry_prefix": "Ik heb interesse in de reis: {trip}.",
+            "trip_inquiry_period": "Mijn voorkeur gaat uit naar {period}."
         },
         "trip": {
             "edit_heading": "Bewerk Reis",
@@ -638,7 +640,7 @@
             "heading": "Reis boeken - {tripName}",
             "intro": "Wat leuk dat je de reis {tripName} wilt gaan boeken. We gaan een aantal stappen doorlopen om te zorgen dat de boeking goed doorkomt.",
             "notice_heading": "Let op:",
-            "notice_text": "Dit is een {booking_request}. We kijken eerst of we aan alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen we binnen {two_working_days} contact metjeop om de boeking te bevestigen.",
+            "notice_text": "Dit is een {booking_request}. We kijken eerst of we aan alle wensen kunnen voldoen en of er voldoende beschikbaarheid is. Na het verzenden nemen we binnen {two_working_days} contact met je op om de boeking te bevestigen.",
             "booking_request": "boekingsaanvraag",
             "two_working_days": "twee werkdagen",
             "trip_label": "Reis",
@@ -864,6 +866,19 @@
             "sustainable_travel": "Duurzaam reizen",
             "small_personal": "Kleinschalig & persoonlijk",
             "carefree_travel": "Zorgeloos op reis"
+        },
+        "highlights_heading": "Wat je gaat zien",
+        "inquiry": {
+            "title": "Plan deze reis",
+            "price_from": "Vanaf €{price},- p.p.",
+            "duration_label": "{duration} dagen",
+            "explanation": "Geen kant-en-klaar product. Ik kijk samen met je naar de beste periode, je voorkeuren en wat deze reis voor jou bijzonder maakt. Je betaalt pas als alles staat.",
+            "cta_make_request": "Vraag voorstel aan",
+            "cta_send_message": "Stel een vraag",
+            "preferred_period_label": "Voorkeursperiode (optioneel)",
+            "preferred_period_placeholder": "Bijv. september 2026",
+            "direct_contact_label": "Of neem direct contact op:",
+            "send_email": "Stuur een e-mail"
         }
     },
     "date_picker": {
@@ -925,7 +940,7 @@
         "next_steps": {
             "title": "Volgende stappen",
             "confirmation_email": "U ontvangt een bevestigingsmail met alle details van uw boeking",
-            "contact_soon": "Ik neem binnenkort contact metjeop voor de definitieve bevestiging",
+            "contact_soon": "Ik neem binnenkort contact met je op voor de definitieve bevestiging",
             "questions": "Heb je vragen? Neem gerust contact met mij op"
         },
         "back_to_home": "Terug naar homepagina"

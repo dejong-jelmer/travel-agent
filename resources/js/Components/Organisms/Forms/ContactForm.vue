@@ -9,14 +9,25 @@ const { t } = useI18n()
 
 const props = defineProps({
     contact: Object,
+    tripSlug: { type: String, default: '' },
+    periode: { type: String, default: '' },
 });
+
+function buildInitialMessage() {
+    if (!props.tripSlug) return ''
+    let msg = t('forms.contact.trip_inquiry_prefix', { trip: props.tripSlug })
+    if (props.periode) {
+        msg += ' ' + t('forms.contact.trip_inquiry_period', { period: props.periode })
+    }
+    return msg
+}
 
 const errors = reactive({});
 const form = reactive({
     name: "",
     email: "",
     phone: "",
-    text: "",
+    text: buildInitialMessage(),
 });
 const honeypot = ref(null);
 const toast = useToast();

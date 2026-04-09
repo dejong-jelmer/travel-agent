@@ -36,7 +36,7 @@ Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTe
 Route::get('/reizen', [TripController::class, 'index'])->name('trips.index');
 Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.show');
 
-// Trip prices
+// TODO: Prijzenroute gedeactiveerd — aanvraagmodel actief. Heractiveer of verwijder wanneer besloten.
 Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
 
 // Blog
@@ -60,11 +60,11 @@ Route::post('/nieuwsbrief/aanmelden', [SubscriptionController::class, 'subscribe
 Route::get('/nieuwsbrief/bevestigen/{token}', [SubscriptionController::class, 'confirm'])->name('newsletter.subscription.confirm');
 Route::get('/nieuwsbrief/afmelden/{token}', [SubscriptionController::class, 'unsubscribe'])->name('newsletter.subscription.unsubscribe');
 
-// Booking routes
-Route::post('/boekingen', [BookingController::class, 'store'])
-    ->middleware('throttle:frontend-form-actions')
-    ->name('bookings.store');
-Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'received'])->middleware('nocache')->name('bookings.received');
+// TODO: Boekingsroutes gedeactiveerd — aanvraagmodel actief. Heractiveer of verwijder wanneer besloten.
+// Route::post('/boekingen', [BookingController::class, 'store'])
+//     ->middleware('throttle:frontend-form-actions')
+//     ->name('bookings.store');
+// Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'received'])->middleware('nocache')->name('bookings.received');
 
 // Admin routes
 Route::get('admin/login', function () {
@@ -103,7 +103,7 @@ Route::prefix('admin')
         Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
 
         // Booking resource routes
-        Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);
+        Route::resource('bookings', AdminBookingController::class);
 
         // Newsletter routes
         Route::prefix('newsletter')

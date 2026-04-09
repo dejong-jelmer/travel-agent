@@ -7,6 +7,10 @@ const { t } = useI18n()
 const props = defineProps({
     contact: Object
 });
+
+const urlParams = new URLSearchParams(window.location.search)
+const tripSlug = urlParams.get('reis') || ''
+const periode = urlParams.get('periode') || ''
 </script>
 
 <template>
@@ -19,7 +23,7 @@ const props = defineProps({
 
         <!-- Form section -->
         <section class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 py-12 laptop:py-24">
-            <ContactForm :contact="contact" />
+            <ContactForm :contact="contact" :trip-slug="tripSlug" :periode="periode" />
         </section>
 
     </Layout>

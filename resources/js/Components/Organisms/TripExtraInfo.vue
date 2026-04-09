@@ -31,12 +31,12 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                 </div>
                 <div class="flex-1 min-w-0">
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
-                        Hoe verloopt de boeking?
+                        Hoe verloopt een aanvraag?
                     </h4>
                     <div class="space-y-3 text-sm tablet:text-base text-brand-text leading-relaxed">
                         <div class="flex items-start gap-2">
                             <span class="w-6 h-6 bg-brand-earth text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">1</span>
-                            <p>Dien een aanvraag in via het boekingsformulier op deze pagina</p>
+                            <p>Dien een aanvraag in via het aanvraagformulier op deze pagina</p>
                         </div>
                         <div class="flex items-start gap-2">
                             <span class="w-6 h-6 bg-brand-earth text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">2</span>
@@ -44,11 +44,11 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                         </div>
                         <div class="flex items-start gap-2">
                             <span class="w-6 h-6 bg-brand-earth text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">3</span>
-                            <p>Onderteken de bestelbon en betaal het voorschot bij akkoord</p>
+                            <p>Onderteken de het reisvoorstel bij akkoord</p>
                         </div>
                         <div class="flex items-start gap-2">
                             <span class="w-6 h-6 bg-brand-earth text-white rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0">4</span>
-                            <p>Je reis is bevestigd en je ontvangt de reisdocumenten</p>
+                            <p>Je reisaanvraag is bevestigd en je ontvangt alle benodigde reisdocumenten en informatie</p>
                         </div>
                     </div>
                 </div>

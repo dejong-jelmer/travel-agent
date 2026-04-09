@@ -65,6 +65,11 @@ const menuGroups = computed(() => [
                 icon: CalendarDaysIcon,
                 badge: true, // Badge via adminStats
             },
+            {
+                label: t('admin_menu.items.bookings'),
+                path: new URL(route('admin.bookings.create'), window.location.origin).pathname,
+                icon: PlusIcon,
+            },
         ]
     },
     {

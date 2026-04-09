@@ -203,7 +203,9 @@
             "submit_button": "Send message",
             "success": "Thank you! Your message has been sent successfully.",
             "privacy": "Your data will only be used to respond to your message. Read more in the {link}.",
-            "privacy_link": "privacy policy"
+            "privacy_link": "privacy policy",
+            "trip_inquiry_prefix": "I'm interested in the trip: {trip}.",
+            "trip_inquiry_period": "My preferred period is {period}."
         },
         "trip": {
             "edit_heading": "Edit Trip",
@@ -865,6 +867,19 @@
             "sustainable_travel": "Sustainable travel",
             "small_personal": "Small & personal",
             "carefree_travel": "Carefree travel"
+        },
+        "highlights_heading": "What you'll see",
+        "inquiry": {
+            "title": "Plan this trip",
+            "price_from": "From €{price},- p.p.",
+            "duration_label": "{duration} days",
+            "explanation": "Not an off-the-shelf product. I'll work with you to find the best period, your preferences, and what makes this trip special for you. You only pay once everything is set.",
+            "cta_make_request": "Make a request",
+            "cta_send_message": "Send a message",
+            "preferred_period_label": "Preferred period (optional)",
+            "preferred_period_placeholder": "E.g. September 2026",
+            "direct_contact_label": "Or reach out directly:",
+            "send_email": "Send an email"
         }
     },
     "date_picker": {

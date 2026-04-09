@@ -38,7 +38,7 @@ class TripFactory extends Factory
     {
         $city = fake()->city();
         $country = fake()->country();
-        $name = "Bijzondere reis naar {$city} in {$country}";
+        $name = $city;
         $slug = Str::slug($name);
         $duration = fake()->numberBetween(6, 14);
 

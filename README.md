@@ -310,7 +310,7 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
 
 **Tailwind Breakpoints** (`resources/js/screens.js`):
 ```js
-{ phone: '0px', tablet: '600px', laptop: '900px', desktop: '1200px', wide: '1350px' }
+{ phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px' }
 ```
 
 **Custom Fonts** (see `tailwind.config.js`):
