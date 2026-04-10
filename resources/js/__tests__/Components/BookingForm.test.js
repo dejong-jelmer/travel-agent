@@ -460,7 +460,7 @@ describe("BookingForm - Complete Test Suite", () => {
 
             // Access the booking from props to check the call
             expect(wrapper.props("booking").post).toHaveBeenCalledWith(
-                "https://example.com/admin/bookings.store",
+                "https://example.com/admin.bookings.store",
                 expect.objectContaining({
                     forceFormData: true,
                 })

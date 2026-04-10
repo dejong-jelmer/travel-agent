@@ -9,14 +9,15 @@ use App\Http\Controllers\Admin\Newsletter\CampaignController;
 use App\Http\Controllers\Admin\Newsletter\SubscriberController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TripController as AdminTripController;
+use App\Http\Controllers\Admin\TripRequestController as AdminTripRequestController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BlogPostController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Newsletter\SubscriptionController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripPriceController;
+use App\Http\Controllers\TripRequestController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -36,8 +37,12 @@ Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTe
 Route::get('/reizen', [TripController::class, 'index'])->name('trips.index');
 Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.show');
 
-// TODO: Prijzenroute gedeactiveerd — aanvraagmodel actief. Heractiveer of verwijder wanneer besloten.
-Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
+// Trip request
+Route::post('/reis/{trip:slug}/aanvraag', [TripRequestController::class, 'store'])
+    ->middleware('throttle:frontend-form-actions')
+    ->name('trip-requests.store');
+Route::get('/reis/{trip:slug}/aanvraag/bedankt', [TripRequestController::class, 'thanks'])
+    ->name('trip-requests.thanks');
 
 // Blog
 Route::get('/blog', [BlogPostController::class, 'index'])->name('blog.index');
@@ -60,12 +65,6 @@ Route::post('/nieuwsbrief/aanmelden', [SubscriptionController::class, 'subscribe
 Route::get('/nieuwsbrief/bevestigen/{token}', [SubscriptionController::class, 'confirm'])->name('newsletter.subscription.confirm');
 Route::get('/nieuwsbrief/afmelden/{token}', [SubscriptionController::class, 'unsubscribe'])->name('newsletter.subscription.unsubscribe');
 
-// TODO: Boekingsroutes gedeactiveerd — aanvraagmodel actief. Heractiveer of verwijder wanneer besloten.
-// Route::post('/boekingen', [BookingController::class, 'store'])
-//     ->middleware('throttle:frontend-form-actions')
-//     ->name('bookings.store');
-// Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'received'])->middleware('nocache')->name('bookings.received');
-
 // Admin routes
 Route::get('admin/login', function () {
     return Inertia::render('Auth/Login', [
@@ -87,6 +86,9 @@ Route::prefix('admin')
         Route::resource('/trips', AdminTripController::class)->except(['update']);
         Route::post('/trips/update/{trip}', [AdminTripController::class, 'update'])->name('trips.update');
 
+        // Trip prices
+        Route::get('trips/{trip}/prices', TripPriceController::class)->name('admin.trips.prices');
+
         // Trip resource Itinerary routes
         Route::resource('trips.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
         Route::patch('/trips/{trip}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('trips.itineraries.order');
@@ -104,6 +106,9 @@ Route::prefix('admin')
 
         // Booking resource routes
         Route::resource('bookings', AdminBookingController::class);
+
+        // Trip request routes
+        Route::get('trip-requests', [AdminTripRequestController::class, 'index'])->name('trip-requests.index');
 
         // Newsletter routes
         Route::prefix('newsletter')

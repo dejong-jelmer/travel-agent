@@ -4,15 +4,18 @@ import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 import {
     CalendarDaysIcon,
+    ChatBubbleLeftRightIcon,
     CheckCircleIcon,
     ClockIcon,
     SparklesIcon,
     ArrowTrendingUpIcon,
+    InboxIcon,
     UserGroupIcon,
 } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
     bookings: Object,
+    tripRequests: Object,
     systemHealth: Object
 })
 
@@ -96,8 +99,8 @@ const lastCheckedTime = computed(() => {
     })
 })
 
-// Dashboard statistieken
-const stats = computed(() => [
+// Dashboard statistieken — Boekingen
+const bookingStats = computed(() => [
     {
         id: 1,
         name: t('admin.dashboard.stats.new.name'),
@@ -107,7 +110,6 @@ const stats = computed(() => [
         iconColor: 'text-brand-accent',
         bgColor: 'bg-brand-accent/10',
         link: route('admin.bookings.index'),
-        change: null,
     },
     {
         id: 2,
@@ -118,7 +120,6 @@ const stats = computed(() => [
         iconColor: 'text-brand-subtle',
         bgColor: 'bg-brand-subtle/10',
         link: route('admin.bookings.index'),
-        change: null,
     },
     {
         id: 3,
@@ -129,7 +130,6 @@ const stats = computed(() => [
         iconColor: 'text-brand-link',
         bgColor: 'bg-brand-link/10',
         link: route('admin.bookings.index'),
-        change: null,
     },
     {
         id: 4,
@@ -140,7 +140,30 @@ const stats = computed(() => [
         iconColor: 'text-brand-primary',
         bgColor: 'bg-brand-primary/10',
         link: route('admin.bookings.index'),
-        change: null,
+    },
+])
+
+// Dashboard statistieken — Aanvragen
+const requestStats = computed(() => [
+    {
+        id: 5,
+        name: t('admin.dashboard.stats.requests_new.name'),
+        value: props.tripRequests.new,
+        description: t('admin.dashboard.stats.requests_new.description'),
+        icon: ChatBubbleLeftRightIcon,
+        iconColor: 'text-brand-accent',
+        bgColor: 'bg-brand-accent/10',
+        link: route('admin.trip-requests.index'),
+    },
+    {
+        id: 6,
+        name: t('admin.dashboard.stats.requests_total.name'),
+        value: props.tripRequests.all,
+        description: t('admin.dashboard.stats.requests_total.description'),
+        icon: InboxIcon,
+        iconColor: 'text-brand-primary',
+        bgColor: 'bg-brand-primary/10',
+        link: route('admin.trip-requests.index'),
     },
 ])
 </script>
@@ -153,45 +176,57 @@ const stats = computed(() => [
             <p class="text-brand-light">{{ t('admin.dashboard.header.welcome') }}</p>
         </div>
 
-        <!-- Stats Grid -->
+        <!-- Bookings Stats Grid -->
+        <h2 class="text-lg font-semibold text-brand-primary mb-4">{{ t('admin.dashboard.sections.bookings') }}</h2>
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
             <component
-                v-for="stat in stats"
+                v-for="stat in bookingStats"
                 :key="stat.id"
                 :is="stat.link ? Link : 'div'"
                 :href="stat.link"
                 class="relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer border border-gray-100"
             >
-                <!-- Gradient overlay on hover -->
                 <div class="absolute inset-0 bg-gradient-to-br from-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
                 <div class="relative px-6 py-6">
-                    <!-- Icon -->
                     <div class="flex items-center justify-between mb-4">
                         <div :class="[stat.bgColor, 'rounded-xl p-3 transition-transform duration-300 group-hover:scale-110']">
-                            <component
-                                :is="stat.icon"
-                                :class="[stat.iconColor, 'h-6 w-6']"
-                                aria-hidden="true"
-                            />
+                            <component :is="stat.icon" :class="[stat.iconColor, 'h-6 w-6']" aria-hidden="true" />
                         </div>
                     </div>
-
-                    <!-- Value -->
                     <div class="mb-2">
-                        <p class="text-4xl font-bold text-brand-primary group-hover:text-brand-primary transition-colors">
-                            {{ stat.value }}
-                        </p>
+                        <p class="text-4xl font-bold text-brand-primary group-hover:text-brand-primary transition-colors">{{ stat.value }}</p>
                     </div>
-
-                    <!-- Label -->
                     <div>
-                        <p class="text-sm font-semibold text-gray-900 mb-1">
-                            {{ stat.name }}
-                        </p>
-                        <p class="text-xs text-brand-light">
-                            {{ stat.description }}
-                        </p>
+                        <p class="text-sm font-semibold text-gray-900 mb-1">{{ stat.name }}</p>
+                        <p class="text-xs text-brand-light">{{ stat.description }}</p>
+                    </div>
+                </div>
+            </component>
+        </div>
+
+        <!-- Trip Requests Stats Grid -->
+        <h2 class="text-lg font-semibold text-brand-primary mb-4">{{ t('admin.dashboard.sections.requests') }}</h2>
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 mb-8">
+            <component
+                v-for="stat in requestStats"
+                :key="stat.id"
+                :is="stat.link ? Link : 'div'"
+                :href="stat.link"
+                class="relative overflow-hidden rounded-2xl bg-white shadow-sm hover:shadow-xl transition-all duration-300 group cursor-pointer border border-gray-100"
+            >
+                <div class="absolute inset-0 bg-gradient-to-br from-transparent to-gray-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div class="relative px-6 py-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <div :class="[stat.bgColor, 'rounded-xl p-3 transition-transform duration-300 group-hover:scale-110']">
+                            <component :is="stat.icon" :class="[stat.iconColor, 'h-6 w-6']" aria-hidden="true" />
+                        </div>
+                    </div>
+                    <div class="mb-2">
+                        <p class="text-4xl font-bold text-brand-primary group-hover:text-brand-primary transition-colors">{{ stat.value }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-semibold text-gray-900 mb-1">{{ stat.name }}</p>
+                        <p class="text-xs text-brand-light">{{ stat.description }}</p>
                     </div>
                 </div>
             </component>
@@ -242,6 +277,31 @@ const stats = computed(() => [
                         <svg class="h-5 w-5 text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
                         </svg>
+                    </Link>
+
+                    <Link
+                        :href="route('admin.trip-requests.index')"
+                        class="flex items-center justify-between p-4 rounded-xl hover:bg-gray-50 transition-colors group"
+                    >
+                        <div class="flex items-center">
+                            <div class="bg-brand-accent/10 rounded-lg p-2 mr-3">
+                                <ChatBubbleLeftRightIcon class="h-5 w-5 text-brand-accent" />
+                            </div>
+                            <span class="font-medium text-gray-900 group-hover:text-brand-primary transition-colors">
+                                {{ t('admin.dashboard.quick_actions.view_requests') }}
+                            </span>
+                        </div>
+                        <div class="flex items-center">
+                            <span
+                                v-if="tripRequests.new > 0"
+                                class="mr-3 inline-flex items-center rounded-full bg-brand-accent/10 px-2.5 py-0.5 text-xs font-semibold text-brand-accent"
+                            >
+                                {{ tripRequests.new }}
+                            </span>
+                            <svg class="h-5 w-5 text-gray-400 group-hover:text-brand-primary group-hover:translate-x-1 transition-all" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </div>
                     </Link>
 
                     <Link

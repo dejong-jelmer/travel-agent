@@ -777,6 +777,10 @@
             "subscribers": "Abonnees",
             "campaigns": "Campagnes",
             "new_campaign": "Nieuwe Campagne",
+            "all_bookings": "Alle Boekingen",
+            "new_booking": "Nieuwe Boeking",
+            "requests": "Aanvragen",
+            "all_requests": "Alle Aanvragen",
             "blog": "Blog",
             "all_blog_posts": "Alle Blogposts",
             "new_blog_post": "Nieuwe Blogpost",
@@ -869,16 +873,77 @@
         },
         "highlights_heading": "Wat je gaat zien",
         "inquiry": {
-            "title": "Plan deze reis",
+            "title": "Over deze reis",
             "price_from": "Vanaf €{price},- p.p.",
             "duration_label": "{duration} dagen",
-            "explanation": "Geen kant-en-klaar product. Ik kijk samen met je naar de beste periode, je voorkeuren en wat deze reis voor jou bijzonder maakt. Je betaalt pas als alles staat.",
+            "explanation": "Graag kijk ik samen met je naar de beste periode, je voorkeuren en wat deze reis voor jou bijzonder maakt. Je boekt pas als alles staat.",
             "cta_make_request": "Vraag voorstel aan",
             "cta_send_message": "Stel een vraag",
             "preferred_period_label": "Voorkeursperiode (optioneel)",
             "preferred_period_placeholder": "Bijv. september 2026",
             "direct_contact_label": "Of neem direct contact op:",
             "send_email": "Stuur een e-mail"
+        }
+    },
+    "trip_request": {
+        "form": {
+            "title": "Reisvoorstel - {tripName}",
+            "section_you": "Over jou",
+            "section_trip": "Over je reis",
+            "section_notes": "Bijzonderheden",
+            "name_label": "Hoe heet je?",
+            "name_placeholder": "Je naam",
+            "email_label": "Jouw E-mailadres",
+            "email_placeholder": "jij{'@'}voorbeeld.nl",
+            "phone_label": "Telefoonnummer",
+            "phone_placeholder": "Bijv. 06 12 34 56 78",
+            "phone_helper": "Niet verplicht, maar wel handig als je liever telefonisch overlegd.",
+            "preferred_month_label": "Wanneer wil je ongeveer vertrekken?",
+            "preferred_month_placeholder": "Maand",
+            "preferred_year_placeholder": "Jaar",
+            "preferred_period_note_label": "Of schrijf hieronder iets specifieks (optioneel)",
+            "preferred_period_note_placeholder": "Bijv. schoolvakantie oktober, of nog flexibel",
+            "travelers_count_label": "Met hoeveel mensen kom je?",
+            "travelers_count_placeholder": "Aantal reizigers",
+            "travelers_count_more_than_8": "Meer dan 8",
+            "departure_station_label": "Vanaf welk station vertrek je graag?",
+            "departure_station_placeholder": "Kies een station",
+            "departure_station_helper": "Nog niet zeker? Geen probleem — dat kijken we samen.",
+            "notes_label": "Is er iets wat ik over jou of je reis moet weten?",
+            "notes_helper": "Bijvoorbeeld: zijn er dieetwensen, is de reis voor een speciale gelegenheid, voorkeuren voor hotels, of iets heel anders.",
+            "consent_privacy": "Ik ga akkoord met de verwerking van mijn gegevens zoals beschreven in het {link}.",
+            "consent_privacy_link": "privacybeleid",
+            "submit_button": "Vraag voorstel aan",
+            "submit_processing": "Bezig met versturen...",
+            "months": {
+                "1": "Januari",
+                "2": "Februari",
+                "3": "Maart",
+                "4": "April",
+                "5": "Mei",
+                "6": "Juni",
+                "7": "Juli",
+                "8": "Augustus",
+                "9": "September",
+                "10": "Oktober",
+                "11": "November",
+                "12": "December"
+            },
+            "stations": {
+                "amsterdam": "Amsterdam Centraal",
+                "utrecht": "Utrecht Centraal",
+                "arnhem": "Arnhem Centraal",
+                "rotterdam": "Rotterdam Centraal",
+                "den_haag": "Den Haag Centraal",
+                "eindhoven": "Eindhoven Centraal",
+                "other": "Anders / weet ik nog niet"
+            }
+        },
+        "thanks": {
+            "title": "Je aanvraag is binnen.",
+            "message": "Ik heb je bericht ontvangen en neem binnen twee werkdagen contact met je op — via de telefoon als je die hebt ingevuld, anders per e-mail. Dan nemen we samen door wat je voor ogen hebt, welke periode het beste past, en wat deze reis voor jou bijzonder kan maken.",
+            "question_prefix": "Heb je in de tussentijd een vraag? Je mag altijd bellen:",
+            "back_to_trips": "Terug naar de reizen"
         }
     },
     "date_picker": {
@@ -894,8 +959,9 @@
             "title": "Je bent ingeschreven!",
             "message": "Bedankt voor het bevestigen van je aanmelding.",
             "box_title": "Wat kun je verwachten?",
-            "updates": "Updates over mijn nieuwste reisaanbod",
+            "updates": "Updates over nieuwe reizen die ik samenstel",
             "content": "Persoonlijke ervaringen en verhalen",
+            "background": "Achtergrond bij bestemmingen",
             "unsubscribe_anytime": "Je kunt je altijd weer uitschrijven"
         },
         "unsubscribed": {
@@ -983,11 +1049,24 @@
                 "total": {
                     "name": "Totaal Boekingen",
                     "description": "Alle boekingen"
+                },
+                "requests_new": {
+                    "name": "Nieuwe aanvragen",
+                    "description": "Nog niet beantwoorde aanvragen"
+                },
+                "requests_total": {
+                    "name": "Totaal aanvragen",
+                    "description": "Alle reisaanvragen"
                 }
+            },
+            "sections": {
+                "bookings": "Boekingen",
+                "requests": "Reisaanvragen"
             },
             "quick_actions": {
                 "title": "Snelle Acties",
                 "view_bookings": "Bekijk alle boekingen",
+                "view_requests": "Bekijk alle aanvragen",
                 "manage_trips": "Beheer reizen",
                 "manage_destinations": "Beheer bestemmingen"
             },
@@ -1153,6 +1232,24 @@
                 "published_at": "Publicatiedatum",
                 "created_at": "Aangemaakt op",
                 "featured_image": "Uitgelichte afbeelding"
+            }
+        },
+        "trip_request": {
+            "index": {
+                "search_placeholder": "Zoek op naam, e-mail of telefoonnummer…",
+                "filters": {
+                    "status": "Status"
+                },
+                "table_headers": {
+                    "name": "Naam",
+                    "email": "E-mail",
+                    "trip": "Reis",
+                    "status": "Status",
+                    "created_at": "Aangevraagd op"
+                },
+                "no_requests": "Er zijn nog geen aanvragen.",
+                "no_requests_found": "Geen aanvragen gevonden.",
+                "no_requests_found_with_search": "Geen aanvragen gevonden met de zoekopdracht: \"{search}\"."
             }
         },
         "booking": {

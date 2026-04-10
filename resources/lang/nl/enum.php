@@ -13,6 +13,12 @@ return [
     'trip_types' => [
         'city_trip' => 'Citytrip',
         'single_base' => 'Vast verblijf',
-        'tour'      => 'Rondreis',
-    ]
+        'tour' => 'Rondreis',
+    ],
+    'trip_requests' => [
+        'new' => 'Nieuw',
+        'contacted' => 'Gecontacteerd',
+        'converted' => 'Omgezet naar boeking',
+        'archived' => 'Gearchiveerd',
+    ],
 ];

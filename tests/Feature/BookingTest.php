@@ -31,13 +31,19 @@ class BookingTest extends TestCase
 
     private Trip $trip;
 
+    private User $admin;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->admin = User::factory()->create();
+        $this->actingAs($this->admin);
+
         $this->trip = Trip::factory()->withPrices()->create();
     }
 
-    public function test_it_can_create_a_booking_with_travelers_and_contact()
+    public function test_admin_can_create_a_booking_with_travelers_and_contact()
     {
         $payload = $this->generateBookingPayload();
         $response = $this->post(route('admin.bookings.store'), $payload);
@@ -51,7 +57,6 @@ class BookingTest extends TestCase
         $this->assertTravelersWereCreatedCorrectly($booking, $payload);
         $this->assertContactWasCreatedCorrectly($booking, $payload);
         $this->assertPricesWhereSetCorrectly($response, $booking);
-        $this->assertRedirectIsCorrect($response, $booking);
     }
 
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
@@ -440,11 +445,6 @@ class BookingTest extends TestCase
             ],
             $booking->fees_and_funds
         );
-    }
-
-    private function assertRedirectIsCorrect($response, Booking $booking): void
-    {
-        $response->assertRedirect(route('bookings.received', ['booking' => $booking->uuid]));
     }
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array

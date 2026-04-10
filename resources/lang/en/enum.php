@@ -13,6 +13,12 @@ return [
     'trip_types' => [
         'city_trip' => 'City trip',
         'single_base' => 'Single base',
-        'tour'      => 'Tour',
-    ]
+        'tour' => 'Tour',
+    ],
+    'trip_requests' => [
+        'new' => 'New',
+        'contacted' => 'Contacted',
+        'converted' => 'Converted to booking',
+        'archived' => 'Archived',
+    ],
 ];

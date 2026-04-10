@@ -777,6 +777,10 @@
             "subscribers": "Subscribers",
             "campaigns": "Campaigns",
             "new_campaign": "New Campaigns",
+            "all_bookings": "All Bookings",
+            "new_booking": "New Booking",
+            "requests": "Requests",
+            "all_requests": "All Requests",
             "blog": "Blog",
             "all_blog_posts": "All Blog Posts",
             "new_blog_post": "New Blog Post",
@@ -870,7 +874,7 @@
         },
         "highlights_heading": "What you'll see",
         "inquiry": {
-            "title": "Plan this trip",
+            "title": "About this trip",
             "price_from": "From €{price},- p.p.",
             "duration_label": "{duration} days",
             "explanation": "Not an off-the-shelf product. I'll work with you to find the best period, your preferences, and what makes this trip special for you. You only pay once everything is set.",
@@ -880,6 +884,67 @@
             "preferred_period_placeholder": "E.g. September 2026",
             "direct_contact_label": "Or reach out directly:",
             "send_email": "Send an email"
+        }
+    },
+    "trip_request": {
+        "form": {
+            "title": "Proposal - {tripName}",
+            "section_you": "About you",
+            "section_trip": "About your trip",
+            "section_notes": "Special requests",
+            "name_label": "What are you called?",
+            "name_placeholder": "Your name",
+            "email_label": "Email address",
+            "email_placeholder": "you{'@'}example.com",
+            "phone_label": "Phone number",
+            "phone_placeholder": "E.g. +31 6 12 34 56 78",
+            "phone_helper": "Not mandatory, but convenient if you prefer to discuss by phone.",
+            "preferred_month_label": "When would you like to depart approximately?",
+            "preferred_month_placeholder": "Month",
+            "preferred_year_placeholder": "Year",
+            "preferred_period_note_label": "Or write something specific below (optional)",
+            "preferred_period_note_placeholder": "E.g. school holidays October, or still flexible",
+            "travelers_count_label": "How many people are traveling?",
+            "travelers_count_placeholder": "Number of travelers",
+            "travelers_count_more_than_8": "More than 8",
+            "departure_station_label": "From which station would you like to depart?",
+            "departure_station_placeholder": "Choose a station",
+            "departure_station_helper": "Not sure yet? No problem — we'll figure it out together.",
+            "notes_label": "Is there anything I should know about you or your trip?",
+            "notes_helper": "For example: are there any dietary requirements, is the trip for a special occasion, hotel preferences, or something completely different?",
+            "consent_privacy": "I agree to the processing of my data as described in the {link}.",
+            "consent_privacy_link": "privacy policy",
+            "submit_button": "Request a proposal",
+            "submit_processing": "Sending...",
+            "months": {
+                "1": "January",
+                "2": "February",
+                "3": "March",
+                "4": "April",
+                "5": "May",
+                "6": "June",
+                "7": "July",
+                "8": "August",
+                "9": "September",
+                "10": "October",
+                "11": "November",
+                "12": "December"
+            },
+            "stations": {
+                "amsterdam": "Amsterdam Centraal",
+                "utrecht": "Utrecht Centraal",
+                "arnhem": "Arnhem Centraal",
+                "rotterdam": "Rotterdam Centraal",
+                "den_haag": "Den Haag Centraal",
+                "eindhoven": "Eindhoven Centraal",
+                "other": "Other / not sure yet"
+            }
+        },
+        "thanks": {
+            "title": "Your request has been received.",
+            "message": "I have received your message and will contact you within two working days — by phone if you provided a number, otherwise by email. We'll discuss together what you have in mind, which period suits you best, and what can make this trip special for you.",
+            "question_prefix": "Have a question in the meantime? Feel free to call:",
+            "back_to_trips": "Back to trips"
         }
     },
     "date_picker": {
@@ -897,6 +962,7 @@
             "box_title": "What to expect?",
             "updates": "Regular updates about our latest travel offerings",
             "content": "Personal experiances and stories",
+            "background": "Background on destinations",
             "unsubscribe_anytime": "You can always unsubscribe"
         },
         "unsubscribed": {
@@ -984,11 +1050,24 @@
                 "total": {
                     "name": "Total Bookings",
                     "description": "All bookings"
+                },
+                "requests_new": {
+                    "name": "New requests",
+                    "description": "Unanswered trip requests"
+                },
+                "requests_total": {
+                    "name": "Total requests",
+                    "description": "All trip requests"
                 }
+            },
+            "sections": {
+                "bookings": "Bookings",
+                "requests": "Trip requests"
             },
             "quick_actions": {
                 "title": "Quick Actions",
                 "view_bookings": "View all bookings",
+                "view_requests": "View all requests",
                 "manage_trips": "Manage trips",
                 "manage_destinations": "Manage destinations"
             },
@@ -1154,6 +1233,24 @@
                 "published_at": "Publication date",
                 "created_at": "Created at",
                 "featured_image": "Featured image"
+            }
+        },
+        "trip_request": {
+            "index": {
+                "search_placeholder": "Search by name, email or phone number…",
+                "filters": {
+                    "status": "Status"
+                },
+                "table_headers": {
+                    "name": "Name",
+                    "email": "Email",
+                    "trip": "Trip",
+                    "status": "Status",
+                    "created_at": "Requested on"
+                },
+                "no_requests": "There are no requests yet.",
+                "no_requests_found": "No requests found.",
+                "no_requests_found_with_search": "No requests found for search: \"{search}\"."
             }
         },
         "booking": {

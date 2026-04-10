@@ -252,6 +252,11 @@ class Trip extends Model
         return $this->hasMany(Booking::class);
     }
 
+    public function tripRequests(): HasMany
+    {
+        return $this->hasMany(TripRequest::class);
+    }
+
     /**
      * Get the hero image URL for Open Graph usage.
      *

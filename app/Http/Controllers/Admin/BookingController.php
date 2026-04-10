@@ -8,6 +8,7 @@ use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
 use App\Events\BookingCreated;
+use App\Events\BookingFailed;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateBookingRequest;
@@ -22,6 +23,7 @@ use App\Services\PriceCalculatorService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
 use Inertia\Inertia;
 use Inertia\Response;
 

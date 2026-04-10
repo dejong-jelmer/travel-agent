@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { Link, usePage } from "@inertiajs/vue3"
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { LayoutPanelTop } from 'lucide-vue-next'
+import { LayoutPanelTop, MessageSquareText } from 'lucide-vue-next'
 import {
     XMarkIcon,
     ChevronRightIcon,
@@ -37,6 +37,8 @@ const collapsedSections = ref({
 
 // Collapsible state voor items met sub-items
 const collapsedItems = ref({
+    bookings: false,
+    requests: false,
     trips: false,
     destinations: false,
     blog_posts: false,
@@ -60,15 +62,35 @@ const menuGroups = computed(() => [
         label: t('admin_menu.groups.bookings'),
         items: [
             {
+                id: 'bookings',
                 label: t('admin_menu.items.bookings'),
-                path: new URL(route('admin.bookings.index'), window.location.origin).pathname,
                 icon: CalendarDaysIcon,
-                badge: true, // Badge via adminStats
+                children: [
+                    {
+                        label: t('admin_menu.items.all_bookings'),
+                        path: new URL(route('admin.bookings.index'), window.location.origin).pathname,
+                        icon: CalendarDaysIcon,
+                        badge: 'bookings',
+                    },
+                    {
+                        label: t('admin_menu.items.new_booking'),
+                        path: new URL(route('admin.bookings.create'), window.location.origin).pathname,
+                        icon: PlusIcon,
+                    },
+                ]
             },
             {
-                label: t('admin_menu.items.bookings'),
-                path: new URL(route('admin.bookings.create'), window.location.origin).pathname,
-                icon: PlusIcon,
+                id: 'requests',
+                label: t('admin_menu.items.requests'),
+                icon: MessageSquareText,
+                children: [
+                    {
+                        label: t('admin_menu.items.all_requests'),
+                        path: new URL(route('admin.trip-requests.index'), window.location.origin).pathname,
+                        icon: MessageSquareText,
+                        badge: 'requests',
+                    },
+                ]
             },
         ]
     },
@@ -188,6 +210,15 @@ const toggleItem = (itemId) => {
 
 // Stats voor badge counts
 const stats = computed(() => adminStats)
+
+const getBadgeCount = (badgeKey) => {
+    if (!badgeKey) return 0
+    const map = {
+        'bookings': stats.value?.newBookingsCount ?? 0,
+        'requests': stats.value?.newTripRequestsCount ?? 0,
+    }
+    return map[badgeKey] ?? 0
+}
 </script>
 
 <template>
@@ -257,6 +288,15 @@ const stats = computed(() => adminStats)
                                                         }" aria-hidden="true" />
                                                     <!-- Label -->
                                                     <span class="flex-1">{{ child.label }}</span>
+                                                    <!-- Badge -->
+                                                    <span v-if="child.badge && getBadgeCount(child.badge) > 0"
+                                                        class="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
+                                                        :class="{
+                                                            'bg-brand-primary text-white': isCurrentPage(child.path),
+                                                            'bg-brand-accent text-white': !isCurrentPage(child.path)
+                                                        }">
+                                                        {{ getBadgeCount(child.badge) }}
+                                                    </span>
                                                     <!-- Active Indicator -->
                                                     <ChevronRightIcon v-if="isCurrentPage(child.path)"
                                                         class="ml-2 h-3 w-3 text-brand-primary" aria-hidden="true" />
@@ -282,13 +322,13 @@ const stats = computed(() => adminStats)
                                         <span class="flex-1">{{ item.label }}</span>
 
                                         <!-- Badge (voor notifications) -->
-                                        <span v-if="item.badge && stats?.newBookingsCount > 0"
+                                        <span v-if="item.badge && getBadgeCount(item.badge) > 0"
                                             class="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                                             :class="{
                                                 'bg-brand-primary text-white': isCurrentPage(item.path),
                                                 'bg-brand-accent text-white': !isCurrentPage(item.path)
                                             }">
-                                            {{ stats.newBookingsCount }}
+                                            {{ getBadgeCount(item.badge) }}
                                         </span>
 
                                         <!-- Active Indicator -->
@@ -423,6 +463,16 @@ const stats = computed(() => adminStats)
                                                                             <span class="flex-1">{{ child.label
                                                                                 }}</span>
 
+                                                                            <!-- Badge -->
+                                                                            <span v-if="child.badge && getBadgeCount(child.badge) > 0"
+                                                                                class="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
+                                                                                :class="{
+                                                                                    'bg-brand-primary text-white': isCurrentPage(child.path),
+                                                                                    'bg-brand-accent text-white': !isCurrentPage(child.path)
+                                                                                }">
+                                                                                {{ getBadgeCount(child.badge) }}
+                                                                            </span>
+
                                                                             <!-- Active Indicator -->
                                                                             <ChevronRightIcon
                                                                                 v-if="isCurrentPage(child.path)"
@@ -451,13 +501,13 @@ const stats = computed(() => adminStats)
                                                                 <span class="flex-1">{{ item.label }}</span>
 
                                                                 <!-- Badge (voor notifications) -->
-                                                                <span v-if="item.badge && stats?.newBookingsCount > 0"
+                                                                <span v-if="item.badge && getBadgeCount(item.badge) > 0"
                                                                     class="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium"
                                                                     :class="{
                                                                         'bg-brand-primary text-white': isCurrentPage(item.path),
                                                                         'bg-brand-accent text-white': !isCurrentPage(item.path)
                                                                     }">
-                                                                    {{ stats.newBookingsCount }}
+                                                                    {{ getBadgeCount(item.badge) }}
                                                                 </span>
 
                                                                 <!-- Active Indicator -->

@@ -42,12 +42,9 @@ const openLightbox = (index) => {
 }
 
 // Inquiry
-const preferredPeriod = ref('')
 const contactUrl = computed(() => {
     const params = new URLSearchParams({ reis: props.trip.slug })
-    if (preferredPeriod.value) {
-        params.set('periode', preferredPeriod.value)
-    }
+
     return `${route('contact')}?${params.toString()}#contact-form`
 })
 
@@ -115,7 +112,7 @@ const tabIcons = {
                         </div>
 
                         <!-- Highlights -->
-                        <div class="border-t border-brand-accent/20 pt-8">
+                        <div v-if="trip.highlights?.length" class="border-t border-brand-accent/20 pt-8">
                             <h3 class="text-lg font-semibold text-brand-primary mb-4">
                                 {{ t('trip_show.highlights_heading') }}
                             </h3>
@@ -216,16 +213,6 @@ const tabIcons = {
                                     {{ t('trip_show.inquiry.explanation') }}
                                 </p>
 
-                                <!-- Preferred period (optional) -->
-                                <div>
-                                    <label class="block text-sm font-medium text-brand-primary mb-1">
-                                        {{ t('trip_show.inquiry.preferred_period_label') }}
-                                    </label>
-                                    <input v-model="preferredPeriod" type="text"
-                                        :placeholder="t('trip_show.inquiry.preferred_period_placeholder')"
-                                        class="w-full rounded-lg border border-brand-primary/20 px-3 py-2 text-sm text-brand-text placeholder-brand-light/60 focus:border-brand-accent focus:ring-1 focus:ring-brand-accent outline-none transition" />
-                                </div>
-
                                 <!-- CTA buttons -->
                                 <div class="space-y-3">
                                     <div class="block">
@@ -310,6 +297,6 @@ const tabIcons = {
         </div>
     </Layout>
     <Modal :open="requestModalOpen" @close="requestModalOpen = false">
-        <p>dummy</p>
+        <TripRequestForm :trip="trip" />
     </Modal>
 </template>
