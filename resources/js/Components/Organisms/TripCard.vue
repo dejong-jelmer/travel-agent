@@ -10,14 +10,11 @@ const props = defineProps({ trip: Object });
     <Link :href="route('trips.show', trip)">
         <Card class="group cursor-pointer">
 
-            <!-- Afbeelding -->
+            <!-- Image -->
             <div class="h-48 tablet:h-52 rounded-t-xl overflow-hidden relative">
-                <img
-                    :src="trip.hero_image?.public_url || placeholder"
-                    :alt="trip.name"
+                <img :src="trip.hero_image?.public_url || placeholder" :alt="trip.name"
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
-                    loading="lazy"
-                />
+                    loading="lazy" />
                 <div class="absolute top-3 right-3">
                     <PriceBadge :price="trip.price_formatted" />
                 </div>
@@ -26,48 +23,37 @@ const props = defineProps({ trip: Object });
             <!-- Content -->
             <div class="py-5 px-8 space-y-3 text-left bg-white select-none">
 
-                <!-- Land / bestemming -->
+                <!-- Country / destination -->
                 <p class="text-sm text-brand-light font-medium line-clamp-1">
                     {{ trip.destinations_formatted }}
                 </p>
 
-                <!-- Titel -->
-                <h3 class="text-xl laptop:text-2xl leading-6 font-bold text-brand-primary line-clamp-2">
-                    {{ trip.name }}
-                </h3>
+                <!-- Title -->
+                <div class="min-h-[40px]">
 
-                <!-- Tagline / beschrijving -->
-                <p class="text-sm text-brand-text line-clamp-2 leading-relaxed">
-                    {{ trip.tagline || trip.description }}
-                </p>
+                    <h3 class="text-xl laptop:text-2xl leading-6 font-bold text-brand-primary line-clamp-1">
+                        {{ trip.name }}
+                    </h3>
+                </div>
+
+                <!-- Description -->
+                <div class="min-h-[80px]">
+                    <p class="text-sm text-brand-text line-clamp-3 leading-relaxed">
+                        {{ trip.intro }}
+                    </p>
+                </div>
 
                 <!-- Details + CTA -->
-                <div class="pt-2 border-t border-neutral-200">
-                    <div class="flex justify-between items-end">
+                <div class="pt-4">
+                    <div class="flex justify-between items-center">
 
-                        <!-- Reis details -->
+                        <!-- Trip details -->
                         <div class="flex flex-col space-y-2">
                             <div v-if="trip.duration" class="inline-flex gap-x-2 items-center">
                                 <Clock class="h-5 w-5 text-brand-light" />
                                 <p class="text-sm text-brand-primary">
                                     {{ trip.duration }} {{ $t("trip_card.days") }}
                                 </p>
-                            </div>
-                            <div v-if="trip.transport" class="flex space-x-2">
-                                <Route class="h-5 w-5 text-brand-light flex-none" />
-                                <div>
-                                    <div class="flex space-x-2" v-for="mode in trip.transport_formatted.slice(0, 3)"
-                                        :key="mode.value">
-                                        <EnumIcon :key="mode.value" :enum="mode.value" v-tippy="mode.label"
-                                            class="text-brand-primary w-4 h-4 flex-none" />
-                                        <span class="text-sm text-brand-primary">
-                                            {{ mode.label }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <span v-if="trip.transport_formatted.length > 3" class="text-xs text-gray-400">
-                                    +{{ trip.transport_formatted.length - 3 }}
-                                </span>
                             </div>
                         </div>
 

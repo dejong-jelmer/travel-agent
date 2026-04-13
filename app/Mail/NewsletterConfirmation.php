@@ -38,6 +38,7 @@ class NewsletterConfirmation extends Mailable
     {
         return new Content(
             view: 'emails.newsletter-confirmation',
+            text: 'emails.text.newsletter-confirmation',
         );
     }
 

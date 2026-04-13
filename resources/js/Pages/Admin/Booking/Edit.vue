@@ -72,6 +72,12 @@ function submit() {
                                 <p class="mt-1 text-gray-900">{{ db_booking.departure_date_formatted || '[No date]' }}</p>
                             </div>
                             <div>
+                                <Label class="text-brand-text" forField="return_date">{{ $t('admin.booking.edit.return_date') }}</Label>
+                                <DatePicker v-model="booking.return_date"
+                                    :min-date="db_booking.departure_date"
+                                    :feedback="booking.errors.return_date" />
+                            </div>
+                            <div>
                                 <TextArea v-model="booking.internal_notes" name="internal_notes"
                                     :label="$t('admin.booking.edit.internal_notes_label')"
                                     :placeholder="$t('admin.booking.edit.internal_notes_placeholder')"
@@ -99,8 +105,8 @@ function submit() {
                             <p class="mt-1 text-sm text-gray-700/30">{{ $t('admin.booking.edit.edit_travelers') }}</p>
                         </div>
                         <div class="p-6 space-y-6">
-                            <Traveler :booking="booking" type="adults" label="Volwassene" />
-                            <Traveler :booking="booking" type="children" label="Kind" />
+                            <Traveler :booking="booking" type="adults" label="Volwassene" :readonly="true" />
+                            <Traveler :booking="booking" type="children" label="Kind" :readonly="true" />
                         </div>
                     </section>
                 </div>

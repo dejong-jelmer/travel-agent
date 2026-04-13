@@ -3,19 +3,22 @@
 @section('content')
     {{-- Greeting --}}
     <h2 style="color:#30547e;font-size:24px;margin:0 0 20px 0;font-weight:600;">
-        Beste {{ $booking->mainBooker->full_name }},
+        Beste {{ $booking->mainBooker->first_name }},
     </h2>
 
     {{-- Success Message --}}
-    <div style="background:#fbfbf7;border-left:4px solid #AFCB98;padding:20px;margin:30px 0;">
-        <h3 style="margin:0 0 10px 0;font-size:20px;font-weight:600;">We hebben uw boeking succesvol ontvangen</h3>
+    <div style="background:#ffffff;border-left:4px solid #AFCB98;padding:20px;margin:30px 0;">
+        <h3 style="margin:0 0 10px 0;font-size:20px;font-weight:600;">Je boeking is binnen</h3>
         <p style="margin:0;font-size:14px;">
-            Bedankt voor uw vertrouwen in {{ config('app.name') }}
+            Wat leuk dat
+            {{ $booking->travelers->count() === 1 ? 'je' : 'jullie' }} met
+            {{ config('app.name') }} op reis
+            {{ $booking->travelers->count() === 1 ? 'gaat' : 'gaan' }}.
         </p>
     </div>
 
     {{-- Booking Reference --}}
-    <div style="background:#fbfbf7;padding:20px;margin-bottom:30px;border-left:4px solid #f59e0b;">
+    <div style="background:#ffffff;padding:20px;margin-bottom:30px;border-left:4px solid #f59e0b;">
         <p
             style="margin:0 0 8px 0;font-size:12px;text-transform:uppercase;color:#A3BCCB;font-weight:600;letter-spacing:0.5px;">
             Uw boekingsnummer
@@ -24,13 +27,14 @@
             {{ $booking->reference }}
         </p>
         <p style="margin:10px 0 0 0;font-size:13px;color:#30547e;">
-            Bewaar dit nummer voor uw administratie en eventuele correspondentie.
+            Bewaar dit nummer voor je administratie en onze verdere contactmomenten.
         </p>
     </div>
 
     {{-- Trip Details --}}
-    <h3 style="color:#30547e;font-size:18px;margin:30px 0 15px 0;padding-bottom:10px;border-bottom:2px solid #fbfbf7;">
-        Uw reis
+    <h3
+        style="color:#30547e;font-size:18px;margin:30px 0 15px 0;padding-bottom:10px;border-bottom:2px solid #fbfbf7;text-transform:uppercase;">
+        Je reis
     </h3>
 
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:30px;background:#fbfbf7;">
@@ -55,10 +59,13 @@
             </td>
             <td style="padding:20px;width:50%;">
                 <p style="margin:0 0 5px 0;font-size:13px;color:#A3BCCB;font-weight:600;text-transform:uppercase;">
-                    Duur
+                    Terugkomstdatum
                 </p>
                 <p style="margin:0;font-size:16px;font-weight:600;color:#30547e;">
-                    {{ $booking->trip->duration }} dagen
+                    {{ $booking->return_date_formatted }}
+                </p>
+                <p style="margin:0;font-size:16px;font-weight:600;color:#30547e;">
+                    (Totaal {{ $booking->trip->duration }} dagen)
                 </p>
             </td>
         </tr>
@@ -105,12 +112,12 @@
     </table>
 
     {{-- Contact Details --}}
-    <h3 style="color:#30547e;font-size:18px;margin:30px 0 15px 0;padding-bottom:10px;border-bottom:2px solid #fbfbf7;">
-        Uw contactgegevens
+    <h3
+        style="color:#30547e;font-size:18px;margin:30px 0 15px 0;padding-bottom:10px;border-bottom:2px solid #fbfbf7;text-transform:uppercase;">
+        Je contactgegevens
     </h3>
 
-    <table width="100%" cellpadding="0" cellspacing="0"
-        style="margin-bottom:30px;background:#fbfbf7;padding:20px;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:30px;background:#fbfbf7;padding:20px;">
         <tr>
             <td>
                 <p style="margin:0 0 15px 0;">
@@ -153,31 +160,35 @@
     </table>
 
     {{-- Next Steps --}}
-    <div style="background:#fbfbf7;border-left:4px solid #AFCB98;padding:20px;margin:30px 0;">
-        <h3 style="color:#30547e;font-size:18px;margin:0 0 15px 0;">
+    <div style="background:#ffffff;border-left:4px solid #AFCB98;padding:20px;margin:30px 0;">
+        <h3 style="color:#30547e;font-size:18px;margin:0 0 15px 0;text-transform:uppercase;">
             Wat gebeurt er nu?
         </h3>
-        <ul style="margin:0;padding:0 0 0 20px;color:#30547e;">
+        <ol style="margin:0;padding:0 0 0 20px;color:#30547e;">
             <li style="margin-bottom:10px;line-height:1.6;">
-                <strong>Bevestiging:</strong> We hebben uw boeking in goede orde ontvangen en gaan deze voor u verwerken.
-            </li>
-            <li style="margin-bottom:10px;line-height:1.6;">
-                <strong>Contact:</strong> Binnen 2 werkdagen nemen wij contact met u op voor de definitieve bevestiging en
-                eventuele vragen.
+                <strong>Ik ga aan de slag</strong><br>
+                Je boeking is bij mij binnen en ik ga nu alles voor je vastleggen.
             </li>
             <li style="margin-bottom:10px;line-height:1.6;">
-                <strong>Reisdocumenten:</strong> U ontvangt uiterlijk 2 weken voor vertrek alle benodigde documenten en
-                informatie.
+                <strong>Je hoort van mij</strong><br>
+                Binnen drie werkdagen hoor je van mij voor de definitieve bevestiging en om eventuele vragen door te nemen.
             </li>
-            <li style="margin-bottom:0;line-height:1.6;">
-                <strong>Vragen?</strong> Neem gerust contact met ons op via onderstaande gegevens.
+            <li style="margin-bottom:10px;line-height:1.6;">
+                <strong>Je reisdocumenten</strong><br>
+                Uiterlijk twee weken voor vertrek stuur ik je alles wat je nodig hebt:
+                tickets, routebeschrijving en mijn persoonlijke tips voor onderweg.
             </li>
-        </ul>
+        </ol>
     </div>
 
     {{-- Contact Info --}}
     <div style="margin:30px 0;padding:20px;background:#fbfbf7;">
-        <h4 style="margin:0 0 12px 0;color:#30547e;font-size:16px;">Heeft u vragen?</h4>
+        <h4 style="margin:0 0 12px 0;color:#30547e;font-size:16px;text-transform:uppercase;">
+            HEB JE NU AL EEN VRAAG?
+        </h4>
+        <p style="margin:0 0 8px 0;font-size:14px;color:#30547e;">
+            Mail of bel gerust.
+        </p>
         <p style="margin:0 0 8px 0;font-size:14px;color:#30547e;">
             <strong>Telefoon:</strong> <a href="tel:{{ config('contact.phone') }}"
                 style="color:#30547e;text-decoration:none;">{{ config('contact.phone') }}</a>
@@ -190,12 +201,14 @@
 
     {{-- Closing --}}
     <p style="margin:30px 0 5px 0;color:#30547e;font-size:15px;">
-        We kijken ernaar uit u te mogen verwelkomen op deze bijzondere reis!
+        Ik ga voor je aan de slag en laat snel van me horen.
     </p>
 
     <p style="margin:20px 0 0 0;color:#30547e;font-size:15px;">
         Met vriendelijke groet,<br><br>
-        <strong>{{ config('contact.full_name') }}</strong><br>
+        <strong>{{ config('contact.first_name') }}</strong><br>
         {{ config('app.name') }}
+        <br><br>
+        Meer mens… Omdat we reizen.
     </p>
 @endsection

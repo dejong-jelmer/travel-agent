@@ -62,7 +62,7 @@ onMounted(async () => {
                     </p>
                 </template>
                 <template v-else>
-                    <Slider :items="trips">
+                    <Slider :items="trips" :visible="3" :internal-arrows="false">
                         <template #default="{ item, index }">
                             <TripCard :trip="item" :key="index" />
                         </template>

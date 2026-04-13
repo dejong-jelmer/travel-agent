@@ -4,18 +4,14 @@ namespace App\Listeners;
 
 use App\Events\BookingCreated;
 use App\Mail\AdminBookingNotificationMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class NotifyAdminOfNewBooking
+class NotifyAdminOfNewBooking implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use InteractsWithQueue;
 
     /**
      * Handle the event.
@@ -28,16 +24,16 @@ class NotifyAdminOfNewBooking
         $event->booking->load(['trip.destinations', 'mainBooker', 'travelers', 'contact']);
 
         try {
-            Mail::to($address)->queue(
+            Mail::to($address)->send(
                 new AdminBookingNotificationMail($event->booking)
             );
         } catch (\Throwable $e) {
-            Log::error('Admin booking notification mail failed: '.$e->getMessage(), [
+            Log::error('Admin booking notification mail failed', [
                 'booking_id' => $event->booking->id,
                 'booking_reference' => $event->booking->reference,
                 'admin_email' => $address,
+                'exception' => $e,
             ]);
-            Log::error('Stack trace: '.$e->getTraceAsString());
         }
     }
 

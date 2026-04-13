@@ -75,7 +75,7 @@ const usps = [
             <div class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-brand-subtle/20">
                 <span class="text-brand-primary font-medium">{{ $t('usp.cta.text') }}</span>
                 <div class="w-px h-4 bg-brand-subtle/30"></div>
-                <DefaultLink :href="route('trips')">{{ $t('usp.cta.link') }} →</DefaultLink>
+                <DefaultLink :href="route('trips.index')">{{ $t('usp.cta.link') }} →</DefaultLink>
             </div>
         </div>
 

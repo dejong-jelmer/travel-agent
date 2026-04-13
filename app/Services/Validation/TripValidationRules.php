@@ -17,6 +17,7 @@ class TripValidationRules
             'name' => ['required', 'string', 'max:255'],
             'highlights' => ['nullable', 'array'],
             'highlights.*' => ['nullable', 'max:255', 'distinct'],
+            'intro' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
         ];
     }
@@ -39,6 +40,7 @@ class TripValidationRules
             'active' => ['boolean'],
             'featured' => ['boolean'],
             'published_at' => ['required', 'date'],
+            'min_advance_days' => ['nullable', 'integer', 'min:0', 'max:730'],
         ];
     }
 

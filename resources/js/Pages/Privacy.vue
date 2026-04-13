@@ -1,21 +1,40 @@
 <script setup>
 import { computed } from 'vue';
 
-const version = '1.2'
-const lastUpdated = 'maart 2026'
-
 const props = defineProps({
     contact: Object,
     newsletterRetentionMonths: {
         type: Number,
         default: 3,
     },
+    bookingRetentionYears: {
+        type: Number,
+        default: 7,
+    },
+    specialRequestsRetentionDays: {
+        type: Number,
+        default: 7,
+    },
+    tripRequestsRetentionYears: {
+        type: Number,
+        default: 1,
+    },
+    privacy: {
+        type: Object,
+        default: { version: null, updated: null }
+    }
 });
 
 const retentionLabel = computed(() =>
     props.newsletterRetentionMonths === 1
         ? '1 maand'
         : `${props.newsletterRetentionMonths} maanden`
+);
+
+const specialRequestsRetentionLabel = computed(() =>
+    props.specialRequestsRetentionDays === 1
+        ? '1 dag'
+        : `${props.specialRequestsRetentionDays} dagen`
 );
 </script>
 <template>
@@ -25,209 +44,285 @@ const retentionLabel = computed(() =>
                 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <!-- Header -->
-                        <header class="bg-brand-light text-white px-6 py-8">
+                        <header class="bg-brand-primary text-white px-6 py-8">
                             <h1 class="text-3xl font-bold mb-2">Privacyverklaring</h1>
-                            <p class="text-sm text-gray-600 mb-8">Versie: {{ version }} | Laatste update: {{ lastUpdated }}</p>
+                            <p class="text-sm text-white/70">Versie: {{ props.privacy.version }} | Laatste update: {{
+                                props.privacy.updated }}
+                            </p>
                         </header>
 
                         <!-- Content -->
                         <div class="px-6 py-8">
                             <!-- Introduction -->
                             <div class="mb-8">
-                                <p class="text-gray-700 leading-relaxed mb-4">
-                                    Om uw privacy te waarborgen en zorgvuldig met de door u verstrekte persoonsgegevens
-                                    om te gaan, zetten wij een extra stap. Zo bent u er zeker van dat uw
-                                    persoonsgegevens bij ons in goede handen zijn.
-                                </p>
-                                <p class="text-gray-700 leading-relaxed mb-4">
-                                    Zo maken we voor gegevensverwerking en -opslag uitsluitend gebruik van Europese
-                                    diensten die voldoen aan de Europese privacy wetgeving en wordt onze website gehost
-                                    door een duurzame aanbieder binnen de EU (Hetzner).
-                                </p>
-                                <p class="text-gray-700 leading-relaxed">
-                                    In deze privacyverklaring leggen we uit welke persoonsgegevens wij verzamelen,
-                                    waarom we dat doen, hoe we daarmee omgaan en wat jouw rechten zijn. Wij handelen in
-                                    overeenstemming met de Algemene Verordening Gegevensbescherming (AVG).
+                                <p class="text-brand-text/80 leading-relaxed">
+                                    Bij het boeken van een reis of inschrijven voor de nieuwsbrief verzamel ik
+                                    persoonsgegevens. Met deze gegevens ga ik zorgvuldig om. Voor gegevensverwerking en
+                                    -opslag maak ik uitsluitend gebruik van diensten die voldoen aan de AVG en waarmee
+                                    ik een verwerkersovereenkomst (DPA) heb gesloten. In deze privacyverklaring lees je
+                                    welke gegevens ik verzamel, waarom, hoe ik daarmee omga en wat jouw rechten zijn.
                                 </p>
                             </div>
 
                             <!-- Section 1 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">1. Wie
-                                    zijn wij?</h2>
-                                <p class="text-gray-700 leading-relaxed mb-4">
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    1. Wie ben ik?
+                                </h2>
+                                <p class="text-brand-text/80 leading-relaxed mb-4">
                                     Deze privacyverklaring is van toepassing op de reisorganisatie Omdat We Reizen,
                                     gevestigd op {{ contact.fullAddress }}, ingeschreven bij de Kamer van Koophandel
                                     onder nummer {{ contact.kvk }}.
                                 </p>
-                                <div class="bg-gray-50 p-4 rounded-lg">
-                                    <p class="text-gray-700 font-medium mb-2">Voor vragen over privacy kun je contact
+                                <div class="bg-brand-secondary/50 p-4 rounded-lg">
+                                    <p class="text-brand-text font-medium mb-2">Voor vragen over privacy kun je contact
                                         opnemen via:</p>
-                                    <p class="">E-mail: <a
-                                            class="email-field text-blue-600 underline hover:text-blue-800" href="#"
-                                            v-html="contact.mail.display"></a></p>
+                                    <p>E-mail: <a class="text-brand-link underline hover:text-brand-accent email-field"
+                                            href="#" v-html="contact.mail.display"></a></p>
                                 </div>
                             </section>
 
                             <!-- Section 2 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">2.
-                                    Welke gegevens verzamelen wij en waarom?</h2>
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    2. Welke gegevens verzamel ik en waarom?
+                                </h2>
 
                                 <!-- Subsection A -->
                                 <div class="mb-6">
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-3">A. Contactformulier</h3>
-                                    <p class="text-gray-700 mb-3">Wanneer je ons contactformulier gebruikt, verzamelen
-                                        wij:</p>
-                                    <ul class="list-disc pl-6 mb-4 text-gray-700 space-y-1">
+                                    <h3 class="text-xl font-semibold text-brand-text mb-3">A. Contactformulier</h3>
+                                    <p class="text-brand-text/80 mb-3">Wanneer je het contactformulier gebruikt,
+                                        verzamel ik:</p>
+                                    <ul class="list-disc pl-6 mb-4 text-brand-text/80 space-y-1">
                                         <li>Naam</li>
                                         <li>E-mailadres</li>
                                         <li>Telefoonnummer (optioneel)</li>
                                         <li>Berichtinhoud</li>
                                     </ul>
-                                    <div class="bg-blue-50 p-3 rounded">
-                                        <p class="text-sm text-gray-700"><strong>Doel:</strong> om je vraag of opmerking
-                                            te kunnen beantwoorden.</p>
-                                        <p class="text-sm text-gray-700"><strong>Grondslag:</strong> gerechtvaardigd
-                                            belang (klantcontact).</p>
+                                    <div class="bg-brand-secondary p-3 rounded">
+                                        <p class="text-sm text-brand-text/80"><strong>Doel:</strong> om je vraag of
+                                            opmerking te kunnen beantwoorden.</p>
+                                        <p class="text-sm text-brand-text/80"><strong>Grondslag:</strong>
+                                            gerechtvaardigd belang (klantcontact).</p>
                                     </div>
                                 </div>
 
                                 <!-- Subsection B -->
                                 <div class="mb-6">
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-3">B. Aanmelding voor nieuwsbrief
-                                    </h3>
-                                    <p class="text-gray-700 mb-3">Bij aanmelding voor onze nieuwsbrief vragen we:</p>
-                                    <ul class="list-disc pl-6 mb-4 text-gray-700">
+                                    <h3 class="text-xl font-semibold text-brand-text mb-3">B. Aanmelding voor
+                                        nieuwsbrief</h3>
+                                    <p class="text-brand-text/80 mb-3">Bij aanmelding voor de nieuwsbrief vraag ik:</p>
+                                    <ul class="list-disc pl-6 mb-4 text-brand-text/80">
                                         <li>E-mailadres</li>
                                         <li>Naam (optioneel)</li>
                                     </ul>
-                                    <div class="bg-blue-50 p-3 rounded">
-                                        <p class="text-sm text-gray-700"><strong>Doel:</strong> om je periodiek
-                                            informatie en aanbiedingen te sturen.</p>
-                                        <p class="text-sm text-gray-700"><strong>Grondslag:</strong> toestemming. Je
-                                            kunt je altijd uitschrijven via de link onderaan elke e-mail.</p>
+                                    <div class="bg-brand-secondary p-3 rounded">
+                                        <p class="text-sm text-brand-text/80"><strong>Doel:</strong> om je periodiek
+                                            informatie te sturen.</p>
+                                        <p class="text-sm text-brand-text/80"><strong>Grondslag:</strong> toestemming.
+                                            Je kunt je altijd uitschrijven via de link onderaan elke e-mail.</p>
                                     </div>
                                 </div>
 
                                 <!-- Subsection C -->
                                 <div class="mb-6">
-                                    <h3 class="text-xl font-semibold text-gray-800 mb-3">C. Boeken van een reis</h3>
-                                    <p class="text-gray-700 mb-3">Wanneer je een reis boekt, verwerken wij:</p>
-                                    <ul class="list-disc pl-6 mb-4 text-gray-700 space-y-1">
-                                        <li>Volledige naam</li>
+                                    <h3 class="text-xl font-semibold text-brand-text mb-3">C. Reisaanvraag</h3>
+                                    <p class="text-brand-text/80 mb-3">Wanneer je een reisaanvraag indient via het aanvraagformulier, verzamel ik:</p>
+                                    <ul class="list-disc pl-6 mb-4 text-brand-text/80 space-y-1">
+                                        <li>Naam</li>
+                                        <li>E-mailadres</li>
+                                        <li>Telefoonnummer (optioneel)</li>
+                                        <li>Gewenste reisperiode — maand, jaar en eventuele toelichting (optioneel)</li>
+                                        <li>Aantal reizigers (optioneel)</li>
+                                        <li>Vertrekstation (optioneel)</li>
+                                        <li>Aanvullende opmerkingen (optioneel)</li>
+                                    </ul>
+                                    <div class="bg-brand-secondary p-3 rounded">
+                                        <p class="text-sm text-brand-text/80"><strong>Doel:</strong> om je aanvraag op te volgen en een reisvoorstel op maat te kunnen maken.</p>
+                                        <p class="text-sm text-brand-text/80"><strong>Grondslag:</strong> gerechtvaardigd belang (opvolging van een vrijwillig ingediende aanvraag).</p>
+                                    </div>
+                                </div>
+
+                                <!-- Subsection D -->
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold text-brand-text mb-3">D. Boeken van een reis</h3>
+                                    <p class="text-brand-text/80 mb-3">Wanneer je een reis boekt, verwerk ik:</p>
+                                    <ul class="list-disc pl-6 mb-4 text-brand-text/80 space-y-1">
+                                        <li>Volledige naam (voornamen en achternaam)</li>
                                         <li>Geboortedatum</li>
-                                        <li>Adresgegevens</li>
+                                        <li>Adresgegevens (straat, huisnummer, woonplaats, postcode)</li>
                                         <li>Telefoonnummer</li>
                                         <li>E-mailadres</li>
-                                        <li>Paspoort- of ID-informatie (indien vereist voor reis)</li>
-                                        <li>Eventuele dieetwensen of medische bijzonderheden (optioneel)</li>
+                                        <li>Nationaliteit (om te beoordelen of aanvullende reisdocumenten of visa
+                                            vereist zijn)</li>
+                                        <li>Reisgegevens en reisschema met datum van vertrek</li>
+                                        <li>Eventuele opmerkingen, dieetwensen of medische bijzonderheden (optioneel)
+                                        </li>
                                     </ul>
-                                    <div class="bg-blue-50 p-3 rounded">
-                                        <p class="text-sm text-gray-700"><strong>Doel:</strong> om jouw reis correct te
-                                            kunnen organiseren en uitvoeren.</p>
-                                        <p class="text-sm text-gray-700"><strong>Grondslag:</strong> uitvoering van de
-                                            overeenkomst. Voor dieetwensen en medische bijzonderheden geldt aanvullend
-                                            uitdrukkelijke toestemming (AVG art. 9 lid 2a), die apart wordt gevraagd bij
-                                            het boekingsproces.</p>
+                                    <div class="bg-brand-secondary p-3 rounded">
+                                        <p class="text-sm text-brand-text/80"><strong>Doel:</strong> om jouw reis
+                                            correct te kunnen organiseren en uitvoeren.</p>
+                                        <p class="text-sm text-brand-text/80"><strong>Grondslag:</strong> uitvoering van
+                                            de overeenkomst. Voor dieetwensen en medische bijzonderheden wordt bij het
+                                            boekingsproces afzonderlijk om jouw uitdrukkelijke toestemming gevraagd (AVG
+                                            art. 9 lid 2a).</p>
                                     </div>
                                 </div>
                             </section>
 
                             <!-- Section 3 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">3. Met
-                                    wie delen wij gegevens?</h2>
-                                <p class="text-gray-700 leading-relaxed mb-4">
-                                    Wij delen persoonsgegevens alleen wanneer dat noodzakelijk is voor de uitvoering van
-                                    onze diensten. Dit gebeurt met:
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    3. Met wie deel ik je gegevens?
+                                </h2>
+                                <p class="text-brand-text/80 leading-relaxed mb-4">
+                                    Ik deel je persoonsgegevens alleen wanneer dat noodzakelijk is voor de uitvoering
+                                    van mijn diensten. Dit gebeurt met:
                                 </p>
-                                <ul class="list-disc pl-6 text-gray-700 space-y-2">
+                                <ul class="list-disc pl-6 text-brand-text/80 space-y-2 mb-6">
                                     <li>
-                                        <strong>Reisdienstverleners</strong> — zoals vervoerders, hotels of lokale
-                                        gidsen, voor zover
-                                        nodig om jouw reis uit te voeren.
+                                        <strong>Reisdienstverleners</strong> — zoals vervoerders en accommodaties, voor
+                                        zover nodig om jouw reis uit te voeren.
                                     </li>
                                     <li>
-                                        <strong>STO Garant</strong> — als garantie- en waarborgfondsen waarmee
-                                        wij wettelijk verplicht samenwerken.
+                                        <strong>STO Garant</strong> — het garantiefonds waarmee ik wettelijk verplicht
+                                        samenwerk.
                                     </li>
                                     <li>
-                                        <strong>Hetzner Online GmbH</strong> — voor het hosten van onze website en
-                                        boekingsomgeving,
-                                        gevestigd in Duitsland. Met Hetzner is een verwerkersovereenkomst (DPA)
-                                        afgesloten. Meer informatie:
-                                        <a class="default-link" href="https://www.hetzner.com/legal/privacy-policy"
-                                            target="_blank" rel="noopener noreferrer nofollow">
-                                            hetzner.com/legal/privacy-policy</a>.
+                                        <strong>Hosting- en serverpartijen</strong> — voor het veilig opslaan en
+                                        beschikbaar
+                                        houden van de website en boekingsomgeving.
                                     </li>
                                     <li>
-                                        <strong>Laravel Forge</strong> (Laravel Holdings Inc.) — voor het beheer en de
-                                        configuratie van
-                                        onze webserver, gevestigd in de Verenigde Staten. Forge heeft via een beveiligde
-                                        SSH-verbinding toegang tot onze server. Deze relatie met de
-                                        Verenigde Staten is gewaarborgd op basis van de door de Europese Commissie
-                                        goedgekeurde standaardcontractbepalingen (SCC's). Voor Laravel's
-                                        privacyverklaring zie:
-                                        <a class="default-link" href="https://laravel.com/legal/privacy#privacy-policy"
-                                            target="_blank" rel="noopener noreferrer nofollow">
-                                            https://laravel.com/legal/privacy#privacy-policy
-                                        </a> Laravel's services (waaronder Forge) voldoen volledig aan de EU wetgeving
-                                        (AVG). Met Laravel is een verwerkersovereenkomst (DPA) afgesloten. Zie: <a
-                                            class="default-link" href=" https://trust.laravel.com/?product=forge"
-                                            target="_blank" rel="noopener noreferrer nofollow">
-                                            https://trust.laravel.com/?product=forge</a>.
+                                        <strong>E-maildienstverlener</strong> — voor het verzenden van
+                                        boekingsbevestigingen
+                                        en nieuwsbrieven.
                                     </li>
                                     <li>
-                                        <strong>Mailjet/Sinch</strong> — voor het verzenden van e-mails
-                                        (boekingsbevestigingen, nieuwsbrief). Mailjet is gevestigd in de EU. Het
-                                        moederbedrijf Sinch heeft een standaard verwerkersovereenkomst: <a
-                                            class="default-link" href="https://www.mailjet.com/legal/dpa/"
-                                            target="_blank" rel="noopener noreferrer nofollow">
-                                            verwerkersovereenkomst (DPA) van Sinch</a>.
+                                        <strong>Domeinnaamregistrar</strong> — voor het beheer van mijn domeinnaam en
+                                        e-maildomein.
                                     </li>
-                                    <li>
-                                        <strong>TransIP B.V.</strong> — voor het beheer van onze domeinnaam en
-                                        e-maildomeinen, gevestigd
-                                        in Nederland. Met TransIP is een verwerkersovereenkomst afgesloten.
-                                    </li>
-
                                 </ul>
+
+                                <p class="text-brand-text/80 leading-relaxed mb-4">
+                                    Met al deze partijen heb ik een verwerkersovereenkomst (DPA) gesloten. Hieronder
+                                    vind
+                                    je een volledig overzicht.
+                                </p>
+
+                                <!-- Verwerkersoverzicht -->
+                                <div class="overflow-x-auto rounded-lg border border-brand-primary/20">
+                                    <table class="min-w-full text-sm text-left text-brand-text">
+                                        <thead class="bg-brand-primary text-white text-xs uppercase tracking-wider">
+                                            <tr>
+                                                <th class="px-4 py-3">Partij</th>
+                                                <th class="px-4 py-3">Vestiging</th>
+                                                <th class="px-4 py-3">Doel</th>
+                                                <th class="px-4 py-3">Privacybeleid</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-brand-primary/10">
+                                            <tr class="bg-brand-secondary/50 hover:bg-brand-secondary">
+                                                <td class="px-4 py-3 font-medium">Hetzner Online GmbH</td>
+                                                <td class="px-4 py-3">Duitsland</td>
+                                                <td class="px-4 py-3">Hosting website en boekingsomgeving</td>
+                                                <td class="px-4 py-3">
+                                                    <a href="https://hetzner.com/legal/privacy-policy" target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        Bekijken
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-brand-secondary">
+                                                <td class="px-4 py-3 font-medium">Laravel Forge</td>
+                                                <td class="px-4 py-3">Verenigde Staten</td>
+                                                <td class="px-4 py-3">Serverbeheer en -configuratie</td>
+                                                <td class="px-4 py-3">
+                                                    <a href="https://laravel.com/legal/privacy" target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        Bekijken
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="bg-brand-secondary/50 hover:bg-brand-secondary">
+                                                <td class="px-4 py-3 font-medium">Mailjet (Sinch)</td>
+                                                <td class="px-4 py-3">Frankrijk (EU)</td>
+                                                <td class="px-4 py-3">Verzenden van e-mails en nieuwsbrieven</td>
+                                                <td class="px-4 py-3">
+                                                    <a href="https://www.mailjet.com/legal/privacy-policy/"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        Bekijken
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                            <tr class="hover:bg-brand-secondary">
+                                                <td class="px-4 py-3 font-medium">TransIP B.V.</td>
+                                                <td class="px-4 py-3">Nederland</td>
+                                                <td class="px-4 py-3">Domeinnaam- en e-maildomeinbeheer</td>
+                                                <td class="px-4 py-3">
+                                                    <a href="https://www.transip.nl/legal-and-security/privacy-policy/"
+                                                        target="_blank" rel="noopener noreferrer"
+                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        Bekijken
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
                             </section>
 
                             <!-- Section 4 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">4. Hoe
-                                    lang bewaren wij jouw gegevens?</h2>
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    4. Hoe lang bewaar ik jouw gegevens?
+                                </h2>
                                 <div class="grid md:grid-cols-2 gap-4">
-                                    <div class="bg-gray-50 p-4 rounded-lg">
-                                        <p class="font-medium text-gray-800">Contactformulier:</p>
-                                        <p class="text-gray-700">max. 1 jaar na afhandeling</p>
+                                    <div class="bg-brand-secondary/50 p-4 rounded-lg">
+                                        <p class="font-medium text-brand-text">Contactformulier:</p>
+                                        <p class="text-brand-text/80">max. {{ tripRequestsRetentionYears }} jaar na afhandeling</p>
                                     </div>
-                                    <div class="bg-gray-50 p-4 rounded-lg">
-                                        <p class="font-medium text-gray-800">Nieuwsbriefgegevens:</p>
-                                        <p class="text-gray-700">tot uitschrijving; na uitschrijving worden gegevens
+                                    <div class="bg-brand-secondary/50 p-4 rounded-lg">
+                                        <p class="font-medium text-brand-text">Nieuwsbriefgegevens:</p>
+                                        <p class="text-brand-text/80">tot uitschrijving; na uitschrijving worden
+                                            gegevens
                                             binnen {{ retentionLabel }} verwijderd</p>
                                     </div>
-                                    <div class="bg-gray-50 p-4 rounded-lg">
-                                        <p class="font-medium text-gray-800">Boekingsgegevens:</p>
-                                        <p class="text-gray-700">Boekingsgegevens worden 7 jaar bewaard op basis van de
-                                            wettelijke bewaarplicht voor administratie. Na deze termijn worden
-                                            persoonsgegevens geanonimiseerd.</p>
+                                    <div class="bg-brand-secondary/50 p-4 rounded-lg">
+                                        <p class="font-medium text-brand-text">Reisaanvragen:</p>
+                                        <p class="text-brand-text/80">max. {{ tripRequestsRetentionYears }} jaar na afhandeling.</p>
+                                        <p class="text-brand-text/80 mt-2">Tenzij je aanvraag leidt tot een boeking, dan geldt de wettelijk bewaar plicht van {{ bookingRetentionYears }} jaar.</p>
                                     </div>
-                                    <div class="bg-gray-50 p-4 rounded-lg">
-                                        <p class="font-medium text-gray-800">Medische/dieetgegevens:</p>
-                                        <p class="text-gray-700">direct na afloop van de reis verwijderd</p>
+                                    <div class="bg-brand-secondary/50 p-4 rounded-lg">
+                                        <p class="font-medium text-brand-text">Boekingsgegevens:</p>
+                                        <p class="text-brand-text/80">{{ bookingRetentionYears }} jaar op basis van de
+                                            wettelijke bewaarplicht
+                                            voor administratie. Na deze termijn worden persoonsgegevens geanonimiseerd.
+                                        </p>
+                                    </div>
+                                    <div class="bg-brand-secondary/50 p-4 rounded-lg">
+                                        <p class="font-medium text-brand-text">Medische/dieetgegevens:</p>
+                                        <p class="text-brand-text/80">binnen {{ specialRequestsRetentionLabel }} na
+                                            afloop van de reis verwijderd</p>
                                     </div>
                                 </div>
                             </section>
 
                             <!-- Section 5 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">5.
-                                    Jouw rechten</h2>
-                                <p class="text-gray-700 mb-4">Je hebt het recht om:</p>
-                                <ul class="list-disc pl-6 text-gray-700 space-y-2 mb-4">
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    5. Jouw rechten
+                                </h2>
+                                <p class="text-brand-text/80 mb-4">Je hebt het recht om:</p>
+                                <ul class="list-disc pl-6 text-brand-text/80 space-y-2 mb-4">
                                     <li>Inzage te krijgen in jouw gegevens</li>
                                     <li>Gegevens te laten corrigeren of verwijderen</li>
                                     <li>Bezwaar te maken tegen verwerking</li>
@@ -235,59 +330,61 @@ const retentionLabel = computed(() =>
                                     <li>Gegevens over te dragen (dataportabiliteit)</li>
                                     <li>Toestemming in te trekken (voor nieuwsbrief)</li>
                                 </ul>
-                                <div class="bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded-r-lg">
-                                    <p class="text-gray-700">
+                                <div class="bg-brand-accent/10 border-l-4 border-brand-accent p-4 rounded-r-lg">
+                                    <p class="text-brand-text/80">
                                         Je kunt deze rechten uitoefenen door contact op te nemen via
-                                        <a class="email-field text-blue-600 underline hover:text-blue-800" href="#"
-                                            v-html="contact.mail.display"></a>.
-                                        Wij reageren binnen 30 dagen.
+                                        <a class="text-brand-link underline hover:text-brand-accent email-field"
+                                            href="#" v-html="contact.mail.display"></a>.
+                                        Ik reageer binnen 30 dagen.
                                     </p>
                                 </div>
                             </section>
 
                             <!-- Section 6 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">6.
-                                    Beveiliging van jouw gegevens</h2>
-                                <p class="text-gray-700 leading-relaxed mb-4">
-                                    Wij nemen passende technische en organisatorische maatregelen om je persoonsgegevens
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    6. Beveiliging van jouw gegevens
+                                </h2>
+                                <p class="text-brand-text/80 leading-relaxed mb-4">
+                                    Ik neem passende technische en organisatorische maatregelen om je persoonsgegevens
                                     te beschermen tegen verlies of ongeoorloofde toegang. Voorbeelden:
                                 </p>
                                 <div class="grid md:grid-cols-2 gap-4">
                                     <div class="flex items-start space-x-3">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                        <div class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></div>
                                         <div>
-                                            <p class="font-medium text-gray-800">Versleutelde verbinding (SSL)</p>
+                                            <p class="font-medium text-brand-text">Versleutelde verbinding (SSL)</p>
                                         </div>
                                     </div>
                                     <div class="flex items-start space-x-3">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                        <div class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></div>
                                         <div>
-                                            <p class="font-medium text-gray-800">Twee-factor-authenticatie (2FA)</p>
-                                            <p class="text-sm text-gray-600">voor extra beveiliging van accounts en
+                                            <p class="font-medium text-brand-text">Twee-factor-authenticatie (2FA)</p>
+                                            <p class="text-sm text-brand-text/60">voor extra beveiliging van accounts en
                                                 systemen</p>
                                         </div>
                                     </div>
                                     <div class="flex items-start space-x-3">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                        <div class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></div>
                                         <div>
-                                            <p class="font-medium text-gray-800">Beveiligde opslag</p>
+                                            <p class="font-medium text-brand-text">Beveiligde opslag</p>
                                         </div>
                                     </div>
                                     <div class="flex items-start space-x-3">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                        <div class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></div>
                                         <div>
-                                            <p class="font-medium text-gray-800">Beperkte toegang tot gegevens</p>
-                                            <p class="text-sm text-gray-600">alleen bevoegde medewerkers hebben toegang
-                                                tot persoonsgegevens</p>
+                                            <p class="font-medium text-brand-text">Beperkte toegang tot gegevens</p>
+                                            <p class="text-sm text-brand-text/60">alleen ik heb toegang tot
+                                                persoonsgegevens</p>
                                         </div>
                                     </div>
                                     <div class="flex items-start space-x-3 md:col-span-2">
-                                        <div class="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
+                                        <div class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></div>
                                         <div>
-                                            <p class="font-medium text-gray-800">Betrouwbare samenwerkingen</p>
-                                            <p class="text-sm text-gray-600">wij werken uitsluitend met externe partijen
-                                                die aantoonbaar voldoen aan de eisen van de AVG</p>
+                                            <p class="font-medium text-brand-text">Betrouwbare samenwerkingen</p>
+                                            <p class="text-sm text-brand-text/60">ik werk uitsluitend met externe
+                                                partijen die aantoonbaar voldoen aan de eisen van de AVG</p>
                                         </div>
                                     </div>
                                 </div>
@@ -295,26 +392,26 @@ const retentionLabel = computed(() =>
 
                             <!-- Section 7 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">7.
-                                    Cookies</h2>
-                                <div class="bg-green-50 border-l-4 border-green-400 p-4 rounded-r-lg">
-                                    <ul class="list-disc text-gray-700 pl-4 leading-relaxed mb-2">
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    7. Cookies
+                                </h2>
+                                <div class="bg-brand-secondary border-l-4 border-brand-subtle p-4 rounded-r-lg">
+                                    <ul class="list-disc text-brand-text/80 pl-4 leading-relaxed mb-2">
                                         <li>
-                                            Onze website gebruikt alleen functionele cookies, die nodig zijn om de site
-                                            goed
-                                            te laten werken:
+                                            Deze website gebruikt alleen functionele cookies, die nodig zijn om de site
+                                            goed te laten werken:
                                             <ul class="list-disc pl-6 mt-1 space-y-1">
                                                 <li><strong>Sessiecookie</strong> — onthoudt je sessie tijdens het
-                                                    bezoek (bijv. bookingstatus).</li>
+                                                    bezoek (bijv. boekingsstatus).</li>
                                                 <li><strong>CSRF-cookie</strong> — beschermt formulieren tegen
                                                     kwaadaardige verzoeken van buitenaf.</li>
-                                                <li><strong>Laravel cookie consent</strong> — onthoudt cookie-keuze.</li>
-
+                                                <li><strong>Cookie-voorkeur</strong> — onthoudt je cookiekeuze.</li>
                                             </ul>
                                         </li>
                                         <li class="mt-2">
-                                            Wij gebruiken <strong>geen</strong> analytische cookies en/of tracking
-                                            cookies van derden.
+                                            Ik gebruik <strong>geen</strong> analytische cookies en/of tracking cookies
+                                            van derden.
                                         </li>
                                     </ul>
                                 </div>
@@ -322,32 +419,36 @@ const retentionLabel = computed(() =>
 
                             <!-- Section 8 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">8.
-                                    Klachten?</h2>
-                                <p class="text-gray-700 leading-relaxed">
-                                    Als je vindt dat wij niet correct omgaan met jouw gegevens, kun je een klacht
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    8. Klachten?
+                                </h2>
+                                <p class="text-brand-text/80 leading-relaxed">
+                                    Als je vindt dat ik niet correct omga met jouw gegevens, kun je een klacht
                                     indienen bij de Autoriteit Persoonsgegevens via
                                     <a href="https://autoriteitpersoonsgegevens.nl" target="_blank"
                                         rel="noopener noreferrer"
-                                        class="text-blue-600 underline hover:text-blue-800">autoriteitpersoonsgegevens.nl</a>.
+                                        class="text-brand-link underline hover:text-brand-accent">autoriteitpersoonsgegevens.nl</a>.
                                 </p>
                             </section>
 
                             <!-- Section 9 -->
                             <section class="mb-8">
-                                <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">9.
-                                    Wijzigingen</h2>
-                                <p class="text-gray-700 leading-relaxed">
-                                    Wij kunnen deze privacyverklaring van tijd tot tijd aanpassen. Wij adviseren je om
-                                    deze verklaring regelmatig te raadplegen. Bij ingrijpende wijzigingen zullen wij dit
+                                <h2
+                                    class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2">
+                                    9. Wijzigingen
+                                </h2>
+                                <p class="text-brand-text/80 leading-relaxed">
+                                    Ik kan deze privacyverklaring van tijd tot tijd aanpassen en adviseer je om deze
+                                    verklaring regelmatig te raadplegen. Bij ingrijpende wijzigingen zal ik dit
                                     duidelijk communiceren.
                                 </p>
                             </section>
 
                             <!-- Footer -->
-                            <footer class="border-t border-gray-200 pt-6 mt-8">
-                                <p class="text-sm text-gray-500 text-center">
-                                    <strong>Laatste update:</strong> {{ lastUpdated }}
+                            <footer class="border-t border-brand-primary/10 pt-6 mt-8">
+                                <p class="text-sm text-brand-text/50 text-center">
+                                    <strong>Laatste update:</strong> {{ privacy.updated }}
                                 </p>
                             </footer>
                         </div>

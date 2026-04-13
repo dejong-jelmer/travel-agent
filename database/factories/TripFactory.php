@@ -37,30 +37,23 @@ class TripFactory extends Factory
     public function definition(): array
     {
         $city = fake()->city();
-        $name = "Bijzondere reis naar {$city}";
+        $name = $city;
         $slug = Str::slug($name);
         $duration = fake()->numberBetween(6, 14);
 
         return [
             'name' => $name,
             'slug' => $slug,
+            'intro' => fake()->text(100),
             'description' => $this->generateDescription($city),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
             'meta_title' => $this->generateMetaTitle($city, $duration),
             'meta_description' => fake()->text(160),
+            'min_advance_days' => fake()->numberBetween(21, 42),
             'blocked_dates' => null,
         ];
-    }
-
-    private function generateSlug(string $city, ?string $destination = null): string
-    {
-        if ($destination) {
-            return Str::slug("reis-naar-{$city}-{$destination}");
-        }
-
-        return Str::slug("reis-naar-{$city}");
     }
 
     private function generateDescription(string $city, ?string $destination = null): string
@@ -69,7 +62,7 @@ class TripFactory extends Factory
             ? "Ontdek het prachtige {$city} in {$destination}. "
             : "Ontdek het prachtige {$city}. ";
 
-        $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes. ';
+        $secondLine = 'Deze bijzondere reis brengt u naar de mooiste plekken en verborgen pareltjes.';
 
         return $intro.$secondLine.fake()->paragraph();
     }
@@ -140,7 +133,7 @@ class TripFactory extends Factory
                     $destination->country_code,
                 );
                 $city = fake($locale)->city();
-                $name = "Bijzondere reis naar {$city} in {$destination->name}";
+                $name = "{$city}";
                 $slug = Str::slug($name);
                 $duration = fake()->numberBetween(6, 14);
 

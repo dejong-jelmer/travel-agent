@@ -10,6 +10,7 @@ use App\Models\BookingContact;
 use App\Models\BookingTraveler;
 use App\Models\Trip;
 use App\Models\TripPrice;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -26,11 +27,16 @@ class BookingFactory extends Factory
     {
         $statuses = $this->getRealisticStatusCombination();
 
+        $departureDate = fake()->dateTimeBetween('now', '+5 months');
+
+        $trip = Trip::factory();
+
         return [
             'uuid' => fake()->uuid(),
-            'trip_id' => Trip::factory(),
-            'trip_price_id' => 0,
-            'departure_date' => fake()->dateTimeBetween('now', '+5 months'),
+            'trip_id' => $trip,
+            'trip_price_id' => TripPrice::factory()->for($trip),
+            'departure_date' => $departureDate,
+            'return_date' => Carbon::instance($departureDate)->addDays(7),
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
             'status' => $statuses['status'],
@@ -48,17 +54,23 @@ class BookingFactory extends Factory
     public function configure(): static
     {
         return $this->afterCreating(function (Booking $booking) {
-            $tripPrice = TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
+            $tripPrice = $booking->tripPrice;
+
+            // Ensure the trip price belongs to the booking's trip.
+            // recycle() may assign a TripPrice from a different Trip.
+            if ($tripPrice->trip_id !== $booking->trip_id) {
+                $tripPrice = TripPrice::where('trip_id', $booking->trip_id)->first()
+                    ?? TripPrice::factory()->create(['trip_id' => $booking->trip_id]);
+                $booking->trip_price_id = $tripPrice->id;
+            }
+
             $year = now()->format('Y');
             $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
-            $booking->trip_price_id = $tripPrice->id;
             $booking->price_per_person = $tripPrice->base_price_pp;
             $booking->single_supplement = $tripPrice->single_supplement;
-            $booking->base_total_price = $tripPrice->base_price_pp;
             $booking->fees_and_funds = [
                 SettingKey::BookingFee->value => 2500,
                 SettingKey::GuaranteeFund->value => 1000,
-                SettingKey::EmergencyFund->value => 250,
             ];
             $booking->saveQuietly();
         });
@@ -141,11 +153,12 @@ class BookingFactory extends Factory
                 $booking->travelers()->saveMany($children);
             }
 
-            $adultPrice = $adultCount === 1
+            $adultPrice = ($adultCount === 1 && $childCount === 0)
                 ? $booking->price_per_person + $booking->single_supplement
                 : $booking->price_per_person * $adultCount;
 
             $booking->base_total_price = $adultPrice + ($booking->price_per_person * $childCount);
+            $booking->grand_total_price = $booking->base_total_price + array_sum($booking->fees_and_funds);
 
             // Update total travelers
             $booking->total_adults = $adultCount;

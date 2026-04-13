@@ -6,11 +6,9 @@ use App\Enums\ModelAction;
 use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Models\Setting;
-use App\Models\Trip;
+use App\Models\TripRequest;
 use App\Responses\BookingResponse;
-use App\Services\CountryService;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\ServiceProvider;
@@ -44,14 +42,12 @@ class AppServiceProvider extends ServiceProvider
                 ];
             },
             'adminStats' => fn () => request()->routeIs('admin.*') && Auth::check()
-                ? ['newBookingsCount' => Booking::new()->count()]
+                ? [
+                    'newBookingsCount' => Booking::new()->count(),
+                    'newTripRequestsCount' => TripRequest::new()->count(),
+                ]
                 : null,
             'settings' => fn () => Setting::pluck('value', 'key')->all(),
-            'navCountries' => fn () => Cache::remember(config('cache.keys.nav_countries'), 3600, fn () => $this->app->make(CountryService::class)->getCountriesForTrips(
-                Trip::with('destinations.country')->published()->get()
-            )
-            ),
-            'countries' => fn () => Cache::remember(config('cache.keys.countries'), 3600, fn () => CountryService::countries()),
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());

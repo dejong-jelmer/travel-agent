@@ -7,7 +7,6 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
-use App\Services\CountryService;
 use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -19,8 +18,6 @@ use Symfony\Component\HttpFoundation\Response as HttpResponse;
 class HomeController extends Controller
 {
     use HasPageMetadata;
-
-    public function __construct(private readonly CountryService $countryService) {}
 
     public function home(): Response
     {
@@ -77,24 +74,19 @@ class HomeController extends Controller
         ], 200);
     }
 
-    public function trips(): Response
-    {
-        $trips = Trip::with(['destinations.country', 'heroImage', 'prices'])->published()->get();
-
-        return Inertia::render('Trip/Index', [
-            'title' => $this->pageTitle('home.trips_seo'),
-            'trips' => $trips,
-            'countries' => $this->countryService->getCountriesForTrips($trips),
-            'seo' => $this->pageSeo('home.trips_seo'),
-        ]);
-    }
-
     public function privacy(): Response
     {
         return Inertia::render('Privacy', [
             'title' => $this->pageTitle('home.privacy_seo'),
             'seo' => $this->pageSeo('home.privacy_seo'),
-            'newsletterRetentionMonths' => (int) config('newsletter.subscription.retention_months', 3),
+            'newsletterRetentionMonths' => (int) config('privacy.newsletter.subscription.retention_months', 3),
+            'bookingRetentionYears' => (int) config('privacy.booking.retention_years', 7),
+            'specialRequestsRetentionDays' => (int) config('privacy.booking.special_requests_retention_days', 7),
+            'tripRequestsRetentionYears' => (int) config('privacy.trip_request.retention_years ', 1),
+            'privacy' => [
+                'version' => config('privacy.version'),
+                'updated' => config('privacy.updated'),
+            ],
         ]);
     }
 
@@ -103,6 +95,10 @@ class HomeController extends Controller
         return Inertia::render('Terms', [
             'title' => $this->pageTitle('home.terms_seo'),
             'seo' => $this->pageSeo('home.terms_seo'),
+            'terms' => [
+                'version' => config('terms.version'),
+                'updated' => config('terms.updated'),
+            ],
         ]);
     }
 

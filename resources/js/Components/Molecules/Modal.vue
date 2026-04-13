@@ -44,9 +44,9 @@ const emitClose = () => {
                 leave-to-class="opacity-0 scale-95"
                 >
                 <div v-if="open"
-                    class="relative w-full max-w-5xl max-h-[90vh] bg-white shadow-xl rounded-2xl p-8 overflow-y-auto">
+                    class="relative w-full max-w-4xl max-h-[90vh] bg-white shadow-xl rounded-2xl p-8 overflow-y-auto">
                     <button aria-label="close"
-                        class="absolute top-0 right-0 p-3 rounded-tr-2xl rounded-bl-2xl bg-status-error text-white hover:bg-status-error/90 transition-colors"
+                        class="absolute top-0 right-0 p-3 rounded-tr-2xl rounded-bl-2xl text-brand-primary hover:text-white hover:bg-gray-300 transition-colors"
                         @click.prevent="emitClose">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
                             <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10

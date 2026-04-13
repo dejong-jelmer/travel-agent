@@ -28,4 +28,4 @@ _ide_helper_models.php
 .phpstorm.meta.php
 CLAUDE.md
 ToDo.txt
-.claude/
+/.claude

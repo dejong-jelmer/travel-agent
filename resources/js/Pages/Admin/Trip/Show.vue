@@ -132,6 +132,11 @@ function displayDate(entry) {
                                     </div>
                                     <div>
                                         <label class="text-sm font-medium text-gray-700">{{
+                                            t('admin.trips.show.details.intro') }}</label>
+                                        <p class="mt-1 text-gray-900">{{ trip.intro }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">{{
                                             t('admin.trips.show.details.slug') }}</label>
                                         <p class="mt-1 text-gray-900">{{ trip.slug }}</p>
                                     </div>

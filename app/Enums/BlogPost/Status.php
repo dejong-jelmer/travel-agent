@@ -15,6 +15,6 @@ enum Status: string
 
     protected function getLabelKey(): string
     {
-        return 'enum.blog_post';
+        return 'enum.blog_posts';
     }
 }

@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useCharacterCounter } from '@/Composables/useCharacterCounter.js';
@@ -30,6 +30,27 @@ const seoConfig = page.props.config?.seo || {}
 
 const META_TITLE_MAX_LENGTH = seoConfig.meta_title_max_length || 0
 const META_DESCRIPTION_MAX_LENGTH = seoConfig.meta_description_max_length || 0
+
+function daysToDisplay(days) {
+    if (!days) return { value: null, unit: 'days' }
+    if (days % 7 === 0) return { value: days / 7, unit: 'weeks' }
+    return { value: days, unit: 'days' }
+}
+
+const { value: initMinAdvanceValue, unit: initMinAdvanceUnit } = daysToDisplay(props.form.min_advance_days)
+const minAdvanceValue = ref(initMinAdvanceValue)
+const minAdvanceUnit = ref(initMinAdvanceUnit ?? 'days')
+
+const unitMultiplier = { days: 1, weeks: 7 }
+const advanceUnitOptions = computed(() => [
+    { id: 'days',  name: t('forms.trip.fields.min_advance.units.days') },
+    { id: 'weeks', name: t('forms.trip.fields.min_advance.units.weeks') },
+])
+
+watch([minAdvanceValue, minAdvanceUnit], ([val, unit]) => {
+    const num = Number(val)
+    props.form.min_advance_days = num > 0 ? Math.round(num * unitMultiplier[unit]) : null
+})
 
 const { length: metaTitleLength, charsLeft: metaTitleCharsLeft, counterClass: metaTitleClass } = useCharacterCounter(
     computed(() => props.form?.meta_title),
@@ -106,6 +127,10 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 <Input type="text" name="name" :label="t('forms.trip.fields.name.label')"
                                     :required="true" v-model="form.name" :feedback="form.errors.name"
                                     :placeholder="t('forms.trip.fields.name.placeholder')" />
+
+                                 <Input type="text" name="intro" :label="t('forms.trip.fields.intro.label')"
+                                    :required="true" v-model="form.intro" :feedback="form.errors.intro"
+                                    :placeholder="t('forms.trip.fields.intro.placeholder')" />
 
                                 <TextArea name="description" :label="t('forms.trip.fields.description.label')"
                                     :required="true" v-model="form.description" :feedback="form.errors.description"
@@ -247,6 +272,21 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                             {{ t('forms.trip.fields.featured.help') }}
                                         </span>
                                     </Checkbox>
+                                </div>
+                                <div class="p-4 bg-white rounded-lg border border-gray-200">
+                                    <Label for="min_advance_value">
+                                        {{ t('forms.trip.fields.min_advance.label') }}
+                                    </Label>
+                                    <div class="flex gap-2 mt-1">
+                                        <Input type="number" name="min_advance_value" v-model="minAdvanceValue"
+                                            :min="0" class="w-24"
+                                            :feedback="form.errors.min_advance_days" />
+                                        <Select name="min_advance_unit" v-model="minAdvanceUnit" :show-label="false"
+                                            :options="advanceUnitOptions" />
+                                    </div>
+                                    <span class="block text-xs text-gray-700/30 mt-2">
+                                        {{ t('forms.trip.fields.min_advance.help') }}
+                                    </span>
                                 </div>
                             </div>
                         </div>

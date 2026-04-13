@@ -72,7 +72,7 @@ function handleSubmit() {
         return;
     }
 
-    booking.value.post(route('bookings.store'), {
+    booking.value.post(route('admin.bookings.store'), {
         forceFormData: true,
         onSuccess: () => { },
         onError: (errors) => {
@@ -121,7 +121,7 @@ function handleSubmit() {
             </div>
 
             <div class="h-2 bg-white rounded-full overflow-hidden">
-                <div class="h-full bg-status-success transition-all duration-500 ease-out"
+                <div class="h-full bg-brand-subtle transition-all duration-500 ease-out"
                     data-testid="progress-bar"
                     :style="{ width: progress + '%' }"></div>
             </div>

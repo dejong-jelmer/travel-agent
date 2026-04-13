@@ -48,7 +48,7 @@ export default {
             spacing: {
                 header: "100px",
             },
-            screens: screens, // {phone: '0px', tablet: '700px', laptop: '900px', desktop: '1200px', wide: '1350px'}
+            screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
             keyframes: {
                 "slide-left-right": {
                     "0%, 100%": { transform: "translateX(0px)" },

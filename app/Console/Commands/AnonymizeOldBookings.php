@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\BookingChange;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;
+use App\Models\TripRequest;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -13,13 +14,13 @@ class AnonymizeOldBookings extends Command
 {
     protected $signature = 'bookings:anonymize
                             {--dry-run : Show what would be anonymized without making changes}
-                            {--years=7 : Number of years retention period}';
+                            {--years= : Number of years retention period}';
 
     protected $description = 'Anonymize bookings whose retention period has expired';
 
     public function handle(): int
     {
-        $years = (int) $this->option('years');
+        $years = (int) ($this->option('years') ?? config('privacy.booking.retention_years'));
         $dryRun = $this->option('dry-run');
         $cutoffDate = now()->subYears($years);
 
@@ -72,6 +73,8 @@ class AnonymizeOldBookings extends Command
                         ])->orWhere('field', 'internal_notes');
                     })
                     ->delete();
+
+                TripRequest::whereIn('booking_id', $bookingIds)->delete();
             });
         } catch (\Throwable $e) {
             $this->error("Anonymization failed: {$e->getMessage()}");

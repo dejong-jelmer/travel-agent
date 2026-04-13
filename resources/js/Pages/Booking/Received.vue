@@ -28,7 +28,7 @@ const { t } = useI18n()
                 <div class="text-left mb-8 laptop:mb-12">
                     <div class="inline-flex gap-4">
                         <div
-                            class="inline-flex items-center justify-center w-8 h-8 laptop:w-12 laptop:h-12 bg-status-success rounded-full mb-4 laptop:mb-6">
+                            class="inline-flex items-center justify-center w-8 h-8 laptop:w-12 laptop:h-12 bg-brand-subtle rounded-full mb-4 laptop:mb-6">
                             <CircleCheckBig class="w-4 h-4 laptop:w-8 laptop:h-8 text-white" />
                         </div>
                         <h1
@@ -37,7 +37,7 @@ const { t } = useI18n()
                         </h1>
                     </div>
                     <p
-                        class="text-left text-base laptop:text-lg text-brand-primary max-w-xl laptop:max-w-2xl leading-relaxed">
+                        class="text-left text-base laptop:text-lg text-brand-text max-w-xl laptop:max-w-2xl leading-relaxed">
                         {{ t('booking_received.header.message') }} <strong>{{ booking.contact.email }}</strong>
                     </p>
                 </div>
@@ -178,22 +178,22 @@ const { t } = useI18n()
                                 <div>
                                     <p class="text-xs text-brand-light font-medium uppercase tracking-wide mb-1">
                                         {{ t('booking_received.contact_details.name') }}</p>
-                                    <p class="text-brand-primary">{{ booking.contact.name }}</p>
+                                    <p class="text-brand-tex">{{ booking.contact.name }}</p>
                                 </div>
                                 <div>
                                     <p class="text-xs text-brand-light font-medium uppercase tracking-wide mb-1">
                                         {{ t('booking_received.contact_details.email') }}</p>
-                                    <p class="text-brand-primary break-all">{{ booking.contact.email }}</p>
+                                    <p class="text-brand-text break-all">{{ booking.contact.email }}</p>
                                 </div>
                                 <div>
                                     <p class="text-xs text-brand-light font-medium uppercase tracking-wide mb-1">
                                         {{ t('booking_received.contact_details.phone') }}</p>
-                                    <p class="text-brand-primary">{{ booking.contact.phone }}</p>
+                                    <p class="text-brand-text">{{ booking.contact.phone }}</p>
                                 </div>
                                 <div>
                                     <p class="text-xs text-brand-light font-medium uppercase tracking-wide mb-1">
                                         {{ t('booking_received.contact_details.address') }}</p>
-                                    <p class="text-brand-primary whitespace-pre-line">{{ booking.contact.address }}</p>
+                                    <p class="text-brand-text whitespace-pre-line">{{ booking.contact.address }}</p>
                                 </div>
                             </div>
                         </div>
