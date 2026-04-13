@@ -30,8 +30,11 @@ class SendNewsletterConfirmationEmail implements ShouldQueue
                 new NewsletterConfirmation($subscriber)
             );
         } catch (Throwable $e) {
-            Log::error('Mail sending failed: '.$e->getMessage());
-            Log::error('Stack trace: '.$e->getTraceAsString());
+            Log::error('Newsletter confirmation mail failed', [
+                'subscriber_id' => $subscriber->id,
+                'subscriber_email' => $subscriber->email,
+                'exception' => $e,
+            ]);
         }
     }
 }

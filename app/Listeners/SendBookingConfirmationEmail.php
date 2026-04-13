@@ -26,12 +26,12 @@ class SendBookingConfirmationEmail implements ShouldQueue
             Mail::to($event->booking->contact->email)
                 ->send(new BookingConfirmationMail($event->booking));
         } catch (\Throwable $e) {
-            Log::error('Booking confirmation mail failed: '.$e->getMessage(), [
+            Log::error('Booking confirmation mail failed', [
                 'booking_id' => $event->booking->id,
                 'booking_reference' => $event->booking->reference,
                 'contact_email' => $event->booking->contact->email,
+                'exception' => $e,
             ]);
-            Log::error('Stack trace: '.$e->getTraceAsString());
         }
     }
 

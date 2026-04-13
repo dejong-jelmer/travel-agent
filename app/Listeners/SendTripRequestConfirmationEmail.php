@@ -23,7 +23,7 @@ class SendTripRequestConfirmationEmail implements ShouldQueue
             Mail::to(new Address($event->tripRequest->email, $event->tripRequest->name))->send(
                 new TripRequestConfirmationMail($event->tripRequest)
             );
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             Log::error('Failed to send trip request confirmation email', [
                 'trip_request_id' => $event->tripRequest->id,
                 'email' => $event->tripRequest->email,

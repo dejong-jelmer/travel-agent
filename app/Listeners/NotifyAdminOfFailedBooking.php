@@ -20,7 +20,10 @@ class NotifyAdminOfFailedBooking implements ShouldQueue
         try {
             Mail::to($address)->send(new AdminBookingFailedMail($event));
         } catch (\Throwable $e) {
-            Log::error('Admin booking failed notification mail could not be sent: '.$e->getMessage());
+            Log::error('Admin booking failed notification mail could not be sent', [
+                'admin_email' => $address,
+                'exception' => $e,
+            ]);
         }
     }
 }

@@ -14,6 +14,6 @@ class TripRequestCreated
      * Create a new event instance.
      */
     public function __construct(
-        public TripRequest $tripRequest,
+        public TripRequest $tripRequest
     ) {}
 }

@@ -25,12 +25,12 @@ class NotifyAdminOfNewsletterSubscription implements ShouldQueue
                 new AdminNewsletterSubscriptionMail($event->subscriber)
             );
         } catch (\Throwable $e) {
-            Log::error('Admin newsletter subscription notification mail failed: '.$e->getMessage(), [
+            Log::error('Admin newsletter subscription notification mail failed', [
                 'subscriber_id' => $event->subscriber->id,
                 'subscriber_email' => $event->subscriber->email,
                 'admin_email' => $address,
+                'exception' => $e,
             ]);
-            Log::error('Stack trace: '.$e->getTraceAsString());
         }
     }
 

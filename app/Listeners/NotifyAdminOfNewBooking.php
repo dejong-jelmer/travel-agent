@@ -28,12 +28,12 @@ class NotifyAdminOfNewBooking implements ShouldQueue
                 new AdminBookingNotificationMail($event->booking)
             );
         } catch (\Throwable $e) {
-            Log::error('Admin booking notification mail failed: '.$e->getMessage(), [
+            Log::error('Admin booking notification mail failed', [
                 'booking_id' => $event->booking->id,
                 'booking_reference' => $event->booking->reference,
                 'admin_email' => $address,
+                'exception' => $e,
             ]);
-            Log::error('Stack trace: '.$e->getTraceAsString());
         }
     }
 
