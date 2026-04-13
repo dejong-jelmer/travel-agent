@@ -36,7 +36,7 @@ class NotifyAdminOfTripRequest
             Log::error('Trip request notification mail failed', [
                 'trip_request_id' => $event->tripRequest->id,
                 'admin_email' => config('contact.mail'),
-                'exception' => $e
+                'exception' => $e,
             ]);
         }
     }
