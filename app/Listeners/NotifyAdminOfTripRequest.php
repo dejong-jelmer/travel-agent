@@ -4,19 +4,15 @@ namespace App\Listeners;
 
 use App\Events\TripRequestCreated;
 use App\Mail\TripRequestNotificationMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class NotifyAdminOfTripRequest
+class NotifyAdminOfTripRequest implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use InteractsWithQueue;
 
     /**
      * Handle the event.
@@ -29,7 +25,7 @@ class NotifyAdminOfTripRequest
         );
 
         try {
-            Mail::to($address)->queue(
+            Mail::to($address)->send(
                 new TripRequestNotificationMail($event->tripRequest)
             );
         } catch (\Throwable $e) {

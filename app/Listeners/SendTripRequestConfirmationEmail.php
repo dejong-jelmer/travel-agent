@@ -4,19 +4,15 @@ namespace App\Listeners;
 
 use App\Events\TripRequestCreated;
 use App\Mail\TripRequestConfirmationMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class SendTripRequestConfirmationEmail
+class SendTripRequestConfirmationEmail implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use InteractsWithQueue;
 
     /**
      * Handle the event.
@@ -24,15 +20,15 @@ class SendTripRequestConfirmationEmail
     public function handle(TripRequestCreated $event): void
     {
         try {
-            Mail::to(new Address($event->tripRequest->email, $event->tripRequest->name))->queue(
+            Mail::to(new Address($event->tripRequest->email, $event->tripRequest->name))->send(
                 new TripRequestConfirmationMail($event->tripRequest)
             );
-        } catch (\Throwable $e) {
-            Log::error('Trip request confirmation mail failed: '.$e->getMessage(), [
+        } catch (\Exception $e) {
+            Log::error('Failed to send trip request confirmation email', [
                 'trip_request_id' => $event->tripRequest->id,
                 'email' => $event->tripRequest->email,
+                'exception' => $e,
             ]);
-            Log::error('Stack trace: '.$e->getTraceAsString());
         }
     }
 

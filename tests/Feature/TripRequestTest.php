@@ -206,7 +206,7 @@ class TripRequestTest extends TestCase
 
         $this->post(route('trip-requests.store', $this->trip), $payload);
 
-        Mail::assertQueued(TripRequestConfirmationMail::class, function ($mail) use ($payload) {
+        Mail::assertSent(TripRequestConfirmationMail::class, function ($mail) use ($payload) {
             return $mail->hasTo($payload['email']);
         });
     }
@@ -220,7 +220,7 @@ class TripRequestTest extends TestCase
             $this->generateTripRequestPayload()
         );
 
-        Mail::assertQueued(TripRequestNotificationMail::class, function ($mail) {
+        Mail::assertSent(TripRequestNotificationMail::class, function ($mail) {
             return $mail->hasTo('admin@example.com');
         });
     }
@@ -234,7 +234,7 @@ class TripRequestTest extends TestCase
             $this->generateTripRequestPayload(['email' => null])
         );
 
-        Mail::assertNothingQueued();
+        Mail::assertNothingSent();
     }
 
     // Admin index tests

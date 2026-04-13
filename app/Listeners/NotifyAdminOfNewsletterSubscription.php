@@ -4,18 +4,14 @@ namespace App\Listeners;
 
 use App\Events\NewsletterSubscriptionRequested;
 use App\Mail\AdminNewsletterSubscriptionMail;
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class NotifyAdminOfNewsletterSubscription
+class NotifyAdminOfNewsletterSubscription implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use InteractsWithQueue;
 
     /**
      * Handle the event.
@@ -25,7 +21,7 @@ class NotifyAdminOfNewsletterSubscription
         $address = config('contact.mail');
 
         try {
-            Mail::to($address)->queue(
+            Mail::to($address)->send(
                 new AdminNewsletterSubscriptionMail($event->subscriber)
             );
         } catch (\Throwable $e) {
