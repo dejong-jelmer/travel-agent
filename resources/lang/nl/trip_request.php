@@ -35,7 +35,7 @@ return [
         'confirmation_subject' => 'Je aanvraag voor :trip is binnen',
         'confirmation_greeting' => 'Beste :name,',
         'confirmation_intro' => 'Bedankt voor je aanvraag voor :trip. Ik heb je bericht goed ontvangen en neem binnen twee werkdagen persoonlijk contact met je op — via de telefoon als je een nummer hebt ingevuld, anders per e-mail.',
-        'confirmation_next_steps' => 'In dat gesprek kijken we samen naar welke periode het beste past, wat je voorkeuren zijn, en wat deze reis voor jou bijzonder kan maken. Neem gerust de tijd om al je vragen, wensen en eventuele bedenkingen op te schrijven; hoe meer ik weet, hoe beter ik de reis op jouw maat kan inrichten.',
+        'confirmation_next_steps' => 'In dat gesprek kijken we samen naar welke periode het beste past, wat je voorkeuren zijn, en wat deze reis voor jou bijzonder kan maken. Neem gerust de tijd om al je vragen, wensen en eventuele bedenkingen op te schrijven; hoe meer ik weet, hoe beter ik de reis voor jou kan inrichten.',
         'confirmation_summary_header' => 'Wat je hebt aangevraagd',
         'confirmation_summary_intro' => 'Voor de zekerheid hieronder een overzicht van de gegevens die je aan me hebt doorgegeven. Klopt er iets niet, of wil je nog iets aanvullen? Stuur me gewoon een berichtje terug, dan pas ik het aan voordat ik je terugbel.',
         'confirmation_what_to_expect_header' => 'Wat kun je van het gesprek verwachten?',

@@ -4,20 +4,16 @@ namespace App\Listeners;
 
 use App\Events\NewsletterSubscriptionRequested;
 use App\Mail\NewsletterConfirmation;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailables\Address;
+use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use Throwable;
 
-class SendNewsletterConfirmationEmail
+class SendNewsletterConfirmationEmail implements ShouldQueue
 {
-    /**
-     * Create the event listener.
-     */
-    public function __construct()
-    {
-        //
-    }
+    use InteractsWithQueue;
 
     /**
      * Handle the event.
@@ -30,12 +26,15 @@ class SendNewsletterConfirmationEmail
             Mail::to(new Address(
                 $subscriber->email,
                 $subscriber->name ?: strtok($subscriber->email, '@')
-            ))->queue(
+            ))->send(
                 new NewsletterConfirmation($subscriber)
             );
         } catch (Throwable $e) {
-            Log::error('Mail sending failed: '.$e->getMessage());
-            Log::error('Stack trace: '.$e->getTraceAsString());
+            Log::error('Newsletter confirmation mail failed', [
+                'subscriber_id' => $subscriber->id,
+                'subscriber_email' => $subscriber->email,
+                'exception' => $e,
+            ]);
         }
     }
 }

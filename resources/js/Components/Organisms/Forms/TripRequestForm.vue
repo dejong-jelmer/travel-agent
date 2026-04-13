@@ -106,17 +106,17 @@ function submit() {
             <div class="grid grid-cols-1 tablet:grid-cols-2 gap-5">
 
                 <Input type="text" name="name" :label="t('trip_request.form.name_label')"
-                    :placeholder="t('trip_request.form.name_placeholder')" :required="true" v-model="form.name"
+                    :required="true" v-model="form.name"
                     :feedback="form.errors.name" />
 
                 <Input type="email" name="email" :label="t('trip_request.form.email_label')"
-                    :placeholder="t('trip_request.form.email_placeholder')" :required="true" v-model="form.email"
+                    :required="true" v-model="form.email"
                     :feedback="form.errors.email" />
 
             </div>
             <div>
                 <Input type="tel" name="phone" :label="t('trip_request.form.phone_label')"
-                    :placeholder="t('trip_request.form.phone_placeholder')" v-model="form.phone"
+                    v-model="form.phone"
                     :feedback="form.errors.phone" />
                 <p class="text-xs text-brand-primary/60 mt-1.5 pl-0.5">
                     {{ t('trip_request.form.phone_helper') }}

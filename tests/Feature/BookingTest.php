@@ -254,7 +254,7 @@ class BookingTest extends TestCase
 
         $this->post(route('admin.bookings.store'), $payload);
 
-        Mail::assertQueued(BookingConfirmationMail::class, function ($mail) use ($payload) {
+        Mail::assertSent(BookingConfirmationMail::class, function ($mail) use ($payload) {
             return $mail->hasTo($payload['contact']['email']);
         });
     }
@@ -269,7 +269,7 @@ class BookingTest extends TestCase
 
         $adminAddress = config('booking.mail');
 
-        Mail::assertQueued(AdminBookingNotificationMail::class, function ($mail) use ($adminAddress) {
+        Mail::assertSent(AdminBookingNotificationMail::class, function ($mail) use ($adminAddress) {
             return $mail->hasTo($adminAddress);
         });
     }

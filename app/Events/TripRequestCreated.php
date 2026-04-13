@@ -2,11 +2,11 @@
 
 namespace App\Events;
 
-use App\Models\NewsletterSubscriber;
+use App\Models\TripRequest;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class NewsletterSubscriptionRequested
+class TripRequestCreated
 {
     use Dispatchable, SerializesModels;
 
@@ -14,6 +14,6 @@ class NewsletterSubscriptionRequested
      * Create a new event instance.
      */
     public function __construct(
-        public NewsletterSubscriber $subscriber,
+        public TripRequest $tripRequest
     ) {}
 }
