@@ -21,7 +21,7 @@ class TripsPageTest extends TestCase
 
     public function test_trips_page_renders_correct_inertia_component(): void
     {
-        $this->get(route('trips'))
+        $this->get(route('trips.index'))
             ->assertInertia(fn (AssertableInertia $page) => $page->component('Trip/Index'))
             ->assertStatus(200);
     }
@@ -31,7 +31,7 @@ class TripsPageTest extends TestCase
         $published = Trip::factory()->create();
         Trip::factory()->create(['published_at' => now()->addDay()]);
 
-        $this->get(route('trips'))
+        $this->get(route('trips.index'))
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Trip/Index')
                 ->has('trips', 1)
@@ -45,7 +45,7 @@ class TripsPageTest extends TestCase
         $trip = Trip::factory()->create();
         $trip->destinations()->attach($destination);
 
-        $this->get(route('trips'))
+        $this->get(route('trips.index'))
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Trip/Index')
                 ->whereType('countries', 'array')
@@ -62,7 +62,7 @@ class TripsPageTest extends TestCase
         $trip = Trip::factory()->create();
         $trip->destinations()->attach($destination);
 
-        $this->get(route('trips'))
+        $this->get(route('trips.index'))
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Trip/Index')
                 ->missing('countries.data')
@@ -79,7 +79,7 @@ class TripsPageTest extends TestCase
         $trip2 = Trip::factory()->create();
         $trip2->destinations()->attach($destination);
 
-        $this->get(route('trips'))
+        $this->get(route('trips.index'))
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Trip/Index')
                 ->has('countries', 1)
@@ -92,7 +92,7 @@ class TripsPageTest extends TestCase
         $draft = Trip::factory()->create(['published_at' => now()->addDay()]);
         $draft->destinations()->attach($destination);
 
-        $this->get(route('trips'))
+        $this->get(route('trips.index'))
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Trip/Index')
                 ->has('countries', 0)

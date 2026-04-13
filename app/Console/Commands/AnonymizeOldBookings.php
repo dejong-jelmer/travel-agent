@@ -6,6 +6,7 @@ use App\Models\Booking;
 use App\Models\BookingChange;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;
+use App\Models\TripRequest;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -72,6 +73,8 @@ class AnonymizeOldBookings extends Command
                         ])->orWhere('field', 'internal_notes');
                     })
                     ->delete();
+
+                TripRequest::whereIn('booking_id', $bookingIds)->delete();
             });
         } catch (\Throwable $e) {
             $this->error("Anonymization failed: {$e->getMessage()}");

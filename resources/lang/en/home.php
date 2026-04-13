@@ -2,27 +2,27 @@
 
 return [
     'home_seo' => [
-        'title' => 'Sustainable railtravel through Europe',
-        'description' => 'Discover Europe by train. Personalized routes with stories, culture, and advice. Don\'t just arrive — experience.',
+        'title' => 'Sustainable train journeys across Europe | Omdat We Reizen',
+        'description' => 'I plan personal train journeys across Europe. Routes I have travelled myself, with the stories and culture that belong to them.',
     ],
     'about_seo' => [
-        'title' => 'About me',
-        'description' => 'I create sustainable train journeys through Europe — routes I\'ve travelled myself, with the stories that go with them.',
+        'title' => 'About me | Omdat We Reizen',
+        'description' => 'I am Jelmer. I travel Europe by train and share the routes, stories and places that made me feel more alive along the way.',
     ],
     'contact_seo' => [
-        'title' => 'Contact',
-        'description' => 'Questions about our trips? Contact us for personal advice on sustainable train journeys through Europe.',
+        'title' => 'Contact | Omdat We Reizen',
+        'description' => 'Questions about a journey, or looking for personal advice? "I am happy to help you plan your next train trip across Europe.',
     ],
     'trips_seo' => [
-        'title' => 'Our trips',
-        'description' => 'An overview of all our sustainable train journeys through Europe.',
+        'title' => 'Journeys | Omdat We Reizen',
+        'description' => 'Destinations and routes I have travelled myself — chosen for the story of the place, not just the address.',
     ],
     'privacy_seo' => [
-        'title' => 'Privacy Statement',
-        'description' => 'Read how we handle your personal data. Our privacy statement for sustainable train journeys through Europe.',
+        'title' => 'Privacy statement | Omdat We Reizen',
+        'description' => 'How I handle your personal data when you get in touch, sign up for the newsletter, or book a journey.',
     ],
     'terms_seo' => [
-        'title' => 'Terms and Conditions',
-        'description' => 'Read our terms and conditions for booking sustainable train journeys through Europe.',
+        'title' => 'Terms and conditions | Omdat We Reizen',
+        'description' => 'The terms under which I plan and book train journeys across Europe. Clear, with no small print.',
     ],
 ];

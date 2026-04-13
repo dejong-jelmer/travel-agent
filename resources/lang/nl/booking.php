@@ -5,12 +5,13 @@ return [
     'title_index' => 'Boekingen',
     'title_show' => 'Boeking details',
     'title_edit' => 'Boeking bewerken',
+    'title_create' => 'Boeking aanmaken',
 
     // Page titles (Frontend)
     'title_received' => 'Boeking ontvangen',
 
     // Flash messages
-    'created' => 'Je boeking is geslaagd! Je ontvangt een bevestigingsmail met meer details over je aanstaande reis.',
+    'created' => 'Nieuwe boeking is succesvol aangemaakt.',
     'updated' => 'Boeking :reference is succesvol aangepast.',
     'deleted' => 'Boeking :reference is verwijderd.',
 

@@ -31,7 +31,7 @@ const fetchPrices = useDebounceFn(async () => {
             travelers: totalTravelers.value,
             date: toDateString(props.booking.departure_date),
         })
-        asyncTripPrices.value = await fetchApi(`${route("trips.prices", props.booking.trip)}?${params}`)
+        asyncTripPrices.value = await fetchApi(`${route('admin.trips.prices', props.booking.trip)}?${params}`)
     } catch (error) {
         console.error(error)
         asyncTripPrices.value = null

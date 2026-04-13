@@ -11,10 +11,10 @@ const navCountries = computed(() => page.props.navCountries ?? []);
 
 // Dropdown items: "All trips" first, then one entry per country
 const tripItems = computed(() => [
-    { label: t('nav.all_trips'), href: route('trips') },
+    { label: t('nav.all_trips'), href: route('trips.index') },
     ...navCountries.value.map(c => ({
         label: c.name,
-        href: `${route('trips')}?land=${c.code}`,
+        href: `${route('trips.index')}?land=${c.code}`,
     })),
 ]);
 
@@ -23,9 +23,9 @@ const links = computed(() => ({
         label: t('nav.home'),
         path: route('home'),
     },
-    contact: {
-        label: t('nav.contact'),
-        path: route('contact'),
+    trips: {
+        label: t('nav.trips'),
+        path: route('trips.index'),
     },
     about: {
         label: t('nav.about'),
@@ -34,6 +34,10 @@ const links = computed(() => ({
     blog: {
         label: t('nav.blog'),
         path: route('blog.index'),
+    },
+    contact: {
+        label: t('nav.contact'),
+        path: route('contact'),
     }
 }));
 </script>
@@ -51,25 +55,12 @@ const links = computed(() => ({
 
             <!-- Desktop Navigation Links -->
             <div class="hidden tablet:flex items-center gap-x-8 laptop:gap-x-12">
-                <NavDropdown
-                    :label="$t('nav.trips')"
-                    :href="route('trips')"
-                    :items="tripItems"
-                    variant="desktop"
-                />
                 <NavLink v-for="link in links" v-show="link.path !== route('home')" :key="link.label" :href="link.path" :label="link.label" variant="desktop" />
             </div>
 
             <!-- Mobile Menu -->
             <MobileMenu class="tablet:hidden">
                 <template #default="{ closeMenu }">
-                    <NavDropdown
-                        :label="$t('nav.trips')"
-                        :href="route('trips')"
-                        :items="tripItems"
-                        variant="mobile"
-                        @close="closeMenu"
-                    />
                     <NavLink v-for="link in links" :key="link.label" :href="link.path" :label="link.label" variant="mobile"
                         @click="closeMenu" />
                 </template>

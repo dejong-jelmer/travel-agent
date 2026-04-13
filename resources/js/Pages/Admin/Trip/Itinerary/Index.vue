@@ -7,7 +7,7 @@ const props = defineProps({
 });
 
 function updateOrder(orderedItinerary) {
-    fetchApi(route("admin.trips.itineraries.order", props.trip), {
+    fetchApi(route('admin.trips.itineraries.order', props.trip), {
         method: 'PATCH',
         body: { itineraries: orderedItinerary },
     })

@@ -16,6 +16,6 @@ enum PriceLabel: string
 
     protected function getLabelKey(): string
     {
-        return 'enum.price_label';
+        return 'enum.price_labels';
     }
 }

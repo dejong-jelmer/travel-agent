@@ -72,7 +72,7 @@ function handleSubmit() {
         return;
     }
 
-    booking.value.post(route('bookings.store'), {
+    booking.value.post(route('admin.bookings.store'), {
         forceFormData: true,
         onSuccess: () => { },
         onError: (errors) => {

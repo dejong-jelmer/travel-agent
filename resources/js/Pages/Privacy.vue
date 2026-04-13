@@ -15,6 +15,10 @@ const props = defineProps({
         type: Number,
         default: 7,
     },
+    tripRequestsRetentionYears: {
+        type: Number,
+        default: 1,
+    },
     privacy: {
         type: Object,
         default: { version: null, updated: null }
@@ -124,7 +128,26 @@ const specialRequestsRetentionLabel = computed(() =>
 
                                 <!-- Subsection C -->
                                 <div class="mb-6">
-                                    <h3 class="text-xl font-semibold text-brand-text mb-3">C. Boeken van een reis</h3>
+                                    <h3 class="text-xl font-semibold text-brand-text mb-3">C. Reisaanvraag</h3>
+                                    <p class="text-brand-text/80 mb-3">Wanneer je een reisaanvraag indient via het aanvraagformulier, verzamel ik:</p>
+                                    <ul class="list-disc pl-6 mb-4 text-brand-text/80 space-y-1">
+                                        <li>Naam</li>
+                                        <li>E-mailadres</li>
+                                        <li>Telefoonnummer (optioneel)</li>
+                                        <li>Gewenste reisperiode — maand, jaar en eventuele toelichting (optioneel)</li>
+                                        <li>Aantal reizigers (optioneel)</li>
+                                        <li>Vertrekstation (optioneel)</li>
+                                        <li>Aanvullende opmerkingen (optioneel)</li>
+                                    </ul>
+                                    <div class="bg-brand-secondary p-3 rounded">
+                                        <p class="text-sm text-brand-text/80"><strong>Doel:</strong> om je aanvraag op te volgen en een reisvoorstel op maat te kunnen maken.</p>
+                                        <p class="text-sm text-brand-text/80"><strong>Grondslag:</strong> gerechtvaardigd belang (opvolging van een vrijwillig ingediende aanvraag).</p>
+                                    </div>
+                                </div>
+
+                                <!-- Subsection D -->
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold text-brand-text mb-3">D. Boeken van een reis</h3>
                                     <p class="text-brand-text/80 mb-3">Wanneer je een reis boekt, verwerk ik:</p>
                                     <ul class="list-disc pl-6 mb-4 text-brand-text/80 space-y-1">
                                         <li>Volledige naam (voornamen en achternaam)</li>
@@ -264,13 +287,18 @@ const specialRequestsRetentionLabel = computed(() =>
                                 <div class="grid md:grid-cols-2 gap-4">
                                     <div class="bg-brand-secondary/50 p-4 rounded-lg">
                                         <p class="font-medium text-brand-text">Contactformulier:</p>
-                                        <p class="text-brand-text/80">max. 1 jaar na afhandeling</p>
+                                        <p class="text-brand-text/80">max. {{ tripRequestsRetentionYears }} jaar na afhandeling</p>
                                     </div>
                                     <div class="bg-brand-secondary/50 p-4 rounded-lg">
                                         <p class="font-medium text-brand-text">Nieuwsbriefgegevens:</p>
                                         <p class="text-brand-text/80">tot uitschrijving; na uitschrijving worden
                                             gegevens
                                             binnen {{ retentionLabel }} verwijderd</p>
+                                    </div>
+                                    <div class="bg-brand-secondary/50 p-4 rounded-lg">
+                                        <p class="font-medium text-brand-text">Reisaanvragen:</p>
+                                        <p class="text-brand-text/80">max. {{ tripRequestsRetentionYears }} jaar na afhandeling.</p>
+                                        <p class="text-brand-text/80 mt-2">Tenzij je aanvraag leidt tot een boeking, dan geldt de wettelijk bewaar plicht van {{ bookingRetentionYears }} jaar.</p>
                                     </div>
                                     <div class="bg-brand-secondary/50 p-4 rounded-lg">
                                         <p class="font-medium text-brand-text">Boekingsgegevens:</p>

@@ -31,16 +31,22 @@ class BookingTest extends TestCase
 
     private Trip $trip;
 
+    private User $admin;
+
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->admin = User::factory()->create();
+        $this->actingAs($this->admin);
+
         $this->trip = Trip::factory()->withPrices()->create();
     }
 
-    public function test_it_can_create_a_booking_with_travelers_and_contact()
+    public function test_admin_can_create_a_booking_with_travelers_and_contact()
     {
         $payload = $this->generateBookingPayload();
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
         $response->assertRedirect();
@@ -51,7 +57,6 @@ class BookingTest extends TestCase
         $this->assertTravelersWereCreatedCorrectly($booking, $payload);
         $this->assertContactWasCreatedCorrectly($booking, $payload);
         $this->assertPricesWhereSetCorrectly($response, $booking);
-        $this->assertRedirectIsCorrect($response, $booking);
     }
 
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
@@ -116,7 +121,7 @@ class BookingTest extends TestCase
             'departure_date' => $nextMonday->format('Y-m-d'),
         ]);
 
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasErrors('departure_date');
     }
@@ -134,7 +139,7 @@ class BookingTest extends TestCase
             'departure_date' => $blockedDate->format('Y-m-d'),
         ]);
 
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasErrors('departure_date');
     }
@@ -157,7 +162,7 @@ class BookingTest extends TestCase
             'departure_date' => $dateInRange->format('Y-m-d'),
         ]);
 
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasErrors('departure_date');
     }
@@ -178,7 +183,7 @@ class BookingTest extends TestCase
             'departure_date' => $availableDate->format('Y-m-d'),
         ]);
 
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
     }
@@ -194,7 +199,7 @@ class BookingTest extends TestCase
             'departure_date' => $seasonEnd->addDay()->format('Y-m-d'),
         ]);
 
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasErrors('departure_date');
     }
@@ -208,7 +213,7 @@ class BookingTest extends TestCase
             'departure_date' => $seasonEnd->format('Y-m-d'),
         ]);
 
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
     }
@@ -221,7 +226,7 @@ class BookingTest extends TestCase
             'departure_date' => now()->addMonth()->format('Y-m-d'),
         ]);
 
-        $response = $this->post(route('bookings.store'), $payload);
+        $response = $this->post(route('admin.bookings.store'), $payload);
 
         $response->assertSessionHasNoErrors();
     }
@@ -234,7 +239,7 @@ class BookingTest extends TestCase
 
         $payload = $this->generateBookingPayload();
 
-        $this->post(route('bookings.store'), $payload);
+        $this->post(route('admin.bookings.store'), $payload);
 
         Event::assertDispatched(BookingCreated::class, function ($event) {
             return $event->booking instanceof Booking;
@@ -247,7 +252,7 @@ class BookingTest extends TestCase
 
         $payload = $this->generateBookingPayload();
 
-        $this->post(route('bookings.store'), $payload);
+        $this->post(route('admin.bookings.store'), $payload);
 
         Mail::assertQueued(BookingConfirmationMail::class, function ($mail) use ($payload) {
             return $mail->hasTo($payload['contact']['email']);
@@ -260,7 +265,7 @@ class BookingTest extends TestCase
 
         $payload = $this->generateBookingPayload();
 
-        $this->post(route('bookings.store'), $payload);
+        $this->post(route('admin.bookings.store'), $payload);
 
         $adminAddress = config('booking.mail');
 
@@ -365,7 +370,7 @@ class BookingTest extends TestCase
             'numberOfAdults' => 2,
             'numberOfChildren' => 1,
         ]);
-        $this->post(route('bookings.store'), $payload);
+        $this->post(route('admin.bookings.store'), $payload);
 
         return Booking::firstOrFail();
     }
@@ -440,11 +445,6 @@ class BookingTest extends TestCase
             ],
             $booking->fees_and_funds
         );
-    }
-
-    private function assertRedirectIsCorrect($response, Booking $booking): void
-    {
-        $response->assertRedirect(route('bookings.received', ['booking' => $booking->uuid]));
     }
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array

@@ -45,8 +45,8 @@ class TripItemTest extends TestCase
         return array_merge([
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
+            'intro' => fake()->text(150),
             'description' => fake()->paragraph(),
-            // 'price' => randomPrice(500, 5000),
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [UploadedFile::fake()->image('img.jpg')],
             'destinations' => $this->destinations->modelKeys(),

@@ -29,8 +29,8 @@
         "home": "Home"
     },
     "trips": {
-        "title": "All trips",
-        "subtitle": "Discover our sustainable train journeys across Europe.",
+        "title": "Where would you go?",
+        "subtitle": "The destinations I chose",
         "result_singular": "trip found",
         "result_plural": "trips found",
         "filter_title": "Filters",
@@ -41,8 +41,7 @@
         "filter_duration": "Travel days",
         "filter_price": "Starting price",
         "filter_days_unit": "days",
-        "empty_title": "No trips found",
-        "empty_body": "No trips match your current selection. Try adjusting your filters."
+        "empty_title": "Unfortunately, there are no available trips yet."
     },
     "blog_post": {
         "status": {
@@ -204,7 +203,9 @@
             "submit_button": "Send message",
             "success": "Thank you! Your message has been sent successfully.",
             "privacy": "Your data will only be used to respond to your message. Read more in the {link}.",
-            "privacy_link": "privacy policy"
+            "privacy_link": "privacy policy",
+            "trip_inquiry_prefix": "I'm interested in the trip: {trip}.",
+            "trip_inquiry_period": "My preferred period is {period}."
         },
         "trip": {
             "edit_heading": "Edit Trip",
@@ -359,6 +360,10 @@
                 "og_image": {
                     "label": "OG Image",
                     "help": "Image for social media sharing (Open Graph)"
+                },
+                "intro": {
+                    "label": "Intro",
+                    "placeholder": "Write a short introduction…"
                 }
             },
             "submit": {
@@ -772,6 +777,10 @@
             "subscribers": "Subscribers",
             "campaigns": "Campaigns",
             "new_campaign": "New Campaigns",
+            "all_bookings": "All Bookings",
+            "new_booking": "New Booking",
+            "requests": "Requests",
+            "all_requests": "All Requests",
             "blog": "Blog",
             "all_blog_posts": "All Blog Posts",
             "new_blog_post": "New Blog Post",
@@ -837,7 +846,7 @@
         "about_trip": "About this trip",
         "tabs": {
             "itinerary": "Day by day",
-            "inclusive": "Included & Excluded",
+            "inclusive": "What is Included",
             "practical": "Practical info",
             "general_info": "General information"
         },
@@ -862,6 +871,93 @@
             "sustainable_travel": "Sustainable travel",
             "small_personal": "Small & personal",
             "carefree_travel": "Carefree travel"
+        },
+        "highlights_heading": "What you'll see",
+        "inquiry": {
+            "title": "Plan this trip",
+            "price_from": "From €{price},- p.p.",
+            "duration_label": "{duration} days",
+            "explanation": "I would be happy to look with you at the best time, your preferences, and what makes this trip special for you. Nothing is final until we have agreed on it together.",
+            "cta_make_request": "Make a request",
+            "cta_send_message": "Send a message",
+            "preferred_period_label": "Preferred period (optional)",
+            "preferred_period_placeholder": "E.g. September 2026",
+            "direct_contact_label": "Or reach out directly:",
+            "direct_contact_form": "Or ask a question about this trip",
+            "send_email": "Send an email"
+        },
+        "extra_trip_info": {
+            "title": "How does an application work?",
+            "steps-1": "You submit an application via the form on this page",
+            "steps-2": "I will contact you within two working days to discuss your wishes",
+            "steps-3": "You will receive a personalized, tailor-made travel proposal",
+            "steps-4": "Upon agreement, I will arrange everything and ensure that you have all travel documents in hand on time"
+        }
+    },
+    "trip_request": {
+        "title_index": "Trip Requests",
+        "title_edit": "Edit Trip Request",
+        "updated": "Request updated.",
+        "deleted": "Request by {name} deleted.",
+        "form": {
+            "title": "Request a proposal for {tripName}",
+            "section_you": "About you",
+            "section_trip": "About your trip",
+            "section_notes": "Special requests",
+            "name_label": "What are you called?",
+            "name_placeholder": "Your name",
+            "email_label": "Your email",
+            "email_placeholder": "you{'@'}example.com",
+            "phone_label": "Your number",
+            "phone_placeholder": "E.g. +31 6 12 34 56 78",
+            "phone_helper": "Not mandatory, but convenient if you prefer to discuss by phone.",
+            "preferred_month_label": "When would you like to depart approximately?",
+            "preferred_month_placeholder": "Month",
+            "preferred_year_placeholder": "Year",
+            "preferred_period_note_label": "Or write something specific below (optional)",
+            "preferred_period_note_placeholder": "E.g. school holidays October, or still flexible",
+            "travelers_count_label": "How many people are traveling?",
+            "travelers_count_placeholder": "Number of travelers",
+            "travelers_count_more_than_6": "More than 6",
+            "departure_station_label": "From which station would you like to depart?",
+            "departure_station_placeholder": "Choose a station",
+            "departure_station_helper": "Not sure yet? No problem — we'll figure it out together.",
+            "travelers_count_helper": "Including yourself.",
+            "notes_label": "Is there anything I should know about you or your trip?",
+            "notes_helper": "For example: are there any dietary requirements, is the trip for a special occasion, hotel preferences, or something completely different?",
+            "consent_privacy": "I agree to the processing of my data as described in the {link}.",
+            "consent_privacy_link": "privacy policy",
+            "submit_button": "Request a proposal",
+            "submit_processing": "Sending...",
+            "months": {
+                "1": "January",
+                "2": "February",
+                "3": "March",
+                "4": "April",
+                "5": "May",
+                "6": "June",
+                "7": "July",
+                "8": "August",
+                "9": "September",
+                "10": "October",
+                "11": "November",
+                "12": "December"
+            },
+            "stations": {
+                "amsterdam": "Amsterdam Centraal",
+                "utrecht": "Utrecht Centraal",
+                "arnhem": "Arnhem Centraal",
+                "rotterdam": "Rotterdam Centraal",
+                "den_haag": "Den Haag Centraal",
+                "eindhoven": "Eindhoven Centraal",
+                "other": "Other / not sure yet"
+            }
+        },
+        "thanks": {
+            "title": "Your request has been received.",
+            "message": "I have received your message and will contact you within two working days — by phone if you provided a number, otherwise by email. We'll discuss together what you have in mind, which period suits you best, and what can make this trip special for you.",
+            "question_prefix": "Have a question in the meantime? Feel free to call:",
+            "back_to_trips": "Back to trips"
         }
     },
     "date_picker": {
@@ -879,6 +975,7 @@
             "box_title": "What to expect?",
             "updates": "Regular updates about our latest travel offerings",
             "content": "Personal experiances and stories",
+            "background": "Background on destinations",
             "unsubscribe_anytime": "You can always unsubscribe"
         },
         "unsubscribed": {
@@ -966,11 +1063,24 @@
                 "total": {
                     "name": "Total Bookings",
                     "description": "All bookings"
+                },
+                "requests_new": {
+                    "name": "New requests",
+                    "description": "Unanswered trip requests"
+                },
+                "requests_total": {
+                    "name": "Total requests",
+                    "description": "All trip requests"
                 }
+            },
+            "sections": {
+                "bookings": "Bookings",
+                "requests": "Trip requests"
             },
             "quick_actions": {
                 "title": "Quick Actions",
                 "view_bookings": "View all bookings",
+                "view_requests": "View all requests",
                 "manage_trips": "Manage trips",
                 "manage_destinations": "Manage destinations"
             },
@@ -1036,7 +1146,8 @@
                 "details": {
                     "name": "Name",
                     "slug": "Slug",
-                    "description": "Description"
+                    "description": "Description",
+                    "intro": "Intro"
                 },
                 "items": {
                     "no_items": "No items",
@@ -1137,6 +1248,54 @@
                 "featured_image": "Featured image"
             }
         },
+        "trip_request": {
+            "actions": {
+                "edit": "View / edit this request",
+                "delete": "Delete request",
+                "delete_confirm": "Are you sure you want to delete this request?"
+            },
+            "index": {
+                "search_placeholder": "Search by name, email or phone number…",
+                "filters": {
+                    "status": "Status"
+                },
+                "table_headers": {
+                    "name": "Name",
+                    "email": "Email",
+                    "trip": "Trip",
+                    "status": "Status",
+                    "created_at": "Requested on",
+                    "actions": "Actions"
+                },
+                "no_requests": "There are no requests yet.",
+                "no_requests_found": "No requests found.",
+                "no_requests_found_with_search": "No requests found for search: \"{search}\"."
+            },
+            "edit": {
+                "title": "Request {name}",
+                "request_details": "Request details",
+                "name": "Name",
+                "email": "Email",
+                "phone": "Phone",
+                "trip": "Trip",
+                "preferred_period": "Preferred period",
+                "no_preference": "No preference",
+                "travelers_count": "Travelers",
+                "departure_station": "Departure station",
+                "created_at": "Submitted on",
+                "notes_section": "Notes",
+                "notes_label": "Notes",
+                "notes_placeholder": "Add notes…",
+                "status_section": "Status",
+                "status_label": "Status",
+                "status_placeholder": "Select a status",
+                "booking_section": "Linked booking",
+                "booking_label": "Booking",
+                "booking_placeholder": "No booking linked",
+                "submit": "Save changes",
+                "submit_processing": "Saving…"
+            }
+        },
         "booking": {
             "actions": {
                 "show": "View this booking",
@@ -1201,6 +1360,7 @@
                 "status_info": "Current booking and payment status",
                 "created_at": "Created on",
                 "internal_notes": "Internal notes",
+                "trip_request": "Trip request",
                 "pricing": {
                     "title": "Pricing",
                     "subtitle": "Prices as recorded at the time of booking",
@@ -1208,6 +1368,11 @@
                     "single_supplement": "Single supplement",
                     "total": "Total"
                 }
+            },
+            "create": {
+                "title": "Create new booking",
+                "subtitle": "Select a trip and fill in the booking details.",
+                "select_trip": "Select a trip"
             }
         },
         "destinations": {

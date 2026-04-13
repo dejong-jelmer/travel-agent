@@ -18,7 +18,7 @@ const form = useForm({
 });
 
 function submit() {
-    form.post(route("admin.trips.itineraries.store", props.trip.id), { forceFormData: true });
+    form.post(route("admin.trips.itineraries.store", props.trip), { forceFormData: true });
 }
 </script>
 

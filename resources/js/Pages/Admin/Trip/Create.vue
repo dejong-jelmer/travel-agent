@@ -21,6 +21,7 @@ const initializePracticalInfo = () => {
 
 const form = useForm({
     name: "",
+    intro: "",
     description: "",
     duration: "",
     transport: [],

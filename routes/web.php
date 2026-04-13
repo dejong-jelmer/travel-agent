@@ -9,14 +9,15 @@ use App\Http\Controllers\Admin\Newsletter\CampaignController;
 use App\Http\Controllers\Admin\Newsletter\SubscriberController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TripController as AdminTripController;
+use App\Http\Controllers\Admin\TripRequestController as AdminTripRequestController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\BlogPostController;
-use App\Http\Controllers\BookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Newsletter\SubscriptionController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripPriceController;
+use App\Http\Controllers\TripRequestController;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -25,13 +26,23 @@ use Inertia\Inertia;
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-mij', [HomeController::class, 'about'])->name('about');
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
-Route::get('/reizen', [HomeController::class, 'trips'])->name('trips');
 Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
 Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTerms'])
     ->middleware('throttle:10,1')
     ->name('terms.download');
+
+// Trips
+Route::get('/reizen', [TripController::class, 'index'])->name('trips.index');
+Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.show');
+
+// Trip request
+Route::post('/reis/{trip:slug}/aanvraag', [TripRequestController::class, 'store'])
+    ->middleware('throttle:frontend-form-actions')
+    ->name('trip-requests.store');
+Route::get('/reis/{trip:slug}/aanvraag/bedankt', [TripRequestController::class, 'thanks'])
+    ->name('trip-requests.thanks');
 
 // Blog
 Route::get('/blog', [BlogPostController::class, 'index'])->name('blog.index');
@@ -54,18 +65,6 @@ Route::post('/nieuwsbrief/aanmelden', [SubscriptionController::class, 'subscribe
 Route::get('/nieuwsbrief/bevestigen/{token}', [SubscriptionController::class, 'confirm'])->name('newsletter.subscription.confirm');
 Route::get('/nieuwsbrief/afmelden/{token}', [SubscriptionController::class, 'unsubscribe'])->name('newsletter.subscription.unsubscribe');
 
-// Trips
-Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.show');
-
-// Trip prices
-Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
-
-// Booking routes
-Route::post('/boekingen', [BookingController::class, 'store'])
-    ->middleware('throttle:frontend-form-actions')
-    ->name('bookings.store');
-Route::get('/boekingen/{booking:uuid}/bevestiging', [BookingController::class, 'received'])->middleware('nocache')->name('bookings.received');
-
 // Admin routes
 Route::get('admin/login', function () {
     return Inertia::render('Auth/Login', [
@@ -87,6 +86,9 @@ Route::prefix('admin')
         Route::resource('/trips', AdminTripController::class)->except(['update']);
         Route::post('/trips/update/{trip}', [AdminTripController::class, 'update'])->name('trips.update');
 
+        // Trip prices
+        Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
+
         // Trip resource Itinerary routes
         Route::resource('trips.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
         Route::patch('/trips/{trip}/itineraries/order', [ItineraryController::class, 'updateOrder'])->name('trips.itineraries.order');
@@ -103,7 +105,10 @@ Route::prefix('admin')
         Route::put('settings', [SettingsController::class, 'update'])->name('settings.update');
 
         // Booking resource routes
-        Route::resource('bookings', AdminBookingController::class)->except(['create', 'store']);
+        Route::resource('bookings', AdminBookingController::class);
+
+        // Trip request routes
+        Route::resource('trip-requests', AdminTripRequestController::class)->only(['index', 'edit', 'update', 'destroy']);
 
         // Newsletter routes
         Route::prefix('newsletter')

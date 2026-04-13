@@ -1,7 +1,7 @@
 <script setup>
-import { ref, toRef, watch, computed } from 'vue'
-import { Clock, TrainFront, MapPinned, ChevronRight, Map, ListChecks, Info, Globe, Route } from 'lucide-vue-next';
-import { useBooking } from '@/Composables/useBooking.js'
+import { ref, computed, toRef, watch } from 'vue'
+import { ChevronRight, Map, ListChecks, Info, Globe, Phone, AtSign, CircleQuestionMark } from 'lucide-vue-next';
+import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
@@ -31,27 +31,22 @@ const selectTab = (id) => {
     activeTab.value = id
     tabsSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
+
 // Modal
-const bookingModalOpen = ref(false)
-// LigtBox
+const requestModalOpen = ref(false)
+
+// LightBox
 const lightboxRef = ref(null)
 const openLightbox = (index) => {
     lightboxRef.value?.open(index)
 }
 
-// Booking data
-const booking = useBooking(props.trip)
+// Inquiry
+const contactUrl = computed(() => {
+    const params = new URLSearchParams({ reis: props.trip.slug })
 
-const departure_date = toRef(booking.booking, 'departure_date')
-const participants = toRef(booking.booking, 'participants')
-watch(
-    () => booking.booking.hasErrors,
-    (newValue) => {
-        if (newValue) {
-            bookingModalOpen.value = true
-        }
-    }
-)
+    return `${route('contact')}?${params.toString()}#contact-form`
+})
 
 const tabs = computed(() => [
     { id: 'itinerary', label: t('trip_show.tabs.itinerary') },
@@ -59,6 +54,16 @@ const tabs = computed(() => [
     { id: 'practical', label: t('trip_show.tabs.practical') },
     { id: 'general_info', label: t('trip_show.tabs.general_info') }
 ])
+
+const tripMeta = computed(() => ({
+    price: `${t('trip_show.hero.from_price', { price: props.trip.price_formatted })} ${t('trip_show.hero.per_person')}`,
+    data: [
+        props.trip.destinations_formatted,
+        t('trip_show.hero.days', {
+            duration: props.trip.duration
+        })
+    ]
+}))
 
 const tabIcons = {
     itinerary: Map,
@@ -73,66 +78,9 @@ const tabIcons = {
     <Layout>
         <template v-slot:hero>
             <!-- Hero Section -->
-            <section class="relative overflow-hidden">
-                <!-- Background Image -->
-                <div class="h-[calc(100vh-140px)] relative">
-                    <div class="absolute inset-0 bg-cover bg-center"
-                        :style="`background-image: url(${trip.hero_image?.public_url})`"></div>
+            <PageHero overlay-class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"
+                :image="trip.hero_image?.public_url" :title="trip.name" :subtitle="trip.intro" :trip-meta="tripMeta" />
 
-                    <!-- Hero Content -->
-                    <div class="absolute bottom-4 tablet:bottom-8 left-0 right-0">
-                        <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
-                            <div
-                                class="max-w-5xl p-4 tablet:p-6 mx-2 tablet:mx-4 laptop:mx-0 laptop:p-8 border border-white rounded-3xl bg-brand-primary/30 backdrop-blur-[2px]">
-                                <!-- Trip Title -->
-                                <h1
-                                    class="text-3xl tablet:text-5xl laptop:text-6xl font-bold text-white mb-6 leading-tight">
-                                    {{ trip.name }}
-                                </h1>
-
-                                <!-- Trip Meta Info -->
-                                <div class="flex flex-wrap gap-3 tablet:gap-6 text-white">
-                                    <!-- Price -->
-                                    <div class="flex items-center gap-2 bg-brand-accent px-4 py-2 rounded-full">
-                                        <span class="text-lg">{{ t('trip_show.hero.from_price', {
-                                            price:
-                                                trip.price_formatted
-                                        })
-                                            }} {{ $t('trip_show.hero.per_person') }}</span>
-                                    </div>
-
-                                    <!-- Duration -->
-                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
-                                        <Clock class="w-5 h-5" />
-                                        <span class="font-medium">{{ t('trip_show.hero.days', {
-                                            duration: trip.duration
-                                        }) }}</span>
-                                    </div>
-
-                                    <!-- Transport -->
-                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
-                                        <Route class="h-5 w-5 flex-none" />
-                                        <div class="inline-flex items-center space-x-1" v-for="mode in trip.transport_formatted.slice(0, 4)" :key="mode.value">
-                                            <EnumIcon :enum="mode.value" v-tippy="mode.label"
-                                                class="text-secondary w-4 h-4 flex-none" />
-                                            <span>{{ mode.label }}</span>
-                                        </div>
-                                        <span v-if="trip.transport_formatted.length > 4" class="text-xs text-white">
-                                            +{{ trip.transport_formatted.length - 4 }}
-                                        </span>
-                                    </div>
-
-                                    <!-- Destination -->
-                                    <div class="flex items-center gap-2 bg-transparent border-2 border-brand-primary px-4 py-2 rounded-full">
-                                        <MapPinned class="w-5 h-5" />
-                                        <span class="font-medium">{{ trip.destinations_formatted }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
         </template>
         <DecorativeLine />
         <!-- Main Content -->
@@ -146,13 +94,13 @@ const tabIcons = {
                     <div class="bg-white rounded-2xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
                         <div class="mb-8">
                             <div class="w-full text-center">
-                                <SectionHeader>{{ t('trip_show.about_trip') }}</SectionHeader>
+                                <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
                             </div>
-                            <div class="p-6">
-                                <Slider :items="trip.images">
+                            <div class="p-0 laptop:p-6">
+                                <Slider :items="trip.images" :visible="1">
                                     <template #default="{ item, index }">
                                         <img :src="item.public_url" alt="Trip image"
-                                            class="w-full h-36 tablet:h-48 rounded-md object-cover cursor-zoom-in"
+                                            class="w-full h-36 tablet:h-full max-h-[500px] object-cover cursor-zoom-in"
                                             :key="index" loading="lazy" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>
@@ -164,7 +112,10 @@ const tabIcons = {
                         </div>
 
                         <!-- Highlights -->
-                        <div class="border-t border-brand-accent/20 pt-8">
+                        <div v-if="trip.highlights?.length" class="border-t border-brand-accent/20 pt-8">
+                            <h3 class="text-lg font-semibold text-brand-primary mb-4">
+                                {{ t('trip_show.highlights_heading') }}
+                            </h3>
                             <ul class="space-y-4">
                                 <template v-for="(highlight, index) in trip.highlights" :key="index">
                                     <li class="flex items-start gap-3">
@@ -240,60 +191,64 @@ const tabIcons = {
                 <!-- Right Column - Booking Sidebar -->
                 <div class="laptop:col-span-1">
                     <div class="sticky top-6 space-y-6">
-                        <!-- Booking Card -->
+                        <!-- Inquiry Card -->
                         <div class="bg-white rounded-2xl shadow-lg border border-brand-accent/20 overflow-hidden">
-                            <div class=" bg-brand-accent p-4">
-                                <h3 class="text-xl font-bold text-white">
-                                    {{ t('trip_show.sidebar.trip_overview') }}
+                            <div class="p-6 laptop:p-8 space-y-6 laptop:space-y-12">
+                                <h3 class="text-sm tablet:text-base font-semibold text-brand-primary">
+                                    {{ t('trip_show.inquiry.title') }}
                                 </h3>
 
-                            </div>
+                                <!-- Price indication -->
+                                <div>
+                                    <span class="text-sm tablet:text-base font-semibold text-brand-primary">
+                                        {{ t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
+                                    </span>
+                                    <span class="block text-sm text-brand-light mt-1">
+                                        {{ t('trip_show.inquiry.duration_label', { duration: trip.duration }) }}
+                                    </span>
+                                </div>
 
-                            <div class="p-6 space-y-6">
-                                <!-- Quick Facts -->
-                                <div class="space-y-4">
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-brand-light">{{ t('trip_show.sidebar.from') }}</span>
-                                        <span class="font-medium text-brand-primary"><strong> € {{ trip.price_formatted
-                                                }},-
-                                            </strong> {{ t('trip_show.sidebar.per_person') }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-brand-light">{{ t('trip_show.sidebar.duration') }}</span>
-                                        <span class="font-medium text-brand-primary">{{ trip.duration }}
-                                            {{ t('trip_show.sidebar.days_label') }}</span>
-                                    </div>
-                                    <div class="flex justify-between items-center">
-                                        <span class="text-brand-light">{{ t('trip_show.sidebar.transport') }}</span>
-                                        <span class="font-medium text-brand-text flex items-center gap-1">
-                                            <EnumIcon v-for="mode in trip.transport_formatted" :key="mode.value"
-                                                :enum="mode.value" v-tippy="mode.label"
-                                                class="text-brand-primary w-4 h-4 flex-none" />
-                                        </span>
+                                <!-- Explanation -->
+                                <p class="text-sm text-brand-text leading-relaxed">
+                                    {{ t('trip_show.inquiry.explanation') }}
+                                </p>
+
+                                <!-- CTA buttons -->
+                                <div class="space-y-3">
+                                    <div class="block">
+                                        <Button @click="requestModalOpen = !requestModalOpen"
+                                            class="w-full flex justify-center items-center">
+                                            {{ t('trip_show.inquiry.cta_make_request') }}
+                                        </Button>
                                     </div>
                                 </div>
-                                <div class="border-t border-brand-accent/20 pt-6 space-y-6">
-                                    <h3 class="text-xl font-bold text-brand-primary">
-                                        {{ t('trip_show.sidebar.book_this_trip') }}
-                                    </h3>
-                                    <DatePicker v-model="departure_date"
-                                        :min-date="booking.constraints.value?.minDate ?? new Date()"
-                                        :max-date="booking.constraints.value?.maxDate ?? null"
-                                        :disabled-dates="booking.disabledDates.value" />
-                                    <PersonPicker v-model="participants" />
-                                    <Button @click="bookingModalOpen = true"
-                                        class="w-full flex justify-center items-center group">
-                                        {{ t('trip_show.sidebar.book_now') }}
-                                        <ChevronRight
-                                            class=" group-hover:translate-x-2 transition-transform duration-300" />
-                                    </Button>
-                                    <BookingCostsSummary :booking="booking.booking" />
-                                    <p class="text-sm text-brand-light text-center mt-4">
-                                        {{ t('trip_show.sidebar.contact_info') }}
+
+                                <!-- Direct contact -->
+                                <div class="border-t border-brand-accent/20 pt-4">
+                                    <p class="text-sm text-brand-light mb-3">
+                                        {{ t('trip_show.inquiry.direct_contact_label') }}
                                     </p>
-                                    <div class="flex gap-3 mt-4">
-                                        <CallButton />
-                                        <MailButton />
+                                    <div class="space-y-2 items-center flex-shrink-0">
+                                        <span class="flex items-center gap-2">
+                                            <Phone class="w-4 h-4 text-brand-primary " />
+                                            <a href="#"
+                                                class="tel-field text-sm text-brand-text hover:text-brand-primary transition-colors">
+                                            </a>
+                                        </span>
+                                        <a href="#"
+                                            class="email-field has-icon flex items-center gap-2 text-sm text-brand-text hover:text-brand-primary hover:underline transition-colors">
+                                            <AtSign class="w-4 h-4 text-brand-primary flex-shrink-0" />
+                                            {{ t('trip_show.inquiry.send_email') }}
+                                        </a>
+                                        <span class="flex items-center gap-2">
+                                            <CircleQuestionMark class="w-4 h-4 text-brand-primary flex-shrink-0" />
+
+                                            <Link :href="contactUrl"
+                                                class="flex flex-wrap items-center text-sm text-brand-text hover:text-brand-primary hover:underline transition-colors">
+                                                {{ t('trip_show.inquiry.direct_contact_form') }}
+                                            </Link>
+
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -303,25 +258,7 @@ const tabIcons = {
                         <TripExtraInfo />
 
                         <!-- Trust Indicators -->
-                        <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-brand-accent/20">
-                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_me') }}
-                            </h4>
-                            <ul class="space-y-3 text-sm">
-                                <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
-                                    <span class="text-brand-text">{{ t('trip_show.sidebar.sustainable_travel')
-                                        }}</span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
-                                    <span class="text-brand-text">{{ t('trip_show.sidebar.small_personal') }}</span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
-                                    <span class="text-brand-text">{{ t('trip_show.sidebar.carefree_travel') }}</span>
-                                </li>
-                            </ul>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -339,15 +276,16 @@ const tabIcons = {
                     <span class="text-xs hidden tablet:inline">{{ tab.label }}</span>
                 </button>
 
-                <Button @click="bookingModalOpen = true" class="shrink-0 flex items-center gap-1 group">
-                    {{ t('trip_show.sidebar.book_now') }}
+
+                <Button @click="requestModalOpen = !requestModalOpen" class="flex items-center gap-1 group">
+                    {{ t('trip_show.inquiry.cta_make_request') }}
                     <ChevronRight class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
+
             </div>
         </div>
     </Layout>
-    <Modal :open="bookingModalOpen" @close="bookingModalOpen = false">
-        <BookingForm :booking="booking.booking" :constraints="booking.constraints"
-            :disabled-dates="booking.disabledDates.value" />
+    <Modal :open="requestModalOpen" @close="requestModalOpen = false">
+        <TripRequestForm :trip="trip" />
     </Modal>
 </template>

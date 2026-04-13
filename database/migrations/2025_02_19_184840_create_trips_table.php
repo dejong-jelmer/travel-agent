@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\Trip\TripType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -15,15 +16,17 @@ return new class extends Migration
             $table->id();
             $table->string('slug')->unique();
             $table->string('name');
+            $table->string('intro');
             $table->text('description');
             $table->integer('duration')->nullable();
             $table->json('transport')->nullable();
             $table->boolean('featured')->default(true);
-            $table->dateTime('published_at');
+            $table->date('published_at');
             $table->json('highlights')->nullable();
             $table->json('practical_info')->nullable();
             $table->json('blocked_dates')->nullable();
             $table->unsignedSmallInteger('min_advance_days')->nullable();
+            $table->string('type')->default(TripType::CityTrip->value);
             $table->string('meta_title', 60)->nullable();
             $table->text('meta_description', 160)->nullable();
             $table->softDeletes();

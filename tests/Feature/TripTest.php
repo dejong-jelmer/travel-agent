@@ -76,6 +76,7 @@ class TripTest extends TestCase
         $tripData = [
             'trip_id' => null,
             'name' => fake()->words(2, true),
+            'intro' => fake()->text(150),
             'description' => fake()->paragraph(),
             'transport' => [Transport::Train->value],
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
@@ -105,9 +106,10 @@ class TripTest extends TestCase
 
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
+        $this->assertEquals($tripData['intro'], $trip->intro);
         $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
-        $this->assertTrue($trip->published_at->isSameSecond($tripData['published_at']));
+        $this->assertTrue($trip->published_at->isSameDay($tripData['published_at']));
         $this->assertCount(2, $trip->destinations);
 
         $expectedTransport = collect($tripData['transport'])->map(fn ($t) => Transport::from($t)->value)->all();
@@ -162,7 +164,8 @@ class TripTest extends TestCase
         $updateData = [
             'trip_id' => $trip->id,
             'name' => 'Updated trip name',
-            'description' => fake()->text(),
+            'intro' => fake()->text(150),
+            'description' => fake()->paragraph(),
             'transport' => array_column([Transport::Bus, Transport::Airplane], 'value'),
             'heroImage' => UploadedFile::fake()->image('updated-featured.jpg'),
             'images' => [
@@ -190,6 +193,7 @@ class TripTest extends TestCase
         $response->assertRedirect(route('admin.trips.show', $trip));
 
         $this->assertEquals($updateData['name'], $trip->name);
+        $this->assertEquals($updateData['intro'], $trip->intro);
         $this->assertEquals($updateData['description'], $trip->description);
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
@@ -439,6 +443,7 @@ class TripTest extends TestCase
     {
         return array_merge([
             'name' => $trip->name,
+            'intro' => $trip->intro,
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),
             'destinations' => $this->destinations->modelKeys(),

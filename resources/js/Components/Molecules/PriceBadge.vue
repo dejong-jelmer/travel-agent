@@ -41,7 +41,7 @@ const textSizeClass = computed(() => {
         class="bg-brand-accent text-white rounded-full shadow-lg"
         :class="sizeClasses"
     >
-        <p class="font-semibold" :class="textSizeClass">
+        <p class="font-semibold select-none" :class="textSizeClass">
             {{ prefix }} €{{ price }},-
         </p>
     </div>

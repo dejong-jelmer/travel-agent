@@ -57,7 +57,7 @@ const isSelected = (value) => {
     if (!props.modelValue) return false;
     return Array.isArray(props.modelValue)
         ? props.modelValue.includes(value)
-        : props.modelValue === value;
+        : props.modelValue == value;
 };
 
 </script>
@@ -66,10 +66,13 @@ const isSelected = (value) => {
         <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <select v-bind="$attrs" :class="['form-input', $attrs.class]" :id="props.name" :required="required" :multiple="multiple" @change="handleChange">
-            <option v-if="placeholder" value="" disabled>{{ placeholder }}</option>
+        <select v-bind="$attrs" :class="['form-input', $attrs.class]" :id="props.name" :required="required"
+            :multiple="multiple" @change="handleChange">
+            <option v-if="placeholder" value="" disabled
+                :selected="!modelValue || modelValue === '' || (Array.isArray(modelValue) && modelValue.length === 0)">
+                {{ placeholder }}</option>
             <option v-for="(option, index) in options" :selected="isSelected(option['id'])" :key="index"
-                :value="option[optionKey]" :disabled="option.disabled ?? false" >
+                :value="option[optionKey]" :disabled="option.disabled ?? false">
                 {{ option[optionValue] }}
             </option>
         </select>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Booking;
+use App\Models\TripRequest;
 use App\Services\SystemHealthService;
 use Inertia\Inertia;
 
@@ -21,6 +22,10 @@ class DashboardController extends Controller
                 'new' => Booking::new()->count(),
                 'upcoming' => Booking::upcoming()->count(),
                 'upcomingMonth' => Booking::upcomingMonth()->count(),
+            ],
+            'tripRequests' => [
+                'new' => TripRequest::new()->count(),
+                'all' => TripRequest::count(),
             ],
             'systemHealth' => $healthService->getAllChecks(),
         ]);

@@ -6,6 +6,7 @@ use App\Enums\Destination\TravelInfo;
 use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Trip;
+use App\Services\CountryService;
 use App\Services\TripItemService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -13,6 +14,23 @@ use Inertia\Response;
 class TripController extends Controller
 {
     use HasPageMetadata;
+
+    public function __construct(private readonly CountryService $countryService) {}
+
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(): Response
+    {
+        $trips = Trip::with(['heroImage', 'prices'])->published()->get();
+
+        return Inertia::render('Trip/Index', [
+            'title' => $this->pageTitle('home.trips_seo'),
+            'trips' => $trips,
+            'countries' => $this->countryService->getCountriesForTrips($trips),
+            'seo' => $this->pageSeo('home.trips_seo'),
+        ]);
+    }
 
     /**
      * Display the specified resource.
