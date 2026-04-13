@@ -46,9 +46,7 @@ class PurgeOldTripRequests extends Command
             return self::SUCCESS;
         }
 
-        TripRequest::whereNull('booking_id')
-            ->where('created_at', '<', $cutoffDate)
-            ->delete();
+        $requests->each->delete();
 
         $this->info("{$requests->count()} trip request(s) successfully deleted.");
 
