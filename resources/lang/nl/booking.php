@@ -5,6 +5,7 @@ return [
     'title_index' => 'Boekingen',
     'title_show' => 'Boeking details',
     'title_edit' => 'Boeking bewerken',
+    'title_create' => 'Boeking aanmaken',
 
     // Page titles (Frontend)
     'title_received' => 'Boeking ontvangen',

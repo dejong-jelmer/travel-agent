@@ -64,7 +64,7 @@ function formatPrice(cents) {
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.trip') }}</dt>
                                 <dd class="text-sm col-span-2">
                                     <DefaultLink :href="route('admin.trips.show', booking.trip)"
-                                        class="text-gray-900 hover:text-brand-link">
+                                        class="text-gray-900 hover:text-brand-link underline">
                                         {{ booking.trip?.name }} - {{ booking.trip?.destinations_formatted }}
                                     </DefaultLink>
                                 </dd>
@@ -80,6 +80,15 @@ function formatPrice(cents) {
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.created_at') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.created_at_formatted }}</dd>
+                            </div>
+                            <div v-if="booking.trip_request" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.trip_request') }}</dt>
+                                <dd class="text-sm col-span-2">
+                                    <DefaultLink :href="route('admin.trip-requests.edit', booking.trip_request)"
+                                        class="text-gray-900 hover:text-brand-link underline">
+                                        {{ booking.trip_request.name }}
+                                    </DefaultLink>
+                                </dd>
                             </div>
                             <div v-if="booking.internal_notes" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.internal_notes') }}</dt>

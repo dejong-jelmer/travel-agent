@@ -149,7 +149,7 @@ const year = new Date().getFullYear();
       </div>
 
       <!-- Bottom section -->
-      <div class="pt-6 mt-12 border-t border-gray-800">
+      <div class="pt-6 mt-12 border-t border-brand-secondary/10">
         <div class="flex flex-col tablet:flex-row tablet:justify-between gap-4 tablet:gap-0 text-center tablet:text-left">
           <p class="text-sm text-white">
             &copy; {{ year }} {{ companyName }}

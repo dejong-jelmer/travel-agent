@@ -82,6 +82,7 @@ class HomeController extends Controller
             'newsletterRetentionMonths' => (int) config('privacy.newsletter.subscription.retention_months', 3),
             'bookingRetentionYears' => (int) config('privacy.booking.retention_years', 7),
             'specialRequestsRetentionDays' => (int) config('privacy.booking.special_requests_retention_days', 7),
+            'tripRequestsRetentionYears' => (int) config('privacy.trip_request.retention_years ', 1),
             'privacy' => [
                 'version' => config('privacy.version'),
                 'updated' => config('privacy.updated'),

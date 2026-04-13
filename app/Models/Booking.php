@@ -36,6 +36,7 @@ class Booking extends Model
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
+        'return_date' => ['format' => 'dddd LL'],
         'created_at' => ['format' => 'dddd LL - HH:mm'],
     ];
 
@@ -190,6 +191,11 @@ class Booking extends Model
     public function trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class);
+    }
+
+    public function tripRequest(): HasOne
+    {
+        return $this->hasOne(TripRequest::class);
     }
 
     public function tripPrice(): BelongsTo

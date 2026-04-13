@@ -14,14 +14,14 @@ const props = defineProps({
         <template v-if="tripItems && Object.keys(tripItems).length > 0">
             <template v-for="(categories, type) in tripItems" :key="type">
                 <!-- Type Section (Inclusief/Exclusief) -->
-                <div class="space-y-4">
-                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-4">
+                <div class="space-y-2">
+                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary">
                         {{ type }}
                     </h4>
 
                     <!-- Categories within type -->
                     <div v-for="(items, category) in categories" :key="category"
-                         class="bg-white rounded-lg border border-brand-accent/20 p-4 tablet:p-6">
+                         class="bg-white p-2 tablet:p-3">
                         <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-4">
                             {{ category }}
                         </h4>

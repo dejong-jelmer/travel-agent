@@ -6,7 +6,8 @@
     <p style="font-size:15px;color:#1e2d3d;line-height:1.8;">Hallo {{ $subscriber->name ?? strtok($subscriber->email, '@') }},</p>
 
     <p style="font-size:15px;color:#1e2d3d;line-height:1.8;">
-        Fijn dat je erbij bent. Ik bouw Omdat We Reizen op als reismaker
+        Wat leuk dat je erbij bent. <br>
+        Ik bouw Omdat We Reizen op als reismaker
         die kiest voor de bestemming als het uitgangspunt — met aandacht voor de plek en het verhaal.
         Via deze nieuwsbrief deel ik wat ik onderweg tegenkom en waar ik mee bezig ben.
     </p>

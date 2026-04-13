@@ -2,7 +2,7 @@ Welkom bij onze nieuwsbrief!
 
 Hallo {{ $subscriber->name ?? strtok($subscriber->email, '@') }},
 
-Fijn dat je erbij bent. Ik bouw Omdat We Reizen op als reismaker die kiest voor de bestemming als het uitgangspunt — met aandacht voor de plek en het verhaal. Via deze nieuwsbrief deel ik wat ik onderweg tegenkom en waar ik mee bezig ben.
+Wat leuk dat je erbij bent. Ik bouw Omdat We Reizen op als reismaker die kiest voor de bestemming als het uitgangspunt — met aandacht voor de plek en het verhaal. Via deze nieuwsbrief deel ik wat ik onderweg tegenkom en waar ik mee bezig ben.
 
 Je hebt je ingeschreven met het e-mailadres: {{ $subscriber->email }}
 

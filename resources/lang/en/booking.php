@@ -5,6 +5,7 @@ return [
     'title_index' => 'Bookings',
     'title_show' => 'Booking details',
     'title_edit' => 'Edit booking',
+    'title_create' => 'Create booking',
 
     // Page titles (Frontend)
     'title_received' => 'Booking received',

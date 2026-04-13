@@ -16,4 +16,7 @@ return [
         'retention_years' => 7,
         'special_requests_retention_days' => 7,
     ],
+    'trip_request' => [
+        'retention_years' => 1,
+    ],
 ];

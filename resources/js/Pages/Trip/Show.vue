@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, toRef, watch } from 'vue'
-import { ChevronRight, Map, ListChecks, Info, Globe, Phone, AtSign } from 'lucide-vue-next';
+import { ChevronRight, Map, ListChecks, Info, Globe, Phone, AtSign, CircleQuestionMark } from 'lucide-vue-next';
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 
@@ -100,8 +100,8 @@ const tabIcons = {
                                 <Slider :items="trip.images" :visible="1">
                                     <template #default="{ item, index }">
                                         <img :src="item.public_url" alt="Trip image"
-                                            class="w-full h-36 tablet:h-full object-cover cursor-zoom-in" :key="index"
-                                            loading="lazy" @click="openLightbox(index)" />
+                                            class="w-full h-36 tablet:h-full max-h-[500px] object-cover cursor-zoom-in"
+                                            :key="index" loading="lazy" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
@@ -216,15 +216,11 @@ const tabIcons = {
                                 <!-- CTA buttons -->
                                 <div class="space-y-3">
                                     <div class="block">
-                                        <Button @click="requestModalOpen = !requestModalOpen" class="w-full flex justify-center items-center">
+                                        <Button @click="requestModalOpen = !requestModalOpen"
+                                            class="w-full flex justify-center items-center">
                                             {{ t('trip_show.inquiry.cta_make_request') }}
                                         </Button>
                                     </div>
-                                    <Link :href="contactUrl" class="block">
-                                        <Button class="w-full flex justify-center items-center" color="primary">
-                                            {{ t('trip_show.inquiry.cta_send_message') }}
-                                        </Button>
-                                    </Link>
                                 </div>
 
                                 <!-- Direct contact -->
@@ -232,16 +228,27 @@ const tabIcons = {
                                     <p class="text-sm text-brand-light mb-3">
                                         {{ t('trip_show.inquiry.direct_contact_label') }}
                                     </p>
-                                    <div class="space-y-2">
+                                    <div class="space-y-2 items-center flex-shrink-0">
+                                        <span class="flex items-center gap-2">
+                                            <Phone class="w-4 h-4 text-brand-primary " />
+                                            <a href="#"
+                                                class="tel-field text-sm text-brand-text hover:text-brand-primary transition-colors">
+                                            </a>
+                                        </span>
                                         <a href="#"
-                                            class="tel-field flex items-center gap-2 text-sm text-brand-text hover:text-brand-primary transition-colors">
-                                            <Phone class="w-4 h-4 text-brand-primary flex-shrink-0" />
-                                        </a>
-                                        <a href="#"
-                                            class="email-field has-icon flex items-center gap-2 text-sm text-brand-text hover:text-brand-primary transition-colors">
+                                            class="email-field has-icon flex items-center gap-2 text-sm text-brand-text hover:text-brand-primary hover:underline transition-colors">
                                             <AtSign class="w-4 h-4 text-brand-primary flex-shrink-0" />
                                             {{ t('trip_show.inquiry.send_email') }}
                                         </a>
+                                        <span class="flex items-center gap-2">
+                                            <CircleQuestionMark class="w-4 h-4 text-brand-primary flex-shrink-0" />
+
+                                            <Link :href="contactUrl"
+                                                class="flex flex-wrap items-center text-sm text-brand-text hover:text-brand-primary hover:underline transition-colors">
+                                                {{ t('trip_show.inquiry.direct_contact_form') }}
+                                            </Link>
+
+                                        </span>
                                     </div>
                                 </div>
                             </div>
@@ -251,25 +258,7 @@ const tabIcons = {
                         <TripExtraInfo />
 
                         <!-- Trust Indicators -->
-                        <div class="bg-white/50 backdrop-blur-sm rounded-xl p-6 border border-brand-accent/20">
-                            <h4 class="font-semibold text-brand-primary mb-4">{{ t('trip_show.sidebar.why_choose_me') }}
-                            </h4>
-                            <ul class="space-y-3 text-sm">
-                                <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
-                                    <span class="text-brand-text">{{ t('trip_show.sidebar.sustainable_travel')
-                                    }}</span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
-                                    <span class="text-brand-text">{{ t('trip_show.sidebar.small_personal') }}</span>
-                                </li>
-                                <li class="flex items-center gap-2">
-                                    <span class="w-2 h-2 bg-brand-accent rounded-full"></span>
-                                    <span class="text-brand-text">{{ t('trip_show.sidebar.carefree_travel') }}</span>
-                                </li>
-                            </ul>
-                        </div>
+
                     </div>
                 </div>
             </div>

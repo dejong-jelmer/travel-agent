@@ -143,7 +143,6 @@ const bookingStats = computed(() => [
     },
 ])
 
-// Dashboard statistieken — Aanvragen
 const requestStats = computed(() => [
     {
         id: 5,

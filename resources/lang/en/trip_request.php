@@ -2,7 +2,12 @@
 
 return [
     'title_index' => 'Requests',
+    'title_edit' => 'Edit request',
     'thanks_page_title' => 'Request received',
+
+    // Flash messages
+    'updated' => 'Request updated successfully.',
+    'deleted' => 'Request is deleted.',
 
     'status' => [
         'new' => 'New',

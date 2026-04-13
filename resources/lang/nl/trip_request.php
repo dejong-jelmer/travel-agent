@@ -3,7 +3,12 @@
 return [
     // Page titles
     'title_index' => 'Aanvragen',
+    'title_edit' => 'Aanvragen bewerken',
     'thanks_page_title' => 'Aanvraag ontvangen',
+
+    // Flash messages
+    'updated' => 'Aanvraag is succesvol aangepast.',
+    'deleted' => 'Aanvraag is verwijderd.',
 
     // Status labels (used by HasTranslatableLabel trait)
     'status' => [

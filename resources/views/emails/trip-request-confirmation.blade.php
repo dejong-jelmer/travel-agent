@@ -31,36 +31,36 @@
             <td style="padding:16px 20px;">
                 <table width="100%" cellpadding="6" cellspacing="0">
                     <tr>
-                        <td width="40%" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
+                        <td class="email-label-col" width="40%" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;">
                             {{ __('trip_request.mail.notification_label_trip') }}
                         </td>
-                        <td width="60%" style="vertical-align:top;font-size:14px;color:#1e2d3d;font-weight:600;">
+                        <td class="email-value-col" width="60%" style="vertical-align:top;font-size:14px;color:#1e2d3d;font-weight:600;">
                             {{ $tripRequest->trip->name }}
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
+                        <td class="email-label-col" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
                             {{ __('trip_request.mail.notification_label_period') }}
                         </td>
-                        <td style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
+                        <td class="email-value-col" style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
                             {{ $tripRequest->preferred_month ?? __('trip_request.mail.notification_not_specified') }}
                         </td>
                     </tr>
                     @if($tripRequest->preferred_period_note)
                     <tr>
-                        <td style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
+                        <td class="email-label-col" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
                             {{ __('trip_request.mail.notification_label_period_note') }}
                         </td>
-                        <td style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
+                        <td class="email-value-col" style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
                             {{ $tripRequest->preferred_period_note }}
                         </td>
                     </tr>
                     @endif
                     <tr>
-                        <td style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
+                        <td class="email-label-col" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
                             {{ __('trip_request.mail.notification_label_travelers') }}
                         </td>
-                        <td style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
+                        <td class="email-value-col" style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
                             @if($tripRequest->travelers_count === 9)
                                 {{ __('trip_request.mail.notification_travelers_more_than_8') }}
                             @elseif($tripRequest->travelers_count)
@@ -71,29 +71,29 @@
                         </td>
                     </tr>
                     <tr>
-                        <td style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
+                        <td class="email-label-col" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
                             {{ __('trip_request.mail.notification_label_station') }}
                         </td>
-                        <td style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
+                        <td class="email-value-col" style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
                             {{ $tripRequest->departure_station ?? __('trip_request.mail.notification_not_specified') }}
                         </td>
                     </tr>
                     @if($tripRequest->phone)
                     <tr>
-                        <td style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
+                        <td class="email-label-col" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
                             {{ __('trip_request.mail.notification_label_phone') }}
                         </td>
-                        <td style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
+                        <td class="email-value-col" style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;">
                             {{ $tripRequest->phone }}
                         </td>
                     </tr>
                     @endif
                     @if($tripRequest->notes)
                     <tr>
-                        <td style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
+                        <td class="email-label-col" style="vertical-align:top;font-size:13px;color:#82b2ca;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;padding-top:10px;">
                             {{ __('trip_request.mail.notification_section_notes') }}
                         </td>
-                        <td style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;white-space:pre-wrap;">{{ $tripRequest->notes }}</td>
+                        <td class="email-value-col" style="vertical-align:top;font-size:14px;color:#1e2d3d;padding-top:10px;white-space:pre-wrap;">{{ $tripRequest->notes }}</td>
                     </tr>
                     @endif
                 </table>

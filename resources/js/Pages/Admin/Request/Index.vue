@@ -18,6 +18,7 @@ const columns = [
     { key: 'trip', label: t('admin.trip_request.index.table_headers.trip'), sortable: true },
     { key: 'status', label: t('admin.trip_request.index.table_headers.status'), sortable: true },
     { key: 'created_at', label: t('admin.trip_request.index.table_headers.created_at'), sortable: true },
+    { key: 'actions', label: t('admin.trip_request.index.table_headers.actions'), sortable: false },
 ];
 
 const filterOptions = computed(() => [
@@ -59,6 +60,24 @@ const currentFilters = computed(() => ({
                 <!-- Custom cell for created_at -->
                 <template #cell-created_at="{ row }">
                     {{ row.created_at_formatted }}
+                </template>
+
+                <!-- Custom cell for actions -->
+                <template #cell-actions="{ row }">
+                    <DropdownMenu>
+                        <template #default="{ MenuItem }">
+                            <component :is="MenuItem">
+                                <IconLink icon="Eye" :href="route('admin.trip-requests.edit', row)"
+                                    v-tippy="t('admin.trip_request.actions.edit')" />
+                            </component>
+                            <component :is="MenuItem">
+                                <IconLink type="delete" icon="Trash2" :href="route('admin.trip-requests.destroy', row)"
+                                    method="delete" :showConfirm="true"
+                                    :prompt="t('admin.trip_request.actions.delete_confirm')"
+                                    v-tippy="t('admin.trip_request.actions.delete')" />
+                            </component>
+                        </template>
+                    </DropdownMenu>
                 </template>
             </DataTable>
         </template>

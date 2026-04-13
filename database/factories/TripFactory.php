@@ -37,7 +37,6 @@ class TripFactory extends Factory
     public function definition(): array
     {
         $city = fake()->city();
-        $country = fake()->country();
         $name = $city;
         $slug = Str::slug($name);
         $duration = fake()->numberBetween(6, 14);
@@ -134,7 +133,7 @@ class TripFactory extends Factory
                     $destination->country_code,
                 );
                 $city = fake($locale)->city();
-                $name = "Bijzondere reis naar {$city} in {$destination->name}";
+                $name = "{$city}";
                 $slug = Str::slug($name);
                 $duration = fake()->numberBetween(6, 14);
 

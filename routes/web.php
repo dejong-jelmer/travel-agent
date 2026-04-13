@@ -87,7 +87,7 @@ Route::prefix('admin')
         Route::post('/trips/update/{trip}', [AdminTripController::class, 'update'])->name('trips.update');
 
         // Trip prices
-        Route::get('trips/{trip}/prices', TripPriceController::class)->name('admin.trips.prices');
+        Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
 
         // Trip resource Itinerary routes
         Route::resource('trips.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);
@@ -108,7 +108,7 @@ Route::prefix('admin')
         Route::resource('bookings', AdminBookingController::class);
 
         // Trip request routes
-        Route::get('trip-requests', [AdminTripRequestController::class, 'index'])->name('trip-requests.index');
+        Route::resource('trip-requests', AdminTripRequestController::class)->only(['index', 'edit', 'update', 'destroy']);
 
         // Newsletter routes
         Route::prefix('newsletter')

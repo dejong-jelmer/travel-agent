@@ -4,9 +4,10 @@ defineProps({
     modelValue: String,
     name: String,
     label: String,
+    description: String,
     placeholder: String,
     feedback: {
-        type: [ String, Array ],
+        type: [String, Array],
         required: false,
     },
     rows: {
@@ -30,16 +31,12 @@ defineProps({
         <Label v-if="(label && showLabel) || $slots.label" :forField="name" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <textarea
-            v-bind="$attrs"
-            :id="name"
-            :value="modelValue"
-            :rows="rows"
-            @input="$emit('update:modelValue', $event.target.value)"
-            class="form-input"
-            :placeholder="placeholder"
-            :required="required"
-        >
+        <p v-if="description" class="text-sm text-brand-text/70 mb-2 leading-relaxed">
+           <slot name="description">{{ description }}</slot>
+        </p>
+        <textarea v-bind="$attrs" :id="name" :value="modelValue" :rows="rows"
+            @input="$emit('update:modelValue', $event.target.value)" class="form-input" :placeholder="placeholder"
+            :required="required">
         </textarea>
         <FormFeedback v-if="feedback" :message="feedback" />
     </div>
