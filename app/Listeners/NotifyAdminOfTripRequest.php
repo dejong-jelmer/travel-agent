@@ -33,11 +33,11 @@ class NotifyAdminOfTripRequest
                 new TripRequestNotificationMail($event->tripRequest)
             );
         } catch (\Throwable $e) {
-            Log::error('Trip request notification mail failed: '.$e->getMessage(), [
+            Log::error('Trip request notification mail failed', [
                 'trip_request_id' => $event->tripRequest->id,
                 'admin_email' => config('contact.mail'),
+                'exception' => $e
             ]);
-            Log::error('Stack trace: '.$e->getTraceAsString());
         }
     }
 

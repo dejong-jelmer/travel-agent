@@ -22,7 +22,7 @@ class NotifyAdminOfNewsletterSubscription
      */
     public function handle(NewsletterSubscriptionRequested $event): void
     {
-        $address = config('booking.mail');
+        $address = config('contact.mail');
 
         try {
             Mail::to($address)->queue(
@@ -46,7 +46,7 @@ class NotifyAdminOfNewsletterSubscription
         Log::critical('Admin newsletter subscription notification email permanently failed after retries', [
             'subscriber_id' => $event->subscriber->id,
             'subscriber_email' => $event->subscriber->email,
-            'admin_email' => config('booking.mail'),
+            'admin_email' => config('contact.mail'),
             'error' => $exception->getMessage(),
         ]);
     }
