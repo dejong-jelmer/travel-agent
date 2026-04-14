@@ -127,7 +127,7 @@
 
     {{-- Unsubscribe Link --}}
     <p style="margin:0;text-align:center;color:#a3bccb;font-size:11px;line-height:1.5;">
-        Je ontvangt deze email omdat je bent ingeschreven op onze nieuwsbrief.<br>
+        Je ontvangt deze email omdat je bent ingeschreven op de nieuwsbrief.<br>
         <a href="{{ $unsubscribeUrl ?? route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token ?? '') }}"
            style="color:#82b2ca;text-decoration:underline;">
             Uitschrijven

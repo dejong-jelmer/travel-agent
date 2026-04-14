@@ -21,7 +21,7 @@ return [
     // Items
     'item' => [
         'category' => [
-            'general_inclusions' => 'Altijd inbegrepen bij onze reizen',
+            'general_inclusions' => 'Altijd inbegrepen',
             'transport' => 'Vervoer',
             'accommodation' => 'De overnachtingen',
             'additional_cost' => 'Bijkomende kosten',

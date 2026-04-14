@@ -1,7 +1,7 @@
 @extends('emails.default')
 
 @section('content')
-    <h3 style="color:#1e2d3d;font-size:22px;margin:0 0 20px 0;font-weight:700;">Welkom bij onze nieuwsbrief!</h3>
+    <h3 style="color:#1e2d3d;font-size:22px;margin:0 0 20px 0;font-weight:700;">Welkom bij de nieuwsbrief!</h3>
 
     <p style="font-size:15px;color:#1e2d3d;line-height:1.8;">Hallo {{ $subscriber->name ?? strtok($subscriber->email, '@') }},</p>
 
@@ -39,7 +39,7 @@
     </ul>
 
     <p style="font-size:14px;color:#1e2d3d;line-height:1.8;">
-        <strong>Privacy:</strong> we gebruiken je e-mailadres uitsluitend voor onze eigen nieuwsbrief en delen
+        <strong>Privacy:</strong> we gebruiken je e-mailadres uitsluitend voor de nieuwsbrief en delen
         het nooit met derden. Je kunt je op elk moment weer uitschrijven.
     </p>
 
