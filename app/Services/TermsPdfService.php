@@ -33,8 +33,8 @@ class TermsPdfService
     {
         $data = [
             'kvk' => config('contact.kvk'),
-            'version' => config('privacy.version'),
-            'updated' => config('privacy.updated'),
+            'version' => config('terms.version'),
+            'updated' => config('terms.updated'),
         ];
 
         try {

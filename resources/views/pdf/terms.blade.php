@@ -130,7 +130,7 @@
 
 <body>
     <div class="footer">
-        Omdat We Reizen | KvK {{ $kvk }} | Pagina <span class="page-number"></span>
+        Omdat We Reizen | KvK {{ $kvk ?? '-' }} | Pagina <span class="page-number"></span>
     </div>
 
     <div class="header">
