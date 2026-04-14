@@ -21,7 +21,7 @@ return [
     // Items
     'item' => [
         'category' => [
-            'general_inclusions' => 'Always included in our trips',
+            'general_inclusions' => 'Always included in my trips',
             'transport' => 'Transport',
             'accommodation' => 'Accommodation',
             'additional_cost' => 'Additional costs',

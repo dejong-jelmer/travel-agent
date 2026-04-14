@@ -15,14 +15,14 @@ return [
     ],
     'trips_seo' => [
         'title' => 'Onze reizen',
-        'description' => 'Een overzicht van al onze duurzame treinreizen door Europa.',
+        'description' => 'Een overzicht van al mijn duurzame treinreizen door Europa.',
     ],
     'privacy_seo' => [
         'title' => 'Privacyverklaring',
-        'description' => 'Lees hoe wij omgaan met uw persoonsgegevens. Onze privacyverklaring voor duurzame treinreizen door Europa.',
+        'description' => 'Lees hoe ik omga met uw persoonsgegevens. De privacyverklaring voor duurzame treinreizen door Europa.',
     ],
     'terms_seo' => [
         'title' => 'Algemene Voorwaarden',
-        'description' => 'Lees onze algemene voorwaarden voor het boeken van duurzame treinreizen door Europa.',
+        'description' => 'Lees de algemene voorwaarden voor het boeken van duurzame treinreizen door Europa.',
     ],
 ];

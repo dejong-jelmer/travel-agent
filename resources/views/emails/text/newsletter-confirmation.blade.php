@@ -1,4 +1,4 @@
-Welkom bij onze nieuwsbrief!
+Welkom bij de nieuwsbrief!
 
 Hallo {{ $subscriber->name ?? strtok($subscriber->email, '@') }},
 
@@ -6,7 +6,7 @@ Wat leuk dat je erbij bent. Ik bouw Omdat We Reizen op als reismaker die kiest v
 
 Je hebt je ingeschreven met het e-mailadres: {{ $subscriber->email }}
 
-Om je aanmelding af te ronden vragen we je nog even je inschrijving te bevestigen via de onderstaande link.
+Om je aanmelding af te ronden vraag ik je nog even je inschrijving te bevestigen via de onderstaande link.
 
 Bevestig je aanmelding:
 {{ route('newsletter.subscription.confirm', $subscriber->confirmation_token) }}
@@ -19,7 +19,7 @@ Bevestig je aanmelding:
 - Persoonlijke ervaringen en verhalen.
 - Achtergrond bij bestemmingen.
 
-Privacy: we gebruiken je e-mailadres uitsluitend voor onze eigen nieuwsbrief en delen het nooit met derden. Je kunt je op elk moment weer uitschrijven.
+Privacy: ik gebruik je e-mailadres uitsluitend voor de nieuwsbrief en delen het nooit met derden. Je kunt je op elk moment weer uitschrijven.
 
 Wil je je afmelden? Dat kan altijd via:
 {{ route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token) }}

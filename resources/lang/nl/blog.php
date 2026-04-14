@@ -8,7 +8,7 @@ return [
     // Frontend SEO (nested with title/description, like home.php)
     'blog_seo' => [
         'title' => 'Blog',
-        'description' => 'Lees onze laatste blogposts over duurzame treinreizen per trein door Europa.',
+        'description' => 'Lees mijn laatste blogposts over duurzame treinreizen per trein door Europa.',
     ],
 
     // Admin page titles & flash messages
