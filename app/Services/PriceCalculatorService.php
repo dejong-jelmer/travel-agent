@@ -71,13 +71,16 @@ class PriceCalculatorService
     }
 
     /**
-     * @return array<string, string>
+     * Get formatted fees and funds
+     *
+     * @return array<string, string> Associative array with setting keys and formatted amounts
      */
     public function getFormattedFeesAndFunds(): array
     {
-        return collect($this->getFeesAndFunds())
-            ->map(fn (Money $ff) => $this->formatAmount($ff))
-            ->toArray();
+        return array_map(
+            fn (Money $ff) => $this->formatAmount($ff),
+            $this->getFeesAndFunds()
+        );
     }
 
     private function resolvePriceRow(Trip $trip, Carbon $departureDate): ?TripPrice
