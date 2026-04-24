@@ -712,9 +712,11 @@
     },
     "footer": {
         "contact": "Contact",
+        "registered": "Registered with",
         "all_rights": "All rights reserverd.",
         "conditions": "Terms and conditions",
         "privacy": "Privacy policy",
+        "guarantee": "Guarantee Scheme",
         "slogan": "Omdat we riezen… more human."
     },
     "booking_step_labels": {

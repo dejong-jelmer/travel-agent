@@ -2,10 +2,14 @@
 
 namespace App\Services;
 
+use App\Enums\SettingKey;
+use App\Models\Setting;
+use App\Support\MoneyHelper;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Money\Money;
 
 class TermsPdfService
 {
@@ -13,6 +17,7 @@ class TermsPdfService
 
     private const STORAGE_PATH = 'terms/'.self::FILENAME;
 
+    public function __construct(private PriceCalculatorService $priceCalculator) {}
     public function path(): string
     {
         $disk = Storage::disk('local');
@@ -32,9 +37,11 @@ class TermsPdfService
     public function generate(): void
     {
         $data = [
+            'companyName' => config('app.name'),
             'kvk' => config('contact.kvk'),
             'version' => config('terms.version'),
             'updated' => config('terms.updated'),
+            'feesAndFunds' => $this->priceCalculator->getFormattedFeesAndFunds()
         ];
 
         try {

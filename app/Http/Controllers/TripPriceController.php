@@ -40,18 +40,13 @@ class TripPriceController extends Controller
         }
 
         return response()->json([
-            'price_per_person' => $this->formatAmount($prices->perPerson),
-            'total_price' => $this->formatAmount($prices->baseTotal),
-            'single_supplement' => $this->formatAmount($prices->singleSupplement),
-            'booking_fee' => $this->formatAmount($prices->feesAndFunds[SettingKey::BookingFee->value]),
-            'guarantee_fund' => $this->formatAmount($prices->feesAndFunds[SettingKey::GuaranteeFund->value]),
-            'emergency_fund' => $this->formatAmount($prices->feesAndFunds[SettingKey::EmergencyFund->value]),
-            'grand_total' => $this->formatAmount($prices->grandTotal),
+            'price_per_person' => $this->priceCalculator->formatAmount($prices->perPerson),
+            'total_price' => $this->priceCalculator->formatAmount($prices->baseTotal),
+            'single_supplement' => $this->priceCalculator->formatAmount($prices->singleSupplement),
+            'booking_fee' => $this->priceCalculator->formatAmount($prices->feesAndFunds[SettingKey::BookingFee->value]),
+            'guarantee_fund' => $this->priceCalculator->formatAmount($prices->feesAndFunds[SettingKey::GuaranteeFund->value]),
+            'emergency_fund' => $this->priceCalculator->formatAmount($prices->feesAndFunds[SettingKey::EmergencyFund->value]),
+            'grand_total' => $this->priceCalculator->formatAmount($prices->grandTotal),
         ]);
-    }
-
-    private function formatAmount(Money $money): string
-    {
-        return bcdiv((string) $money->getAmount(), (string) MoneyHelper::CENTS_PER_UNIT, 2);
     }
 }

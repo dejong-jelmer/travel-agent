@@ -24,9 +24,7 @@ class PriceCalculatorService
     {
         $currency = new Currency(self::CURRENCY);
 
-        $feesAndFunds[SettingKey::BookingFee->value] = new Money(MoneyHelper::toCents(Setting::get(SettingKey::BookingFee, 0)), $currency);
-        $feesAndFunds[SettingKey::GuaranteeFund->value] = new Money(MoneyHelper::toCents(Setting::get(SettingKey::GuaranteeFund, 0)), $currency);
-        $feesAndFunds[SettingKey::EmergencyFund->value] = new Money(MoneyHelper::toCents(Setting::get(SettingKey::EmergencyFund, 0)), $currency);
+        $feesAndFunds = $this->getFeesAndFunds();
 
         $priceRow = $this->resolvePriceRow($trip, $departureDate);
 
@@ -51,6 +49,35 @@ class PriceCalculatorService
             grandTotal: $grandTotal,
             feesAndFunds: $feesAndFunds
         );
+    }
+
+    /**
+     * @return array<string, Money>
+     */
+    public function getFeesAndFunds(): array
+    {
+        $currency = new Currency(self::CURRENCY);
+
+        return [
+            SettingKey::BookingFee->value => new Money(MoneyHelper::toCents(Setting::get(SettingKey::BookingFee, 0)), $currency),
+            SettingKey::GuaranteeFund->value => new Money(MoneyHelper::toCents(Setting::get(SettingKey::GuaranteeFund, 0)), $currency),
+            SettingKey::EmergencyFund->value => new Money(MoneyHelper::toCents(Setting::get(SettingKey::EmergencyFund, 0)), $currency),
+        ];
+    }
+
+    public function formatAmount(Money $money): string
+    {
+        return bcdiv((string) $money->getAmount(), (string) MoneyHelper::CENTS_PER_UNIT, 2);
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getFormattedFeesAndFunds(): array
+    {
+        return collect($this->getFeesAndFunds())
+            ->map(fn (Money $ff) => $this->formatAmount($ff))
+            ->toArray();
     }
 
     private function resolvePriceRow(Trip $trip, Carbon $departureDate): ?TripPrice

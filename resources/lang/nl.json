@@ -712,9 +712,11 @@
     },
     "footer": {
         "contact": "Contact",
+        "registered": "Aangesloten bij",
         "all_rights": "Alle rechten voorbehouden.",
         "conditions": "Algemene voorwaarden",
         "privacy": "Privacyverklaring",
+        "guarantee": "Garantieregeling",
         "slogan": "Omdat we reizen… meer mens."
     },
     "booking_step_labels": {

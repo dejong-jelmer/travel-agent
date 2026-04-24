@@ -25,4 +25,8 @@ return [
         'title' => 'Algemene Voorwaarden',
         'description' => 'Lees de algemene voorwaarden voor het boeken van duurzame treinreizen door Europa.',
     ],
+    'guarantee_seo' => [
+        'title' => 'Garantieregeling',
+        'description' => 'Lees de Garantieregeling bij STO voor het boeken van duurzame treinreizen door Europa.',
+    ],
 ];
