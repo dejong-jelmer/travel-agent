@@ -6,11 +6,9 @@ use App\Enums\SettingKey;
 use App\Exceptions\NoPriceAvailableException;
 use App\Models\Trip;
 use App\Services\PriceCalculatorService;
-use App\Support\MoneyHelper;
 use Carbon\Carbon;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Log;
-use Money\Money;
 
 class TripPriceController extends Controller
 {

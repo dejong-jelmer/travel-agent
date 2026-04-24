@@ -64,12 +64,12 @@ class HomeController extends Controller
                 new AdminContactFormNotificationMail($contact)
             );
         } catch (\Throwable $e) {
-            Log::error('Contact form notification mail failed: ' . $e->getMessage(), [
+            Log::error('Contact form notification mail failed: '.$e->getMessage(), [
                 'contact_name' => $contact->name,
                 'contact_email' => $contact->email,
                 'admin_email' => $address,
             ]);
-            Log::error('Stack trace: ' . $e->getTraceAsString());
+            Log::error('Stack trace: '.$e->getTraceAsString());
         }
 
         return response()->json([
@@ -102,7 +102,7 @@ class HomeController extends Controller
                 'version' => config('terms.version'),
                 'updated' => config('terms.updated'),
             ],
-            'feesAndFunds' => $this->priceCalculator->getFormattedFeesAndFunds()
+            'feesAndFunds' => $this->priceCalculator->getFormattedFeesAndFunds(),
         ]);
     }
 
