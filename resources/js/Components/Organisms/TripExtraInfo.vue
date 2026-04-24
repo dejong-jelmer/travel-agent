@@ -5,7 +5,8 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
 <template>
     <div class="space-y-6">
         <!-- Prijs & Offerte -->
-        <div class="bg-white rounded-lg border border-brand-primary/20 px-4 tablet:px-6 py-6 tablet:py-12 space-y-6 tablet:space-y-12">
+        <div
+            class="bg-white rounded-lg border border-brand-primary/20 px-4 tablet:px-6 py-6 tablet:py-12 space-y-6 tablet:space-y-12">
             <div class="flex items-start gap-3 mb-3">
                 <div class="flex-shrink-0 mt-1">
                     <Euro class="w-5 h-5 text-brand-accent" />
@@ -70,7 +71,10 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                         Betalingsgarantie via STO Garant
                     </h4>
                     <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
-                        Al mijn reizen zijn verzekerd via STO Garant — je betaling staat veilig tot je reis voltooid is.
+                        Dit aanbod valt onder de garantie van STO Garant. U kunt de voorwaarden van deze
+                        garantieregeling vinden op de website van STO Garant <a class="text-brand-link underline" target="_blank" rel="noopener noreferrer"
+                                        aria-label="STO Garant - STO Garant Garantieregeling voor pakketreizen"
+                                        href="https://www.sto-garant.nl/downloads">(www.sto-garant.nl/downloads)</a>
                     </p>
                 </div>
             </div>

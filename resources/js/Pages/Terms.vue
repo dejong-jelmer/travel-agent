@@ -2,8 +2,11 @@
 import { ref } from 'vue';
 import { Download, Loader2 } from 'lucide-vue-next';
 
+const companyName = window.appName;
+
 const props = defineProps({
     contact: Object,
+    feesAndFunds: Object,
     terms: {
         type: Object,
         default: { version: null, updated: null }
@@ -40,11 +43,7 @@ async function downloadPdf() {
                 <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
                     <!-- PDF Download button -->
                     <div class="flex justify-end mb-4">
-                        <Button class="inline-flex gap-2 items-center"
-                            @click="downloadPdf"
-                            :disabled="isGenerating"
-
-                        >
+                        <Button class="inline-flex gap-2 items-center" @click="downloadPdf" :disabled="isGenerating">
                             <Loader2 v-if="isGenerating" class="h-5 animate-spin" />
                             <Download v-else class="h-5" />
                         </Button>
@@ -54,7 +53,8 @@ async function downloadPdf() {
                         <!-- Header -->
                         <header class="bg-brand-primary text-white px-6 py-8">
                             <h1 class="text-3xl font-bold mb-2">Algemene Voorwaarden</h1>
-                            <p class="text-sm text-white/70 mb-8">Versie: {{ terms.version }} | Laatste update: {{ terms.updated }}</p>
+                            <p class="text-sm text-white/70 mb-8">Versie: {{ terms.version }} | Laatste update: {{
+                                terms.updated }}</p>
                         </header>
 
                         <!-- Content -->
@@ -62,11 +62,11 @@ async function downloadPdf() {
 
                             <div id="inhoud" class="mb-12">
                                 <h2 class="text-2xl font-bold mb-4 text-gray-900 border-b pb-2">Inhoud</h2>
-                                <ul class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-2 list-none p-0">
+                                <ul class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-[repeat(11,minmax(0,1fr))] md:grid-flow-col gap-x-8 gap-y-2 list-none p-0">
                                     <li><a href="#article-1" class="hover:text-blue-800 hover:underline">Artikel 1
                                             - Definities</a></li>
                                     <li><a href="#article-2" class="hover:text-blue-800 hover:underline">Artikel 2
-                                            – Garantiefonds STO Garant</a></li>
+                                            – Garantieregeling STO Garant</a></li>
                                     <li><a href="#article-3" class="hover:text-blue-800 hover:underline">Artikel 3
                                             – Toepasselijkheid Voorwaarden</a></li>
                                     <li><a href="#article-4" class="hover:text-blue-800 hover:underline">Artikel 4
@@ -117,11 +117,13 @@ async function downloadPdf() {
                                         Definities
                                     </h2>
                                     <div class="space-y-4">
-                                        <p><strong class="font-semibold">Organisator:</strong> Omdat We Reizen. De
+                                        <p><strong class="font-semibold">Organisator:</strong> <strong>{{ companyName
+                                        }}</strong>. De
                                             handelaar die
                                             Reis samenstelt en deze – al dan niet via een doorverkoper – aanbiedt, en de
                                             handelaar
-                                            die een Gekoppeld Reisarrangement faciliteert. Omdat We Reizen is een
+                                            die een Gekoppeld Reisarrangement faciliteert. <strong>{{ companyName
+                                            }}</strong> is een
                                             geregistreerde
                                             handelsnaam en ingeschreven bij de Kamer van Koophandel onder nummer:
                                             <strong>{{ contact.kvk }}</strong>.
@@ -192,36 +194,47 @@ async function downloadPdf() {
                                     </div>
                                 </section>
 
-                                <section id="article-2" class="scroll-mt-[150px]">
-                                    <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 2 – Garantiefonds STO Garant</h2>
-                                    <p class="mb-4">Om te voldoen aan de wettelijk verplichte garantiestelling maakt de
-                                        Organisatie gebruik van STO Garant. U kunt dit controleren via de STO Garant
-                                        deelnemerspagina op <a href="https://sto-garant.nl/reizigers/aangesloten-organisaties" target="_blank" class="text-blue-500 hover:text-blue-800 hover:underline">sto-garant.nl</a>. Bij elk (reis)aanbod van de Organisator wordt
-                                        duidelijk vermeld of de garantie van STO Garant van toepassing is. Binnen de
-                                        grenzen
-                                        van
-                                        de garantieregeling (te vinden op <a href="https://www.sto-garant.nl/downloads" target="_blank" class="text-blue-500 hover:text-blue-800 hover:underline">www.sto-garant.nl/downloads</a>) is de garantie
-                                        van
-                                        STO
-                                        Garant van toepassing. In de garantieregeling leest u wat de garantie inhoudt en
-                                        welke
-                                        voorwaarden van toepassing zijn.</p>
-                                    <p class="mb-4">Indien de garantie van STO Garant van toepassing is op uw boeking,
-                                        dan
-                                        betaalt u de reissom niet aan de Organisator, maar aan de derdengeldenrekening
-                                        van
-                                        Stichting Derdengelden Certo Escrow, een bij De Nederlandsche Bank (DNB) en de
-                                        Autoriteit Financiële Markten (AFM) geregistreerde betaaldienstverlener. Deze
-                                        stichting
-                                        derdengelden waarborgt uw reissom tot na afloop van uw boeking. Wanneer diensten
-                                        door
-                                        financieel onvermogen van de Organisator niet (volledig en/of tijdig) worden
-                                        verleend,
-                                        dan voert STO Garant de garantie uit. In de garantieregeling leest u hoe u daar
-                                        in
-                                        dat
-                                        geval aanspraak op maakt.</p>
+                                <section id="article-2" class="scroll-mt-[150px] space-y-4">
+                                    <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2">
+                                        Artikel 2 – Garantieregeling STO Garant</h2>
+                                    <p>Om te voldoen aan de wettelijk verplichte garantiestelling maakt
+                                        <strong>{{ companyName }}</strong> gebruik van STO Garant. U kunt dit
+                                        controleren via de STO Garant deelnemerspagina
+                                        <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
+                                            target="_blank" rel="noopener noreferrer"
+                                            aria-label="STO Garant - Welke organisaties zijn aangesloten bij STO Garant?"
+                                            href="https://www.sto-garant.nl/deelnemers">(www.sto-garant.nl/deelnemers)</a>.
+                                        Alle informatie over STO Garant vindt u op <a
+                                            class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
+                                            target="_blank" rel="noopener noreferrer" aria-label="STO Garant"
+                                            href="https://www.sto-garant.nl">www.sto-garant.nl</a>.
+                                        </p>
+                                        <p>
+                                        Bij elk (reis)aanbod van <strong>{{ companyName }}</strong> wordt duidelijk
+                                        vermeld of de
+                                        garantie van STO
+                                        Garant van toepassing is. In de garantieregeling leest u wat de garantie inhoudt
+                                        en welke
+                                        voorwaarden van toepassing zijn. U vindt deze garantieregeling op de website van
+                                        STO Garant
+                                        <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
+                                            target="_blank" rel="noopener noreferrer"
+                                            aria-label="STO Garant - STO Garant Garantieregeling voor pakketreizen"
+                                            href="https://www.sto-garant.nl/downloads">(www.sto-garant.nl/downloads)</a>.
+                                    </p>
+
+                                    <p>Indien de garantie van STO Garant van toepassing is op uw boeking, dan betaalt u
+                                        de reissom niet
+                                        aan <strong>{{ companyName }}</strong>, maar aan de derdengeldenrekening van Stichting
+                                        Derdengelden Certo
+                                        Escrow, een bij De Nederlandsche Bank (DNB) en de Autoriteit Financiële Markten
+                                        (AFM)
+                                        geregistreerde betaaldienstverlener. Deze stichting derdengelden waarborgt uw
+                                        reissom tot na
+                                        afloop van uw boeking. Wanneer diensten door financieel onvermogen van <strong>{{ companyName }}</strong>
+                                        niet (volledig en/of tijdig) worden verleend, dan voert STO Garant de garantie
+                                        uit. In de
+                                        garantieregeling leest u hoe u daar in dat geval aanspraak op maakt.</p>
                                 </section>
 
                                 <section id="article-3" class="scroll-mt-[150px]">
@@ -268,7 +281,8 @@ async function downloadPdf() {
                                             informatie</strong></h3>
                                     <p class="mb-4 pl-4">De aangeboden Reis omvat de diensten zoals omschreven in de
                                         uitingen
-                                        van Omdat We Reizen (offertes, publicaties, website). De inhoud van het aanbod
+                                        van <strong>{{ companyName }}</strong> (offertes, publicaties, website). De
+                                        inhoud van het aanbod
                                         wordt
                                         bepaald door de informatie verstrekt door of namens de Organisator vóór het
                                         sluiten
@@ -455,9 +469,12 @@ async function downloadPdf() {
                                     <p class="mb-4 pl-4">Specifieke dieetwensen bij inbegrepen maaltijden worden als
                                         voorkeur
                                         behandeld conform <a href="#article-22.1"
-                                            class="hover:text-blue-800 underline">Artikel 22.1 - Voorkeuren (wensen)</a>. Hoewel de Organisator zijn
-                                        best doet deze wensen door te geven aan het hotel of de betreffende dienstverlener,
-                                        kunnen deze niet gegarandeerd worden. Eventuele meerkosten die ter plaatse door de
+                                            class="hover:text-blue-800 underline">Artikel 22.1 - Voorkeuren
+                                            (wensen)</a>. Hoewel de Organisator zijn
+                                        best doet deze wensen door te geven aan het hotel of de betreffende
+                                        dienstverlener,
+                                        kunnen deze niet gegarandeerd worden. Eventuele meerkosten die ter plaatse door
+                                        de
                                         dienstverlener in rekening worden gebracht voor het voldoen aan dieetwensen zijn
                                         voor rekening van de Reiziger.</p>
                                     <h3 class="mb-2"><strong class="text-lg font-semibold">6.4. Medicijngebruik</strong>
@@ -494,11 +511,11 @@ async function downloadPdf() {
                                     <h3 class="mb-2"><strong class="text-lg font-semibold">7.1. Aanbetaling</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Na de totstandkoming van de Overeenkomst en tegelijk met de
-                                        bevestiging/factuur en uiterlijk binnen 7 dagen na dagtekening daarvan, is de
+                                        bevestiging/factuur en uiterlijk binnen 14 dagen na dagtekening daarvan, is de
                                         Reiziger
-                                        een aanbetaling verschuldigd van 30% van de reissom. De boekingskosten (€27,50)
+                                        een aanbetaling verschuldigd van 30% van de reissom. De boekingskosten (€{{ feesAndFunds['booking_fee'] }})
                                         en
-                                        kosten voor de garantieregeling (€10,00) dienen ook binnen 7 dagen na ontvangst
+                                        kosten voor de garantieregeling (€{{ feesAndFunds['guarantee_fund'] }}) dienen ook binnen 14 dagen na ontvangst
                                         van
                                         de
                                         factuur te zijn voldaan.</p>
@@ -948,16 +965,23 @@ async function downloadPdf() {
                                         kan
                                         voldoen aan een Schriftelijk overeengekomen bijzondere wens van de Reiziger
                                         (conform
-                                        <a href="#article-22.2" class="hover:text-blue-800 underline">Artikel 22.2 - Vereisten</a> van deze Voorwaarden), dan kan de Organisator de Reis op dit
+                                        <a href="#article-22.2" class="hover:text-blue-800 underline">Artikel 22.2 -
+                                            Vereisten</a> van deze Voorwaarden), dan kan de Organisator de Reis op dit
                                         onderdeel wijzigen. De Reiziger kan in dat geval de wijziging aanvaarden of de
-                                        Overeenkomst beëindigen zonder betaling van annuleringskosten.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.5. Wijzigingen na vertrek</strong></h3>
+                                        Overeenkomst beëindigen zonder betaling van annuleringskosten.
+                                    </p>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.5. Wijzigingen na
+                                            vertrek</strong></h3>
                                     <p class="mb-4 pl-4">Indien wijzigingen zich voordoen na vertrek en een significant
-                                        deel van de overeengekomen Reisdiensten niet kan worden verricht, zal de Organisator
-                                        onmiddellijk alles in het werk stellen om de continuering van de Reis te waarborgen. Indien
+                                        deel van de overeengekomen Reisdiensten niet kan worden verricht, zal de
+                                        Organisator
+                                        onmiddellijk alles in het werk stellen om de continuering van de Reis te
+                                        waarborgen. Indien
                                         het onmogelijk is dergelijke maatregelen te treffen, of wanneer de Reiziger de
-                                        aangeboden alternatieve om deugdelijke redenen niet accepteert, zal de Organisator, zonder
-                                        extra kosten, zorg dragen voor de terugreis naar de plaats van vertrek, dan wel naar
+                                        aangeboden alternatieve om deugdelijke redenen niet accepteert, zal de
+                                        Organisator, zonder
+                                        extra kosten, zorg dragen voor de terugreis naar de plaats van vertrek, dan wel
+                                        naar
                                         een andere overeengekomen plaats van terugkeer.</p>
                                     <h3 class="mb-2"><strong class="text-lg font-semibold">13.6. Wijzigingen door schuld
                                             Reiziger</strong></h3>
@@ -991,15 +1015,18 @@ async function downloadPdf() {
                                                 </li>
                                             </ul>
                                         </li>
-                                        <li>Als gevolg van Onvermijdbare en buitengewone omstandigheden (overmacht) In de bovenstaande gevallen betaalt de Organisator reeds
-                                        ontvangen
-                                        bedragen onverwijld en uiterlijk binnen 14 dagen terug. Niet vergoed worden
-                                        kosten
-                                        die
-                                        door de Reiziger zijn gemaakt voor diensten die buiten de Overeenkomst vallen
-                                        zoals
-                                        inentingen, visa, aanschaf materiaal, verzekeringen en indien niet bij de Reis
-                                        inbegrepen de vliegreis, tickets, accommodatie, e.d..</li>
+                                        <li>Als gevolg van Onvermijdbare en buitengewone omstandigheden (overmacht) In
+                                            de bovenstaande gevallen betaalt de Organisator reeds
+                                            ontvangen
+                                            bedragen onverwijld en uiterlijk binnen 14 dagen terug. Niet vergoed worden
+                                            kosten
+                                            die
+                                            door de Reiziger zijn gemaakt voor diensten die buiten de Overeenkomst
+                                            vallen
+                                            zoals
+                                            inentingen, visa, aanschaf materiaal, verzekeringen en indien niet bij de
+                                            Reis
+                                            inbegrepen de vliegreis, tickets, accommodatie, e.d..</li>
                                     </ol>
                                     <h3 class="mb-2"><strong class="text-lg font-semibold">14.2. Opzegging door Schuld
                                             Reiziger</strong>
@@ -1067,7 +1094,8 @@ async function downloadPdf() {
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
                                         Artikel 16 – Hulp en
                                         bijstand</h2>
-                                    <h3 id="article-16.1" class="mb-2 scroll-mt-[150px]"><strong class="text-lg font-semibold">16.1. Verplichte
+                                    <h3 id="article-16.1" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">16.1. Verplichte
                                             bijstand</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator verleent de Reiziger onverwijld hulp en bijstand
                                         indien
@@ -1097,7 +1125,8 @@ async function downloadPdf() {
                                         opgegeven
                                         noodnummer of de verstrekte contactgegevens. De Organisator zal u vervolgens de
                                         nodige
-                                        hulp en bijstand verlenen conform <a href="#article-16.1" class="hover:text-blue-800 underline">16.1 - Verplichte bijstand</a>.</p>
+                                        hulp en bijstand verlenen conform <a href="#article-16.1"
+                                            class="hover:text-blue-800 underline">16.1 - Verplichte bijstand</a>.</p>
                                 </section>
 
                                 <section id="article-17" class="scroll-mt-[150px]">
@@ -1135,7 +1164,8 @@ async function downloadPdf() {
                                             was;</li>
                                         <li>Onvermijdbare en Buitengewone Omstandigheden.</li>
                                     </ol>
-                                    <h3 id="article-17.3" class="mb-2 scroll-mt-[150px]"><strong class="text-lg font-semibold">17.3. Beperking van
+                                    <h3 id="article-17.3" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">17.3. Beperking van
                                             aansprakelijkheid</strong>
                                     </h3>
                                     <ol class="list-[lower-alpha] pl-8 mb-4">
@@ -1159,7 +1189,8 @@ async function downloadPdf() {
                                             EU-verordeningen
                                             (zoals
                                             genoemd onder a) een lagere limiet bepalen, is de totale aansprakelijkheid
-                                            van de Organisator voor alle schade per Reiziger beperkt tot maximaal driemaal (3x)
+                                            van de Organisator voor alle schade per Reiziger beperkt tot maximaal
+                                            driemaal (3x)
                                             de totale reissom.
                                         </li>
                                     </ol>
@@ -1173,7 +1204,9 @@ async function downloadPdf() {
                                         de
                                         reissom per Reiziger. Deze beperking geldt binnen de totale
                                         aansprakelijkheidslimiet
-                                        zoals genoemd in <a href="#article-17.3" class="hover:text-blue-800 underline">17.3.b</a>. Schade die de Reiziger lijdt in de uitoefening van zijn
+                                        zoals genoemd in <a href="#article-17.3"
+                                            class="hover:text-blue-800 underline">17.3.b</a>. Schade die de Reiziger
+                                        lijdt in de uitoefening van zijn
                                         beroep
                                         of bedrijf komt niet voor vergoeding in aanmerking.</p>
                                     <h3 class="mb-2"><strong class="text-lg font-semibold">17.5. Werking ten behoeve van

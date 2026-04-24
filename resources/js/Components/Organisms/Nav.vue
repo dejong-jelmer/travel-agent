@@ -47,7 +47,7 @@ const links = computed(() => ({
         <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto h-20 laptop:h-24 px-6 laptop:px-8 flex items-center justify-between">
             <!-- Logo -->
             <div class="hover:drop-shadow-xl hover:scale-[1.01] transition-all ease-in duration-200">
-                <Link :href="'/'" class="block">
+                <Link :href="route('home')" class="block">
                     <Logo
                         class="w-[150px] laptop:w-[200px]" />
                 </Link>
