@@ -28,7 +28,7 @@ return new class extends Migration
             $table->unsignedSmallInteger('min_advance_days')->nullable();
             $table->string('type')->default(TripType::CityTrip->value);
             $table->string('meta_title', 60)->nullable();
-            $table->text('meta_description', 160)->nullable();
+            $table->text('meta_description')->nullable();
             $table->softDeletes();
             $table->timestamps();
 
