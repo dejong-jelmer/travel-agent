@@ -56,7 +56,9 @@ const tabs = computed(() => [
 ])
 
 const tripMeta = computed(() => ({
-    price: `${t('trip_show.hero.from_price', { price: props.trip.price_formatted })} ${t('trip_show.hero.per_person')}`,
+    price: props.trip.is_expected
+        ? t('trip_show.hero.expected')
+        : `${t('trip_show.hero.from_price', { price: props.trip.price_formatted })} ${t('trip_show.hero.per_person')}`,
     data: [
         props.trip.destinations_formatted,
         t('trip_show.hero.days', {
@@ -201,7 +203,9 @@ const tabIcons = {
                                 <!-- Price indication -->
                                 <div>
                                     <span class="text-sm tablet:text-base font-semibold text-brand-primary">
-                                        {{ t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
+                                        {{ trip.is_expected
+                                            ? t('trip_show.inquiry.expected')
+                                            : t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
                                     </span>
                                     <span class="block text-sm text-brand-light mt-1">
                                         {{ t('trip_show.inquiry.duration_label', { duration: trip.duration }) }}

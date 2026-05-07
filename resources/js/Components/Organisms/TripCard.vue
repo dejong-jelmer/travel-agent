@@ -16,7 +16,7 @@ const props = defineProps({ trip: Object });
                     class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
                     loading="lazy" />
                 <div class="absolute top-3 right-3">
-                    <PriceBadge :price="trip.price_formatted" />
+                    <PriceBadge :price="trip.price_formatted" :expected="trip.is_expected" :expected-label="$t('trip_card.expected')" />
                 </div>
             </div>
 

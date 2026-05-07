@@ -64,6 +64,7 @@ class Trip extends Model
     protected $appends = [
         'image_paths',
         'price_formatted',
+        'is_expected',
         'destinations_formatted',
         'published_at_formatted',
         'og_image_url',
@@ -223,7 +224,21 @@ class Trip extends Model
     protected function priceFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => number_format((float) $this->starting_from_price / MoneyHelper::CENTS_PER_UNIT, 0, ',', '.')
+            get: fn () => empty($this->starting_from_price)
+                ? null
+                : number_format((float) $this->starting_from_price / MoneyHelper::CENTS_PER_UNIT, 0, ',', '.')
+        );
+    }
+
+    /**
+     * Whether this trip has no prices set yet and should be shown as "expected".
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<bool, never>
+     */
+    protected function isExpected(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => empty($this->starting_from_price)
         );
     }
 
