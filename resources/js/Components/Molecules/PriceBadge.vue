@@ -4,11 +4,19 @@ import { computed } from 'vue';
 const props = defineProps({
     price: {
         type: [Number, String],
-        required: true
+        default: null
     },
     prefix: {
         type: String,
         default: 'Vanaf'
+    },
+    expected: {
+        type: Boolean,
+        default: false
+    },
+    expectedLabel: {
+        type: String,
+        default: 'Verwacht'
     },
     size: {
         type: String,
@@ -42,7 +50,8 @@ const textSizeClass = computed(() => {
         :class="sizeClasses"
     >
         <p class="font-semibold select-none" :class="textSizeClass">
-            {{ prefix }} €{{ price }},-
+            <template v-if="expected">{{ expectedLabel }}</template>
+            <template v-else>{{ prefix }} €{{ price }},-</template>
         </p>
     </div>
 </template>
