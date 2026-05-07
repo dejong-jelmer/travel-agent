@@ -64,7 +64,8 @@
     "trip_card": {
         "days": "days",
         "sustainable_travel": "Sustainable travel",
-        "view_trip": "View trip"
+        "view_trip": "View trip",
+        "expected": "Expected"
     },
     "trip_itinerary": {
         "day": "Day",
@@ -712,9 +713,11 @@
     },
     "footer": {
         "contact": "Contact",
+        "registered": "Registered with",
         "all_rights": "All rights reserverd.",
         "conditions": "Terms and conditions",
         "privacy": "Privacy policy",
+        "guarantee": "Guarantee Scheme",
         "slogan": "Omdat we riezen… more human."
     },
     "booking_step_labels": {
@@ -841,7 +844,8 @@
         "hero": {
             "from_price": "From €{price},-",
             "days": "{duration} days",
-            "per_person": "p.p."
+            "per_person": "p.p.",
+            "expected": "Expected"
         },
         "about_trip": "About this trip",
         "tabs": {
@@ -876,6 +880,7 @@
         "inquiry": {
             "title": "Plan this trip",
             "price_from": "From €{price},- p.p.",
+            "expected": "Price on request",
             "duration_label": "{duration} days",
             "explanation": "I would be happy to look with you at the best time, your preferences, and what makes this trip special for you. Nothing is final until we have agreed on it together.",
             "cta_make_request": "Make a request",
@@ -970,7 +975,7 @@
             "title": "You're subscribed!",
             "message": "Thank you for confirming your subscription.",
             "box_title": "What to expect?",
-            "updates": "Regular updates about our latest travel offerings",
+            "updates": "Regular updates about my latest travel offerings",
             "content": "Personal experiances and stories",
             "background": "Background on destinations",
             "unsubscribe_anytime": "You can always unsubscribe"

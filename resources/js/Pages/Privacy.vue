@@ -78,7 +78,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                 <div class="bg-brand-secondary/50 p-4 rounded-lg">
                                     <p class="text-brand-text font-medium mb-2">Voor vragen over privacy kun je contact
                                         opnemen via:</p>
-                                    <p>E-mail: <a class="text-brand-link underline hover:text-brand-accent email-field"
+                                    <p>E-mail: <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline email-field"
                                             href="#" v-html="contact.mail.display"></a></p>
                                 </div>
                             </section>
@@ -232,7 +232,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                                 <td class="px-4 py-3">
                                                     <a href="https://hetzner.com/legal/privacy-policy" target="_blank"
                                                         rel="noopener noreferrer"
-                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline">
                                                         Bekijken
                                                     </a>
                                                 </td>
@@ -244,7 +244,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                                 <td class="px-4 py-3">
                                                     <a href="https://laravel.com/legal/privacy" target="_blank"
                                                         rel="noopener noreferrer"
-                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline">
                                                         Bekijken
                                                     </a>
                                                 </td>
@@ -256,7 +256,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                                 <td class="px-4 py-3">
                                                     <a href="https://www.mailjet.com/legal/privacy-policy/"
                                                         target="_blank" rel="noopener noreferrer"
-                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline">
                                                         Bekijken
                                                     </a>
                                                 </td>
@@ -268,7 +268,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                                 <td class="px-4 py-3">
                                                     <a href="https://www.transip.nl/legal-and-security/privacy-policy/"
                                                         target="_blank" rel="noopener noreferrer"
-                                                        class="text-brand-link underline hover:text-brand-accent">
+                                                        class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline">
                                                         Bekijken
                                                     </a>
                                                 </td>
@@ -333,7 +333,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                 <div class="bg-brand-accent/10 border-l-4 border-brand-accent p-4 rounded-r-lg">
                                     <p class="text-brand-text/80">
                                         Je kunt deze rechten uitoefenen door contact op te nemen via
-                                        <a class="text-brand-link underline hover:text-brand-accent email-field"
+                                        <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline email-field"
                                             href="#" v-html="contact.mail.display"></a>.
                                         Ik reageer binnen 30 dagen.
                                     </p>
@@ -428,7 +428,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                     indienen bij de Autoriteit Persoonsgegevens via
                                     <a href="https://autoriteitpersoonsgegevens.nl" target="_blank"
                                         rel="noopener noreferrer"
-                                        class="text-brand-link underline hover:text-brand-accent">autoriteitpersoonsgegevens.nl</a>.
+                                        class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline">autoriteitpersoonsgegevens.nl</a>.
                                 </p>
                             </section>
 

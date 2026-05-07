@@ -8,7 +8,7 @@ return [
     // Frontend SEO (nested with title/description, like home.php)
     'blog_seo' => [
         'title' => 'Blog',
-        'description' => 'Read our latest blog posts about sustainable train travel across Europe.',
+        'description' => 'Read my latest blog posts about sustainable train travel across Europe.',
     ],
 
     // Admin page titles & flash messages
