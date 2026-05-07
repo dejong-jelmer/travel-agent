@@ -29,7 +29,7 @@ Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
-Route::get('/guarantee', [HomeController::class, 'guarantee'])->name('guarantee');
+Route::get('/garantie', [HomeController::class, 'guarantee'])->name('guarantee');
 Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTerms'])
     ->middleware('throttle:10,1')
     ->name('terms.download');
