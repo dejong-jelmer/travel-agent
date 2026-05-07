@@ -64,7 +64,8 @@
     "trip_card": {
         "days": "reisdagen",
         "sustainable_travel": "Duurzaam reizen",
-        "view_trip": "Bekijk reis"
+        "view_trip": "Bekijk reis",
+        "expected": "Verwacht"
     },
     "trip_itinerary": {
         "day": "Dag",
@@ -842,7 +843,8 @@
         "hero": {
             "from_price": "Vanaf €{price},-",
             "days": "{duration} dagen",
-            "per_person": "p.p."
+            "per_person": "p.p.",
+            "expected": "Verwacht"
         },
         "about_trip": "Waarom {trip}",
         "tabs": {
@@ -877,6 +879,7 @@
         "inquiry": {
             "title": "Plan deze reis",
             "price_from": "Vanaf €{price},- p.p.",
+            "expected": "Prijs op aanvraag",
             "duration_label": "{duration} dagen",
             "explanation": "Ik kijk graag samen met je naar de beste periode, je voorkeuren en wat deze reis voor jou bijzonder maakt. Niets is definitief tot we het samen hebben afgestemd.",
             "cta_make_request": "Vraag voorstel aan",

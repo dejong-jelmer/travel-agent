@@ -64,7 +64,8 @@
     "trip_card": {
         "days": "days",
         "sustainable_travel": "Sustainable travel",
-        "view_trip": "View trip"
+        "view_trip": "View trip",
+        "expected": "Expected"
     },
     "trip_itinerary": {
         "day": "Day",
@@ -843,7 +844,8 @@
         "hero": {
             "from_price": "From €{price},-",
             "days": "{duration} days",
-            "per_person": "p.p."
+            "per_person": "p.p.",
+            "expected": "Expected"
         },
         "about_trip": "About this trip",
         "tabs": {
@@ -878,6 +880,7 @@
         "inquiry": {
             "title": "Plan this trip",
             "price_from": "From €{price},- p.p.",
+            "expected": "Price on request",
             "duration_label": "{duration} days",
             "explanation": "I would be happy to look with you at the best time, your preferences, and what makes this trip special for you. Nothing is final until we have agreed on it together.",
             "cta_make_request": "Make a request",
