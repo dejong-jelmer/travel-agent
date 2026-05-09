@@ -145,15 +145,15 @@ class TripItemService
                 continue;
             }
 
-            // Category is already a value (e.g., 'transport'), not a label
+            $typeEnum = ItemType::tryFrom($itemData['type']);
             $categoryEnum = ItemCategory::tryFrom($itemData['category']);
 
-            if (! $categoryEnum) {
-                continue; // Skip if category not found
+            if (! $typeEnum || ! $categoryEnum) {
+                continue;
             }
 
             $trip->items()->create([
-                'type' => $categoryEnum->type(), // Get type from category
+                'type' => $typeEnum,
                 'category' => $categoryEnum,
                 'item' => $itemData['item'],
             ]);

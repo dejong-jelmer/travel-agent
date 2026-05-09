@@ -1,5 +1,7 @@
 <script setup>
-import { Check, X } from 'lucide-vue-next';
+import { computed, markRaw } from 'vue';
+
+import { Check, X, Plus } from 'lucide-vue-next';
 
 const props = defineProps({
     tripItems: {
@@ -7,6 +9,13 @@ const props = defineProps({
         default: () => ({})
     }
 });
+
+const icons = {
+    inclusion: markRaw(Check),
+    exclusion: markRaw(X),
+    optional: markRaw(Plus),
+};
+
 </script>
 
 <template>
@@ -31,8 +40,12 @@ const props = defineProps({
                                 class="flex items-start gap-3">
                                 <div class="flex-shrink-0 mt-0.5">
                                     <component
-                                        :is="tripItem.is_inclusive ? Check : X"
-                                        :class="tripItem.is_inclusive ? 'text-status-success' : 'text-status-error'"
+                                        :is="icons[tripItem.type]"
+                                        :class="{
+                                            'text-status-success': tripItem.type === 'inclusion',
+                                            'text-status-error': tripItem.type === 'exclusion',
+                                            'text-brand-accent': tripItem.type === 'optional',
+                                        }"
                                         class="w-5 h-5"
                                     />
                                 </div>

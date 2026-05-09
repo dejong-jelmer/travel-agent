@@ -19,6 +19,10 @@ const props = defineProps({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    index: {
+        type: Number,
+        default: 0
     }
 })
 </script>
@@ -32,7 +36,7 @@ const props = defineProps({
             <!-- Day label -->
             <div class="relative flex-shrink-0 w-20 tablet:w-24 pt-1">
                 <span class="text-sm tablet:text-base font-light text-brand-primary/60 tabular-nums">
-                    {{ $t('trip_itinerary.day') }} {{ itinerary.day_from }}<span v-if="itinerary.day_to"> - {{ itinerary.day_to }}</span>
+                    {{ $t('trip_itinerary.day') }} {{ itinerary.day_from }}<span v-if="itinerary.day_to">–{{ itinerary.day_to }}</span>
                 </span>
             </div>
 
@@ -74,13 +78,13 @@ const props = defineProps({
                 </div>
 
                 <!-- Description + optional image -->
-                <div v-if="itinerary.image?.public_url" class="flex flex-col tablet:flex-row gap-6 items-start">
+                <div :class="['flex flex-col gap-6 items-start', index % 2 === 0 ? 'tablet:flex-row' : 'tablet:flex-row-reverse']">
                     <div class="flex-1 min-w-0">
                         <p class="text-brand-text leading-relaxed text-sm tablet:text-base">
                             {{ itinerary.description }}
                         </p>
                     </div>
-                    <div class="flex-shrink-0 w-full tablet:w-48 self-start">
+                    <div v-if="itinerary.image?.public_url" class="flex-shrink-0 w-full tablet:w-48 self-start">
                         <div class="rounded-md overflow-hidden">
                             <img
                                 :src="itinerary.image?.public_url ?? placeholder"
@@ -92,11 +96,7 @@ const props = defineProps({
                         </div>
                         <LightBox ref="lightboxRef" :images="[itinerary.image]" />
                     </div>
-                </div>
-                <div v-else>
-                    <p class="text-brand-text leading-relaxed text-sm tablet:text-base">
-                        {{ itinerary.description }}
-                    </p>
+                    <div v-else class="hidden tablet:block flex-shrink-0 tablet:w-48 self-start" aria-hidden="true"></div>
                 </div>
 
                 <!-- Remark -->

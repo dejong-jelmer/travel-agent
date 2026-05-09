@@ -12,6 +12,7 @@ enum ItemType: string
 
     case Inclusion = 'inclusion';
     case Exclusion = 'exclusion';
+    case Optional = 'optional';
 
     protected function getLabelKey(): string
     {
