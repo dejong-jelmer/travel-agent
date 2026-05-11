@@ -19,7 +19,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                         De getoonde prijs is een richtprijs per persoon. De definitieve prijs hangt af van wanneer je
                         gaat en met hoeveel mensen.
                         Voor populaire periodes zoals schoolvakanties is het verstandig om vroeg contact op te nemen —
-                        dan hebben we meer ruimte om een passend voorstel te maken.
+                        dan is er meer ruimte om een passend voorstel te maken.
                     </p>
                 </div>
             </div>
@@ -52,9 +52,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                         Hulp onderweg
                     </h4>
                     <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
-                        Bij je reisdocumenten ontvang je mijn 24/7 bereikbare noodnummer. Hiermee kun je
-                        mij altijd bereiken bij problemen of vragen tijdens je reis, ook buiten kantooruren
-                        en in het weekend.
+                        Bij je reisdocumenten ontvang je mijn noodnummer. Daarmee kun je me bereiken bij urgente problemen tijdens je reis, ook in het weekend.
                     </p>
                 </div>
             </div>

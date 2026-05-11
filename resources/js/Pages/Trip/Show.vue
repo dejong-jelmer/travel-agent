@@ -121,7 +121,7 @@ const tabIcons = {
                                 <template v-for="(highlight, index) in trip.highlights" :key="index">
                                     <li class="flex items-start gap-3">
                                         <span class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
-                                        <span class="text-brand-primary">{{ highlight }}</span>
+                                        <span class="text-brand-text">{{ highlight }}</span>
                                     </li>
                                 </template>
                             </ul>
@@ -195,13 +195,13 @@ const tabIcons = {
                         <!-- Inquiry Card -->
                         <div class="bg-white rounded-2xl shadow-lg border border-brand-accent/20 overflow-hidden">
                             <div class="p-6 laptop:p-8 space-y-6 laptop:space-y-12">
-                                <h3 class="text-sm tablet:text-base font-semibold text-brand-primary">
+                                <h3 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                                     {{ t('trip_show.inquiry.title') }}
                                 </h3>
 
                                 <!-- Price indication -->
                                 <div>
-                                    <span class="text-sm tablet:text-base font-semibold text-brand-primary">
+                                    <span class="text-base tablet:text-base font-semibold text-brand-primary">
                                         {{ trip.is_expected
                                             ? t('trip_show.inquiry.expected')
                                             : t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
@@ -212,7 +212,7 @@ const tabIcons = {
                                 </div>
 
                                 <!-- Explanation -->
-                                <p class="text-sm text-brand-text leading-relaxed">
+                                <p class="text-base text-brand-text leading-relaxed">
                                     {{ t('trip_show.inquiry.explanation') }}
                                 </p>
 
