@@ -60,13 +60,12 @@ class ItineraryController extends Controller
     {
         $itinerary = new Itinerary;
         $validatedFields = $request->safe()->except('image');
-        $validatedImage = $request->safe()->only('image');
 
         $itinerary->fill($validatedFields);
         $itinerary->trip()->associate($trip);
         $itinerary->order = $trip->itineraries->count() + 1;
         $itinerary->save();
-        $itinerary->syncImages($validatedImage['image'], ImageRelation::Image);
+        $itinerary->syncImageFromRequest($request, 'image', ImageRelation::Image);
 
         return redirect()
             ->route('admin.trips.itineraries.index', $itinerary->trip)
@@ -90,12 +89,10 @@ class ItineraryController extends Controller
     public function update(UpdateItineraryRequest $request, Itinerary $itinerary): RedirectResponse
     {
         $validatedFields = $request->safe()->except('image');
-        $validatedImage = $request->safe()->only('image');
 
         $itinerary->update($validatedFields);
 
-        // Sync image (handles both existing path and new upload)
-        $itinerary->syncImages($validatedImage['image'] ?? [], ImageRelation::Image);
+        $itinerary->syncImageFromRequest($request, 'image', ImageRelation::Image);
 
         return redirect()
             ->route('admin.trips.itineraries.index', $itinerary->trip)
