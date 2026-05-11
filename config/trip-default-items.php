@@ -12,13 +12,8 @@ return [
         ],
     ],
     ItemType::Exclusion->value => [
-        ItemCategory::AdditionalCost->value => [
-            'trip.item.additional_cost.fees.booking',
-            'trip.item.additional_cost.fees.guarantee_fund',
-        ],
         ItemCategory::CostsToConsider->value => [
             'trip.item.costs_to_consider.additional_meals',
-            'trip.item.costs_to_consider.activities',
             'trip.item.costs_to_consider.excursions',
             'trip.item.costs_to_consider.tips',
             'trip.item.costs_to_consider.personal_expenses',

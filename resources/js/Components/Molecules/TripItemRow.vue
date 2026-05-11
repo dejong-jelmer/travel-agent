@@ -1,5 +1,5 @@
 <script setup>
-const props = defineProps({
+defineProps({
     item: {
         type: Object,
         required: true,
@@ -12,6 +12,10 @@ const props = defineProps({
         type: Array,
         required: true,
     },
+    typeOptions: {
+        type: Array,
+        default: () => [],
+    },
     showTypeSelect: {
         type: Boolean,
         default: false,
@@ -23,24 +27,29 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['update', 'delete']);
-
-// Update type automatically when category changes
-const handleCategoryChange = (newCategory) => {
-    const selectedCategory = props.categoryOptions.find(cat => cat.id === newCategory);
-    if (selectedCategory && selectedCategory.type) {
-        props.item.type = selectedCategory.type;
-    }
-};
 </script>
 
 <template>
     <div class="flex items-start gap-3 group">
+        <!-- Type select -->
+        <div v-if="showTypeSelect" class="w-40">
+            <Select
+                name="type"
+                v-model="item.type"
+                :multiple="false"
+                :required="true"
+                :options="typeOptions"
+                :feedback="errors[`items.${index}.type`]"
+                :placeholder="$t('admin.trips.edit.items.select_type')"
+                :show-label="false"
+            />
+        </div>
+
         <!-- Category select -->
         <div class="w-48">
             <Select
                 name="category"
                 v-model="item.category"
-                @update:modelValue="handleCategoryChange"
                 :multiple="false"
                 :required="true"
                 :options="categoryOptions"

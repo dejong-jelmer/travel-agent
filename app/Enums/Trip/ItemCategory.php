@@ -13,6 +13,7 @@ enum ItemCategory: string
     case GeneralInclusions = 'general_inclusions';
     case Transport = 'transport';
     case Accommodation = 'accommodation';
+    case Experiences = 'experiences';
     case AdditionalCost = 'additional_cost';
     case CostsToConsider = 'costs_to_consider';
 

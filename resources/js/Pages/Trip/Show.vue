@@ -108,8 +108,7 @@ const tabIcons = {
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
                             </div>
-                            <p class="text-lg text-brand-text leading-relaxed">
-                                {{ trip.description }}
+                            <p class="text-lg text-brand-text leading-relaxed" v-html="trip.description">
                             </p>
                         </div>
 
@@ -151,7 +150,7 @@ const tabIcons = {
                             <div v-if="activeTab === 'itinerary'" class="space-y-6">
                                 <div v-if="trip.itineraries?.length" class="space-y-6">
                                     <template v-for="(itinerary, index) in trip.itineraries" :key="index">
-                                        <TripItinerary :itinerary="itinerary" />
+                                        <TripItinerary :itinerary="itinerary" :index="index" />
                                     </template>
                                 </div>
                                 <p v-else class="text-brand-light">

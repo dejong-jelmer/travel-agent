@@ -131,10 +131,9 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                  <Input type="text" name="intro" :label="t('forms.trip.fields.intro.label')"
                                     :required="true" v-model="form.intro" :feedback="form.errors.intro"
                                     :placeholder="t('forms.trip.fields.intro.placeholder')" />
-
-                                <TextArea name="description" :label="t('forms.trip.fields.description.label')"
-                                    :required="true" v-model="form.description" :feedback="form.errors.description"
-                                    :placeholder="t('forms.trip.fields.description.placeholder')" :rows="6" />
+                                <Label for-field="description" :required="true">{{ t('forms.trip.fields.description.label') }}</Label>
+                                <TipTap name="description" :required="true" v-model="form.description" :feedback="form.errors.description" />
+                                <FormFeedback :message="form.errors.description" />
                                 <DynamicInputList :items="form.highlights" name="highlights"
                                     :label="t('forms.trip.fields.highlights.label')"
                                     :placeholder="t('forms.trip.fields.highlights.placeholder')"

@@ -26,7 +26,7 @@ class ItineraryValidationRules
     public static function imageCreate(): array
     {
         return [
-            'image' => ['required', ...ImageValidationRules::baseImage()],
+            'image' => ['nullable', ...ImageValidationRules::baseImage()],
         ];
     }
 
