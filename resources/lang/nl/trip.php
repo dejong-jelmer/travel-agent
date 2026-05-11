@@ -23,18 +23,20 @@ return [
         'category' => [
             'general_inclusions' => 'Altijd inbegrepen',
             'transport' => 'Vervoer',
-            'accommodation' => 'De overnachtingen',
+            'accommodation' => 'Overnachtingen',
             'additional_cost' => 'Bijkomende kosten',
             'costs_to_consider' => 'Kosten om rekening mee te houden',
+            'experiences' => 'Belevenissen',
         ],
         'type' => [
             'inclusion' => 'Inclusief',
             'exclusion' => 'Exclusief',
+            'optional' => 'Optioneel',
         ],
         'general_inclusions' => [
-            'itinerary' => 'Goed uitgedacht reisplan',
+            'itinerary' => 'Persoonlijk samengesteld reisplan',
             'accommodation_breakfast' => 'Accommodatie altijd inclusief ontbijt',
-            'train_reservations' => 'Zitplaatsreservering in de trein (indien mogelijk)',
+            'train_reservations' => 'Zitplaatsen gereserveerd waar dat kan',
         ],
         'additional_cost' => [
             'fees' => [
@@ -45,8 +47,7 @@ return [
         ],
         'costs_to_consider' => [
             'additional_meals' => 'Overige maaltijden',
-            'activities' => 'Activiteiten',
-            'excursions' => 'Excursies',
+            'excursions' => 'Overige activiteiten & excursies',
             'tips' => 'Fooien',
             'personal_expenses' => 'Persoonlijke uitgaven',
             'travel_cancellation_insurance' => 'Reis- en/of annuleringsverzekering',

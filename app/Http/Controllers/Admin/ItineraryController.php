@@ -95,9 +95,7 @@ class ItineraryController extends Controller
         $itinerary->update($validatedFields);
 
         // Sync image (handles both existing path and new upload)
-        if (isset($validatedImage['image'])) {
-            $itinerary->syncImages($validatedImage['image'], ImageRelation::Image);
-        }
+        $itinerary->syncImages($validatedImage['image'] ?? [], ImageRelation::Image);
 
         return redirect()
             ->route('admin.trips.itineraries.index', $itinerary->trip)

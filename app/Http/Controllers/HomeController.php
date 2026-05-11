@@ -26,7 +26,7 @@ class HomeController extends Controller
     {
         return Inertia::render('Home', [
             'title' => $this->pageTitle('home.home_seo'),
-            'trips' => Trip::with(['destinations', 'heroImage'])->published()->featured()->get(),
+            'trips' => Trip::with(['destinations', 'heroImage'])->published()->featured()->orderBy('published_at', 'desc')->get(),
             'seo' => $this->pageSeo('home.home_seo'),
         ]);
     }

@@ -4,58 +4,32 @@ import { Plus } from 'lucide-vue-next';
 
 const props = defineProps({
     form: Object,
-    typeOptions: Object,
-    categoryOptions: Object,
+    typeOptions: Array,
+    categoryOptions: Array,
 });
 
-// Groepeer categories per type
-const categoriesByType = computed(() => {
-    const grouped = {};
+const customizableCategoryOptions = computed(() =>
+    props.categoryOptions.filter(category => !category.disabled)
+);
 
-    props.categoryOptions.forEach(category => {
-        if (!category.disabled && category.type) {
-            if (!grouped[category.type]) {
-                grouped[category.type] = [];
-            }
-            grouped[category.type].push(category);
-        }
+const itemsForType = (typeValue) =>
+    props.form.items.filter(item => item.type === typeValue);
+
+const lastItemEmpty = (typeValue) => {
+    const items = itemsForType(typeValue);
+    const last = items.at(-1);
+    return last ? last.item === '' : false;
+};
+
+const addItem = (typeValue) => {
+    if (lastItemEmpty(typeValue)) {
+        return;
+    }
+    props.form.items.push({
+        type: typeValue,
+        category: '',
+        item: '',
     });
-
-    return grouped;
-});
-
-const getTypeLabel = (typeValue) => {
-    const type = props.typeOptions.find(t => t.id === typeValue);
-    return type ? type.name : typeValue;
-};
-
-const itemsFor = (category) => {
-    return props.form.items.filter(
-        item => item.category === category
-    );
-};
-
-const lastItemEmpty = (category) => {
-    const items = props.form.items.filter(
-        item => item.category === category
-    );
-    const lastValue = Object.values(items).at(-1)
-    if (typeof lastValue !== 'undefined') {
-        return lastValue.item === ''
-    }
-    return false;
-}
-
-const addItem = (category, type) => {
-
-    if (!lastItemEmpty(category)) {
-        props.form.items.push({
-            type,
-            category,
-            item: ''
-        });
-    }
-
 };
 
 const deleteItem = (item) => {
@@ -68,29 +42,35 @@ const deleteItem = (item) => {
 
 <template>
     <div class="space-y-10">
-        <div v-for="(categories, typeValue) in categoriesByType" :key="typeValue" class="space-y-6">
+        <div v-for="type in typeOptions" :key="type.id" class="space-y-6">
             <h3 class="text-xl font-bold text-gray-800 border-b-2 border-primary-default pb-2">
-                {{ getTypeLabel(typeValue) }}
+                {{ type.name }}
             </h3>
 
-            <div v-for="category in categories" :key="category.id" class="ml-4 mb-6">
-                <h4 class="text-base font-semibold text-gray-700 mb-3">{{ category.name }}</h4>
+            <div class="space-y-2 mb-3 ml-4">
+                <TripItemRow
+                    v-for="(item, index) in itemsForType(type.id)"
+                    :key="`${type.id}-${form.items.indexOf(item)}`"
+                    :index="form.items.indexOf(item)"
+                    :item="item"
+                    :type-options="typeOptions"
+                    :category-options="customizableCategoryOptions"
+                    :show-type-select="true"
+                    :errors="form.errors"
+                    @delete="() => deleteItem(item)"
+                />
+            </div>
 
-                <div class="space-y-2 mb-3 ml-4">
-                    <TripItemRow v-for="(item, index) in itemsFor(category.id)" :key="`${category.id}-${index}`" :index="form.items.indexOf(item)" :item="item"
-                        @delete="() => deleteItem(item)" :category-options="categoryOptions" :show-type-select="false"
-                        :errors="form.errors" />
-                </div>
-
-                <!-- Add button -->
-                <div class="ml-4">
-                    <button type="button" @click="addItem(category.id, category.type)"
-                        class="flex items-center gap-2 px-3 py-2 text-sm text-primary-default hover:text-primary-dark transition-colors"
-                        :class="{ 'cursor-not-allowed': lastItemEmpty(category.id) }">
-                        <Plus class="h-4 w-4" />
-                        <span>{{ $t('forms.actions.add') }}</span>
-                    </button>
-                </div>
+            <div class="ml-4">
+                <button
+                    type="button"
+                    @click="addItem(type.id)"
+                    class="flex items-center gap-2 px-3 py-2 text-sm text-primary-default hover:text-primary-dark transition-colors"
+                    :class="{ 'cursor-not-allowed': lastItemEmpty(type.id) }"
+                >
+                    <Plus class="h-4 w-4" />
+                    <span>{{ $t('forms.actions.add') }}</span>
+                </button>
             </div>
         </div>
     </div>

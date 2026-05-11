@@ -1203,6 +1203,7 @@
             },
             "edit": {
                 "items": {
+                    "select_type": "Selecteer een type…",
                     "select_category": "Selecteer een category…",
                     "description": "Omschrijving"
                 }

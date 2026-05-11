@@ -26,10 +26,12 @@ return [
             'accommodation' => 'Accommodation',
             'additional_cost' => 'Additional costs',
             'costs_to_consider' => 'Costs to consider',
+            'experiences' => 'Experiences',
         ],
         'type' => [
             'inclusion' => 'Included',
             'exclusion' => 'Excluded',
+            'optional' => 'Optioneel',
         ],
         'general_inclusions' => [
             'itinerary' => 'Well-planned itinerary',
@@ -45,8 +47,7 @@ return [
         ],
         'costs_to_consider' => [
             'additional_meals' => 'Additional meals',
-            'activities' => 'Activities',
-            'excursions' => 'Excursions',
+            'excursions' => 'Additional activities & excursions',
             'tips' => 'Tips',
             'personal_expenses' => 'Personal expenses',
             'travel_cancellation_insurance' => 'Travel and/or cancellation insurance',

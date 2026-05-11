@@ -143,7 +143,7 @@ function displayDate(entry) {
                                     <div>
                                         <label class="text-sm font-medium text-gray-700">{{
                                             t('admin.trips.show.details.description') }}</label>
-                                        <p class="mt-1 text-gray-900">{{ trip.description }}</p>
+                                        <p class="mt-1 text-gray-900" v-html="trip.description"></p>
                                     </div>
                                     <div v-if="trip.highlights?.length">
                                         <label class="text-sm font-medium text-gray-700">{{

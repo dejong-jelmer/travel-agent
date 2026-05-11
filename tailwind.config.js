@@ -1,4 +1,5 @@
 import defaultTheme from "tailwindcss/defaultTheme";
+import typography from "@tailwindcss/typography";
 import screens from "./resources/js/screens.js";
 
 /** @type {import('tailwindcss').Config} */
@@ -61,5 +62,5 @@ export default {
             },
         },
     },
-    plugins: [],
+    plugins: [typography],
 };
