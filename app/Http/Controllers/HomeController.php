@@ -102,7 +102,6 @@ class HomeController extends Controller
                 'version' => config('terms.version'),
                 'updated' => config('terms.updated'),
             ],
-            'feesAndFunds' => $this->priceCalculator->getFormattedFeesAndFunds(),
         ]);
     }
 

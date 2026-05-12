@@ -6,7 +6,6 @@ const companyName = window.appName;
 
 const props = defineProps({
     contact: Object,
-    feesAndFunds: Object,
     terms: {
         type: Object,
         default: { version: null, updated: null }
@@ -62,7 +61,8 @@ async function downloadPdf() {
 
                             <div id="inhoud" class="mb-12">
                                 <h2 class="text-2xl font-bold mb-4 text-gray-900 border-b pb-2">Inhoud</h2>
-                                <ul class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-[repeat(11,minmax(0,1fr))] md:grid-flow-col gap-x-8 gap-y-2 list-none p-0">
+                                <ul
+                                    class="grid grid-cols-1 md:grid-cols-2 md:grid-rows-[repeat(11,minmax(0,1fr))] md:grid-flow-col gap-x-8 gap-y-2 list-none p-0">
                                     <li><a href="#article-1" class="hover:text-blue-800 hover:underline">Artikel 1
                                             - Definities</a></li>
                                     <li><a href="#article-2" class="hover:text-blue-800 hover:underline">Artikel 2
@@ -76,7 +76,7 @@ async function downloadPdf() {
                                     <li><a href="#article-6" class="hover:text-blue-800 hover:underline">Artikel 6
                                             – Informatie door de Reiziger</a></li>
                                     <li><a href="#article-7" class="hover:text-blue-800 hover:underline">Artikel 7
-                                            – Betaling</a></li>
+                                            – Betaling en Garantieregeling</a></li>
                                     <li><a href="#article-8" class="hover:text-blue-800 hover:underline">Artikel 8
                                             – Prijswijziging</a></li>
                                     <li><a href="#article-9" class="hover:text-blue-800 hover:underline">Artikel 9
@@ -118,12 +118,12 @@ async function downloadPdf() {
                                     </h2>
                                     <div class="space-y-4">
                                         <p><strong class="font-semibold">Organisator:</strong> <strong>{{ companyName
-                                        }}</strong>. De
+                                                }}</strong>. De
                                             handelaar die
                                             Reis samenstelt en deze – al dan niet via een doorverkoper – aanbiedt, en de
                                             handelaar
                                             die een Gekoppeld Reisarrangement faciliteert. <strong>{{ companyName
-                                            }}</strong> is een
+                                                }}</strong> is een
                                             geregistreerde
                                             handelsnaam en ingeschreven bij de Kamer van Koophandel onder nummer:
                                             <strong>{{ contact.kvk }}</strong>.
@@ -208,8 +208,8 @@ async function downloadPdf() {
                                             class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
                                             target="_blank" rel="noopener noreferrer" aria-label="STO Garant"
                                             href="https://www.sto-garant.nl">www.sto-garant.nl</a>.
-                                        </p>
-                                        <p>
+                                    </p>
+                                    <p>
                                         Bij elk (reis)aanbod van <strong>{{ companyName }}</strong> wordt duidelijk
                                         vermeld of de
                                         garantie van STO
@@ -225,16 +225,19 @@ async function downloadPdf() {
 
                                     <p>Indien de garantie van STO Garant van toepassing is op uw boeking, dan betaalt u
                                         de reissom niet
-                                        aan <strong>{{ companyName }}</strong>, maar aan de derdengeldenrekening van Stichting
+                                        aan <strong>{{ companyName }}</strong>, maar aan de derdengeldenrekening van
+                                        Stichting
                                         Derdengelden Certo
                                         Escrow, een bij De Nederlandsche Bank (DNB) en de Autoriteit Financiële Markten
                                         (AFM)
                                         geregistreerde betaaldienstverlener. Deze stichting derdengelden waarborgt uw
                                         reissom tot na
-                                        afloop van uw boeking. Wanneer diensten door financieel onvermogen van <strong>{{ companyName }}</strong>
+                                        afloop van uw boeking. Wanneer diensten door financieel onvermogen van
+                                        <strong>{{ companyName }}</strong>
                                         niet (volledig en/of tijdig) worden verleend, dan voert STO Garant de garantie
                                         uit. In de
-                                        garantieregeling leest u hoe u daar in dat geval aanspraak op maakt.</p>
+                                        garantieregeling leest u hoe u daar in dat geval aanspraak op maakt.
+                                    </p>
                                 </section>
 
                                 <section id="article-3" class="scroll-mt-[150px]">
@@ -506,31 +509,39 @@ async function downloadPdf() {
 
                                 <section id="article-7" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 7 – Betaling
+                                        Artikel 7 – Betaling en Garantieregeling
                                     </h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.1. Aanbetaling</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.1. Uitvoering via STO
+                                            Garant</strong>
                                     </h3>
-                                    <p class="mb-4 pl-4">Na de totstandkoming van de Overeenkomst en tegelijk met de
-                                        bevestiging/factuur en uiterlijk binnen 14 dagen na dagtekening daarvan, is de
-                                        Reiziger
-                                        een aanbetaling verschuldigd van 30% van de reissom. De boekingskosten (€{{ feesAndFunds['booking_fee'] }})
-                                        en
-                                        kosten voor de garantieregeling (€{{ feesAndFunds['guarantee_fund'] }}) dienen ook binnen 14 dagen na ontvangst
-                                        van
-                                        de
-                                        factuur te zijn voldaan.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.2. Restbetaling</strong>
+                                    <p class="mb-4 pl-4">De betaling van de reissom geschiedt niet rechtstreeks aan de
+                                        Organisator. Om aan de wettelijke garantieplicht te voldoen, maakt de
+                                        Organisator gebruik van STO Garant. De Reiziger ontvangt hiertoe per e-mail
+                                        vanuit het platform van STO Garant een betaalverzoek met een betaallink.</p>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.2. Aanbetaling</strong>
+                                    </h3>
+                                    <p class="mb-4 pl-4">Na de totstandkoming van de Overeenkomst ontvangt de Reiziger
+                                        de bevestiging/factuur. Tegelijkertijd, of kort
+                                        daarna, ontvangt de Reiziger het betaalverzoek van STO Garant. De aanbetaling
+                                        van 30% van de reissom dient
+                                        uiterlijk binnen 14 dagen na ontvangst van dit betaalverzoek te zijn voldaan.
+                                        Eventuele boekingskosten en
+                                        kosten voor de garantieregeling dienen eveneens binnen deze termijn te worden
+                                        voldaan.</p>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.3. Restbetaling</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Het restant van de reissom dient uiterlijk 6 weken voor de
                                         aanvangsdatum van de Reis te zijn voldaan.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.3. Boeking kort voor
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.4. Boeking kort voor
                                             vertrek</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Bij totstandkoming van de Overeenkomst binnen 6 weken voor de
-                                        aanvangsdatum van de reis, dient de volledige reissom per ommegaande en in ieder
-                                        geval
-                                        voor aanvang van de reis te zijn voldaan.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.4. Niet-terugbetaalbare
+                                        aanvangsdatum van de reis, dient de volledige reissom per ommegaande na
+                                        ontvangst van het betaalverzoek te worden voldaan. De betaling dient in ieder
+                                        geval voor aanvang van de reis door het platform van STO Garant te zijn
+                                        ontvangen.</p>
+                                    <h3 id="article-7.5" class="mb-2"><strong class="text-lg font-semibold">7.5.
+                                            Niet-terugbetaalbare
                                             elementen</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Sommige onderdelen van de Reis zijn 'niet-terugbetaalbaar'.
@@ -543,14 +554,14 @@ async function downloadPdf() {
                                         sluiten van de Overeenkomst zijn alleen mogelijk conform de wettelijke
                                         bepalingen en <a href="#article-8" class="hover:text-blue-800 underline">Artikel
                                             8 – Prijswijziging</a>, van deze Voorwaarden.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.5. Verzuim</strong></h3>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.6. Verzuim</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger niet betaalt binnen de hierboven of op de
                                         factuur
                                         genoemde termijn, is de Reiziger zonder dat een nadere ingebrekestelling is
                                         vereist
                                         in
                                         verzuim.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.6. Uitblijven van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.7. Uitblijven van
                                             betaling</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger in verzuim is, kan de Organisator het
                                         toezenden
@@ -571,7 +582,7 @@ async function downloadPdf() {
                                         daarvoor verschuldigde annuleringskosten bij de Reiziger in rekening brengen
                                         conform <a href="#article-12" class="hover:text-blue-800 underline">Artikel 12 –
                                             Annulering door de Reiziger</a>.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.7. Geen annulering door
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.8. Geen annulering door
                                             niet-betalen</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger kan de boeking niet annuleren door simpelweg niet
                                         aan
@@ -863,12 +874,22 @@ async function downloadPdf() {
                                     <p class="mb-4 pl-4">Bij opzegging van de Overeenkomst is de Reiziger de volgende
                                         gestandaardiseerde bedragen verschuldigd:</p>
                                     <ul class="list-disc pl-8 mb-4">
-                                        <li>tot en met 56 dagen vóór de dag van vertrek: 30% van de reissom;</li>
-                                        <li>vanaf 55 dagen tot en met 22 dagen vóór de dag van vertrek: 60% van de
-                                            reissom;
-                                        </li>
-                                        <li>vanaf 21 dagen vóór de dag van vertrek: 100% van de reissom.</li>
+                                        <li>tot en met 56 dagen vóór de dag van vertrek: 30% van de reissom (de
+                                            aanbetaling);</li>
+                                        <li>vanaf 55 dagen tot en met 42 dagen vóór de dag van vertrek: 50% van de
+                                            reissom;</li>
+                                        <li>vanaf 41 dagen tot en met 21 dagen vóór de dag van vertrek: 75% van de
+                                            reissom;</li>
+                                        <li>vanaf 20 dagen vóór de dag van vertrek tot en met de dag van vertrek: 100%
+                                            van de reissom.</li>
                                     </ul>
+                                    <p class="mb-4 pl-4">De Reiziger heeft het recht om aan te tonen dat de werkelijke
+                                        schade die de Organisator lijdt door de annulering lager is dan de
+                                        gestandaardiseerde bedragen. In dat geval zal de Organisator de lagere schade in
+                                        rekening brengen. Omgekeerd kan de Organisator hogere kosten in rekening brengen
+                                        indien de werkelijke kosten (conform <a href="#article-7.5"
+                                            class="hover:text-blue-800 underline">Artikel 7.5 - Niet-terugbetaalbare
+                                            elementen</a>) de staffel overstijgen.</p>
                                     <h3 class="mb-2"><strong class="text-lg font-semibold">12.4. Deelannulering</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Bij vermindering van het aantal deelnemers van de Reis waarbij

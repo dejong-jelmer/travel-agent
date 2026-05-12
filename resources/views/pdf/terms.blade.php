@@ -147,7 +147,7 @@
             <li>Artikel 4 – Totstandkoming en Inhoud van de Overeenkomst</li>
             <li>Artikel 5 – Informatie door de Organisator</li>
             <li>Artikel 6 – Informatie door de Reiziger</li>
-            <li>Artikel 7 – Betaling</li>
+            <li>Artikel 7 – Betaling en Garantieregeling</li>
             <li>Artikel 8 – Prijswijziging</li>
             <li>Artikel 9 – Reisdocumenten en reisbescheiden</li>
             <li>Artikel 10 – Wijzigingen door de Reiziger</li>
@@ -363,27 +363,31 @@
 
     {{-- Artikel 7 --}}
     <div class="article">
-        <h2>Artikel 7 – Betaling</h2>
-        <h3>7.1. Aanbetaling</h3>
-        <p>Na de totstandkoming van de Overeenkomst en tegelijk met de bevestiging/factuur en uiterlijk binnen 14 dagen
-            na dagtekening daarvan, is de Reiziger een aanbetaling verschuldigd van 30% van de reissom. De
-            boekingskosten (€{{ $feesAndFunds['booking_fee'] }}) en kosten voor de garantieregeling
-            (€{{ $feesAndFunds['guarantee_fund'] }}) dienen ook binnen 14 dagen na ontvangst
-            van de factuur te zijn voldaan.</p>
-        <h3>7.2. Restbetaling</h3>
+        <h2>Artikel 7 – Betaling en Garantieregeling</h2>
+        <h3>7.1. Uitvoering via STO Garant</h3>
+        <p>De betaling van de reissom geschiedt niet rechtstreeks aan de Organisator. Om aan de wettelijke
+            garantieplicht te voldoen, maakt de Organisator gebruik van STO Garant. De Reiziger ontvangt hiertoe per
+            e-mail vanuit het platform van STO Garant een betaalverzoek met een betaallink.</p>
+        <h3>7.2. Aanbetaling</h3>
+        <p>Na de totstandkoming van de Overeenkomst ontvangt de Reiziger de bevestiging/factuur. Tegelijkertijd, of kort
+            daarna, ontvangt de Reiziger het betaalverzoek van STO Garant. De aanbetaling van 30% van de reissom dient
+            uiterlijk binnen 14 dagen na ontvangst van dit betaalverzoek te zijn voldaan. Eventuele boekingskosten en
+            kosten voor de garantieregeling dienen eveneens binnen deze termijn te worden voldaan.</p>
+        <h3>7.3. Restbetaling</h3>
         <p>Het restant van de reissom dient uiterlijk 6 weken voor de aanvangsdatum van de Reis te zijn voldaan.</p>
-        <h3>7.3. Boeking kort voor vertrek</h3>
+        <h3>7.4. Boeking kort voor vertrek</h3>
         <p>Bij totstandkoming van de Overeenkomst binnen 6 weken voor de aanvangsdatum van de reis, dient de volledige
-            reissom per ommegaande en in ieder geval voor aanvang van de reis te zijn voldaan.</p>
-        <h3>7.4. Niet-terugbetaalbare elementen</h3>
+            reissom per ommegaande na ontvangst van het betaalverzoek te worden voldaan. De betaling dient in ieder
+            geval voor aanvang van de reis door het platform van STO Garant te zijn ontvangen.</p>
+        <h3>7.5. Niet-terugbetaalbare elementen</h3>
         <p>Sommige onderdelen van de Reis zijn 'niet-terugbetaalbaar'. Deze kosten worden door de Organisator na
             ontvangst van de aanbetaling definitief voldaan aan leveranciers en bij annulering niet (volledig)
             terugbetaald. Prijswijzigingen na het sluiten van de Overeenkomst zijn alleen mogelijk conform de wettelijke
             bepalingen en Artikel 8 – Prijswijziging, van deze Voorwaarden.</p>
-        <h3>7.5. Verzuim</h3>
+        <h3>7.6. Verzuim</h3>
         <p>Indien de Reiziger niet betaalt binnen de hierboven of op de factuur genoemde termijn, is de Reiziger zonder
             dat een nadere ingebrekestelling is vereist in verzuim.</p>
-        <h3>7.6. Uitblijven van betaling</h3>
+        <h3>7.7. Uitblijven van betaling</h3>
         <p>Indien de Reiziger in verzuim is, kan de Organisator het toezenden van de Reisbescheiden zonder nadere
             aankondiging opschorten tot de volledige betaling is ontvangen. Indien betaling ook na aanmaning uitblijft
             of indien niet voor aanvang van de reis is betaald, heeft de Organisator het recht de Reiziger uit te
@@ -391,7 +395,7 @@
             Reiziger uit te sluiten van deelname kan de Organisator de Overeenkomst annuleren en de daarvoor
             verschuldigde annuleringskosten bij de Reiziger in rekening brengen conform Artikel 12 – Annulering door de
             Reiziger.</p>
-        <h3>7.7. Geen annulering door niet-betalen</h3>
+        <h3>7.8. Geen annulering door niet-betalen</h3>
         <p>De Reiziger kan de boeking niet annuleren door simpelweg niet aan de financiële verplichtingen te voldoen.
             Een annulering dient Schriftelijk te geschieden conform Artikel 12 – Annulering door de Reiziger.</p>
     </div>
@@ -521,10 +525,21 @@
         <h3>12.3. Annuleringskosten</h3>
         <p>Bij opzegging van de Overeenkomst is de Reiziger de volgende gestandaardiseerde bedragen verschuldigd:</p>
         <ul>
-            <li>tot en met 56 dagen vóór de dag van vertrek: 30% van de reissom;</li>
-            <li>vanaf 55 dagen tot en met 22 dagen vóór de dag van vertrek: 60% van de reissom;</li>
-            <li>vanaf 21 dagen vóór de dag van vertrek: 100% van de reissom.</li>
+            <li>tot en met 56 dagen vóór de dag van vertrek: 30% van de reissom (de
+                aanbetaling);</li>
+            <li>vanaf 55 dagen tot en met 42 dagen vóór de dag van vertrek: 50% van de
+                reissom;</li>
+            <li>vanaf 41 dagen tot en met 21 dagen vóór de dag van vertrek: 75% van de
+                reissom;</li>
+            <li>vanaf 20 dagen vóór de dag van vertrek tot en met de dag van vertrek: 100%
+                van de reissom.</li>
         </ul>
+        <p>De Reiziger heeft het recht om aan te tonen dat de werkelijke
+            schade die de Organisator lijdt door de annulering lager is dan de
+            gestandaardiseerde bedragen. In dat geval zal de Organisator de lagere schade in
+            rekening brengen. Omgekeerd kan de Organisator hogere kosten in rekening brengen
+            indien de werkelijke kosten (conform Artikel 7.5 - Niet-terugbetaalbare
+            elementen) de staffel overstijgen.</p>
         <h3>12.4. Deelannulering</h3>
         <p>Bij vermindering van het aantal deelnemers van de Reis waarbij niet alle diensten evenredig kunnen worden
             verminderd (bijvoorbeeld bij accommodatie op basis van een kamerprijs), bedragen de verschuldigde
