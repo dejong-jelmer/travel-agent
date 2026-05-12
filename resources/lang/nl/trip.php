@@ -21,7 +21,7 @@ return [
     // Items
     'item' => [
         'category' => [
-            'general_inclusions' => 'Altijd inbegrepen',
+            'general_inclusions' => 'Voorbereiding',
             'transport' => 'Vervoer',
             'accommodation' => 'Overnachtingen',
             'additional_cost' => 'Bijkomende kosten',
@@ -35,8 +35,8 @@ return [
         ],
         'general_inclusions' => [
             'itinerary' => 'Persoonlijk samengesteld reisplan',
-            'accommodation_breakfast' => 'Accommodatie altijd inclusief ontbijt',
-            'train_reservations' => 'Zitplaatsen gereserveerd waar dat kan',
+            'background_info' => 'Een informatiepakket met routebeschrijving, achtergrond en tips ter plaatse',
+            'train_reservations' => 'Zitplaatsreservering waar dat kan',
         ],
         'additional_cost' => [
             'fees' => [

@@ -7,7 +7,7 @@ return [
     ItemType::Inclusion->value => [
         ItemCategory::GeneralInclusions->value => [
             'trip.item.general_inclusions.itinerary',
-            'trip.item.general_inclusions.accommodation_breakfast',
+            'trip.item.general_inclusions.background_info',
             'trip.item.general_inclusions.train_reservations',
         ],
     ],

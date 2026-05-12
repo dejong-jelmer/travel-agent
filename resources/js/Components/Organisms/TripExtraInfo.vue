@@ -13,11 +13,13 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                 </div>
                 <div class="flex-1 min-w-0">
                     <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
-                        Prijzen & Offerte
+                        Prijzen
                     </h4>
                     <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
-                        De getoonde prijs is een richtprijs per persoon. De definitieve prijs hangt af van wanneer je
-                        gaat en met hoeveel mensen.
+                        De getoonde prijs is een richtprijs per persoon, inclusief BTW, garantiefonds en boekingskosten.
+                        De definitieve prijs hangt af van wanneer je gaat en met hoeveel personen.
+                        <br>
+                        <br>
                         Voor populaire periodes zoals schoolvakanties is het verstandig om vroeg contact op te nemen —
                         dan is er meer ruimte om een passend voorstel te maken.
                     </p>
@@ -52,7 +54,8 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                         Hulp onderweg
                     </h4>
                     <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
-                        Bij je reisdocumenten ontvang je mijn noodnummer. Daarmee kun je me bereiken bij urgente problemen tijdens je reis, ook in het weekend.
+                        Bij je reisdocumenten ontvang je mijn noodnummer. Daarmee kun je me bereiken bij urgente
+                        problemen tijdens je reis, ook in het weekend.
                     </p>
                 </div>
             </div>
@@ -70,9 +73,10 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     </h4>
                     <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
                         Dit aanbod valt onder de garantie van STO Garant. U kunt de voorwaarden van deze
-                        garantieregeling vinden op de website van STO Garant <a class="text-brand-link underline" target="_blank" rel="noopener noreferrer"
-                                        aria-label="STO Garant - STO Garant Garantieregeling voor pakketreizen"
-                                        href="https://www.sto-garant.nl/downloads">(www.sto-garant.nl/downloads)</a>
+                        garantieregeling vinden op de website van STO Garant <a class="text-brand-link underline"
+                            target="_blank" rel="noopener noreferrer"
+                            aria-label="STO Garant - STO Garant Garantieregeling voor pakketreizen"
+                            href="https://www.sto-garant.nl/downloads">(www.sto-garant.nl/downloads)</a>
                     </p>
                 </div>
             </div>
