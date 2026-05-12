@@ -21,7 +21,7 @@ return [
     // Items
     'item' => [
         'category' => [
-            'general_inclusions' => 'Always included in my trips',
+            'general_inclusions' => 'Preparation',
             'transport' => 'Transport',
             'accommodation' => 'Accommodation',
             'additional_cost' => 'Additional costs',
@@ -35,7 +35,7 @@ return [
         ],
         'general_inclusions' => [
             'itinerary' => 'Well-planned itinerary',
-            'accommodation_breakfast' => 'Accommodation always includes breakfast',
+            'background_info' => 'Carefully compiled information package with background information and a practical guide to the destination',
             'train_reservations' => 'Seat reservation on the train (when possible)',
         ],
         'additional_cost' => [
@@ -70,6 +70,15 @@ return [
             'trip_items' => [
                 'placeholder' => 'Enter item description',
             ],
+        ],
+    ],
+    'practical-info' => [
+        'sections' => [
+            'travel_period' => 'Reisperiode',
+            'departure_dates' => 'Vertrekdata',
+            'outbound_return' => 'Heen- en terugreis',
+            'transport' => 'Vervoer tijdens de reis',
+            'accommodation' => 'Logies',
         ],
     ],
 
