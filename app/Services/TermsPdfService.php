@@ -13,8 +13,6 @@ class TermsPdfService
 
     private const STORAGE_PATH = 'terms/'.self::FILENAME;
 
-    public function __construct(private PriceCalculatorService $priceCalculator) {}
-
     public function path(): string
     {
         $disk = Storage::disk('local');

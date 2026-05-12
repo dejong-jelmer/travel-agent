@@ -20,8 +20,6 @@ class HomeController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private PriceCalculatorService $priceCalculator) {}
-
     public function home(): Response
     {
         return Inertia::render('Home', [
