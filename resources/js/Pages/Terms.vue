@@ -66,47 +66,45 @@ async function downloadPdf() {
                                     <li><a href="#article-1" class="hover:text-blue-800 hover:underline">Artikel 1
                                             - Definities</a></li>
                                     <li><a href="#article-2" class="hover:text-blue-800 hover:underline">Artikel 2
-                                            – Garantieregeling STO Garant</a></li>
-                                    <li><a href="#article-3" class="hover:text-blue-800 hover:underline">Artikel 3
                                             – Toepasselijkheid Voorwaarden</a></li>
-                                    <li><a href="#article-4" class="hover:text-blue-800 hover:underline">Artikel 4
+                                    <li><a href="#article-3" class="hover:text-blue-800 hover:underline">Artikel 3
                                             – Totstandkoming en Inhoud van de Overeenkomst</a></li>
-                                    <li><a href="#article-5" class="hover:text-blue-800 hover:underline">Artikel 5
+                                    <li><a href="#article-4" class="hover:text-blue-800 hover:underline">Artikel 4
                                             – Informatie door de Organisator</a></li>
-                                    <li><a href="#article-6" class="hover:text-blue-800 hover:underline">Artikel 6
+                                    <li><a href="#article-5" class="hover:text-blue-800 hover:underline">Artikel 5
                                             – Informatie door de Reiziger</a></li>
-                                    <li><a href="#article-7" class="hover:text-blue-800 hover:underline">Artikel 7
+                                    <li><a href="#article-6" class="hover:text-blue-800 hover:underline">Artikel 6
                                             – Betaling en Garantieregeling</a></li>
-                                    <li><a href="#article-8" class="hover:text-blue-800 hover:underline">Artikel 8
+                                    <li><a href="#article-7" class="hover:text-blue-800 hover:underline">Artikel 7
                                             – Prijswijziging</a></li>
-                                    <li><a href="#article-9" class="hover:text-blue-800 hover:underline">Artikel 9
+                                    <li><a href="#article-8" class="hover:text-blue-800 hover:underline">Artikel 8
                                             – Reisdocumenten en reisbescheiden</a></li>
+                                    <li><a href="#article-9" class="hover:text-blue-800 hover:underline">Artikel 9
+                                            – Wijzigingen door de Reiziger</a></li>
                                     <li><a href="#article-10" class="hover:text-blue-800 hover:underline">Artikel
-                                            10 – Wijzigingen door de Reiziger</a></li>
+                                            10 – Indeplaatsstelling</a></li>
                                     <li><a href="#article-11" class="hover:text-blue-800 hover:underline">Artikel
-                                            11 – Indeplaatsstelling</a></li>
+                                            11 – Annulering door de Reiziger</a></li>
                                     <li><a href="#article-12" class="hover:text-blue-800 hover:underline">Artikel
-                                            12 – Annulering door de Reiziger</a></li>
+                                            12 – Wijzigingen door de Organisator</a></li>
                                     <li><a href="#article-13" class="hover:text-blue-800 hover:underline">Artikel
-                                            13 – Wijzigingen door de Organisator</a></li>
+                                            13 – Opzegging door de Organisator</a></li>
                                     <li><a href="#article-14" class="hover:text-blue-800 hover:underline">Artikel
-                                            14 – Opzegging door de Organisator</a></li>
+                                            14 – Uitvoering van de reis en conformiteit</a></li>
                                     <li><a href="#article-15" class="hover:text-blue-800 hover:underline">Artikel
-                                            15 – Uitvoering van de reis en conformiteit</a></li>
+                                            15 – Hulp en bijstand</a></li>
                                     <li><a href="#article-16" class="hover:text-blue-800 hover:underline">Artikel
-                                            16 – Hulp en bijstand</a></li>
+                                            16 – Aansprakelijkheid en Onvermijdbare Omstandigheden</a></li>
                                     <li><a href="#article-17" class="hover:text-blue-800 hover:underline">Artikel
-                                            17 – Aansprakelijkheid en Onvermijdbare Omstandigheden</a></li>
+                                            17 – Bagage en Waardevolle Spullen</a></li>
                                     <li><a href="#article-18" class="hover:text-blue-800 hover:underline">Artikel
-                                            18 – Bagage en Waardevolle Spullen</a></li>
+                                            18 – Verplichtingen Reiziger</a></li>
                                     <li><a href="#article-19" class="hover:text-blue-800 hover:underline">Artikel
-                                            19 – Verplichtingen Reiziger</a></li>
+                                            19 – Klachten en Geschillenbeslechting</a></li>
                                     <li><a href="#article-20" class="hover:text-blue-800 hover:underline">Artikel
-                                            20 – Klachten en Geschillenbeslechting</a></li>
+                                            20 – Overige bepalingen</a></li>
                                     <li><a href="#article-21" class="hover:text-blue-800 hover:underline">Artikel
-                                            21 – Overige bepalingen</a></li>
-                                    <li><a href="#article-22" class="hover:text-blue-800 hover:underline">Artikel
-                                            22 – Bijzondere wensen en vereisten</a></li>
+                                            21 – Bijzondere wensen en vereisten</a></li>
                                 </ul>
                             </div>
 
@@ -194,63 +192,17 @@ async function downloadPdf() {
                                     </div>
                                 </section>
 
-                                <section id="article-2" class="scroll-mt-[150px] space-y-4">
-                                    <h2 class="text-2xl font-bold text-gray-900 border-b-2 border-blue-200 pb-2">
-                                        Artikel 2 – Garantieregeling STO Garant</h2>
-                                    <p>Om te voldoen aan de wettelijk verplichte garantiestelling maakt
-                                        <strong>{{ companyName }}</strong> gebruik van STO Garant. U kunt dit
-                                        controleren via de STO Garant deelnemerspagina
-                                        <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
-                                            target="_blank" rel="noopener noreferrer"
-                                            aria-label="STO Garant - Welke organisaties zijn aangesloten bij STO Garant?"
-                                            href="https://www.sto-garant.nl/deelnemers">(www.sto-garant.nl/deelnemers)</a>.
-                                        Alle informatie over STO Garant vindt u op <a
-                                            class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
-                                            target="_blank" rel="noopener noreferrer" aria-label="STO Garant"
-                                            href="https://www.sto-garant.nl">www.sto-garant.nl</a>.
-                                    </p>
-                                    <p>
-                                        Bij elk (reis)aanbod van <strong>{{ companyName }}</strong> wordt duidelijk
-                                        vermeld of de
-                                        garantie van STO
-                                        Garant van toepassing is. In de garantieregeling leest u wat de garantie inhoudt
-                                        en welke
-                                        voorwaarden van toepassing zijn. U vindt deze garantieregeling op de website van
-                                        STO Garant
-                                        <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
-                                            target="_blank" rel="noopener noreferrer"
-                                            aria-label="STO Garant - STO Garant Garantieregeling voor pakketreizen"
-                                            href="https://www.sto-garant.nl/downloads">(www.sto-garant.nl/downloads)</a>.
-                                    </p>
-
-                                    <p>Indien de garantie van STO Garant van toepassing is op uw boeking, dan betaalt u
-                                        de reissom niet
-                                        aan <strong>{{ companyName }}</strong>, maar aan de derdengeldenrekening van
-                                        Stichting
-                                        Derdengelden Certo
-                                        Escrow, een bij De Nederlandsche Bank (DNB) en de Autoriteit Financiële Markten
-                                        (AFM)
-                                        geregistreerde betaaldienstverlener. Deze stichting derdengelden waarborgt uw
-                                        reissom tot na
-                                        afloop van uw boeking. Wanneer diensten door financieel onvermogen van
-                                        <strong>{{ companyName }}</strong>
-                                        niet (volledig en/of tijdig) worden verleend, dan voert STO Garant de garantie
-                                        uit. In de
-                                        garantieregeling leest u hoe u daar in dat geval aanspraak op maakt.
-                                    </p>
-                                </section>
-
-                                <section id="article-3" class="scroll-mt-[150px]">
+                                <section id="article-2" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 3 – Toepasselijkheid Voorwaarden</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.1. Pakketreizen</strong>
+                                        Artikel 2 – Toepasselijkheid Voorwaarden</h2>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">2.1. Pakketreizen</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Deze Voorwaarden zijn van toepassing op alle door de
                                         Organisator
                                         aangeboden of met de Organisator overeengekomen Pakketreizen en vormen een
                                         onlosmakelijk
                                         onderdeel daarvan.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.2. Gekoppelde
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">2.2. Gekoppelde
                                             reisarrangementen</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Deze Voorwaarden zijn tevens van toepassing op Reisdiensten die
@@ -258,7 +210,7 @@ async function downloadPdf() {
                                         met de
                                         Organisator zijn overeengekomen zijn de voorwaarden van de leverancier van die
                                         Reisdienst van toepassing.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.3. Reisdiensten</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">2.3. Reisdiensten</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Deze Voorwaarden zijn tevens van toepassing op Reisdiensten die
                                         geen
@@ -267,7 +219,7 @@ async function downloadPdf() {
                                         Boek 7 Burgerlijk Wetboek niet van toepassing en geldt er, tenzij uitdrukkelijk
                                         anders
                                         vermeld, geen wettelijke bescherming bij insolventie.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.4. Afwijkende en
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">2.4. Afwijkende en
                                             aanvullende
                                             voorwaarden</strong></h3>
                                     <p class="mb-4 pl-4">Afwijkende en aanvullende voorwaarden dienen Schriftelijk te
@@ -277,10 +229,10 @@ async function downloadPdf() {
                                         boven deze Voorwaarden.</p>
                                 </section>
 
-                                <section id="article-4" class="scroll-mt-[150px]">
+                                <section id="article-3" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 4 – Totstandkoming en Inhoud van de Overeenkomst</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.1. Het Aanbod en
+                                        Artikel 3 – Totstandkoming en Inhoud van de Overeenkomst</h2>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.1. Het Aanbod en
                                             informatie</strong></h3>
                                     <p class="mb-4 pl-4">De aangeboden Reis omvat de diensten zoals omschreven in de
                                         uitingen
@@ -305,7 +257,7 @@ async function downloadPdf() {
                                         fout betrof. Bij twijfel aan de juistheid van de prijs of informatie dient de
                                         Reiziger
                                         navraag te doen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.2. Totstandkoming van de
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.2. Totstandkoming van de
                                             Overeenkomst</strong></h3>
                                     <p class="mb-4 pl-4">Alle offertes van de Organisator zijn onder voorbehoud van
                                         beschikbaarheid. De Overeenkomst komt tot stand zodra de Reiziger het aanbod van
@@ -314,7 +266,7 @@ async function downloadPdf() {
                                         mogelijk
                                         een
                                         schriftelijke bevestiging, tevens factuur.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.3. Boekingen 'op
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.3. Boekingen 'op
                                             aanvraag'</strong></h3>
                                     <p class="mb-4 pl-4">Bepaalde reizen geschieden 'op aanvraag'. Dit betekent dat na
                                         uw
@@ -327,7 +279,7 @@ async function downloadPdf() {
                                         de beschikbaarheid bij de leveranciers heeft gecontroleerd en de boeking
                                         Schriftelijk
                                         aan de Reiziger heeft bevestigd.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.4. Bijzondere aspecten van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">3.4. Bijzondere aspecten van
                                             de
                                             boeking</strong></h3>
 
@@ -379,10 +331,10 @@ async function downloadPdf() {
                                     </div>
                                 </section>
 
-                                <section id="article-5" class="scroll-mt-[150px]">
+                                <section id="article-4" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 5 – Informatie door de Organisator</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.1. Reissom</strong></h3>
+                                        Artikel 4 – Informatie door de Organisator</h2>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.1. Reissom</strong></h3>
                                     <p class="mb-4 pl-4">De vermelde prijzen gelden per persoon, tenzij uitdrukkelijk
                                         anders
                                         is
@@ -390,7 +342,7 @@ async function downloadPdf() {
                                         persoon
                                         is
                                         gebaseerd, kan de Organisator een nieuwe reissom per persoon vaststellen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.2. Informatie vóór de
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.2. Informatie vóór de
                                             boeking</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Voordat de Overeenkomst tot stand komt, verstrekt de
@@ -402,7 +354,7 @@ async function downloadPdf() {
                                         artikel
                                         7:502
                                         BW.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.3. Informatie bij de
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.3. Informatie bij de
                                             boeking</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Bij het sluiten van de Overeenkomst of onverwijld daarna,
@@ -417,7 +369,7 @@ async function downloadPdf() {
                                         formaliteiten op gezondheidsgebied, en de overige wettelijk verplichte
                                         informatie.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.4. Informatie vóór de
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.4. Informatie vóór de
                                             reis</strong></h3>
                                     <p class="mb-4 pl-4">Tijdig voor aanvang van de Reis en uiterlijk bij het
                                         verstrekken
@@ -427,7 +379,7 @@ async function downloadPdf() {
                                         tussenstops, aansluitingen, aankomsttijden en eventueel de naam van de
                                         uitvoerende
                                         vervoerder(s).</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.5. Contactgegevens tijdens
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">4.5. Contactgegevens tijdens
                                             de
                                             reis</strong>
                                     </h3>
@@ -439,10 +391,10 @@ async function downloadPdf() {
                                         lokale vertegenwoordiger of de accommodatie.</p>
                                 </section>
 
-                                <section id="article-6" class="scroll-mt-[150px]">
+                                <section id="article-5" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 6 – Informatie door de Reiziger</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.1. Algemene
+                                        Artikel 5 – Informatie door de Reiziger</h2>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.1. Algemene
                                             informatieplicht</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Vóór of bij het sluiten van de Overeenkomst verstrekt de
@@ -453,7 +405,7 @@ async function downloadPdf() {
                                         essentieel voor de uitvoering, veiligheid en het welzijn gedurende de Reis,
                                         waaronder
                                         benodigde specifieke gegevens die nodig zijn voor tickets op naam.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.2. Melding van specifieke
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.2. Melding van specifieke
                                             omstandigheden</strong></h3>
                                     <p class="mb-4 pl-4">Reizigers met verminderde mobiliteit en hun begeleiders,
                                         zwangere
@@ -464,15 +416,15 @@ async function downloadPdf() {
                                         nadat de Reiziger hiermee bekend is te melden bij de Organisator. Indien deze
                                         omstandigheden een essentieel vereiste vormen voor deelname aan de reis, dient
                                         dit
-                                        expliciet als zodanig kenbaar te worden gemaakt conform <a href="#article-22.2"
-                                            class="hover:text-blue-800 underline">Artikel 22.2 - Vereisten</a>.
+                                        expliciet als zodanig kenbaar te worden gemaakt conform <a href="#article-21.2"
+                                            class="hover:text-blue-800 underline">Artikel 21.2 - Vereisten</a>.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.3. Dieetwensen</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.3. Dieetwensen</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Specifieke dieetwensen bij inbegrepen maaltijden worden als
                                         voorkeur
-                                        behandeld conform <a href="#article-22.1"
-                                            class="hover:text-blue-800 underline">Artikel 22.1 - Voorkeuren
+                                        behandeld conform <a href="#article-21.1"
+                                            class="hover:text-blue-800 underline">Artikel 21.1 - Voorkeuren
                                             (wensen)</a>. Hoewel de Organisator zijn
                                         best doet deze wensen door te geven aan het hotel of de betreffende
                                         dienstverlener,
@@ -480,7 +432,7 @@ async function downloadPdf() {
                                         de
                                         dienstverlener in rekening worden gebracht voor het voldoen aan dieetwensen zijn
                                         voor rekening van de Reiziger.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.4. Medicijngebruik</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.4. Medicijngebruik</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De Reiziger is zelf verantwoordelijk voor het meenemen van
                                         voldoende
@@ -488,7 +440,7 @@ async function downloadPdf() {
                                         om
                                         een
                                         recept in het Latijn mee te nemen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.5. Gevolgen van onjuiste of
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">5.5. Gevolgen van onjuiste of
                                             onvolledige
                                             informatie</strong></h3>
                                     <p class="mb-4 pl-4">Onjuiste of onvolledige relevante informatie verstrekt door de
@@ -507,18 +459,45 @@ async function downloadPdf() {
                                         betreffende diensten.</p>
                                 </section>
 
-                                <section id="article-7" class="scroll-mt-[150px]">
+                                <section id="article-6" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 7 – Betaling en Garantieregeling
+                                        Artikel 6 – Betaling en Garantieregeling
                                     </h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.1. Uitvoering via STO
-                                            Garant</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.1. Garantieregeling STO Garant</strong>
                                     </h3>
-                                    <p class="mb-4 pl-4">De betaling van de reissom geschiedt niet rechtstreeks aan de
-                                        Organisator. Om aan de wettelijke garantieplicht te voldoen, maakt de
-                                        Organisator gebruik van STO Garant. De Reiziger ontvangt hiertoe per e-mail
-                                        vanuit het platform van STO Garant een betaalverzoek met een betaallink.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.2. Aanbetaling</strong>
+                                    <p class="mb-4 pl-4">Om te voldoen aan de wettelijk verplichte garantiestelling maakt
+                                        <strong>{{ companyName }}</strong> gebruik van STO Garant. U kunt dit
+                                        controleren via de STO Garant deelnemerspagina
+                                        <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
+                                            target="_blank" rel="noopener noreferrer"
+                                            aria-label="STO Garant - Welke organisaties zijn aangesloten bij STO Garant?"
+                                            href="https://www.sto-garant.nl/deelnemers">(www.sto-garant.nl/deelnemers)</a>.
+                                        Alle informatie over STO Garant vindt u op <a
+                                            class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
+                                            target="_blank" rel="noopener noreferrer" aria-label="STO Garant"
+                                            href="https://www.sto-garant.nl">www.sto-garant.nl</a>.
+                                    </p>
+                                    <p class="mb-4 pl-4">
+                                        Bij elk (reis)aanbod van <strong>{{ companyName }}</strong> wordt duidelijk
+                                        vermeld of de garantie van STO Garant van toepassing is. In de garantieregeling
+                                        leest u wat de garantie inhoudt en welke voorwaarden van toepassing zijn.
+                                        U vindt deze garantieregeling op de website van STO Garant
+                                        <a class="text-blue-500 hover:text-blue-800 visited:text-pink-900 underline"
+                                            target="_blank" rel="noopener noreferrer"
+                                            aria-label="STO Garant - STO Garant Garantieregeling voor pakketreizen"
+                                            href="https://www.sto-garant.nl/downloads">(www.sto-garant.nl/downloads)</a>.
+                                    </p>
+                                    <p class="mb-4 pl-4">Indien de garantie van STO Garant van toepassing is op uw boeking, dan betaalt u
+                                        de reissom niet aan <strong>{{ companyName }}</strong>, maar aan de
+                                        derdengeldenrekening van Stichting Derdengelden Certo Escrow, een bij De
+                                        Nederlandsche Bank (DNB) en de Autoriteit Financiële Markten (AFM)
+                                        geregistreerde betaaldienstverlener. Deze stichting derdengelden waarborgt uw
+                                        reissom tot na afloop van uw boeking. Wanneer diensten door financieel onvermogen
+                                        van <strong>{{ companyName }}</strong> niet (volledig en/of tijdig) worden
+                                        verleend, dan voert STO Garant de garantie uit. In de garantieregeling leest u
+                                        hoe u daar in dat geval aanspraak op maakt.
+                                    </p>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.2. Aanbetaling</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Na de totstandkoming van de Overeenkomst ontvangt de Reiziger
                                         de bevestiging/factuur. Tegelijkertijd, of kort
@@ -528,11 +507,11 @@ async function downloadPdf() {
                                         Eventuele boekingskosten en
                                         kosten voor de garantieregeling dienen eveneens binnen deze termijn te worden
                                         voldaan.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.3. Restbetaling</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.3. Restbetaling</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Het restant van de reissom dient uiterlijk 6 weken voor de
                                         aanvangsdatum van de Reis te zijn voldaan.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.4. Boeking kort voor
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.4. Boeking kort voor
                                             vertrek</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Bij totstandkoming van de Overeenkomst binnen 6 weken voor de
@@ -540,7 +519,7 @@ async function downloadPdf() {
                                         ontvangst van het betaalverzoek te worden voldaan. De betaling dient in ieder
                                         geval voor aanvang van de reis door het platform van STO Garant te zijn
                                         ontvangen.</p>
-                                    <h3 id="article-7.5" class="mb-2"><strong class="text-lg font-semibold">7.5.
+                                    <h3 id="article-6.5" class="mb-2"><strong class="text-lg font-semibold">6.5.
                                             Niet-terugbetaalbare
                                             elementen</strong>
                                     </h3>
@@ -552,16 +531,16 @@ async function downloadPdf() {
                                         leveranciers en bij annulering niet (volledig) terugbetaald. Prijswijzigingen na
                                         het
                                         sluiten van de Overeenkomst zijn alleen mogelijk conform de wettelijke
-                                        bepalingen en <a href="#article-8" class="hover:text-blue-800 underline">Artikel
-                                            8 – Prijswijziging</a>, van deze Voorwaarden.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.6. Verzuim</strong></h3>
+                                        bepalingen en <a href="#article-7" class="hover:text-blue-800 underline">Artikel
+                                            7 – Prijswijziging</a>, van deze Voorwaarden.</p>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.6. Verzuim</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger niet betaalt binnen de hierboven of op de
                                         factuur
                                         genoemde termijn, is de Reiziger zonder dat een nadere ingebrekestelling is
                                         vereist
                                         in
                                         verzuim.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.7. Uitblijven van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.7. Uitblijven van
                                             betaling</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger in verzuim is, kan de Organisator het
                                         toezenden
@@ -580,25 +559,25 @@ async function downloadPdf() {
                                         annuleren en
                                         de
                                         daarvoor verschuldigde annuleringskosten bij de Reiziger in rekening brengen
-                                        conform <a href="#article-12" class="hover:text-blue-800 underline">Artikel 12 –
+                                        conform <a href="#article-11" class="hover:text-blue-800 underline">Artikel 11 –
                                             Annulering door de Reiziger</a>.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.8. Geen annulering door
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">6.8. Geen annulering door
                                             niet-betalen</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger kan de boeking niet annuleren door simpelweg niet
                                         aan
                                         de
                                         financiële verplichtingen te voldoen. Een annulering dient Schriftelijk te
-                                        geschieden conform <a href="#article-12"
-                                            class="hover:text-blue-800 underline">Artikel 12 – Annulering door de
+                                        geschieden conform <a href="#article-11"
+                                            class="hover:text-blue-800 underline">Artikel 11 – Annulering door de
                                             Reiziger</a>.</p>
                                 </section>
 
-                                <section id="article-8" class="scroll-mt-[150px]">
+                                <section id="article-7" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 8 –
+                                        Artikel 7 –
                                         Prijswijziging</h2>
-                                    <h3 id="article-8.1" class="mb-2 scroll-mt-[150px]"><strong
-                                            class="text-lg font-semibold">8.1. Recht op
+                                    <h3 id="article-7.1" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">7.1. Recht op
                                             Prijswijziging</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator behoudt zich het recht voor om met betrekking
                                         tot
@@ -621,12 +600,12 @@ async function downloadPdf() {
                                         op
                                         een
                                         Overeenkomstige prijsverlaging.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">8.2. Prijsherziening</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.2. Prijsherziening</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De methode voor de berekening van prijsverhogingen en
                                         -verlagingen
-                                        op basis van de in <a href="#article-8.1"
-                                            class="hover:text-blue-800 underline">8.1 - Recht op Prijswijziging</a> –
+                                        op basis van de in <a href="#article-7.1"
+                                            class="hover:text-blue-800 underline">7.1 - Recht op Prijswijziging</a> –
                                         genoemde gronden dient voor de
                                         boeking
                                         kenbaar te zijn gemaakt aan de Reiziger en is onderdeel van de Overeenkomst. De
@@ -634,7 +613,7 @@ async function downloadPdf() {
                                         brandstofprijzen, heffingen en belastingen, zoals deze bij de Organisator bekend
                                         waren
                                         op het moment van publicatie van het aanbod.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">8.3. Significante
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.3. Significante
                                             verhoging</strong></h3>
                                     <p class="mb-4 pl-4">Indien de prijsverhoging meer dan 8% van de totale reissom
                                         bedraagt,
@@ -652,13 +631,13 @@ async function downloadPdf() {
                                         termijn beëindigd, dan geldt de prijsverhoging als aanvaard en vervalt het recht
                                         op
                                         beëindiging.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">8.4. Recht op
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">7.4. Recht op
                                             prijsverlaging</strong></h3>
                                     <p class="mb-4 pl-4">Een prijsverhoging wordt de Reiziger duidelijk en begrijpelijk
                                         meegedeeld, vergezeld van een motivering van die prijsverhoging en een
                                         berekening.
                                         Zoals
-                                        vermeld in 8.1. Recht op Prijswijziging, heeft de Reiziger recht op een
+                                        vermeld in 7.1. Recht op Prijswijziging, heeft de Reiziger recht op een
                                         prijsverlaging
                                         indien de relevante kosten dalen na het sluiten van de Overeenkomst. De
                                         Organisator
@@ -666,11 +645,11 @@ async function downloadPdf() {
                                         de Reiziger informeren over een dergelijke prijsverlaging.</p>
                                 </section>
 
-                                <section id="article-9" class="scroll-mt-[150px]">
+                                <section id="article-8" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 9 –
+                                        Artikel 8 –
                                         Reisdocumenten en reisbescheiden</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.1. Reisdocumenten</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">8.1. Reisdocumenten</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De Reiziger dient gedurende de gehele Reis in bezit te zijn van
                                         reisnoodzakelijke reisdocumenten, zoals een paspoort, eventuele visa,
@@ -691,7 +670,7 @@ async function downloadPdf() {
                                         zich goed voorbereidt op eventuele inreisbeperkingen of specifieke vereisten van
                                         het
                                         land van bestemming.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.2. Ontbrekende
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">8.2. Ontbrekende
                                             documenten</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger niet aan de (voortzetting van de) reis kan
                                         deelnemen
@@ -703,7 +682,7 @@ async function downloadPdf() {
                                         voortgang kan vinden, komt zulks met alle daaraan verbonden gevolgen en kosten
                                         geheel
                                         voor de rekening van de Reiziger.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.3. Reisbescheiden</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">8.3. Reisbescheiden</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De benodigde Reisbescheiden zullen, tenzij anders
                                         overeengekomen,
@@ -727,7 +706,7 @@ async function downloadPdf() {
                                         plaatse
                                         te
                                         verifiëren.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.4. Specifieke
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">8.4. Specifieke
                                             Documenten</strong></h3>
                                     <div class="mb-4 pl-4 space-y-2">
                                         <p>
@@ -763,12 +742,12 @@ async function downloadPdf() {
                                     </div>
                                 </section>
 
-                                <section id="article-10" class="scroll-mt-[150px]">
+                                <section id="article-9" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 10 –
+                                        Artikel 9 –
                                         Wijzigingen
                                         door de Reiziger</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">10.1. Wijzigen</strong></h3>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.1. Wijzigen</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger kan de Organisator Schriftelijk verzoeken de
                                         Overeenkomst
                                         te wijzigen. De Organisator spant zich in om een redelijk verzoek tot wijziging
@@ -778,7 +757,7 @@ async function downloadPdf() {
                                         en
                                         ze
                                         deze accepteren.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">10.2.
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.2.
                                             Wijzigingskosten</strong></h3>
                                     <p class="mb-4 pl-4">Indien op verzoek van de Reiziger een wijziging van de
                                         Overeenkomst
@@ -789,7 +768,7 @@ async function downloadPdf() {
                                         Betaling van de doorgevoerde wijzigingen en de bijbehorende kosten dient direct
                                         na
                                         bevestiging en facturering te worden voldaan.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">10.3. Afwijzing</strong></h3>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.3. Afwijzing</strong></h3>
                                     <p class="mb-4 pl-4">
                                         Wanneer de gevraagde wijziging niet door de betrokken Reisdienstverleners kan
                                         worden gehonoreerd of om andere redenen niet uitvoerbaar is, blijft de
@@ -797,11 +776,11 @@ async function downloadPdf() {
                                         de afwijzing van uw wijzigingsverzoek vasthoudt aan de gewenste wijziging en de
                                         oorspronkelijke Overeenkomst niet wilt nakomen, wordt dit beschouwd als een
                                         annulering van de Overeenkomst, waarop de annuleringsvoorwaarden van
-                                        <a href="#article-12" class="hover:text-blue-800 underline">Artikel 12 –
+                                        <a href="#article-11" class="hover:text-blue-800 underline">Artikel 11 –
                                             Annulering door de Reiziger</a>
                                         van toepassing zijn.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">10.4. Uitzonderingen</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">9.4. Uitzonderingen</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Een verzoek tot wijziging van de vertrekdatum of een
                                         vermindering
@@ -813,15 +792,15 @@ async function downloadPdf() {
                                         Op
                                         een dergelijke (deel)annulering zijn de annuleringsbepalingen en kosten zoals
                                         vermeld in
-                                        Artikel <a href="#article-12" class="hover:text-blue-800 underline">12 –
+                                        Artikel <a href="#article-11" class="hover:text-blue-800 underline">11 –
                                             Annulering door de Reiziger</a> van toepassing.</p>
                                 </section>
 
-                                <section id="article-11" class="scroll-mt-[150px]">
+                                <section id="article-10" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 11 –
+                                        Artikel 10 –
                                         Indeplaatsstelling</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">11.1. Voorwaarden en
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">10.1. Voorwaarden en
                                             kennisgeving</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De Reiziger, heeft het recht om de Reis over te dragen aan een
@@ -836,7 +815,7 @@ async function downloadPdf() {
                                         om de
                                         persoon in de plaats te stellen. Overdracht is slechts mogelijk voor zover de
                                         voorwaarden van de betrokken Reisdienstverlener dit toelaten.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">11.2. Hoofdelijke
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">10.2. Hoofdelijke
                                             aansprakelijkheid en
                                             bijkomende kosten</strong></h3>
                                     <p class="mb-4 pl-4">De oorspronkelijke Reiziger, en degene die de Reis overneemt
@@ -846,21 +825,21 @@ async function downloadPdf() {
                                         toeslagen
                                         en andere kosten die voortvloeien uit de indeplaatsstelling, waaronder
                                         wijzigingskosten
-                                        zoals vermeld in 10.2. Wijzigingskosten.</p>
+                                        zoals vermeld in 9.2. Wijzigingskosten.</p>
                                 </section>
 
-                                <section id="article-12" class="scroll-mt-[150px]">
+                                <section id="article-11" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 12 –
+                                        Artikel 11 –
                                         Annulering
                                         door de Reiziger</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.1. Recht op
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">11.1. Recht op
                                             annulering</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger kan de Overeenkomst te allen tijde vóór aanvang van
                                         de
                                         Reis
                                         opzeggen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.2. Wijze van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">11.2. Wijze van
                                             annulering</strong></h3>
                                     <p class="mb-4 pl-4">Annulering dient Schriftelijk te geschieden. De datum waarop de
                                         Schriftelijke kennisgeving van annulering door de Organisator wordt ontvangen op
@@ -869,7 +848,7 @@ async function downloadPdf() {
                                         buiten de
                                         Werkdagen om, wordt de eerst volgende Werkdag gezien als de datum van ontvangst.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.3.
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">11.3.
                                             Annuleringskosten</strong></h3>
                                     <p class="mb-4 pl-4">Bij opzegging van de Overeenkomst is de Reiziger de volgende
                                         gestandaardiseerde bedragen verschuldigd:</p>
@@ -887,10 +866,10 @@ async function downloadPdf() {
                                         schade die de Organisator lijdt door de annulering lager is dan de
                                         gestandaardiseerde bedragen. In dat geval zal de Organisator de lagere schade in
                                         rekening brengen. Omgekeerd kan de Organisator hogere kosten in rekening brengen
-                                        indien de werkelijke kosten (conform <a href="#article-7.5"
-                                            class="hover:text-blue-800 underline">Artikel 7.5 - Niet-terugbetaalbare
+                                        indien de werkelijke kosten (conform <a href="#article-6.5"
+                                            class="hover:text-blue-800 underline">Artikel 6.5 - Niet-terugbetaalbare
                                             elementen</a>) de staffel overstijgen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.4. Deelannulering</strong>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">11.4. Deelannulering</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Bij vermindering van het aantal deelnemers van de Reis waarbij
                                         niet
@@ -908,7 +887,7 @@ async function downloadPdf() {
                                         Reiziger
                                         geannuleerd kunnen worden, maar alleen voor het volledige gezelschap, met de
                                         bijbehorende kosten.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.5. Annulering ná
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">11.5. Annulering ná
                                             omboeking</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger en de Organisator de Reis hebben omgeboekt
                                         naar
@@ -920,12 +899,12 @@ async function downloadPdf() {
                                         datum van de oorspronkelijke omboeking zou zijn geannuleerd.</p>
                                 </section>
 
-                                <section id="article-13" class="scroll-mt-[150px]">
+                                <section id="article-12" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 13 –
+                                        Artikel 12 –
                                         Wijzigingen
                                         door de Organisator</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.1. Onbeduidende
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.1. Onbeduidende
                                             wijzigingen vóór
                                             vertrek</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator heeft het recht vóór aanvang van de Reis de
@@ -941,7 +920,7 @@ async function downloadPdf() {
                                         wijziging aantoonbaar essentieel is voor de Reiziger en dit vooraf kenbaar is
                                         gemaakt.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.2. Ingrijpende wijzigingen
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.2. Ingrijpende wijzigingen
                                             vóór
                                             vertrek</strong></h3>
                                     <p class="mb-4 pl-4">Indien noodzakelijk kan de Organisator de voornaamste kenmerken
@@ -952,7 +931,7 @@ async function downloadPdf() {
                                         het
                                         aanbieden van een alternatieve Reis die, indien redelijkerwijs mogelijk, van
                                         gelijkwaardige of hogere kwaliteit is.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.3. Procedure en rechten
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.3. Procedure en rechten
                                             bij ingrijpende
                                             wijzigingen vóór vertrek</strong></h3>
                                     <p class="mb-4 pl-4">Bij ingrijpende wijzigingen vóór vertrek stelt de Organisator
@@ -979,19 +958,19 @@ async function downloadPdf() {
                                         Reiziger betaalde bedragen onverwijld en uiterlijk binnen 14 dagen aan de
                                         Reiziger
                                         terug.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.4. Wijziging
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.4. Wijziging
                                             overeengekomen bijzondere
                                             wens</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Organisator niet of niet met een redelijke inspanning
                                         kan
                                         voldoen aan een Schriftelijk overeengekomen bijzondere wens van de Reiziger
                                         (conform
-                                        <a href="#article-22.2" class="hover:text-blue-800 underline">Artikel 22.2 -
+                                        <a href="#article-21.2" class="hover:text-blue-800 underline">Artikel 21.2 -
                                             Vereisten</a> van deze Voorwaarden), dan kan de Organisator de Reis op dit
                                         onderdeel wijzigen. De Reiziger kan in dat geval de wijziging aanvaarden of de
                                         Overeenkomst beëindigen zonder betaling van annuleringskosten.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.5. Wijzigingen na
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.5. Wijzigingen na
                                             vertrek</strong></h3>
                                     <p class="mb-4 pl-4">Indien wijzigingen zich voordoen na vertrek en een significant
                                         deel van de overeengekomen Reisdiensten niet kan worden verricht, zal de
@@ -1004,17 +983,17 @@ async function downloadPdf() {
                                         extra kosten, zorg dragen voor de terugreis naar de plaats van vertrek, dan wel
                                         naar
                                         een andere overeengekomen plaats van terugkeer.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.6. Wijzigingen door schuld
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">12.6. Wijzigingen door schuld
                                             Reiziger</strong></h3>
                                     <p class="mb-4 pl-4">Indien de oorzaak van een wijziging (vóór of na vertrek) aan de
                                         Reiziger kan worden toegerekend, komt de hieruit voortvloeiende schade voor
                                         rekening van de Reiziger.</p>
                                 </section>
 
-                                <section id="article-14" class="scroll-mt-[150px]">
+                                <section id="article-13" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 14 – Opzegging door de Organisator</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">14.1. Opzegging</strong></h3>
+                                        Artikel 13 – Opzegging door de Organisator</h2>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.1. Opzegging</strong></h3>
                                     <p class="mb-4 pl-4">In de volgende gevallen kan de Organisator de Overeenkomst vóór
                                         aanvang
                                         van de reis opzeggen en de Reiziger alle voor de Reis betaalde bedragen,
@@ -1049,7 +1028,7 @@ async function downloadPdf() {
                                             Reis
                                             inbegrepen de vliegreis, tickets, accommodatie, e.d..</li>
                                     </ol>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">14.2. Opzegging door Schuld
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">13.2. Opzegging door Schuld
                                             Reiziger</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Ingeval de Reiziger niet voldoet aan vooraf gestelde
@@ -1068,12 +1047,12 @@ async function downloadPdf() {
                                     </p>
                                 </section>
 
-                                <section id="article-15" class="scroll-mt-[150px]">
+                                <section id="article-14" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 15 –
+                                        Artikel 14 –
                                         Uitvoering
                                         van de reis en conformiteit</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">15.1. Verantwoordelijkheid
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">14.1. Verantwoordelijkheid
                                             van de
                                             Organisator</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator is verantwoordelijk voor de goede uitvoering van
@@ -1087,7 +1066,7 @@ async function downloadPdf() {
                                         Overeenkomst. Deze verantwoordelijkheid geldt ongeacht of de Reisdiensten door
                                         de
                                         Organisator zelf of door een andere Reisdienstverlener worden uitgevoerd.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">15.2. Meldplicht bij
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">14.2. Meldplicht bij
                                             Non-conformiteit</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger meent dat de Reis niet conform de
@@ -1100,7 +1079,7 @@ async function downloadPdf() {
                                         invloed
                                         zijn
                                         op uw rechten.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">15.3. Oplossen
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">14.3. Oplossen
                                             Non-conformiteit</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De Organisator draagt er zorg voor dat de gemelde
@@ -1111,12 +1090,12 @@ async function downloadPdf() {
                                         betreffende Reisdiensten.</p>
                                 </section>
 
-                                <section id="article-16" class="scroll-mt-[150px]">
+                                <section id="article-15" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 16 – Hulp en
+                                        Artikel 15 – Hulp en
                                         bijstand</h2>
-                                    <h3 id="article-16.1" class="mb-2 scroll-mt-[150px]"><strong
-                                            class="text-lg font-semibold">16.1. Verplichte
+                                    <h3 id="article-15.1" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">15.1. Verplichte
                                             bijstand</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator verleent de Reiziger onverwijld hulp en bijstand
                                         indien
@@ -1129,7 +1108,7 @@ async function downloadPdf() {
                                         bij
                                         het
                                         vinden van alternatieve reisarrangementen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">16.2. Kosten</strong></h3>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">15.2. Kosten</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator kan een redelijke vergoeding in rekening brengen
                                         voor de
                                         verleende hulp en bijstand indien de moeilijkheden zijn ontstaan door opzet of
@@ -1137,7 +1116,7 @@ async function downloadPdf() {
                                         dan
                                         de
                                         werkelijk gemaakte kosten.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">16.3. Contact in geval van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">15.3. Contact in geval van
                                             nood</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">In geval van nood of indien u in moeilijkheden verkeert tijdens
@@ -1146,15 +1125,15 @@ async function downloadPdf() {
                                         opgegeven
                                         noodnummer of de verstrekte contactgegevens. De Organisator zal u vervolgens de
                                         nodige
-                                        hulp en bijstand verlenen conform <a href="#article-16.1"
-                                            class="hover:text-blue-800 underline">16.1 - Verplichte bijstand</a>.</p>
+                                        hulp en bijstand verlenen conform <a href="#article-15.1"
+                                            class="hover:text-blue-800 underline">15.1 - Verplichte bijstand</a>.</p>
                                 </section>
 
-                                <section id="article-17" class="scroll-mt-[150px]">
+                                <section id="article-16" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 17 –
+                                        Artikel 16 –
                                         Aansprakelijkheid en Onvermijdbare Omstandigheden</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.1. Aansprakelijkheid
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">16.1. Aansprakelijkheid
                                             Organisator</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De Organisator is aansprakelijk voor de goede uitvoering van
@@ -1168,7 +1147,7 @@ async function downloadPdf() {
                                         diensten door de Organisator zelf of door andere ingeschakelde
                                         Reisdienstverleners
                                         worden uitgevoerd.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.2. Uitsluitingen van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">16.2. Uitsluitingen van
                                             aansprakelijkheid</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator is niet aansprakelijk voor schade die het gevolg
                                         is
@@ -1185,8 +1164,8 @@ async function downloadPdf() {
                                             was;</li>
                                         <li>Onvermijdbare en Buitengewone Omstandigheden.</li>
                                     </ol>
-                                    <h3 id="article-17.3" class="mb-2 scroll-mt-[150px]"><strong
-                                            class="text-lg font-semibold">17.3. Beperking van
+                                    <h3 id="article-16.3" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">16.3. Beperking van
                                             aansprakelijkheid</strong>
                                     </h3>
                                     <ol class="list-[lower-alpha] pl-8 mb-4">
@@ -1215,7 +1194,7 @@ async function downloadPdf() {
                                             de totale reissom.
                                         </li>
                                     </ol>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.4. Vergoeding gederfd
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">16.4. Vergoeding gederfd
                                             reisgenot</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Voor schade bestaande uit derving van reisgenot (immateriële
@@ -1225,12 +1204,12 @@ async function downloadPdf() {
                                         de
                                         reissom per Reiziger. Deze beperking geldt binnen de totale
                                         aansprakelijkheidslimiet
-                                        zoals genoemd in <a href="#article-17.3"
-                                            class="hover:text-blue-800 underline">17.3.b</a>. Schade die de Reiziger
+                                        zoals genoemd in <a href="#article-16.3"
+                                            class="hover:text-blue-800 underline">16.3.b</a>. Schade die de Reiziger
                                         lijdt in de uitoefening van zijn
                                         beroep
                                         of bedrijf komt niet voor vergoeding in aanmerking.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.5. Werking ten behoeve van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">16.5. Werking ten behoeve van
                                             hulppersonen</strong></h3>
                                     <p class="mb-4 pl-4">De in dit artikel opgenomen uitsluitingen en beperkingen van de
                                         aansprakelijkheid van de Organisator gelden ook ten behoeve van werknemers van
@@ -1242,19 +1221,19 @@ async function downloadPdf() {
                                     </p>
                                 </section>
 
-                                <section id="article-18" class="scroll-mt-[150px]">
+                                <section id="article-17" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 18 – Bagage
+                                        Artikel 17 – Bagage
                                         en
                                         Waardevolle Spullen</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.1.
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.1.
                                             Verantwoordelijkheid</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger is zelf verantwoordelijk voor zijn bagage en
                                         persoonlijke
                                         bezittingen gedurende de gehele Reis. Dit omvat onder meer toezicht houden op
                                         bagage
                                         tijdens transport, overstappen en verblijfplaatsen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.2.
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.2.
                                             Aansprakelijkheid</strong></h3>
                                     <p class="mb-4 pl-4">De aansprakelijkheid van de Organisator voor verlies, diefstal
                                         van
@@ -1272,7 +1251,7 @@ async function downloadPdf() {
                                         Reiziger, tenzij de schade is veroorzaakt door opzet of grove schuld van de
                                         Organisator.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.3. Waardevolle
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.3. Waardevolle
                                             spullen</strong></h3>
                                     <p class="mb-4 pl-4">De Organisator is niet aansprakelijk voor verlies, diefstal van
                                         of
@@ -1284,7 +1263,7 @@ async function downloadPdf() {
                                         altijd
                                         in
                                         de handbagage te bewaren en onder persoonlijk toezicht te houden.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.4.
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">17.4.
                                             Reisverzekering</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger wordt dringend geadviseerd om een adequate
                                         reisverzekering
@@ -1295,11 +1274,11 @@ async function downloadPdf() {
                                         verzekering komen niet voor rekening van de Organisator.</p>
                                 </section>
 
-                                <section id="article-19" class="scroll-mt-[150px]">
+                                <section id="article-18" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 19 –
+                                        Artikel 18 –
                                         Verplichtingen Reiziger</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.1. Gedrag en opvolging
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.1. Gedrag en opvolging
                                             aanwijzingen</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger dient zich als een redelijk handelend Reiziger te
                                         gedragen.
@@ -1307,7 +1286,7 @@ async function downloadPdf() {
                                         de
                                         Reis
                                         door de Organisatie en de Reisdienstverleners op te volgen.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.2. Aansprakelijkheid
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.2. Aansprakelijkheid
                                             Reiziger voor
                                             schade</strong></h3>
                                     <p class="mb-4 pl-4">De Reiziger is aansprakelijk voor schade veroorzaakt door zijn
@@ -1318,7 +1297,7 @@ async function downloadPdf() {
                                         betrokken Reisdienstverleners of derden voor schade die door de Reiziger is
                                         veroorzaakt
                                         of aan hem moet worden toegerekend.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.3. Uitsluiting van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.3. Uitsluiting van
                                             deelname</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger zodanige hinder of last veroorzaakt
@@ -1333,7 +1312,7 @@ async function downloadPdf() {
                                         gedeelte
                                         van)
                                         de reissom.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.4. Controleren tijden
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">18.4. Controleren tijden
                                             terugreis</strong>
                                     </h3>
                                     <p class="mb-4 pl-4">De Reiziger dient ten minste 24 uur voor aanvang van de
@@ -1341,13 +1320,13 @@ async function downloadPdf() {
                                         terugreis het exacte tijdstip van vertrek te verifiëren.</p>
                                 </section>
 
-                                <section id="article-20" class="scroll-mt-[150px]">
+                                <section id="article-19" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 20 – Klachten
+                                        Artikel 19 – Klachten
                                         en
                                         Geschillenbeslechting</h2>
-                                    <h3 id="article-20.1" class="mb-2 scroll-mt-[150px]"><strong
-                                            class="text-lg font-semibold">20.1 - Melden tijdens de Reis</strong></h3>
+                                    <h3 id="article-19.1" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">19.1 - Melden tijdens de Reis</strong></h3>
                                     <p class="mb-4 pl-4">Een geconstateerde tekortkoming in de uitvoering van de
                                         Overeenkomst
                                         (Non-conformiteit) dient zo spoedig mogelijk te worden gemeld bij de betrokken
@@ -1357,7 +1336,7 @@ async function downloadPdf() {
                                         en afbreuk doet aan de kwaliteit van de Reis, dient deze onverwijld en zo
                                         volledig
                                         mogelijk onderbouwd, gemeld te worden bij de Organisator.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.2. Melding na de
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.2. Melding na de
                                             Reis</strong></h3>
                                     <p class="mb-4 pl-4">Als een Non-conformiteit niet bevredigend wordt opgelost
                                         tijdens de
@@ -1368,12 +1347,12 @@ async function downloadPdf() {
                                         Organisator is gehouden binnen één maand na ontvangst van de klacht na
                                         terugkomst
                                         gemotiveerd te reageren.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.3. Gevolgen niet of niet
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.3. Gevolgen niet of niet
                                             tijdig
                                             melden</strong></h3>
                                     <p class="mb-4 pl-4">Het niet of niet tijdig melden van de Non-conformiteit
-                                        overeenkomstig <a href="#article-20.1"
-                                            class="hover:text-blue-800 underline">20.1 - Melden tijdens de Reis</a> -
+                                        overeenkomstig <a href="#article-19.1"
+                                            class="hover:text-blue-800 underline">19.1 - Melden tijdens de Reis</a> -
                                         kan van invloed zijn op de hoogte van een
                                         eventuele
                                         prijsverlaging of schadevergoeding, tenzij de belangen van de Organisator door
@@ -1387,7 +1366,7 @@ async function downloadPdf() {
                                         behandeling genomen, tenzij dit in de omstandigheden van het geval niet redelijk
                                         is.
                                     </p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.4. Compensatie bij
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.4. Compensatie bij
                                             vertraging/comfortverlies treinreizen</strong></h3>
                                     <p class="mb-4 pl-4">Bij vertragingen van treinen (meestal vanaf 60 minuten) en/of
                                         vermindering van comfort (bijvoorbeeld missende rijtuigen, of vervangend, minder
@@ -1417,15 +1396,15 @@ async function downloadPdf() {
                                         van
                                         de totale reis, kan de Reiziger hiervoor een beroep doen op de Organisator via
                                         de
-                                        klachtenprocedure zoals beschreven in <a href="#article-20"
-                                            class="hover:text-blue-800 underline">dit Artikel 20 – Klachten en
+                                        klachtenprocedure zoals beschreven in <a href="#article-19"
+                                            class="hover:text-blue-800 underline">dit Artikel 19 – Klachten en
                                             Geschillenbeslechting</a>. De eventuele compensatie die de Reiziger reeds
                                         van de
                                         spoorwegmaatschappij heeft ontvangen, zal hierbij in mindering worden gebracht
                                         op
                                         een
                                         eventuele vergoeding door de Organisator.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.5. Gang naar de
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">19.5. Gang naar de
                                             rechter</strong></h3>
                                     <p class="mb-4 pl-4">Indien een geschil niet in onderling overleg kan worden
                                         opgelost,
@@ -1434,15 +1413,15 @@ async function downloadPdf() {
                                         Op
                                         de
                                         Overeenkomst is Nederlands recht van toepassing, zoals vermeld in <a
-                                            href="#article-21.4" class="hover:text-blue-800 underline">21.4 -
+                                            href="#article-20.4" class="hover:text-blue-800 underline">20.4 -
                                             Toepasselijk recht</a> van deze Voorwaarden.</p>
                                 </section>
 
-                                <section id="article-21" class="scroll-mt-[150px]">
+                                <section id="article-20" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 21 – Overige
+                                        Artikel 20 – Overige
                                         bepalingen</h2>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">21.1. Rechten van
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.1. Rechten van
                                             derden</strong></h3>
                                     <p class="mb-4 pl-4">Ondergeschikten, hulppersonen en andere bij de uitvoering van
                                         de
@@ -1452,7 +1431,7 @@ async function downloadPdf() {
                                         jegens de Reiziger beroepen op de bepalingen uit de Overeenkomst en deze
                                         Voorwaarden
                                         (met inbegrip van de aansprakelijkheidsuitsluitingen en -beperkingen).</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">21.2. Vervangende
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.2. Vervangende
                                             bepalingen</strong></h3>
                                     <p class="mb-4 pl-4">Indien dwingend recht aan de geldigheid van een bepaling in
                                         deze
@@ -1462,7 +1441,7 @@ async function downloadPdf() {
                                         strekking
                                         zo
                                         dicht mogelijk de oorspronkelijke intentie benadert.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">21.3. Verjaring</strong></h3>
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.3. Verjaring</strong></h3>
                                     <p class="mb-4 pl-4">Iedere aanspraak van de Reiziger op vergoeding van schade
                                         verjaart
                                         twee
@@ -1470,8 +1449,8 @@ async function downloadPdf() {
                                         twee
                                         jaar
                                         na de geplande datum van aanvang.</p>
-                                    <h3 id="article-21.4" class="mb-2 scroll-mt-[150px]"><strong
-                                            class="text-lg font-semibold">21.4. Toepasselijk
+                                    <h3 id="article-20.4" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">20.4. Toepasselijk
                                             recht</strong></h3>
                                     <p class="mb-4 pl-4">Op het aanbod, de Overeenkomst en de uitvoering van de
                                         Overeenkomst
@@ -1489,7 +1468,7 @@ async function downloadPdf() {
                                         dat
                                         land
                                         worden verricht.</p>
-                                    <h3 class="mb-2"><strong class="text-lg font-semibold">21.5. Foto's en informatie in
+                                    <h3 class="mb-2"><strong class="text-lg font-semibold">20.5. Foto's en informatie in
                                             publicaties</strong></h3>
                                     <p class="mb-4 pl-4">Foto's in publicaties (brochures, website, etc.) van de
                                         Organisator
@@ -1510,13 +1489,13 @@ async function downloadPdf() {
                                         aanbod is gepresenteerd.</p>
                                 </section>
 
-                                <section id="article-22" class="scroll-mt-[150px]">
+                                <section id="article-21" class="scroll-mt-[150px]">
                                     <h2 class="text-2xl font-bold text-gray-900 mb-4 border-b-2 border-blue-200 pb-2">
-                                        Artikel 22 –
+                                        Artikel 21 –
                                         Bijzondere
                                         wensen en vereisten</h2>
-                                    <h3 id="article-22.1" class="mb-2 scroll-mt-[150px]"><strong
-                                            class="text-lg font-semibold">22.1. Voorkeuren
+                                    <h3 id="article-21.1" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">21.1. Voorkeuren
                                             (wensen)</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger bij de totstandkoming van de Overeenkomst
                                         bepaalde
@@ -1530,8 +1509,8 @@ async function downloadPdf() {
                                         reistypes, kunnen aan deze voorkeuren kunnen echter geen rechten worden
                                         ontleend,
                                         ondanks eventuele vermeldingen op Reisbescheiden of boekingsformulieren.</p>
-                                    <h3 id="article-22.2" class="mb-2 scroll-mt-[150px]"><strong
-                                            class="text-lg font-semibold">22.2. Vereisten</strong></h3>
+                                    <h3 id="article-21.2" class="mb-2 scroll-mt-[150px]"><strong
+                                            class="text-lg font-semibold">21.2. Vereisten</strong></h3>
                                     <p class="mb-4 pl-4">Indien de Reiziger uiterlijk bij het aangaan van de
                                         Overeenkomst
                                         specifieke vereisten kenbaar maakt die essentieel zijn voor deelname aan de
