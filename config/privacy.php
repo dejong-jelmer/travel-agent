@@ -2,7 +2,7 @@
 
 use Carbon\Carbon;
 
-$date = Carbon::parse('03-04-2026');
+$date = Carbon::parse('2026-04-03');
 
 return [
     'version' => '1.1',
