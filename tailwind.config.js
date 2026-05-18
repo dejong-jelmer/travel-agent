@@ -48,6 +48,7 @@ export default {
             },
             spacing: {
                 header: "140px",
+                "header-phone": "200px",
             },
             screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
             keyframes: {

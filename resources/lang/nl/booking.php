@@ -36,4 +36,12 @@ return [
         'partially_refunded' => 'Gedeeltelijk terugbetaald',
         'failed' => 'Mislukt',
     ],
+
+    'cost_category' => [
+        'train' => 'Trein',
+        'accommodation' => 'Accommodatie + ontbijt',
+        'transfer' => 'Transfer',
+        'ticket' => 'Tickets',
+        'extra' => 'Overig',
+    ],
 ];

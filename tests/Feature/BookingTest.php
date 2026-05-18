@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Booking\CostCategory;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\SettingKey;
@@ -15,7 +16,6 @@ use App\Models\BookingTraveler;
 use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
-use App\Services\PriceCalculatorService;
 use App\Services\TermsPdfService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -56,7 +56,60 @@ class BookingTest extends TestCase
         $this->assertBookingWasCreatedCorrectly($booking, $payload);
         $this->assertTravelersWereCreatedCorrectly($booking, $payload);
         $this->assertContactWasCreatedCorrectly($booking, $payload);
-        $this->assertPricesWhereSetCorrectly($response, $booking);
+        $this->assertPricesWhereSetCorrectly($booking, $payload);
+    }
+
+    public function test_booking_persists_cost_items_and_calculated_price_with_vezere_payload(): void
+    {
+        $payload = $this->generateBookingPayload([
+            'numberOfAdults' => 2,
+            'numberOfChildren' => 0,
+            'cost_items' => [
+                ['category' => CostCategory::Train->value, 'label' => 'TGV Parijs–Bordeaux retour', 'amount_per_person' => 40000, 'quantity' => 2],
+                ['category' => CostCategory::Accommodation->value, 'label' => 'Boutiquehotel Sarlat', 'amount_per_person' => 33000, 'quantity' => 2],
+                ['category' => CostCategory::Transfer->value, 'label' => 'Transfer station-hotel', 'amount_per_person' => 9000, 'quantity' => 2],
+                ['category' => CostCategory::Ticket->value, 'label' => 'Toegang grottenroute', 'amount_per_person' => 3000, 'quantity' => 2],
+            ],
+            'margin_percentage' => 35,
+        ]);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail()->load('costItems');
+
+        $this->assertCount(4, $booking->costItems);
+        $this->assertSame(170000, $booking->total_cost);
+        $this->assertSame(3500, $booking->margin_basis_points);
+        // 170000 / (1 - 0.35) = 261538.461... rounded to 261538.
+        $this->assertSame(261538, $booking->calculated_price);
+        $this->assertSame(261538, $booking->display_price);
+    }
+
+    public function test_final_price_overrides_calculated_price(): void
+    {
+        $payload = $this->generateBookingPayload([
+            'numberOfAdults' => 2,
+            'numberOfChildren' => 0,
+            'final_price' => 260000,
+        ]);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail();
+
+        $this->assertSame(260000, $booking->final_price);
+        $this->assertSame(260000, $booking->display_price);
+    }
+
+    public function test_booking_creation_rejects_empty_cost_items(): void
+    {
+        $payload = $this->generateBookingPayload(['cost_items' => []]);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('cost_items');
     }
 
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
@@ -333,7 +386,17 @@ class BookingTest extends TestCase
             ],
             'main_booker' => 0,
             'contact' => $this->generateContactData(),
+            'cost_items' => $this->defaultCostItems(),
+            'margin_percentage' => 35,
         ], $overrides);
+    }
+
+    private function defaultCostItems(): array
+    {
+        return [
+            ['category' => CostCategory::Train->value, 'label' => 'Trein heen en terug', 'amount_per_person' => 40000, 'quantity' => 2],
+            ['category' => CostCategory::Accommodation->value, 'label' => 'Hotel', 'amount_per_person' => 30000, 'quantity' => 2],
+        ];
     }
 
     private function generateTravelers(int $count, TravelerType $type): array
@@ -428,23 +491,25 @@ class BookingTest extends TestCase
         $this->assertContactWasCreatedCorrectly($booking, $payload);
     }
 
-    private function assertPricesWhereSetCorrectly($response, Booking $booking): void
+    private function assertPricesWhereSetCorrectly(Booking $booking, array $payload): void
     {
-        $prices = app(PriceCalculatorService::class)->forTrip($this->trip, $booking->total_travelers, $booking->departure_date);
+        $booking->load('costItems');
 
-        $this->assertEquals($prices->tripPriceId, $booking->trip_price_id);
-        $this->assertEquals($prices->perPerson->getAmount(), $booking->price_per_person);
-        $this->assertEquals($prices->singleSupplement->getAmount(), $booking->single_supplement);
-        $this->assertEquals($prices->baseTotal->getAmount(), $booking->base_total_price);
-        $this->assertEquals($prices->grandTotal->getAmount(), $booking->grand_total_price);
-        $this->assertEquals(
-            [
-                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
-                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
-                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::GuaranteeFund->value]->getAmount(),
-            ],
-            $booking->fees_and_funds
+        $this->assertCount(count($payload['cost_items']), $booking->costItems);
+
+        $expectedTotalCost = collect($payload['cost_items'])
+            ->sum(fn (array $item) => $item['amount_per_person'] * $item['quantity']);
+
+        $this->assertSame($expectedTotalCost, $booking->total_cost);
+        $this->assertSame(
+            (int) round((float) $payload['margin_percentage'] * 100),
+            $booking->margin_basis_points,
         );
+
+        $margin = $booking->margin_basis_points / 10000;
+        $expectedCalculated = (int) round($expectedTotalCost / (1 - $margin));
+
+        $this->assertSame($expectedCalculated, $booking->calculated_price);
     }
 
     private function generateUpdatePayload(Booking $booking, array $overrides = []): array
@@ -480,6 +545,8 @@ class BookingTest extends TestCase
                 'email',
                 'phone',
             ]),
+            'cost_items' => $this->defaultCostItems(),
+            'margin_percentage' => 35,
         ];
 
         return array_replace_recursive($payload, $overrides);

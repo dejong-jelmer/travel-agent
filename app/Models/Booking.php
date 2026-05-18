@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
+use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\Sortable;
@@ -17,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Staudenmeir\EloquentHasManyDeep\HasManyDeep;
 use Staudenmeir\EloquentHasManyDeep\HasRelationships;
@@ -33,6 +35,8 @@ class Booking extends Model
         HasRelationships,
         SoftDeletes,
         Sortable;
+
+    public const DEFAULT_MARGIN_BASIS_POINTS = 3500;
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
@@ -61,6 +65,9 @@ class Booking extends Model
         'base_total_price',
         'grand_total_price',
         'fees_and_funds',
+        'margin_basis_points',
+        'calculated_price',
+        'final_price',
         'internal_notes',
         'anonymized_at',
     ];
@@ -73,6 +80,9 @@ class Booking extends Model
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
+        'margin_basis_points' => 'integer',
+        'calculated_price' => 'integer',
+        'final_price' => 'integer',
         'anonymized_at' => 'datetime',
         'conditions_accepted_at' => 'datetime',
         'confirmed_at' => 'datetime',
@@ -85,6 +95,7 @@ class Booking extends Model
         'status_label',
         'payment_status_label',
         'total_travelers',
+        'display_price',
     ];
 
     protected $attributes = [
@@ -127,6 +138,21 @@ class Booking extends Model
 
     protected static function booted()
     {
+        static::creating(function (self $booking) {
+            if ($booking->margin_basis_points === null) {
+                $booking->margin_basis_points = (int) Setting::get(
+                    SettingKey::DefaultBookingMarginBasisPoints,
+                    self::DEFAULT_MARGIN_BASIS_POINTS
+                );
+            }
+        });
+
+        static::saving(function (self $booking) {
+            if ($booking->exists && $booking->isDirty('margin_basis_points')) {
+                $booking->calculated_price = $booking->computeCalculatedPrice();
+            }
+        });
+
         static::created(function ($booking) {
             $year = now()->format('Y');
             $booking->reference = "{$year}-".str_pad($booking->id, 6, '0', STR_PAD_LEFT);
@@ -267,6 +293,11 @@ class Booking extends Model
         return $this->hasMany(BookingChange::class);
     }
 
+    public function costItems(): HasMany
+    {
+        return $this->hasMany(BookingCostItem::class)->orderBy('sort_order');
+    }
+
     /**
      * The destinations reachable via this booking's trip.
      */
@@ -348,5 +379,78 @@ class Booking extends Model
                 ? ($this->total_adults ?? 0) + ($this->total_children ?? 0)
                 : $this->travelers->count(),
         );
+    }
+
+    /**
+     * Sum of all cost items in cents.
+     *
+     * @return Attribute<int, never>
+     */
+    protected function totalCost(): Attribute
+    {
+        return Attribute::get(
+            fn () => (int) $this->costItems->sum('subtotal'),
+        );
+    }
+
+    /**
+     * Visible sales price in cents: final_price override, else stored calculated_price.
+     */
+    protected function displayPrice(): Attribute
+    {
+        return Attribute::get(fn () => $this->final_price ?? $this->calculated_price);
+    }
+
+    /**
+     * Recompute the sales price from cost items and the margin.
+     *
+     * Margin works on the sales side: 35% margin means cost = 65% of sales.
+     * calculated_price = total_cost / (1 - margin / 100).
+     */
+    public function computeCalculatedPrice(): int
+    {
+        $margin = ($this->margin_basis_points ?? 0) / 10000;
+
+        if ($margin < 0 || $margin >= 1.0) {
+            throw new \DomainException(
+                "Invalid margin_basis_points ({$this->margin_basis_points}): margin must be between 0% and 100%."
+            );
+        }
+
+        return (int) round($this->totalCost / (1 - $margin));
+    }
+
+    /**
+     * Persist a freshly computed calculated_price.
+     */
+    public function recalculatePrice(): void
+    {
+        $this->load('costItems');
+        $this->calculated_price = $this->computeCalculatedPrice();
+        $this->saveQuietly();
+    }
+
+    /**
+     * Replace this booking's cost items inside a transaction.
+     *
+     * @param  array<int, array{category: mixed, label: string, amount_per_person: int, quantity: int, sort_order?: int}>  $items
+     */
+    public function syncCostItems(array $items): void
+    {
+        DB::transaction(function () use ($items) {
+            $this->costItems()->delete();
+
+            foreach (array_values($items) as $index => $item) {
+                $this->costItems()->make([
+                    'category' => $item['category'],
+                    'label' => $item['label'],
+                    'amount_per_person' => $item['amount_per_person'],
+                    'quantity' => $item['quantity'],
+                    'sort_order' => $item['sort_order'] ?? $index,
+                ])->saveQuietly();
+            }
+
+            $this->recalculatePrice();
+        });
     }
 }

@@ -1,9 +1,11 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { usePage } from '@inertiajs/vue3';
 import { FileText, User, Users, Activity, Receipt } from 'lucide-vue-next';
 
 const { t } = useI18n();
+const page = usePage();
 
 const props = defineProps({
     booking: Object,
@@ -15,8 +17,32 @@ const totalTravelers = computed(() =>
 )
 
 function formatPrice(cents) {
-    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100)
+    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format((cents ?? 0) / 100)
 }
+
+const costCategories = computed(() => page.props.cost_categories ?? []);
+
+const categoryLabel = (id) =>
+    costCategories.value.find((c) => c.id === id)?.name ?? id;
+
+const costItems = computed(() => props.booking.cost_items ?? []);
+
+const totalCostCents = computed(() =>
+    costItems.value.reduce(
+        (acc, item) => acc + (item.amount_per_person ?? 0) * (item.quantity ?? 0),
+        0,
+    ),
+);
+
+const marginPercentage = computed(
+    () => (props.booking.margin_basis_points ?? 0) / 100,
+);
+
+const marginAmountCents = computed(
+    () => (props.booking.calculated_price ?? 0) - totalCostCents.value,
+);
+
+const hasOverride = computed(() => props.booking.final_price !== null && props.booking.final_price !== undefined);
 </script>
 
 <template>
@@ -197,22 +223,51 @@ function formatPrice(cents) {
                             <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.pricing.subtitle') }}</p>
                         </div>
                         <div class="p-6 space-y-3">
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">{{ t('admin.booking.show.pricing.price_per_person') }}</span>
-                                <span class="font-semibold text-gray-900">{{ formatPrice(booking.price_per_person) }}</span>
+                            <div v-if="costItems.length === 0" class="text-sm text-gray-500 italic">
+                                {{ t('admin.booking.show.pricing.no_cost_items') }}
                             </div>
-                            <div v-if="totalTravelers === 1" class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">{{ t('admin.booking.show.pricing.single_supplement') }}</span>
-                                <span class="font-semibold text-gray-900">{{ formatPrice(booking.single_supplement) }}</span>
+
+                            <ul v-else class="divide-y divide-gray-100 border border-gray-100 rounded-lg overflow-hidden">
+                                <li v-for="(item, index) in costItems" :key="index"
+                                    class="grid grid-cols-12 gap-2 px-4 py-3 text-sm bg-gray-50">
+                                    <div class="col-span-5">
+                                        <div class="font-medium text-gray-900">{{ item.label }}</div>
+                                        <div class="text-xs text-gray-500">{{ categoryLabel(item.category) }}</div>
+                                    </div>
+                                    <div class="col-span-4 text-right text-gray-700 self-center">
+                                        {{ formatPrice(item.amount_per_person) }} × {{ item.quantity }}
+                                    </div>
+                                    <div class="col-span-3 text-right font-semibold text-gray-900 self-center">
+                                        {{ formatPrice(item.amount_per_person * item.quantity) }}
+                                    </div>
+                                </li>
+                            </ul>
+
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.total_cost') }}</span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(totalCostCents) }}</span>
                             </div>
-                            <div v-for="(amount, key) in booking.fees_and_funds" :key="key"
-                                class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">{{ t(`booking_steps.overview.${key}`) }}</span>
-                                <span class="font-semibold text-gray-900">{{ formatPrice(amount) }}</span>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">
+                                    {{ t('booking_steps.price.margin') }} ({{ marginPercentage }}%)
+                                </span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(marginAmountCents) }}</span>
                             </div>
-                            <div class="flex items-center justify-between p-4 bg-primary-default/5 rounded-lg border border-primary-default/20">
-                                <span class="text-sm font-semibold text-gray-700">{{ t('admin.booking.show.pricing.total') }}</span>
-                                <span class="text-lg font-bold text-primary-default">{{ formatPrice(booking.grand_total_price) }}</span>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.calculated_price') }}</span>
+                                <span class="font-semibold text-gray-900"
+                                    :class="{ 'line-through opacity-50': hasOverride }">
+                                    {{ formatPrice(booking.calculated_price) }}
+                                </span>
+                            </div>
+                            <div v-if="hasOverride"
+                                class="flex items-center justify-between p-3 bg-brand-accent/10 rounded-lg border border-brand-accent/30">
+                                <span class="text-sm font-medium text-brand-accent">{{ t('booking_steps.price.final_price') }}</span>
+                                <span class="font-semibold text-brand-accent">{{ formatPrice(booking.final_price) }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-brand-primary/5 rounded-lg border border-brand-primary/20">
+                                <span class="text-sm font-semibold text-gray-700">{{ t('booking_steps.price.display_price') }}</span>
+                                <span class="text-lg font-bold text-brand-primary">{{ formatPrice(booking.display_price) }}</span>
                             </div>
                         </div>
                     </section>

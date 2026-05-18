@@ -18,7 +18,7 @@ defineProps({
 </script>
 
 <template>
-    <section class="relative overflow-hidden h-[calc(100vh-theme(spacing.header))] flex items-end"
+    <section class="relative overflow-hidden h-[calc(100vh-theme(spacing.header-phone))] laptop:h-[calc(100vh-theme(spacing.header))] flex items-end"
         :style="`background-image: url(${image}); background-size: cover; background-position: center;`">
         <div class="absolute inset-0" :class="overlayClass" role="presentation"></div>
         <div
@@ -28,7 +28,7 @@ defineProps({
                     {{ tripMeta.price }}
                 </span>
             </h1>
-            <p class="mt-2 text-base laptop:text-lg text-white/80 font-poppins flex justify-between">
+            <p class="mt-2 text-base laptop:text-lg text-white/80 font-poppins flex justify-between gap-x-10 laptop:gap-x-0">
                 <span class="max-w-xl">{{ subtitle }}</span>
                 <span v-if="tripMeta?.data?.length" class="text-right text-base text-white/80">
                     <span v-for="(item, index) in tripMeta?.data" :key="index">

@@ -2,6 +2,17 @@
 import { watch, reactive, readonly, computed } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 
+const DEFAULT_MARGIN_BASIS_POINTS = 3500;
+
+const createCostItem = (data = {}) => ({
+    category: data.category || "train",
+    label: data.label || "",
+    // Stored in euros for input convenience; converted to cents on submit.
+    amount_per_person:
+        data.amount_per_person != null ? data.amount_per_person / 100 : null,
+    quantity: data.quantity ?? 2,
+});
+
 // Constants buiten state
 export const BOOKING_CONSTRAINTS = readonly({
     maxFutureYears: 1,
@@ -44,6 +55,17 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             ?.filter((tr) => tr.type === "child")
             ?.map(createTraveler) ?? [];
 
+    const defaultMargin =
+        usePage().props.default_margin_basis_points ??
+        DEFAULT_MARGIN_BASIS_POINTS;
+
+    const costItems = (db_booking?.cost_items?.length
+        ? db_booking.cost_items.map(createCostItem)
+        : [createCostItem()]);
+
+    const initialMarginBp =
+        db_booking?.margin_basis_points ?? defaultMargin;
+
     const booking = useForm({
         trip: trip || null,
         status: db_booking?.status || null,
@@ -76,6 +98,13 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
             Math.min(main_booker_index, adults.length - 1)
         ),
         internal_notes: db_booking?.internal_notes || "",
+        cost_items: costItems,
+        margin_percentage: initialMarginBp / 100,
+        // Stored in euros; converted to cents on submit.
+        final_price:
+            db_booking?.final_price != null
+                ? db_booking.final_price / 100
+                : null,
         has_confirmed: false,
         has_accepted_conditions: false,
     });

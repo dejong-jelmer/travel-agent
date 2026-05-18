@@ -35,4 +35,12 @@ return [
         'partially_refunded' => 'Partially refunded',
         'failed' => 'Failed',
     ],
+
+    'cost_category' => [
+        'train' => 'Train',
+        'accommodation' => 'Accommodation + breakfast',
+        'transfer' => 'Transfer',
+        'ticket' => 'Tickets',
+        'extra' => 'Other',
+    ],
 ];

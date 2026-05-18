@@ -181,30 +181,34 @@ describe("BookingForm - Complete Test Suite", () => {
     let wrapper;
 
     // Factory function to create mock booking data
-    const createMockBooking = (overrides = {}) => ({
-        departure_date: "2025-05-15",
-        travelers: {
-            adults: [],
-            children: [],
-        },
-        contact: {
-            street: "",
-            house_number: "",
-            postal_code: "",
-            city: "",
-            email: "",
-            phone: "",
-        },
-        has_confirmed: false,
-        has_accepted_conditions: false,
-        processing: false,
-        hasErrors: false,
-        errors: {},
-        post: vi.fn(),
-        clearErrors: vi.fn(),
-        setError: vi.fn(),
-        ...overrides,
-    });
+    const createMockBooking = (overrides = {}) => {
+        const mock = {
+            departure_date: "2025-05-15",
+            travelers: {
+                adults: [],
+                children: [],
+            },
+            contact: {
+                street: "",
+                house_number: "",
+                postal_code: "",
+                city: "",
+                email: "",
+                phone: "",
+            },
+            has_confirmed: false,
+            has_accepted_conditions: false,
+            processing: false,
+            hasErrors: false,
+            errors: {},
+            post: vi.fn(),
+            clearErrors: vi.fn(),
+            setError: vi.fn(),
+            ...overrides,
+        };
+        mock.transform = vi.fn(() => mock);
+        return mock;
+    };
 
     const mockConstraints = {
         min_adults: 1,

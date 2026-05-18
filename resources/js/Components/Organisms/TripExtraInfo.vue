@@ -44,21 +44,6 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     </div>
                 </div>
             </div>
-            <div class="border-t border-brand-primary/10 text-sm text-brand-text/80"></div>
-            <div class="flex items-start gap-3 mb-3">
-                <div class="flex-shrink-0 mt-1">
-                    <PhoneCall class="w-5 h-5 text-brand-accent" />
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
-                        Hulp onderweg
-                    </h4>
-                    <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
-                        Bij je reisdocumenten ontvang je mijn noodnummer. Daarmee kun je me bereiken bij urgente
-                        problemen tijdens je reis, ook in het weekend.
-                    </p>
-                </div>
-            </div>
         </div>
 
         <!-- Betalingsgarantie -->

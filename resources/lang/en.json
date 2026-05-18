@@ -704,6 +704,27 @@
             "emergency_fund": "Emergency fund",
             "single_supplement": "Single supplement",
             "costs_total": "Total"
+        },
+        "price": {
+            "heading": "Price build-up",
+            "cost_items_heading": "Cost items",
+            "add_item": "Add cost item",
+            "remove_item": "Remove",
+            "label_placeholder": "E.g. TGV Paris–Bordeaux return",
+            "column": {
+                "category": "Category",
+                "label": "Description",
+                "amount_per_person": "Amount p.p. (€)",
+                "quantity": "Quantity"
+            },
+            "total_cost": "Total cost",
+            "margin": "Margin (%)",
+            "margin_amount": "Margin in euros",
+            "calculated_price": "Calculated price",
+            "final_price": "Final price (€)",
+            "final_price_help": "Leave empty to use calculated price",
+            "display_price": "Sales price",
+            "override_active": "The calculated price is being overridden."
         }
     },
     "hero": {
@@ -724,6 +745,7 @@
         "trip": "Trip",
         "travelers": "Travel party",
         "contact": "Contact details",
+        "price": "Price",
         "overview": "Review & confirm"
     },
     "validation": {
@@ -742,7 +764,11 @@
             "invalid_birthdate": "Enter a valid date of birth.",
             "invalid_house_number": "House number must be a valid number greater than 0.",
             "invalid_traveler_data": "Traveler information is invalid.",
-            "missing_special_requests_consent": "You must give consent to process the special requests you entered."
+            "missing_special_requests_consent": "You must give consent to process the special requests you entered.",
+            "missing_cost_items": "Add at least one cost item.",
+            "invalid_amount": "Enter a valid amount.",
+            "invalid_quantity": "Enter a valid quantity (1–20).",
+            "invalid_margin": "Enter a margin between 0 and 95%."
         },
         "fields": {
             "first_name": "First name",
@@ -1366,10 +1392,11 @@
                 "trip_request": "Trip request",
                 "pricing": {
                     "title": "Pricing",
-                    "subtitle": "Prices as recorded at the time of booking",
+                    "subtitle": "Cost items and margin as recorded on this booking",
                     "price_per_person": "Price per person",
                     "single_supplement": "Single supplement",
-                    "total": "Total"
+                    "total": "Total",
+                    "no_cost_items": "No cost items recorded for this booking."
                 }
             },
             "create": {
