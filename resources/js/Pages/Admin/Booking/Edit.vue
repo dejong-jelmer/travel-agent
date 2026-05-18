@@ -21,8 +21,23 @@ const { booking } = useBooking(
 
 const bookingReference = computed(() => props.db_booking.reference || '[No reference]')
 
+const toCents = (euros) => Math.round(Number(euros) * 100);
+
 function submit() {
-    booking.put(route("admin.bookings.update", props.db_booking));
+    booking.transform((data) => ({
+        ...data,
+        cost_items: (data.cost_items ?? []).map((item, index) => ({
+            category: item.category,
+            label: item.label,
+            amount_per_person: toCents(item.amount_per_person),
+            quantity: Number(item.quantity),
+            sort_order: index,
+        })),
+        final_price:
+            data.final_price === null || data.final_price === ''
+                ? null
+                : toCents(data.final_price),
+    })).put(route("admin.bookings.update", props.db_booking));
 }
 </script>
 
@@ -107,6 +122,17 @@ function submit() {
                         <div class="p-6 space-y-6">
                             <Traveler :booking="booking" type="adults" label="Volwassene" :readonly="true" />
                             <Traveler :booking="booking" type="children" label="Kind" :readonly="true" />
+                        </div>
+                    </section>
+
+                    <!-- Price Section -->
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">{{ $t('booking_step_labels.price') }}</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">{{ $t('admin.booking.show.pricing.subtitle') }}</p>
+                        </div>
+                        <div class="p-6">
+                            <Price :booking="booking" />
                         </div>
                     </section>
                 </div>

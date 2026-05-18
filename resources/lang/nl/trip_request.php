@@ -39,7 +39,7 @@ return [
         'confirmation_summary_header' => 'Wat je hebt aangevraagd',
         'confirmation_summary_intro' => 'Voor de zekerheid hieronder een overzicht van de gegevens die je aan me hebt doorgegeven. Klopt er iets niet, of wil je nog iets aanvullen? Stuur me gewoon een berichtje terug, dan pas ik het aan voordat ik je terugbel.',
         'confirmation_what_to_expect_header' => 'Wat kun je van het gesprek verwachten?',
-        'confirmation_what_to_expect_1' => 'We bespreken samen je voorkeursperiode en welke datums realistisch zijn met de huidige treinverbindingen.',
+        'confirmation_what_to_expect_1' => 'We bespreken samen je voorkeursperiode en welke data realistisch zijn met de huidige treinverbindingen.',
         'confirmation_what_to_expect_2' => 'We kijken samen naar de prijsindicatie en wat er wel en niet bij de reis is inbegrepen.',
         'confirmation_what_to_expect_3' => 'Je krijgt ruim de gelegenheid om vragen te stellen — er is geen verplichting om direct te boeken.',
         'confirmation_question' => 'Heb je in de tussentijd nog een vraag of wil je iets toevoegen aan je aanvraag? Je mag me altijd bellen of gewoon op deze e-mail antwoorden.',

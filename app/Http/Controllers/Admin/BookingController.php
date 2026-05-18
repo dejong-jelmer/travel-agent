@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\DTO\CreateBookingData;
 use App\DTO\UpdateBookingData;
+use App\Enums\Booking\CostCategory;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
 use App\Enums\ModelAction;
+use App\Enums\SettingKey;
 use App\Events\BookingCreated;
 use App\Events\BookingFailed;
 use App\Http\Controllers\Controller;
@@ -15,11 +17,11 @@ use App\Http\Requests\CreateBookingRequest;
 use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use App\Models\Booking;
+use App\Models\Setting;
 use App\Models\Trip;
 use App\Services\BookingService;
 use App\Services\CountryService;
 use App\Services\DataTableService;
-use App\Services\PriceCalculatorService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -31,7 +33,7 @@ class BookingController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private BookingService $bookingService, private DataTableService $dataTableService, private PriceCalculatorService $priceCalculator) {}
+    public function __construct(private BookingService $bookingService, private DataTableService $dataTableService) {}
 
     /**
      * Display a listing of the resource.
@@ -58,26 +60,18 @@ class BookingController extends Controller
         return Inertia::render('Admin/Booking/Create', [
             'trips' => Trip::get(),
             'countries' => CountryService::countries(),
+            'cost_categories' => CostCategory::options(),
+            'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, 3500),
             'title' => $this->pageTitle('booking.title_create'),
         ]);
     }
 
     public function store(CreateBookingRequest $request): RedirectResponse
     {
-
         $bookingData = CreateBookingData::fromRequest($request);
-        $totalTravelers = $this->bookingService->getTotalTravellers($bookingData->travelers);
 
         try {
-            $prices = $this->priceCalculator->forTrip($bookingData->trip, $totalTravelers, $bookingData->date);
-        } catch (Exception $e) {
-            $this->handleBookingError($e, 'No prices available', $bookingData);
-
-            return back()->withErrors(['message' => __('booking.error.no_prices_available')]);
-        }
-
-        try {
-            $booking = $this->bookingService->create($bookingData, $prices);
+            $booking = $this->bookingService->create($bookingData);
         } catch (Exception $e) {
             $this->handleBookingError($e, 'Booking create failed', $bookingData);
 
@@ -95,7 +89,8 @@ class BookingController extends Controller
     public function show(Booking $booking): Response
     {
         return Inertia::render('Admin/Booking/Show', [
-            'booking' => $booking->load(['trip', 'contact', 'adults', 'children', 'mainBooker', 'tripRequest']),
+            'booking' => $booking->load(['trip', 'contact', 'adults', 'children', 'mainBooker', 'tripRequest', 'costItems']),
+            'cost_categories' => CostCategory::options(),
             'title' => $this->pageTitle('booking.title_show'),
         ]);
     }
@@ -106,9 +101,11 @@ class BookingController extends Controller
     public function edit(Booking $booking): Response
     {
         return Inertia::render('Admin/Booking/Edit', [
-            'db_booking' => $booking->load(['trip', 'contact', 'travelers', 'adults', 'mainBooker']),
+            'db_booking' => $booking->load(['trip', 'contact', 'travelers', 'adults', 'mainBooker', 'costItems']),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
+            'cost_categories' => CostCategory::options(),
+            'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, 3500),
             'title' => $this->pageTitle('booking.title_edit'),
         ]);
     }

@@ -24,6 +24,13 @@ const DUMMY_DATA = {
             { first_name: 'Pietje', last_name: 'Jansen', birthdate: '20-03-2015', nationality: 'Nederlands' },
         ],
     },
+    cost_items: [
+        { category: 'train', label: 'TGV Parijs–Bordeaux retour', amount_per_person: 400, quantity: 2 },
+        { category: 'accommodation', label: 'Boutiquehotel Sarlat', amount_per_person: 330, quantity: 2 },
+        { category: 'transfer', label: 'Transfer station–hotel', amount_per_person: 90, quantity: 2 },
+        { category: 'ticket', label: 'Toegang grottenroute', amount_per_person: 30, quantity: 2 },
+    ],
+    margin_percentage: 35,
 };
 
 export function fillBookingWithDummyData(booking) {
@@ -34,6 +41,9 @@ export function fillBookingWithDummyData(booking) {
         booking.participants.adults = DUMMY_DATA.participants.adults;
         booking.participants.children = DUMMY_DATA.participants.children;
         Object.assign(booking.contact, DUMMY_DATA.contact);
+
+        booking.cost_items = DUMMY_DATA.cost_items.map((item) => ({ ...item }));
+        booking.margin_percentage = DUMMY_DATA.margin_percentage;
 
         // Travelers are synced by a watcher in useBooking — wait for that tick first
         nextTick(() => {

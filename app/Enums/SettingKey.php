@@ -8,4 +8,5 @@ enum SettingKey: string
     case BookingFee = 'booking_fee';
     case GuaranteeFund = 'guarantee_fund';
     case EmergencyFund = 'emergency_fund';
+    case DefaultBookingMarginBasisPoints = 'default_booking_margin_basis_points';
 }

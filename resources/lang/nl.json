@@ -704,6 +704,27 @@
             "emergency_fund": "Calamiteitenfonds",
             "single_supplement": "Eenpersoonstoeslag",
             "costs_total": "Totaal"
+        },
+        "price": {
+            "heading": "Prijs opbouwen",
+            "cost_items_heading": "Kostenposten",
+            "add_item": "Kostenpost toevoegen",
+            "remove_item": "Verwijderen",
+            "label_placeholder": "Bijv. TGV Parijs–Bordeaux retour",
+            "column": {
+                "category": "Categorie",
+                "label": "Omschrijving",
+                "amount_per_person": "Bedrag p.p. (€)",
+                "quantity": "Aantal"
+            },
+            "total_cost": "Totale inkoop",
+            "margin": "Marge (%)",
+            "margin_amount": "Marge in euro",
+            "calculated_price": "Berekende prijs",
+            "final_price": "Eindprijs (€)",
+            "final_price_help": "Laat leeg om berekende prijs te gebruiken",
+            "display_price": "Verkoopprijs",
+            "override_active": "De berekende prijs wordt overschreven."
         }
     },
     "hero": {
@@ -724,6 +745,7 @@
         "trip": "Reis",
         "travelers": "Reisgezelschap",
         "contact": "Contactgegevens",
+        "price": "Prijs",
         "overview": "Bekijken & bevestigen"
     },
     "validation": {
@@ -742,7 +764,11 @@
             "invalid_birthdate": "Vul een geldige geboortedatum in.",
             "invalid_house_number": "Het huisnummer moet een geldig getal groter dan 0 zijn.",
             "invalid_traveler_data": "Reizigersgegevens zijn ongeldig.",
-            "missing_special_requests_consent": "Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden."
+            "missing_special_requests_consent": "Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.",
+            "missing_cost_items": "Voeg ten minste één kostenpost toe.",
+            "invalid_amount": "Voer een geldig bedrag in.",
+            "invalid_quantity": "Voer een geldig aantal in (1 t/m 20).",
+            "invalid_margin": "Voer een marge in tussen 0 en 95%."
         },
         "fields": {
             "first_name": "Voornaam",
@@ -1365,10 +1391,11 @@
                 "trip_request": "Reisaanvraag",
                 "pricing": {
                     "title": "Prijsoverzicht",
-                    "subtitle": "Prijzen zoals vastgelegd bij het boeken",
+                    "subtitle": "Kostenposten en marge zoals vastgelegd bij deze boeking",
                     "price_per_person": "Prijs per persoon",
                     "single_supplement": "Eenpersoonstoeslag",
-                    "total": "Totaal"
+                    "total": "Totaal",
+                    "no_cost_items": "Geen kostenposten vastgelegd voor deze boeking."
                 }
             },
             "create": {

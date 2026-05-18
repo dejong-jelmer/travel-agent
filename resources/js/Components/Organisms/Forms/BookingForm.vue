@@ -4,13 +4,15 @@ import { useBookingSteps } from '@/Composables/useBookingSteps.js';
 import Trip from '@/Components/Organisms/BookingSteps/Trip.vue';
 import Travelers from '@/Components/Organisms/BookingSteps/Travelers.vue';
 import Contact from '@/Components/Organisms/BookingSteps/Contact.vue';
+import Price from '@/Components/Organisms/BookingSteps/Price.vue';
 import Overview from '@/Components/Organisms/BookingSteps/Overview.vue';
-import { LoaderCircle, TrainFront, Users, Home, ClipboardList } from 'lucide-vue-next'
+import { LoaderCircle, TrainFront, Users, Home, Euro, ClipboardList } from 'lucide-vue-next'
 
 const stepIcons = {
     trip: TrainFront,
     travelers: Users,
     contact: Home,
+    price: Euro,
     overview: ClipboardList,
 }
 
@@ -42,8 +44,11 @@ const stepComponents = {
     trip: Trip,
     travelers: Travelers,
     contact: Contact,
+    price: Price,
     overview: Overview
 };
+
+const toCents = (euros) => Math.round(Number(euros) * 100);
 
 const currentStepComponent = computed(() => stepComponents[currentStep.value.id]);
 
@@ -72,7 +77,20 @@ function handleSubmit() {
         return;
     }
 
-    booking.value.post(route('admin.bookings.store'), {
+    booking.value.transform((data) => ({
+        ...data,
+        cost_items: (data.cost_items ?? []).map((item, index) => ({
+            category: item.category,
+            label: item.label,
+            amount_per_person: toCents(item.amount_per_person),
+            quantity: Number(item.quantity),
+            sort_order: index,
+        })),
+        final_price:
+            data.final_price === null || data.final_price === ''
+                ? null
+                : toCents(data.final_price),
+    })).post(route('admin.bookings.store'), {
         forceFormData: true,
         onSuccess: () => { },
         onError: (errors) => {

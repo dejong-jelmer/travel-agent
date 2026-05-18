@@ -3,6 +3,7 @@
 namespace App\DTO\Traits;
 
 use App\DTO\BookingContactData;
+use App\DTO\BookingCostItemData;
 use App\DTO\BookingTravelerData;
 use App\Enums\TravelerType;
 use App\Models\Trip;
@@ -26,6 +27,19 @@ trait BookingDataParser
         $adultTravelers = BookingTravelerData::manyFromArray($adults);
         $childTravelers = BookingTravelerData::manyFromArray($children);
 
+        $costItems = array_map(
+            fn (BookingCostItemData $item) => $item->toArray(),
+            BookingCostItemData::manyFromArray($validated['cost_items'] ?? []),
+        );
+
+        $marginBasisPoints = isset($validated['margin_percentage'])
+            ? (int) round(((float) $validated['margin_percentage']) * 100)
+            : null;
+
+        $finalPrice = isset($validated['final_price']) && $validated['final_price'] !== ''
+            ? (int) $validated['final_price']
+            : null;
+
         return [
             'main_booker' => $mainBooker,
             'travelers' => [
@@ -33,6 +47,9 @@ trait BookingDataParser
                 TravelerType::Child->value => $childTravelers,
             ],
             'contact' => BookingContactData::fromArray($mainBookerFullName, $validated['contact']),
+            'cost_items' => $costItems,
+            'margin_basis_points' => $marginBasisPoints,
+            'final_price' => $finalPrice,
         ];
     }
 

@@ -42,6 +42,7 @@ class UpdateBookingRequest extends FormRequest
             BookingValidationRules::contact(),
             BookingValidationRules::travelers(),
             BookingValidationRules::mainBooker(),
+            BookingValidationRules::costItems(),
         );
     }
 }
