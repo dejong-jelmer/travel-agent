@@ -3,7 +3,7 @@
 return [
     'home_seo' => [
         'title' => 'Duurzame treinreizen door Europa',
-        'description' => 'Ontdek Europa per trein. Persoonlijk samengestelde routes met verhaal, cultuur en advies. Niet aankomen — beleven.',
+        'description' => 'Duurzame treinreizen door Europa, persoonlijk samengesteld. Bestemmingen met verhaal, ruimte voor wat onderweg gebeurt, en een gids die meedenkt.',
     ],
     'about_seo' => [
         'title' => 'Over mij',
