@@ -17,6 +17,7 @@ class ContactDetailsServiceProvider extends ServiceProvider
     {
         $this->app->singleton(ContactDetailsService::class, function ($app) {
             $details = new ContactDetails(
+                full_name: config('contact.full_name'),
                 address: config('contact.address'),
                 postal_code: config('contact.postal_code'),
                 city: config('contact.city'),
