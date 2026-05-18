@@ -50,6 +50,9 @@ class HandleInertiaRequests extends Middleware
                 'images' => config('images'),
             ],
             'contact' => [
+                'fullName' => function () use ($contactService) {
+                    return $contactService->getContact('full_name');
+                },
                 'phone' => function () use ($contactService) {
                     return $contactService->getContact('phone')->getPhoneNumber();
                 },

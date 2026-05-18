@@ -8,6 +8,7 @@ use App\Services\PhoneNumberService;
 class ContactDetails
 {
     public function __construct(
+        public string $full_name,
         public string $address,
         public string $postal_code,
         public string $city,

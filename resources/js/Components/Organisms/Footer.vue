@@ -17,9 +17,6 @@ const year = new Date().getFullYear();
                     <div class="flex justify-start">
                         <LogoWhite class="w-[200px] h-[100px]" />
                     </div>
-                    <p class="max-w-md mx-auto mt-6 leading-relaxed text-left text-brand-secondary">
-                        {{ $t('footer.slogan') }}
-                    </p>
                     <ul class="mt-5 space-y-4 text-sm">
                         <li>
                             <span class="flex items-center gap-1.5">
@@ -137,6 +134,9 @@ const year = new Date().getFullYear();
                     </p>
                 </div>
             </div>
+            <p class="text-xs text-white/40 text-center mt-3">
+                Webdesign &amp; development {{ contact.fullName }}
+            </p>
         </div>
     </footer>
 </template>
