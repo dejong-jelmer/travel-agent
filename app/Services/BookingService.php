@@ -3,22 +3,19 @@
 namespace App\Services;
 
 use App\DTO\CreateBookingData;
-use App\DTO\TripPriceData;
 use App\DTO\UpdateBookingData;
-use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Booking;
 
 class BookingService
 {
     /**
-     * Create a new booking with contact details and travelers from validated DTO data.
+     * Create a new booking with contact details, travelers, and cost items from validated DTO data.
      *
      * @param  CreateBookingData  $bookingData  Validated and typed booking input data.
-     * @param  TripPriceData  $prices  Calculated price breakdown for the trip and date.
      * @return Booking The newly created booking model.
      */
-    public function create(CreateBookingData $bookingData, TripPriceData $prices): Booking
+    public function create(CreateBookingData $bookingData): Booking
     {
         // Get Data from DTO
         $contactData = $bookingData->contact->toArray();
@@ -38,17 +35,11 @@ class BookingService
             'confirmed_at' => $bookingData->has_confirmed ? now() : null,
             'total_adults' => $totalAdults,
             'total_children' => $totalChildren,
-            'trip_price_id' => $prices->tripPriceId,
-            'price_per_person' => $prices->perPerson->getAmount(),
-            'single_supplement' => $prices->singleSupplement->getAmount(),
-            'base_total_price' => $prices->baseTotal->getAmount(),
-            'grand_total_price' => $prices->grandTotal->getAmount(),
-            'fees_and_funds' => [
-                SettingKey::BookingFee->value => $prices->feesAndFunds[SettingKey::BookingFee->value]->getAmount(),
-                SettingKey::EmergencyFund->value => $prices->feesAndFunds[SettingKey::EmergencyFund->value]->getAmount(),
-                SettingKey::GuaranteeFund->value => $prices->feesAndFunds[SettingKey::GuaranteeFund->value]->getAmount(),
-            ],
+            'margin_basis_points' => $bookingData->margin_basis_points,
+            'final_price' => $bookingData->final_price,
         ]);
+
+        $booking->syncCostItems($bookingData->cost_items);
 
         // Create booking contact details
         $booking->contact()->create([
@@ -85,7 +76,17 @@ class BookingService
             'return_date' => $bookingData->return_date,
         ];
 
+        if ($bookingData->margin_basis_points !== null) {
+            $updateData['margin_basis_points'] = $bookingData->margin_basis_points;
+        }
+
+        $updateData['final_price'] = $bookingData->final_price;
+
         $booking->update($updateData);
+
+        if ($bookingData->cost_items !== null) {
+            $booking->syncCostItems($bookingData->cost_items);
+        }
         // Get data from DTO
         $contactData = $bookingData->contact->toArray();
         $travelersData = $bookingData->travelers;

@@ -235,6 +235,57 @@ export function useBookingValidation() {
      * @param {Object} bookingData - The booking data object
      * @returns {Object} Errors object with field names as keys and error messages as values
      */
+    /**
+     * Validates the price step: cost items, margin, optional final price.
+     *
+     * @param {Object} bookingData
+     * @returns {Object}
+     */
+    function validatePriceStep(bookingData) {
+        const errors = {};
+        const items = bookingData?.cost_items ?? [];
+
+        if (items.length === 0) {
+            errors["cost_items"] = t('validation.errors.missing_cost_items');
+        }
+
+        items.forEach((item, index) => {
+            if (!item.category) {
+                errors[`cost_items.${index}.category`] = t('validation.errors.missing', {
+                    field: t('booking_steps.price.column.category'),
+                });
+            }
+            const label = item.label?.trim() ?? "";
+            if (label === "") {
+                errors[`cost_items.${index}.label`] = t('validation.errors.missing', {
+                    field: t('booking_steps.price.column.label'),
+                });
+            }
+            const amount = Number(item.amount_per_person);
+            if (!Number.isFinite(amount) || amount <= 0) {
+                errors[`cost_items.${index}.amount_per_person`] = t('validation.errors.invalid_amount');
+            }
+            const quantity = Number(item.quantity);
+            if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
+                errors[`cost_items.${index}.quantity`] = t('validation.errors.invalid_quantity');
+            }
+        });
+
+        const margin = Number(bookingData?.margin_percentage);
+        if (!Number.isFinite(margin) || margin < 0 || margin > 95) {
+            errors["margin_percentage"] = t('validation.errors.invalid_margin');
+        }
+
+        if (bookingData?.final_price !== null && bookingData?.final_price !== "" && bookingData?.final_price !== undefined) {
+            const finalPrice = Number(bookingData.final_price);
+            if (!Number.isFinite(finalPrice) || finalPrice < 0) {
+                errors["final_price"] = t('validation.errors.invalid_amount');
+            }
+        }
+
+        return errors;
+    }
+
     function validateTripStep(bookingData) {
         const errors = {};
 
@@ -323,5 +374,6 @@ export function useBookingValidation() {
         validateContactStep,
         validateOverviewStep,
         validateTripStep,
+        validatePriceStep,
     };
 }

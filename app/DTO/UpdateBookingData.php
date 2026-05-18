@@ -21,6 +21,9 @@ class UpdateBookingData implements Arrayable
         public readonly BookingContactData $contact,
         public readonly ?string $internal_notes,
         public readonly ?string $return_date,
+        public readonly ?array $cost_items,
+        public readonly ?int $margin_basis_points,
+        public readonly ?int $final_price,
     ) {}
 
     /**
@@ -39,6 +42,9 @@ class UpdateBookingData implements Arrayable
             contact: $parsed['contact'],
             internal_notes: $validated['internal_notes'] ?? null,
             return_date: $validated['return_date'] ?? null,
+            cost_items: array_key_exists('cost_items', $validated) ? $parsed['cost_items'] : null,
+            margin_basis_points: array_key_exists('margin_percentage', $validated) ? $parsed['margin_basis_points'] : null,
+            final_price: array_key_exists('final_price', $validated) ? $parsed['final_price'] : null,
         );
     }
 }

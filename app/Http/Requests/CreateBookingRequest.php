@@ -76,6 +76,7 @@ class CreateBookingRequest extends FormRequest
             BookingValidationRules::contact(),
             BookingValidationRules::travelers(),
             BookingValidationRules::mainBooker(),
+            BookingValidationRules::costItems(),
         );
     }
 }

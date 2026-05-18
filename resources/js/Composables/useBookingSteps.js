@@ -8,12 +8,14 @@ const {
     validateContactStep,
     validateOverviewStep,
     validateTripStep,
+    validatePriceStep,
 } = useBookingValidation();
 
 export const BOOKING_STEPS = {
     TRIP: "trip",
     TRAVELERS: "travelers",
     CONTACT: "contact",
+    PRICE: "price",
     OVERVIEW: "overview",
 };
 
@@ -37,6 +39,12 @@ export function useBookingSteps(booking) {
             label: i18n.global.t('booking_step_labels.contact'),
             fields: ["contact"],
             validate: () => validateContactStep(booking.value),
+        },
+        {
+            id: BOOKING_STEPS.PRICE,
+            label: i18n.global.t('booking_step_labels.price'),
+            fields: ["cost_items", "margin_percentage", "final_price"],
+            validate: () => validatePriceStep(booking.value),
         },
         {
             id: BOOKING_STEPS.OVERVIEW,
