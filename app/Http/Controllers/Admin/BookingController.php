@@ -61,7 +61,7 @@ class BookingController extends Controller
             'trips' => Trip::get(),
             'countries' => CountryService::countries(),
             'cost_categories' => CostCategory::options(),
-            'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, 3500),
+            'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, Booking::DEFAULT_MARGIN_BASIS_POINTS),
             'title' => $this->pageTitle('booking.title_create'),
         ]);
     }
@@ -105,7 +105,7 @@ class BookingController extends Controller
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
             'cost_categories' => CostCategory::options(),
-            'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, 3500),
+            'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, Booking::DEFAULT_MARGIN_BASIS_POINTS),
             'title' => $this->pageTitle('booking.title_edit'),
         ]);
     }

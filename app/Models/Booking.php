@@ -36,6 +36,8 @@ class Booking extends Model
         SoftDeletes,
         Sortable;
 
+    public const DEFAULT_MARGIN_BASIS_POINTS = 3500;
+
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
         'return_date' => ['format' => 'dddd LL'],
@@ -140,7 +142,7 @@ class Booking extends Model
             if ($booking->margin_basis_points === null) {
                 $booking->margin_basis_points = (int) Setting::get(
                     SettingKey::DefaultBookingMarginBasisPoints,
-                    3500
+                    self::DEFAULT_MARGIN_BASIS_POINTS
                 );
             }
         });
@@ -409,8 +411,10 @@ class Booking extends Model
     {
         $margin = ($this->margin_basis_points ?? 0) / 10000;
 
-        if ($margin >= 1.0) {
-            return 0;
+        if ($margin < 0 || $margin >= 1.0) {
+            throw new \DomainException(
+                "Invalid margin_basis_points ({$this->margin_basis_points}): margin must be between 0% and 100%."
+            );
         }
 
         return (int) round($this->totalCost / (1 - $margin));
@@ -437,13 +441,13 @@ class Booking extends Model
             $this->costItems()->delete();
 
             foreach (array_values($items) as $index => $item) {
-                $this->costItems()->create([
+                $this->costItems()->make([
                     'category' => $item['category'],
                     'label' => $item['label'],
                     'amount_per_person' => $item['amount_per_person'],
                     'quantity' => $item['quantity'],
                     'sort_order' => $item['sort_order'] ?? $index,
-                ]);
+                ])->saveQuietly();
             }
 
             $this->recalculatePrice();
