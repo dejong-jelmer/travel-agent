@@ -11,10 +11,15 @@ class SetLocale
 {
     public function handle(Request $request, Closure $next)
     {
+        if (! $request->is('admin*')) {
+            App::setLocale('nl');
+
+            return $next($request);
+        }
+
         $availableLocales = availableLocales() ?: ['nl', 'en'];
         $currentLocale = Session::get('locale');
 
-        // Set preferred locale
         $locale = in_array($currentLocale, $availableLocales)
             ? $currentLocale
             : $request->getPreferredLanguage($availableLocales);
@@ -23,7 +28,6 @@ class SetLocale
 
         App::setLocale($locale);
 
-        // Set session locale if changed
         if ($currentLocale !== $locale) {
             Session::put('locale', $locale);
         }
