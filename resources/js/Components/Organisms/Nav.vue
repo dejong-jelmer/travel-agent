@@ -18,6 +18,14 @@ const tripItems = computed(() => [
     })),
 ]);
 
+// "More" dropdown: legal/informational links (mirrors the footer)
+const moreItems = computed(() => [
+    { label: t('footer.conditions'), href: route('terms') },
+    { label: t('footer.privacy'), href: route('privacy') },
+    { label: t('footer.guarantee'), href: route('guarantee') },
+    { label: t('footer.sustainability'), href: route('sustainability'), download: true },
+]);
+
 const links = computed(() => ({
     home: {
         label: t('nav.home'),
@@ -56,6 +64,7 @@ const links = computed(() => ({
             <!-- Desktop Navigation Links -->
             <div class="hidden tablet:flex items-center gap-x-8 laptop:gap-x-12">
                 <NavLink v-for="link in links" v-show="link.path !== route('home')" :key="link.label" :href="link.path" :label="link.label" variant="desktop" />
+                <NavDropdown :label="$t('nav.more')" :items="moreItems" variant="desktop" />
             </div>
 
             <!-- Mobile Menu -->
@@ -63,6 +72,7 @@ const links = computed(() => ({
                 <template #default="{ closeMenu }">
                     <NavLink v-for="link in links" :key="link.label" :href="link.path" :label="link.label" variant="mobile"
                         @click="closeMenu" />
+                    <NavDropdown :label="$t('nav.more')" :items="moreItems" variant="mobile" @close="closeMenu" />
                 </template>
             </MobileMenu>
         </div>

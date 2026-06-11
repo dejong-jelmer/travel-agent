@@ -1,6 +1,8 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
+import vvkrLogo from '@/../images/vvkr.png'
+
 
 const page = usePage();
 const contact = page.props.contact;
@@ -15,7 +17,7 @@ const year = new Date().getFullYear();
                 <!-- Logo + Slogan -->
                 <div class="text-left">
                     <div class="flex justify-start">
-                        <LogoWhite class="w-[200px] h-[100px]" />
+                        <LogoWhite class="w-[250px] h-[125px]" />
                     </div>
                     <ul class="mt-5 space-y-4 text-sm">
                         <li>
@@ -62,7 +64,7 @@ const year = new Date().getFullYear();
                                             d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                                     </svg>
                                     <span class="text-white transition">
-                                        <a class="email-field" v-html="contact.mail.display"></a>
+                                        <a class="email-field" href="#" v-html="contact.mail.display"></a>
                                     </span>
                                 </a>
                             </li>
@@ -96,12 +98,25 @@ const year = new Date().getFullYear();
                         </ul>
                     </div>
                     <div class="w-full justify-start">
-                        <p class="mt-8 text-lg font-medium text-white">{{ $t('footer.registered')}}</p>
+                        <p class="mt-8 text-lg font-medium text-white">{{ $t('footer.registered') }}</p>
 
-                        <a href="https://www.sto-garant.nl/" target="_blank" rel="noopener noreferrer"
-                            aria-label="STO Garant" class="mt-8 block">
-                            <Sto class="h-24 w-24" aria-hidden="true" />
-                        </a>
+                        <div class="mt-6 flex flex-wrap items-center gap-6">
+                            <a href="https://www.sto-garant.nl/" target="_blank" rel="noopener noreferrer"
+                                aria-label="STO Garant">
+                                <Sto class="h-24 w-24" aria-hidden="true" />
+                            </a>
+                            <a href="https://www.vvkr.nl"
+                                target="_blank" rel="noopener noreferrer" aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties">
+                                <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties" width="150px" height="70px">
+                            </a>
+                            <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
+                                target="_blank" rel="noopener noreferrer" :aria-label="$t('footer.green_hosting_aria')">
+                                <img src="https://app.greenweb.org/api/v3/greencheckimage/omdatwereizen.nl?nocache=true"
+                                    alt="This website runs on green hosting - verified by thegreenwebfoundation.org"
+                                    width="150px" height="70px">
+                            </a>
+                            <!-- <GreenHostingBadge /> -->
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,6 +146,11 @@ const year = new Date().getFullYear();
                             class="inline-block text-brand-link underline transition hover:text-brand-link/75">
                             {{ $t('footer.guarantee') }}
                         </Link>
+                        &nbsp;<span>&middot;</span>&nbsp;
+                        <a :href="route('sustainability')"
+                            class="inline-block text-brand-link underline transition hover:text-brand-link/75">
+                            {{ $t('footer.sustainability') }}
+                        </a>
                     </p>
                 </div>
             </div>

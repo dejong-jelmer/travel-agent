@@ -10,19 +10,22 @@ const usps = [
         image: routesImage,
         titleKey: 'usp.routes.title',
         descriptionKey: 'usp.routes.description',
-        highlightKey: 'usp.routes.highlight'
+        highlightKey: 'usp.routes.highlight',
+        alt: 'usp.routes.highlight'
     },
     {
         image: trainImage,
         titleKey: 'usp.train.title',
         descriptionKey: 'usp.train.description',
-        highlightKey: 'usp.train.highlight'
+        highlightKey: 'usp.train.highlight',
+        alt: 'usp.train.highlight'
     },
     {
         image: uniqueImage,
         titleKey: 'usp.unique.title',
         descriptionKey: 'usp.unique.description',
-        highlightKey: 'usp.unique.highlight'
+        highlightKey: 'usp.unique.highlight',
+        alt: 'usp.unique.highlight'
     }
 ];
 </script>
@@ -45,7 +48,7 @@ const usps = [
             >
                 <!-- Header afbeelding -->
                 <div class="h-48 overflow-hidden">
-                    <img :src="usp.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                    <img :src="usp.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
                 </div>
 
                 <div class="p-6 flex flex-col flex-1">

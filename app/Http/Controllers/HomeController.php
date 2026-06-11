@@ -10,6 +10,7 @@ use App\Models\Trip;
 use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -108,6 +109,16 @@ class HomeController extends Controller
             'title' => $this->pageTitle('home.guarantee_seo'),
             'seo' => $this->pageSeo('home.guarantee_seo'),
         ]);
+    }
+
+    public function downloadSustainabilityDocument(): BinaryFileResponse
+    {
+        $path = 'sustainability/Reizen met aandacht.pdf';
+        $disk = Storage::disk('local');
+
+        abort_unless($disk->exists($path), 404);
+
+        return response()->download($disk->path($path), 'Reizen met aandacht.pdf');
     }
 
     public function downloadTerms(TermsPdfService $termsPdf): BinaryFileResponse

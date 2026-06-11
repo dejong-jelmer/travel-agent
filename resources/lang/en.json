@@ -26,7 +26,8 @@
         "contact": "Contact",
         "about": "About me",
         "blog": "Blog",
-        "home": "Home"
+        "home": "Home",
+        "more": "More"
     },
     "trips": {
         "title": "Where would you go?",
@@ -738,7 +739,8 @@
         "all_rights": "All rights reserverd.",
         "conditions": "Terms and conditions",
         "privacy": "Privacy policy",
-        "guarantee": "Guarantee Scheme"
+        "guarantee": "Guarantee Scheme",
+        "sustainability": "Sustainability"
     },
     "booking_step_labels": {
         "trip": "Trip",
