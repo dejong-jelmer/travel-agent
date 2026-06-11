@@ -13,8 +13,7 @@ const missionStatement = tm('about.promise_statement')
     <Layout>
         <!-- Hero -->
         <template v-slot:hero>
-            <PageHero :image="heroImage" :title="t('about.hero.title')" :subtitle="t('about.hero.sub_title')"
-                overlay-class="bg-brand-accent/15" />
+            <PageHero :image="heroImage" :title="t('about.hero.title')" :subtitle="t('about.hero.sub_title')" />
         </template>
         <!-- Story -->
         <section class="bg-brand-secondary py-12 laptop:py-24">

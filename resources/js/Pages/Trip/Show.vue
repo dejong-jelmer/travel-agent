@@ -80,8 +80,7 @@ const tabIcons = {
     <Layout>
         <template v-slot:hero>
             <!-- Hero Section -->
-            <PageHero overlay-class="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent"
-                :image="trip.hero_image?.public_url" :title="trip.name" :subtitle="trip.intro" :trip-meta="tripMeta" />
+            <PageHero :image="trip.hero_image?.public_url" :title="trip.name" :subtitle="trip.intro" :trip-meta="tripMeta" />
 
         </template>
         <DecorativeLine />
