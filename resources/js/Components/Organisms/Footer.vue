@@ -3,7 +3,6 @@ import { usePage } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import vvkrLogo from '@/../images/vvkr.png'
 
-
 const page = usePage();
 const contact = page.props.contact;
 const companyName = window.appName;
@@ -102,18 +101,21 @@ const year = new Date().getFullYear();
 
                         <div class="mt-6 flex flex-wrap items-center gap-6">
                             <a href="https://www.sto-garant.nl/" target="_blank" rel="noopener noreferrer"
-                                aria-label="STO Garant">
+                                aria-label="STO Garant"
+                                class="rounded-lg p-2 transition ring-1 ring-transparent hover:ring-white/40 hover:bg-white/5">
                                 <Sto class="h-24 w-24" aria-hidden="true" />
                             </a>
                             <a href="https://www.vvkr.nl"
-                                target="_blank" rel="noopener noreferrer" aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties">
-                                <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties" width="150px" height="70px">
+                                target="_blank" rel="noopener noreferrer" aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties"
+                                class="rounded-lg p-2 transition ring-1 ring-transparent hover:ring-white/40 hover:bg-white/5">
+                                <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties" class="w-[120px] h-[70px]">
                             </a>
                             <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
-                                target="_blank" rel="noopener noreferrer" :aria-label="$t('footer.green_hosting_aria')">
+                                target="_blank" rel="noopener noreferrer" :aria-label="$t('footer.green_hosting_aria')"
+                                class="rounded-lg p-2 transition ring-1 ring-transparent hover:ring-white/40 hover:bg-white/5">
                                 <img src="https://app.greenweb.org/api/v3/greencheckimage/omdatwereizen.nl?nocache=true"
                                     alt="This website runs on green hosting - verified by thegreenwebfoundation.org"
-                                    width="150px" height="70px">
+                                    class="w-[150px] h-[70px]">
                             </a>
                             <!-- <GreenHostingBadge /> -->
                         </div>

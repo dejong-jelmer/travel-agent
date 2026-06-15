@@ -15,6 +15,9 @@ const props = defineProps({
 
 const emit = defineEmits(['close']);
 
+// Download/external items render as a plain anchor; everything else as an SPA Link.
+const getLinkComponent = (item) => (item.download ? 'a' : Link);
+
 // Desktop: hover-based open/close with slight close delay
 const isOpen = ref(false);
 let closeTimer = null;
@@ -104,26 +107,16 @@ function handleItemClick() {
                 @mouseenter="onMouseEnter"
                 @mouseleave="onMouseLeave"
             >
-                <template v-for="item in items" :key="item.href">
-                    <!-- Download / external link -->
-                    <a
-                        v-if="item.download"
-                        :href="item.href"
-                        class="block px-4 py-2 text-sm text-brand-text hover:bg-brand-secondary hover:text-brand-primary transition-colors duration-150 rounded-lg mx-1"
-                        @click="isOpen = false"
-                    >
-                        {{ item.label }}
-                    </a>
-                    <!-- SPA link -->
-                    <Link
-                        v-else
-                        :href="item.href"
-                        class="block px-4 py-2 text-sm text-brand-text hover:bg-brand-secondary hover:text-brand-primary transition-colors duration-150 rounded-lg mx-1"
-                        @click="isOpen = false"
-                    >
-                        {{ item.label }}
-                    </Link>
-                </template>
+                <component
+                    :is="getLinkComponent(item)"
+                    v-for="item in items"
+                    :key="item.href"
+                    :href="item.href"
+                    class="block px-4 py-2 text-sm text-brand-text hover:bg-brand-secondary hover:text-brand-primary transition-colors duration-150 rounded-lg mx-1"
+                    @click="isOpen = false"
+                >
+                    {{ item.label }}
+                </component>
             </div>
         </Transition>
     </div>
@@ -154,26 +147,16 @@ function handleItemClick() {
             leave-to-class="opacity-0 -translate-y-1"
         >
             <div v-show="expanded" class="pb-1">
-                <template v-for="item in items" :key="item.href">
-                    <!-- Download / external link -->
-                    <a
-                        v-if="item.download"
-                        :href="item.href"
-                        class="block px-4 py-2 text-sm text-brand-text hover:text-brand-primary hover:bg-brand-secondary transition-colors duration-150 rounded-lg mx-auto max-w-[200px] text-center"
-                        @click="handleItemClick"
-                    >
-                        {{ item.label }}
-                    </a>
-                    <!-- SPA link -->
-                    <Link
-                        v-else
-                        :href="item.href"
-                        class="block px-4 py-2 text-sm text-brand-text hover:text-brand-primary hover:bg-brand-secondary transition-colors duration-150 rounded-lg mx-auto max-w-[200px] text-center"
-                        @click="handleItemClick"
-                    >
-                        {{ item.label }}
-                    </Link>
-                </template>
+                <component
+                    :is="getLinkComponent(item)"
+                    v-for="item in items"
+                    :key="item.href"
+                    :href="item.href"
+                    class="block px-4 py-2 text-sm text-brand-text hover:text-brand-primary hover:bg-brand-secondary transition-colors duration-150 rounded-lg mx-auto max-w-[200px] text-center"
+                    @click="handleItemClick"
+                >
+                    {{ item.label }}
+                </component>
             </div>
         </Transition>
     </div>

@@ -7,10 +7,10 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
+use App\Services\SustainabilityPdfService;
 use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -111,14 +111,9 @@ class HomeController extends Controller
         ]);
     }
 
-    public function downloadSustainabilityDocument(): BinaryFileResponse
+    public function downloadSustainabilityDocument(SustainabilityPdfService $sustainabilityPdf): BinaryFileResponse
     {
-        $path = 'sustainability/Reizen met aandacht.pdf';
-        $disk = Storage::disk('local');
-
-        abort_unless($disk->exists($path), 404);
-
-        return response()->download($disk->path($path), 'Reizen met aandacht.pdf');
+        return response()->download($sustainabilityPdf->path(), SustainabilityPdfService::FILENAME);
     }
 
     public function downloadTerms(TermsPdfService $termsPdf): BinaryFileResponse
