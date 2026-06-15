@@ -19,13 +19,18 @@ const emailLinks = function initEmailLinks(encodedEmail, selector) {
     };
 
     emailElements.forEach(el => {
-        const handler = () => {
+        const handler = (e) => {
             const email = decodeEmailAddress();
             if (!email) return;
 
             el.setAttribute('href', `mailto:${email}`);
             for (let event of events) {
                 el.removeEventListener(event, handler);
+            }
+
+            if (e.type === 'click') {
+                e.preventDefault();
+                window.location.href = `mailto:${email}`;
             }
         };
         for (let event of events) {
@@ -36,7 +41,6 @@ const emailLinks = function initEmailLinks(encodedEmail, selector) {
 
 const phoneLinks = function initPhoneLinks(encodedPhone, selector) {
     const telElements = document.querySelectorAll(`a${selector}`);
-    const events = ['mouseover', 'focus', 'touchstart', 'click'];
     const decodeEmailPhone = () => {
 
         try {
@@ -56,24 +60,11 @@ const phoneLinks = function initPhoneLinks(encodedPhone, selector) {
 
     telElements.forEach(el => {
         const phone = decodeEmailPhone();
+        if (!phone) return;
+
+        el.setAttribute('href', `tel:${phone}`);
         if(!el.classList.contains('has-icon')) {
             el.textContent = formatPhone(phone);
-        }
-    });
-
-    telElements.forEach(el => {
-        const handler = () => {
-            const phone = decodeEmailPhone();
-
-            if (!phone) return;
-
-            el.setAttribute('href', `tel:${phone}`);
-            for (let event of events) {
-                el.removeEventListener(event, handler);
-            }
-        };
-        for (let event of events) {
-            el.addEventListener(event, handler);
         }
     });
 }

@@ -26,7 +26,8 @@
         "contact": "Contact",
         "about": "Over mij",
         "blog": "Blog",
-        "home": "Home"
+        "home": "Home",
+        "more": "Meer"
     },
     "trips": {
         "title": "Waar ga jij heen?",
@@ -734,11 +735,12 @@
     },
     "footer": {
         "contact": "Contact",
-        "registered": "Aangesloten bij",
+        "registered": "Duurzaam & betrouwbaar",
         "all_rights": "Alle rechten voorbehouden.",
         "conditions": "Algemene voorwaarden",
         "privacy": "Privacyverklaring",
-        "guarantee": "Garantieregeling"
+        "guarantee": "Garantieregeling",
+        "sustainability": "Duurzaamheid"
     },
     "booking_step_labels": {
         "trip": "Reis",
