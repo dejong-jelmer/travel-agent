@@ -117,7 +117,6 @@ const year = new Date().getFullYear();
                                     alt="This website runs on green hosting - verified by thegreenwebfoundation.org"
                                     class="w-[150px] h-[70px]">
                             </a>
-                            <!-- <GreenHostingBadge /> -->
                         </div>
                     </div>
                 </div>
