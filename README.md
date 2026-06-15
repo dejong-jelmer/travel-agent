@@ -326,7 +326,7 @@ All components in `Components/`, `Templates/`, and `Icons/` are globally availab
   - `brand.accent` (#f59e0b) - Accent/highlight color (amber)
   - `brand.secondary` (#f5f0e8) - Light background
   - `brand.text` (#1e2d3d) - Primary text
-  - `brand.light` (#a3bccb) - Light brand tint
+  - `brand.light` (#4d6f80) - Light brand tint
   - `brand.subtle` (#afcb98) - Subtle green
   - `brand.earth` (#dcc7aa) - Warm earth tone
   - `brand.link` (#82b2ca) - Link color

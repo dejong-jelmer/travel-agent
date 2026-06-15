@@ -34,6 +34,7 @@ const usps = [
 
         <!-- Header -->
         <div class="text-center mb-12 laptop:mb-24">
+            <h2 class="sr-only">{{ $t('usp.heading') }}</h2>
             <p class="text-brand-text text-sm laptop:text-lg text-left max-w-2xl mx-auto leading-relaxed">
                 {{ $t('usp.intro') }}
             </p>

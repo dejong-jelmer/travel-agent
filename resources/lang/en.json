@@ -154,6 +154,7 @@
         "special_requests_consent": "I consent to the processing of the health and/or diet-related data provided by me for the purpose of my trip."
     },
     "usp": {
+        "heading": "About our journeys",
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
         "routes": {
             "title": "I know the way",
