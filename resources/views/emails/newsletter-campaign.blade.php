@@ -73,7 +73,7 @@
                         <h4 style="margin:0 0 8px;font-size:17px;font-weight:600;color:#30547e;">
                             {{ $trip->name }}
                         </h4>
-                        <p style="margin:0 0 12px;color:#a3bccb;font-size:14px;line-height:1.4;">
+                        <p style="margin:0 0 12px;color:#4d6f80;font-size:14px;line-height:1.4;">
                             {{ $trip->description }}
                         </p>
                         <a href="{{ $trip->url }}"
@@ -113,7 +113,7 @@
     @endif
 
     {{-- Company Info --}}
-    <p style="margin:0 0 16px;text-align:center;color:#a3bccb;font-size:13px;line-height:1.5;">
+    <p style="margin:0 0 16px;text-align:center;color:#4d6f80;font-size:13px;line-height:1.5;">
         <strong>{{ config('app.name') }}</strong><br>
         @if(!empty(config('contact.address')))
             {{ config('contact.address') }}<br>
@@ -126,7 +126,7 @@
     </p>
 
     {{-- Unsubscribe Link --}}
-    <p style="margin:0;text-align:center;color:#a3bccb;font-size:11px;line-height:1.5;">
+    <p style="margin:0;text-align:center;color:#4d6f80;font-size:11px;line-height:1.5;">
         Je ontvangt deze email omdat je bent ingeschreven op de nieuwsbrief.<br>
         <a href="{{ $unsubscribeUrl ?? route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token ?? '') }}"
            style="color:#82b2ca;text-decoration:underline;">

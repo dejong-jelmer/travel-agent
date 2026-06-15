@@ -102,17 +102,17 @@ const year = new Date().getFullYear();
                         <div class="mt-6 flex flex-wrap items-center gap-6">
                             <a href="https://www.sto-garant.nl/" target="_blank" rel="noopener noreferrer"
                                 aria-label="STO Garant"
-                                class="rounded-lg p-2 transition hover:scale-125 ease-in-out duration-500">
+                                class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
                                 <Sto class="h-16 w-16" aria-hidden="true" />
                             </a>
                             <a href="https://www.vvkr.nl"
                                 target="_blank" rel="noopener noreferrer" aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties"
-                                class="rounded-lg p-2 transition hover:scale-125 ease-in-out duration-500">
+                                class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
                                 <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties" class="w-[80px] h-[50px]">
                             </a>
                             <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
                                 target="_blank" rel="noopener noreferrer" :aria-label="$t('footer.green_hosting_aria')"
-                                class="rounded-lg p-2 transition hover:scale-125 ease-in-out duration-500">
+                                class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
                                 <img src="https://app.greenweb.org/api/v3/greencheckimage/omdatwereizen.nl?nocache=true"
                                     alt="This website runs on green hosting - verified by thegreenwebfoundation.org"
                                     class="w-[100px] h-[50px]">
