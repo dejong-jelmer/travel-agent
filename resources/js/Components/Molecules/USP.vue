@@ -48,7 +48,7 @@ const usps = [
             >
                 <!-- Header afbeelding -->
                 <div class="h-48 overflow-hidden">
-                    <img :src="usp.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" alt="" />
+                    <img :src="usp.image" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" :alt="$t(usp.alt)" />
                 </div>
 
                 <div class="p-6 flex flex-col flex-1">
