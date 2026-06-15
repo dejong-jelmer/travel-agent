@@ -7,6 +7,7 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Trip;
+use App\Services\SustainabilityPdfService;
 use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
@@ -108,6 +109,11 @@ class HomeController extends Controller
             'title' => $this->pageTitle('home.guarantee_seo'),
             'seo' => $this->pageSeo('home.guarantee_seo'),
         ]);
+    }
+
+    public function downloadSustainabilityDocument(SustainabilityPdfService $sustainabilityPdf): BinaryFileResponse
+    {
+        return response()->download($sustainabilityPdf->path(), SustainabilityPdfService::FILENAME);
     }
 
     public function downloadTerms(TermsPdfService $termsPdf): BinaryFileResponse
