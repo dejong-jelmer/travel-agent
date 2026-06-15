@@ -20,7 +20,7 @@
     {{-- Booking Reference --}}
     <div style="background:#ffffff;padding:20px;margin-bottom:30px;border-left:4px solid #f59e0b;">
         <p
-            style="margin:0 0 8px 0;font-size:12px;text-transform:uppercase;color:#A3BCCB;font-weight:600;letter-spacing:0.5px;">
+            style="margin:0 0 8px 0;font-size:12px;text-transform:uppercase;color:#4d6f80;font-weight:600;letter-spacing:0.5px;">
             Uw boekingsnummer
         </p>
         <p style="margin:0;font-size:28px;font-weight:700;color:#30547e;letter-spacing:1px;">
@@ -40,7 +40,7 @@
     <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:30px;background:#fbfbf7;">
         <tr>
             <td style="padding:20px;border-bottom:1px solid #e0e0e0;" colspan="3">
-                <p style="margin:0 0 5px 0;font-size:13px;color:#A3BCCB;font-weight:600;text-transform:uppercase;">
+                <p style="margin:0 0 5px 0;font-size:13px;color:#4d6f80;font-weight:600;text-transform:uppercase;">
                     Reis
                 </p>
                 <p style="margin:0;font-size:18px;font-weight:600;color:#30547e;">
@@ -50,7 +50,7 @@
         </tr>
         <tr>
             <td style="padding:20px;width:50%;">
-                <p style="margin:0 0 5px 0;font-size:13px;color:#A3BCCB;font-weight:600;text-transform:uppercase;">
+                <p style="margin:0 0 5px 0;font-size:13px;color:#4d6f80;font-weight:600;text-transform:uppercase;">
                     Vertrekdatum
                 </p>
                 <p style="margin:0;font-size:16px;font-weight:600;color:#30547e;">
@@ -58,7 +58,7 @@
                 </p>
             </td>
             <td style="padding:20px;width:50%;">
-                <p style="margin:0 0 5px 0;font-size:13px;color:#A3BCCB;font-weight:600;text-transform:uppercase;">
+                <p style="margin:0 0 5px 0;font-size:13px;color:#4d6f80;font-weight:600;text-transform:uppercase;">
                     Terugkomstdatum
                 </p>
                 <p style="margin:0;font-size:16px;font-weight:600;color:#30547e;">
@@ -99,7 +99,7 @@
                                             </span>
                                         @endif
                                     </p>
-                                    <p style="margin:3px 0 0 0;font-size:13px;color:#A3BCCB;">
+                                    <p style="margin:3px 0 0 0;font-size:13px;color:#4d6f80;">
                                         Geboortedatum: {{ $traveler->birthdate_formatted }}
                                     </p>
                                 </td>
@@ -122,7 +122,7 @@
             <td>
                 <p style="margin:0 0 15px 0;">
                     <span
-                        style="font-size:12px;color:#A3BCCB;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
+                        style="font-size:12px;color:#4d6f80;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
                         Naam
                     </span>
                     <span style="font-size:15px;color:#30547e;">
@@ -131,7 +131,7 @@
                 </p>
                 <p style="margin:0 0 15px 0;">
                     <span
-                        style="font-size:12px;color:#A3BCCB;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
+                        style="font-size:12px;color:#4d6f80;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
                         E-mailadres
                     </span>
                     <span style="font-size:15px;color:#30547e;">
@@ -140,7 +140,7 @@
                 </p>
                 <p style="margin:0 0 15px 0;">
                     <span
-                        style="font-size:12px;color:#A3BCCB;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
+                        style="font-size:12px;color:#4d6f80;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
                         Telefoonnummer
                     </span>
                     <span style="font-size:15px;color:#30547e;">
@@ -149,7 +149,7 @@
                 </p>
                 <p style="margin:0;">
                     <span
-                        style="font-size:12px;color:#A3BCCB;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
+                        style="font-size:12px;color:#4d6f80;font-weight:600;text-transform:uppercase;display:block;margin-bottom:5px;">
                         Adres
                     </span>
                     <span

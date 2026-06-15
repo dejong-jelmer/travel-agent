@@ -56,7 +56,7 @@ const year = new Date().getFullYear();
                     <div class="w-full justify-start">
                         <ul class="mt-8 space-y-4 text-sm text-left">
                             <li>
-                                <a class="flex items-center gap-1.5 group" href="/">
+                                <span class="flex items-center gap-1.5 group">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 text-white shrink-0"
                                         fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -65,7 +65,7 @@ const year = new Date().getFullYear();
                                     <span class="text-white transition">
                                         <a class="email-field" href="#" v-html="contact.mail.display"></a>
                                     </span>
-                                </a>
+                                </span>
                             </li>
                             <li>
                                 <span class="flex items-center gap-1.5 group">
@@ -102,20 +102,20 @@ const year = new Date().getFullYear();
                         <div class="mt-6 flex flex-wrap items-center gap-6">
                             <a href="https://www.sto-garant.nl/" target="_blank" rel="noopener noreferrer"
                                 aria-label="STO Garant"
-                                class="rounded-lg p-2 transition ring-1 ring-transparent hover:ring-white/40 hover:bg-white/5">
-                                <Sto class="h-24 w-24" aria-hidden="true" />
+                                class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
+                                <Sto class="h-16 w-16" aria-hidden="true" />
                             </a>
                             <a href="https://www.vvkr.nl"
                                 target="_blank" rel="noopener noreferrer" aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties"
-                                class="rounded-lg p-2 transition ring-1 ring-transparent hover:ring-white/40 hover:bg-white/5">
-                                <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties" class="w-[120px] h-[70px]">
+                                class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
+                                <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties" class="w-[80px] h-[50px]">
                             </a>
                             <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
                                 target="_blank" rel="noopener noreferrer" :aria-label="$t('footer.green_hosting_aria')"
-                                class="rounded-lg p-2 transition ring-1 ring-transparent hover:ring-white/40 hover:bg-white/5">
+                                class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
                                 <img src="https://app.greenweb.org/api/v3/greencheckimage/omdatwereizen.nl?nocache=true"
                                     alt="This website runs on green hosting - verified by thegreenwebfoundation.org"
-                                    class="w-[150px] h-[70px]">
+                                    class="w-[100px] h-[50px]">
                             </a>
                         </div>
                     </div>
@@ -130,7 +130,7 @@ const year = new Date().getFullYear();
                         &copy; {{ year }} {{ companyName }}
                     </p>
 
-                    <p class="text-sm text-gray-400">
+                    <p class="text-sm text-gray-300">
                         <span class="block tablet:inline">{{ $t('footer.all_rights') }}</span>
                         &nbsp;
                         <Link :href="route('terms')"
@@ -155,8 +155,11 @@ const year = new Date().getFullYear();
                     </p>
                 </div>
             </div>
-            <p class="text-xs text-white/40 text-center mt-3">
-                Webdesign &amp; development {{ contact.fullName }}
+            <p class="text-xs text-white/75 text-center mt-3">
+                <a href="https://heldergebouwd.nl" target="_blank" rel="noopener noreferrer"
+                    class="hover:underline">
+                    Webdesign &amp; development {{ contact.fullName }}
+                </a>
             </p>
         </div>
     </footer>

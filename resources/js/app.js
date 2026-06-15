@@ -2,11 +2,13 @@ import './bootstrap';
 import '../css/app.css';
 import { createApp, h, defineAsyncComponent } from 'vue'
 
-// Only heavy admin-only components are loaded async
+// Heavy, route-specific components are loaded async so they stay out of the main bundle.
+// Keep this list in sync with the negative glob patterns in the eager registration below.
 const ASYNC_COMPONENTS = [
     'BookingForm', 'TripForm', 'DestinationForm', 'CampaignForm', 'ItineraryForm',
-    'DataTable', 'SortableBlocks', 'ImageUploader', 'TripPricesManager',
-    'TripItemsTab', 'BlockedDatesManager', 'LightBox',
+    'BlogPostForm', 'TripPricesManager', 'TripItemsTab',
+    'DataTable', 'SortableBlocks', 'TipTap', 'ImageUploader',
+    'BlockedDatesManager', 'LightBox', 'DatePicker',
 ]
 import { createInertiaApp } from '@inertiajs/vue3'
 import { ZiggyVue } from 'ziggy-js';
@@ -28,8 +30,8 @@ import.meta.glob([
 
 createInertiaApp({
     resolve: name => {
-        const pages = import.meta.glob('./Pages/**/*.vue', { eager: true })
-        return pages[`./Pages/${name}.vue`]
+        const pages = import.meta.glob('./Pages/**/*.vue')
+        return pages[`./Pages/${name}.vue`]()
     },
     setup({ el, App, props, plugin }) {
         const app = createApp({ render: () => h(App, props) });
@@ -56,9 +58,14 @@ createInertiaApp({
             // Register components globally; heavy admin components are loaded async
             const getName = (path) => path.split('/').pop().replace(/\.[^/.]+$/, '')
 
-            // Eagerly register all non-async components
+            // Eagerly register all non-async components. Heavy, route-specific components are
+            // excluded from the eager glob so they are not pulled into the main bundle; they are
+            // registered async below and code-split into their own chunks.
             const eagerGlobs = [
-                import.meta.glob('./Components/**/*.vue', { eager: true }),
+                import.meta.glob([
+                    './Components/**/*.vue',
+                    '!**/{BookingForm,TripForm,DestinationForm,CampaignForm,ItineraryForm,BlogPostForm,TripPricesManager,TripItemsTab,DataTable,SortableBlocks,TipTap,ImageUploader,BlockedDatesManager,LightBox,DatePicker}.vue',
+                ], { eager: true }),
                 import.meta.glob('./Templates/*.vue', { eager: true }),
                 import.meta.glob('./Icons/*.vue', { eager: true }),
             ]
