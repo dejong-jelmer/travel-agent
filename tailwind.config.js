@@ -33,7 +33,7 @@ export default {
                     accent: "#f59e0b",
                     secondary: "#f5f0e8",
                     text: "#1e2d3d",
-                    light: "#a3bccb",
+                    light: "#4d6f80",
                     subtle: "#afcb98",
                     earth: "#dcc7aa",
                     link: "#82b2ca",
