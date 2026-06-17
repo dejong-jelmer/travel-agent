@@ -111,6 +111,14 @@ class HomeController extends Controller
         ]);
     }
 
+    public function vvkr(): Response
+    {
+        return Inertia::render('VvKR', [
+            'title' => $this->pageTitle('home.vvkr_seo'),
+            'seo' => $this->pageSeo('home.vvkr_seo'),
+        ]);
+    }
+
     public function downloadSustainabilityDocument(SustainabilityPdfService $sustainabilityPdf): BinaryFileResponse
     {
         return response()->download($sustainabilityPdf->path(), SustainabilityPdfService::FILENAME);

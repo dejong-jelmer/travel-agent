@@ -30,6 +30,7 @@ Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
 Route::get('/garantie', [HomeController::class, 'guarantee'])->name('guarantee');
+Route::get('/over-vvkr', [HomeController::class, 'vvkr'])->name('vvkr');
 Route::get('/duurzaamheid', [HomeController::class, 'downloadSustainabilityDocument'])
     ->middleware('throttle:10,1')
     ->name('sustainability');

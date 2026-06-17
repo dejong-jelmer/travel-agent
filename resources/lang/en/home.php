@@ -3,15 +3,15 @@
 return [
     'home_seo' => [
         'title' => 'Sustainable train journeys across Europe | Omdat We Reizen',
-        'description' => 'I plan personal train journeys across Europe. Routes I have travelled myself, with the stories and culture that belong to them.',
+        'description' => 'Sustainable train journeys through Europe, personally curated. Destinations with a story, room for what happens along the way, and a guide who thinks along with you.',
     ],
     'about_seo' => [
         'title' => 'About me | Omdat We Reizen',
-        'description' => 'I am Jelmer. I travel Europe by train and share the routes, stories and places that made me feel more alive along the way.',
+        'description' => 'I curate sustainable train journeys through Europe — routes I have traveled myself, with the stories that go with them.',
     ],
     'contact_seo' => [
         'title' => 'Contact | Omdat We Reizen',
-        'description' => 'Questions about a journey, or looking for personal advice? "I am happy to help you plan your next train trip across Europe.',
+        'description' => 'Do you have questions about a trip or would you like personal advice? I would be happy to help you plan your sustainable train journey through Europe.',
     ],
     'trips_seo' => [
         'title' => 'Journeys | Omdat We Reizen',
@@ -19,10 +19,18 @@ return [
     ],
     'privacy_seo' => [
         'title' => 'Privacy statement | Omdat We Reizen',
-        'description' => 'How I handle your personal data when you get in touch, sign up for the newsletter, or book a journey.',
+        'description' => 'Read how I handle your personal data. The privacy statement for sustainable train travel through Europe.',
     ],
     'terms_seo' => [
         'title' => 'Terms and conditions | Omdat We Reizen',
-        'description' => 'The terms under which I plan and book train journeys across Europe. Clear, with no small print.',
+        'description' => 'Read the general terms and conditions for booking sustainable train journeys through Europe.',
+    ],
+    'guarantee_seo' => [
+        'title' => 'Guarantee Scheme',
+        'description' => 'Read the Guarantee Scheme at STO for booking sustainable train journeys through Europe.',
+    ],
+    'vvkr_seo' => [
+        'title' => 'About VvKR',
+        'description' => 'More about the — Association of Small-Scale Travel Organizations for booking sustainable train journeys through Europe.',
     ],
 ];
