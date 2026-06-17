@@ -29,4 +29,8 @@ return [
         'title' => 'Garantieregeling',
         'description' => 'Lees de Garantieregeling bij STO voor het boeken van duurzame treinreizen door Europa.',
     ],
+    'vvkr_seo' => [
+        'title' => 'Over VvKR',
+        'description' => 'Meer over de VvKR — Vereniging van Kleinschalige Reisorganisaties voor het boeken van duurzame treinreizen door Europa.',
+    ],
 ];

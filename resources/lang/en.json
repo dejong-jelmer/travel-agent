@@ -741,6 +741,7 @@
         "conditions": "Terms and conditions",
         "privacy": "Privacy policy",
         "guarantee": "Guarantee Scheme",
+        "vvkr": "VvKR",
         "sustainability": "Sustainability"
     },
     "booking_step_labels": {
@@ -851,6 +852,8 @@
         "hero_tagline": "Curious about a route? Or just a question? I'd love to hear from you."
     },
     "home": {
+        "heading": "About Omdat We Reizen",
+        "intro": "We travel in our own way, and increasingly seek depth, connection, and that one destination that allows us to see things differently. At the same time, there is friction: travel comes at a price, for the environment and for the place where we arrive. I curate trips with care, a good story, and the train as the starting point. What underpins my journeys is the destination: what there is to experience and the story a place tells.",
         "our_trips_heading": "Our trips",
         "contact_cta": {
             "heading": "Have a question?",

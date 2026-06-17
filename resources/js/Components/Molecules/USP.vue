@@ -1,27 +1,27 @@
 <script setup>
 import { CheckCircle } from 'lucide-vue-next';
 
-import routesImage from '@/../images/route.webp';
-import trainImage from '@/../images/train.webp';
-import uniqueImage from '@/../images/unique.webp';
+import uspI from '@/../images/uspI.jpg';
+import uspII from '@/../images/uspII.jpg';
+import uspIII from '@/../images/uspIII.jpg';
 
 const usps = [
     {
-        image: routesImage,
+        image: uspI,
         titleKey: 'usp.routes.title',
         descriptionKey: 'usp.routes.description',
         highlightKey: 'usp.routes.highlight',
         alt: 'usp.routes.highlight'
     },
     {
-        image: trainImage,
+        image: uspII,
         titleKey: 'usp.train.title',
         descriptionKey: 'usp.train.description',
         highlightKey: 'usp.train.highlight',
         alt: 'usp.train.highlight'
     },
     {
-        image: uniqueImage,
+        image: uspIII,
         titleKey: 'usp.unique.title',
         descriptionKey: 'usp.unique.description',
         highlightKey: 'usp.unique.highlight',

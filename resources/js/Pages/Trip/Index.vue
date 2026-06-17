@@ -18,7 +18,7 @@ const props = defineProps({
                     <h1 class="text-3xl tablet:text-4xl laptop:text-5xl font-poppins text-white mb-4">
                         {{ $t('trips.title') }}
                     </h1>
-                    <p class="text-brand-light text-base tablet:text-lg max-w-2xl">
+                    <p class="text-white/80 text-base tablet:text-lg max-w-2xl">
                         {{ $t('trips.subtitle') }}
                     </p>
                 </div>

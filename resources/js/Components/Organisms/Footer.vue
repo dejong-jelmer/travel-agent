@@ -106,9 +106,10 @@ const year = new Date().getFullYear();
                                 <Sto class="h-16 w-16" aria-hidden="true" />
                             </a>
                             <a href="https://www.vvkr.nl"
+                                title="Aangesloten bij VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                 target="_blank" rel="noopener noreferrer" aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties"
                                 class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
-                                <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties" class="w-[80px] h-[50px]">
+                                <img :src="vvkrLogo" alt="Logo VvKR — Vereniging van Kleinschalige Reisorganisaties" class="w-[80px] h-[50px]">
                             </a>
                             <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
                                 target="_blank" rel="noopener noreferrer" :aria-label="$t('footer.green_hosting_aria')"

@@ -23,6 +23,7 @@ const moreItems = computed(() => [
     { label: t('footer.conditions'), href: route('terms') },
     { label: t('footer.privacy'), href: route('privacy') },
     { label: t('footer.guarantee'), href: route('guarantee') },
+    { label: t('footer.vvkr'), href: route('vvkr') },
     { label: t('footer.sustainability'), href: route('sustainability'), download: true },
 ]);
 
