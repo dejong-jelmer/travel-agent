@@ -1,31 +1,31 @@
 <script setup>
 import { CheckCircle } from 'lucide-vue-next';
 
-import uspI from '@/../images/uspI.jpg';
-import uspII from '@/../images/uspII.jpg';
-import uspIII from '@/../images/uspIII.jpg';
+import usp1 from '@/../images/usp1.jpg';
+import usp2 from '@/../images/usp2.jpg';
+import usp3 from '@/../images/usp3.jpg';
 
 const usps = [
     {
-        image: uspI,
-        titleKey: 'usp.routes.title',
-        descriptionKey: 'usp.routes.description',
-        highlightKey: 'usp.routes.highlight',
-        alt: 'usp.routes.highlight'
+        image: usp1,
+        titleKey: 'usp.usp-1.title',
+        descriptionKey: 'usp.usp-1.description',
+        highlightKey: 'usp.usp-1.highlight',
+        alt: 'usp.usp-1.highlight'
     },
     {
-        image: uspII,
-        titleKey: 'usp.train.title',
-        descriptionKey: 'usp.train.description',
-        highlightKey: 'usp.train.highlight',
-        alt: 'usp.train.highlight'
+        image: usp2,
+        titleKey: 'usp.usp-2.title',
+        descriptionKey: 'usp.usp-2.description',
+        highlightKey: 'usp.usp-2.highlight',
+        alt: 'usp.usp-2.highlight'
     },
     {
-        image: uspIII,
-        titleKey: 'usp.unique.title',
-        descriptionKey: 'usp.unique.description',
-        highlightKey: 'usp.unique.highlight',
-        alt: 'usp.unique.highlight'
+        image: usp3,
+        titleKey: 'usp.usp-3.title',
+        descriptionKey: 'usp.usp-3.description',
+        highlightKey: 'usp.usp-3.highlight',
+        alt: 'usp.usp-3.highlight'
     }
 ];
 </script>
@@ -33,7 +33,7 @@ const usps = [
     <div id="over-de-reizen" class="max-w-6xl mx-auto px-4 scroll-mt-36">
 
         <!-- Header -->
-        <div class="text-center mb-12 laptop:mb-24">
+        <div class="text-center mb-6 laptop:mb-12">
             <h2 class="sr-only">{{ $t('usp.heading') }}</h2>
             <p class="text-brand-text text-sm laptop:text-lg text-left max-w-2xl mx-auto leading-relaxed">
                 {{ $t('usp.intro') }}
