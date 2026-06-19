@@ -156,20 +156,20 @@
     "usp": {
         "heading": "About our journeys",
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
-        "routes": {
-            "title": "I know the way",
-            "description": "I have traveled every route you book with me myself. I know which platform to be on, which neighborhood is worth visiting, and where to find the best places to eat after arrival.",
-            "highlight": "Personally curated"
+        "usp-1": {
+            "title": "The place sets the journey",
+            "description": "I choose destinations and routes with enough to discover to build a whole trip around: a city, a region, or a line that ties places together. The train gets you there comfortably and sustainably — what you find once you arrive is what it's all about.",
+            "highlight": "The destination is the point"
         },
-        "train": {
-            "title": "The journey begins on the platform",
-            "description": "A train station where you can already feel the journey beginning. The train is not just a means of transport — it is the first chapter. You arrive rested, curious, and already a little way into the story.",
-            "highlight": "Europe by rail"
+        "usp-2": {
+            "title": "Staying for character",
+            "description": "I look for places to stay with a sense of place — a house, a family-run hotel, somewhere with a story of its own. Sometimes the best one is a stop further down the line; as far as I'm concerned, that's worth the extra ride.",
+            "highlight": "Character as the starting point"
         },
-        "unique": {
-            "title": "Destinations you won't find on Google",
-            "description": "I choose places that have something to say — and whose story I know myself. A destination that stays with you long after you are home.",
-            "highlight": "Every trip has a story"
+        "usp-3": {
+            "title": "Every trip has a thread",
+            "description": "An angle that turns a place or region into a story. In the Vézère valley it's the prehistory you keep following from cave to cave; elsewhere a layer of time, or a region you only learn to read once you know what to look for. A trip that stays with you, long after you're home.",
+            "highlight": "A distinct angle for every trip"
         },
         "cta": {
             "text": "Ready for your next adventure?",

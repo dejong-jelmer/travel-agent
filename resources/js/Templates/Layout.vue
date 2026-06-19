@@ -32,7 +32,7 @@ Object.entries(flash).forEach(([type, message]) => {
 <template>
 
     <SeoHead />
-    <main>
+    <main class="overflow-hidden">
         <Topbar class="z-50" />
         <Nav class="z-50 sticky top-0 inset-x-0" />
         <slot name="hero"></slot>

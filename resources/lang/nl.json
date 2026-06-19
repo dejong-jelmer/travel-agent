@@ -156,20 +156,20 @@
     "usp": {
         "heading": "Over onze reizen",
         "intro": "Ik stel reizen samen met aandacht, naar bestemmingen die iets te vertellen hebben en met de trein als vertrekpunt.",
-        "routes": {
-            "title": "De bestemming maakt de reis",
-            "description": "Ik kies bestemmingen waar je áánkomt: een stad of streek met genoeg te beleven. De trein brengt je er comfortabel en duurzaam naartoe.",
-            "highlight": "Een bestemming waar je áánkomt"
+        "usp-1": {
+            "title": "De plek bepaalt de reis",
+            "description": "Ik kies bestemmingen en routes waar genoeg te beleven valt om de hele reis aan op te hangen: een stad, een streek, of een lijn die plekken met elkaar verbindt. De trein brengt je er comfortabel en duurzaam naartoe — wat je dáár vindt, is waar het om draait.",
+            "highlight": "De bestemming is het doel"
         },
-        "train": {
-            "title": "Accommodaties gekozen op karakter",
-            "description": "Ik zoek accommodaties met sfeer en karakter, het liefst passend bij de plek waar je bent. Soms betekent dat een halte verderop — wat mij betreft is een leuk huis een extra ritje waard.",
+        "usp-2": {
+            "title": "Slapen op karakter",
+            "description": "Ik zoek accommodaties met sfeer die bij de plek passen — een huis, een familiehotel, iets met een eigen verhaal. Soms staat de mooiste een halte verderop; wat mij betreft is dat een extra ritje waard.",
             "highlight": "Karakter als uitgangspunt"
         },
-        "unique": {
-            "title": "Plekken die iets te vertellen hebben",
-            "description": "Naast alle praktische informatie krijg je een reisgids met mijn blik op de plek: welke stadswijk de moeite waard is, waar je het beste kunt eten. Een bestemming die je beleeft en bijblijft, lang nadat je thuis bent.",
-            "highlight": "Elke reis een eigen invalshoek"
+        "usp-3": {
+            "title": "Elke reis een rode draad",
+            "description": "Een invalshoek die een plek of streek tot een verhaal maakt. In de Vézère-vallei is dat de prehistorie die je van grot tot grot blijft volgen; elders een tijdlaag of een streek die je pas leert lezen als je weet waar je naar kijkt. Een reis die je bijblijft, lang nadat je thuis bent.",
+            "highlight": "Een eigen invalshoek per reis"
         },
         "cta": {
             "text": "Klaar voor jouw volgende avontuur?",
@@ -906,7 +906,7 @@
             "small_personal": "Kleinschalig & persoonlijk",
             "carefree_travel": "Zorgeloos op reis"
         },
-        "highlights_heading": "Wat is er te zien en te doen",
+        "highlights_heading": "Wat er te zien en te doen is",
         "inquiry": {
             "title": "Plan deze reis",
             "price_from": "Vanaf €{price},- p.p.",
