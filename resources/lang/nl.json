@@ -162,13 +162,13 @@
             "highlight": "De bestemming is het doel"
         },
         "usp-2": {
-            "title": "Slapen op karakter",
-            "description": "Ik zoek accommodaties met sfeer die bij de plek passen — een huis, een familiehotel, iets met een eigen verhaal. Soms staat de mooiste een halte verderop; wat mij betreft is dat een extra ritje waard.",
+            "title": "Slapen met karakter",
+            "description": "Ik zoek accommodaties met sfeer die bij de plek passen — een huis, een familiehotel, iets met een verhaal. Soms staat de mooiste iets verderop; wat mij betreft is dat een extra halte waard.",
             "highlight": "Karakter als uitgangspunt"
         },
         "usp-3": {
             "title": "Elke reis een rode draad",
-            "description": "Een invalshoek die een plek of streek tot een verhaal maakt. In de Vézère-vallei is dat de prehistorie die je van grot tot grot blijft volgen; elders een tijdlaag of een streek die je pas leert lezen als je weet waar je naar kijkt. Een reis die je bijblijft, lang nadat je thuis bent.",
+            "description": "Een invalshoek die een plek of streek tot een verhaal maakt. In de Vézère-vallei is dat de prehistorie; elders een tijdlaag of een streek die je pas leert lezen als je weet waar je naar kijkt. Zo'n reis blijft je bij, lang nadat je thuis bent.",
             "highlight": "Een eigen invalshoek per reis"
         },
         "cta": {
@@ -732,6 +732,7 @@
     "hero": {
         "title": "Meer mens…",
         "sub_title": "omdat we reizen",
+        "tagline": "Europese bestemmingen met een verhaal — waar je aankomt met de trein.",
         "cta": "Over de reizen"
     },
     "footer": {
