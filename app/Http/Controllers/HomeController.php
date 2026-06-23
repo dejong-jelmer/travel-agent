@@ -22,26 +22,32 @@ class HomeController extends Controller
 
     public function home(): Response
     {
+        $seo = $this->shareSeo('home.home_seo');
+
         return Inertia::render('Home', [
-            'title' => $this->pageTitle('home.home_seo'),
+            'title' => $seo['title'],
             'trips' => Trip::with(['destinations', 'heroImage'])->published()->featured()->orderBy('published_at', 'desc')->get(),
-            'seo' => $this->pageSeo('home.home_seo'),
+            'seo' => $seo,
         ]);
     }
 
     public function about(): Response
     {
+        $seo = $this->shareSeo('home.about_seo');
+
         return Inertia::render('About', [
-            'title' => $this->pageTitle('home.about_seo'),
-            'seo' => $this->pageSeo('home.about_seo'),
+            'title' => $seo['title'],
+            'seo' => $seo,
         ]);
     }
 
     public function contact(): Response
     {
+        $seo = $this->shareSeo('home.contact_seo');
+
         return Inertia::render('Contact', [
-            'title' => $this->pageTitle('home.contact_seo'),
-            'seo' => $this->pageSeo('home.contact_seo'),
+            'title' => $seo['title'],
+            'seo' => $seo,
         ]);
     }
 
@@ -77,9 +83,11 @@ class HomeController extends Controller
 
     public function privacy(): Response
     {
+        $seo = $this->shareSeo('home.privacy_seo', ['robots' => 'noindex, follow']);
+
         return Inertia::render('Privacy', [
-            'title' => $this->pageTitle('home.privacy_seo'),
-            'seo' => $this->pageSeo('home.privacy_seo'),
+            'title' => $seo['title'],
+            'seo' => $seo,
             'newsletterRetentionMonths' => (int) config('privacy.newsletter.subscription.retention_months', 3),
             'bookingRetentionYears' => (int) config('privacy.booking.retention_years', 7),
             'specialRequestsRetentionDays' => (int) config('privacy.booking.special_requests_retention_days', 7),
@@ -93,9 +101,11 @@ class HomeController extends Controller
 
     public function terms(): Response
     {
+        $seo = $this->shareSeo('home.terms_seo', ['robots' => 'noindex, follow']);
+
         return Inertia::render('Terms', [
-            'title' => $this->pageTitle('home.terms_seo'),
-            'seo' => $this->pageSeo('home.terms_seo'),
+            'title' => $seo['title'],
+            'seo' => $seo,
             'terms' => [
                 'version' => config('terms.version'),
                 'updated' => config('terms.updated'),
@@ -105,17 +115,21 @@ class HomeController extends Controller
 
     public function guarantee(): Response
     {
+        $seo = $this->shareSeo('home.guarantee_seo');
+
         return Inertia::render('Guarantee', [
-            'title' => $this->pageTitle('home.guarantee_seo'),
-            'seo' => $this->pageSeo('home.guarantee_seo'),
+            'title' => $seo['title'],
+            'seo' => $seo,
         ]);
     }
 
     public function vvkr(): Response
     {
+        $seo = $this->shareSeo('home.vvkr_seo');
+
         return Inertia::render('VvKR', [
-            'title' => $this->pageTitle('home.vvkr_seo'),
-            'seo' => $this->pageSeo('home.vvkr_seo'),
+            'title' => $seo['title'],
+            'seo' => $seo,
         ]);
     }
 

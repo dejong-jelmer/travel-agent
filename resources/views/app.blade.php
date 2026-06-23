@@ -29,6 +29,7 @@
         type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/images/hero-poster.webp') }}" as="image" type="image/webp">
     <style>.js-cookie-consent { opacity: 0; }</style>
+    @include('seo')
     @routes
     @vite('resources/js/app.js')
     @inertiaHead

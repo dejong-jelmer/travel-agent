@@ -30,8 +30,6 @@ Object.entries(flash).forEach(([type, message]) => {
 </script>
 
 <template>
-
-    <SeoHead />
     <main class="overflow-hidden">
         <Topbar class="z-50" />
         <Nav class="z-50 sticky top-0 inset-x-0" />
