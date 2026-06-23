@@ -1,4 +1,9 @@
 @php
+    // SEO data travels as the page's `seo` Inertia prop (see HasPageMetadata::shareSeo).
+    // Reading it here keeps the head tags in sync without mutating global View state.
+    $seo = $page['props']['seo'] ?? [];
+    $jsonLd = $seo['jsonLd'] ?? null;
+
     $appUrl = rtrim(config('app.url'), '/');
     $canonical = $appUrl . '/' . ltrim(request()->path() === '/' ? '' : request()->path(), '/');
 

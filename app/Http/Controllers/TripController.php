@@ -73,11 +73,7 @@ class TripController extends Controller
             'name' => $trip->name,
             'description' => $trip->meta_description,
             'image' => $trip->og_image_url,
-            'provider' => [
-                '@type' => 'TravelAgency',
-                'name' => config('app.name'),
-                'url' => config('app.url'),
-            ],
+            'provider' => $this->travelAgencySchema(),
         ];
 
         if (! $trip->is_expected) {

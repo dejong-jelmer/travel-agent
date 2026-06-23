@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Traits;
 
-use Illuminate\Support\Facades\View;
-
 trait HasPageMetadata
 {
     /**
@@ -30,18 +28,22 @@ trait HasPageMetadata
     }
 
     /**
+     * Build the SEO metadata array for a page, including its JSON-LD schema.
+     *
+     * The returned array is passed straight to the page as the `seo` Inertia prop;
+     * the root Blade view reads it from `$page['props']['seo']` to render the head
+     * tags. No global View state is mutated.
+     *
      * @param  string  $key  Translation key
      * @param  array  $overrides  Custom SEO values to override defaults
-     * @param  array  $jsonLd  Custom jsonLd values
-     * @return array SEO metadata array with title, description, og_image (shared with view)
+     * @param  array|null  $jsonLd  Custom JSON-LD schema: null → generic TravelAgency
+     *                              fallback, [] → no schema, array → that exact schema
+     * @return array SEO metadata array with title, description, og_image, jsonLd
      */
     public function shareSeo(string $key, array $overrides = [], ?array $jsonLd = null): array
     {
         $seo = $this->pageSeo($key, $overrides);
-        $jsonLd = $jsonLd ?? $this->getJsonLd($key);
-
-        View::share('seo', $seo);
-        View::share('jsonLd', $jsonLd);
+        $seo['jsonLd'] = $jsonLd ?? $this->getJsonLd($key);
 
         return $seo;
     }
@@ -62,17 +64,32 @@ trait HasPageMetadata
 
     private function getJsonLd(string $key): array
     {
-        return [
+        return array_merge([
             '@context' => 'https://schema.org',
-            '@type' => 'TravelAgency',
-            'name' => config('app.name'),
-            'url' => config('app.url'),
+        ], $this->travelAgencySchema(), [
             'description' => __("{$key}.description"),
             'image' => asset(config('seo.default_og_image')),
             'logo' => asset('images/logos/logo-text.png'),
             'sameAs' => [
                 // Instagram, LinkedIn, etc.
             ],
+        ]);
+    }
+
+    /**
+     * The organization's schema.org node (name/url from a single source).
+     *
+     * Used standalone as the site-wide TravelAgency in getJsonLd(), and nested
+     * as the `provider` of per-page schemas such as the TouristTrip in TripController.
+     *
+     * @return array<string, string>
+     */
+    protected function travelAgencySchema(): array
+    {
+        return [
+            '@type' => 'TravelAgency',
+            'name' => config('app.name'),
+            'url' => config('app.url'),
         ];
     }
 }
