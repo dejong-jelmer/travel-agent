@@ -53,7 +53,7 @@ class BlogPostController extends Controller
             ],
         );
         $seo = $this->shareSeo(overrides: $overrides, jsonLd: $jsonLd);
-    dd($seo);
+
         return Inertia::render('Blog/Show', [
             'post' => $post,
             'title' => $seo['title'],
