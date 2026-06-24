@@ -42,11 +42,7 @@ class HandleInertiaRequests extends Middleware
             'locale' => app()->getLocale(),
             'locales' => availableLocales() ?: ['nl', 'en'],
             'auth' => [
-                'user' => $request->user() ? [
-                    'id' => $request->user()->id,
-                    'name' => $request->user()->name,
-                    'role' => $request->user()->role,
-                ] : null,
+                'user' => $request->user()?->only(['id', 'name', 'role']) ?: null,
             ],
             'config' => [
                 'seo' => config('seo'),

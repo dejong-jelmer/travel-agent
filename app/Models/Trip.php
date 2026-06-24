@@ -109,7 +109,7 @@ class Trip extends Model
     {
         parent::boot();
 
-        $clearNavCache = fn () => \Illuminate\Support\Facades\Cache::forget(config('cache.keys.nav_countries'));
+        $clearNavCache = fn() => \Illuminate\Support\Facades\Cache::forget(config('cache.keys.nav_countries'));
         static::saved($clearNavCache);
         static::deleted($clearNavCache);
         static::restored($clearNavCache);
@@ -158,7 +158,7 @@ class Trip extends Model
 
     protected function publishedAtFormatted(): Attribute
     {
-        return Attribute::get(fn () => $this->getFormattedDate('published_at'));
+        return Attribute::get(fn() => $this->getFormattedDate('published_at'));
     }
 
     /**
@@ -174,12 +174,12 @@ class Trip extends Model
         return Attribute::get(function () {
             /** @var \Illuminate\Database\Eloquent\Collection<int, Destination> $destinations */
             $destinations = $this->destinations;
-            $names = $destinations->map(fn (Destination $d) => $d->region ?? $d->name);
+            $names = $destinations->map(fn(Destination $d) => $d->region ?? $d->name);
 
             return match ($names->count()) {
                 0 => '',
                 1 => $names->first(),
-                default => $names->slice(0, -1)->implode(', ').' & '.$names->last()
+                default => $names->slice(0, -1)->implode(', ') . ' & ' . $names->last()
             };
         });
     }
@@ -212,7 +212,7 @@ class Trip extends Model
     protected function startingFromPrice(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->prices->min('base_price_pp')
+            get: fn() => $this->prices->min('base_price_pp')
         );
     }
 
@@ -224,7 +224,7 @@ class Trip extends Model
     protected function priceFormatted(): Attribute
     {
         return Attribute::make(
-            get: fn () => empty($this->starting_from_price)
+            get: fn() => empty($this->starting_from_price)
                 ? null
                 : number_format((float) $this->starting_from_price / MoneyHelper::CENTS_PER_UNIT, 0, ',', '.')
         );
@@ -238,7 +238,7 @@ class Trip extends Model
     protected function isExpected(): Attribute
     {
         return Attribute::make(
-            get: fn () => empty($this->starting_from_price)
+            get: fn() => empty($this->starting_from_price)
         );
     }
 
@@ -259,7 +259,7 @@ class Trip extends Model
      */
     public function imagePaths(): Attribute
     {
-        return Attribute::get(fn () => $this->images->pluck('path'));
+        return Attribute::get(fn() => $this->images->pluck('path'));
     }
 
     public function bookings(): HasMany
@@ -280,7 +280,7 @@ class Trip extends Model
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image')) // @phpstan-ignore nullsafe.neverNull
+            fn() => $this->heroImage?->public_url ?? asset(config('seo.default_og_image')) // @phpstan-ignore nullsafe.neverNull
         );
     }
 
@@ -292,7 +292,7 @@ class Trip extends Model
     protected function metaDescription(): Attribute
     {
         return Attribute::get(
-            fn (?string $value) => $value ?? Str::substr(
+            fn(?string $value) => $value ?? Str::substr(
                 $this->description ?? '',
                 0,
                 config(
@@ -310,7 +310,7 @@ class Trip extends Model
     protected function metaTitle(): Attribute
     {
         return Attribute::get(
-            fn (?string $value) => $value ?? Str::substr(
+            fn(?string $value) => $value ?? Str::substr(
                 $this->name ?? '',
                 0,
                 config(
@@ -328,8 +328,8 @@ class Trip extends Model
     public function transportFormatted(): Attribute
     {
         return Attribute::get(
-            fn () => collect($this->transport ?? [])
-                ->map(fn (string $value) => [
+            fn() => collect($this->transport ?? [])
+                ->map(fn(string $value) => [
                     'value' => $value,
                     'label' => Transport::from($value)->label(),
                 ])
@@ -345,7 +345,7 @@ class Trip extends Model
     protected function highlights(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => $this->castStringArray($value)
+            set: fn($value) => $this->castStringArray($value)
         );
     }
 
@@ -362,14 +362,45 @@ class Trip extends Model
 
                 // Get all keys from PracticalInfo enum
                 $allKeys = collect(PracticalInfo::cases())
-                    ->mapWithKeys(fn ($case) => [$case->value => ''])
+                    ->mapWithKeys(fn($case) => [$case->value => ''])
                     ->all();
 
                 // Merge with existing values
                 return array_merge($allKeys, $decoded);
             },
-            set: fn ($value) => json_encode($value ?? [])
+            set: fn($value) => json_encode($value ?? [])
         );
+    }
+
+    /**
+     * Build a schema.org TouristTrip JSON-LD object from the trip's model fields.
+     *
+     * The canonical price lives in the `starting_from_price` accessor (lowest
+     * `base_price_pp` across price rows, stored in cents) — the same source that
+     * feeds `price_formatted`. Trips without a price are "expected" and get no Offer.
+     *
+     * @return array<string, mixed>
+     */
+    public function toTouristTripSchema(): array
+    {
+        $schema = [
+            '@type' => 'TouristTrip',
+            'name' => $this->name,
+            'description' => $this->meta_description,
+            'image' => $this->og_image_url,
+        ];
+
+        if (! $this->is_expected && $this->starting_from_price !== null) {
+            $schema['offers'] = [
+                '@type' => 'Offer',
+                'price' => round($this->starting_from_price / 100, 2),
+                'priceCurrency' => config('seo.currency', 'EUR'),
+                'availability' => 'https://schema.org/InStock',
+                'url' => route('trips.show', $this->slug),
+            ];
+        }
+
+        return $schema;
     }
 
     public function getRouteKeyName(): string

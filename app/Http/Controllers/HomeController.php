@@ -22,7 +22,7 @@ class HomeController extends Controller
 
     public function home(): Response
     {
-        $seo = $this->shareSeo('home.home_seo');
+        $seo = $this->shareSeo('seo.home');
 
         return Inertia::render('Home', [
             'title' => $seo['title'],
@@ -33,7 +33,7 @@ class HomeController extends Controller
 
     public function about(): Response
     {
-        $seo = $this->shareSeo('home.about_seo');
+        $seo = $this->shareSeo('seo.about');
 
         return Inertia::render('About', [
             'title' => $seo['title'],
@@ -43,7 +43,7 @@ class HomeController extends Controller
 
     public function contact(): Response
     {
-        $seo = $this->shareSeo('home.contact_seo');
+        $seo = $this->shareSeo('seo.contact');
 
         return Inertia::render('Contact', [
             'title' => $seo['title'],
@@ -83,7 +83,7 @@ class HomeController extends Controller
 
     public function privacy(): Response
     {
-        $seo = $this->shareSeo('home.privacy_seo', ['robots' => 'noindex, follow']);
+        $seo = $this->shareSeo('seo.privacy', ['robots' => 'noindex, follow']);
 
         return Inertia::render('Privacy', [
             'title' => $seo['title'],
@@ -101,7 +101,7 @@ class HomeController extends Controller
 
     public function terms(): Response
     {
-        $seo = $this->shareSeo('home.terms_seo', ['robots' => 'noindex, follow']);
+        $seo = $this->shareSeo('seo.terms', ['robots' => 'noindex, follow']);
 
         return Inertia::render('Terms', [
             'title' => $seo['title'],
@@ -115,7 +115,7 @@ class HomeController extends Controller
 
     public function guarantee(): Response
     {
-        $seo = $this->shareSeo('home.guarantee_seo');
+        $seo = $this->shareSeo('seo.guarantee');
 
         return Inertia::render('Guarantee', [
             'title' => $seo['title'],
@@ -125,7 +125,7 @@ class HomeController extends Controller
 
     public function vvkr(): Response
     {
-        $seo = $this->shareSeo('home.vvkr_seo');
+        $seo = $this->shareSeo('seo.vvkr');
 
         return Inertia::render('VvKR', [
             'title' => $seo['title'],

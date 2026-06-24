@@ -23,7 +23,7 @@ class TripController extends Controller
     public function index(): Response
     {
         $trips = Trip::with(['heroImage', 'prices'])->published()->get();
-        $seo = $this->shareSeo('home.trips_seo');
+        $seo = $this->shareSeo('seo.trips');
 
         return Inertia::render('Trip/Index', [
             'title' => $seo['title'],
@@ -40,11 +40,11 @@ class TripController extends Controller
     {
         $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items']);
 
-        $seo = $this->shareSeo('trip.show', [
-            'title' => $trip->meta_title.' | '.config('app.name'),
+        $seo = $this->shareSeo(overrides: [
+            'title' => $trip->meta_title . ' | ' . config('app.name'),
             'description' => $trip->meta_description,
             'og_image' => $trip->og_image_url,
-        ], $this->tripJsonLd($trip));
+        ], jsonLd: $this->tripJsonLd($trip));
 
         return Inertia::render('Trip/Show', [
             'title' => $seo['title'],
@@ -79,7 +79,7 @@ class TripController extends Controller
         if (! $trip->is_expected) {
             $schema['offers'] = [
                 '@type' => 'Offer',
-                'price' => number_format((float) $trip->starting_from_price / 100, 2, '.', ''),
+                'price' => round($trip->starting_from_price / 100, 2),
                 'priceCurrency' => 'EUR',
                 'availability' => 'https://schema.org/InStock',
                 'url' => route('trips.show', $trip->slug),
