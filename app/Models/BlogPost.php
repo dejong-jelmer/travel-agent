@@ -81,7 +81,7 @@ class BlogPost extends Model
     public function isPublished(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->status === Status::Published
+            get: fn () => $this->status === Status::Published
         );
     }
 
@@ -95,7 +95,7 @@ class BlogPost extends Model
         return array_filter([
             '@type' => 'BlogPosting',
             'headline' => $this->title,
-            'description' => $this->meta_description  ?: $this->excerpt,
+            'description' => $this->meta_description ?: $this->excerpt,
             'image' => $this->heroImage?->public_url,
             'datePublished' => $this->published_at?->toIso8601String(),
             'dateModified' => $this->updated_at?->toIso8601String(),

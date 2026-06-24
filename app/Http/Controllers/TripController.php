@@ -41,7 +41,7 @@ class TripController extends Controller
         $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items']);
 
         $seo = $this->shareSeo(overrides: [
-            'title' => $trip->meta_title . ' | ' . config('app.name'),
+            'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
             'og_image' => $trip->og_image_url,
         ], jsonLd: $this->tripJsonLd($trip));

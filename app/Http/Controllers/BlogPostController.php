@@ -35,8 +35,8 @@ class BlogPostController extends Controller
             ->firstOrFail();
 
         $overrides = [
-            'title' => ($post->meta_title ?: $post->title) . ' | ' . config('app.name'),
-            'description' =>  e($post->meta_description ?: $post->excerpt),
+            'title' => ($post->meta_title ?: $post->title).' | '.config('app.name'),
+            'description' => $post->meta_description ?: $post->excerpt,
             'og_image' => $post->heroImage?->public_url,
         ];
 

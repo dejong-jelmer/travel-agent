@@ -24,7 +24,7 @@ trait HasPageMetadata
             $translation = __($key);
         }
 
-        return (is_string($translation) ? $translation : $key) . ' | ' . config('app.name');
+        return (is_string($translation) ? $translation : $key).' | '.config('app.name');
     }
 
     /**
@@ -58,23 +58,26 @@ trait HasPageMetadata
         $defaults = ['og_image' => asset(config('seo.default_og_image'))];
 
         if ($key !== null && $key !== '') {
-            $defaults['title'] = __("{$key}.title") . ' | ' . config('app.name');
+            $defaults['title'] = __("{$key}.title").' | '.config('app.name');
             $defaults['description'] = __("{$key}.description");
         }
 
         return array_merge($defaults, $overrides);
     }
 
-    private function getJsonLd(string $key): array
+    private function getJsonLd(?string $key): array
     {
         return array_merge([
             '@context' => 'https://schema.org',
         ], $this->travelAgencySchema(), [
-            'description' => __("{$key}.description"),
+            'description' => $key ? __("{$key}.description") : __('seo.home.description'),
             'image' => asset(config('seo.default_og_image')),
             'logo' => asset(config('seo.logo')),
             'sameAs' => [
-                // @todo: add Instagram, LinkedIn, etc.
+                array_filter([
+                    config('socials.instagram'),
+                    config('socials.linkedin'),
+                ]),
             ],
         ]);
     }
