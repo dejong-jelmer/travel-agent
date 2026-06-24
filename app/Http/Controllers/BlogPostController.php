@@ -18,10 +18,12 @@ class BlogPostController extends Controller
             ->latest('published_at')
             ->paginate(12);
 
+        $seo = $this->shareSeo('seo.blog');
+
         return Inertia::render('Blog/Index', [
             'posts' => $posts,
-            'title' => $this->pageTitle('blog.title_index'),
-            'seo' => $this->pageSeo('blog.blog_seo'),
+            'title' => $seo['title'],
+            'seo' => $seo,
         ]);
     }
 
@@ -32,14 +34,30 @@ class BlogPostController extends Controller
             ->with('heroImage')
             ->firstOrFail();
 
+        $overrides = [
+            'title' => ($post->meta_title ?: $post->title).' | '.config('app.name'),
+            'description' => $post->meta_description ?: $post->excerpt,
+            'og_image' => $post->heroImage?->public_url,
+        ];
+
+        $jsonLd = array_merge(
+            ['@context' => 'https://schema.org'],
+            $post->toBlogPostingSchema(),
+            [
+                'author' => [
+                    '@type' => 'Person',
+                    'name' => config('blog.author_name'),
+                    'url' => route('about'),
+                ],
+                'publisher' => $this->travelAgencySchema(),
+            ],
+        );
+        $seo = $this->shareSeo(overrides: $overrides, jsonLd: $jsonLd);
+
         return Inertia::render('Blog/Show', [
             'post' => $post,
-            'title' => $this->pageTitle('blog.title_show'),
-            'seo' => $this->pageSeo('blog.blog_seo', [
-                'title' => ($post->meta_title ?: $post->title).' | '.config('app.name'),
-                'description' => $post->meta_description ?: $post->excerpt,
-                'og_image' => $post->heroImage?->public_url,
-            ]),
+            'title' => $seo['title'],
+            'seo' => $seo,
         ]);
     }
 }

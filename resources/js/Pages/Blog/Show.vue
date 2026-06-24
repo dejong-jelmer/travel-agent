@@ -15,13 +15,6 @@ const { formattedDate } = useDateFormatter();
 
 <template>
     <Layout>
-        <SeoHead
-            :title="post.meta_title || post.title"
-            :description="post.meta_description || post.excerpt"
-            :image="post.hero_image?.public_url"
-            :url="route('blog.show', post.slug)"
-        />
-
         <article class="max-w-wide mx-auto px-4 py-12 laptop:py-20">
             <!-- Header -->
             <header class="max-w-3xl mx-auto text-center mb-10">
