@@ -24,7 +24,7 @@ trait HasPageMetadata
             $translation = __($key);
         }
 
-        return (is_string($translation) ? $translation : $key) . ' | ' . config('app.name');
+        return (is_string($translation) ? $translation : $key).' | '.config('app.name');
     }
 
     /**
@@ -57,8 +57,8 @@ trait HasPageMetadata
     {
         $defaults = ['og_image' => asset(config('seo.default_og_image'))];
 
-        if ($key !== null && $key !== '') {
-            $defaults['title'] = __("{$key}.title") . ' | ' . config('app.name');
+        if ($key) {
+            $defaults['title'] = __("{$key}.title").' | '.config('app.name');
             $defaults['description'] = __("{$key}.description");
         }
 
@@ -86,7 +86,7 @@ trait HasPageMetadata
      * Used standalone as the site-wide TravelAgency in getJsonLd(), and nested
      * as the `provider` of per-page schemas such as the TouristTrip in TripController.
      *
-     * @return array<string, string>
+     * @return array<string, mixed>
      */
     protected function travelAgencySchema(): array
     {

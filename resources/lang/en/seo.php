@@ -2,51 +2,72 @@
 
 return [
     'home' => [
-        'title' => 'Duurzame treinreizen door Europa',
-        'description' => 'Duurzame treinreizen door Europa, compleet verzorgd. Alle tickets en zorgvuldig gekozen accommodaties geregeld — je hoeft alleen nog in te stappen.',
+
+        'title' => 'Sustainable train journeys through Europe',
+
+        'description' => 'Sustainable train journeys through Europe, fully taken care of. All tickets and carefully selected accommodations arranged — all you have to do is board.',
     ],
+
     'trips' => [
-        'title' => 'Verzorgde treinreizen op maat door Europa',
-        'description' => 'Bekijk alle duurzame treinreizen — zorgvuldig uitgedachte routes naar Europese bestemmingen, compleet samengesteld en zonder gedoe onderweg.',
+        'title' => 'Tailored, organized train journeys through Europe',
+
+        'description' => 'View all sustainable train journeys — carefully thought-out routes to European destinations, fully curated and hassle-free along the way.',
     ],
+
     'contact' => [
-        'title' => 'Stel je vraag of plan je treinreis',
-        'description' => 'Een vraag, twijfel of concreet reisplan? Neem contact op voor persoonlijk advies over jouw treinreis door Europa — ik help je graag op weg, vrijblijvend.',
+        'title' => 'Ask your question or plan your train journey',
+
+        'description' => 'A question, doubt, or a concrete travel plan? Contact me for personal advice on your train journey through Europe — I am happy to help you on your way, without obligation.',
     ],
+
     'about' => [
-        'title' => 'Over mij — wie jouw reis samenstelt',
-        'description' => 'De mens achter Omdat We Reizen. Ik stel treinreizen door Europa samen, met accommodaties gekozen op karakter — omdat reizen je meer mens maakt.',
+        'title' => 'About me — who puts together your trip',
+        'description' => 'The person behind Omdat We Reizen. I put together train journeys through Europe, with accommodations chosen for their character — because travel makes you more human.',
+
     ],
+
     'vvkr' => [
-        'title' => 'Aangesloten bij de VvKR',
-        'description' => 'Omdat We Reizen is lid van de VvKR — de Vereniging van Kleinschalige Reisorganisaties. Lees wat dit betekent voor de kwaliteit en zekerheid van jouw reis.',
+        'title' => 'Affiliated with the VvKR',
+        'description' => 'Omdat We Reizen is a member of the VvKR — the Association of Small-Scale Travel Organizations. Read what this means for the quality and security of your trip.',
+
     ],
+
     'guarantee' => [
-        'title' => 'STO Garant — jouw reissom beschermd',
-        'description' => 'Boekt je bij mij, dan is jouw geld beschermd via STO Garant. Lees hoe deze garantieregeling werkt en wat het voor jou betekent.',
+        'title' => 'STO Garant — your travel sum protected',
+        'description' => 'If you book with me, your money is protected via STO Garant. Read how this guarantee scheme works and what it means for you.',
+
     ],
+
     'blog' => [
-        'title' => 'Mijn verhalen — treinreizen door Europa',
-        'description' => 'Verhalen en praktische tips over reizen per trein door Europa. Van bestemmingen en routes tot hoe je er zonder vliegen komt — lees mee onderweg.',
+        'title' => 'My stories — train journeys through Europe',
+        'description' => 'Stories and practical tips about traveling by train through Europe. From destinations and routes to how to get there without flying — read along on the way.',
+
     ],
 
     // noindex
     'privacy' => [
-        'title' => 'Privacyverklaring',
-        'description' => 'Lees hoe ik omga met jouw persoonsgegevens bij het boeken van een reis.',
-    ],
-    'terms' => [
-        'title' => 'Algemene Voorwaarden',
-        'description' => 'De voorwaarden voor het boeken van een treinreis bij Omdat We Reizen.',
+
+        'title' => 'Privacy Statement',
+        'description' => 'Read how I handle your personal data when booking a trip.',
+
     ],
 
-    // destination page examples (real values via trip props)
-    'bordeaux' => [
-        'title' => 'Met de trein naar Bordeaux | Wijnstad, Chartrons & historie',
-        'description' => 'Per trein naar Bordeaux, zonder vliegen. Door de Chartrons-wijk met haar Nederlands-Vlaamse handelsgeschiedenis — verblijf midden in de Chartrons.',
+    'terms' => [
+        'title' => 'General Terms and Conditions',
+        'description' => 'The terms and conditions for booking a train journey with Omdat We Reizen.',
     ],
+
+    // destination page examples (real values ​​via trip props)
+    'bordeaux' => [
+        'title' => 'By train to Bordeaux | Wine City, Chartrons & history',
+
+        'description' => 'By train to Bordeaux, without flying. Through the Chartrons district with its Dutch-Flemish trading history — stay in the heart of the Chartrons.',
+
+    ],
+
     'perigord' => [
-        'title' => 'Treinreis Périgord Noir | Met de trein naar de Dordogne',
-        'description' => 'Hoe reist u met de trein naar Les Eyzies en het Périgord Noir? Een compleet samengestelde reis door de Dordogne — prehistorie, dorpjes en rust, alles geregeld.',
+        'title' => 'Train Journey Périgord Noir | By train to the Dordogne',
+
+        'description' => 'How do you travel by train to Les Eyzies and the Périgord Noir? A fully curated journey through the Dordogne — prehistory, villages and tranquility, everything arranged.',
     ],
 ];
