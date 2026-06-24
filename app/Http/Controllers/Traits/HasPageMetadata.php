@@ -24,7 +24,7 @@ trait HasPageMetadata
             $translation = __($key);
         }
 
-        return (is_string($translation) ? $translation : $key).' | '.config('app.name');
+        return (is_string($translation) ? $translation : $key) . ' | ' . config('app.name');
     }
 
     /**
@@ -58,7 +58,7 @@ trait HasPageMetadata
         $defaults = ['og_image' => asset(config('seo.default_og_image'))];
 
         if ($key !== null && $key !== '') {
-            $defaults['title'] = __("{$key}.title").' | '.config('app.name');
+            $defaults['title'] = __("{$key}.title") . ' | ' . config('app.name');
             $defaults['description'] = __("{$key}.description");
         }
 
@@ -73,12 +73,10 @@ trait HasPageMetadata
             'description' => $key ? __("{$key}.description") : __('seo.home.description'),
             'image' => asset(config('seo.default_og_image')),
             'logo' => asset(config('seo.logo')),
-            'sameAs' => [
-                array_filter([
-                    config('socials.instagram'),
-                    config('socials.linkedin'),
-                ]),
-            ],
+            'sameAs' => array_filter([
+                config('socials.instagram'),
+                config('socials.linkedin'),
+            ]),
         ]);
     }
 

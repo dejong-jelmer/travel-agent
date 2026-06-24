@@ -44,7 +44,7 @@ class TripController extends Controller
             'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
             'og_image' => $trip->og_image_url,
-        ], jsonLd: $this->tripJsonLd($trip));
+        ], jsonLd: $trip->toTouristTripSchema());
 
         return Inertia::render('Trip/Show', [
             'title' => $seo['title'],
@@ -54,38 +54,5 @@ class TripController extends Controller
             'travelInfoSections' => TravelInfo::labels(),
             'seo' => $seo,
         ]);
-    }
-
-    /**
-     * Build a schema.org TouristTrip JSON-LD object from the trip's real model fields.
-     *
-     * The canonical price lives in the `starting_from_price` accessor (lowest
-     * `base_price_pp` across price rows, stored in cents) — the same source that
-     * feeds `price_formatted`. Trips without a price are "expected" and get no Offer.
-     *
-     * @return array<string, mixed>
-     */
-    private function tripJsonLd(Trip $trip): array
-    {
-        $schema = [
-            '@context' => 'https://schema.org',
-            '@type' => 'TouristTrip',
-            'name' => $trip->name,
-            'description' => $trip->meta_description,
-            'image' => $trip->og_image_url,
-            'provider' => $this->travelAgencySchema(),
-        ];
-
-        if (! $trip->is_expected) {
-            $schema['offers'] = [
-                '@type' => 'Offer',
-                'price' => round($trip->starting_from_price / 100, 2),
-                'priceCurrency' => 'EUR',
-                'availability' => 'https://schema.org/InStock',
-                'url' => route('trips.show', $trip->slug),
-            ];
-        }
-
-        return $schema;
     }
 }
