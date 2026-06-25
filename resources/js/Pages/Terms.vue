@@ -36,10 +36,10 @@ async function downloadPdf() {
 
 </script>
 <template>
-    <Layout>
+    <Layout :showContact="false">
         <section class="section">
             <article>
-                <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto py-12 tablet:py-24 px-4 sm:px-6 lg:px-8">
                     <!-- PDF Download button -->
                     <div class="flex justify-end mb-4">
                         <Button class="inline-flex gap-2 items-center" @click="downloadPdf" :disabled="isGenerating">

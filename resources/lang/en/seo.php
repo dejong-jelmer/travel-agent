@@ -14,12 +14,6 @@ return [
         'description' => 'View all sustainable train journeys — carefully thought-out routes to European destinations, fully curated and hassle-free along the way.',
     ],
 
-    'contact' => [
-        'title' => 'Ask your question or plan your train journey',
-
-        'description' => 'A question, doubt, or a concrete travel plan? Contact me for personal advice on your train journey through Europe — I am happy to help you on your way, without obligation.',
-    ],
-
     'about' => [
         'title' => 'About me — who puts together your trip',
         'description' => 'The person behind Omdat We Reizen. I put together train journeys through Europe, with accommodations chosen for their character — because travel makes you more human.',

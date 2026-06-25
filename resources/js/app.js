@@ -10,7 +10,7 @@ const ASYNC_COMPONENTS = [
     'DataTable', 'SortableBlocks', 'TipTap', 'ImageUploader',
     'BlockedDatesManager', 'LightBox', 'DatePicker',
 ]
-import { createInertiaApp } from '@inertiajs/vue3'
+import { createInertiaApp, router } from '@inertiajs/vue3'
 import { ZiggyVue } from 'ziggy-js';
 import VueTippy from 'vue-tippy'
 import { Vue3Mq } from "vue3-mq";
@@ -27,6 +27,17 @@ import.meta.glob([
   '../images/**',
   '../fonts/**',
 ]);
+
+// Inertia resets the scroll to the top on each page visit. Because <html> has
+// `scroll-smooth`, that reset animates and the window visibly scrolls up on every
+// navigation. Disable smooth scrolling for the duration of a visit so the reset is
+// instant; in-page anchor links keep their smooth behaviour outside of visits.
+router.on('start', () => {
+    document.documentElement.style.scrollBehavior = 'auto'
+})
+router.on('finish', () => {
+    document.documentElement.style.scrollBehavior = ''
+})
 
 createInertiaApp({
     resolve: name => {

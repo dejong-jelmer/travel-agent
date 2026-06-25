@@ -30,8 +30,8 @@ onMounted(() => {
 });
 
 onBeforeUnmount(() => {
-    if (observer && iconRef.value) {
-        observer.unobserve(iconRef.value);
+    if (observer) {
+        observer.disconnect();
     }
 });
 </script>

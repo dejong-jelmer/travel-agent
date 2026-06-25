@@ -1,145 +1,78 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { fetchApi } from "@/fetchApi";
-import { reactive, ref } from "vue";
-import { useToast } from "vue-toastification";
-import { Phone, AtSign, Pencil } from 'lucide-vue-next';
+import { useContactForm } from '@/Composables/useContactForm.js'
 
 const { t } = useI18n()
-
-const props = defineProps({
-    contact: Object,
-    tripSlug: { type: String, default: '' },
-    periode: { type: String, default: '' },
-});
-
-function buildInitialMessage() {
-    if (!props.tripSlug) return ''
-    let msg = t('forms.contact.trip_inquiry_prefix', { trip: props.tripSlug })
-    if (props.periode) {
-        msg += ' ' + t('forms.contact.trip_inquiry_period', { period: props.periode })
-    }
-    return msg
-}
-
-const errors = reactive({});
-const form = reactive({
-    name: "",
-    email: "",
-    phone: "",
-    text: buildInitialMessage(),
-});
-const honeypot = ref(null);
-const toast = useToast();
-
-function resetObject(obj) {
-    Object.keys(obj).forEach((key) => delete obj[key]);
-}
-
-function submit() {
-    try {
-        honeypot.value.validate();
-        resetObject(errors);
-        fetchApi(route("submit.contact"), { method: 'POST', body: form })
-            .then(() => {
-                toast.success(t('forms.contact.success'));
-                resetObject(form);
-            })
-            .catch((error) => {
-                if (error.response?.errors) {
-                    Object.assign(errors, error.response.errors);
-                }
-            });
-    } catch (error) { }
-}
+const { form, errors, honeypot, submit, resetObject } = useContactForm()
 </script>
 
 <template>
-    <div class="grid gap-y-8 laptop:gap-y-16">
+    <section id="contact" class="relative overflow-hidden bg-brand-primary scroll-mt-[120px]">
+        <span aria-hidden="true"
+            class="pointer-events-none select-none absolute -top-24 right-52 font-serif leading-none text-white/[0.045] text-[20rem] laptop:text-[28rem]">?</span>
 
-        <!-- Header sectie -->
-        <div class="text-center">
-            <div
-                class="max-w-2xl mx-auto bg-white backdrop-blur-sm rounded-xl p-6 tablet:p-8 border border-brand-primary/20 shadow-sm">
-                <SectionHeader>{{ $t('forms.contact.heading') }}</SectionHeader>
-                <p class="text-left text-sm laptop:text-base text-brand-text leading-relaxed">
-                    {{ $t('forms.contact.intro') }}
-                    <br />
-                    <br />
-                    <span class="inline-flex items-center gap-2">
-                        <AtSign class="w-5 h-5 text-brand-accent" />
-                        <span class="hidden tablet:inline-flex">{{ $t('forms.contact.email') }}</span>
-                        <span class="font-bold text-brand-link">
-                            <a class="email-field default-link" href="#" v-html="contact.mail.display"></a>
-                        </span>
-                    </span>
-                    <br />
-                    <span class="inline-flex items-center gap-2 text-brand-text">
-                        <Pencil class="w-5 h-5 text-brand-accent" />
-                        {{ $t('forms.contact.or_use_form') }}
-                    </span>
+        <div class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 pt-20 tablet:pt-28">
+            <!-- eyebrow -->
+            <div class="flex items-center gap-3.5 mb-7">
+                <span class="block w-9 h-0.5 bg-brand-accent"></span>
+                <span class="text-xs uppercase tracking-[0.18em] font-poppins font-semibold text-brand-accent">
+                    {{ t('home.contact_cta.eyebrow') }}
+                </span>
+            </div>
+
+            <!-- heading + body -->
+            <div class="grid laptop:grid-cols-2 gap-10 laptop:gap-16 laptop:items-start mb-12 tablet:mb-16">
+                <h2 class="font-poppins text-white text-brand-sand leading-[1.05] text-4xl laptop:text-5xl wide:text-6xl">
+                    {{ t('home.contact_cta.heading') }}
+                </h2>
+                <p class="font-poppins font-light text-white/85 text-base laptop:text-lg leading-relaxed max-w-md laptop:pt-2">
+                    {{ t('home.contact_cta.body') }}
                 </p>
             </div>
-        </div>
 
-        <!-- Formulier sectie -->
-        <div id="contact-form" class="max-w-4xl mx-auto scroll-mt-[180px]">
-            <form @submit.prevent="submit" @change="resetObject(errors)" class="space-y-8">
-                <div
-                    class="bg-brand-secondary backdrop-blur-sm rounded-2xl p-6 tablet:p-8 border border-brand-subtle/20 shadow-sm">
-                    <div class="grid tablet:grid-cols-2 gap-8 tablet:gap-12">
-                        <!-- Links: persoonlijke gegevens -->
-                        <div class="space-y-6">
-                            <div class="border-l-4 border-brand-accent pl-4 mb-6">
-                                <h3 class="text-lg font-semibold text-brand-primary">{{
-                                    $t('forms.contact.your_details_heading') }}</h3>
-                                <p class="text-sm text-brand-primary/60">{{ $t('forms.contact.your_details_subheading')
-                                    }}</p>
-                            </div>
-
-                            <Input type="text" name="name" :placeholder="$t('forms.contact.name_label')"
-                                :required="false" :show-label="false" v-model="form.name" :feedback="errors?.name"
-                                class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
-                            <Input type="email" name="email" :placeholder="$t('forms.contact.email_label')"
-                                :required="false" :show-label="false" v-model="form.email" :feedback="errors?.email"
-                                class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
-                            <Input type="phone" name="phone" :placeholder="$t('forms.contact.phone_label')"
-                                :required="false" :show-label="false" v-model="form.phone" :feedback="errors?.phone"
-                                class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02]" />
+            <!-- form -->
+            <form @submit.prevent="submit" @change="resetObject(errors)">
+                <div class="grid tablet:grid-cols-2 gap-10 tablet:gap-14 items-start">
+                    <div class="space-y-5">
+                        <div class="border-l-4 border-brand-accent pl-4 mb-6">
+                            <h3 class="font-poppins text-white text-xl laptop:text-2xl font-semibold text-brand-sand leading-tight">
+                                {{ t('forms.contact.your_details_heading') }}
+                            </h3>
+                            <p class="font-poppins text-sm font-light text-white/85 mt-1">
+                                {{ t('forms.contact.your_details_subheading') }}
+                            </p>
                         </div>
 
-                        <!-- Rechts: bericht -->
-                        <div class="space-y-6">
-                            <div class="border-l-4 border-brand-accent pl-4 mb-6">
-                                <h3 class="text-lg font-semibold text-brand-primary">{{
-                                    $t('forms.contact.your_message_heading') }}</h3>
-                                <p class="text-sm text-brand-primary/60">{{ $t('forms.contact.your_message_subheading')
-                                    }}</p>
-                            </div>
+                        <Input type="text" name="name" :placeholder="t('forms.contact.name_label')"
+                            :required="false" :show-label="false" v-model="form.name" :feedback="errors?.name" />
+                        <Input type="email" name="email" :placeholder="t('forms.contact.email_label')"
+                            :required="false" :show-label="false" v-model="form.email" :feedback="errors?.email" />
+                        <Input type="phone" name="phone" :placeholder="t('forms.contact.phone_label')"
+                            :required="false" :show-label="false" v-model="form.phone" :feedback="errors?.phone" />
+                    </div>
 
-                            <TextArea name="text" :label="$t('forms.contact.message_label')" :required="false"
-                                :show-label="false" v-model="form.text" :feedback="errors?.text"
-                                class="transition-all duration-300 focus-within:transform focus-within:scale-[1.02] h-auto" />
-
-                            <VueHoneypot ref="honeypot" />
-
-                            <!-- Submit button -->
-                            <div class="flex justify-end">
-                                <Button>
-                                    {{ $t('forms.contact.submit_button') }}
-                                </Button>
-                            </div>
+                    <div class="flex flex-col h-full">
+                        <div class="border-l-4 border-brand-accent pl-4 mb-6">
+                            <h3 class="font-poppins text-white text-xl laptop:text-2xl font-semibold text-brand-sand leading-tight">
+                                {{ t('forms.contact.your_message_heading') }}
+                            </h3>
+                            <p class="font-poppins text-sm font-light text-white/85 mt-1">
+                                {{ t('forms.contact.your_message_subheading') }}
+                            </p>
                         </div>
+
+                        <TextArea name="text" :label="t('forms.contact.message_label')" :required="false"
+                            :show-label="false" v-model="form.text" :feedback="errors?.text"
+                            class="flex-1 min-h-[167px]" />
                     </div>
                 </div>
-                <i18n-t keypath="forms.contact.privacy" tag="p" class="text-sm text-gray-500 text-center mt-6">
-                    <template #link>
-                        <DefaultLink :href="route('privacy')" class="underline hover:text-gray-700">
-                            {{ $t('forms.contact.privacy_link') }}
-                        </DefaultLink>
-                    </template>
-                </i18n-t>
+
+                <VueHoneypot ref="honeypot" />
+
+                <div class="flex justify-end mt-8">
+                    <Button>{{ t('forms.contact.submit_button') }} →</Button>
+                </div>
             </form>
         </div>
-    </div>
+    </section>
 </template>

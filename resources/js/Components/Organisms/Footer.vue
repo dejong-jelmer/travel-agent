@@ -3,16 +3,25 @@ import { usePage } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import vvkrLogo from '@/../images/vvkr.png'
 
+const props = defineProps({
+    showContact: {
+        type: Boolean,
+        default: false
+    }
+});
+
 const page = usePage();
 const contact = page.props.contact;
 const companyName = window.appName;
 const year = new Date().getFullYear();
 </script>
 <template>
+
     <footer class="bg-brand-primary">
-        <div class="max-w-screen-wide laptop:max-w-screen-desktop px-4 pt-16 pb-6 mx-auto tablet:px-6 laptop:pt-24">
-            <div
-                class="grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between">
+        <ContactForm v-if="showContact" />
+        <div class="max-w-screen-wide laptop:max-w-screen-desktop pb-6 mx-auto px-4 tablet:px-6 laptop:pt-24">
+            <div class="pt-10 grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between"
+                :class="showContact ? 'border-t border-brand-secondary/10' : ''">
                 <!-- Logo + Slogan -->
                 <div class="text-left">
                     <div class="flex justify-start">
@@ -99,17 +108,19 @@ const year = new Date().getFullYear();
                     <div class="w-full justify-start">
                         <p class="mt-8 text-lg font-medium text-white">{{ $t('footer.registered') }}</p>
 
-                        <div class="mt-6 flex flex-wrap items-center gap-6">
+                        <div class="mt-6 p-2 rounded-md flex flex-wrap items-center gap-6 bg-white/90">
                             <a href="https://www.sto-garant.nl/" target="_blank" rel="noopener noreferrer"
                                 aria-label="STO Garant"
                                 class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
-                                <Sto class="h-16 w-16" aria-hidden="true" />
+                                <Sto class="h-[50px] w-[64px]" aria-hidden="true" />
                             </a>
                             <a href="https://www.vvkr.nl"
                                 title="Aangesloten bij VvKR - Vereniging van Kleinschalige Reisorganisaties"
-                                target="_blank" rel="noopener noreferrer" aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties"
+                                target="_blank" rel="noopener noreferrer"
+                                aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties"
                                 class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
-                                <img :src="vvkrLogo" alt="Logo VvKR — Vereniging van Kleinschalige Reisorganisaties" class="w-[80px] h-[50px]">
+                                <img :src="vvkrLogo" alt="Logo VvKR — Vereniging van Kleinschalige Reisorganisaties"
+                                    class="h-[50px] w-[80px]">
                             </a>
                             <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
                                 target="_blank" rel="noopener noreferrer" :aria-label="$t('footer.green_hosting_aria')"
@@ -156,9 +167,8 @@ const year = new Date().getFullYear();
                     </p>
                 </div>
             </div>
-            <p class="text-xs text-white/75 text-center mt-3">
-                <a href="https://heldergebouwd.nl" target="_blank" rel="noopener noreferrer"
-                    class="hover:underline">
+            <p class="text-xs text-white/75 mt-3">
+                <a href="https://heldergebouwd.nl" target="_blank" rel="noopener noreferrer" class="hover:underline">
                     Webdesign &amp; development {{ contact.fullName }}
                 </a>
             </p>

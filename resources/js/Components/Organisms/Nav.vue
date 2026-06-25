@@ -43,10 +43,6 @@ const links = computed(() => ({
     blog: {
         label: t('nav.blog'),
         path: route('blog.index'),
-    },
-    contact: {
-        label: t('nav.contact'),
-        path: route('contact'),
     }
 }));
 </script>
