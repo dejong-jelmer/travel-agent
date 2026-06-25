@@ -19,7 +19,6 @@
         "adults": "Adult | Adults",
         "children": "Child | Children"
     },
-    "topbar_text": "Travel sustainably",
     "nav": {
         "trips": "Trips",
         "all_trips": "All trips",
@@ -126,7 +125,10 @@
     "newsletter": {
         "heading": "Stay informed",
         "description": "Inspiration, stories, and new routes — straight to your inbox.",
+        "eyebrow": "Nieuwsbrief",
         "form": {
+            "heading": "Schrijf je in",
+            "note": "Eén mail per maand, geen spam.",
             "name_placeholder": "Your first name (optional)",
             "email_placeholder": "your.email{'@'}example.com",
             "submitting": "Submitting…",
@@ -871,6 +873,30 @@
         },
         "pullquote": "For me, traveling is different from a vacation. It is the difference between literature and a medical novel.",
         "pullquote_source": "Jelmer de Jong"
+    },
+    "about_trust": {
+        "eyebrow": "The maker",
+        "body": "I'm Jelmer. I put every trip together myself: I choose the destination, map out the route, and book the trains and overnight stays. Behind Omdat We Reizen stands one person with a perspective of their own, who follows your trip from the first idea to your homecoming.",
+        "portrait_alt": "Jelmer de Jong, the maker behind Omdat We Reizen",
+        "about_link": "About me",
+        "trust_heading": "What a trip with me means for you",
+        "read_about": "Read more about",
+        "and_about": "and about",
+        "points": {
+            "arranged": {
+                "title": "A fully arranged package trip",
+                "line": "I book the trains and overnight stays for you in advance."
+            },
+            "protected": {
+                "title": "Protected by STO-Garant",
+                "line": "The travel sum you pay is kept safe."
+            },
+            "contact": {
+                "title": "One point of contact",
+                "line": "You have me — before, during, and after the trip."
+            }
+        },
+        "terms_link": "Read the travel conditions and the STO-Garant scheme"
     },
     "trip_show": {
         "hero": {

@@ -2,6 +2,7 @@
 import { Link, usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { useDateFormatter } from '@/Composables/useDateFormatter';
+import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -11,6 +12,7 @@ const props = defineProps({
 const { t } = useI18n();
 const locale = computed(() => usePage().props.locale);
 const { formattedDate } = useDateFormatter();
+const { rootRef, visible, reveal } = useRevealEffect();
 </script>
 
 <template>
@@ -20,9 +22,12 @@ const { formattedDate } = useDateFormatter();
                 {{ t('blog.index.title') }}
             </SectionHeader>
 
-            <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
-                <Link v-for="post in posts.data" :key="post.id"
-                    :href="route('blog.show', post.slug)">
+            <div ref="rootRef" class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
+                <Link v-for="(post, index) in posts.data" :key="post.id"
+                    :href="route('blog.show', post.slug)"
+                    class="transition-all duration-1000 ease-out"
+                    v-bind="reveal(Math.min(index, 5) * 75)"
+                    :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'">
                     <Card>
                         <!-- Featured Image -->
                         <div class="aspect-[16/10] overflow-hidden bg-gray-100">

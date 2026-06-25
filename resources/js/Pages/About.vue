@@ -1,5 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
+import { useRevealEffect } from '@/Composables/useRevealEffect.js'
 import heroImage from '@/../images/about.webp'
 import meImage from '@/../images/me.webp'
 
@@ -7,6 +8,11 @@ const { t, tm } = useI18n()
 
 const myStory = tm('about.my_story')
 const missionStatement = tm('about.promise_statement')
+
+const { rootRef: storyRef, visible: storyVisible } = useRevealEffect()
+const { rootRef: convictionRef, visible: convictionVisible } = useRevealEffect()
+const { rootRef: pullquoteRef, visible: pullquoteVisible } = useRevealEffect()
+const { rootRef: promiseRef, visible: promiseVisible } = useRevealEffect()
 </script>
 
 <template>
@@ -19,7 +25,9 @@ const missionStatement = tm('about.promise_statement')
         <section class="bg-brand-secondary py-12 laptop:py-24">
                 <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8">
 
-                    <div class="mt-8 flex flex-col laptop:flex-row gap-10 laptop:gap-16 items-start">
+                    <div ref="storyRef"
+                        class="mt-8 flex flex-col laptop:flex-row gap-10 laptop:gap-16 items-start transition-all duration-1000 ease-out"
+                        :class="storyVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
 
                         <div class="relative w-full laptop:w-2/5 flex-shrink-0">
                             <img :src="meImage" :alt="t('about.founder.name')"
@@ -56,7 +64,8 @@ const missionStatement = tm('about.promise_statement')
 
         <section class="max-w-3xl mx-auto px-4 py-12 laptop:py-24 space-y-12 laptop:space-y-24">
             <!-- Conviction -->
-            <div>
+            <div ref="convictionRef" class="transition-all duration-1000 ease-out"
+                :class="convictionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
                 <div class="flex items-center gap-2 mb-6">
                     <div class="w-4 h-px bg-brand-accent"></div>
                     <span class="text-xs font-medium tracking-widest uppercase text-brand-primary">
@@ -71,14 +80,17 @@ const missionStatement = tm('about.promise_statement')
             </div>
 
             <!-- Pullquote -->
-            <div class="w-full text-center">
+            <div ref="pullquoteRef"
+                class="w-full text-center transition-all duration-1000 ease-out"
+                :class="pullquoteVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
                 <p class="text-2xl laptop:text-4xl font-poppins text-brand-primary leading-tight">
                     {{ t('about.pullquote') }}
                 </p>
             </div>
 
             <!-- Promise -->
-            <div>
+            <div ref="promiseRef" class="transition-all duration-1000 ease-out"
+                :class="promiseVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'">
                 <div class="flex items-center gap-2 mb-6">
                     <div class="w-4 h-px bg-brand-accent"></div>
                     <span class="text-xs font-medium tracking-widest uppercase text-brand-primary">

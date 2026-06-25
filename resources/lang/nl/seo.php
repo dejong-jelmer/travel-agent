@@ -9,10 +9,6 @@ return [
         'title' => 'Verzorgde treinreizen op maat door Europa',
         'description' => 'Bekijk alle duurzame treinreizen — zorgvuldig uitgedachte routes naar Europese bestemmingen, compleet samengesteld en zonder gedoe onderweg.',
     ],
-    'contact' => [
-        'title' => 'Stel je vraag of plan je treinreis',
-        'description' => 'Een vraag, twijfel of concreet reisplan? Neem contact op voor persoonlijk advies over jouw treinreis door Europa — ik help je graag op weg, vrijblijvend.',
-    ],
     'about' => [
         'title' => 'Over mij — wie jouw reis samenstelt',
         'description' => 'De mens achter Omdat We Reizen. Ik stel treinreizen door Europa samen, met accommodaties gekozen op karakter — omdat reizen je meer mens maakt.',

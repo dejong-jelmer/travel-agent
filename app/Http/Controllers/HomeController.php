@@ -41,16 +41,6 @@ class HomeController extends Controller
         ]);
     }
 
-    public function contact(): Response
-    {
-        $seo = $this->shareSeo('seo.contact');
-
-        return Inertia::render('Contact', [
-            'title' => $seo['title'],
-            'seo' => $seo,
-        ]);
-    }
-
     public function submitContact(SubmitContactRequest $request): HttpResponse
     {
         $validated = $request->validated();

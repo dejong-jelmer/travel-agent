@@ -8,12 +8,12 @@ const props = defineProps({ trip: Object });
 </script>
 <template>
     <Link :href="route('trips.show', trip)">
-        <Card class="group cursor-pointer">
+        <Card class="group/card cursor-pointer">
 
             <!-- Image -->
             <div class="h-48 tablet:h-52 rounded-t-xl overflow-hidden relative">
                 <img :src="trip.hero_image?.public_url || placeholder" :alt="trip.name"
-                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-100 group-hover:scale-110"
+                    class="absolute inset-0 w-full h-full object-cover transition-transform duration-500 ease-out scale-100 group-hover/card:scale-110"
                     loading="lazy" />
                 <div class="absolute top-3 right-3">
                     <PriceBadge :price="trip.price_formatted" :expected="trip.is_expected" :expected-label="$t('trip_card.expected')" />

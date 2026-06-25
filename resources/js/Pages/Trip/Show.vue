@@ -41,13 +41,6 @@ const openLightbox = (index) => {
     lightboxRef.value?.open(index)
 }
 
-// Inquiry
-const contactUrl = computed(() => {
-    const params = new URLSearchParams({ reis: props.trip.slug })
-
-    return `${route('contact')}?${params.toString()}#contact-form`
-})
-
 const tabs = computed(() => [
     { id: 'itinerary', label: t('trip_show.tabs.itinerary') },
     { id: 'inclusive', label: t('trip_show.tabs.inclusive') },
