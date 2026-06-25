@@ -1,10 +1,11 @@
 // resources/js/composables/useRevealEffect.js
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
 export function useRevealEffect() {
     const rootRef = ref(null);
     const visible = ref(false);
     const prefersReducedMotion = ref(false);
+    let observer = null;
 
     onMounted(() => {
         prefersReducedMotion.value = window.matchMedia(
@@ -16,7 +17,7 @@ export function useRevealEffect() {
             return;
         }
 
-        const observer = new IntersectionObserver(
+        observer = new IntersectionObserver(
             (entries) => {
                 entries.forEach((entry) => {
                     if (entry.isIntersecting) {
@@ -29,6 +30,10 @@ export function useRevealEffect() {
         );
 
         if (rootRef.value) observer.observe(rootRef.value);
+    });
+
+    onBeforeUnmount(() => {
+        if (observer) observer.disconnect();
     });
     const reveal = (delay = 0) => ({
         style: {

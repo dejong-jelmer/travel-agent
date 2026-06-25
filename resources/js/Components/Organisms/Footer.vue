@@ -4,7 +4,10 @@ import { Link } from "@inertiajs/vue3";
 import vvkrLogo from '@/../images/vvkr.png'
 
 const props = defineProps({
-    showContact: {type: Boolean, default: false }
+    showContact: {
+        type: Boolean,
+        default: false
+    }
 });
 
 const page = usePage();
@@ -17,8 +20,8 @@ const year = new Date().getFullYear();
     <footer class="bg-brand-primary">
         <ContactForm v-if="showContact" />
         <div class="max-w-screen-wide laptop:max-w-screen-desktop pb-6 mx-auto px-4 tablet:px-6 laptop:pt-24">
-            <div
-                class="pt-10 grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between" :class="showContact ? 'border-t border-brand-secondary/10' : ''">
+            <div class="pt-10 grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between"
+                :class="showContact ? 'border-t border-brand-secondary/10' : ''">
                 <!-- Logo + Slogan -->
                 <div class="text-left">
                     <div class="flex justify-start">

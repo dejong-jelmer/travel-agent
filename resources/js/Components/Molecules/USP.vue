@@ -56,7 +56,7 @@ const usps = [
                 <div class="h-48 overflow-hidden">
                     <img :src="usp.image"
                         class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                        :alt="$t(usp.alt)" />
+                        :alt="$t(usp.alt || 'usp ' + index)" />
                 </div>
 
                 <div class="p-6 flex flex-col flex-1">
@@ -87,10 +87,10 @@ const usps = [
         <div v-bind="reveal(300)" :class="visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'"
             class="transition-all duration-1000 ease-out text-center mt-12">
             <div
-                class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-brand-subtle/20">
+                class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-brand-subtle/20 text-sm laptop:text-base">
                 <span class="text-brand-primary font-medium">{{ $t('usp.cta.text') }}</span>
-                <div class="w-px h-4 bg-brand-subtle/30"></div>
-                <DefaultLink :href="route('trips.index')">{{ $t('usp.cta.link') }} →</DefaultLink>
+                <div class="w-px h-4 bg-brand-text"></div>
+                <DefaultLink :href="route('trips.index')">{{ $t('usp.cta.link') }}&nbsp;→</DefaultLink>
             </div>
         </div>
 

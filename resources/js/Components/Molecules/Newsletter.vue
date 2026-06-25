@@ -1,15 +1,11 @@
 <script setup>
-import { ref, onMounted, nextTick } from "vue"
+import { ref } from "vue"
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification"
 import { LoaderCircle } from "lucide-vue-next"
-import newsletterImage from '@/../images/verona.webp';
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-
-const newsletterRef = ref(null)
-const newsletterLoaded = ref(false)
 
 const honeypot = ref(null)
 const toast = useToast()
@@ -18,21 +14,6 @@ const alreadySubscribed = ref(false)
 const form = useForm({
     name: '',
     email: '',
-})
-
-onMounted(async () => {
-    await nextTick()
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                if (entry.target === newsletterRef.value) newsletterLoaded.value = true
-                observer.unobserve(entry.target)
-            }
-        })
-    }, { rootMargin: '200px' })
-
-    if (newsletterRef.value) observer.observe(newsletterRef.value)
 })
 
 function submit() {
@@ -64,9 +45,9 @@ function submit() {
 
 <template>
     <section id="nieuwsbrief" class="bg-brand-secondary scroll-mt-24">
-        <div class="max-w-6xl mx-auto px-4 py-16 phone:px-6 laptop:px-8 laptop:py-24">
+        <div class="max-w-6xl mx-auto px-4 py-12 phone:px-6 laptop:px-8 laptop:py-24">
             <div
-                class="grid grid-cols-1 tablet:grid-cols-[1.15fr_1fr] gap-8 laptop:gap-12 tablet:items-end mb-12 laptop:mb-14">
+                class="grid grid-cols-1 tablet:grid-cols-[1.15fr_1fr] gap-8 laptop:gap-12 tablet:items-end mb-12">
                 <div>
                     <div class="flex items-center gap-3 mb-5">
                         <span class="block w-10 h-0.5 bg-brand-accent"></span>

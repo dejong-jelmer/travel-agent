@@ -1,5 +1,4 @@
 <script setup>
-import { ref, onMounted, nextTick } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Link } from '@inertiajs/vue3';
 
@@ -8,9 +7,6 @@ const props = defineProps({
 });
 
 const { t } = useI18n()
-
-const newsletterRef = ref(null)
-const contactRef = ref(null)
 
 </script>
 
