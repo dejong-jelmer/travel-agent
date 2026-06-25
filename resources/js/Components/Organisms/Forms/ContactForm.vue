@@ -9,7 +9,7 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
 <template>
     <section id="contact" class="relative overflow-hidden bg-brand-primary scroll-mt-[120px]">
         <span aria-hidden="true"
-            class="pointer-events-none select-none absolute -top-24 -right-6 font-serif leading-none text-white/[0.045] text-[20rem] laptop:text-[28rem]">?</span>
+            class="pointer-events-none select-none absolute -top-24 right-52 font-serif leading-none text-white/[0.045] text-[20rem] laptop:text-[28rem]">?</span>
 
         <div class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 pt-20 tablet:pt-28">
             <!-- eyebrow -->

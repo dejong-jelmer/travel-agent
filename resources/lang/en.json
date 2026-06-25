@@ -125,10 +125,10 @@
     "newsletter": {
         "heading": "Stay informed",
         "description": "Inspiration, stories, and new routes — straight to your inbox.",
-        "eyebrow": "Nieuwsbrief",
+        "eyebrow": "Newsletter",
         "form": {
-            "heading": "Schrijf je in",
-            "note": "Eén mail per maand, geen spam.",
+            "heading": "Sign up",
+            "note": "Receive updates, experiences & background.",
             "name_placeholder": "Your first name (optional)",
             "email_placeholder": "your.email{'@'}example.com",
             "submitting": "Submitting…",
