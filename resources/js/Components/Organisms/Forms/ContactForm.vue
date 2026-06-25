@@ -1,6 +1,6 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
-import { useContactForm } from '@/composables/useContactForm.js'
+import { useContactForm } from '@/Composables/useContactForm.js'
 
 const { t } = useI18n()
 const { form, errors, honeypot, submit, resetObject } = useContactForm()
