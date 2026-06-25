@@ -103,7 +103,7 @@ class HomeTest extends TestCase
             'text' => fake()->text(500),
         ];
 
-        $response = $this->post(route('contact', $contactData));
+        $response = $this->post(route('submit.contact', $contactData));
         $response->assertStatus(200);
         $toAddress = config('contact.mail');
 
