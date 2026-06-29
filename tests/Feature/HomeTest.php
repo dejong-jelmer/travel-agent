@@ -48,11 +48,6 @@ class HomeTest extends TestCase
         $this->get(route('about'))->assertStatus(200);
     }
 
-    public function test_contact_page_returns_200()
-    {
-        $this->get(route('contact'))->assertStatus(200);
-    }
-
     public function test_trip_show_shows_correct_trip()
     {
         $destination = Destination::factory()->create();
@@ -108,7 +103,7 @@ class HomeTest extends TestCase
             'text' => fake()->text(500),
         ];
 
-        $response = $this->post(route('contact', $contactData));
+        $response = $this->post(route('submit.contact', $contactData));
         $response->assertStatus(200);
         $toAddress = config('contact.mail');
 

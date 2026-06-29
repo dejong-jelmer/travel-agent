@@ -5,12 +5,6 @@ return [
     'title_index' => 'Blog',
     'title_show' => 'Blog',
 
-    // Frontend SEO (nested with title/description, like home.php)
-    'blog_seo' => [
-        'title' => 'Blog',
-        'description' => 'Read my latest blog posts about sustainable train travel across Europe.',
-    ],
-
     // Admin page titles & flash messages
     'posts' => [
         'title_index' => 'Blog Posts',

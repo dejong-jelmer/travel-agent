@@ -372,6 +372,37 @@ class Trip extends Model
         );
     }
 
+    /**
+     * Build a schema.org TouristTrip JSON-LD object from the trip's model fields.
+     *
+     * The canonical price lives in the `starting_from_price` accessor (lowest
+     * `base_price_pp` across price rows, stored in cents) — the same source that
+     * feeds `price_formatted`. Trips without a price are "expected" and get no Offer.
+     *
+     * @return array<string, mixed>
+     */
+    public function toTouristTripSchema(): array
+    {
+        $schema = [
+            '@type' => 'TouristTrip',
+            'name' => $this->name,
+            'description' => $this->meta_description,
+            'image' => $this->og_image_url,
+        ];
+
+        if (! $this->is_expected && $this->starting_from_price !== null) {
+            $schema['offers'] = [
+                '@type' => 'Offer',
+                'price' => round($this->starting_from_price / 100, 2),
+                'priceCurrency' => config('seo.currency', 'EUR'),
+                'availability' => 'https://schema.org/InStock',
+                'url' => route('trips.show', $this->slug),
+            ];
+        }
+
+        return $schema;
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';

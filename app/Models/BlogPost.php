@@ -84,4 +84,22 @@ class BlogPost extends Model
             get: fn () => $this->status === Status::Published
         );
     }
+
+    /**
+     * Build a schema.org BlogPosting JSON-LD object from the BlogPost's model fields.
+     *
+     * @return array<string, string|null>
+     */
+    public function toBlogPostingSchema(): array
+    {
+        return array_filter([
+            '@type' => 'BlogPosting',
+            'headline' => $this->title,
+            'description' => $this->meta_description ?: $this->excerpt,
+            'image' => $this->heroImage?->public_url,
+            'datePublished' => $this->published_at?->toIso8601String(),
+            'dateModified' => $this->updated_at?->toIso8601String(),
+            'mainEntityOfPage' => route('blog.show', $this->slug),
+        ], fn ($v) => $v !== null);
+    }
 }

@@ -19,7 +19,6 @@
         "adults": "Volwassene | Volwassenen",
         "children": "Kind | Kinderen"
     },
-    "topbar_text": "Duurzame treinreizen door Europa",
     "nav": {
         "trips": "Reizen",
         "all_trips": "De reizen",
@@ -126,7 +125,10 @@
     "newsletter": {
         "heading": "Blijf op de hoogte",
         "description": "Inspiratie, verhalen en nieuwe routes — rechtstreeks in je inbox.",
+        "eyebrow": "Nieuwsbrief",
         "form": {
+            "heading": "Schrijf je in",
+            "note": "Ontvang updates, ervaringen & achtergronden.",
             "name_placeholder": "Je voornaam (optioneel)",
             "email_placeholder": "jouw.email{'@'}voorbeeld.nl",
             "submitting": "Bezig met verzenden…",
@@ -163,7 +165,7 @@
         },
         "usp-2": {
             "title": "Slapen met karakter",
-            "description": "Ik zoek accommodaties met sfeer die bij de plek passen — een huis, een familiehotel, iets met een verhaal. Soms staat de mooiste iets verderop; wat mij betreft is dat een extra halte waard.",
+            "description": "Ik zoek accommodaties met sfeer die bij de plek passen — een huis, een familiehotel, iets met een verhaal. En altijd goed te bereiken met trein, tram of bus.",
             "highlight": "Karakter als uitgangspunt"
         },
         "usp-3": {
@@ -172,7 +174,7 @@
             "highlight": "Een eigen invalshoek per reis"
         },
         "cta": {
-            "text": "Klaar voor jouw volgende avontuur?",
+            "text": "Waar ga jij heen?",
             "link": "Ontdek alle reizen"
         }
     },
@@ -856,6 +858,7 @@
         "intro": "Ik stel reizen samen met aandacht, een goed verhaal en de trein als vertrekpunt. Wat mijn reizen dragt, is de bestemming: wat er te beleven valt en het verhaal dat de plek te vertelten heeft.",
         "our_trips_heading": "De reizen",
         "contact_cta": {
+            "eyebrow": "Contact",
             "heading": "Heb je een vraag?",
             "body": "Ik vertel je graag meer over de routes, de planning of gewoon wat je te wachten staat.",
             "button": "Neem contact op"
@@ -868,8 +871,32 @@
             "message_middle2": "pagina. Wil je als eerste weten wanneer de eerste reis online staat? Schrijf je in voor mijn",
             "newsletter_link": "nieuwsbrief"
         },
+        "pullquote_eyebrow": "Citaat",
         "pullquote": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur.",
         "pullquote_source": "Jelmer de Jong"
+    },
+    "about_trust": {
+        "eyebrow": "De maker",
+        "body": "Ik ben Jelmer. Ik stel elke reis zelf samen: ik kies de bestemming, leg de route vast en boek de treinen en overnachtingen. Achter Omdat We Reizen staat één mens met een eigen blik, die je reis van het eerste idee tot je thuiskomst volgt.",
+        "portrait_alt": "Jelmer de Jong, de maker van Omdat We Reizen",
+        "about_link": "Over mij",
+        "read_about": "Lees meer over",
+        "and_about": "en over",
+        "trust_heading": "Waar je bij mij op kunt rekenen",
+        "points": {
+            "arranged": {
+                "title": "Een geregelde pakketreis",
+                "line": "De treinen en overnachtingen boek ik voor je."
+            },
+            "protected": {
+                "title": "Beschermd via STO-Garant",
+                "line": "Je betaalde reissom staat veilig."
+            },
+            "contact": {
+                "title": "Eén aanspreekpunt",
+                "line": "Je hebt mij — voor, tijdens en na de reis."
+            }
+        }
     },
     "trip_show": {
         "hero": {

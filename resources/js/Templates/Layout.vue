@@ -7,7 +7,8 @@ import { emailLinks, phoneLinks } from '@/Composables/useAntiSpamLinks.js';
 
 const props = defineProps({
     title: String,
-    phone: Object
+    phone: Object,
+    showContact: {type: Boolean, default: true }
 });
 const page = usePage()
 const flash = page.props.flash ?? {};
@@ -30,13 +31,11 @@ Object.entries(flash).forEach(([type, message]) => {
 </script>
 
 <template>
-
-    <SeoHead />
     <main class="overflow-hidden">
         <Topbar class="z-50" />
         <Nav class="z-50 sticky top-0 inset-x-0" />
         <slot name="hero"></slot>
         <slot></slot>
-        <Footer />
+        <Footer :showContact="showContact"/>
     </main>
 </template>

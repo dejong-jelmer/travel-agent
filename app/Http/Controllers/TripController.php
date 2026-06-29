@@ -23,12 +23,13 @@ class TripController extends Controller
     public function index(): Response
     {
         $trips = Trip::with(['heroImage', 'prices'])->published()->get();
+        $seo = $this->shareSeo('seo.trips');
 
         return Inertia::render('Trip/Index', [
-            'title' => $this->pageTitle('home.trips_seo'),
+            'title' => $seo['title'],
             'trips' => $trips,
             'countries' => $this->countryService->getCountriesForTrips($trips),
-            'seo' => $this->pageSeo('home.trips_seo'),
+            'seo' => $seo,
         ]);
     }
 
@@ -39,17 +40,19 @@ class TripController extends Controller
     {
         $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items']);
 
+        $seo = $this->shareSeo(overrides: [
+            'title' => $trip->meta_title.' | '.config('app.name'),
+            'description' => $trip->meta_description,
+            'og_image' => $trip->og_image_url,
+        ], jsonLd: $trip->toTouristTripSchema());
+
         return Inertia::render('Trip/Show', [
-            'title' => $this->pageTitle($trip->name),
+            'title' => $seo['title'],
             'trip' => $trip,
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
-            'seo' => [
-                'title' => $trip->meta_title,
-                'description' => $trip->meta_description,
-                'og_image' => $trip->og_image_url,
-            ],
+            'seo' => $seo,
         ]);
     }
 }

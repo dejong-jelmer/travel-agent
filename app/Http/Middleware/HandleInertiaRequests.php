@@ -4,7 +4,6 @@ namespace App\Http\Middleware;
 
 use App\Services\ContactDetailsService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -43,7 +42,7 @@ class HandleInertiaRequests extends Middleware
             'locale' => app()->getLocale(),
             'locales' => availableLocales() ?: ['nl', 'en'],
             'auth' => [
-                'user' => Auth::user(),
+                'user' => $request->user()?->only(['id', 'name', 'role']) ?: null,
             ],
             'config' => [
                 'seo' => config('seo'),

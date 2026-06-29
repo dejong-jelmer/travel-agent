@@ -3,10 +3,10 @@ import vvkrLogo from '@/../images/vvkr.png'
 
 </script>
 <template>
-    <Layout>
+    <Layout :showContact="false">
         <section class="section">
             <article>
-                <div class="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto py-12 tablet:py-24 px-4 sm:px-6 lg:px-8">
                     <div class="bg-white shadow-lg rounded-lg overflow-hidden">
                         <!-- Header -->
                         <header class="bg-brand-primary text-white px-6 py-8">
@@ -20,7 +20,7 @@ import vvkrLogo from '@/../images/vvkr.png'
                                     class="text-2xl font-bold text-brand-text mb-4 border-b-2 border-brand-primary/20 pb-2 inline-flex gap-2">
                                     <a href="https://www.vvkr.nl/" target="_blank" rel="noopener noreferrer"
                                         aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties"
-                                        class="block transition hover:scale-110 ease-in-out duration-300">
+                                        class="block flex-none transition hover:scale-110 ease-in-out duration-300">
                                         <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties"
                                             class="h-7" aria-hidden="true">
                                     </a>
