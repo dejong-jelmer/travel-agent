@@ -28,7 +28,13 @@
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font"
         type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/images/hero-poster.webp') }}" as="image" type="image/webp">
-    <style>.js-cookie-consent { opacity: 0; }</style>
+    <style>
+        .js-cookie-consent {
+            opacity: 0;
+        }
+    </style>
+    <script defer src="https://stats.omdatwereizen.nl/script.js" data-website-id="654796c2-5542-4877-aa8e-d7660e1e1d2b">
+    </script>
     @include('seo')
     @routes
     @vite('resources/js/app.js')
