@@ -91,7 +91,7 @@ function submit() {
                 <div class="flex flex-col-reverse gap-6 tablet:flex-row tablet:items-center tablet:justify-between">
                     <i18n-t keypath="newsletter.privacy" tag="p" class="text-sm text-gray-500 max-w-xl">
                         <template #link>
-                            <DefaultLink :href="route('privacy')" class="underline hover:text-gray-700">
+                            <DefaultLink :href="route('privacy')" class="underline hover:text-brand-link/75">
                                 {{ $t('newsletter.privacy_link') }}
                             </DefaultLink>
                         </template>
