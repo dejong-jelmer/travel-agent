@@ -60,6 +60,12 @@ const tripMeta = computed(() => ({
     ]
 }))
 
+const contactUrl = computed(() => {
+    const params = new URLSearchParams({ reis: props.trip.slug })
+
+    return `?${params.toString()}#contact`
+})
+
 const tabIcons = {
     itinerary: Map,
     inclusive: ListChecks,

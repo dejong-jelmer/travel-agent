@@ -3,7 +3,10 @@ import { useI18n } from 'vue-i18n'
 import { useContactForm } from '@/Composables/useContactForm.js'
 
 const { t } = useI18n()
+
+
 const { form, errors, honeypot, submit, resetObject } = useContactForm()
+
 </script>
 
 <template>
@@ -11,7 +14,8 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
         <span aria-hidden="true"
             class="pointer-events-none select-none absolute -top-24 right-52 font-serif leading-none text-white/[0.045] text-[20rem] laptop:text-[28rem]">?</span>
 
-        <div class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 pt-20 tablet:pt-28">
+        <div
+            class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 pt-20 tablet:pt-28">
             <!-- eyebrow -->
             <div class="flex items-center gap-3.5 mb-7">
                 <span class="block w-9 h-0.5 bg-brand-accent"></span>
@@ -22,10 +26,12 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
 
             <!-- heading + body -->
             <div class="grid laptop:grid-cols-2 gap-10 laptop:gap-16 laptop:items-start mb-12 tablet:mb-16">
-                <h2 class="font-poppins text-white text-brand-sand leading-[1.05] text-4xl laptop:text-5xl wide:text-6xl">
+                <h2
+                    class="font-poppins text-white text-brand-sand leading-[1.05] text-4xl laptop:text-5xl wide:text-6xl">
                     {{ t('home.contact_cta.heading') }}
                 </h2>
-                <p class="font-poppins font-light text-white/85 text-base laptop:text-lg leading-relaxed max-w-md laptop:pt-2">
+                <p
+                    class="font-poppins font-light text-white/85 text-base laptop:text-lg leading-relaxed max-w-md laptop:pt-2">
                     {{ t('home.contact_cta.body') }}
                 </p>
             </div>
@@ -35,7 +41,8 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
                 <div class="grid tablet:grid-cols-2 gap-10 tablet:gap-14 items-start">
                     <div class="space-y-5">
                         <div class="border-l-4 border-brand-accent pl-4 mb-6">
-                            <h3 class="font-poppins text-white text-xl laptop:text-2xl font-semibold text-brand-sand leading-tight">
+                            <h3
+                                class="font-poppins text-white text-xl laptop:text-2xl font-semibold text-brand-sand leading-tight">
                                 {{ t('forms.contact.your_details_heading') }}
                             </h3>
                             <p class="font-poppins text-sm font-light text-white/85 mt-1">
@@ -43,17 +50,25 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
                             </p>
                         </div>
 
-                        <Input type="text" name="name" :placeholder="t('forms.contact.name_label')"
-                            :required="false" :show-label="false" v-model="form.name" :feedback="errors?.name" />
-                        <Input type="email" name="email" :placeholder="t('forms.contact.email_label')"
-                            :required="false" :show-label="false" v-model="form.email" :feedback="errors?.email" />
-                        <Input type="phone" name="phone" :placeholder="t('forms.contact.phone_label')"
-                            :required="false" :show-label="false" v-model="form.phone" :feedback="errors?.phone" />
+                        <Input type="text" name="name" :placeholder="t('forms.contact.name_label')" :required="false"
+                            :show-label="false" v-model="form.name" :feedback="errors?.name" />
+                        <Input type="email" name="email" :placeholder="t('forms.contact.email_label')" :required="false"
+                            :show-label="false" v-model="form.email" :feedback="errors?.email" />
+                        <Input type="phone" name="phone" :placeholder="t('forms.contact.phone_label')" :required="false"
+                            :show-label="false" v-model="form.phone" :feedback="errors?.phone" />
+                        <i18n-t keypath="forms.contact.privacy" tag="p" class="text-sm text-white text-left mt-6">
+                            <template #link>
+                                <DefaultLink :href="route('privacy')" class="underline hover:text-brand-link/75">
+                                    {{ $t('forms.contact.privacy_link') }}
+                                </DefaultLink>
+                            </template>
+                        </i18n-t>
                     </div>
 
                     <div class="flex flex-col h-full">
                         <div class="border-l-4 border-brand-accent pl-4 mb-6">
-                            <h3 class="font-poppins text-white text-xl laptop:text-2xl font-semibold text-brand-sand leading-tight">
+                            <h3
+                                class="font-poppins text-white text-xl laptop:text-2xl font-semibold text-brand-sand leading-tight">
                                 {{ t('forms.contact.your_message_heading') }}
                             </h3>
                             <p class="font-poppins text-sm font-light text-white/85 mt-1">
@@ -72,6 +87,7 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
                 <div class="flex justify-end mt-8">
                     <Button>{{ t('forms.contact.submit_button') }} →</Button>
                 </div>
+
             </form>
         </div>
     </section>

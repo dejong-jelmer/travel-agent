@@ -20,7 +20,7 @@ const year = new Date().getFullYear();
     <footer class="bg-brand-primary">
         <ContactForm v-if="showContact" />
         <div class="max-w-screen-wide laptop:max-w-screen-desktop pb-6 mx-auto px-4 tablet:px-6 laptop:pt-24">
-            <div class="pt-10 grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between"
+            <div class="mt-10 pt-10 grid tablet:flex grid-cols-1 gap-12 tablet:grid-cols-2 laptop:grid-cols-3 tablet:justify-between"
                 :class="showContact ? 'border-t border-brand-secondary/10' : ''">
                 <!-- Logo + Slogan -->
                 <div class="text-left">
@@ -139,12 +139,11 @@ const year = new Date().getFullYear();
                 <div
                     class="flex flex-col tablet:flex-row tablet:justify-between gap-4 tablet:gap-0 text-center tablet:text-left">
                     <p class="text-sm text-white">
-                        &copy; {{ year }} {{ companyName }}
+                        &copy; {{ year }} {{ companyName }}&nbsp;—&nbsp;<span class="block tablet:inline">{{ $t('footer.all_rights') }}</span>
                     </p>
 
                     <p class="text-sm text-gray-300">
-                        <span class="block tablet:inline">{{ $t('footer.all_rights') }}</span>
-                        &nbsp;
+
                         <Link :href="route('terms')"
                             class="inline-block text-brand-link underline transition hover:text-brand-link/75">
                             {{ $t('footer.conditions') }}
@@ -167,8 +166,8 @@ const year = new Date().getFullYear();
                     </p>
                 </div>
             </div>
-            <p class="text-xs text-white/75 mt-3">
-                <a href="https://heldergebouwd.nl" target="_blank" rel="noopener noreferrer" class="hover:underline">
+            <p class="tex-center underline text-xs text-white/75 hover:text-brand-link/75 mt-3">
+                <a href="https://heldergebouwd.nl" target="_blank" rel="noopener noreferrer">
                     Webdesign &amp; development {{ contact.fullName }}
                 </a>
             </p>

@@ -33,8 +33,10 @@
             opacity: 0;
         }
     </style>
-    <script defer src="https://stats.omdatwereizen.nl/script.js" data-website-id="654796c2-5542-4877-aa8e-d7660e1e1d2b">
-    </script>
+    @if (app()->env === 'production')
+        <script defer src="https://stats.omdatwereizen.nl/script.js" data-website-id="654796c2-5542-4877-aa8e-d7660e1e1d2b">
+        </script>
+    @endif
     @include('seo')
     @routes
     @vite('resources/js/app.js')
