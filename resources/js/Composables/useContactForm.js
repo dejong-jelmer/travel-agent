@@ -4,16 +4,21 @@ import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import { fetchApi } from '@/fetchApi'
 
-export function useContactForm({ tripSlug = '', periode = '' } = {}) {
+export function useContactForm() {
     const { t } = useI18n()
     const toast = useToast()
+
+    const urlParams = new URLSearchParams(window.location.search)
+    const tripSlug = urlParams.get('reis') || ''
+    const period = urlParams.get('periode') || ''
 
     function buildInitialMessage() {
         if (!tripSlug) return ''
         let msg = t('forms.contact.trip_inquiry_prefix', { trip: tripSlug })
-        if (periode) {
-            msg += ' ' + t('forms.contact.trip_inquiry_period', { period: periode })
+        if (period) {
+            msg += ' ' + t('forms.contact.trip_inquiry_period', { period: period })
         }
+
         return msg
     }
 
