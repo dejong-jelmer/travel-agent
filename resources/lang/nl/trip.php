@@ -46,12 +46,12 @@ return [
             ],
         ],
         'costs_to_consider' => [
-            'additional_meals' => 'Overige maaltijden',
+            'additional_meals' => 'Overige dranken & maaltijden',
             'excursions' => 'Overige activiteiten & excursies',
-            'tips' => 'Fooien',
+            'transfers' => 'Lokale verplaatsingen',
             'personal_expenses' => 'Persoonlijke uitgaven',
             'travel_cancellation_insurance' => 'Reis- en/of annuleringsverzekering',
-            'local_tourist_tax' => 'Lokale toeristenbelasting',
+            'local_tourist_tax' => 'Eventuele lokale toeristenbelasting',
         ],
     ],
 

@@ -124,7 +124,7 @@
     },
     "newsletter": {
         "heading": "Blijf op de hoogte",
-        "description": "Inspiratie, verhalen en nieuwe routes — rechtstreeks in je inbox.",
+        "description": "Inspiratie, verhalen en nieuwe routes. Rechtstreeks in je inbox.",
         "eyebrow": "Nieuwsbrief",
         "form": {
             "heading": "Schrijf je in",
@@ -160,12 +160,12 @@
         "intro": "Ik stel reizen samen met aandacht, naar bestemmingen die iets te vertellen hebben en met de trein als vertrekpunt.",
         "usp-1": {
             "title": "De plek bepaalt de reis",
-            "description": "Ik kies bestemmingen en routes waar genoeg te beleven valt om de hele reis aan op te hangen: een stad, een streek, of een lijn die plekken met elkaar verbindt. De trein brengt je er comfortabel en duurzaam naartoe — wat je dáár vindt, is waar het om draait.",
+            "description": "Ik kies bestemmingen en routes waar genoeg te beleven valt om de hele reis aan op te hangen: een stad, een streek, of een lijn die plekken met elkaar verbindt. De trein brengt je er comfortabel en duurzaam naartoe. Wat je dáár vindt, is waar het om draait.",
             "highlight": "De bestemming is het doel"
         },
         "usp-2": {
             "title": "Slapen met karakter",
-            "description": "Ik zoek accommodaties met sfeer die bij de plek passen — een huis, een familiehotel, iets met een verhaal. En altijd goed te bereiken met trein, tram of bus.",
+            "description": "Ik zoek accommodaties met sfeer die bij de plek passen. Een huis, een familiehotel, iets met een verhaal. En altijd goed te bereiken met trein, tram of bus.",
             "highlight": "Karakter als uitgangspunt"
         },
         "usp-3": {
@@ -732,9 +732,9 @@
         }
     },
     "hero": {
-        "title": "Meer mens…",
-        "sub_title": "omdat we reizen",
-        "tagline": "Europese bestemmingen met een verhaal — waar je aankomt met de trein.",
+        "title": "Meer mens.",
+        "sub_title": "Omdat we reizen.",
+        "tagline": "Treinreizen met karakter voor de reiziger die nieuwsgierig blijft.",
         "cta": "Over de reizen"
     },
     "footer": {
@@ -756,17 +756,17 @@
     },
     "validation": {
         "errors": {
-            "missing": "{field} ontbreekt — deze hebben we nodig voor je boeking.",
+            "missing": "{field} ontbreekt. Deze hebben we nodig voor je boeking.",
             "missing_traveler_data": "Reizigersgegevens ontbreken.",
             "missing_contact_data": "Contactgegevens ontbreken.",
             "missing_booking_data": "Boekinggegevens ontbreken.",
             "missing_departure_date": "Kies een vertrekdatum.",
             "missing_confirmation": "Je moet nog akkoord gaan.",
             "missing_accepted_conditions": "Je moet nog akkoord gaan met de algemene voorwaarden.",
-            "too_short": "{field} is te kort — vul minimaal {min} tekens in.",
+            "too_short": "{field} is te kort. Vul minimaal {min} tekens in.",
             "too_long": "{field} is te lang vul maximaal {max} tekens in.",
             "invalid": "{field} is ongeldig - voer een geldige waarde in.",
-            "invalid_postal_code": "{field} is ongeldig — gebruik het formaat 1234AB.",
+            "invalid_postal_code": "{field} is ongeldig. Gebruik het formaat 1234AB.",
             "invalid_birthdate": "Vul een geldige geboortedatum in.",
             "invalid_house_number": "Het huisnummer moet een geldig getal groter dan 0 zijn.",
             "invalid_traveler_data": "Reizigersgegevens zijn ongeldig.",
@@ -841,13 +841,13 @@
         "my_story": [
             "Mijn fascinatie voor reizen is er al zolang ik me kan herinneren. Als mijn vader op reis ging voor zijn werk, keerde ik mijn spaarpot om te kijken of ik al genoeg gespaard had voor een ticket, of probeerde ik in zijn koffer te passen in de hoop zo mee te kunnen naar die fascinerende bestemmingen waar hij souvenirs of vreemde munten van meebracht.",
             "Ik herinner me hoe ik later familie, vrienden, studiegenoten of zelfs wildvreemden op sleeptouw nam naar dat ene speciale restaurantje in de steegjes van Boedapest of Gent.",
-            "Omgeven door prehistorische kunst van duizenden generaties geleden, in de grotten van Lascaux, besefte ik dat ik nooit meer helemaal dezelfde persoon zou zijn als daarvoor — zoals ik vaak had meegemaakt op één van mijn reizen. Het gevoel dat ik een beetje meer mens geworden was. Dat gevoel wilde ik delen, en ik begon met het organiseren van reizen voor anderen. Als eerste een reis naar deze grotten met mijn vader en broer, met wie ik de fascinatie voor kunst en geschiedenis deel. Ik zocht het uit, organiseerde de reis, regelde de details. Het plezier dat ik daarin had, en de voldoening van het delen van die plek, zeiden me meer dan jarenlang nadenken ooit had kunnen doen. In Omdat We Reizen is de rode draad die ik al die jaren door mijn leven heb zien lopen, eindelijk op zijn plek.",
-            "Een route samenstellen is voor mij als het leggen van een puzzel. De eerste stukken zijn snel gelegd: bestemming, vervoer, accommodatie. Maar dan komen de details die de reis bijzonder maken — het verhaal dat je wilt vertellen, de wijk waar het gebeurt, de bijzondere plekjes die de meeste mensen overslaan. Je schuift, schrapt en bedenkt opnieuw. Bij ieder stukje is het alsof je de reis zelf al een beetje maakt. En dan is er het moment waarop de puzzel ligt, en alles klopt."
+            "Omgeven door prehistorische kunst van duizenden generaties geleden, in de grotten van Lascaux, besefte ik dat ik nooit meer helemaal dezelfde persoon zou zijn als daarvoor, zoals ik vaak had meegemaakt op één van mijn reizen. Het gevoel dat ik een beetje meer mens geworden was. Dat gevoel wilde ik delen, en ik begon met het organiseren van reizen voor anderen. Als eerste een reis naar deze grotten met mijn vader en broer, met wie ik de fascinatie voor kunst en geschiedenis deel. Ik zocht het uit, organiseerde de reis, regelde de details. Het plezier dat ik daarin had, en de voldoening van het delen van die plek, zeiden me meer dan jarenlang nadenken ooit had kunnen doen. In Omdat We Reizen is de rode draad die ik al die jaren door mijn leven heb zien lopen, eindelijk op zijn plek.",
+            "Een route samenstellen is voor mij als het leggen van een puzzel. De eerste stukken zijn snel gelegd: bestemming, vervoer, accommodatie. Maar dan komen de details die de reis bijzonder maken, het verhaal dat je wilt vertellen, de wijk waar het gebeurt, de bijzondere plekjes die de meeste mensen overslaan. Je schuift, schrapt en bedenkt opnieuw. Bij ieder stukje is het alsof je de reis zelf al een beetje maakt. En dan is er het moment waarop de puzzel ligt, en alles klopt."
         ],
-        "conviction": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur. Het is loskomen uit je bubbel, plekken ontdekken die je blik verruimen — en je even, of voorgoed, een beetje meer mens maken. Dat gevoel wil ik doorgeven.",
+        "conviction": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur. Het is loskomen uit je bubbel, plekken ontdekken die je blik verruimen en je even, of voorgoed, een beetje meer mens maken. Dat gevoel wil ik doorgeven.",
         "promise_statement": [
-            "Inspiratie begint pas als je hoofd vrij is. Daarom neem ik de planning volledig uit handen — zodat jij de ruimte hebt om te genieten van wat je onderweg tegenkomt.",
-            "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok — rijker in ervaringen, inzichten en herinneringen."
+            "Inspiratie begint pas als je hoofd vrij is. Daarom neem ik de planning volledig uit handen, zodat jij de ruimte hebt om te genieten van wat je onderweg tegenkomt.",
+            "Ik ben pas tevreden als jij rijker thuiskomt dan je vertrok. Rijker in ervaringen, inzichten en herinneringen."
         ]
     },
     "contact": {
@@ -894,7 +894,7 @@
             },
             "contact": {
                 "title": "Eén aanspreekpunt",
-                "line": "Je hebt mij — voor, tijdens en na de reis."
+                "line": "Je hebt mij voor, tijdens en na de reis."
             }
         }
     },
@@ -981,7 +981,7 @@
             "travelers_count_more_than_6": "Meer dan 6",
             "departure_station_label": "Vanaf welk station wil je graag vertrekken?",
             "departure_station_placeholder": "Kies een station",
-            "departure_station_helper": "Nog niet zeker? Geen probleem — dat kijken we samen.",
+            "departure_station_helper": "Nog niet zeker? Geen probleem dan kijken we samen.",
             "travelers_count_helper": "Inclusief jezelf.",
             "notes_label": "Is er iets wat ik over jou of je reis moet weten?",
             "notes_helper": "Bijvoorbeeld: zijn er dieetwensen, is de reis voor een speciale gelegenheid, voorkeuren voor hotels, of iets heel anders.",
@@ -1015,7 +1015,7 @@
         },
         "thanks": {
             "title": "Je aanvraag is binnen.",
-            "message": "Ik heb je bericht ontvangen en neem binnen twee werkdagen contact met je op — via de telefoon als je die hebt ingevuld, anders per e-mail. Dan nemen we samen door wat je voor ogen hebt, welke periode het beste past, en wat deze reis voor jou bijzonder kan maken.",
+            "message": "Ik heb je bericht ontvangen en neem binnen twee werkdagen contact met je op, via de telefoon als je die hebt ingevuld, anders per e-mail. Dan nemen we samen door wat je voor ogen hebt, welke periode het beste past, en wat deze reis voor jou bijzonder kan maken.",
             "question_prefix": "Heb je in de tussentijd een vraag? Je mag altijd bellen:",
             "back_to_trips": "Terug naar de reizen"
         }
