@@ -15,7 +15,7 @@ return [
         ItemCategory::CostsToConsider->value => [
             'trip.item.costs_to_consider.additional_meals',
             'trip.item.costs_to_consider.excursions',
-            'trip.item.costs_to_consider.tips',
+            'trip.item.costs_to_consider.transfers',
             'trip.item.costs_to_consider.personal_expenses',
             'trip.item.costs_to_consider.travel_cancellation_insurance',
             'trip.item.costs_to_consider.local_tourist_tax',
