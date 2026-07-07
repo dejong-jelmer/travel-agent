@@ -12,7 +12,6 @@ const props = defineProps({
     form: Object,
     typeOptions: Object,
     transportOptions: Object,
-    categoryOptions: Object,
     priceLabelOptions: Object,
     practicalSections: Object,
 });
@@ -141,8 +140,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                             </TabPanel>
 
                             <TabPanel class="p-6">
-                                <TripItemsTab :form="form" :type-options="typeOptions"
-                                    :category-options="categoryOptions" />
+                                <TripItemsTab :form="form" :type-options="typeOptions" />
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">

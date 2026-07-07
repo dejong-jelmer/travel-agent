@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Models\Destination;
 use App\Models\Trip;
@@ -60,9 +59,9 @@ class TripItemTest extends TestCase
     public function test_admin_can_create_trip_with_items(): void
     {
         $items = [
-            ['type' => ItemType::Inclusion->value, 'category' => ItemCategory::Transport->value, 'item' => 'First class train tickets'],
-            ['type' => ItemType::Inclusion->value, 'category' => ItemCategory::Accommodation->value, 'item' => 'Hotel with breakfast'],
-            ['type' => ItemType::Exclusion->value, 'category' => ItemCategory::AdditionalCost->value, 'item' => 'Travel insurance'],
+            ['type' => ItemType::Inclusion->value, 'item' => 'First class train tickets'],
+            ['type' => ItemType::Inclusion->value, 'item' => 'Hotel with breakfast'],
+            ['type' => ItemType::Exclusion->value, 'item' => 'Travel insurance'],
         ];
 
         $response = $this->post(route('admin.trips.store'), $this->baseTripData(['items' => $items]));
@@ -75,14 +74,12 @@ class TripItemTest extends TestCase
         $this->assertDatabaseHas('trip_items', [
             'trip_id' => $trip->id,
             'type' => ItemType::Inclusion->value,
-            'category' => ItemCategory::Transport->value,
             'item' => 'First class train tickets',
         ]);
 
         $this->assertDatabaseHas('trip_items', [
             'trip_id' => $trip->id,
             'type' => ItemType::Exclusion->value,
-            'category' => ItemCategory::AdditionalCost->value,
             'item' => 'Travel insurance',
         ]);
     }
@@ -100,13 +97,13 @@ class TripItemTest extends TestCase
     public function test_admin_can_update_trip_items(): void
     {
         // Create initial items
-        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'category' => ItemCategory::Transport, 'item' => 'Old item 1']);
-        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'category' => ItemCategory::AdditionalCost, 'item' => 'Old item 2']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'item' => 'Old item 1']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'item' => 'Old item 2']);
 
         $newItems = [
-            ['type' => ItemType::Inclusion->value, 'category' => ItemCategory::Accommodation->value, 'item' => 'New hotel stay'],
-            ['type' => ItemType::Inclusion->value, 'category' => ItemCategory::Transport->value, 'item' => 'New train tickets'],
-            ['type' => ItemType::Exclusion->value, 'category' => ItemCategory::AdditionalCost->value, 'item' => 'New insurance fee'],
+            ['type' => ItemType::Inclusion->value, 'item' => 'New hotel stay'],
+            ['type' => ItemType::Inclusion->value, 'item' => 'New train tickets'],
+            ['type' => ItemType::Exclusion->value, 'item' => 'New insurance fee'],
         ];
 
         $response = $this->post(route('admin.trips.update', $this->trip), $this->baseTripData(['items' => $newItems]));
@@ -124,9 +121,9 @@ class TripItemTest extends TestCase
 
     public function test_admin_can_remove_all_items_on_update(): void
     {
-        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'category' => ItemCategory::Transport, 'item' => 'Item to remove 1']);
-        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'category' => ItemCategory::Accommodation, 'item' => 'Item to remove 2']);
-        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'category' => ItemCategory::AdditionalCost, 'item' => 'Item to remove 3']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'item' => 'Item to remove 1']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'item' => 'Item to remove 2']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'item' => 'Item to remove 3']);
 
         $response = $this->post(route('admin.trips.update', $this->trip), $this->baseTripData(['items' => []]));
         $this->trip->refresh();
@@ -138,8 +135,8 @@ class TripItemTest extends TestCase
 
     public function test_trip_show_includes_aggregated_items(): void
     {
-        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'category' => ItemCategory::Transport, 'item' => 'Train tickets included']);
-        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'category' => ItemCategory::AdditionalCost, 'item' => 'Booking fees']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'item' => 'Train tickets included']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'item' => 'Booking fees']);
 
         $response = $this->get(route('admin.trips.show', $this->trip));
 
@@ -153,26 +150,12 @@ class TripItemTest extends TestCase
         );
     }
 
-    public function test_trip_item_validation_rejects_invalid_category(): void
-    {
-        $tripCount = Trip::count();
-
-        $items = [
-            ['type' => ItemType::Inclusion->value, 'category' => 'invalid_category', 'item' => 'Some item'],
-        ];
-
-        $response = $this->post(route('admin.trips.store'), $this->baseTripData(['items' => $items]));
-
-        $response->assertSessionHasErrors('items.0.category');
-        $this->assertEquals($tripCount, Trip::count());
-    }
-
     public function test_trip_item_validation_rejects_invalid_type(): void
     {
         $tripCount = Trip::count();
 
         $items = [
-            ['type' => 'invalid_type', 'category' => ItemCategory::Transport->value, 'item' => 'Some item'],
+            ['type' => 'invalid_type', 'item' => 'Some item'],
         ];
 
         $response = $this->post(route('admin.trips.store'), $this->baseTripData(['items' => $items]));

@@ -4,7 +4,6 @@ import { useForm } from "@inertiajs/vue3";
 const props = defineProps({
     destinations: Object,
     typeOptions: Object,
-    categoryOptions: Object,
     transportOptions: Object,
     priceLabelOptions: Object,
     practicalSections: Object,
@@ -50,7 +49,6 @@ function submit() {
             :form="form"
             :destinations="destinations"
             :type-options="typeOptions"
-            :category-options="categoryOptions"
             :transport-options="transportOptions"
             :price-label-options="priceLabelOptions"
             :practical-sections="practicalSections"

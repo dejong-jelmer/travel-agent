@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
 use App\Enums\Transport;
-use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
@@ -59,7 +58,6 @@ class TripController extends Controller
         return Inertia::render('Admin/Trip/Create', [
             'destinations' => Destination::all(),
             'typeOptions' => ItemType::options(),
-            'categoryOptions' => ItemCategory::options(),
             'transportOptions' => Transport::options(),
             'priceLabelOptions' => PriceLabel::options(),
             'practicalSections' => PracticalInfo::labels(),
@@ -127,7 +125,6 @@ class TripController extends Controller
             'trip' => $trip->load(['heroImage', 'images', 'destinations', 'items', 'prices']),
             'destinations' => Destination::all(),
             'typeOptions' => ItemType::options(),
-            'categoryOptions' => ItemCategory::options(),
             'transportOptions' => Transport::options(),
             'priceLabelOptions' => PriceLabel::options(),
             'practicalSections' => PracticalInfo::labels(),

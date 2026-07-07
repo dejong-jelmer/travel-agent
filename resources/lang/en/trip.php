@@ -20,35 +20,25 @@ return [
 
     // Items
     'item' => [
-        'category' => [
-            'general_inclusions' => 'Preparation',
-            'transport' => 'Transport',
-            'accommodation' => 'Accommodation',
-            'additional_cost' => 'Additional costs',
-            'costs_to_consider' => 'Costs to consider',
-            'experiences' => 'Experiences',
-        ],
         'type' => [
             'inclusion' => 'Included',
             'exclusion' => 'Excluded',
             'optional' => 'Optioneel',
         ],
-        'general_inclusions' => [
+        'inclusion' => [
             'itinerary' => 'Well-planned itinerary',
             'background_info' => 'Carefully compiled information package with background information and a practical guide to the destination',
             'train_reservations' => 'Seat reservation on the train (when possible)',
         ],
-        'additional_cost' => [
+        'exclusion' => [
             'fees' => [
                 'booking' => 'Booking fee - :amount per booking',
                 'guarantee_fund' => 'STO guarantee fund - :amount per booking',
                 'emergency_fund' => 'Emergency fund - :amount per booking',
             ],
-        ],
-        'costs_to_consider' => [
             'additional_meals' => 'Additional meals',
             'excursions' => 'Additional activities & excursions',
-            'tips' => 'Tips',
+            'transfers' => 'Local transportation',
             'personal_expenses' => 'Personal expenses',
             'travel_cancellation_insurance' => 'Travel and/or cancellation insurance',
             'local_tourist_tax' => 'Local tourist tax',

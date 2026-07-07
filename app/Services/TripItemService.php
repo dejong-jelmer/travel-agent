@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Enums\SettingKey;
-use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Models\Setting;
 use App\Models\Trip;
@@ -15,7 +14,7 @@ use Illuminate\Support\Collection;
  *
  * This service combines trip-specific items stored in the database with
  * default items from configuration, providing a complete collection of
- * items grouped by type and category.
+ * items grouped by type.
  */
 class TripItemService
 {
@@ -23,18 +22,18 @@ class TripItemService
      * Aggregate trip items from database and config defaults.
      *
      * Retrieves trip items from the database, combines them with default items
-     * from config, and returns them grouped by type and category. Database items
+     * from config, and returns them grouped by type. Database items
      * are added to defaults.
      *
      * @param  Trip  $trip  The trip to aggregate items for
-     * @return Collection Nested collection: [ItemType label => [ItemCategory label => Collection<TripItem>]]
+     * @return Collection Nested collection: [ItemType label => Collection<TripItem>]
      */
     public static function aggregate(Trip $trip): Collection
     {
         $feeParams = [
-            'trip.item.additional_cost.fees.booking' => ['amount' => '€'.Setting::get(SettingKey::BookingFee, '27.50')],
-            'trip.item.additional_cost.fees.guarantee_fund' => ['amount' => '€'.Setting::get(SettingKey::GuaranteeFund, '10')],
-            'trip.item.additional_cost.fees.emergency_fund' => ['amount' => '€'.Setting::get(SettingKey::EmergencyFund, '2.50')],
+            'trip.item.exclusion.fees.booking' => ['amount' => '€'.Setting::get(SettingKey::BookingFee, '27.50')],
+            'trip.item.exclusion.fees.guarantee_fund' => ['amount' => '€'.Setting::get(SettingKey::GuaranteeFund, '10')],
+            'trip.item.exclusion.fees.emergency_fund' => ['amount' => '€'.Setting::get(SettingKey::EmergencyFund, '2.50')],
         ];
 
         return self::mergeItems(
@@ -44,60 +43,49 @@ class TripItemService
     }
 
     /**
-     * Retrieve trip items from database, grouped by type and category.
+     * Retrieve trip items from database, grouped by type.
      *
      * Fetches all TripItem records for the given trip and groups them
      * using enum labels as keys for better readability in the frontend.
      *
      * @param  Trip  $trip  The trip to retrieve items for
-     * @return Collection Nested collection: [ItemType label => [ItemCategory label => Collection<TripItem>]]
+     * @return Collection Nested collection: [ItemType label => Collection<TripItem>]
      */
     private static function getTripItems(Trip $trip): Collection
     {
         return TripItem::where('trip_id', $trip->id)
             ->get()
-            ->groupBy(['type', 'category'])
-            ->mapWithKeys(
-                fn ($categories, $type) => [
-                    ItemType::from($type)->label() => $categories->mapWithKeys(fn ($items, $category) => [
-                        ItemCategory::from($category)->label() => $items,
-                    ]),
-                ]
-            );
+            ->groupBy(fn (TripItem $item) => $item->type->label());
     }
 
     /**
      * Convert default items from config into TripItem models.
      *
      * Transforms the raw config array structure into a collection of TripItem
-     * models, grouped by type and category. Item text is translated via __().
+     * models, grouped by type. Item text is translated via __().
      *
-     * @param  array  $tripDefaults  Default items from config: [type => [category => [items]]]
+     * @param  array  $tripDefaults  Default items from config: [type => [items]]
      * @param  string  $model  The model class to instantiate (defaults to TripItem)
-     * @return Collection Nested collection: [ItemType label => [ItemCategory label => Collection<TripItem>]]
+     * @return Collection Nested collection: [ItemType label => Collection<TripItem>]
      */
     private static function getDefaultItems(array $tripDefaults, array $params = [], string $model = TripItem::class): Collection
     {
         return collect($tripDefaults)
-            ->mapWithKeys(fn ($categories, $type) => [
-                ItemType::from($type)->label() => collect($categories)
-                    ->mapWithKeys(fn ($items, $category) => [
-                        ItemCategory::from($category)->label() => collect($items)
-                            ->map(fn ($item) => new $model([
-                                'type' => ItemCategory::from($category)->type(),
-                                'category' => $category,
-                                'item' => __($item, $params[$item] ?? []),
-                            ])),
-                    ]),
+            ->mapWithKeys(fn ($items, $type) => [
+                ItemType::from($type)->label() => collect($items)
+                    ->map(fn ($item) => new $model([
+                        'type' => ItemType::from($type),
+                        'item' => __($item, $params[$item] ?? []),
+                    ])),
             ]);
     }
 
     /**
      * Merge trip items with defaults, combining both sources.
      *
-     * For each type+category combination, default items and database items
-     * are combined. Database items are added to defaults.
-     * Also includes categories/types that only exist in one source.
+     * For each type, default items and database items are combined.
+     * Database items are added to defaults.
+     * Also includes types that only exist in one source.
      *
      * @param  Collection  $tripItems  Items from database
      * @param  Collection  $defaultItems  Items from config
@@ -105,22 +93,14 @@ class TripItemService
      */
     private static function mergeItems(Collection $tripItems, Collection $defaultItems): Collection
     {
-        $merged = $defaultItems->map(function ($defaultCategories, $type) use ($tripItems) {
+        $merged = $defaultItems->map(function ($defaultTypeItems, $type) use ($tripItems) {
             if (! $tripItems->has($type)) {
                 // Type doesn't exist in tripItems, use defaults
-                return $defaultCategories;
+                return $defaultTypeItems;
             }
 
-            // Type exists in both: merge categories
-            return $defaultCategories->map(function ($defaultCategoryItems, $category) use ($tripItems, $type) {
-                if (! $tripItems[$type]->has($category)) {
-                    // Category doesn't exist in tripItems, use defaults
-                    return $defaultCategoryItems;
-                }
-
-                // Category exists in both: combine items (defaults + trip items)
-                return $defaultCategoryItems->merge($tripItems[$type][$category]);
-            })->merge($tripItems[$type]->diffKeys($defaultCategories));
+            // Type exists in both: combine items (defaults + trip items)
+            return $defaultTypeItems->merge($tripItems[$type]);
         });
 
         // Add types that only exist in tripItems
@@ -131,7 +111,7 @@ class TripItemService
      * Sync trip items from the validated array.
      *
      * Expected structure after transformation: [
-     *   ['type' => 'inclusion', 'category' => 'transport', 'item' => 'item text'],
+     *   ['type' => 'inclusion', 'item' => 'item text'],
      *   ...
      * ]
      *
@@ -146,15 +126,13 @@ class TripItemService
             }
 
             $typeEnum = ItemType::tryFrom($itemData['type']);
-            $categoryEnum = ItemCategory::tryFrom($itemData['category']);
 
-            if (! $typeEnum || ! $categoryEnum) {
+            if (! $typeEnum) {
                 continue;
             }
 
             $trip->items()->create([
                 'type' => $typeEnum,
-                'category' => $categoryEnum,
                 'item' => $itemData['item'],
             ]);
         }

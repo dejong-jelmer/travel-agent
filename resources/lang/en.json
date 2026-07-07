@@ -1264,7 +1264,6 @@
             "edit": {
                 "items": {
                     "select_type": "Select a type…",
-                    "select_category": "Select a category…",
                     "description": "Description"
                 }
             }
