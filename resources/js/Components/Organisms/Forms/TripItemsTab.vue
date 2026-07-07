@@ -1,16 +1,10 @@
 <script setup>
-import { computed } from 'vue';
 import { Plus } from 'lucide-vue-next';
 
 const props = defineProps({
     form: Object,
     typeOptions: Array,
-    categoryOptions: Array,
 });
-
-const customizableCategoryOptions = computed(() =>
-    props.categoryOptions.filter(category => !category.disabled)
-);
 
 const itemsForType = (typeValue) =>
     props.form.items.filter(item => item.type === typeValue);
@@ -27,7 +21,6 @@ const addItem = (typeValue) => {
     }
     props.form.items.push({
         type: typeValue,
-        category: '',
         item: '',
     });
 };
@@ -54,7 +47,6 @@ const deleteItem = (item) => {
                     :index="form.items.indexOf(item)"
                     :item="item"
                     :type-options="typeOptions"
-                    :category-options="customizableCategoryOptions"
                     :show-type-select="true"
                     :errors="form.errors"
                     @delete="() => deleteItem(item)"

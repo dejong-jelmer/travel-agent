@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use App\Enums\ImageRelation;
 use App\Enums\Transport;
-use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
 use App\Models\Destination;
@@ -150,11 +150,10 @@ class TripFactory extends Factory
     public function withItems(): static
     {
         return $this->afterCreating(function (Trip $trip) {
-            foreach ([ItemCategory::Transport, ItemCategory::Accommodation, ItemCategory::AdditionalCost] as $category) {
+            foreach ([ItemType::Inclusion, ItemType::Inclusion, ItemType::Exclusion] as $type) {
                 TripItem::create([
                     'trip_id' => $trip->id,
-                    'type' => $category->type(),
-                    'category' => $category,
+                    'type' => $type,
                     'item' => fake()->sentence(),
                 ]);
             }

@@ -20,32 +20,22 @@ return [
 
     // Items
     'item' => [
-        'category' => [
-            'general_inclusions' => 'Voorbereiding',
-            'transport' => 'Vervoer',
-            'accommodation' => 'Overnachtingen',
-            'additional_cost' => 'Bijkomende kosten',
-            'costs_to_consider' => 'Kosten om rekening mee te houden',
-            'experiences' => 'Belevenissen',
-        ],
         'type' => [
             'inclusion' => 'Inclusief',
             'exclusion' => 'Exclusief',
             'optional' => 'Optioneel',
         ],
-        'general_inclusions' => [
+        'inclusion' => [
             'itinerary' => 'Persoonlijk samengesteld reisplan',
             'background_info' => 'Een informatiepakket met routebeschrijving, achtergrond en tips ter plaatse',
             'train_reservations' => 'Zitplaatsreservering waar dat kan',
         ],
-        'additional_cost' => [
+        'exclusion' => [
             'fees' => [
                 'booking' => 'Boekingskosten - :amount per boeking',
                 'guarantee_fund' => 'STO garantiefonds - :amount per boeking',
                 'emergency_fund' => 'Calamiteitenfonds - :amount per boeking',
             ],
-        ],
-        'costs_to_consider' => [
             'additional_meals' => 'Overige dranken & maaltijden',
             'excursions' => 'Overige activiteiten & excursies',
             'transfers' => 'Lokale verplaatsingen',

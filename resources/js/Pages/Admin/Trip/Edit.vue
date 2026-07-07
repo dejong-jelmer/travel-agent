@@ -5,7 +5,6 @@ const props = defineProps({
     trip: Object,
     destinations: Object,
     typeOptions: Object,
-    categoryOptions: Object,
     transportOptions: Object,
     priceLabelOptions: Object,
     practicalSections: Object,
@@ -50,7 +49,6 @@ function submit() {
             :form="form"
             :destinations="destinations"
             :type-options="typeOptions"
-            :category-options="categoryOptions"
             :transport-options="transportOptions"
             :price-label-options="priceLabelOptions"
             :practical-sections="practicalSections"
