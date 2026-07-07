@@ -150,7 +150,7 @@ class TripFactory extends Factory
     public function withItems(): static
     {
         return $this->afterCreating(function (Trip $trip) {
-            foreach ([ItemType::Inclusion, ItemType::Inclusion, ItemType::Exclusion] as $type) {
+            foreach ([ItemType::Inclusion, ItemType::Exclusion] as $type) {
                 TripItem::create([
                     'trip_id' => $trip->id,
                     'type' => $type,
