@@ -3,7 +3,6 @@
 namespace App\Services\Validation;
 
 use App\Enums\Transport;
-use App\Enums\Trip\ItemCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PriceLabel;
 use App\Rules\NoOverlappingPricePeriods;
@@ -107,7 +106,6 @@ class TripValidationRules
         return [
             'items' => ['nullable', 'array'],
             'items.*.type' => ['required', 'string', Rule::enum(ItemType::class)],
-            'items.*.category' => ['required', 'string', Rule::enum(ItemCategory::class)],
             'items.*.item' => ['required', 'string', 'max:255'],
         ];
     }

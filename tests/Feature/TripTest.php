@@ -3,7 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\Transport;
-use App\Enums\Trip\ItemCategory;
+use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
 use App\Models\Destination;
@@ -533,11 +533,10 @@ class TripTest extends TestCase
             'imageable_type' => Trip::class,
         ]);
 
-        foreach ([ItemCategory::Transport, ItemCategory::Accommodation] as $category) {
+        foreach ([ItemType::Inclusion, ItemType::Exclusion] as $type) {
             TripItem::create([
                 'trip_id' => $trip->id,
-                'type' => $category->type(),
-                'category' => $category,
+                'type' => $type,
                 'item' => fake()->sentence(),
             ]);
         }

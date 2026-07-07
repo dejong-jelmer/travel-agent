@@ -158,26 +158,21 @@ function displayDate(entry) {
 
                                 <TabPanel class="p-6">
                                     <div v-if="tripItems && Object.keys(tripItems).length" class="space-y-8">
-                                        <div v-for="(categories, typeLabel) in tripItems" :key="typeLabel"
+                                        <div v-for="(items, typeLabel) in tripItems" :key="typeLabel"
                                             class="space-y-4">
                                             <h3
                                                 class="text-lg font-bold text-gray-800 border-b-2 border-primary-default pb-2">
                                                 {{ typeLabel }}
                                             </h3>
-                                            <div v-for="(items, categoryLabel) in categories" :key="categoryLabel"
-                                                class="ml-4 space-y-2">
-                                                <h4 class="text-base font-semibold text-gray-700">{{ categoryLabel }}
-                                                </h4>
-                                                <ul v-if="items.length" class="ml-6 space-y-1 list-disc list-inside">
-                                                    <li v-for="(item, index) in items" :key="index"
-                                                        class="text-gray-900">
-                                                        {{ item.item }}
-                                                    </li>
-                                                </ul>
-                                                <p v-else class="ml-6 text-sm text-gray-500 italic">
-                                                    {{ t('admin.trips.show.items.no_items') }}
-                                                </p>
-                                            </div>
+                                            <ul v-if="items.length" class="ml-6 space-y-1 list-disc list-inside">
+                                                <li v-for="(item, index) in items" :key="index"
+                                                    class="text-gray-900">
+                                                    {{ item.item }}
+                                                </li>
+                                            </ul>
+                                            <p v-else class="ml-6 text-sm text-gray-500 italic">
+                                                {{ t('admin.trips.show.items.no_items') }}
+                                            </p>
                                         </div>
                                     </div>
                                     <div v-else class="text-center py-8 text-gray-500">
