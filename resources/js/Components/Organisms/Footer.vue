@@ -117,9 +117,9 @@ const year = new Date().getFullYear();
                             <a href="https://www.vvkr.nl"
                                 title="Aangesloten bij VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                 target="_blank" rel="noopener noreferrer"
-                                aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties"
+                                aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                 class="rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
-                                <img :src="vvkrLogo" alt="Logo VvKR — Vereniging van Kleinschalige Reisorganisaties"
+                                <img :src="vvkrLogo" alt="Logo VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                     class="h-[50px] w-[80px]">
                             </a>
                             <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
@@ -139,7 +139,7 @@ const year = new Date().getFullYear();
                 <div
                     class="flex flex-col tablet:flex-row tablet:justify-between gap-4 tablet:gap-0 text-center tablet:text-left">
                     <p class="text-sm text-white">
-                        &copy; {{ year }} {{ companyName }}&nbsp;—&nbsp;<span class="block tablet:inline">{{ $t('footer.all_rights') }}</span>
+                        &copy; {{ year }} {{ companyName }}&nbsp;-&nbsp;<span class="block tablet:inline">{{ $t('footer.all_rights') }}</span>
                     </p>
 
                     <p class="text-sm text-gray-300">

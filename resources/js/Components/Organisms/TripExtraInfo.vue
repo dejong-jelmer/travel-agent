@@ -20,8 +20,7 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                         De definitieve prijs hangt af van wanneer je gaat en met hoeveel personen.
                         <br>
                         <br>
-                        Voor populaire periodes zoals schoolvakanties is het verstandig om vroeg contact op te nemen —
-                        dan is er meer ruimte om een passend voorstel te maken.
+                        Voor populaire periodes zoals schoolvakanties is het verstandig om vroeg contact op te nemen, dan is er meer ruimte om een passend voorstel te maken.
                     </p>
                 </div>
             </div>

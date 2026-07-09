@@ -20,7 +20,7 @@ const { rootRef, visible, reveal } = useRevealEffect();
                 {{ $t('home.pullquote') }}
             </p>
             <p class="mt-6 font-poppins text-sm text-brand-light tracking-widest italic">
-                — {{ $t('home.pullquote_source') }}
+                - {{ $t('home.pullquote_source') }}
             </p>
         </div>
     </section>

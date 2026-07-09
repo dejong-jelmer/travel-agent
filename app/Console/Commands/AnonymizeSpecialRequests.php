@@ -47,7 +47,7 @@ class AnonymizeSpecialRequests extends Command
             $bookings->each(function (Booking $booking): void {
                 /** @var int $count Loaded via withCount */
                 $count = $booking->getAttribute('special_requests_count');
-                $this->line("  - Booking #{$booking->id} ({$booking->reference}) — return: {$booking->return_date->format('Y-m-d')} — {$count} traveler(s)");
+                $this->line("  - Booking #{$booking->id} ({$booking->reference}) - return: {$booking->return_date->format('Y-m-d')} - {$count} traveler(s)");
             });
 
             return self::SUCCESS;

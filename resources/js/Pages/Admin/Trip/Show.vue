@@ -50,7 +50,7 @@ function displayDate(entry) {
     }
     if (entry.start && entry.end) {
         const fmt = (d) => new Intl.DateTimeFormat(locale.value, { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d.substring(0, 10) + 'T00:00:00'))
-        return `${fmt(entry.start)} — ${fmt(entry.end)}`
+        return `${fmt(entry.start)} - ${fmt(entry.end)}`
     }
     return ''
 }
@@ -293,7 +293,7 @@ function displayDate(entry) {
                                     class="rounded-md border border-gray-200 overflow-hidden">
                                     <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
                                         <span class="text-sm font-semibold text-gray-700">{{ labelMap[row.label] ?? row.label }}</span>
-                                        <span class="text-xs text-gray-500">{{ formattedDate(row.valid_from, { longDay: false, fallback: '-', locale: locale }) }} — {{ formattedDate(row.valid_until, { longDay: false, fallback: '-', locale: locale }) }}</span>
+                                        <span class="text-xs text-gray-500">{{ formattedDate(row.valid_from, { longDay: false, fallback: '-', locale: locale }) }} - {{ formattedDate(row.valid_until, { longDay: false, fallback: '-', locale: locale }) }}</span>
                                     </div>
                                     <div class="grid grid-cols-2 divide-x divide-gray-200">
                                         <div class="px-4 py-3">

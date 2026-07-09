@@ -40,12 +40,12 @@
                 {{-- embed via $message if available --}}
                 @if (isset($message) && file_exists(resource_path('images/logos/mail/logo-text.png')))
                     <img src="{{ $message->embed(resource_path('images/logos/mail/logo-text.png')) }}"
-                        alt="{{ config('app.name') }} — duurzame treinreizen door Europa"
+                        alt="{{ config('app.name') }} - duurzame treinreizen door Europa"
                         style="max-height:100px;display:block;margin:0 auto;">
                 @elseif (file_exists(public_path('images/logos/mail/logo-text.png')))
                     {{-- fallback to public copy --}}
                     <img src="{{ asset('images/logos/mail/logo-text.png') }}"
-                        alt="{{ config('app.name') }} — duurzame treinreizen door Europa"
+                        alt="{{ config('app.name') }} - duurzame treinreizen door Europa"
                         style="max-height:100px;display:block;margin:0 auto;">
                 @else
                     {{-- simple text fallback --}}

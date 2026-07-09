@@ -3,27 +3,27 @@
 return [
     'home' => [
         'title' => 'Duurzame treinreizen door Europa',
-        'description' => 'Duurzame treinreizen door Europa, compleet verzorgd. Alle tickets en zorgvuldig gekozen accommodaties geregeld — je hoeft alleen nog in te stappen.',
+        'description' => 'Duurzame treinreizen door Europa, compleet verzorgd. Alle tickets en zorgvuldig gekozen accommodaties geregeld - je hoeft alleen nog in te stappen.',
     ],
     'trips' => [
         'title' => 'Verzorgde treinreizen op maat door Europa',
-        'description' => 'Bekijk alle duurzame treinreizen — zorgvuldig uitgedachte routes naar Europese bestemmingen, compleet samengesteld en zonder gedoe onderweg.',
+        'description' => 'Bekijk alle duurzame treinreizen - zorgvuldig uitgedachte routes naar Europese bestemmingen, compleet samengesteld en zonder gedoe onderweg.',
     ],
     'about' => [
-        'title' => 'Over mij — wie jouw reis samenstelt',
-        'description' => 'De mens achter Omdat We Reizen. Ik stel treinreizen door Europa samen, met accommodaties gekozen op karakter — omdat reizen je meer mens maakt.',
+        'title' => 'Over mij - wie jouw reis samenstelt',
+        'description' => 'De mens achter Omdat We Reizen. Ik stel treinreizen door Europa samen, met accommodaties gekozen op karakter - omdat reizen je meer mens maakt.',
     ],
     'vvkr' => [
         'title' => 'Aangesloten bij de VvKR',
-        'description' => 'Omdat We Reizen is lid van de VvKR — de Vereniging van Kleinschalige Reisorganisaties. Lees wat dit betekent voor de kwaliteit en zekerheid van jouw reis.',
+        'description' => 'Omdat We Reizen is lid van de VvKR - de Vereniging van Kleinschalige Reisorganisaties. Lees wat dit betekent voor de kwaliteit en zekerheid van jouw reis.',
     ],
     'guarantee' => [
-        'title' => 'STO Garant — jouw reissom beschermd',
+        'title' => 'STO Garant - jouw reissom beschermd',
         'description' => 'Boekt je bij mij, dan is jouw geld beschermd via STO Garant. Lees hoe deze garantieregeling werkt en wat het voor jou betekent.',
     ],
     'blog' => [
-        'title' => 'Mijn verhalen — treinreizen door Europa',
-        'description' => 'Verhalen en praktische tips over reizen per trein door Europa. Van bestemmingen en routes tot hoe je er zonder vliegen komt — lees mee onderweg.',
+        'title' => 'Mijn verhalen - treinreizen door Europa',
+        'description' => 'Verhalen en praktische tips over reizen per trein door Europa. Van bestemmingen en routes tot hoe je er zonder vliegen komt - lees mee onderweg.',
     ],
 
     // noindex
@@ -39,10 +39,10 @@ return [
     // destination page examples (real values via trip props)
     'bordeaux' => [
         'title' => 'Met de trein naar Bordeaux | Wijnstad, Chartrons & historie',
-        'description' => 'Per trein naar Bordeaux, zonder vliegen. Door de Chartrons-wijk met haar Nederlands-Vlaamse handelsgeschiedenis — verblijf midden in de Chartrons.',
+        'description' => 'Per trein naar Bordeaux, zonder vliegen. Door de Chartrons-wijk met haar Nederlands-Vlaamse handelsgeschiedenis - verblijf midden in de Chartrons.',
     ],
     'perigord' => [
         'title' => 'Treinreis Périgord Noir | Met de trein naar de Dordogne',
-        'description' => 'Hoe reist u met de trein naar Les Eyzies en het Périgord Noir? Een compleet samengestelde reis door de Dordogne — prehistorie, dorpjes en rust, alles geregeld.',
+        'description' => 'Hoe reist u met de trein naar Les Eyzies en het Périgord Noir? Een compleet samengestelde reis door de Dordogne - prehistorie, dorpjes en rust, alles geregeld.',
     ],
 ];

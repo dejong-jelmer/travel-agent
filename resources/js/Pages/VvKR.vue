@@ -21,10 +21,10 @@ import vvkrLogo from '@/../images/vvkr.png'
                                     <a href="https://www.vvkr.nl/" target="_blank" rel="noopener noreferrer"
                                         aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                         class="block flex-none transition hover:scale-110 ease-in-out duration-300">
-                                        <img :src="vvkrLogo" alt="VvKR — Vereniging van Kleinschalige Reisorganisaties"
+                                        <img :src="vvkrLogo" alt="VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                             class="h-7" aria-hidden="true">
                                     </a>
-                                    De VvKR — Vereniging van Kleinschalige Reisorganisaties
+                                    De VvKR - Vereniging van Kleinschalige Reisorganisaties
                                 </h2>
                                 <div class="grid gap-4 laptop:gap-6">
 
@@ -80,13 +80,13 @@ import vvkrLogo from '@/../images/vvkr.png'
                                     <li>
                                         <a href="https://www.vvkr.nl/handboek-duurzaamheid"
                                             class="text-brand-link underline" target="_blank" rel="noopener noreferrer"
-                                            aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties — Handboek duurzaamheid">Handboek
+                                            aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties - Handboek duurzaamheid">Handboek
                                             duurzaamheid</a>
                                     </li>
                                     <li>
                                         <a href="https://www.vvkr.nl/kompas-duurzaam-reizen-vvkr"
                                             class="text-brand-link underline" target="_blank" rel="noopener noreferrer"
-                                            aria-label="VvKR — Vereniging van Kleinschalige Reisorganisaties — Kompas Duurzaam Reizen">Kompas
+                                            aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties - Kompas Duurzaam Reizen">Kompas
                                             Duurzaam Reizen</a>
                                     </li>
                                 </ul>

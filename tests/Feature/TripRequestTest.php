@@ -30,7 +30,7 @@ class TripRequestTest extends TestCase
         $this->trip = Trip::factory()->create();
     }
 
-    // Public flow — store
+    // Public flow - store
 
     public function test_visitor_can_submit_a_valid_trip_request(): void
     {

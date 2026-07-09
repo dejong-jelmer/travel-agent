@@ -44,7 +44,7 @@ class TripRequestController extends Controller
             ->get()
             ->map(fn (Booking $booking) => [
                 'id' => $booking->id,
-                'name' => $booking->reference.' — '.$booking->trip->name,
+                'name' => $booking->reference.' - '.$booking->trip->name,
             ])
             ->all();
 
