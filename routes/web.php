@@ -25,7 +25,6 @@ use Inertia\Inertia;
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
 Route::get('/over-mij', [HomeController::class, 'about'])->name('about');
-Route::get('/blog', [HomeController::class, 'blog'])->name('blog');
 Route::get('/privacy', [HomeController::class, 'privacy'])->name('privacy');
 Route::get('/algemene-voorwaarden', [HomeController::class, 'terms'])->name('terms');
 Route::get('/garantie', [HomeController::class, 'guarantee'])->name('guarantee');
@@ -49,8 +48,8 @@ Route::get('/reis/{trip:slug}/aanvraag/bedankt', [TripRequestController::class, 
     ->name('trip-requests.thanks');
 
 // Blog
-Route::get('/blog', [BlogPostController::class, 'index'])->name('blog.index');
-Route::get('/blog/{post:slug}', [BlogPostController::class, 'show'])->name('blog.show');
+Route::get('/mijn-verhalen', [BlogPostController::class, 'index'])->name('blog.index');
+Route::get('/mijn-verhalen/{post:slug}', [BlogPostController::class, 'show'])->name('blog.show');
 
 // Switch locale
 Route::post('/locale/switch', [LocaleController::class, 'switch'])
