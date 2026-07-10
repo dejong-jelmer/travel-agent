@@ -14,14 +14,21 @@ class GenerateSitemapTest extends TestCase
     use RefreshDatabase;
 
     private TemporaryDirectory $tempDir;
+
     private string $path;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->tempDir = (new TemporaryDirectory())->create();
+        $this->tempDir = (new TemporaryDirectory)->create();
         $this->path = $this->tempDir->path('sitemap.xml');
+    }
+
+    protected function tearDown(): void
+    {
+        $this->tempDir->delete();
+        parent::tearDown();
     }
 
     public function test_sitemap_includes_published_content_and_excludes_drafts(): void

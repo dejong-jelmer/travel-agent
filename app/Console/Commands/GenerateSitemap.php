@@ -15,6 +15,11 @@ class GenerateSitemap extends Command
 
     protected $description = 'Generate sitemap.xml with all public pages';
 
+    /**
+     * Generate a sitemap containing all publicly accessible pages.
+     *
+     * @return int Command exit code
+     */
     public function handle(): int
     {
         $sitemap = Sitemap::create();
@@ -55,11 +60,20 @@ class GenerateSitemap extends Command
             );
         });
 
-        $path = $this->option('path') ?: public_path('sitemap.xml');
+        if ($customPath = $this->option('path')) {
+            if (! str_starts_with(realpath(dirname($customPath)), base_path())) {
+                $this->error('Path must be within application directory');
+
+                return self::FAILURE;
+            }
+            $path = $customPath;
+        } else {
+            $path = public_path('sitemap.xml');
+        }
 
         $sitemap->writeToFile($path);
 
-        $this->info('Sitemap generated: ' . $path);
+        $this->info('Sitemap generated: '.$path);
 
         return self::SUCCESS;
     }
