@@ -60,20 +60,11 @@ class GenerateSitemap extends Command
             );
         });
 
-        if ($customPath = $this->option('path')) {
-            if (! str_starts_with(realpath(dirname($customPath)), base_path())) {
-                $this->error('Path must be within application directory');
-
-                return self::FAILURE;
-            }
-            $path = $customPath;
-        } else {
-            $path = public_path('sitemap.xml');
-        }
+        $path = $this->option('path') ?: public_path('sitemap.xml');
 
         $sitemap->writeToFile($path);
 
-        $this->info('Sitemap generated: '.$path);
+        $this->info('Sitemap generated: ' . $path);
 
         return self::SUCCESS;
     }
