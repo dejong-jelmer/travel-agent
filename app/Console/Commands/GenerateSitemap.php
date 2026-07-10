@@ -5,14 +5,15 @@ namespace App\Console\Commands;
 use App\Models\BlogPost;
 use App\Models\Trip;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Route;
 use Spatie\Sitemap\Sitemap;
 use Spatie\Sitemap\Tags\Url;
 
 class GenerateSitemap extends Command
 {
-    protected $signature = 'sitemap:generate {--path= : Optioneel pad om de sitemap weg te schrijven}';
+    protected $signature = 'sitemap:generate {--path= : Optional path to write the sitemap}';
 
-    protected $description = 'Genereer sitemap.xml met alle publieke pagina\'s';
+    protected $description = 'Generate sitemap.xml with all public pages';
 
     public function handle(): int
     {
@@ -31,7 +32,11 @@ class GenerateSitemap extends Command
         ];
 
         foreach ($staticRoutes as $name) {
-            $sitemap->add(Url::create(route($name)));
+            if (Route::has($name)) {
+                $sitemap->add(Url::create(route($name)));
+            } else {
+                $this->warn("Route '{$name}' not found, skipping...");
+            }
         }
 
         // Published trips
@@ -54,7 +59,7 @@ class GenerateSitemap extends Command
 
         $sitemap->writeToFile($path);
 
-        $this->info('Sitemap generated: '.$path);
+        $this->info('Sitemap generated: ' . $path);
 
         return self::SUCCESS;
     }

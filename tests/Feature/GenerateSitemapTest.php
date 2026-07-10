@@ -6,39 +6,33 @@ use App\Enums\BlogPost\Status;
 use App\Models\BlogPost;
 use App\Models\Trip;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Spatie\TemporaryDirectory\TemporaryDirectory;
 use Tests\TestCase;
 
 class GenerateSitemapTest extends TestCase
 {
     use RefreshDatabase;
 
+    private TemporaryDirectory $tempDir;
     private string $path;
 
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->path = sys_get_temp_dir().'/sitemap_test_'.uniqid().'.xml';
+        $this->tempDir = (new TemporaryDirectory())->create();
+        $this->path = $this->tempDir->path('sitemap.xml');
     }
 
-    protected function tearDown(): void
+    public function test_sitemap_includes_published_content_and_excludes_drafts(): void
     {
-        if (file_exists($this->path)) {
-            unlink($this->path);
-        }
-
-        parent::tearDown();
-    }
-
-    public function test_de_sitemap_bevat_gepubliceerde_content_en_laat_concepten_weg(): void
-    {
-        // Gepubliceerd: verleden datum, dus zichtbaar in de published scope
+        // Published: past date, therefore visible in the published scope
         $publishedTrip = Trip::factory()->create([
             'slug' => 'gepubliceerde-reis',
             'published_at' => today()->subDay(),
         ]);
 
-        // Concept: toekomstige datum, valt buiten de published scope
+        // Concept: future date, falls outside the published scope
         $draftTrip = Trip::factory()->create([
             'slug' => 'concept-reis',
             'published_at' => today()->addDays(30),
@@ -50,7 +44,7 @@ class GenerateSitemapTest extends TestCase
             'published_at' => now()->subDay(),
         ]);
 
-        // Concept: status Published maar toekomstige datum, valt buiten de scope
+        // Concept: status Published but future date, falls outside the scope
         $draftPost = BlogPost::factory()->create([
             'slug' => 'concept-post',
             'status' => Status::Published,
@@ -62,14 +56,14 @@ class GenerateSitemapTest extends TestCase
 
         $xml = file_get_contents($this->path);
 
-        // Statische pagina hoort erin
+        // A static page belongs
         $this->assertStringContainsString(route('home'), $xml);
 
-        // Gepubliceerde content hoort erin
+        // Published content belongs
         $this->assertStringContainsString(route('trips.show', $publishedTrip->slug), $xml);
         $this->assertStringContainsString(route('blog.show', $publishedPost->slug), $xml);
 
-        // Concepten horen er niet in
+        // Concepts don't belong
         $this->assertStringNotContainsString(route('trips.show', $draftTrip->slug), $xml);
         $this->assertStringNotContainsString(route('blog.show', $draftPost->slug), $xml);
     }
