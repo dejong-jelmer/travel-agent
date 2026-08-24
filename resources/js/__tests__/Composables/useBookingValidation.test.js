@@ -110,6 +110,54 @@ describe("useBookingValidation", () => {
             });
         });
 
+        describe("return_date validation", () => {
+            it("should accept when return_date is missing (optional)", () => {
+                const bookingData = { departure_date: "2025-05-15" };
+                const errors = validator.validateTripStep(bookingData);
+
+                expect(errors).not.toHaveProperty("return_date");
+            });
+
+            it("should accept when return_date is null (optional)", () => {
+                const bookingData = { departure_date: "2025-05-15", return_date: null };
+                const errors = validator.validateTripStep(bookingData);
+
+                expect(errors).not.toHaveProperty("return_date");
+            });
+
+            it("should accept when return_date is after departure_date", () => {
+                const bookingData = {
+                    departure_date: "2025-05-15",
+                    return_date: "2025-05-22",
+                };
+                const errors = validator.validateTripStep(bookingData);
+
+                expect(errors).not.toHaveProperty("return_date");
+            });
+
+            it("should return error when return_date equals departure_date", () => {
+                const bookingData = {
+                    departure_date: "2025-05-15",
+                    return_date: "2025-05-15",
+                };
+                const errors = validator.validateTripStep(bookingData);
+
+                expect(errors).toHaveProperty("return_date");
+                expect(errors.return_date).toBe("validation.errors.invalid_return_date");
+            });
+
+            it("should return error when return_date is before departure_date", () => {
+                const bookingData = {
+                    departure_date: "2025-05-15",
+                    return_date: "2025-05-10",
+                };
+                const errors = validator.validateTripStep(bookingData);
+
+                expect(errors).toHaveProperty("return_date");
+                expect(errors.return_date).toBe("validation.errors.invalid_return_date");
+            });
+        });
+
         describe("bookingData validation", () => {
             it("should return error when bookingData is null", () => {
                 const errors = validator.validateTripStep(null);

@@ -25,7 +25,7 @@ export function useBookingSteps(booking) {
         {
             id: BOOKING_STEPS.TRIP,
             label: i18n.global.t('booking_step_labels.trip'),
-            fields: ["departure_date"],
+            fields: ["departure_date", "return_date"],
             validate: () => validateTripStep(booking.value),
         },
         {

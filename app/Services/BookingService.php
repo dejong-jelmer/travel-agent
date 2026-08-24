@@ -28,7 +28,8 @@ class BookingService
         /** @var Booking $booking */
         $booking = $bookingData->trip->bookings()->create([
             'departure_date' => $bookingData->date,
-            'return_date' => $bookingData->date->copy()->addDays($bookingData->trip->duration ?? 0),
+            'return_date' => $bookingData->return_date
+                ?? $bookingData->date->copy()->addDays($bookingData->trip->duration ?? 0),
             'has_accepted_conditions' => $bookingData->has_accepted_conditions,
             'conditions_accepted_at' => $bookingData->has_accepted_conditions ? now() : null,
             'has_confirmed' => $bookingData->has_confirmed,

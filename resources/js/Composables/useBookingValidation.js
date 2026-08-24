@@ -12,7 +12,7 @@
 
 import { useDateFormatter } from "@/Composables/useDateFormatter.js";
 import { emailRegex, phoneRegex, postalCodeRegex } from "@/Validators/regex.js";
-import i18n from '@/plugins/i18n.js';
+import i18n from "@/plugins/i18n.js";
 
 const { isValidDate } = useDateFormatter();
 
@@ -62,59 +62,85 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData?.travelers) {
-            return { travelers: t('validation.errors.missing_traveler_data') };
+            return { travelers: t("validation.errors.missing_traveler_data") };
         }
 
         for (const [type, travelers] of Object.entries(bookingData.travelers)) {
             travelers.forEach((traveler, index) => {
                 const basePath = `travelers.${type}.${index}`;
-                if (!traveler || typeof traveler !== 'object') {
-                    errors[`${basePath}`] = t('validation.errors.invalid_traveler_data');
+                if (!traveler || typeof traveler !== "object") {
+                    errors[`${basePath}`] = t(
+                        "validation.errors.invalid_traveler_data",
+                    );
                     return;
                 }
                 const firstNameError = validateStringField(
                     traveler.first_name,
-                    t('validation.fields.first_name'),
+                    t("validation.fields.first_name"),
                     MIN_FRIST_NAME_LENGTH,
-                    t('validation.errors.missing', { field: t('validation.fields.first_name') }),
-                    t('validation.errors.too_short', { field: t('validation.fields.first_name'), min: MIN_FRIST_NAME_LENGTH })
+                    t("validation.errors.missing", {
+                        field: t("validation.fields.first_name"),
+                    }),
+                    t("validation.errors.too_short", {
+                        field: t("validation.fields.first_name"),
+                        min: MIN_FRIST_NAME_LENGTH,
+                    }),
                 );
                 if (firstNameError)
                     errors[`${basePath}.first_name`] = firstNameError;
 
                 const lastNameError = validateStringField(
                     traveler.last_name,
-                    t('validation.fields.last_name'),
+                    t("validation.fields.last_name"),
                     DEFAULT_MIN_STRING_LENGTH,
-                    t('validation.errors.missing', { field: t('validation.fields.last_name') }),
-                    t('validation.errors.too_short', { field: t('validation.fields.last_name'), min: DEFAULT_MIN_STRING_LENGTH })
+                    t("validation.errors.missing", {
+                        field: t("validation.fields.last_name"),
+                    }),
+                    t("validation.errors.too_short", {
+                        field: t("validation.fields.last_name"),
+                        min: DEFAULT_MIN_STRING_LENGTH,
+                    }),
                 );
                 if (lastNameError)
                     errors[`${basePath}.last_name`] = lastNameError;
 
                 if (!traveler.birthdate || !isValidDate(traveler.birthdate)) {
-                    errors[`${basePath}.birthdate`] =
-                        t('validation.errors.invalid_birthdate');
+                    errors[`${basePath}.birthdate`] = t(
+                        "validation.errors.invalid_birthdate",
+                    );
                 }
 
-                const specialRequests = traveler.special_requests?.trim() || '';
+                const specialRequests = traveler.special_requests?.trim() || "";
                 if (specialRequests.length > MAX_SPECIAL_REQUESTS_LENGTH) {
-                    errors[`${basePath}.special_requests`] = t('validation.errors.too_long', {
-                        field: t('validation.fields.special_requests'),
-                        max: MAX_SPECIAL_REQUESTS_LENGTH
-                    });
+                    errors[`${basePath}.special_requests`] = t(
+                        "validation.errors.too_long",
+                        {
+                            field: t("validation.fields.special_requests"),
+                            max: MAX_SPECIAL_REQUESTS_LENGTH,
+                        },
+                    );
                 }
 
-                if (specialRequests.length > 0 && !traveler.special_requests_consent) {
-                    errors[`${basePath}.special_requests_consent`] = t('validation.errors.missing_special_requests_consent');
+                if (
+                    specialRequests.length > 0 &&
+                    !traveler.special_requests_consent
+                ) {
+                    errors[`${basePath}.special_requests_consent`] = t(
+                        "validation.errors.missing_special_requests_consent",
+                    );
                 }
 
                 const nationalityError = validateStringField(
                     traveler.nationality,
-                    t('validation.fields.nationality'),
+                    t("validation.fields.nationality"),
                     MIN_NATIONALITY_LENGTH,
-                    t('validation.errors.missing', { field: t('validation.fields.nationality') }),
-                    t('validation.errors.too_short', { field: t('validation.fields.nationality'), min: MIN_NATIONALITY_LENGTH })
+                    t("validation.errors.missing", {
+                        field: t("validation.fields.nationality"),
+                    }),
+                    t("validation.errors.too_short", {
+                        field: t("validation.fields.nationality"),
+                        min: MIN_NATIONALITY_LENGTH,
+                    }),
                 );
                 if (nationalityError)
                     errors[`${basePath}.nationality`] = nationalityError;
@@ -136,7 +162,7 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData?.contact) {
-            return { contact: t('validation.errors.missing_contact_data') };
+            return { contact: t("validation.errors.missing_contact_data") };
         }
 
         const { contact } = bookingData;
@@ -144,54 +170,77 @@ export function useBookingValidation() {
 
         const streetError = validateStringField(
             contact.street,
-            t('validation.fields.street_name'),
+            t("validation.fields.street_name"),
             DEFAULT_MIN_STRING_LENGTH,
-            t('validation.errors.missing', { field: t('validation.fields.street_name') }),
-            t('validation.errors.too_short', { field: t('validation.fields.street_name'), min: MIN_NATIONALITY_LENGTH })
+            t("validation.errors.missing", {
+                field: t("validation.fields.street_name"),
+            }),
+            t("validation.errors.too_short", {
+                field: t("validation.fields.street_name"),
+                min: MIN_NATIONALITY_LENGTH,
+            }),
         );
         if (streetError) errors["contact.street"] = streetError;
 
         if (isNaN(houseNumber) || houseNumber <= 0) {
-            errors["contact.house_number"] =
-                t('validation.errors.invalid_house_number');
+            errors["contact.house_number"] = t(
+                "validation.errors.invalid_house_number",
+            );
         }
 
         const postalCodeError = validateRegexField(
             contact.postal_code,
-            t('validation.fields.postal_code'),
+            t("validation.fields.postal_code"),
             postalCodeRegex,
-            t('validation.errors.missing', { field: t('validation.fields.postal_code') }),
-            t('validation.errors.invalid_postal_code', { field: t('validation.fields.postal_code') })
+            t("validation.errors.missing", {
+                field: t("validation.fields.postal_code"),
+            }),
+            t("validation.errors.invalid_postal_code", {
+                field: t("validation.fields.postal_code"),
+            }),
         );
 
         if (postalCodeError) errors["contact.postal_code"] = postalCodeError;
 
         const cityError = validateStringField(
             contact.city,
-            t('validation.fields.city'),
+            t("validation.fields.city"),
             DEFAULT_MIN_STRING_LENGTH,
-            t('validation.errors.missing', { field: t('validation.fields.city') }),
-            t('validation.errors.too_short', { field: t('validation.fields.city'), min: DEFAULT_MIN_STRING_LENGTH })
+            t("validation.errors.missing", {
+                field: t("validation.fields.city"),
+            }),
+            t("validation.errors.too_short", {
+                field: t("validation.fields.city"),
+                min: DEFAULT_MIN_STRING_LENGTH,
+            }),
         );
 
         if (cityError) errors["contact.city"] = cityError;
 
         const emailError = validateRegexField(
             contact.email,
-            t('validation.fields.email'),
+            t("validation.fields.email"),
             emailRegex,
-            t('validation.errors.missing', { field: t('validation.fields.email') }),
-            t('validation.errors.invalid', { field: t('validation.fields.email') })
+            t("validation.errors.missing", {
+                field: t("validation.fields.email"),
+            }),
+            t("validation.errors.invalid", {
+                field: t("validation.fields.email"),
+            }),
         );
 
         if (emailError) errors["contact.email"] = emailError;
 
         const phoneError = validateRegexField(
             contact.phone,
-            t('validation.fields.phone'),
+            t("validation.fields.phone"),
             phoneRegex,
-            t('validation.errors.missing', { field: t('validation.fields.phone') }),
-            t('validation.errors.invalid', { field: t('validation.fields.phone') })
+            t("validation.errors.missing", {
+                field: t("validation.fields.phone"),
+            }),
+            t("validation.errors.invalid", {
+                field: t("validation.fields.phone"),
+            }),
         );
 
         if (phoneError) errors["contact.phone"] = phoneError;
@@ -212,16 +261,19 @@ export function useBookingValidation() {
         const errors = {};
 
         if (!bookingData) {
-            return { overview: t('validation.errors.missing_booking_data') };
+            return { overview: t("validation.errors.missing_booking_data") };
         }
 
         if (!bookingData.has_confirmed) {
-            errors["has_confirmed"] = t('validation.errors.missing_confirmation');
+            errors["has_confirmed"] = t(
+                "validation.errors.missing_confirmation",
+            );
         }
 
         if (!bookingData.has_accepted_conditions) {
-            errors["has_accepted_conditions"] =
-                t('validation.errors.missing_accepted_conditions');
+            errors["has_accepted_conditions"] = t(
+                "validation.errors.missing_accepted_conditions",
+            );
         }
 
         return errors;
@@ -246,55 +298,94 @@ export function useBookingValidation() {
         const items = bookingData?.cost_items ?? [];
 
         if (items.length === 0) {
-            errors["cost_items"] = t('validation.errors.missing_cost_items');
+            errors["cost_items"] = t("validation.errors.missing_cost_items");
         }
 
         items.forEach((item, index) => {
             if (!item.category) {
-                errors[`cost_items.${index}.category`] = t('validation.errors.missing', {
-                    field: t('booking_steps.price.column.category'),
-                });
+                errors[`cost_items.${index}.category`] = t(
+                    "validation.errors.missing",
+                    {
+                        field: t("booking_steps.price.column.category"),
+                    },
+                );
             }
             const label = item.label?.trim() ?? "";
             if (label === "") {
-                errors[`cost_items.${index}.label`] = t('validation.errors.missing', {
-                    field: t('booking_steps.price.column.label'),
-                });
+                errors[`cost_items.${index}.label`] = t(
+                    "validation.errors.missing",
+                    {
+                        field: t("booking_steps.price.column.label"),
+                    },
+                );
             }
             const amount = Number(item.amount_per_person);
             if (!Number.isFinite(amount) || amount <= 0) {
-                errors[`cost_items.${index}.amount_per_person`] = t('validation.errors.invalid_amount');
+                errors[`cost_items.${index}.amount_per_person`] = t(
+                    "validation.errors.invalid_amount",
+                );
             }
             const quantity = Number(item.quantity);
             if (!Number.isInteger(quantity) || quantity < 1 || quantity > 20) {
-                errors[`cost_items.${index}.quantity`] = t('validation.errors.invalid_quantity');
+                errors[`cost_items.${index}.quantity`] = t(
+                    "validation.errors.invalid_quantity",
+                );
             }
         });
 
         const margin = Number(bookingData?.margin_percentage);
         if (!Number.isFinite(margin) || margin < 0 || margin > 95) {
-            errors["margin_percentage"] = t('validation.errors.invalid_margin');
+            errors["margin_percentage"] = t("validation.errors.invalid_margin");
         }
 
-        if (bookingData?.final_price !== null && bookingData?.final_price !== "" && bookingData?.final_price !== undefined) {
+        if (
+            bookingData?.final_price !== null &&
+            bookingData?.final_price !== "" &&
+            bookingData?.final_price !== undefined
+        ) {
             const finalPrice = Number(bookingData.final_price);
             if (!Number.isFinite(finalPrice) || finalPrice < 0) {
-                errors["final_price"] = t('validation.errors.invalid_amount');
+                errors["final_price"] = t("validation.errors.invalid_amount");
             }
         }
 
         return errors;
     }
 
+    /**
+     * @param {Object} bookingData
+     * @param {string} bookingData.departure_date
+     * @param {string|null} [bookingData.return_date]
+     * @returns {Object.<string, string>} Validation errors
+     */
     function validateTripStep(bookingData) {
         const errors = {};
 
         if (!bookingData) {
-            return { trip: t('validation.errors.missing_booking_data') };
+            return { trip: t("validation.errors.missing_booking_data") };
         }
 
         if (!bookingData.departure_date) {
-            errors["departure_date"] = t('validation.errors.missing_departure_date');
+            errors["departure_date"] = t(
+                "validation.errors.missing_departure_date",
+            );
+        }
+
+        // return_date is optional; only validate when a value is present.
+        if (bookingData.return_date) {
+            if (!bookingData.departure_date) {
+                errors["return_date"] = t(
+                    "validation.errors.departure_required_for_return",
+                );
+            } else {
+                const departure = new Date(bookingData.departure_date);
+                const returnDate = new Date(bookingData.return_date);
+                if (returnDate <= departure) {
+                    errors["return_date"] = t(
+                        "validation.errors.invalid_return_date",
+                    );
+                }
+            }
         }
 
         return errors;
@@ -315,7 +406,7 @@ export function useBookingValidation() {
         fieldName,
         minLength,
         emptyMessage,
-        tooShortMessage
+        tooShortMessage,
     ) {
         const trimmed = value?.trim() || "";
 
@@ -330,9 +421,9 @@ export function useBookingValidation() {
         }
 
         if (trimmed.length > DEFAULT_MAX_STRING_LENGTH) {
-            return t('validation.errors.too_long', {
+            return t("validation.errors.too_long", {
                 field: fieldName,
-                max: DEFAULT_MAX_STRING_LENGTH
+                max: DEFAULT_MAX_STRING_LENGTH,
             });
         }
 
@@ -354,7 +445,7 @@ export function useBookingValidation() {
         fieldName,
         regex,
         emptyMessage,
-        invalidMessage
+        invalidMessage,
     ) {
         const trimmed = value?.trim() || "";
 
