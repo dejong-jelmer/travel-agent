@@ -112,6 +112,60 @@ class BookingTest extends TestCase
         $response->assertSessionHasErrors('cost_items');
     }
 
+    public function test_return_date_falls_back_to_trip_duration_when_omitted(): void
+    {
+        $this->trip->forceFill(['duration' => 9])->save();
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => '2030-06-01',
+        ]);
+        unset($payload['return_date']);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail();
+
+        $expected = Carbon::parse('2030-06-01')->addDays(9)->format('Y-m-d');
+        $this->assertSame($expected, $booking->return_date->format('Y-m-d'));
+    }
+
+    public function test_return_date_is_used_when_provided(): void
+    {
+        $this->trip->forceFill(['duration' => 9])->save();
+
+        $providedReturn = Carbon::parse('2030-06-01')->addDays(21);
+
+        $payload = $this->generateBookingPayload([
+            'departure_date' => '2030-06-01',
+            'return_date' => $providedReturn->format('Y-m-d'),
+        ]);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail();
+
+        $this->assertSame($providedReturn->format('Y-m-d'), $booking->return_date->format('Y-m-d'));
+        // Proves the provided value wins over the duration-based fallback.
+        $this->assertNotSame(
+            Carbon::parse('2030-06-01')->addDays(9)->format('Y-m-d'),
+            $booking->return_date->format('Y-m-d'),
+        );
+    }
+
+    public function test_booking_is_rejected_when_return_date_is_before_departure_date(): void
+    {
+        $payload = $this->generateBookingPayload([
+            'departure_date' => '2030-06-01',
+            'return_date' => '2030-05-31',
+        ]);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+
+        $response->assertSessionHasErrors('return_date');
+    }
+
     public function test_admin_can_update_the_booking_travelers_and_contact_details()
     {
         $admin = User::factory()->admin()->create();
@@ -372,14 +426,15 @@ class BookingTest extends TestCase
     {
         $numberOfAdults = $overrides['numberOfAdults'] ?? fake()->numberBetween(1, 4);
         $numberOfChildren = $overrides['numberOfChildren'] ?? fake()->numberBetween(0, 2);
-        $departureDate = fake()->dateTimeBetween('now', '+1 year');
+        $departureDate = $overrides['departure_date'] ?? fake()->dateTimeBetween('now', '+1 year')->format('Y-m-d');
 
         return array_merge([
             'trip' => ['id' => $this->trip->id],
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
-            'departure_date' => $departureDate->format('Y-m-d'),
-            'return_date' => Carbon::instance($departureDate)->addDays(7),
+            'departure_date' => Carbon::parse($departureDate)->format('Y-m-d'),
+            'return_date' => $overrides['return_date']
+                ?? Carbon::parse($departureDate)->addDays(7)->format('Y-m-d'),
             'travelers' => [
                 'adults' => $this->generateTravelers($numberOfAdults, TravelerType::Adult),
                 'children' => $this->generateTravelers($numberOfChildren, TravelerType::Child),

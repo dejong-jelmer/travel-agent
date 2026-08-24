@@ -15,7 +15,7 @@
     <link rel="icon" type="image/x-icon" href="/darkmode/favicon.ico" media="(prefers-color-scheme: dark)">
     <link rel="icon" type="image/png" sizes="96x96" href="/darkmode/favicon-96x96.png"
         media="(prefers-color-scheme: dark)">
-    <!-- Apple touch icon (geen media query support — altijd light) -->
+    <!-- Apple touch icon (geen media query support - altijd light) -->
     <link rel="apple-touch-icon" href="/lightmode/apple-touch-icon.png">
     <!-- Web App Manifest per kleurschema -->
     <link rel="manifest" href="/lightmode/site.webmanifest" media="(prefers-color-scheme: light)">

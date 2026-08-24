@@ -134,7 +134,7 @@ const specialRequestsRetentionLabel = computed(() =>
                                         <li>Naam</li>
                                         <li>E-mailadres</li>
                                         <li>Telefoonnummer (optioneel)</li>
-                                        <li>Gewenste reisperiode — maand, jaar en eventuele toelichting (optioneel)</li>
+                                        <li>Gewenste reisperiode - maand, jaar en eventuele toelichting (optioneel)</li>
                                         <li>Aantal reizigers (optioneel)</li>
                                         <li>Vertrekstation (optioneel)</li>
                                         <li>Aanvullende opmerkingen (optioneel)</li>
@@ -184,25 +184,25 @@ const specialRequestsRetentionLabel = computed(() =>
                                 </p>
                                 <ul class="list-disc pl-6 text-brand-text/80 space-y-2 mb-6">
                                     <li>
-                                        <strong>Reisdienstverleners</strong> — zoals vervoerders en accommodaties, voor
+                                        <strong>Reisdienstverleners</strong> - zoals vervoerders en accommodaties, voor
                                         zover nodig om jouw reis uit te voeren.
                                     </li>
                                     <li>
-                                        <strong>STO Garant</strong> — het garantiefonds waarmee ik wettelijk verplicht
+                                        <strong>STO Garant</strong> - het garantiefonds waarmee ik wettelijk verplicht
                                         samenwerk.
                                     </li>
                                     <li>
-                                        <strong>Hosting- en serverpartijen</strong> — voor het veilig opslaan en
+                                        <strong>Hosting- en serverpartijen</strong> - voor het veilig opslaan en
                                         beschikbaar
                                         houden van de website en boekingsomgeving.
                                     </li>
                                     <li>
-                                        <strong>E-maildienstverlener</strong> — voor het verzenden van
+                                        <strong>E-maildienstverlener</strong> - voor het verzenden van
                                         boekingsbevestigingen
                                         en nieuwsbrieven.
                                     </li>
                                     <li>
-                                        <strong>Domeinnaamregistrar</strong> — voor het beheer van mijn domeinnaam en
+                                        <strong>Domeinnaamregistrar</strong> - voor het beheer van mijn domeinnaam en
                                         e-maildomein.
                                     </li>
                                 </ul>
@@ -402,11 +402,11 @@ const specialRequestsRetentionLabel = computed(() =>
                                             Deze website gebruikt alleen functionele cookies, die nodig zijn om de site
                                             goed te laten werken:
                                             <ul class="list-disc pl-6 mt-1 space-y-1">
-                                                <li><strong>Sessiecookie</strong> — onthoudt je sessie tijdens het
+                                                <li><strong>Sessiecookie</strong> - onthoudt je sessie tijdens het
                                                     bezoek (bijv. boekingsstatus).</li>
-                                                <li><strong>CSRF-cookie</strong> — beschermt formulieren tegen
+                                                <li><strong>CSRF-cookie</strong> - beschermt formulieren tegen
                                                     kwaadaardige verzoeken van buitenaf.</li>
-                                                <li><strong>Cookie-voorkeur</strong> — onthoudt je cookiekeuze.</li>
+                                                <li><strong>Cookie-voorkeur</strong> - onthoudt je cookiekeuze.</li>
                                             </ul>
                                         </li>
                                         <li class="mt-2">

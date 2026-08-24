@@ -124,7 +124,7 @@
     },
     "newsletter": {
         "heading": "Stay informed",
-        "description": "Inspiration, stories, and new routes — straight to your inbox.",
+        "description": "Inspiration, stories, and new routes - straight to your inbox.",
         "eyebrow": "Newsletter",
         "form": {
             "heading": "Sign up",
@@ -160,12 +160,12 @@
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
         "usp-1": {
             "title": "The place sets the journey",
-            "description": "I choose destinations and routes with enough to discover to build a whole trip around: a city, a region, or a line that ties places together. The train gets you there comfortably and sustainably — what you find once you arrive is what it's all about.",
+            "description": "I choose destinations and routes with enough to discover to build a whole trip around: a city, a region, or a line that ties places together. The train gets you there comfortably and sustainably - what you find once you arrive is what it's all about.",
             "highlight": "The destination is the point"
         },
         "usp-2": {
             "title": "Staying for character",
-            "description": "I look for places to stay with a sense of place — a house, a family-run hotel, somewhere with a story of its own. Sometimes the best one is a stop further down the line; as far as I'm concerned, that's worth the extra ride.",
+            "description": "I look for places to stay with a sense of place - a house, a family-run hotel, somewhere with a story of its own. Sometimes the best one is a stop further down the line; as far as I'm concerned, that's worth the extra ride.",
             "highlight": "Character as the starting point"
         },
         "usp-3": {
@@ -654,6 +654,8 @@
             "choose_date": "Choose a {date} for departure",
             "date": "date",
             "no_date_chosen": "No date chosen",
+            "return_date": "Return date",
+            "return_date_optional": "Optional — leave empty to use the trip duration",
             "choose_number": "Choose the {number} of travelers",
             "number": "number",
             "participants_label": "Participants:",
@@ -734,7 +736,7 @@
     "hero": {
         "title": "More human.",
         "sub_title": "Because we travel",
-        "tagline": "European destinations with a story — where you arrive by train.",
+        "tagline": "European destinations with a story - where you arrive by train.",
         "cta": "View the trips"
     },
     "footer": {
@@ -756,17 +758,19 @@
     },
     "validation": {
         "errors": {
-            "missing": "{field} is missing — we need this for your booking.",
+            "missing": "{field} is missing - we need this for your booking.",
             "missing_traveler_data": "Traveler information is missing.",
             "missing_contact_data": "Contact information is missing.",
             "missing_booking_data": "Booking information is missing.",
             "missing_departure_date": "Choose a departure date.",
+            "invalid_return_date": "The return date must be after the departure date.",
+            "departure_required_for_return": "Departure date is needed for a return date.",
             "missing_confirmation": "You must confirm.",
             "missing_accepted_conditions": "You must accept the terms and conditions.",
-            "too_short": "{field} is too short — enter at least {min} characters.",
-            "too_long": "{field} is too long — enter no more than {max} characters.",
+            "too_short": "{field} is too short - enter at least {min} characters.",
+            "too_long": "{field} is too long - enter no more than {max} characters.",
             "invalid": "{field} is invalid - enter a valid value.",
-            "invalid_postal_code": "{field} is invalid — use the format 1234AB.",
+            "invalid_postal_code": "{field} is invalid - use the format 1234AB.",
             "invalid_birthdate": "Enter a valid date of birth.",
             "invalid_house_number": "House number must be a valid number greater than 0.",
             "invalid_traveler_data": "Traveler information is invalid.",
@@ -842,13 +846,13 @@
         "my_story": [
             "My fascination with travel has been there for as long as I can remember. When my father went on business trips, I would turn my piggy bank upside down to see if I had saved enough for a ticket, or I would try to fit inside his suitcase, hoping to tag along to those fascinating destinations he brought back souvenirs or foreign coins from.",
             "I remember how later on I would take family, friends, fellow students, or even complete strangers along to that one special little restaurant in the alleyways of Budapest or Ghent.",
-            "Surrounded by prehistoric art from thousands of generations ago, in the caves of Lascaux, I realized I would never quite be the same person as before — something I had often experienced on my travels. The feeling of having become a little more human. I wanted to share that feeling, and I started organizing trips for others. The first was a trip to these caves with my father and brother, with whom I share a fascination for art and history. I researched it, organized the trip, arranged the details. The pleasure I found in that, and the satisfaction of sharing that place, told me more than years of deliberation ever could have. In Omdat We Reizen, the thread I had seen running through my life all those years finally fell into place.",
-            "Putting together a route is like solving a puzzle to me. The first pieces fall into place quickly: destination, transport, accommodation. But then come the details that make the trip special — the story you want to tell, the neighborhood where it all happens, the remarkable spots most people skip. You shuffle, scrap, and rethink. With every piece, it feels like you're already making the trip a little. And then comes the moment when the puzzle is complete, and everything fits."
+            "Surrounded by prehistoric art from thousands of generations ago, in the caves of Lascaux, I realized I would never quite be the same person as before - something I had often experienced on my travels. The feeling of having become a little more human. I wanted to share that feeling, and I started organizing trips for others. The first was a trip to these caves with my father and brother, with whom I share a fascination for art and history. I researched it, organized the trip, arranged the details. The pleasure I found in that, and the satisfaction of sharing that place, told me more than years of deliberation ever could have. In Omdat We Reizen, the thread I had seen running through my life all those years finally fell into place.",
+            "Putting together a route is like solving a puzzle to me. The first pieces fall into place quickly: destination, transport, accommodation. But then come the details that make the trip special - the story you want to tell, the neighborhood where it all happens, the remarkable spots most people skip. You shuffle, scrap, and rethink. With every piece, it feels like you're already making the trip a little. And then comes the moment when the puzzle is complete, and everything fits."
         ],
-        "conviction": "To me, travel is different from a holiday. It's the difference between literature and a medical novel. It's breaking free from your bubble, discovering places that broaden your perspective — and making you, briefly or forever, a little more human. That feeling is what I want to pass on.",
+        "conviction": "To me, travel is different from a holiday. It's the difference between literature and a medical novel. It's breaking free from your bubble, discovering places that broaden your perspective - and making you, briefly or forever, a little more human. That feeling is what I want to pass on.",
         "promise_statement": [
-            "Inspiration only begins when your mind is free. That's why I take care of all the planning — so you have the space to enjoy whatever you encounter along the way.",
-            "I'm only satisfied when you come home richer than when you left — richer in experiences, insights, and memories."
+            "Inspiration only begins when your mind is free. That's why I take care of all the planning - so you have the space to enjoy whatever you encounter along the way.",
+            "I'm only satisfied when you come home richer than when you left - richer in experiences, insights, and memories."
         ]
     },
     "contact": {
@@ -894,7 +898,7 @@
             },
             "contact": {
                 "title": "One point of contact",
-                "line": "You have me — before, during, and after the trip."
+                "line": "You have me - before, during, and after the trip."
             }
         },
         "terms_link": "Read the travel conditions and the STO-Garant scheme"
@@ -982,7 +986,7 @@
             "travelers_count_more_than_6": "More than 6",
             "departure_station_label": "From which station would you like to depart?",
             "departure_station_placeholder": "Choose a station",
-            "departure_station_helper": "Not sure yet? No problem — we'll figure it out together.",
+            "departure_station_helper": "Not sure yet? No problem - we'll figure it out together.",
             "travelers_count_helper": "Including yourself.",
             "notes_label": "Is there anything I should know about you or your trip?",
             "notes_helper": "For example: are there any dietary requirements, is the trip for a special occasion, hotel preferences, or something completely different?",
@@ -1016,7 +1020,7 @@
         },
         "thanks": {
             "title": "Your request has been received.",
-            "message": "I have received your message and will contact you within two working days — by phone if you provided a number, otherwise by email. We'll discuss together what you have in mind, which period suits you best, and what can make this trip special for you.",
+            "message": "I have received your message and will contact you within two working days - by phone if you provided a number, otherwise by email. We'll discuss together what you have in mind, which period suits you best, and what can make this trip special for you.",
             "question_prefix": "Have a question in the meantime? Feel free to call:",
             "back_to_trips": "Back to trips"
         }

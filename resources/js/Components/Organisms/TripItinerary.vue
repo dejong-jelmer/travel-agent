@@ -38,7 +38,7 @@ const props = defineProps({
             <!-- Day label -->
             <div class="relative flex-shrink-0 w-20 tablet:w-24 pt-1">
                 <span class="text-sm tablet:text-base font-light text-brand-primary/60 tabular-nums">
-                    {{ $t('trip_itinerary.day') }} {{ itinerary.day_from }}<span v-if="itinerary.day_to">–{{
+                    {{ $t('trip_itinerary.day') }} {{ itinerary.day_from }}<span v-if="itinerary.day_to">-{{
                         itinerary.day_to }}</span>
                 </span>
             </div>

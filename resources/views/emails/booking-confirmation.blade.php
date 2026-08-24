@@ -209,6 +209,6 @@
         <strong>{{ config('contact.first_name') }}</strong><br>
         {{ config('app.name') }}
         <br><br>
-        Meer mens… Omdat we reizen.
+        Meer mens. Omdat we reizen.
     </p>
 @endsection

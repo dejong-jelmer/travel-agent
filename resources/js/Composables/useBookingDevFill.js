@@ -45,7 +45,7 @@ export function fillBookingWithDummyData(booking) {
         booking.cost_items = DUMMY_DATA.cost_items.map((item) => ({ ...item }));
         booking.margin_percentage = DUMMY_DATA.margin_percentage;
 
-        // Travelers are synced by a watcher in useBooking — wait for that tick first
+        // Travelers are synced by a watcher in useBooking - wait for that tick first
         nextTick(() => {
             DUMMY_DATA.travelers.adults.forEach((data, i) => {
                 if (booking.travelers.adults[i]) Object.assign(booking.travelers.adults[i], data);

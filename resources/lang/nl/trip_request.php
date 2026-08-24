@@ -30,24 +30,24 @@ return [
         'consent_privacy_accepted' => 'Je moet nog akkoord gaan met het privacybeleid.',
     ],
 
-    // Mail — Confirmation to requester
+    // Mail - Confirmation to requester
     'mail' => [
         'confirmation_subject' => 'Je aanvraag voor :trip is binnen',
         'confirmation_greeting' => 'Beste :name,',
-        'confirmation_intro' => 'Bedankt voor je aanvraag voor :trip. Ik heb je bericht goed ontvangen en neem binnen twee werkdagen persoonlijk contact met je op — via de telefoon als je een nummer hebt ingevuld, anders per e-mail.',
+        'confirmation_intro' => 'Bedankt voor je aanvraag voor :trip. Ik heb je bericht goed ontvangen en neem binnen twee werkdagen persoonlijk contact met je op - via de telefoon als je een nummer hebt ingevuld, anders per e-mail.',
         'confirmation_next_steps' => 'In dat gesprek kijken we samen naar welke periode het beste past, wat je voorkeuren zijn, en wat deze reis voor jou bijzonder kan maken. Neem gerust de tijd om al je vragen, wensen en eventuele bedenkingen op te schrijven; hoe meer ik weet, hoe beter ik de reis voor jou kan inrichten.',
         'confirmation_summary_header' => 'Wat je hebt aangevraagd',
         'confirmation_summary_intro' => 'Voor de zekerheid hieronder een overzicht van de gegevens die je aan me hebt doorgegeven. Klopt er iets niet, of wil je nog iets aanvullen? Stuur me gewoon een berichtje terug, dan pas ik het aan voordat ik je terugbel.',
         'confirmation_what_to_expect_header' => 'Wat kun je van het gesprek verwachten?',
         'confirmation_what_to_expect_1' => 'We bespreken samen je voorkeursperiode en welke data realistisch zijn met de huidige treinverbindingen.',
         'confirmation_what_to_expect_2' => 'We kijken samen naar de prijsindicatie en wat er wel en niet bij de reis is inbegrepen.',
-        'confirmation_what_to_expect_3' => 'Je krijgt ruim de gelegenheid om vragen te stellen — er is geen verplichting om direct te boeken.',
+        'confirmation_what_to_expect_3' => 'Je krijgt ruim de gelegenheid om vragen te stellen - er is geen verplichting om direct te boeken.',
         'confirmation_question' => 'Heb je in de tussentijd nog een vraag of wil je iets toevoegen aan je aanvraag? Je mag me altijd bellen of gewoon op deze e-mail antwoorden.',
         'confirmation_phone_label' => 'Telefoon: ',
         'confirmation_closing' => 'Tot snel,',
 
-        // Mail — Notification to owner
-        'notification_subject' => 'Nieuwe aanvraag: :trip — :name',
+        // Mail - Notification to owner
+        'notification_subject' => 'Nieuwe aanvraag: :trip - :name',
         'notification_header' => 'Nieuwe reisaanvraag binnengekomen',
         'notification_subheader' => 'Reis: :trip',
         'notification_received_at' => 'Ontvangen op',

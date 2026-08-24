@@ -19,6 +19,7 @@ class CreateBookingData implements Arrayable
         public readonly array $travelers,
         public readonly BookingContactData $contact,
         public readonly Carbon $date,
+        public readonly ?Carbon $return_date,
         public readonly bool $has_accepted_conditions,
         public readonly bool $has_confirmed,
         public readonly array $cost_items,
@@ -40,6 +41,9 @@ class CreateBookingData implements Arrayable
             travelers: $parsed['travelers'],
             contact: $parsed['contact'],
             date: Carbon::parse($validated['departure_date']),
+            return_date: isset($validated['return_date'])
+                ? Carbon::parse($validated['return_date'])
+                : null,
             has_accepted_conditions: $validated['has_accepted_conditions'] ?? false,
             has_confirmed: $validated['has_confirmed'] ?? false,
             cost_items: $parsed['cost_items'],

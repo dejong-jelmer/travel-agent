@@ -376,7 +376,7 @@ class Trip extends Model
      * Build a schema.org TouristTrip JSON-LD object from the trip's model fields.
      *
      * The canonical price lives in the `starting_from_price` accessor (lowest
-     * `base_price_pp` across price rows, stored in cents) — the same source that
+     * `base_price_pp` across price rows, stored in cents) - the same source that
      * feeds `price_formatted`. Trips without a price are "expected" and get no Offer.
      *
      * @return array<string, mixed>

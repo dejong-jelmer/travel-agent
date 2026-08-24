@@ -99,7 +99,7 @@ const lastCheckedTime = computed(() => {
     })
 })
 
-// Dashboard statistieken — Boekingen
+// Dashboard statistieken - Boekingen
 const bookingStats = computed(() => [
     {
         id: 1,

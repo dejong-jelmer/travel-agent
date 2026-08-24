@@ -85,7 +85,7 @@ function displayDate(entry) {
     }
     if (entry.start && entry.end) {
         const fmt = (d) => new Intl.DateTimeFormat(_locale, { day: '2-digit', month: 'short', year: 'numeric' }).format(new Date(d + 'T00:00:00'))
-        return `${fmt(entry.start)} — ${fmt(entry.end)}`
+        return `${fmt(entry.start)} - ${fmt(entry.end)}`
     }
     return ''
 }

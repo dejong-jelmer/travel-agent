@@ -69,7 +69,7 @@ vi.mock("@/Composables/useBookingSteps.js", () => ({
             {
                 id: "trip",
                 label: t('booking_step_labels.trip'),
-                fields: ["departure_date"],
+                fields: ["departure_date", "return_date"],
                 validate: () => ({}),
             },
             {
@@ -184,6 +184,7 @@ describe("BookingForm - Complete Test Suite", () => {
     const createMockBooking = (overrides = {}) => {
         const mock = {
             departure_date: "2025-05-15",
+            return_date: null,
             travelers: {
                 adults: [],
                 children: [],

@@ -157,7 +157,7 @@
     },
     "usp": {
         "heading": "Over onze reizen",
-        "intro": "Ik stel reizen samen met aandacht, naar bestemmingen die iets te vertellen hebben en met de trein als vertrekpunt.",
+        "intro": "Ik stel reizen samen met aandacht, naar bestemmingen die iets te vertellen hebben, en met de trein als uitgangspunt.",
         "usp-1": {
             "title": "De plek bepaalt de reis",
             "description": "Ik kies bestemmingen en routes waar genoeg te beleven valt om de hele reis aan op te hangen: een stad, een streek, of een lijn die plekken met elkaar verbindt. De trein brengt je er comfortabel en duurzaam naartoe. Wat je dáár vindt, is waar het om draait.",
@@ -654,6 +654,8 @@
             "choose_date": "Kies een {date} voor vertrek",
             "date": "datum",
             "no_date_chosen": "Geen datum gekozen",
+            "return_date": "Retourdatum",
+            "return_date_optional": "Optioneel — laat leeg om de reisduur te gebruiken",
             "number": "aantal",
             "choose_number": "Kies het {number} reizigers",
             "participants_label": "Deelnemers:",
@@ -761,6 +763,8 @@
             "missing_contact_data": "Contactgegevens ontbreken.",
             "missing_booking_data": "Boekinggegevens ontbreken.",
             "missing_departure_date": "Kies een vertrekdatum.",
+            "invalid_return_date": "De retourdatum moet na de vertrekdatum liggen.",
+            "departure_required_for_return": "De vertrekdatum nodig om een retourdatum te kunnen bepalen.",
             "missing_confirmation": "Je moet nog akkoord gaan.",
             "missing_accepted_conditions": "Je moet nog akkoord gaan met de algemene voorwaarden.",
             "too_short": "{field} is te kort. Vul minimaal {min} tekens in.",
@@ -854,7 +858,7 @@
         "hero_tagline": "Nieuwsgierig naar een route? Of gewoon een vraag? Ik hoor het graag."
     },
     "home": {
-        "heading": "Meer mens… Omdat we reizen",
+        "heading": "Meer mens. Omdat we reizen",
         "intro": "Ik stel reizen samen met aandacht, een goed verhaal en de trein als vertrekpunt. Wat mijn reizen dragt, is de bestemming: wat er te beleven valt en het verhaal dat de plek te vertelten heeft.",
         "our_trips_heading": "De reizen",
         "contact_cta": {
