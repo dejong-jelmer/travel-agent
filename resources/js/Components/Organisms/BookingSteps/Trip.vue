@@ -13,6 +13,7 @@ const props = defineProps({
 })
 
 const departure_date = toRef(props.booking, 'departure_date')
+const return_date = toRef(props.booking, 'return_date')
 const participants = toRef(props.booking, 'participants')
 
 const participantSummary = computed(() => {
@@ -88,6 +89,21 @@ const participantSummary = computed(() => {
                 <DatePicker v-model="departure_date" :min-date="new Date()" :max-date="constraints?.maxDate ?? null"
                     :disabled-dates="disabledDates" :feedback="booking.errors['departure_date']"
                     @mouseup="booking.clearErrors('departure_date')" />
+            </div>
+
+            <!-- Retourdatum (optioneel) -->
+            <div class="bg-brand-secondary/40 border border-brand-primary/10 rounded-xl p-4 space-y-3">
+                <div class="flex justify-between items-center">
+                    <p class="text-xs font-semibold uppercase tracking-wide text-brand-light">
+                        {{ $t('booking_steps.trip.return_date') }}
+                    </p>
+                    <span class="text-sm text-brand-text">{{ formattedDate(booking.return_date) ||
+                        $t('booking_steps.trip.no_date_chosen') }}</span>
+                </div>
+                <DatePicker v-model="return_date" :min-date="booking.departure_date ?? new Date()"
+                    :max-date="constraints?.maxDate ?? null" :feedback="booking.errors['return_date']"
+                    @mouseup="booking.clearErrors('return_date')" />
+                <p class="text-xs text-brand-light">{{ $t('booking_steps.trip.return_date_optional') }}</p>
             </div>
 
             <!-- Deelnemers -->

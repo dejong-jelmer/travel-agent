@@ -297,6 +297,15 @@ export function useBookingValidation() {
             errors["departure_date"] = t('validation.errors.missing_departure_date');
         }
 
+        // return_date is optional; only validate when a value is present.
+        if (bookingData.return_date && bookingData.departure_date) {
+            const departure = new Date(bookingData.departure_date);
+            const returnDate = new Date(bookingData.return_date);
+            if (returnDate <= departure) {
+                errors["return_date"] = t('validation.errors.invalid_return_date');
+            }
+        }
+
         return errors;
     }
 

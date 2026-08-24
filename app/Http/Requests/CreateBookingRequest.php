@@ -60,6 +60,7 @@ class CreateBookingRequest extends FormRequest
                 'trip.id' => ['required', Rule::exists(Trip::class, 'id')],
                 // Date & confirmation
                 'departure_date' => $departureDateRules,
+                'return_date' => ['nullable', 'date', 'after:departure_date'],
                 'has_confirmed' => ['accepted'],
                 'has_accepted_conditions' => ['accepted'],
                 'travelers' => [
