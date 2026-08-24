@@ -764,6 +764,7 @@
             "missing_booking_data": "Booking information is missing.",
             "missing_departure_date": "Choose a departure date.",
             "invalid_return_date": "The return date must be after the departure date.",
+            "departure_required_for_return": "Departure date is needed for a return date.",
             "missing_confirmation": "You must confirm.",
             "missing_accepted_conditions": "You must accept the terms and conditions.",
             "too_short": "{field} is too short - enter at least {min} characters.",

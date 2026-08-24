@@ -100,7 +100,7 @@ const participantSummary = computed(() => {
                     <span class="text-sm text-brand-text">{{ formattedDate(booking.return_date) ||
                         $t('booking_steps.trip.no_date_chosen') }}</span>
                 </div>
-                <DatePicker v-model="return_date" :min-date="booking.departure_date ?? new Date()"
+                <DatePicker v-model="return_date" :min-date="booking.departure_date || new Date()"
                     :max-date="constraints?.maxDate ?? null" :feedback="booking.errors['return_date']"
                     @mouseup="booking.clearErrors('return_date')" />
                 <p class="text-xs text-brand-light">{{ $t('booking_steps.trip.return_date_optional') }}</p>

@@ -433,7 +433,8 @@ class BookingTest extends TestCase
             'has_accepted_conditions' => true,
             'has_confirmed' => true,
             'departure_date' => Carbon::parse($departureDate)->format('Y-m-d'),
-            'return_date' => Carbon::parse($departureDate)->addDays(7)->format('Y-m-d'),
+            'return_date' => $overrides['return_date']
+                ?? Carbon::parse($departureDate)->addDays(7)->format('Y-m-d'),
             'travelers' => [
                 'adults' => $this->generateTravelers($numberOfAdults, TravelerType::Adult),
                 'children' => $this->generateTravelers($numberOfChildren, TravelerType::Child),

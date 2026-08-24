@@ -764,6 +764,7 @@
             "missing_booking_data": "Boekinggegevens ontbreken.",
             "missing_departure_date": "Kies een vertrekdatum.",
             "invalid_return_date": "De retourdatum moet na de vertrekdatum liggen.",
+            "departure_required_for_return": "De vertrekdatum nodig om een retourdatum te kunnen bepalen.",
             "missing_confirmation": "Je moet nog akkoord gaan.",
             "missing_accepted_conditions": "Je moet nog akkoord gaan met de algemene voorwaarden.",
             "too_short": "{field} is te kort. Vul minimaal {min} tekens in.",
