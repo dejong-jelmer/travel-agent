@@ -203,7 +203,7 @@ const isSorted = (columnKey) => {
         </div>
 
         <!-- Table -->
-        <div class="bg-white shadow-lg rounded-2xl min-w-fit overflow-auto">
+        <div class="bg-white shadow-lg rounded-2xl overflow-hidden">
             <template v-if="data.length > 0">
                 <div class="overflow-x-auto">
                 <table class="w-full border-collapse">
