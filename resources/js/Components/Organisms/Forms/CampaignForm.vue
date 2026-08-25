@@ -141,7 +141,7 @@ function isTripSelected(tripId) {
                                     </p>
                                 </div>
 
-                                <TextArea name="content" :label="t('forms.campaign.fields.body.label')" :required="true" v-model="form.content"
+                                <TipTap name="content" :label="t('forms.campaign.fields.body.label')" :required="true" v-model="form.content"
                                     :feedback="form.errors.content"
                                     :placeholder="t('forms.campaign.fields.body.placeholder')"
                                     :rows="15" />
