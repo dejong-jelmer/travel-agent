@@ -18,7 +18,17 @@ class CampaignValidationRules
             'status' => [
                 Rule::enum(CampaignStatus::class)->except([CampaignStatus::Queued]),
             ],
-            'scheduled_at' => ['nullable', 'required_if:status,scheduled', 'date', 'after:today'],
+            'scheduled_at' => [
+                'nullable',
+                'required_if:status,scheduled',
+                'date',
+                // Alleen een geplande campagne moet in de toekomst liggen; een reeds
+                // verzonden campagne houdt zijn oude datum en mag gewoon bewerkt worden.
+                Rule::when(
+                    fn ($input) => $input->status === CampaignStatus::Scheduled->value,
+                    ['after:today']
+                ),
+            ],
         ];
     }
 
