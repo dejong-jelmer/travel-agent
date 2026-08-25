@@ -149,6 +149,43 @@ class CampaignTest extends TestCase
         Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$heroImage->path}");
     }
 
+    public function test_admin_can_update_a_sent_campaign_with_a_past_scheduled_at(): void
+    {
+        $campaign = NewsletterCampaign::factory()->create([
+            'status' => CampaignStatus::Sent,
+            'scheduled_at' => now()->subDays(3),
+            'sent_at' => now()->subDays(3),
+        ]);
+
+        $response = $this->post(route('admin.newsletter.campaigns.update', $campaign), [
+            'id' => $campaign->id,
+            'subject' => $campaign->subject,
+            'content' => '<p>Bijgewerkte <strong>inhoud</strong></p>',
+            'preview_text' => $campaign->preview_text,
+            'status' => CampaignStatus::Sent->value,
+            'scheduled_at' => $campaign->scheduled_at->toISOString(),
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertEquals('<p>Bijgewerkte <strong>inhoud</strong></p>', $campaign->refresh()->content);
+    }
+
+    public function test_a_scheduled_campaign_still_requires_a_future_date(): void
+    {
+        $campaign = NewsletterCampaign::factory()->scheduled()->create();
+
+        $response = $this->post(route('admin.newsletter.campaigns.update', $campaign), [
+            'id' => $campaign->id,
+            'subject' => $campaign->subject,
+            'content' => $this->content,
+            'preview_text' => $campaign->preview_text,
+            'status' => CampaignStatus::Scheduled->value,
+            'scheduled_at' => now()->subDay()->toISOString(),
+        ]);
+
+        $response->assertSessionHasErrors('scheduled_at');
+    }
+
     public function test_admin_can_delete_a_campaign(): void
     {
         $campaign = NewsletterCampaign::factory()->create();

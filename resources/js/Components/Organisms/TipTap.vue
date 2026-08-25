@@ -4,7 +4,20 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import { TextStyle, FontSize } from '@tiptap/extension-text-style'
 
-const props = defineProps({ modelValue: String })
+const props = defineProps({
+    modelValue: String,
+    name: String,
+    label: String,
+    feedback: {
+        type: [String, Array],
+        required: false,
+    },
+    required: {
+        type: Boolean,
+        required: false,
+        default: null,
+    },
+})
 const emit = defineEmits(['update:modelValue'])
 
 const fontSizes = ['11px', '12px', '14px', '16px', '18px', '20px', '24px', '30px', '36px']
@@ -39,7 +52,9 @@ function setLink() {
 </script>
 
 <template>
-    <div class="border rounded-lg" v-if="editor">
+    <div class="grid gap-1" v-if="editor">
+        <Label v-if="label" :forField="name" :required="required">{{ label }}</Label>
+        <div class="border rounded-lg">
         <!-- Toolbar -->
         <div class="flex flex-wrap gap-1 p-2 border-b">
             <button type="button" @click="editor.chain().focus().toggleBold().run()"
@@ -85,6 +100,8 @@ function setLink() {
                 <option v-for="size in fontSizes" :key="size" :value="size">{{ size }}</option>
             </select>
         </div>
-        <EditorContent :editor="editor" class="prose max-w-none p-4" />
+            <EditorContent :editor="editor" :id="name" class="prose max-w-none p-4" />
+        </div>
+        <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

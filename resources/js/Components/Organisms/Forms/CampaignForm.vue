@@ -116,24 +116,30 @@ function isTripSelected(tripId) {
                                     :label="form.hero_image ? t('forms.campaign.fields.hero_image.change') : t('forms.campaign.fields.hero_image.select')"
                                     :feedback="form.errors.hero_image" />
 
-                                <Input type="text" name="subject" :label="t('forms.campaign.fields.subject.label')" :required="true"
-                                    v-model="form.subject" :feedback="form.errors.subject"
+                                <Input type="text" name="subject" :label="t('forms.campaign.fields.subject.label')"
+                                    :required="true" v-model="form.subject" :feedback="form.errors.subject"
                                     :placeholder="t('forms.campaign.fields.subject.placeholder')" />
 
                                 <div>
-                                    <Input type="text" name="preview_text" :label="t('forms.campaign.fields.preview_text.label')"
-                                        :required="false" v-model="form.preview_text"
-                                        :feedback="form.errors.preview_text"
+                                    <Input type="text" name="preview_text"
+                                        :label="t('forms.campaign.fields.preview_text.label')" :required="false"
+                                        v-model="form.preview_text" :feedback="form.errors.preview_text"
                                         :placeholder="t('forms.campaign.fields.preview_text.placeholder')" />
                                     <div class="mt-2 flex items-center justify-between text-xs">
                                         <span :class="previewTextClass">
-                                            {{ t('forms.campaign.character_counter.current', { current: previewTextLength, max: PREVIEW_TEXT_MAX_LENGTH }) }}
+                                            {{ t('forms.campaign.character_counter.current', {
+                                                current:
+                                            previewTextLength, max: PREVIEW_TEXT_MAX_LENGTH }) }}
                                         </span>
                                         <span v-if="previewTextCharsLeft < 0" class="text-status-error font-semibold">
-                                            {{ t('forms.campaign.character_counter.too_many', { count: Math.abs(previewTextCharsLeft) }) }}
+                                            {{ t('forms.campaign.character_counter.too_many', {
+                                                count:
+                                            Math.abs(previewTextCharsLeft) }) }}
                                         </span>
                                         <span v-else-if="previewTextCharsLeft <= 20" :class="previewTextClass">
-                                            {{ t('forms.campaign.character_counter.remaining', { count: previewTextCharsLeft }) }}
+                                            {{ t('forms.campaign.character_counter.remaining', {
+                                                count:
+                                            previewTextCharsLeft }) }}
                                         </span>
                                     </div>
                                     <p class="mt-2 text-xs text-gray-700/30">
@@ -141,10 +147,8 @@ function isTripSelected(tripId) {
                                     </p>
                                 </div>
 
-                                <TipTap name="content" :label="t('forms.campaign.fields.body.label')" :required="true" v-model="form.content"
-                                    :feedback="form.errors.content"
-                                    :placeholder="t('forms.campaign.fields.body.placeholder')"
-                                    :rows="15" />
+                                <TipTap name="content" :label="t('forms.campaign.fields.body.label')" :required="true"
+                                    v-model="form.content" :feedback="form.errors.content" />
                                 <p class="text-xs text-gray-700/30">
                                     {{ t('forms.campaign.fields.body.help') }}
                                 </p>
@@ -184,10 +188,13 @@ function isTripSelected(tripId) {
                                                 <div class="flex gap-3 text-xs text-gray-500">
                                                     <span v-if="trip.duration" class="flex items-center gap-1">
                                                         <Clock class="w-3.5 h-3.5" />
-                                                        {{ t('forms.campaign.fields.featured_trips.duration', { days: trip.duration }) }}
+                                                        {{ t('forms.campaign.fields.featured_trips.duration', {
+                                                            days:
+                                                        trip.duration }) }}
                                                     </span>
                                                     |
-                                                    <span v-if="trip.price_formatted" class="flex items-center gap-1 font-medium">
+                                                    <span v-if="trip.price_formatted"
+                                                        class="flex items-center gap-1 font-medium">
                                                         €{{ trip.price_formatted }}
                                                     </span>
                                                 </div>
@@ -200,31 +207,36 @@ function isTripSelected(tripId) {
                                         {{ t('forms.campaign.fields.featured_trips.no_trips') }}
                                     </div>
 
-                                    <p v-if="form.trips && form.trips.length > 0"
-                                        class="text-xs text-gray-700/50 mt-3">
-                                        {{ t('forms.campaign.fields.featured_trips.selected', { count: form.trips.length }) }}
+                                    <p v-if="form.trips && form.trips.length > 0" class="text-xs text-gray-700/50 mt-3">
+                                        {{ t('forms.campaign.fields.featured_trips.selected', {
+                                            count: form.trips.length
+                                        }) }}
                                     </p>
                                 </div>
                             </TabPanel>
 
                             <TabPanel class="p-6 space-y-6">
                                 <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
-                                    <h3 class="text-sm font-semibold text-gray-700 mb-4">{{ t('forms.campaign.preview.title') }}</h3>
+                                    <h3 class="text-sm font-semibold text-gray-700 mb-4">{{
+                                        t('forms.campaign.preview.title') }}</h3>
 
                                     <div class="bg-white rounded border border-gray-200 p-4 mb-4">
-                                        <div class="text-xs text-gray-700/50 mb-2">{{ t('forms.campaign.preview.subject') }}</div>
+                                        <div class="text-xs text-gray-700/50 mb-2">{{
+                                            t('forms.campaign.preview.subject') }}</div>
                                         <div class="font-semibold text-gray-700 mb-3">
                                             {{ form.subject || t('forms.campaign.preview.no_subject') }}
                                         </div>
 
-                                        <div v-if="form.preview_text" class="text-xs text-gray-700/50 mb-2">{{ t('forms.campaign.preview.preview_text') }}</div>
+                                        <div v-if="form.preview_text" class="text-xs text-gray-700/50 mb-2">{{
+                                            t('forms.campaign.preview.preview_text') }}</div>
                                         <div v-if="form.preview_text" class="text-sm text-gray-700/70 mb-3">
                                             {{ form.preview_text }}
                                         </div>
                                     </div>
 
                                     <div class="bg-white rounded border border-gray-200 p-4 max-h-96 overflow-y-auto">
-                                        <div class="text-xs text-gray-700/50 mb-2">{{ t('forms.campaign.preview.content_preview') }}</div>
+                                        <div class="text-xs text-gray-700/50 mb-2">{{
+                                            t('forms.campaign.preview.content_preview') }}</div>
                                         <div v-if="form.content" class="prose prose-sm max-w-none"
                                             v-html="form.content"></div>
                                         <div v-else class="text-gray-700/30 text-sm italic">
@@ -234,12 +246,14 @@ function isTripSelected(tripId) {
                                 </div>
 
                                 <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                                    <h4 class="text-sm font-semibold text-blue-900 mb-2">{{ t('forms.campaign.test.title') }}</h4>
+                                    <h4 class="text-sm font-semibold text-blue-900 mb-2">{{
+                                        t('forms.campaign.test.title') }}</h4>
                                     <p class="text-xs text-blue-700 mb-3">
                                         {{ t('forms.campaign.test.help') }}
                                     </p>
                                     <Button type="button" @click="sendTestEmail" :disabled="!form?.id || sendingTest">
-                                        {{ sendingTest ? t('forms.campaign.test.sending') : t('forms.campaign.test.button') }}
+                                        {{ sendingTest ? t('forms.campaign.test.sending') :
+                                        t('forms.campaign.test.button') }}
                                     </Button>
                                     <p v-if="!form?.id" class="text-xs text-blue-600 mt-2">
                                         {{ t('forms.campaign.test.save_first') }}
@@ -260,8 +274,8 @@ function isTripSelected(tripId) {
                     </div>
                     <div class="p-6 space-y-6">
                         <div>
-                            <Select name="status" :label="t('forms.campaign.fields.status.label')" v-model="form.status" :required="true"
-                                :options="statusOptions" :feedback="form.errors.status"
+                            <Select name="status" :label="t('forms.campaign.fields.status.label')" v-model="form.status"
+                                :required="true" :options="statusOptions" :feedback="form.errors.status"
                                 :placeholder="t('forms.campaign.fields.status.placeholder')" />
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.campaign.status.help') }}
@@ -270,7 +284,8 @@ function isTripSelected(tripId) {
 
                         <div v-if="form.status === 'scheduled'"
                             class="p-4 bg-white rounded-lg border border-gray-200 grid gap-1">
-                            <Label for="scheduled_at" :required="false">{{ t('forms.campaign.fields.scheduled_at.label') }}</Label>
+                            <Label for="scheduled_at" :required="false">{{ t('forms.campaign.fields.scheduled_at.label')
+                                }}</Label>
                             <DatePicker v-model="form.scheduled_at" :minDate="new Date()"
                                 :feedback="form.errors.scheduled_at" :enableTimePicker="true" />
                             <span class="block text-xs text-gray-700/30 mt-2">
@@ -304,7 +319,9 @@ function isTripSelected(tripId) {
 
         </div>
         <!-- Footer Actions -->
-        <FormFooter :form="form" :label="form.id ? t('forms.campaign.submit.update') : t('forms.campaign.submit.create')" @submit="emit('submit')" />
+        <FormFooter :form="form"
+            :label="form.id ? t('forms.campaign.submit.update') : t('forms.campaign.submit.create')"
+            @submit="emit('submit')" />
 
     </form>
 </template>
