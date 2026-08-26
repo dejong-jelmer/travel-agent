@@ -54,10 +54,15 @@
     {{-- Featured Trips Section (optional) --}}
     @if(!empty($featuredTrips) && count($featuredTrips) > 0)
         <h3 style="margin:30px 0 20px;font-size:20px;font-weight:600;color:#30547e;">
-            Onze Aanbevolen Reizen
+            Bekijk de @if(count($featuredTrips) == 1) reis: @else reizen: @endif
         </h3>
 
         @foreach($featuredTrips as $trip)
+            @php
+                // Clip the plain text description to a few lines so every trip card
+                // stays the same size.
+                $tripDescription = Str::limit($trip->description_plain, 200);
+            @endphp
             <table width="100%" cellpadding="0" cellspacing="0" style="margin-bottom:20px;border:1px solid #d6e4ef;border-radius:8px;overflow:hidden;">
                 <tr>
                     {{-- Trip Image --}}
@@ -74,11 +79,11 @@
                             {{ $trip->name }}
                         </h4>
                         <p style="margin:0 0 12px;color:#4d6f80;font-size:14px;line-height:1.4;">
-                            {{ $trip->description }}
+                            {{ $tripDescription }}
                         </p>
-                        <a href="{{ $trip->url }}"
+                        <a href="{{ route('trips.show', $trip->slug) }}"
                            style="display:inline-block;padding:8px 18px;background:#f59e0b;color:#FFFFFF;text-decoration:none;border-radius:6px;font-size:14px;font-weight:500;">
-                            Bekijk Reis
+                            Bekijk reis
                         </a>
                     </td>
                 </tr>

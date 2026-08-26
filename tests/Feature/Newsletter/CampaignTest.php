@@ -7,6 +7,7 @@ use App\Jobs\SendNewsletterCampaign;
 use App\Mail\NewsletterCampaignMail;
 use App\Models\NewsletterCampaign;
 use App\Models\NewsletterSubscriber;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -287,6 +288,24 @@ class CampaignTest extends TestCase
 
         $response->assertRedirect();
         $response->assertSessionHas('error');
+    }
+
+    public function test_featured_trip_renders_plain_clipped_description_and_working_link(): void
+    {
+        $trip = Trip::factory()->create([
+            'description' => '<p>'.str_repeat('Reis met de trein door Europa. ', 20).'</p><p>Tweede alinea &amp; meer.</p>',
+        ]);
+
+        $campaign = NewsletterCampaign::factory()->create();
+        $campaign->trips()->attach($trip, ['order' => 1]);
+        $campaign->load('trips');
+
+        $html = (new NewsletterCampaignMail($campaign))->render();
+
+        $this->assertStringContainsString(route('trips.show', $trip->slug), $html);
+        $this->assertStringNotContainsString('&lt;p&gt;', $html);
+        $this->assertStringContainsString('Reis met de trein door Europa. Reis', $html);
+        $this->assertStringNotContainsString('Tweede alinea', $html);
     }
 
     public function test_only_active_subscribers_receive_campaign(): void

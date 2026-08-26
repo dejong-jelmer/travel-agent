@@ -437,6 +437,20 @@ class TripTest extends TestCase
         $this->assertSame([], $trip->refresh()->blocked_dates['weekdays']);
     }
 
+    public function test_meta_description_falls_back_to_plain_text_description(): void
+    {
+        $trip = Trip::factory()->create([
+            'description' => '<p>'.str_repeat('Reis met de trein door Europa. ', 20).'</p>',
+            'meta_description' => null,
+        ]);
+
+        $metaDescription = $trip->meta_description;
+
+        $this->assertStringNotContainsString('<', $metaDescription);
+        $this->assertStringStartsWith('Reis met de trein door Europa.', $metaDescription);
+        $this->assertLessThanOrEqual(config('seo.meta_description_max_length'), strlen($metaDescription));
+    }
+
     // Helper Methods
 
     private function generateTripUpdatePayload(Trip $trip, array $overrides = []): array
