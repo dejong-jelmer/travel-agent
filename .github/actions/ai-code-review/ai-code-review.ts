@@ -5,14 +5,14 @@ import * as github from "@actions/github";
 
 // Constants
 const MAX_DIFF_CHARS = 20000;
-const MAX_RESPONSE_TOKENS = 2500;
-const API_TIMEOUT_MS = 60000; // 60 seconds
+const MAX_RESPONSE_TOKENS = 16000;
+const API_TIMEOUT_MS = 180000; // 3 minutes
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 1000;
 const TOKEN_ESTIMATE_DIVISOR = 4;
 const ANTHROPIC_API_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_API_VERSION = process.env.ANTHROPIC_API_VERSION || "2023-06-01";
-const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-4-5-20250929";
+const ANTHROPIC_MODEL = process.env.ANTHROPIC_MODEL || "claude-sonnet-5";
 const CUSTOM_PROMPT = process.env.CUSTOM_PROMPT || `You are an expert software engineer performing a code review.
 Provide specific, concise feedback on code quality, security, maintainability, and style.
 Be objective and constructive.`;
@@ -22,8 +22,10 @@ interface AnthropicTextContent {
     text: string;
 }
 
+type AnthropicContentBlock = AnthropicTextContent | { type: "thinking"; thinking: string };
+
 interface AnthropicResponse {
-    content?: AnthropicTextContent[];
+    content?: AnthropicContentBlock[];
 }
 
 interface FileWithDiff {
@@ -73,7 +75,7 @@ function extractReview(resp: AnthropicResponse): string {
     if (!resp?.content || !Array.isArray(resp.content)) {
         return "⚠️ No feedback received.";
     }
-    const first = resp.content[0];
+    const first = resp.content.find(block => block.type === "text");
     if (!first || first.type !== "text" || !first.text) {
         return "⚠️ No feedback received.";
     }
@@ -118,6 +120,7 @@ async function callAnthropicWithRetry(prompt: string, apiKey: string): Promise<A
                     body: JSON.stringify({
                         model: ANTHROPIC_MODEL,
                         max_tokens: MAX_RESPONSE_TOKENS,
+                        output_config: { effort: "medium" },
                         messages: [{ role: "user", content: prompt }],
                     }),
                 },
