@@ -296,7 +296,7 @@ class Trip extends Model
     {
         return Attribute::get(
             fn () => Str::squish(
-                html_entity_decode(strip_tags(str_replace('<', ' <', (string) $this->description)))
+                strip_tags(str_replace('<', ' <', html_entity_decode((string) $this->description)))
             )
         );
     }

@@ -293,7 +293,8 @@ class CampaignTest extends TestCase
     public function test_featured_trip_renders_plain_clipped_description_and_working_link(): void
     {
         $trip = Trip::factory()->create([
-            'description' => '<p>'.str_repeat('Reis met de trein door Europa. ', 20).'</p><p>Tweede alinea &amp; meer.</p>',
+            'description' => '<p>Met de trein door Europa.</p><p>Onderweg <strong>&amp;</strong> ter plekke.</p>'
+                .'<p>'.str_repeat('Nog een zin over de reis. ', 20).'Deze staart valt buiten de limiet.</p>',
         ]);
 
         $campaign = NewsletterCampaign::factory()->create();
@@ -303,9 +304,13 @@ class CampaignTest extends TestCase
         $html = (new NewsletterCampaignMail($campaign))->render();
 
         $this->assertStringContainsString(route('trips.show', $trip->slug), $html);
+
+        // Markup gone, block elements separated by a space, entity escaped exactly once
+        $this->assertStringContainsString('Met de trein door Europa. Onderweg &amp; ter plekke. Nog een zin', $html);
         $this->assertStringNotContainsString('&lt;p&gt;', $html);
-        $this->assertStringContainsString('Reis met de trein door Europa. Reis', $html);
-        $this->assertStringNotContainsString('Tweede alinea', $html);
+
+        // Clipped at 200 characters
+        $this->assertStringNotContainsString('Deze staart', $html);
     }
 
     public function test_only_active_subscribers_receive_campaign(): void
