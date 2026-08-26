@@ -54,7 +54,7 @@
     {{-- Featured Trips Section (optional) --}}
     @if(!empty($featuredTrips) && count($featuredTrips) > 0)
         <h3 style="margin:30px 0 20px;font-size:20px;font-weight:600;color:#30547e;">
-            Bekijk de @if(count($featuredTrips) == 1) reis: @else reizen: @endif
+            Bekijk de {{ count($featuredTrips) === 1 ? 'reis' : 'reizen' }}:
         </h3>
 
         @foreach($featuredTrips as $trip)
