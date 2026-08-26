@@ -7,6 +7,7 @@ use App\Jobs\SendNewsletterCampaign;
 use App\Mail\NewsletterCampaignMail;
 use App\Models\NewsletterCampaign;
 use App\Models\NewsletterSubscriber;
+use App\Models\Trip;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -287,6 +288,29 @@ class CampaignTest extends TestCase
 
         $response->assertRedirect();
         $response->assertSessionHas('error');
+    }
+
+    public function test_featured_trip_renders_plain_clipped_description_and_working_link(): void
+    {
+        $trip = Trip::factory()->create([
+            'description' => '<p>Met de trein door Europa.</p><p>Onderweg <strong>&amp;</strong> ter plekke.</p>'
+                .'<p>'.str_repeat('Nog een zin over de reis. ', 20).'Deze staart valt buiten de limiet.</p>',
+        ]);
+
+        $campaign = NewsletterCampaign::factory()->create();
+        $campaign->trips()->attach($trip, ['order' => 1]);
+        $campaign->load('trips');
+
+        $html = (new NewsletterCampaignMail($campaign))->render();
+
+        $this->assertStringContainsString(route('trips.show', $trip->slug), $html);
+
+        // Markup gone, block elements separated by a space, entity escaped exactly once
+        $this->assertStringContainsString('Met de trein door Europa. Onderweg &amp; ter plekke. Nog een zin', $html);
+        $this->assertStringNotContainsString('&lt;p&gt;', $html);
+
+        // Clipped at 200 characters
+        $this->assertStringNotContainsString('Deze staart', $html);
     }
 
     public function test_only_active_subscribers_receive_campaign(): void
