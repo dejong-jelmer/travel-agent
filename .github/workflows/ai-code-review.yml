@@ -30,7 +30,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
-          ANTHROPIC_MODEL: claude-sonnet-4-5-20250929
+          ANTHROPIC_MODEL: claude-sonnet-5
           ANTHROPIC_API_VERSION: '2023-06-01'
           CUSTOM_PROMPT: |
             You are an expert software engineer performing a code review.

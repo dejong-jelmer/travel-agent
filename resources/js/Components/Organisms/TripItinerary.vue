@@ -83,7 +83,7 @@ const props = defineProps({
                             <img :src="itinerary.image?.public_url ?? placeholder" :alt="itinerary.title" loading="lazy"
                                 v-bind="reveal(50)"
                                 :class="visible ? 'opacity-100 translate-x-0' : (index % 2 === 0 ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
-                                class="w-full h-40 tablet:h-32 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out"
+                                class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out"
                                 @click="openLightbox(index)" />
                         </div>
                         <LightBox ref="lightboxRef" :images="[itinerary.image]" />

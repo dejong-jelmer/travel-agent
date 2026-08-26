@@ -285,6 +285,23 @@ class Trip extends Model
     }
 
     /**
+     * Get the description as plain text, with all rich text markup removed.
+     *
+     * A space is injected before every tag so block elements do not glue the
+     * surrounding words together once the tags are stripped.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     */
+    protected function descriptionPlain(): Attribute
+    {
+        return Attribute::get(
+            fn () => Str::squish(
+                strip_tags(str_replace('<', ' <', html_entity_decode((string) $this->description)))
+            )
+        );
+    }
+
+    /**
      * Get the meta_description property or fallback to substring of $trip->description.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
@@ -293,7 +310,7 @@ class Trip extends Model
     {
         return Attribute::get(
             fn (?string $value) => $value ?? Str::substr(
-                $this->description ?? '',
+                $this->description_plain,
                 0,
                 config(
                     'seo.meta_description_max_length'
