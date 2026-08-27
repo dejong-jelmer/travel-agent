@@ -79,7 +79,8 @@ const tabIcons = {
     <Layout>
         <template v-slot:hero>
             <!-- Hero Section -->
-            <PageHero :image="trip.hero_image?.public_url" :title="trip.name" :subtitle="trip.intro" :trip-meta="tripMeta" />
+            <PageHero :image="trip.hero_image?.public_url" :title="trip.name" :subtitle="trip.intro"
+                :trip-meta="tripMeta" />
 
         </template>
         <DecorativeLine />
@@ -106,23 +107,16 @@ const tabIcons = {
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
                             </div>
-                            <p class="text-lg text-brand-text leading-relaxed" v-html="trip.description">
-                            </p>
+                            <div class="prose prose-brand max-w-none text-lg text-brand-text leading-relaxed"
+                                v-html="trip.description"></div>
                         </div>
 
                         <!-- Highlights -->
-                        <div v-if="trip.highlights?.length" class="border-t border-brand-accent/20 pt-8">
+                        <div class="border-t border-brand-accent/20 pt-8">
                             <h3 class="text-lg font-semibold text-brand-primary mb-4">
                                 {{ t('trip_show.highlights_heading') }}
                             </h3>
-                            <ul class="space-y-4">
-                                <template v-for="(highlight, index) in trip.highlights" :key="index">
-                                    <li class="flex items-start gap-3">
-                                        <span class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0"></span>
-                                        <span class="text-brand-text">{{ highlight }}</span>
-                                    </li>
-                                </template>
-                            </ul>
+                            <Highlights :trip="trip" />
                         </div>
                     </div>
 

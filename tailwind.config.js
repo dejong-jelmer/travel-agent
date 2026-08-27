@@ -61,6 +61,36 @@ export default {
             animation: {
                 "wiggle-x": "slide-left-right 6s ease-in-out infinite",
             },
+            typography: ({ theme }) => ({
+                brand: {
+                    css: {
+                        h2: {
+                            color: theme("colors.brand.primary"),
+                            fontWeight: "600",
+                            fontSize: theme("fontSize.2xl")[0],
+                            lineHeight: theme("fontSize.2xl")[1].lineHeight,
+                            marginTop: theme("spacing.8"),
+                            marginBottom: theme("spacing.0"),
+                        },
+                        h3: {
+                            color: theme("colors.brand.primary"),
+                            fontWeight: "600",
+                            fontSize: theme("fontSize.lg")[0],
+                            lineHeight: theme("fontSize.lg")[1].lineHeight,
+                            marginTop: theme("spacing.6"),
+                            marginBottom: theme("spacing.2"),
+                        },
+                        p: {
+                            color: theme("colors.brand.text"),
+                            fontWeight: "400",
+                            fontSize: theme("fontSize.base")[0],
+                            lineHeight: theme("fontSize.base")[1].lineHeight,
+                            marginTop: theme("spacing.0"),
+                            marginBottom: theme("spacing.2"),
+                        },
+                    },
+                },
+            }),
         },
     },
     plugins: [typography],
