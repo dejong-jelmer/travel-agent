@@ -2,30 +2,28 @@
 import { computed } from 'vue';
 
 const props = defineProps({
-    trip: { type: Object, required: true },
+    highlights: { type: Object, required: true },
 });
 
-// Supports both the legacy string format and the new { title, description } shape,
-// so trips that have not been migrated yet keep rendering.
-const highlights = computed(() =>
-    (props.trip.highlights ?? []).map((highlight) =>
+// A highlight is either a { title, description } object or a plain string title.
+const items = computed(() =>
+    (props.highlights ?? []).map((highlight) =>
         typeof highlight === 'string'
-            ? { title: highlight.split(':')[0], description: highlight.split(':')[1] }
-            : { title: highlight.title, description: highlight.description },
-
-        // { title: highlight, description: null }
+            ? { title: highlight, description: null }
+            : highlight,
     ),
 );
+
+// Arbitrary Tailwind value; the underscore renders as the space after the colon.
+const colonAfter = "after:content-[':_']";
 </script>
 
 <template>
     <ul class="space-y-4">
-        <li v-for="highlight in highlights" :key="highlight.title" class="flex items-start gap-3">
+        <li v-for="highlight in items" :key="highlight.title" class="flex items-start gap-3">
             <span class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0" aria-hidden="true"></span>
             <div class="text-brand-text">
-                <h3
-                    class="inline font-medium after:content-[':']"
-                >{{ highlight.title }}</h3>
+                <h3 class="inline font-medium" :class="highlight.description ? colonAfter : ''">{{ highlight.title }}</h3>
                 <p v-if="highlight.description" class="inline">{{ highlight.description }}</p>
             </div>
         </li>

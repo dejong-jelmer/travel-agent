@@ -49,7 +49,10 @@ class TripItemTest extends TestCase
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [UploadedFile::fake()->image('img.jpg')],
             'destinations' => $this->destinations->modelKeys(),
-            'highlights' => ['highlight 1', 'highlight 2'],
+            'highlights' => [
+                ['title' => 'highlight 1', 'description' => 'description 1'],
+                ['title' => 'highlight 2', 'description' => null],
+            ],
             'published_at' => now()->toDateTimeString(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),

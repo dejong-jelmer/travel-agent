@@ -85,7 +85,11 @@ class TripTest extends TestCase
                 UploadedFile::fake()->image('image2.jpg'),
             ],
             'destinations' => $this->destinations->modelKeys(),
-            'highlights' => ['highlight 1', 'highlight 2', 'highlight 3'],
+            'highlights' => [
+                ['title' => 'highlight 1', 'description' => 'description 1'],
+                ['title' => 'highlight 2', 'description' => 'description 2'],
+                ['title' => 'highlight 3', 'description' => null],
+            ],
             'published_at' => now(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
@@ -173,7 +177,11 @@ class TripTest extends TestCase
                 UploadedFile::fake()->image('new2.jpg'),
             ],
             'destinations' => $this->destinations->modelKeys(),
-            'highlights' => ['updated highlight 1', 'updated highlight 2', 'updated highlight 3'],
+            'highlights' => [
+                ['title' => 'updated highlight 1', 'description' => 'updated description 1'],
+                ['title' => 'updated highlight 2', 'description' => 'updated description 2'],
+                ['title' => 'updated highlight 3', 'description' => null],
+            ],
             'published_at' => now()->addDay(fake()->randomDigit())->startOfDay()->toDateTimeString(),
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
@@ -287,6 +295,41 @@ class TripTest extends TestCase
         $trip->load('destinations');
 
         $this->assertEquals('Tuscany', $trip->destinations_formatted);
+    }
+
+    // Highlights validation tests
+    public function test_trip_update_drops_blank_highlights(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'highlights' => [
+                ['title' => 'highlight 1', 'description' => 'description 1'],
+                ['title' => 'highlight 2', 'description' => ''],
+                ['title' => '', 'description' => ''],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertEquals([
+            ['title' => 'highlight 1', 'description' => 'description 1'],
+            ['title' => 'highlight 2', 'description' => null],
+        ], $trip->fresh()->highlights);
+    }
+
+    public function test_trip_update_rejects_a_description_without_title(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'highlights' => [
+                ['title' => '', 'description' => 'description without a title'],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('highlights.0.title');
     }
 
     // Blocked dates validation tests
@@ -461,7 +504,7 @@ class TripTest extends TestCase
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),
             'destinations' => $this->destinations->modelKeys(),
-            'highlights' => ['highlight 1'],
+            'highlights' => [['title' => 'highlight 1', 'description' => null]],
             'meta_title' => $trip->meta_title,
             'meta_description' => $trip->meta_description,
             'prices' => [

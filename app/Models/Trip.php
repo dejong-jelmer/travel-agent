@@ -5,7 +5,6 @@ namespace App\Models;
 use App\Enums\Transport;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\TripType;
-use App\Models\Traits\CastsStringArray;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
@@ -32,8 +31,7 @@ use Illuminate\Support\Str;
  */
 class Trip extends Model
 {
-    use CastsStringArray,
-        HasFactory,
+    use HasFactory,
         HasFormattedDates,
         ManagesImages,
         SoftDeletes,
@@ -355,14 +353,23 @@ class Trip extends Model
     }
 
     /**
-     * Get the trip highlights
+     * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ...]
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     protected function highlights(): Attribute
     {
         return Attribute::make(
-            set: fn ($value) => $this->castStringArray($value)
+            set: fn ($value) => json_encode(
+                collect(is_array($value) ? $value : [])
+                    ->map(fn ($highlight) => [
+                        'title' => trim((string) ($highlight['title'] ?? '')),
+                        'description' => trim((string) ($highlight['description'] ?? '')) ?: null,
+                    ])
+                    ->filter(fn (array $highlight) => $highlight['title'] !== '')
+                    ->values()
+                    ->all()
+            )
         );
     }
 

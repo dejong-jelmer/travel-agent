@@ -116,7 +116,7 @@ const tabIcons = {
                             <h3 class="text-lg font-semibold text-brand-primary mb-4">
                                 {{ t('trip_show.highlights_heading') }}
                             </h3>
-                            <Highlights :trip="trip" />
+                            <Highlights :highlights="trip.highlights" />
                         </div>
                     </div>
 

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, watchEffect, ref } from 'vue';
-import { Plus, Minus } from 'lucide-vue-next';
+import { Plus, Minus, ChevronUp, ChevronDown } from 'lucide-vue-next';
 
 
 const props = defineProps({
@@ -8,6 +8,18 @@ const props = defineProps({
     label: String,
     name: String,
     placeholder: String,
+    // Optional: renders an input per field, items become objects instead of strings.
+    // Shape: [{ key, label, placeholder }]
+    fields: {
+        type: Array,
+        required: false,
+        default: null,
+    },
+    sortable: {
+        type: Boolean,
+        required: false,
+        default: false,
+    },
     required: {
         type: Boolean,
         required: false,
@@ -30,21 +42,29 @@ const items = computed({
   }
 })
 
+const blankItem = () => props.fields
+    ? Object.fromEntries(props.fields.map((field) => [field.key, '']))
+    : ''
+
+const isBlank = (item) => props.fields
+    ? props.fields.every((field) => !item?.[field.key])
+    : item === ''
+
 watchEffect(() => {
-    if (items.value.length === 0 || items.value[items.value.length - 1] !== '') {
-        items.value.push('')
+    if (items.value.length === 0 || !isBlank(items.value[items.value.length - 1])) {
+        items.value.push(blankItem())
     }
 })
 
 
 const handleInput = (index) => {
-    const currentValue = items.value[index]
     const isLastItem = index === items.value.length - 1
+    const blank = isBlank(items.value[index])
 
-    if (currentValue !== '' && isLastItem) {
-        items.value.push('')
+    if (!blank && isLastItem) {
+        items.value.push(blankItem())
     }
-    if (currentValue === '' && items.value.length > 1 && !isLastItem) {
+    if (blank && items.value.length > 1 && !isLastItem) {
         items.value.splice(index, 1)
     }
 }
@@ -55,6 +75,11 @@ const deleteItem = (index) => {
     }
 }
 
+const move = (index, offset) => {
+    const [item] = items.value.splice(index, 1)
+    items.value.splice(index + offset, 0, item)
+}
+
 </script>
 <template>
     <div class="grid gap-2">
@@ -62,8 +87,43 @@ const deleteItem = (index) => {
             <slot name="label">{{ label }}</slot>
         </Label>
         <div v-for="(item, index) in items" :key="`${name}-${index}`" role="group" class="flex items-start gap-2 group">
-            <div class="flex-1">
+            <div v-if="sortable" class="flex flex-col" :class="{ 'invisible': index === items.length - 1 }">
+                <button
+                    type="button"
+                    :disabled="index === 0"
+                    :title="$t('forms.actions.move_up')"
+                    class="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
+                    @click="move(index, -1)"
+                >
+                    <ChevronUp class="h-4 w-4" />
+                </button>
+                <button
+                    type="button"
+                    :disabled="index >= items.length - 2"
+                    :title="$t('forms.actions.move_down')"
+                    class="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
+                    @click="move(index, 1)"
+                >
+                    <ChevronDown class="h-4 w-4" />
+                </button>
+            </div>
+            <div class="flex-1" :class="fields ? 'grid gap-2 tablet:grid-cols-2' : ''">
+                <template v-if="fields">
+                    <Input
+                        v-for="field in fields"
+                        :key="field.key"
+                        type="text"
+                        :name="`${name}.${index}.${field.key}`"
+                        :label="field.label"
+                        :showLabel="false"
+                        v-model="items[index][field.key]"
+                        :placeholder="field.placeholder"
+                        :feedback="feedback[`${name}.${index}.${field.key}`] ?? null"
+                        @keyup="handleInput(index)"
+                    />
+                </template>
                 <Input
+                    v-else
                     type="text"
                     :name="`${name}.${index}`"
                     :label="label"

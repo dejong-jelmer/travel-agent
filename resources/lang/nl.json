@@ -181,7 +181,9 @@
     "forms": {
         "actions": {
             "add": "Toevoegen",
-            "delete": "Verwijderen"
+            "delete": "Verwijderen",
+            "move_up": "Omhoog verplaatsen",
+            "move_down": "Omlaag verplaatsen"
         },
         "booking": {
             "tooltip_locked": "Vul eerst de vorige stappen in",
@@ -329,7 +331,14 @@
                 },
                 "highlights": {
                     "label": "Hoogtepunten",
-                    "placeholder": "Voeg hoogtepunten toe…",
+                    "title": {
+                        "label": "Titel",
+                        "placeholder": "Titel van het hoogtepunt…"
+                    },
+                    "description": {
+                        "label": "Omschrijving",
+                        "placeholder": "Korte toelichting…"
+                    },
                     "help": "Voer unieke ervaringen en attracties van deze reis in"
                 },
                 "active": {
