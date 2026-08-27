@@ -143,30 +143,27 @@ function displayDate(entry) {
                                     <div>
                                         <label class="text-sm font-medium text-gray-700">{{
                                             t('admin.trips.show.details.description') }}</label>
-                                        <p class="mt-1 text-gray-900" v-html="trip.description"></p>
+                                        <div class="prose prose-brand max-w-none text-lg text-brand-text leading-relaxed"
+                                            v-html="trip.description"></div>
                                     </div>
-                                    <div v-if="trip.highlights?.length">
-                                        <label class="text-sm font-medium text-gray-700">{{
-                                            t('admin.trips.show.highlights.label') }}</label>
-                                        <ul class="mt-1 text-gray-900 list-disc list-inside space-y-1">
-                                            <li v-for="(highlight, index) in trip.highlights" :key="index">
-                                                {{ highlight }}
-                                            </li>
-                                        </ul>
+                                    <!-- Highlights -->
+                                    <div class="border-t border-brand-accent/20 pt-8">
+                                        <h3 class="text-lg font-semibold text-brand-primary mb-4">
+                                            {{ t('trip_show.highlights_heading') }}
+                                        </h3>
+                                        <Highlights :highlights="trip.highlights" />
                                     </div>
                                 </TabPanel>
 
                                 <TabPanel class="p-6">
                                     <div v-if="tripItems && Object.keys(tripItems).length" class="space-y-8">
-                                        <div v-for="(items, typeLabel) in tripItems" :key="typeLabel"
-                                            class="space-y-4">
+                                        <div v-for="(items, typeLabel) in tripItems" :key="typeLabel" class="space-y-4">
                                             <h3
                                                 class="text-lg font-bold text-gray-800 border-b-2 border-primary-default pb-2">
                                                 {{ typeLabel }}
                                             </h3>
                                             <ul v-if="items.length" class="ml-6 space-y-1 list-disc list-inside">
-                                                <li v-for="(item, index) in items" :key="index"
-                                                    class="text-gray-900">
+                                                <li v-for="(item, index) in items" :key="index" class="text-gray-900">
                                                     {{ item.item }}
                                                 </li>
                                             </ul>
@@ -276,33 +273,57 @@ function displayDate(entry) {
                     <!-- Pricing & Duration Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
-                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.pricing.title') }}</h2>
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.pricing.title') }}
+                            </h2>
                             <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.pricing.subtitle') }}</p>
                         </div>
                         <div class="p-6 space-y-4">
                             <!-- Duration -->
                             <div>
-                                <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.pricing.duration') }}</label>
-                                <p class="mt-1 text-xl text-gray-900">{{ t('admin.trips.show.pricing.days', { duration: trip.duration }) }}</p>
+                                <label class="text-sm font-medium text-gray-700">{{
+                                    t('admin.trips.show.pricing.duration') }}</label>
+                                <p class="mt-1 text-xl text-gray-900">{{ t('admin.trips.show.pricing.days', {
+                                    duration:
+                                        trip.duration
+                                })
+                                }}</p>
                             </div>
 
                             <!-- Price rows -->
                             <div v-if="trip.prices?.length" class="space-y-3">
-                                <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.pricing.seasons') }}</label>
+                                <label class="text-sm font-medium text-gray-700">{{
+                                    t('admin.trips.show.pricing.seasons') }}</label>
                                 <div v-for="(row, index) in trip.prices" :key="row.id ?? index"
                                     class="rounded-md border border-gray-200 overflow-hidden">
-                                    <div class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
-                                        <span class="text-sm font-semibold text-gray-700">{{ labelMap[row.label] ?? row.label }}</span>
-                                        <span class="text-xs text-gray-500">{{ formattedDate(row.valid_from, { longDay: false, fallback: '-', locale: locale }) }} - {{ formattedDate(row.valid_until, { longDay: false, fallback: '-', locale: locale }) }}</span>
+                                    <div
+                                        class="flex items-center justify-between px-4 py-2 bg-gray-50 border-b border-gray-200">
+                                        <span class="text-sm font-semibold text-gray-700">{{ labelMap[row.label] ??
+                                            row.label }}</span>
+                                        <span class="text-xs text-gray-500">{{ formattedDate(row.valid_from, {
+                                            longDay:
+                                                false, fallback:
+                                                '-', locale: locale
+                                        }) }} - {{ formattedDate(row.valid_until, {
+                                                longDay:
+                                                    false, fallback:
+                                                    '-', locale: locale
+                                            }) }}</span>
                                     </div>
                                     <div class="grid grid-cols-2 divide-x divide-gray-200">
                                         <div class="px-4 py-3">
-                                            <p class="text-xs text-gray-500">{{ t('forms.trip.fields.prices.base_price_pp.label') }}</p>
-                                            <p class="mt-0.5 text-lg font-semibold text-gray-900">{{ formatPrice(row.base_price_pp) }}</p>
+                                            <p class="text-xs text-gray-500">{{
+                                                t('forms.trip.fields.prices.base_price_pp.label') }}</p>
+                                            <p class="mt-0.5 text-lg font-semibold text-gray-900">{{
+                                                formatPrice(row.base_price_pp) }}
+                                            </p>
                                         </div>
                                         <div class="px-4 py-3">
-                                            <p class="text-xs text-gray-500">{{ t('forms.trip.fields.prices.single_supplement.label') }}</p>
-                                            <p class="mt-0.5 text-lg font-semibold text-gray-900">{{ formatPrice(row.single_supplement) }}</p>
+                                            <p class="text-xs text-gray-500">{{
+                                                t('forms.trip.fields.prices.single_supplement.label') }}
+                                            </p>
+                                            <p class="mt-0.5 text-lg font-semibold text-gray-900">{{
+                                                formatPrice(row.single_supplement)
+                                            }}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -325,7 +346,7 @@ function displayDate(entry) {
                                 <Pill v-for="destination in trip.destinations" :key="destination.id" type="success"
                                     variant="transparent">
                                     <Link :href="route('admin.destinations.edit', destination.id)">
-                                    {{ destination.region || destination.name }}
+                                        {{ destination.region || destination.name }}
                                     </Link>
                                 </Pill>
                             </div>
@@ -335,12 +356,14 @@ function displayDate(entry) {
                     <!-- Transport Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
-                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.transport.title') }}</h2>
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.transport.title') }}
+                            </h2>
                             <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.transport.subtitle') }}</p>
                         </div>
                         <div class="p-6">
                             <div v-if="trip.transport_formatted?.length" class="flex flex-wrap gap-2">
-                                <Pill v-for="mode in trip.transport_formatted" :key="mode.value" type="primary" variant="transparent">
+                                <Pill v-for="mode in trip.transport_formatted" :key="mode.value" type="primary"
+                                    variant="transparent">
                                     <EnumIcon :enum="mode.value" class="w-4 h-4 mr-1.5 flex-none" />
                                     {{ mode.label }}
                                 </Pill>
@@ -352,35 +375,32 @@ function displayDate(entry) {
                     <!-- Availability Section -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
-                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.availability.title') }}</h2>
-                            <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.availability.subtitle') }}</p>
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trips.show.availability.title')
+                            }}</h2>
+                            <p class="mt-1 text-sm text-gray-700/30">{{ t('admin.trips.show.availability.subtitle') }}
+                            </p>
                         </div>
                         <div class="p-6 space-y-4">
                             <template v-if="hasAvailabilityRestrictions">
                                 <div v-if="blockedWeekdays.length">
-                                    <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.availability.blocked_weekdays') }}</label>
+                                    <label class="text-sm font-medium text-gray-700">{{
+                                        t('admin.trips.show.availability.blocked_weekdays') }}</label>
                                     <div class="mt-2 flex flex-wrap gap-2">
-                                        <span
-                                            v-for="day in 7"
-                                            :key="day"
-                                            class="px-3 py-1.5 rounded-md text-sm font-medium border"
-                                            :class="blockedWeekdays.includes(day % 7)
+                                        <span v-for="day in 7" :key="day"
+                                            class="px-3 py-1.5 rounded-md text-sm font-medium border" :class="blockedWeekdays.includes(day % 7)
                                                 ? 'bg-status-error/10 border-status-error text-status-error'
-                                                : 'bg-white border-gray-200 text-gray-700/30'"
-                                        >
+                                                : 'bg-white border-gray-200 text-gray-700/30'">
                                             {{ weekdaysTranslated[day % 7] }}
                                         </span>
                                     </div>
                                 </div>
 
                                 <div v-if="blockedDates.length">
-                                    <label class="text-sm font-medium text-gray-700">{{ t('admin.trips.show.availability.blocked_dates') }}</label>
+                                    <label class="text-sm font-medium text-gray-700">{{
+                                        t('admin.trips.show.availability.blocked_dates') }}</label>
                                     <div class="mt-2 space-y-2">
-                                        <div
-                                            v-for="(entry, index) in blockedDates"
-                                            :key="index"
-                                            class="p-2 bg-gray-50 rounded-md border border-gray-200 text-sm text-gray-700"
-                                        >
+                                        <div v-for="(entry, index) in blockedDates" :key="index"
+                                            class="p-2 bg-gray-50 rounded-md border border-gray-200 text-sm text-gray-700">
                                             {{ displayDate(entry) }}
                                         </div>
                                     </div>

@@ -31,7 +31,7 @@ const props = defineProps({ trip: Object });
                 <!-- Title -->
                 <div class="min-h-[40px]">
 
-                    <h3 class="text-xl laptop:text-2xl leading-6 font-bold text-brand-primary line-clamp-1">
+                    <h3 class="text-xl laptop:text-2xl leading-6 font-bold text-brand-primary line-clamp-2">
                         {{ trip.name }}
                     </h3>
                 </div>

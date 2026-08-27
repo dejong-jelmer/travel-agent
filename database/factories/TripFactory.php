@@ -23,10 +23,10 @@ use Illuminate\Support\Str;
 class TripFactory extends Factory
 {
     private const HIGHLIGHTS = [
-        'Romantische treinrit door de Alpen met adembenemende uitzichten',
-        'Bezoek aan historische kastelen en unieke UNESCO werelderfgoed locaties',
-        'Lokale culinaire ervaringen en wijnproeverijen',
-        'Duurzaam reizen per trein',
+        ['title' => 'Romantische treinrit door de Alpen', 'description' => 'Met adembenemende uitzichten over de bergpassen'],
+        ['title' => 'Historische kastelen', 'description' => 'Bezoek unieke UNESCO werelderfgoed locaties'],
+        ['title' => 'Lokale culinaire ervaringen', 'description' => 'Inclusief wijnproeverijen bij kleine producenten'],
+        ['title' => 'Duurzaam reizen per trein', 'description' => null],
     ];
 
     /**

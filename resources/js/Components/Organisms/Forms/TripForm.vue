@@ -51,6 +51,19 @@ watch([minAdvanceValue, minAdvanceUnit], ([val, unit]) => {
     props.form.min_advance_days = num > 0 ? Math.round(num * unitMultiplier[unit]) : null
 })
 
+const highlightFields = computed(() => [
+    {
+        key: 'title',
+        label: t('forms.trip.fields.highlights.title.label'),
+        placeholder: t('forms.trip.fields.highlights.title.placeholder'),
+    },
+    {
+        key: 'description',
+        label: t('forms.trip.fields.highlights.description.label'),
+        placeholder: t('forms.trip.fields.highlights.description.placeholder'),
+    },
+])
+
 const { length: metaTitleLength, charsLeft: metaTitleCharsLeft, counterClass: metaTitleClass } = useCharacterCounter(
     computed(() => props.form?.meta_title),
     META_TITLE_MAX_LENGTH
@@ -135,7 +148,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 <FormFeedback :message="form.errors.description" />
                                 <DynamicInputList :items="form.highlights" name="highlights"
                                     :label="t('forms.trip.fields.highlights.label')"
-                                    :placeholder="t('forms.trip.fields.highlights.placeholder')"
+                                    :fields="highlightFields" :sortable="true"
                                     :feedback="form.errors" />
                             </TabPanel>
 
