@@ -69,4 +69,38 @@ jobs:
             - Do not praise, do not summarise the diff, do not restate what the code does.
             - If there is nothing meaningful to report, reply with exactly:
               "No blocking issues found." and nothing else.
+
+              ## Output format
+
+              Start with a one-line verdict, then a scannable table, then the details.
+
+              Use exactly this structure:
+
+              **Verdict:** <one sentence, max 15 words>
+
+              | | File | Finding |
+              |---|---|---|
+              | 🔴 | `app/Models/Trip.php:355` | Possible double JSON encoding |
+              | 🟡 | `app/Services/Foo.php:19` | Validation rule may allow blank titles |
+
+              Then, for each finding in the same order:
+
+              ---
+
+              ### 🔴 `app/Models/Trip.php:355`
+              **Possible double JSON encoding**
+
+              Two sentences maximum explaining what is wrong and why it matters.
+
+              > **Fix:** one sentence, or a short code block.
+
+              ---
+
+              Severity icons: 🔴 blocker, 🟠 major, 🟡 minor, ⚪ nit.
+
+              Hard limits:
+              - The explanation is two sentences. Not three.
+              - The fix line is one sentence or one code block, never both.
+              - No sentence longer than 25 words.
+              - Never repeat the file path inside the explanation text.
         run: bun run review
