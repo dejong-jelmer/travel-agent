@@ -46,6 +46,10 @@ return [
         'travelers.*.*.special_requests_consent.accepted' => 'You must give consent to process the special requests you entered.',
         'special_requests_consent_required' => 'You must give consent to process the special requests you entered.',
 
+        // Trip
+        'highlights.*.title.required_with' => 'Please enter a title for this description.',
+        'highlights.*.title.distinct' => 'This title is already used by another highlight.',
+
         // Main booker
         'main_booker' => [
             'too_young' => 'The main booker must be at least 18 years old.',

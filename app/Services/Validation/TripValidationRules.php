@@ -15,7 +15,7 @@ class TripValidationRules
         return [
             'name' => ['required', 'string', 'max:255'],
             'highlights' => ['nullable', 'array'],
-            'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct', 'required_with:highlights.*.description'],
+            'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct:ignore_case', 'required_with:highlights.*.description'],
             'highlights.*.description' => ['nullable', 'string', 'max:500'],
             'intro' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],

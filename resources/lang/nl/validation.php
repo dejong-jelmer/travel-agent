@@ -46,6 +46,10 @@ return [
         'travelers.*.*.special_requests_consent.accepted' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
         'special_requests_consent_required' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
 
+        // Trip
+        'highlights.*.title.required_with' => 'Vul een titel in bij deze omschrijving.',
+        'highlights.*.title.distinct' => 'Deze titel is al gebruikt bij een ander hoogtepunt.',
+
         // Main booker
         'main_booker' => [
             'too_young' => 'De hoofdboeker moet minimaal 18 jaar oud zijn.',

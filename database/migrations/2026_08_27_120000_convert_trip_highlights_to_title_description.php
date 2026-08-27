@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Trip::withTrashed()->each(function (Trip $trip): void {
+        Trip::withTrashed()->eachById(function (Trip $trip): void {
             if (blank($trip->highlights)) {
                 return;
             }
@@ -21,7 +21,9 @@ return new class extends Migration
                     return $highlight;
                 }
 
-                // Legacy format: "Lascaux IV: een verbluffende reconstructie van ..."
+                // Legacy format: "Lascaux IV: een verbluffende reconstructie van ...".
+                // Best effort and lossy: a title that legitimately contains a colon
+                // is split at that colon, and the exact spacing is not restorable.
                 [$title, $description] = array_pad(explode(':', $highlight, 2), 2, null);
 
                 return [
@@ -41,7 +43,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Trip::withTrashed()->each(function (Trip $trip): void {
+        Trip::withTrashed()->eachById(function (Trip $trip): void {
             if (blank($trip->highlights)) {
                 return;
             }

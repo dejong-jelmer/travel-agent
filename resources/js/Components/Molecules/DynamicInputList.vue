@@ -92,6 +92,7 @@ const move = (index, offset) => {
                     type="button"
                     :disabled="index === 0"
                     :title="$t('forms.actions.move_up')"
+                    :aria-label="$t('forms.actions.move_up')"
                     class="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
                     @click="move(index, -1)"
                 >
@@ -101,6 +102,7 @@ const move = (index, offset) => {
                     type="button"
                     :disabled="index >= items.length - 2"
                     :title="$t('forms.actions.move_down')"
+                    :aria-label="$t('forms.actions.move_down')"
                     class="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
                     @click="move(index, 1)"
                 >
