@@ -181,7 +181,9 @@
     "forms": {
         "actions": {
             "add": "Add",
-            "delete": "Delete"
+            "delete": "Delete",
+            "move_up": "Move up",
+            "move_down": "Move down"
         },
         "booking": {
             "tooltip_locked": "Please complete the previous steps first",
@@ -329,7 +331,14 @@
                 },
                 "highlights": {
                     "label": "Highlights",
-                    "placeholder": "Add highlights…",
+                    "title": {
+                        "label": "Title",
+                        "placeholder": "Highlight title…"
+                    },
+                    "description": {
+                        "label": "Description",
+                        "placeholder": "Short description…"
+                    },
                     "help": "Enter unique experiences and attractions of this trip"
                 },
                 "active": {
