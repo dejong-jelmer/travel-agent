@@ -4,16 +4,6 @@ import { useI18n } from 'vue-i18n'
 
 const props = defineProps({
     trip: Object,
-    // image: String,
-    // title: String,
-    // subtitle: String,
-    // tripMeta: {
-    //     type: Object,
-    //     default: () => ({
-    //         price: null,
-    //         data: []
-    //     })
-    // },
     overlayClass: {
         type: String,
         default: 'bg-gradient-to-b from-transparent via-transparent to-brand-text/85',

@@ -5,7 +5,6 @@ use App\Enums\Trip\ItemType;
 return [
     ItemType::Inclusion->value => [
         'trip.item.inclusion.itinerary',
-        // 'trip.item.inclusion.background_info',
         'trip.item.inclusion.train_reservations',
     ],
     ItemType::Exclusion->value => [
