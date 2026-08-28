@@ -1,7 +1,6 @@
 <script setup>
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
-import Heading from '@tiptap/extension-heading'
 import Link from '@tiptap/extension-link'
 import { TextStyle, FontSize } from '@tiptap/extension-text-style'
 
@@ -28,13 +27,10 @@ const editor = useEditor({
     extensions: [
         StarterKit,
         Link.configure({ openOnClick: false }),
-        Heading.configure({
-            levels: [1, 2, 3, 4, 5],
-        }),
         TextStyle,
         FontSize
     ],
-    onUpdate: ({ editor }) => emit('update:modelValue', editor.isEmpty ? '' : editor.getHTML()),
+    onUpdate: ({ editor }) => emit('update:modelValue', editor.getHTML()),
 })
 
 function setFontSize(event) {
