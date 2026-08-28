@@ -115,7 +115,7 @@ class TripValidationRules
     {
         return [
             'practical_info' => ['nullable', 'array'],
-            'practical_info.*' => ['nullable', 'string', 'max:1020'],
+            'practical_info.*' => ['nullable', 'string', 'max:5000'],
         ];
     }
 

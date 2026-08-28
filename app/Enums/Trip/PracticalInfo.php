@@ -13,6 +13,7 @@ enum PracticalInfo: string
     case OutboundReturn = 'outbound_return';
     case Transport = 'transport';
     case Accommodation = 'accommodation';
+    case Additional = 'additional';
 
     protected function getLabelKey(): string
     {

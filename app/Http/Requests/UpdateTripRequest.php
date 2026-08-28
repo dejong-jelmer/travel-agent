@@ -27,6 +27,9 @@ class UpdateTripRequest extends FormRequest
         //  Default to empty array's on null
         emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'prices', 'blocked_dates']);
 
+        // Null out rich text sections left empty in the editor
+        nullifyEmptyHtml($this, 'practical_info');
+
         // Cast FormData string to integer
         if ($this->filled('min_advance_days')) {
             $this->merge(['min_advance_days' => (int) $this->input('min_advance_days')]);

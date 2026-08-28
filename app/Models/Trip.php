@@ -172,7 +172,7 @@ class Trip extends Model
         return Attribute::get(function () {
             /** @var \Illuminate\Database\Eloquent\Collection<int, Destination> $destinations */
             $destinations = $this->destinations;
-            $names = $destinations->map(fn (Destination $d) => $d->region ?? $d->name);
+            $names = $destinations->map(fn (Destination $d) => $d->region ? $d->region.', '.$d->name : $d->name);
 
             return match ($names->count()) {
                 0 => '',
