@@ -141,7 +141,8 @@ const endDrag = () => {
 </script>
 <template>
     <section ref="rootRef">
-        <div class="flex items-center justify-center group gap-2">
+        <div class="flex items-center justify-center group gap-2"
+            :class="{ 'tablet:px-6 laptop:px-12': !internalArrows }">
             <!-- External arrows (internalArrows=false) -->
             <template v-if="!internalArrows && items.length > visibleItems">
                 <button @click="prevSlide" :disabled="currentIndex === 0"

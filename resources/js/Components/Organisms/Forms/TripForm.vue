@@ -158,9 +158,9 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
 
                             <TabPanel class="p-6 space-y-6">
                                 <template v-for="(label, key) in practicalSections" :key="key">
-                                    <TextArea :name="`practical_info.${key}`" :label="label"
+                                    <TipTap :name="`practical_info.${key}`" :label="label"
                                         v-model="form.practical_info[key]"
-                                        :feedback="form.errors[`practical_info.${key}`]" :rows="6" />
+                                        :feedback="form.errors[`practical_info.${key}`]" />
                                 </template>
                             </TabPanel>
 

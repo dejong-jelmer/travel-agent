@@ -919,12 +919,12 @@
             "expected": "Verwacht"
         },
         "about_trip": "Waarom {trip}",
-        "tabs": {
-            "itinerary": "Dag tot dag",
-            "inclusive": "Wat is inbegrepen",
-            "practical": "Praktische info",
-            "general_info": "Over het land"
+        "itinerary_heading": "Deze reis van dag tot dag",
+        "card_tabs": {
+            "about": "Over deze reis",
+            "practical": "Praktische informatie"
         },
+        "country_heading": "Over het land",
         "tab_content": {
             "itinerary_empty": "Gedetailleerd reisprogramma wordt binnenkort toegevoegd",
             "inclusive_placeholder": "Inbegrepen en niet inbegrepen informatie komt hier.",
@@ -953,7 +953,7 @@
             "price_from": "Vanaf €{price},- p.p.",
             "expected": "Prijs op aanvraag",
             "duration_label": "{duration} dagen",
-            "explanation": "Ik kijk graag samen met je naar de beste periode, je voorkeuren en wat deze reis voor jou bijzonder maakt. Niets is definitief tot we het samen hebben afgestemd.",
+            "explanation": "Ik kijk graag met je naar de beste periode en je voorkeuren. Niets is definitief tot we het samen hebben afgestemd.",
             "cta_make_request": "Vraag voorstel aan",
             "cta_send_message": "Stel een vraag",
             "preferred_period_label": "Voorkeursperiode (optioneel)",

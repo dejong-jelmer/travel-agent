@@ -4,47 +4,6 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
 
 <template>
     <div class="space-y-6">
-        <!-- Prijs & Offerte -->
-        <div
-            class="bg-white rounded-lg border border-brand-primary/20 px-4 tablet:px-6 py-6 tablet:py-12 space-y-6 tablet:space-y-12">
-            <div class="flex items-start gap-3 mb-3">
-                <div class="flex-shrink-0 mt-1">
-                    <Euro class="w-5 h-5 text-brand-accent" />
-                </div>
-                <div class="flex-1 min-w-0">
-                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
-                        Prijzen
-                    </h4>
-                    <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
-                        De getoonde prijs is een richtprijs per persoon, inclusief BTW, garantiefonds en boekingskosten.
-                        De definitieve prijs hangt af van wanneer je gaat en met hoeveel personen.
-                        <br>
-                        <br>
-                        Voor populaire periodes zoals schoolvakanties is het verstandig om vroeg contact op te nemen, dan is er meer ruimte om een passend voorstel te maken.
-                    </p>
-                </div>
-            </div>
-            <div class="border-t border-brand-primary/10 text-sm text-brand-text/80"></div>
-            <div class="flex items-start gap-3 mb-3">
-                <div class="flex-shrink-0 mt-1">
-                    <FileText class="w-5 h-5 text-brand-accent" />
-                </div>
-                <div>
-                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
-                        {{ $t('trip_show.extra_trip_info.title') }}
-                    </h4>
-                    <div class="space-y-5 text-sm tablet:text-base text-brand-text leading-relaxed">
-                        <div v-for="(step, index) in 4" :key="index" class="flex items-baseline gap-2">
-                            <span class="text-sm font-light text-brand-primary flex-shrink-0 tabular-nums">
-                                {{ index + 1 }}
-                            </span>
-                            <p>{{ $t(`trip_show.extra_trip_info.steps-${index + 1}`) }}</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Betalingsgarantie -->
         <div class="bg-brand-subtle/10 rounded-lg border border-brand-subtle/30 p-4 tablet:p-6">
             <div class="flex items-start gap-3">
@@ -52,9 +11,9 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                     <ShieldCheck class="w-5 h-5 text-brand-subtle" />
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
+                    <h3 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                         Betalingsgarantie via STO Garant
-                    </h4>
+                    </h3>
                     <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
                         Dit aanbod valt onder de garantie van STO Garant. U kunt de voorwaarden van deze
                         garantieregeling vinden op de website van STO Garant <a class="text-brand-link underline"
@@ -65,5 +24,50 @@ import { Euro, FileText, CreditCard, Wallet, PhoneCall, ShieldCheck } from 'luci
                 </div>
             </div>
         </div>
+        <!-- Prijs & Offerte -->
+        <div
+            class="bg-white rounded-lg border border-brand-primary/20 px-4 tablet:px-6 py-6 tablet:py-12 space-y-6 tablet:space-y-12">
+            <div class="flex items-start gap-3 mb-3">
+                <div class="flex-shrink-0 mt-1">
+                    <FileText class="w-5 h-5 text-brand-accent" />
+                </div>
+                <div>
+                    <h3 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
+                        {{ $t('trip_show.extra_trip_info.title') }}
+                    </h3>
+                    <div class="space-y-5 text-sm tablet:text-base text-brand-text leading-relaxed">
+                        <div v-for="(step, index) in 4" :key="index" class="flex items-baseline gap-2">
+                            <span class="text-sm font-light text-brand-primary flex-shrink-0 tabular-nums">
+                                {{ index + 1 }}
+                            </span>
+                            <p>{{ $t(`trip_show.extra_trip_info.steps-${index + 1}`) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="border-t border-brand-primary/10 text-sm text-brand-text/80" role="presentation"></div>
+            <div class="flex items-start gap-3 mb-3">
+                <div class="flex-shrink-0 mt-1">
+                    <Euro class="w-5 h-5 text-brand-accent" />
+                </div>
+                <div class="flex-1 min-w-0">
+                    <h3 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
+                        Prijzen
+                    </h3>
+                    <p class="text-sm tablet:text-base text-brand-text leading-relaxed">
+                        De getoonde prijs is een vanaf prijs per persoon, op basis van twee personen. Inclusief btw,
+                        bijdrage garantiefonds en boekingskosten. Wat je uiteindelijk betaalt hangt af van wanneer je
+                        gaat en met hoeveel personen je reist.
+                        <br>
+                        <br>
+                        Treinkaartjes worden meestal duurder naarmate de vertrekdatum nadert. Vroeg boeken geeft je de
+                        meeste keuze in vertrektijden, en vaak de beste prijs.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+
     </div>
 </template>

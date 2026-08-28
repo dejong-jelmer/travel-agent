@@ -24,15 +24,15 @@ const icons = {
             <template v-for="(items, type) in tripItems" :key="type">
                 <!-- Type Section (Inclusief/Exclusief) -->
                 <div class="space-y-2">
-                    <h4 class="text-base tablet:text-lg font-semibold text-brand-primary">
+                    <h3 class="text-base font-semibold text-brand-primary mb-2">
                         {{ type }}
-                    </h4>
+                    </h3>
 
-                    <div class="bg-white p-2 tablet:p-3">
-                        <ul class="space-y-3">
+                    <div class="bg-white">
+                        <ul class="space-y-2">
                             <li v-for="(tripItem, index) in items" :key="index"
-                                class="flex items-start gap-3">
-                                <div class="flex-shrink-0 mt-0.5">
+                                class="flex items-center gap-2">
+                                <div class="flex-shrink-0">
                                     <component
                                         :is="icons[tripItem.type]"
                                         :class="{
@@ -40,7 +40,7 @@ const icons = {
                                             'text-status-error': tripItem.type === 'exclusion',
                                             'text-brand-accent': tripItem.type === 'optional',
                                         }"
-                                        class="w-5 h-5"
+                                        class="w-3 h-3"
                                     />
                                 </div>
                                 <span class="text-sm tablet:text-base text-brand-text leading-relaxed flex-1">

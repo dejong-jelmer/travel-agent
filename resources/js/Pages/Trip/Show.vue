@@ -1,6 +1,7 @@
 <script setup>
-import { ref, computed, toRef, watch } from 'vue'
-import { ChevronRight, Map, ListChecks, Info, Globe, Phone, AtSign, CircleQuestionMark } from 'lucide-vue-next';
+import { ref, computed } from 'vue'
+import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from 'lucide-vue-next';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 
@@ -11,26 +12,10 @@ const props = defineProps({
     },
     tripItems: Object,
     practicalSections: Object,
-    travelInfoSections: Object,
-    inclusions: {
-        type: Object,
-        default: () => ({ type_label: '', categories: [] })
-    },
-    exclusions: {
-        type: Object,
-        default: () => ({ type_label: '', categories: [] })
-    }
+    travelInfoSections: Object
 })
 
 const { t } = useI18n()
-
-// Tabs
-const activeTab = ref('itinerary')
-const tabsSection = ref(null)
-const selectTab = (id) => {
-    activeTab.value = id
-    tabsSection.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-}
 
 // Modal
 const requestModalOpen = ref(false)
@@ -41,24 +26,24 @@ const openLightbox = (index) => {
     lightboxRef.value?.open(index)
 }
 
-const tabs = computed(() => [
-    { id: 'itinerary', label: t('trip_show.tabs.itinerary') },
-    { id: 'inclusive', label: t('trip_show.tabs.inclusive') },
-    { id: 'practical', label: t('trip_show.tabs.practical') },
-    { id: 'general_info', label: t('trip_show.tabs.general_info') }
+// Inquiry card tabs
+const activeCardTab = ref('about')
+const cardTabs = computed(() => [
+    { id: 'about', label: t('trip_show.card_tabs.about') },
+    { id: 'practical', label: t('trip_show.card_tabs.practical') }
 ])
 
-const tripMeta = computed(() => ({
-    price: props.trip.is_expected
-        ? t('trip_show.hero.expected')
-        : `${t('trip_show.hero.from_price', { price: props.trip.price_formatted })} ${t('trip_show.hero.per_person')}`,
-    data: [
-        props.trip.destinations_formatted,
-        t('trip_show.hero.days', {
-            duration: props.trip.duration
-        })
-    ]
-}))
+const inquiryCard = ref(null)
+const openCardTab = (id) => {
+    activeCardTab.value = id
+    inquiryCard.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+}
+
+const hasCountryInfo = computed(() =>
+    props.trip.destinations?.some(destination =>
+        Object.keys(props.travelInfoSections ?? {}).some(key => destination.travel_info?.[key])
+    ) ?? false
+)
 
 const contactUrl = computed(() => {
     const params = new URLSearchParams({ reis: props.trip.slug })
@@ -66,27 +51,19 @@ const contactUrl = computed(() => {
     return `?${params.toString()}#contact`
 })
 
-const tabIcons = {
-    itinerary: Map,
-    inclusive: ListChecks,
-    practical: Info,
-    general_info: Globe,
-}
-
 </script>
 
 <template>
     <Layout>
         <template v-slot:hero>
             <!-- Hero Section -->
-            <PageHero :image="trip.hero_image?.public_url" :title="trip.name" :subtitle="trip.intro"
-                :trip-meta="tripMeta" />
+            <PageHero :trip="trip" />
 
         </template>
         <DecorativeLine />
         <!-- Main Content -->
         <div
-            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-24 laptop:pb-0">
+            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-32 laptop:pb-0">
             <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">
@@ -107,8 +84,7 @@ const tabIcons = {
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
                             </div>
-                            <div class="prose prose-brand max-w-none text-lg text-brand-text leading-relaxed"
-                                v-html="trip.description"></div>
+                            <div class="prose prose-brand max-w-none" v-html="trip.description"></div>
                         </div>
 
                         <!-- Highlights -->
@@ -120,93 +96,114 @@ const tabIcons = {
                         </div>
                     </div>
 
-                    <!-- Tabs Section -->
-                    <div ref="tabsSection"
-                        class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 overflow-hidden scroll-mt-[125px]">
-                        <!-- Tab Headers -->
-                        <div class="hidden laptop:block border-b border-brand-accent/20">
-                            <nav class="flex overflow-x-auto">
-                                <button v-for="tab in tabs" :key="tab.id" @click="activeTab = tab.id" :class="[
-                                    'flex-1 px-6 py-4 text-center font-medium whitespace-nowrap transition-colors',
-                                    activeTab === tab.id
-                                        ? 'text-brand-primary bg-brand-earth/10 border-b-2 border-brand-accent'
-                                        : 'text-brand-light hover:text-brand-primary hover:bg-white'
-                                ]">
-                                    {{ tab.label }}
-                                </button>
-                            </nav>
+                    <!-- Itinerary Section -->
+                    <div
+                        class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 overflow-hidden p-6 laptop:p-8">
+                        <div class="w-full text-center">
+                            <SectionHeader>{{ t('trip_show.itinerary_heading') }}</SectionHeader>
                         </div>
-
-                        <!-- Tab Content -->
-                        <div class="p-6 laptop:p-8">
-                            <div v-if="activeTab === 'itinerary'" class="space-y-6">
-                                <div v-if="trip.itineraries?.length" class="space-y-6">
-                                    <template v-for="(itinerary, index) in trip.itineraries" :key="index">
-                                        <TripItinerary :itinerary="itinerary" :index="index" />
-                                    </template>
-                                </div>
-                                <p v-else class="text-brand-light">
-                                    {{ t('trip_show.tab_content.itinerary_empty') }}
-                                </p>
-                            </div>
-                            <div v-else-if="activeTab === 'inclusive'" class="space-y-6">
-                                <TripItems :trip-items="tripItems" />
-                            </div>
-
-                            <div v-else-if="activeTab === 'practical'" class="space-y-2">
-                                <template v-for="(label, key) in practicalSections" :key="key">
-                                    <div v-if="trip.practical_info?.[key]" class="p-2 tablet:p-4">
-                                        <h4 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
-                                            {{ label }}
-                                        </h4>
-                                        <div
-                                            class="text-sm tablet:text-base text-brand-text leading-relaxed whitespace-pre-line">
-                                            {{ trip.practical_info[key] }}
-                                        </div>
-                                    </div>
-                                </template>
-
-                                <!-- Empty state -->
-                                <p v-if="!trip.practical_info || !Object.values(trip.practical_info).some(v => v)"
-                                    class="text-brand-light text-center py-8">
-                                    {{ t('trip_show.tab_content.practical_placeholder') }}
-                                </p>
-                            </div>
-
-                            <div v-else-if="activeTab === 'general_info'" class="space-y-2">
-                                <TripTravelInfo :destinations="trip.destinations"
-                                    :travel-info-sections="travelInfoSections" />
-                            </div>
+                        <div v-if="trip.itineraries?.length" class="space-y-6">
+                            <template v-for="(itinerary, index) in trip.itineraries" :key="index">
+                                <TripItinerary :itinerary="itinerary" :index="index" />
+                            </template>
                         </div>
+                        <p v-else class="text-brand-light">
+                            {{ t('trip_show.tab_content.itinerary_empty') }}
+                        </p>
                     </div>
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->
                 <div class="laptop:col-span-1">
-                    <div class="sticky top-6 space-y-6">
+                    <div class="space-y-6">
                         <!-- Inquiry Card -->
-                        <div class="bg-white rounded-2xl shadow-lg border border-brand-accent/20 overflow-hidden">
-                            <div class="p-6 laptop:p-8 space-y-6 laptop:space-y-12">
+                        <div ref="inquiryCard"
+                            class="bg-white rounded-2xl shadow-lg border border-brand-accent/20 overflow-hidden scroll-mt-[125px]">
+                            <!-- Tab Headers -->
+                            <div class="border-b border-brand-accent/20">
+                                <nav class="flex">
+                                    <button v-for="tab in cardTabs" :key="tab.id" @click="activeCardTab = tab.id"
+                                        :class="[
+                                            'flex-1 px-4 py-3 text-center text-sm font-medium transition-colors',
+                                            activeCardTab === tab.id
+                                                ? 'text-brand-primary bg-brand-earth/10 border-b-2 border-brand-accent'
+                                                : 'text-brand-light hover:text-brand-primary hover:bg-white'
+                                        ]">
+                                        {{ tab.label }}
+                                    </button>
+                                </nav>
+                            </div>
+
+                            <!-- Tab Content -->
+                            <div class="p-6 laptop:p-8 space-y-2 laptop:space-y-4">
+                                <template v-if="activeCardTab === 'about'">
+                                    <p class="flex flex-col space-y-1 text-base text-brand-text mt-1">
+                                        <span class="font-bold">
+                                            {{ trip.is_expected
+                                                ? t('trip_show.inquiry.expected')
+                                                : t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
+                                        </span>
+                                        <span>
+                                            {{ trip.destinations_formatted }}
+                                        </span>
+                                        <span>
+                                            {{ t('trip_show.inquiry.duration_label', { duration: trip.duration }) }}
+                                        </span>
+                                    </p>
+                                    <div class="border-t border-brand-accent/20" role="presentation"></div>
+
+                                    <TripItems :trip-items="tripItems" />
+                                </template>
+
+                                <template v-else-if="activeCardTab === 'practical'">
+                                    <template v-for="(label, key) in practicalSections" :key="key">
+                                        <div v-if="trip.practical_info?.[key]" >
+                                            <h3 class="text-base tablet:text-lg font-semibold text-brand-primary">
+                                                {{ label }}
+                                            </h3>
+                                            <div class="prose prose-brand max-w-none"
+                                                v-html="trip.practical_info[key]"></div>
+                                        </div>
+                                    </template>
+
+                                    <!-- Country info -->
+                                    <Disclosure v-if="hasCountryInfo" v-slot="{ open }" as="div" class="pt-2">
+                                        <h3 class="text-base tablet:text-lg font-semibold text-brand-primary">
+                                            <DisclosureButton
+                                                class="w-full flex items-center justify-between gap-2 text-left hover:text-brand-accent transition-colors">
+                                                {{ t('trip_show.country_heading') }}
+                                                <ChevronDown :class="open ? 'rotate-180' : ''"
+                                                    class="w-5 h-5 flex-shrink-0 transition-transform" />
+                                            </DisclosureButton>
+                                        </h3>
+                                        <DisclosurePanel class="mt-2">
+                                            <TripTravelInfo :destinations="trip.destinations"
+                                                :travel-info-sections="travelInfoSections" />
+                                        </DisclosurePanel>
+                                    </Disclosure>
+
+                                    <!-- Empty state -->
+                                    <p v-if="!hasCountryInfo && (!trip.practical_info || !Object.values(trip.practical_info).some(v => v))"
+                                        class="text-brand-light text-center py-8">
+                                        {{ t('trip_show.tab_content.practical_placeholder') }}
+                                    </p>
+                                </template>
+                            </div>
+
+                            <div class="px-6 laptop:px-8 space-y-2 laptop:space-y-4">
+                                <div class="border-t border-brand-accent/20" role="presentation"></div>
                                 <h3 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                                     {{ t('trip_show.inquiry.title') }}
                                 </h3>
-
-                                <!-- Price indication -->
-                                <div>
-                                    <span class="text-base tablet:text-base font-semibold text-brand-primary">
-                                        {{ trip.is_expected
-                                            ? t('trip_show.inquiry.expected')
-                                            : t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
-                                    </span>
-                                    <span class="block text-sm text-brand-light mt-1">
-                                        {{ t('trip_show.inquiry.duration_label', { duration: trip.duration }) }}
-                                    </span>
-                                </div>
-
                                 <!-- Explanation -->
                                 <p class="text-base text-brand-text leading-relaxed">
                                     {{ t('trip_show.inquiry.explanation') }}
                                 </p>
+                            </div>
+                            <div class="p-6 laptop:p-8 space-y-6 laptop:space-y-12">
+
+
+
 
                                 <!-- CTA buttons -->
                                 <div class="space-y-3">
@@ -252,8 +249,6 @@ const tabIcons = {
                         <!-- Extra Info -->
                         <TripExtraInfo />
 
-                        <!-- Trust Indicators -->
-
                     </div>
                 </div>
             </div>
@@ -262,17 +257,19 @@ const tabIcons = {
         <!-- Fixed bottom nav: mobile + tablet only -->
         <div
             class="fixed bottom-0 left-0 right-0 z-40 laptop:hidden bg-white border-t border-brand-primary/20 shadow-lg">
-            <div class="flex items-center gap-1 px-2 py-2">
-                <button v-for="tab in tabs" :key="tab.id" @click="selectTab(tab.id)"
-                    class="flex-1 flex flex-col items-center gap-0.5 py-2 px-1 rounded-lg transition-colors" :class="activeTab === tab.id
-                        ? 'text-brand-primary bg-brand-earth/10'
-                        : 'text-brand-light hover:text-brand-primary'">
-                    <component :is="tabIcons[tab.id]" class="w-5 h-5" />
-                    <span class="text-xs hidden tablet:inline">{{ tab.label }}</span>
+            <nav class="flex border-b border-brand-accent/20">
+                <button v-for="tab in cardTabs" :key="tab.id" @click="openCardTab(tab.id)" :class="[
+                    'flex-1 px-4 py-3 text-center text-sm font-medium transition-colors',
+                    activeCardTab === tab.id
+                        ? 'text-brand-primary bg-brand-earth/10 border-b-2 border-brand-accent'
+                        : 'text-brand-light hover:text-brand-primary'
+                ]">
+                    {{ tab.label }}
                 </button>
-
-
-                <Button @click="requestModalOpen = !requestModalOpen" class="flex items-center gap-1 group">
+            </nav>
+            <div class="flex items-center gap-1 px-2 py-2">
+                <Button @click="requestModalOpen = !requestModalOpen"
+                    class="w-full flex justify-center items-center gap-1 group">
                     {{ t('trip_show.inquiry.cta_make_request') }}
                     <ChevronRight class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
