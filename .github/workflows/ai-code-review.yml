@@ -62,7 +62,7 @@ jobs:
             Severity is one of: blocker, major, minor, nit.
 
             ## Rules
-            - Report at most 8 findings. If there are more, report the most important
+            - Report at most 5 findings. If there are more, report the most important
               ones and state how many you left out.
             - If you are not confident an issue is real, phrase it as a question
               instead of a finding, or leave it out entirely.
