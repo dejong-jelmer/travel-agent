@@ -92,11 +92,6 @@ export default {
                                 fontSize: theme("fontSize.lg")[0],
                                 lineHeight: theme("fontSize.lg")[1].lineHeight,
                             },
-                            [`@media (min-width: ${screens.laptop})`]: {
-                                fontSize: theme("fontSize.xl")[0],
-                                lineHeight: theme("fontSize.xl")[1].lineHeight,
-                                marginTop: theme("spacing.8"),
-                            },
                         },
                         p: {
                             color: theme("colors.brand.text"),
