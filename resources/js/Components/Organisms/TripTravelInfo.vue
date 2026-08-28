@@ -45,7 +45,7 @@ const getDestinationsWithInfo = (key) => {
             </h4>
             <template v-for="(group, index) in groupByContent(key)" :key="index">
                 <div class="mt-4">
-                    <h5 v-if="group.destinations > 1"  class="text-sm tablet:text-base font-bold text-brand-primary mb-1">
+                    <h5 v-if="destinations.length > 1" class="text-sm tablet:text-base font-bold text-brand-primary mb-1">
                         {{ group.destinations.join(', ') }}
                     </h5>
                     <div

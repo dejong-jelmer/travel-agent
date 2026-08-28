@@ -920,12 +920,12 @@
             "expected": "Expected"
         },
         "about_trip": "About this trip",
-        "tabs": {
-            "itinerary": "Day by day",
-            "inclusive": "What is Included",
-            "practical": "Practical info",
-            "general_info": "General information"
+        "itinerary_heading": "This trip day by day",
+        "card_tabs": {
+            "about": "About this trip",
+            "practical": "Practical information"
         },
+        "country_heading": "About the country",
         "tab_content": {
             "itinerary_empty": "Detailed itinerary will be added soon",
             "inclusive_placeholder": "Included and excluded information comes here.",

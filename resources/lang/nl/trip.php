@@ -36,8 +36,8 @@ return [
                 'guarantee_fund' => 'STO garantiefonds - :amount per boeking',
                 'emergency_fund' => 'Calamiteitenfonds - :amount per boeking',
             ],
-            'additional_meals' => 'Overige dranken & maaltijden',
-            'excursions' => 'Overige activiteiten & excursies',
+            'additional_meals' => 'Dranken & maaltijden',
+            'excursions' => 'Activiteiten, excursies & tickets',
             'transfers' => 'Lokale verplaatsingen',
             'personal_expenses' => 'Persoonlijke uitgaven',
             'travel_cancellation_insurance' => 'Reis- en/of annuleringsverzekering',
@@ -69,6 +69,7 @@ return [
             'outbound_return' => 'Heen- en terugreis',
             'transport' => 'Vervoer tijdens de reis',
             'accommodation' => 'Logies',
+            'additional' => 'Overige',
         ],
     ],
 

@@ -294,7 +294,7 @@ class TripTest extends TestCase
         $trip->destinations()->attach($destination);
         $trip->load('destinations');
 
-        $this->assertEquals('Tuscany', $trip->destinations_formatted);
+        $this->assertEquals('Tuscany, Italy', $trip->destinations_formatted);
     }
 
     // Highlights validation tests

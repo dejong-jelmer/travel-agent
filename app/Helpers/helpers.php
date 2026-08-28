@@ -25,6 +25,30 @@ if (! function_exists('emptyFormRequestToArray')) {
     }
 }
 
+if (! function_exists('nullifyEmptyHtml')) {
+    /**
+     * Null out rich text values that hold no visible content
+     * TipTap submits "<p></p>" for an empty editor
+     */
+    function nullifyEmptyHtml(FormRequest $formRequest, string $field): void
+    {
+        $values = $formRequest->input($field);
+
+        if (! is_array($values)) {
+            return;
+        }
+
+        $formRequest->merge([
+            $field => array_map(
+                fn ($value) => preg_replace('/\s+/u', '', html_entity_decode(strip_tags((string) $value))) === ''
+                    ? null
+                    : $value,
+                $values
+            ),
+        ]);
+    }
+}
+
 if (! function_exists('availableLocales')) {
     function availableLocales(): array
     {
