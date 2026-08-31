@@ -9,6 +9,8 @@ use App\Models\Booking;
 
 class BookingService
 {
+    public function __construct(private FeesAndFundsService $feesAndFunds) {}
+
     /**
      * Create a new booking with contact details, travelers, and cost items from validated DTO data.
      *
@@ -37,6 +39,11 @@ class BookingService
             'total_adults' => $totalAdults,
             'total_children' => $totalChildren,
             'margin_basis_points' => $bookingData->margin_basis_points,
+            'margin_in_percentage' => $bookingData->margin_in_percentage,
+            'margin_amount' => $bookingData->margin_amount,
+            'fee_per_person' => $bookingData->fee_per_person,
+            // Snapshot the current settings so later changes leave this booking untouched.
+            'fees_and_funds' => $this->feesAndFunds->asCents(),
             'final_price' => $bookingData->final_price,
         ]);
 
@@ -79,6 +86,18 @@ class BookingService
 
         if ($bookingData->margin_basis_points !== null) {
             $updateData['margin_basis_points'] = $bookingData->margin_basis_points;
+        }
+
+        if ($bookingData->margin_in_percentage !== null) {
+            $updateData['margin_in_percentage'] = $bookingData->margin_in_percentage;
+        }
+
+        if ($bookingData->margin_amount !== null) {
+            $updateData['margin_amount'] = $bookingData->margin_amount;
+        }
+
+        if ($bookingData->fee_per_person !== null) {
+            $updateData['fee_per_person'] = $bookingData->fee_per_person;
         }
 
         $updateData['final_price'] = $bookingData->final_price;

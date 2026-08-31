@@ -5,7 +5,6 @@ namespace App\Services;
 use App\DTO\TripPriceData;
 use App\Enums\SettingKey;
 use App\Exceptions\NoPriceAvailableException;
-use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\TripPrice;
 use App\Support\MoneyHelper;
@@ -17,6 +16,8 @@ class PriceCalculatorService
 {
     const CURRENCY = 'EUR';
 
+    public function __construct(private FeesAndFundsService $feesAndFunds) {}
+
     /**
      * @throws \App\Exceptions\NoPriceAvailableException if the price can't be resolved
      */
@@ -24,7 +25,7 @@ class PriceCalculatorService
     {
         $currency = new Currency(self::CURRENCY);
 
-        $feesAndFunds = $this->getFeesAndFunds();
+        $feesAndFunds = $this->feesAndFunds->asMoney();
 
         $priceRow = $this->resolvePriceRow($trip, $departureDate);
 
@@ -51,20 +52,6 @@ class PriceCalculatorService
         );
     }
 
-    /**
-     * @return array<string, Money>
-     */
-    public function getFeesAndFunds(): array
-    {
-        $currency = new Currency(self::CURRENCY);
-
-        return [
-            SettingKey::BookingFee->value => new Money(MoneyHelper::toCents(Setting::get(SettingKey::BookingFee, 0)), $currency),
-            SettingKey::GuaranteeFund->value => new Money(MoneyHelper::toCents(Setting::get(SettingKey::GuaranteeFund, 0)), $currency),
-            SettingKey::EmergencyFund->value => new Money(MoneyHelper::toCents(Setting::get(SettingKey::EmergencyFund, 0)), $currency),
-        ];
-    }
-
     public function formatAmount(Money $money): string
     {
         return bcdiv((string) $money->getAmount(), (string) MoneyHelper::CENTS_PER_UNIT, 2);
@@ -79,7 +66,7 @@ class PriceCalculatorService
     {
         return array_map(
             fn (Money $ff) => $this->formatAmount($ff),
-            $this->getFeesAndFunds()
+            $this->feesAndFunds->asMoney()
         );
     }
 

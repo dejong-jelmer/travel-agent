@@ -66,6 +66,9 @@ class Booking extends Model
         'grand_total_price',
         'fees_and_funds',
         'margin_basis_points',
+        'margin_in_percentage',
+        'margin_amount',
+        'fee_per_person',
         'calculated_price',
         'final_price',
         'internal_notes',
@@ -81,6 +84,9 @@ class Booking extends Model
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
         'margin_basis_points' => 'integer',
+        'margin_in_percentage' => 'boolean',
+        'margin_amount' => 'integer',
+        'fee_per_person' => 'integer',
         'calculated_price' => 'integer',
         'final_price' => 'integer',
         'anonymized_at' => 'datetime',
@@ -101,6 +107,7 @@ class Booking extends Model
     protected $attributes = [
         'status' => Status::New->value,
         'payment_status' => PaymentStatus::Pending->value,
+        'margin_in_percentage' => true,
     ];
 
     // Sortable properties
@@ -148,7 +155,13 @@ class Booking extends Model
         });
 
         static::saving(function (self $booking) {
-            if ($booking->exists && $booking->isDirty('margin_basis_points')) {
+            if ($booking->exists && $booking->isDirty([
+                'margin_basis_points',
+                'margin_in_percentage',
+                'margin_amount',
+                'fee_per_person',
+                'fees_and_funds',
+            ])) {
                 $booking->calculated_price = $booking->computeCalculatedPrice();
             }
         });
@@ -394,6 +407,18 @@ class Booking extends Model
     }
 
     /**
+     * Sum of the fees and funds snapshot in cents.
+     *
+     * @return Attribute<int, never>
+     */
+    protected function feesAndFundsTotal(): Attribute
+    {
+        return Attribute::get(
+            fn () => (int) array_sum($this->fees_and_funds ?? []),
+        );
+    }
+
+    /**
      * Visible sales price in cents: final_price override, else stored calculated_price.
      */
     protected function displayPrice(): Attribute
@@ -404,11 +429,31 @@ class Booking extends Model
     /**
      * Recompute the sales price from cost items and the margin.
      *
-     * Margin works on the sales side: 35% margin means cost = 65% of sales.
+     * Percentage margin works on the sales side: 35% margin means cost = 65% of sales.
      * calculated_price = total_cost / (1 - margin / 100).
+     *
+     * Fixed margin is added on top of the cost instead:
+     * calculated_price = total_cost + margin_amount + fee_per_person * total_adults.
+     *
+     * The fees and funds snapshot is charged once per booking, on top of either
+     * margin, so no margin is made on it.
      */
     public function computeCalculatedPrice(): int
     {
+        return $this->computeMarginedPrice() + $this->feesAndFundsTotal;
+    }
+
+    /**
+     * The sales price of the trip itself, before fees and funds.
+     */
+    private function computeMarginedPrice(): int
+    {
+        if (! $this->margin_in_percentage) {
+            return $this->totalCost
+                + ($this->margin_amount ?? 0)
+                + ($this->fee_per_person ?? 0) * ($this->total_adults ?? 0);
+        }
+
         $margin = ($this->margin_basis_points ?? 0) / 10000;
 
         if ($margin < 0 || $margin >= 1.0) {

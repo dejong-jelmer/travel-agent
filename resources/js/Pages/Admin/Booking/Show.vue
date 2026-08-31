@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { usePage } from '@inertiajs/vue3';
 import { FileText, User, Users, Activity, Receipt } from 'lucide-vue-next';
+import { feesAndFundsEntries, sumCostItems, sumFeesAndFunds } from '@/Support/bookingPrice.js';
 
 const { t } = useI18n();
 const page = usePage();
@@ -27,19 +28,32 @@ const categoryLabel = (id) =>
 
 const costItems = computed(() => props.booking.cost_items ?? []);
 
-const totalCostCents = computed(() =>
-    costItems.value.reduce(
-        (acc, item) => acc + (item.amount_per_person ?? 0) * (item.quantity ?? 0),
-        0,
-    ),
-);
+// Stored cost items are already in cents.
+const totalCostCents = computed(() => sumCostItems(costItems.value));
 
 const marginPercentage = computed(
     () => (props.booking.margin_basis_points ?? 0) / 100,
 );
 
+const feesAndFundsRows = computed(() =>
+    feesAndFundsEntries(props.booking.fees_and_funds),
+);
+
+const feesAndFundsTotalCents = computed(() =>
+    sumFeesAndFunds(props.booking.fees_and_funds),
+);
+
+// Derived from the stored price rather than recalculated, so this page always
+// shows what the server actually persisted.
 const marginAmountCents = computed(
-    () => (props.booking.calculated_price ?? 0) - totalCostCents.value,
+    () =>
+        (props.booking.calculated_price ?? 0) -
+        feesAndFundsTotalCents.value -
+        totalCostCents.value,
+);
+
+const feeTotalCents = computed(
+    () => (props.booking.fee_per_person ?? 0) * (props.booking.total_adults ?? 0),
 );
 
 const hasOverride = computed(() => props.booking.final_price !== null && props.booking.final_price !== undefined);
@@ -249,9 +263,26 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                             </div>
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <span class="text-sm font-medium text-gray-700">
-                                    {{ t('booking_steps.price.margin') }} ({{ marginPercentage }}%)
+                                    <template v-if="booking.margin_in_percentage">
+                                        {{ t('booking_steps.price.margin') }} ({{ marginPercentage }}%)
+                                    </template>
+                                    <template v-else>{{ t('booking_steps.price.margin_fixed') }}</template>
                                 </span>
-                                <span class="font-semibold text-gray-900">{{ formatPrice(marginAmountCents) }}</span>
+                                <span class="font-semibold text-gray-900">
+                                    {{ formatPrice(booking.margin_in_percentage ? marginAmountCents : booking.margin_amount) }}
+                                </span>
+                            </div>
+                            <div v-if="!booking.margin_in_percentage"
+                                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">
+                                    {{ t('booking_steps.price.fee_total', { count: booking.total_adults ?? 0 }) }}
+                                </span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(feeTotalCents) }}</span>
+                            </div>
+                            <div v-for="[key, cents] in feesAndFundsRows" :key="key"
+                                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">{{ t(`booking_steps.overview.${key}`) }}</span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(cents) }}</span>
                             </div>
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.calculated_price') }}</span>

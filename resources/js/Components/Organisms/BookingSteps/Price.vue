@@ -2,6 +2,7 @@
 import { computed, toRef } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { Plus, X, Info } from 'lucide-vue-next';
+import { useBookingPrice } from '@/Composables/useBookingPrice.js';
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -12,50 +13,33 @@ const costCategories = computed(() => page.props.cost_categories ?? []);
 
 const costItems = toRef(props.booking, 'cost_items');
 
+const marginInPercentage = computed({
+    get: () => props.booking.margin_in_percentage,
+    set: (value) => (props.booking.margin_in_percentage = value),
+});
+
+// Snapshot for an existing booking, current settings for a new one.
+const {
+    adultCount,
+    totalCostCents,
+    fixedMarginCents,
+    marginCents,
+    feeTotalCents,
+    feesAndFundsRows,
+    calculatedPriceCents,
+    hasOverride,
+    displayPriceCents,
+} = useBookingPrice(
+    props.booking,
+    computed(() => page.props.fees_and_funds ?? {}),
+);
+
 const fmt = (cents) =>
     new Intl.NumberFormat('nl-NL', {
         style: 'currency',
         currency: 'EUR',
         minimumFractionDigits: 2,
     }).format((cents ?? 0) / 100);
-
-const subtotalCents = (item) => {
-    const amount = Number(item.amount_per_person);
-    const quantity = Number(item.quantity);
-    if (!Number.isFinite(amount) || !Number.isFinite(quantity)) return 0;
-    return Math.round(amount * 100) * quantity;
-};
-
-const totalCostCents = computed(() =>
-    costItems.value.reduce((acc, item) => acc + subtotalCents(item), 0),
-);
-
-const marginFraction = computed(() => {
-    const m = Number(props.booking.margin_percentage);
-    if (!Number.isFinite(m)) return 0;
-    return Math.min(Math.max(m, 0), 95) / 100;
-});
-
-const calculatedPriceCents = computed(() => {
-    if (marginFraction.value >= 1) return 0;
-    return Math.round(totalCostCents.value / (1 - marginFraction.value));
-});
-
-const marginAmountCents = computed(
-    () => calculatedPriceCents.value - totalCostCents.value,
-);
-
-const finalPriceCents = computed(() => {
-    const fp = props.booking.final_price;
-    if (fp === null || fp === '' || fp === undefined) return null;
-    return Math.round(Number(fp) * 100);
-});
-
-const hasOverride = computed(() => finalPriceCents.value !== null);
-
-const displayPriceCents = computed(() =>
-    hasOverride.value ? finalPriceCents.value : calculatedPriceCents.value,
-);
 
 function addItem() {
     costItems.value.push({
@@ -147,12 +131,29 @@ function clearItemError(index, field) {
                         <span class="font-bold text-brand-primary">{{ fmt(totalCostCents) }}</span>
                     </div>
                 </div>
-                <div>
-                    <Input type="number" name="margin_percentage"
+                <div class="space-y-2">
+                    <Checkbox v-model="marginInPercentage" name="margin_in_percentage">
+                        {{ $t('booking_steps.price.margin_in_percentage') }}
+                    </Checkbox>
+                    <Input v-if="marginInPercentage" type="number" name="margin_percentage"
                         :label="$t('booking_steps.price.margin')" :showLabel="true" :required="true"
                         v-model="booking.margin_percentage" step="0.5" min="0" max="95"
                         :feedback="booking.errors['margin_percentage']"
                         @keyup="booking.clearErrors('margin_percentage')" />
+                    <template v-else>
+                        <Input type="number" name="margin_amount"
+                            :label="$t('booking_steps.price.margin_fixed')" :showLabel="true" :required="true"
+                            v-model="booking.margin_amount" step="0.01" min="0"
+                            placeholder="0.00"
+                            :feedback="booking.errors['margin_amount']"
+                            @keyup="booking.clearErrors('margin_amount')" />
+                        <Input type="number" name="fee_per_person"
+                            :label="$t('booking_steps.price.fee_per_person')" :showLabel="true" :required="true"
+                            v-model="booking.fee_per_person" step="0.01" min="0"
+                            placeholder="0.00"
+                            :feedback="booking.errors['fee_per_person']"
+                            @keyup="booking.clearErrors('fee_per_person')" />
+                    </template>
                 </div>
             </div>
 
@@ -160,7 +161,22 @@ function clearItemError(index, field) {
                 <span class="text-brand-text/70">
                     {{ $t('booking_steps.price.margin_amount') }}
                 </span>
-                <span class="font-medium text-brand-text/70">{{ fmt(marginAmountCents) }}</span>
+                <span class="font-medium text-brand-text/70">
+                    {{ fmt(marginInPercentage ? marginCents : fixedMarginCents) }}
+                </span>
+            </div>
+
+            <div v-if="!marginInPercentage" class="flex items-center justify-between">
+                <span class="text-brand-text/70">
+                    {{ $t('booking_steps.price.fee_total', { count: adultCount }) }}
+                </span>
+                <span class="font-medium text-brand-text/70">{{ fmt(feeTotalCents) }}</span>
+            </div>
+
+            <div v-for="[key, cents] in feesAndFundsRows" :key="key"
+                class="flex items-center justify-between">
+                <span class="text-brand-text/70">{{ $t(`booking_steps.overview.${key}`) }}</span>
+                <span class="font-medium text-brand-text/70">{{ fmt(cents) }}</span>
             </div>
 
             <div class="flex items-center justify-between">
