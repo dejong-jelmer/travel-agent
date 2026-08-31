@@ -67,7 +67,10 @@ class BookingValidationRules
             'cost_items.*.label' => ['required', 'string', 'max:255'],
             'cost_items.*.amount_per_person' => ['required', 'integer', 'min:1'],
             'cost_items.*.quantity' => ['required', 'integer', 'between:1,20'],
-            'margin_percentage' => ['required', 'numeric', 'between:0,95'],
+            'margin_in_percentage' => ['nullable', 'boolean'],
+            'margin_percentage' => ['required_unless:margin_in_percentage,false', 'nullable', 'numeric', 'between:0,95'],
+            'margin_amount' => ['required_if:margin_in_percentage,false', 'nullable', 'integer', 'min:0'],
+            'fee_per_person' => ['required_if:margin_in_percentage,false', 'nullable', 'integer', 'min:0'],
             'final_price' => ['nullable', 'integer', 'min:0'],
         ];
     }

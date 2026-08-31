@@ -23,7 +23,10 @@ class CreateBookingData implements Arrayable
         public readonly bool $has_accepted_conditions,
         public readonly bool $has_confirmed,
         public readonly array $cost_items,
-        public readonly int $margin_basis_points,
+        public readonly ?int $margin_basis_points,
+        public readonly bool $margin_in_percentage,
+        public readonly ?int $margin_amount,
+        public readonly ?int $fee_per_person,
         public readonly ?int $final_price,
     ) {}
 
@@ -48,6 +51,9 @@ class CreateBookingData implements Arrayable
             has_confirmed: $validated['has_confirmed'] ?? false,
             cost_items: $parsed['cost_items'],
             margin_basis_points: $parsed['margin_basis_points'],
+            margin_in_percentage: $parsed['margin_in_percentage'],
+            margin_amount: $parsed['margin_amount'],
+            fee_per_person: $parsed['fee_per_person'],
             final_price: $parsed['final_price'],
         );
     }

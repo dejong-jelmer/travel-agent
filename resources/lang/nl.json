@@ -560,11 +560,11 @@
                 },
                 "guarantee_fund": {
                     "label": "Garantiefonds",
-                    "help": "Bijdrage aan het garantiefonds per persoon in euro."
+                    "help": "Bijdrage aan het garantiefonds per boeking in euro."
                 },
                 "emergency_fund": {
                     "label": "Calamiteitenfonds",
-                    "help": "Bijdrage aan het noodfonds per persoon in euro."
+                    "help": "Bijdrage aan het noodfonds per boeking in euro."
                 }
             },
             "submit": {
@@ -734,12 +734,16 @@
             },
             "total_cost": "Totale inkoop",
             "margin": "Marge (%)",
+            "margin_in_percentage": "Marge berekenen als percentage",
+            "margin_fixed": "Vast margebedrag (€)",
+            "fee_per_person": "Fee per persoon (€)",
+            "fee_total": "Fee ({count} volwassenen)",
             "margin_amount": "Marge in euro",
             "calculated_price": "Berekende prijs",
             "final_price": "Eindprijs (€)",
             "final_price_help": "Laat leeg om berekende prijs te gebruiken",
             "display_price": "Verkoopprijs",
-            "override_active": "De berekende prijs wordt overschreven."
+            "override_active": "De berekende prijs wordt overschreven. Toeslagen en fondsen zitten in dit bedrag."
         }
     },
     "hero": {

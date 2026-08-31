@@ -560,11 +560,11 @@
                 },
                 "guarantee_fund": {
                     "label": "Guarantee fund",
-                    "help": "Contribution to the guarantee fund per person in euros."
+                    "help": "Contribution to the guarantee fund per booking in euros."
                 },
                 "emergency_fund": {
                     "label": "Emergency fund",
-                    "help": "Contribution to the emergency fund per person in euros."
+                    "help": "Contribution to the emergency fund per booking in euros."
                 }
             },
             "submit": {
@@ -734,12 +734,16 @@
             },
             "total_cost": "Total cost",
             "margin": "Margin (%)",
+            "margin_in_percentage": "Calculate margin as a percentage",
+            "margin_fixed": "Fixed margin amount (€)",
+            "fee_per_person": "Fee per person (€)",
+            "fee_total": "Fee ({count} adults)",
             "margin_amount": "Margin in euros",
             "calculated_price": "Calculated price",
             "final_price": "Final price (€)",
             "final_price_help": "Leave empty to use calculated price",
             "display_price": "Sales price",
-            "override_active": "The calculated price is being overridden."
+            "override_active": "The calculated price is being overridden. Fees and funds are included in this amount."
         }
     },
     "hero": {

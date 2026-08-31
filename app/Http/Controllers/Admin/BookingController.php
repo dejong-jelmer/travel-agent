@@ -22,6 +22,7 @@ use App\Models\Trip;
 use App\Services\BookingService;
 use App\Services\CountryService;
 use App\Services\DataTableService;
+use App\Services\FeesAndFundsService;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -33,7 +34,11 @@ class BookingController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private BookingService $bookingService, private DataTableService $dataTableService) {}
+    public function __construct(
+        private BookingService $bookingService,
+        private DataTableService $dataTableService,
+        private FeesAndFundsService $feesAndFunds,
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -62,6 +67,7 @@ class BookingController extends Controller
             'countries' => CountryService::countries(),
             'cost_categories' => CostCategory::options(),
             'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, Booking::DEFAULT_MARGIN_BASIS_POINTS),
+            'fees_and_funds' => $this->feesAndFunds->asCents(),
             'title' => $this->pageTitle('booking.title_create'),
         ]);
     }
@@ -106,6 +112,8 @@ class BookingController extends Controller
             'paymentStatusOptions' => PaymentStatus::options(),
             'cost_categories' => CostCategory::options(),
             'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, Booking::DEFAULT_MARGIN_BASIS_POINTS),
+            // Show what was snapshotted on this booking, not what the settings say today.
+            'fees_and_funds' => $booking->fees_and_funds ?? $this->feesAndFunds->asCents(),
             'title' => $this->pageTitle('booking.title_edit'),
         ]);
     }

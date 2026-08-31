@@ -43,10 +43,51 @@ const marginFraction = computed(() => {
     return Math.min(Math.max(m, 0), 95) / 100;
 });
 
-const calculatedPriceCents = computed(() => {
+const toCents = (euros) => {
+    const value = Number(euros);
+    return Number.isFinite(value) ? Math.round(value * 100) : 0;
+};
+
+// The fee is charged per adult; children do not pay it.
+const adultCount = computed(() => {
+    const count = Number(props.booking.participants?.adults);
+    return Number.isFinite(count) ? count : 0;
+});
+
+const feeTotalCents = computed(
+    () => toCents(props.booking.fee_per_person) * adultCount.value,
+);
+
+// Snapshot for an existing booking, current settings for a new one.
+const feesAndFunds = computed(() => page.props.fees_and_funds ?? {});
+
+const feesAndFundsRows = computed(() =>
+    Object.entries(feesAndFunds.value).filter(([, cents]) => Number(cents) > 0),
+);
+
+const feesAndFundsTotalCents = computed(() =>
+    Object.values(feesAndFunds.value).reduce(
+        (acc, cents) => acc + (Number(cents) || 0),
+        0,
+    ),
+);
+
+// The sales price of the trip itself, before fees and funds.
+const marginedPriceCents = computed(() => {
+    if (!props.booking.margin_in_percentage) {
+        return (
+            totalCostCents.value +
+            toCents(props.booking.margin_amount) +
+            feeTotalCents.value
+        );
+    }
     if (marginFraction.value >= 1) return 0;
     return Math.round(totalCostCents.value / (1 - marginFraction.value));
 });
+
+const calculatedPriceCents = computed(
+    () => marginedPriceCents.value + feesAndFundsTotalCents.value,
+);
 
 const finalPriceCents = computed(() => {
     const fp = props.booking.final_price;
@@ -92,9 +133,28 @@ const displayPriceCents = computed(() =>
             <div class="flex items-center">
                 <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
                 <span class="flex-1 flex items-center gap-2">
-                    <span>{{ $t('booking_steps.price.margin') }} ({{ booking.margin_percentage }}%)</span>
+                    <span v-if="booking.margin_in_percentage">{{ $t('booking_steps.price.margin') }} ({{ booking.margin_percentage }}%)</span>
+                    <span v-else>{{ $t('booking_steps.price.margin_fixed') }}</span>
                     <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                    <span class="font-bold">{{ fmt(calculatedPriceCents - totalCostCents) }}</span>
+                    <span class="font-bold">{{ fmt(booking.margin_in_percentage ? marginedPriceCents - totalCostCents : toCents(booking.margin_amount)) }}</span>
+                </span>
+            </div>
+
+            <div v-if="!booking.margin_in_percentage" class="flex items-center">
+                <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
+                <span class="flex-1 flex items-center gap-2">
+                    <span>{{ $t('booking_steps.price.fee_total', { count: adultCount }) }}</span>
+                    <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
+                    <span class="font-bold">{{ fmt(feeTotalCents) }}</span>
+                </span>
+            </div>
+
+            <div v-for="[key, cents] in feesAndFundsRows" :key="key" class="flex items-center">
+                <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
+                <span class="flex-1 flex items-center gap-2">
+                    <span>{{ $t(`booking_steps.overview.${key}`) }}</span>
+                    <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
+                    <span class="font-bold">{{ fmt(cents) }}</span>
                 </span>
             </div>
 

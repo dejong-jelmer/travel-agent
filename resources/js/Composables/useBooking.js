@@ -100,7 +100,16 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         internal_notes: db_booking?.internal_notes || "",
         cost_items: costItems,
         margin_percentage: initialMarginBp / 100,
+        margin_in_percentage: db_booking?.margin_in_percentage ?? true,
         // Stored in euros; converted to cents on submit.
+        margin_amount:
+            db_booking?.margin_amount != null
+                ? db_booking.margin_amount / 100
+                : null,
+        fee_per_person:
+            db_booking?.fee_per_person != null
+                ? db_booking.fee_per_person / 100
+                : null,
         final_price:
             db_booking?.final_price != null
                 ? db_booking.final_price / 100

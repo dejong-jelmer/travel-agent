@@ -33,6 +33,14 @@ function submit() {
             quantity: Number(item.quantity),
             sort_order: index,
         })),
+        margin_amount:
+            data.margin_amount === null || data.margin_amount === ''
+                ? null
+                : toCents(data.margin_amount),
+        fee_per_person:
+            data.fee_per_person === null || data.fee_per_person === ''
+                ? null
+                : toCents(data.fee_per_person),
         final_price:
             data.final_price === null || data.final_price === ''
                 ? null

@@ -333,9 +333,23 @@ export function useBookingValidation() {
             }
         });
 
-        const margin = Number(bookingData?.margin_percentage);
-        if (!Number.isFinite(margin) || margin < 0 || margin > 95) {
-            errors["margin_percentage"] = t("validation.errors.invalid_margin");
+        if (bookingData?.margin_in_percentage === false) {
+            const marginAmount = Number(bookingData?.margin_amount);
+            if (!Number.isFinite(marginAmount) || marginAmount < 0) {
+                errors["margin_amount"] = t("validation.errors.invalid_amount");
+            }
+
+            const feePerPerson = Number(bookingData?.fee_per_person);
+            if (!Number.isFinite(feePerPerson) || feePerPerson < 0) {
+                errors["fee_per_person"] = t("validation.errors.invalid_amount");
+            }
+        } else {
+            const margin = Number(bookingData?.margin_percentage);
+            if (!Number.isFinite(margin) || margin < 0 || margin > 95) {
+                errors["margin_percentage"] = t(
+                    "validation.errors.invalid_margin",
+                );
+            }
         }
 
         if (

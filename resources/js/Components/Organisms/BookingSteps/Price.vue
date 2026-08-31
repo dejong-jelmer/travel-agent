@@ -12,6 +12,11 @@ const costCategories = computed(() => page.props.cost_categories ?? []);
 
 const costItems = toRef(props.booking, 'cost_items');
 
+const marginInPercentage = computed({
+    get: () => props.booking.margin_in_percentage,
+    set: (value) => (props.booking.margin_in_percentage = value),
+});
+
 const fmt = (cents) =>
     new Intl.NumberFormat('nl-NL', {
         style: 'currency',
@@ -36,13 +41,54 @@ const marginFraction = computed(() => {
     return Math.min(Math.max(m, 0), 95) / 100;
 });
 
-const calculatedPriceCents = computed(() => {
+const toCents = (euros) => {
+    const value = Number(euros);
+    return Number.isFinite(value) ? Math.round(value * 100) : 0;
+};
+
+// The fee is charged per adult; children do not pay it.
+const adultCount = computed(() => {
+    const count = Number(props.booking.participants?.adults);
+    return Number.isFinite(count) ? count : 0;
+});
+
+const feeTotalCents = computed(
+    () => toCents(props.booking.fee_per_person) * adultCount.value,
+);
+
+// Snapshot for an existing booking, current settings for a new one.
+const feesAndFunds = computed(() => page.props.fees_and_funds ?? {});
+
+const feesAndFundsRows = computed(() =>
+    Object.entries(feesAndFunds.value).filter(([, cents]) => Number(cents) > 0),
+);
+
+const feesAndFundsTotalCents = computed(() =>
+    Object.values(feesAndFunds.value).reduce(
+        (acc, cents) => acc + (Number(cents) || 0),
+        0,
+    ),
+);
+
+// The sales price of the trip itself, before fees and funds.
+const marginedPriceCents = computed(() => {
+    if (!marginInPercentage.value) {
+        return (
+            totalCostCents.value +
+            toCents(props.booking.margin_amount) +
+            feeTotalCents.value
+        );
+    }
     if (marginFraction.value >= 1) return 0;
     return Math.round(totalCostCents.value / (1 - marginFraction.value));
 });
 
+const calculatedPriceCents = computed(
+    () => marginedPriceCents.value + feesAndFundsTotalCents.value,
+);
+
 const marginAmountCents = computed(
-    () => calculatedPriceCents.value - totalCostCents.value,
+    () => marginedPriceCents.value - totalCostCents.value,
 );
 
 const finalPriceCents = computed(() => {
@@ -147,12 +193,29 @@ function clearItemError(index, field) {
                         <span class="font-bold text-brand-primary">{{ fmt(totalCostCents) }}</span>
                     </div>
                 </div>
-                <div>
-                    <Input type="number" name="margin_percentage"
+                <div class="space-y-2">
+                    <Checkbox v-model="marginInPercentage" name="margin_in_percentage">
+                        {{ $t('booking_steps.price.margin_in_percentage') }}
+                    </Checkbox>
+                    <Input v-if="marginInPercentage" type="number" name="margin_percentage"
                         :label="$t('booking_steps.price.margin')" :showLabel="true" :required="true"
                         v-model="booking.margin_percentage" step="0.5" min="0" max="95"
                         :feedback="booking.errors['margin_percentage']"
                         @keyup="booking.clearErrors('margin_percentage')" />
+                    <template v-else>
+                        <Input type="number" name="margin_amount"
+                            :label="$t('booking_steps.price.margin_fixed')" :showLabel="true" :required="true"
+                            v-model="booking.margin_amount" step="0.01" min="0"
+                            placeholder="0.00"
+                            :feedback="booking.errors['margin_amount']"
+                            @keyup="booking.clearErrors('margin_amount')" />
+                        <Input type="number" name="fee_per_person"
+                            :label="$t('booking_steps.price.fee_per_person')" :showLabel="true" :required="true"
+                            v-model="booking.fee_per_person" step="0.01" min="0"
+                            placeholder="0.00"
+                            :feedback="booking.errors['fee_per_person']"
+                            @keyup="booking.clearErrors('fee_per_person')" />
+                    </template>
                 </div>
             </div>
 
@@ -160,7 +223,22 @@ function clearItemError(index, field) {
                 <span class="text-brand-text/70">
                     {{ $t('booking_steps.price.margin_amount') }}
                 </span>
-                <span class="font-medium text-brand-text/70">{{ fmt(marginAmountCents) }}</span>
+                <span class="font-medium text-brand-text/70">
+                    {{ fmt(marginInPercentage ? marginAmountCents : toCents(booking.margin_amount)) }}
+                </span>
+            </div>
+
+            <div v-if="!marginInPercentage" class="flex items-center justify-between">
+                <span class="text-brand-text/70">
+                    {{ $t('booking_steps.price.fee_total', { count: adultCount }) }}
+                </span>
+                <span class="font-medium text-brand-text/70">{{ fmt(feeTotalCents) }}</span>
+            </div>
+
+            <div v-for="[key, cents] in feesAndFundsRows" :key="key"
+                class="flex items-center justify-between">
+                <span class="text-brand-text/70">{{ $t(`booking_steps.overview.${key}`) }}</span>
+                <span class="font-medium text-brand-text/70">{{ fmt(cents) }}</span>
             </div>
 
             <div class="flex items-center justify-between">
