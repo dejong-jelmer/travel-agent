@@ -4,6 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { usePage } from '@inertiajs/vue3';
 import { FileText, User, Users, Activity, Receipt } from 'lucide-vue-next';
 import { feesAndFundsEntries, sumCostItems, sumFeesAndFunds } from '@/Support/bookingPrice.js';
+import { formatCents as formatPrice } from '@/Support/money.js';
 
 const { t } = useI18n();
 const page = usePage();
@@ -16,10 +17,6 @@ const props = defineProps({
 const totalTravelers = computed(() =>
     (props.booking.adults?.length ?? 0) + (props.booking.children?.length ?? 0)
 )
-
-function formatPrice(cents) {
-    return new Intl.NumberFormat('nl-NL', { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format((cents ?? 0) / 100)
-}
 
 const costCategories = computed(() => page.props.cost_categories ?? []);
 

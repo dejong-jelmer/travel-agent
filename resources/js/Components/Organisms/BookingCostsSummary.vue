@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { Euro, Info } from 'lucide-vue-next';
 import { usePage } from '@inertiajs/vue3';
 import { useBookingPrice } from '@/Composables/useBookingPrice.js';
+import { formatCents as fmt } from '@/Support/money.js';
 
 const props = defineProps({
     booking: {
@@ -35,13 +36,6 @@ const {
     props.booking,
     computed(() => page.props.fees_and_funds ?? {}),
 );
-
-const fmt = (cents) =>
-    new Intl.NumberFormat('nl-NL', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2,
-    }).format((cents ?? 0) / 100);
 
 </script>
 

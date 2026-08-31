@@ -100,6 +100,12 @@ class BookingService
             $updateData['fee_per_person'] = $bookingData->fee_per_person;
         }
 
+        // A booking made before fees and funds existed has no snapshot to
+        // protect, so capture one now. An existing snapshot is left alone.
+        if ($booking->fees_and_funds === null) {
+            $updateData['fees_and_funds'] = $this->feesAndFunds->asCents();
+        }
+
         $updateData['final_price'] = $bookingData->final_price;
 
         $booking->update($updateData);

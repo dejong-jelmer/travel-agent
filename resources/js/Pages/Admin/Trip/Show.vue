@@ -4,6 +4,7 @@ import { usePage } from '@inertiajs/vue3';
 import { Link } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { useDateFormatter } from '@/Composables/useDateFormatter';
+import { formatCents } from '@/Support/money.js';
 import { computed } from 'vue';
 
 const weekdaysTranslated = computed(() => {
@@ -28,9 +29,7 @@ const labelMap = computed(() =>
     Object.fromEntries((props.priceLabelOptions ?? []).map(o => [o.id, o.name]))
 )
 
-function formatPrice(cents) {
-    return new Intl.NumberFormat(locale.value, { style: 'currency', currency: 'EUR', minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cents / 100)
-}
+const formatPrice = (cents) => formatCents(cents, locale.value);
 
 const blockedWeekdays = computed(() =>
     (props.trip.blocked_dates?.weekdays ?? []).map(Number)
