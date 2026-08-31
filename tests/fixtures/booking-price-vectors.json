@@ -1,0 +1,195 @@
+{
+    "description": "Shared specification for the booking price formula. Run against Booking::computeCalculatedPrice() in PHP (tests/Unit/BookingPriceVectorsTest.php) and calculateBookingPrice() in JS (resources/js/__tests__/Support/bookingPrice.test.js). The two implementations cannot share code, so they share these vectors instead: change the formula on one side only and the other side's test fails. All amounts are in cents.",
+    "vectors": [
+        {
+            "name": "percentage margin without fees",
+            "cost_items": [
+                { "amount_per_person": 40000, "quantity": 2 },
+                { "amount_per_person": 33000, "quantity": 2 },
+                { "amount_per_person": 9000, "quantity": 2 },
+                { "amount_per_person": 3000, "quantity": 2 }
+            ],
+            "margin_in_percentage": true,
+            "margin_percentage": 35,
+            "margin_amount": null,
+            "fee_per_person": null,
+            "adults": 2,
+            "fees_and_funds": {},
+            "expected": {
+                "total_cost": 170000,
+                "fees_and_funds_total": 0,
+                "margined_price": 261538,
+                "calculated_price": 261538
+            }
+        },
+        {
+            "name": "percentage margin with fees and funds on top",
+            "cost_items": [
+                { "amount_per_person": 85000, "quantity": 2 }
+            ],
+            "margin_in_percentage": true,
+            "margin_percentage": 35,
+            "margin_amount": null,
+            "fee_per_person": null,
+            "adults": 2,
+            "fees_and_funds": {
+                "booking_fee": 2500,
+                "guarantee_fund": 1000,
+                "emergency_fund": 250
+            },
+            "expected": {
+                "total_cost": 170000,
+                "fees_and_funds_total": 3750,
+                "margined_price": 261538,
+                "calculated_price": 265288
+            }
+        },
+        {
+            "name": "fixed margin with a fee per adult, percentage is ignored",
+            "cost_items": [
+                { "amount_per_person": 40000, "quantity": 2 },
+                { "amount_per_person": 45000, "quantity": 2 }
+            ],
+            "margin_in_percentage": false,
+            "margin_percentage": 35,
+            "margin_amount": 50000,
+            "fee_per_person": 2500,
+            "adults": 2,
+            "fees_and_funds": {
+                "booking_fee": 2500,
+                "guarantee_fund": 1000,
+                "emergency_fund": 250
+            },
+            "expected": {
+                "total_cost": 170000,
+                "fees_and_funds_total": 3750,
+                "margined_price": 225000,
+                "calculated_price": 228750
+            }
+        },
+        {
+            "name": "fee counts adults only, not the child in the party",
+            "cost_items": [
+                { "amount_per_person": 20000, "quantity": 3 }
+            ],
+            "margin_in_percentage": false,
+            "margin_percentage": 35,
+            "margin_amount": 25000,
+            "fee_per_person": 1500,
+            "adults": 2,
+            "fees_and_funds": {},
+            "expected": {
+                "total_cost": 60000,
+                "fees_and_funds_total": 0,
+                "margined_price": 88000,
+                "calculated_price": 88000
+            }
+        },
+        {
+            "name": "fixed margin without a fee per person",
+            "cost_items": [
+                { "amount_per_person": 25000, "quantity": 1 }
+            ],
+            "margin_in_percentage": false,
+            "margin_percentage": 35,
+            "margin_amount": 10000,
+            "fee_per_person": 0,
+            "adults": 3,
+            "fees_and_funds": {},
+            "expected": {
+                "total_cost": 25000,
+                "fees_and_funds_total": 0,
+                "margined_price": 35000,
+                "calculated_price": 35000
+            }
+        },
+        {
+            "name": "zero percentage margin sells at cost plus fees",
+            "cost_items": [
+                { "amount_per_person": 12345, "quantity": 2 }
+            ],
+            "margin_in_percentage": true,
+            "margin_percentage": 0,
+            "margin_amount": null,
+            "fee_per_person": null,
+            "adults": 2,
+            "fees_and_funds": { "booking_fee": 2500 },
+            "expected": {
+                "total_cost": 24690,
+                "fees_and_funds_total": 2500,
+                "margined_price": 24690,
+                "calculated_price": 27190
+            }
+        },
+        {
+            "name": "an exact half rounds up on both sides",
+            "cost_items": [
+                { "amount_per_person": 10, "quantity": 1 }
+            ],
+            "margin_in_percentage": true,
+            "margin_percentage": 20,
+            "margin_amount": null,
+            "fee_per_person": null,
+            "adults": 1,
+            "fees_and_funds": {},
+            "expected": {
+                "total_cost": 10,
+                "fees_and_funds_total": 0,
+                "margined_price": 13,
+                "calculated_price": 13
+            }
+        },
+        {
+            "name": "fractional margin percentage",
+            "cost_items": [
+                { "amount_per_person": 999, "quantity": 1 }
+            ],
+            "margin_in_percentage": true,
+            "margin_percentage": 7.5,
+            "margin_amount": null,
+            "fee_per_person": null,
+            "adults": 1,
+            "fees_and_funds": {},
+            "expected": {
+                "total_cost": 999,
+                "fees_and_funds_total": 0,
+                "margined_price": 1080,
+                "calculated_price": 1080
+            }
+        },
+        {
+            "name": "the maximum percentage margin",
+            "cost_items": [
+                { "amount_per_person": 10000, "quantity": 1 }
+            ],
+            "margin_in_percentage": true,
+            "margin_percentage": 95,
+            "margin_amount": null,
+            "fee_per_person": null,
+            "adults": 1,
+            "fees_and_funds": {},
+            "expected": {
+                "total_cost": 10000,
+                "fees_and_funds_total": 0,
+                "margined_price": 200000,
+                "calculated_price": 200000
+            }
+        },
+        {
+            "name": "no cost items yet, only the fees apply",
+            "cost_items": [],
+            "margin_in_percentage": true,
+            "margin_percentage": 35,
+            "margin_amount": null,
+            "fee_per_person": null,
+            "adults": 2,
+            "fees_and_funds": { "booking_fee": 2500 },
+            "expected": {
+                "total_cost": 0,
+                "fees_and_funds_total": 2500,
+                "margined_price": 0,
+                "calculated_price": 2500
+            }
+        }
+    ]
+}

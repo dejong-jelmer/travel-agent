@@ -2,6 +2,7 @@
 import { computed, toRef } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { Plus, X, Info } from 'lucide-vue-next';
+import { useBookingPrice } from '@/Composables/useBookingPrice.js';
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -17,91 +18,28 @@ const marginInPercentage = computed({
     set: (value) => (props.booking.margin_in_percentage = value),
 });
 
+// Snapshot for an existing booking, current settings for a new one.
+const {
+    adultCount,
+    totalCostCents,
+    fixedMarginCents,
+    marginCents,
+    feeTotalCents,
+    feesAndFundsRows,
+    calculatedPriceCents,
+    hasOverride,
+    displayPriceCents,
+} = useBookingPrice(
+    props.booking,
+    computed(() => page.props.fees_and_funds ?? {}),
+);
+
 const fmt = (cents) =>
     new Intl.NumberFormat('nl-NL', {
         style: 'currency',
         currency: 'EUR',
         minimumFractionDigits: 2,
     }).format((cents ?? 0) / 100);
-
-const subtotalCents = (item) => {
-    const amount = Number(item.amount_per_person);
-    const quantity = Number(item.quantity);
-    if (!Number.isFinite(amount) || !Number.isFinite(quantity)) return 0;
-    return Math.round(amount * 100) * quantity;
-};
-
-const totalCostCents = computed(() =>
-    costItems.value.reduce((acc, item) => acc + subtotalCents(item), 0),
-);
-
-const marginFraction = computed(() => {
-    const m = Number(props.booking.margin_percentage);
-    if (!Number.isFinite(m)) return 0;
-    return Math.min(Math.max(m, 0), 95) / 100;
-});
-
-const toCents = (euros) => {
-    const value = Number(euros);
-    return Number.isFinite(value) ? Math.round(value * 100) : 0;
-};
-
-// The fee is charged per adult; children do not pay it.
-const adultCount = computed(() => {
-    const count = Number(props.booking.participants?.adults);
-    return Number.isFinite(count) ? count : 0;
-});
-
-const feeTotalCents = computed(
-    () => toCents(props.booking.fee_per_person) * adultCount.value,
-);
-
-// Snapshot for an existing booking, current settings for a new one.
-const feesAndFunds = computed(() => page.props.fees_and_funds ?? {});
-
-const feesAndFundsRows = computed(() =>
-    Object.entries(feesAndFunds.value).filter(([, cents]) => Number(cents) > 0),
-);
-
-const feesAndFundsTotalCents = computed(() =>
-    Object.values(feesAndFunds.value).reduce(
-        (acc, cents) => acc + (Number(cents) || 0),
-        0,
-    ),
-);
-
-// The sales price of the trip itself, before fees and funds.
-const marginedPriceCents = computed(() => {
-    if (!marginInPercentage.value) {
-        return (
-            totalCostCents.value +
-            toCents(props.booking.margin_amount) +
-            feeTotalCents.value
-        );
-    }
-    if (marginFraction.value >= 1) return 0;
-    return Math.round(totalCostCents.value / (1 - marginFraction.value));
-});
-
-const calculatedPriceCents = computed(
-    () => marginedPriceCents.value + feesAndFundsTotalCents.value,
-);
-
-const marginAmountCents = computed(
-    () => marginedPriceCents.value - totalCostCents.value,
-);
-
-const finalPriceCents = computed(() => {
-    const fp = props.booking.final_price;
-    if (fp === null || fp === '' || fp === undefined) return null;
-    return Math.round(Number(fp) * 100);
-});
-
-const hasOverride = computed(() => finalPriceCents.value !== null);
-
-const displayPriceCents = computed(() =>
-    hasOverride.value ? finalPriceCents.value : calculatedPriceCents.value,
-);
 
 function addItem() {
     costItems.value.push({
@@ -224,7 +162,7 @@ function clearItemError(index, field) {
                     {{ $t('booking_steps.price.margin_amount') }}
                 </span>
                 <span class="font-medium text-brand-text/70">
-                    {{ fmt(marginInPercentage ? marginAmountCents : toCents(booking.margin_amount)) }}
+                    {{ fmt(marginInPercentage ? marginCents : fixedMarginCents) }}
                 </span>
             </div>
 
