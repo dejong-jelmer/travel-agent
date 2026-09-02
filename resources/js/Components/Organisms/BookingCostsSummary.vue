@@ -3,7 +3,7 @@ import { computed } from 'vue';
 import { Euro, Info } from 'lucide-vue-next';
 import { usePage } from '@inertiajs/vue3';
 import { useBookingPrice } from '@/Composables/useBookingPrice.js';
-import { formatCents as fmt } from '@/Support/money.js';
+import { formatCents } from '@/Support/money.js';
 
 const props = defineProps({
     booking: {
@@ -14,6 +14,8 @@ const props = defineProps({
 
 const page = usePage();
 const costCategories = computed(() => page.props.cost_categories ?? []);
+
+const fmt = (cents) => formatCents(cents, page.props.locale);
 
 const categoryLabel = (id) =>
     costCategories.value.find((c) => c.id === id)?.name ?? id;

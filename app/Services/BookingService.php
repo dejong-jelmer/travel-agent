@@ -6,6 +6,7 @@ use App\DTO\CreateBookingData;
 use App\DTO\UpdateBookingData;
 use App\Enums\TravelerType;
 use App\Models\Booking;
+use Illuminate\Support\Facades\DB;
 
 class BookingService
 {
@@ -76,61 +77,64 @@ class BookingService
      */
     public function update(Booking $booking, UpdateBookingData $bookingData): Booking
     {
-        // Update booking
-        $updateData = [
-            'status' => $bookingData->status,
-            'payment_status' => $bookingData->payment_status,
-            'internal_notes' => $bookingData->internal_notes,
-            'return_date' => $bookingData->return_date,
-        ];
+        // The booking, its cost items, contact and travelers are written as one
+        // unit, so a failure part way through cannot leave a half-updated booking.
+        return DB::transaction(function () use ($booking, $bookingData) {
+            $updateData = [
+                'status' => $bookingData->status,
+                'payment_status' => $bookingData->payment_status,
+                'internal_notes' => $bookingData->internal_notes,
+                'return_date' => $bookingData->return_date,
+            ];
 
-        if ($bookingData->margin_basis_points !== null) {
-            $updateData['margin_basis_points'] = $bookingData->margin_basis_points;
-        }
+            if ($bookingData->margin_basis_points !== null) {
+                $updateData['margin_basis_points'] = $bookingData->margin_basis_points;
+            }
 
-        if ($bookingData->margin_in_percentage !== null) {
-            $updateData['margin_in_percentage'] = $bookingData->margin_in_percentage;
-        }
+            if ($bookingData->margin_in_percentage !== null) {
+                $updateData['margin_in_percentage'] = $bookingData->margin_in_percentage;
+            }
 
-        if ($bookingData->margin_amount !== null) {
-            $updateData['margin_amount'] = $bookingData->margin_amount;
-        }
+            if ($bookingData->margin_amount !== null) {
+                $updateData['margin_amount'] = $bookingData->margin_amount;
+            }
 
-        if ($bookingData->fee_per_person !== null) {
-            $updateData['fee_per_person'] = $bookingData->fee_per_person;
-        }
+            if ($bookingData->fee_per_person !== null) {
+                $updateData['fee_per_person'] = $bookingData->fee_per_person;
+            }
 
-        // A booking made before fees and funds existed has no snapshot to
-        // protect, so capture one now. An existing snapshot is left alone.
-        if ($booking->fees_and_funds === null) {
-            $updateData['fees_and_funds'] = $this->feesAndFunds->asCents();
-        }
+            // A booking made before fees and funds existed has no snapshot to
+            // protect, so capture one now. An existing snapshot is left alone.
+            if ($booking->fees_and_funds === null) {
+                $updateData['fees_and_funds'] = $this->feesAndFunds->asCents();
+            }
 
-        $updateData['final_price'] = $bookingData->final_price;
+            $updateData['final_price'] = $bookingData->final_price;
 
-        $booking->update($updateData);
+            $booking->update($updateData);
 
-        if ($bookingData->cost_items !== null) {
-            $booking->syncCostItems($bookingData->cost_items);
-        }
-        // Get data from DTO
-        $contactData = $bookingData->contact->toArray();
-        $travelersData = $bookingData->travelers;
+            if ($bookingData->cost_items !== null) {
+                $booking->syncCostItems($bookingData->cost_items);
+            }
+            // Get data from DTO
+            $contactData = $bookingData->contact->toArray();
+            $travelersData = $bookingData->travelers;
 
-        $booking->contact->update([
-            'name' => $contactData['name'],
-            'street' => $contactData['street'],
-            'house_number' => $contactData['house_number'],
-            'addition' => $contactData['addition'],
-            'postal_code' => $contactData['postal_code'],
-            'city' => $contactData['city'],
-            'email' => $contactData['email'],
-            'phone' => $contactData['phone'],
-        ]);
+            $booking->contact->update([
+                'name' => $contactData['name'],
+                'street' => $contactData['street'],
+                'house_number' => $contactData['house_number'],
+                'addition' => $contactData['addition'],
+                'postal_code' => $contactData['postal_code'],
+                'city' => $contactData['city'],
+                'email' => $contactData['email'],
+                'phone' => $contactData['phone'],
+            ]);
 
-        $this->updateOrCreateTravelers($booking, $travelersData, $bookingData->main_booker['index']);
+            $this->updateOrCreateTravelers($booking, $travelersData, $bookingData->main_booker['index']);
 
-        return $booking;
+            return $booking;
+        });
     }
 
     /**

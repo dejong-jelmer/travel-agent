@@ -4,10 +4,12 @@ import { useI18n } from 'vue-i18n';
 import { usePage } from '@inertiajs/vue3';
 import { FileText, User, Users, Activity, Receipt } from 'lucide-vue-next';
 import { feesAndFundsEntries, sumCostItems, sumFeesAndFunds } from '@/Support/bookingPrice.js';
-import { formatCents as formatPrice } from '@/Support/money.js';
+import { formatCents } from '@/Support/money.js';
 
 const { t } = useI18n();
 const page = usePage();
+
+const formatPrice = (cents) => formatCents(cents, page.props.locale);
 
 const props = defineProps({
     booking: Object,
