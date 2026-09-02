@@ -123,3 +123,9 @@ body {
     }
 
 }
+
+/* vue-easy-lightbox: prevent native page panning/pinch-zoom while the lightbox is open (touch handlers of the library do not preventDefault) */
+.vel-modal {
+    touch-action: none;
+    overscroll-behavior: contain;
+}

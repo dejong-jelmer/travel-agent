@@ -67,6 +67,11 @@
         "view_trip": "View trip",
         "expected": "Expected"
     },
+    "slider": {
+        "previous": "Previous",
+        "next": "Next",
+        "go_to": "Go to position {position}"
+    },
     "trip_itinerary": {
         "day": "Day",
         "activities": "Activities",
@@ -96,30 +101,18 @@
             "single_allowed": "One image allowed"
         },
         "errors": {
-            "invalid_files": "Some files are not valid images and have been skipped.",
-            "upload_error": "An error occurred while uploading the files.",
-            "processing_error": "Error processing the file.",
+            "invalid_type": "{filename}: file type not allowed (allowed: {types}).",
+            "too_large": "{filename}: file is larger than {maxSize}.",
             "image_load_error": "Image could not be loaded",
             "cannot_load_image": "Cannot load image"
         },
         "preview": {
-            "loading": "Loading…",
             "remove_image": "Remove image"
         },
         "file_info": {
             "filename": "Filename",
             "filesize": "File size",
-            "filetype": "File type",
-            "max_size_exceeded": "Maximum file size is {maxSize}"
-        },
-        "console": {
-            "not_an_image": "File {filename} is not an image",
-            "could_not_load": "Image {index} could not be loaded",
-            "could_not_create_url": "Could not create preview URL:",
-            "processing_error": "Error processing files:",
-            "remove_error": "Error removing image:",
-            "emit_error": "Error emitting update:",
-            "cleanup_error": "Error during cleanup:"
+            "filetype": "File type"
         }
     },
     "newsletter": {

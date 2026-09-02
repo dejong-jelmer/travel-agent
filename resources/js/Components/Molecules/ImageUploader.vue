@@ -1,96 +1,243 @@
+<script setup>
+import { ref, computed, onBeforeUnmount } from 'vue';
+import { usePage } from '@inertiajs/vue3';
+import { useI18n } from 'vue-i18n';
+
+const props = defineProps({
+    modelValue: {
+        type: [Object, String, Array],
+        required: false
+    },
+    multiple: {
+        type: Boolean,
+        default: false
+    },
+    previewSize: {
+        type: String,
+        default: 'thumbnail',
+        validator: (value) => ['large', 'thumbnail'].includes(value)
+    },
+    label: {
+        type: String,
+        required: false
+    },
+    feedback: {
+        type: [String, Array],
+        required: false
+    }
+});
+
+const emit = defineEmits(['update:modelValue']);
+const { t } = useI18n();
+
+const imageConfig = computed(() => usePage().props.config?.images || {});
+
+const fileInput = ref(null);
+const isDragging = ref(false);
+const errorMessages = ref([]);
+
+// Each entry: { source: File|string, url: string, error: boolean }
+// `source` is what gets emitted; `url` is what the preview shows.
+const images = ref([]);
+
+const isLargePreview = computed(() => !props.multiple && props.previewSize === 'large');
+const singleImage = computed(() => (props.multiple ? null : images.value[0] ?? null));
+const singleFile = computed(() => (singleImage.value?.source instanceof File ? singleImage.value.source : null));
+
+const urlFor = (source) => {
+    if (source instanceof File) return URL.createObjectURL(source);
+    if (source.startsWith('/storage/') || source.startsWith('http')) return source;
+    return `/storage/${imageConfig.value.directory ?? 'images'}/${source}`;
+};
+
+const toImage = (source) => ({ source, url: urlFor(source), error: false });
+
+const revoke = (image) => {
+    if (image.source instanceof File) URL.revokeObjectURL(image.url);
+};
+
+// Initialise from the current v-model value (existing paths and/or File objects).
+const initial = props.multiple
+    ? (Array.isArray(props.modelValue) ? props.modelValue : [])
+    : [props.modelValue].filter((v) => typeof v === 'string' || v instanceof File);
+images.value = initial.map(toImage);
+
+const emitUpdate = () => {
+    const sources = images.value.map((image) => image.source);
+    emit('update:modelValue', props.multiple ? sources : sources[0] ?? null);
+};
+
+// Mirrors the server-side rules (ImageValidationRules): allowed mimes and max size.
+const allowedTypes = computed(() =>
+    (imageConfig.value.allowed_mimes ?? []).map((ext) => `image/${ext === 'jpg' ? 'jpeg' : ext}`)
+);
+
+const rejectionFor = (file) => {
+    const isImage = file.type.startsWith('image/');
+    const isAllowed = allowedTypes.value.length === 0 || allowedTypes.value.includes(file.type);
+    if (!isImage || !isAllowed) {
+        return t('image_uploader.errors.invalid_type', {
+            filename: file.name,
+            types: (imageConfig.value.allowed_mimes ?? []).join(', ')
+        });
+    }
+    if (file.size > maxBytes.value) {
+        return t('image_uploader.errors.too_large', { filename: file.name, maxSize: formatBytes(maxBytes.value) });
+    }
+    return null;
+};
+
+const addFiles = (fileList) => {
+    errorMessages.value = [];
+    const validFiles = [];
+
+    for (const file of Array.from(fileList)) {
+        const rejection = rejectionFor(file);
+        if (rejection) errorMessages.value.push(rejection);
+        else validFiles.push(file);
+    }
+    if (validFiles.length === 0) return;
+
+    if (props.multiple) {
+        images.value.push(...validFiles.map(toImage));
+    } else {
+        images.value.forEach(revoke);
+        images.value = [toImage(validFiles[0])];
+    }
+    emitUpdate();
+};
+
+const triggerFileInput = () => fileInput.value.click();
+
+const handleFiles = (event) => {
+    addFiles(event.target.files);
+    event.target.value = '';
+};
+
+const handleDrop = (event) => {
+    isDragging.value = false;
+    addFiles(event.dataTransfer.files);
+};
+
+const handleDragLeave = (event) => {
+    // dragleave also fires when moving over a child element; ignore those.
+    if (event.currentTarget.contains(event.relatedTarget)) return;
+    isDragging.value = false;
+};
+
+const removeImage = (index) => {
+    revoke(images.value[index]);
+    images.value.splice(index, 1);
+    if (images.value.length === 0) errorMessages.value = [];
+    emitUpdate();
+};
+
+// A broken preview only shows a fallback; the value stays intact so an existing
+// image is never silently dropped from the form. Removing is an explicit action.
+const handleImageError = (index) => {
+    images.value[index].error = true;
+};
+
+const handleImageLoad = (index) => {
+    images.value[index].error = false;
+};
+
+const KB = 1024;
+
+const formatBytes = (bytes, decimals = 2) => {
+    if (bytes === 0) return '0 Bytes';
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(KB));
+    return parseFloat((bytes / Math.pow(KB, i)).toFixed(decimals)) + ' ' + sizes[i];
+};
+
+// config('images.max_size') is in kilobytes, matching Laravel's `max:` rule.
+const maxBytes = computed(() => imageConfig.value.max_size * KB);
+
+onBeforeUnmount(() => images.value.forEach(revoke));
+</script>
+
 <template>
     <div>
         <!-- Hidden file input -->
         <input ref="fileInput" type="file" :multiple="multiple" accept="image/*" class="hidden" @change="handleFiles" />
 
         <!-- Drop zone -->
-        <div class="border-2 border-dashed rounded-lg p-8 transition-colors cursor-pointer"
+        <div class="border-2 border-dashed rounded-lg p-8 transition-colors cursor-pointer" role="button" tabindex="0"
             :class="isDragging ? 'border-brand-link bg-brand-link/5' : 'border-gray-300 hover:border-gray-400'"
-            @click="triggerFileInput" @dragover.prevent="isDragging = true" @dragenter.prevent="isDragging = true"
-            @dragleave.prevent="isDragging = false" @drop.prevent="handleDrop">
+            @click="triggerFileInput" @keydown.enter.prevent="triggerFileInput" @keydown.space.prevent="triggerFileInput"
+            @dragover.prevent="isDragging = true" @dragenter.prevent="isDragging = true"
+            @dragleave.prevent="handleDragLeave" @drop.prevent="handleDrop">
             <div class="flex flex-col items-center justify-center space-y-2">
                 <div class="text-brand-link font-medium">
                     {{ isDragging ?
-                        (multiple ? $t('image_uploader.drop_zone.drop_multiple') :
-                            $t('image_uploader.drop_zone.drop_single')) :
-                        (label || (multiple ? $t('image_uploader.drop_zone.click_or_drag_multiple') :
-                            $t('image_uploader.drop_zone.click_or_drag_single')))
+                        (multiple ? t('image_uploader.drop_zone.drop_multiple') :
+                            t('image_uploader.drop_zone.drop_single')) :
+                        (label || (multiple ? t('image_uploader.drop_zone.click_or_drag_multiple') :
+                            t('image_uploader.drop_zone.click_or_drag_single')))
                     }}
                 </div>
                 <div class="text-sm text-gray-500">
-                    {{ multiple ? $t('image_uploader.drop_zone.multiple_allowed') :
-                        $t('image_uploader.drop_zone.single_allowed') }}
+                    {{ multiple ? t('image_uploader.drop_zone.multiple_allowed') :
+                        t('image_uploader.drop_zone.single_allowed') }}
                 </div>
             </div>
 
-            <!-- Error message for processing image/file -->
-            <div v-if="errorMessage" class="mt-4 text-status-error text-sm text-center">
-                {{ errorMessage }}
+            <!-- Rejected files (type or size) -->
+            <div v-if="errorMessages.length" class="mt-4 text-status-error text-sm text-center space-y-1">
+                <p v-for="message in errorMessages" :key="message">{{ message }}</p>
             </div>
 
             <!-- Error message from form request validation -->
             <FormFeedback v-if="feedback" :message="feedback" />
 
             <!-- Preview Section -->
-            <div v-if="hasImages" class="mt-4">
+            <div v-if="images.length > 0" class="mt-4">
                 <!-- Large preview (single mode only) -->
-                <div v-if="!multiple && previewSize === 'large'" class="relative">
-                    <img v-if="!imageLoadError && singleImageData.url" :src="singleImageData.url" alt="Preview"
+                <div v-if="isLargePreview" class="relative">
+                    <img v-if="!singleImage.error" :src="singleImage.url" alt=""
                         class="max-w-full h-auto rounded-lg shadow-md" @error="handleImageError(0)"
                         @load="handleImageLoad(0)" />
 
                     <!-- Fallback for broken image -->
-                    <div v-else-if="imageLoadError" class="p-4 bg-gray-100 rounded-lg text-gray-600">
-                        <p class="text-sm">{{ imageLoadError }}</p>
+                    <div v-else class="p-4 bg-gray-100 rounded-lg text-gray-600">
+                        <p class="text-sm">{{ t('image_uploader.errors.image_load_error') }}</p>
                     </div>
 
                     <!-- Remove button -->
-                    <button v-if="singleImageData.url" type="button"
+                    <button type="button"
                         class="absolute -top-2 -right-2 w-8 h-8 bg-status-error text-white rounded-full flex items-center justify-center text-sm font-bold hover:bg-red-600 hover:scale-110 transition-all shadow-md z-10"
-                        @click.stop="removeImage(0)" :aria-label="$t('image_uploader.preview.remove_image')">
+                        @click.stop="removeImage(0)" :aria-label="t('image_uploader.preview.remove_image')">
                         ✕
                     </button>
 
                     <!-- File info (only in large mode) -->
-                    <div v-if="singleImageFile" class="mt-4 space-y-1 text-sm">
-                        <p>{{ $t('image_uploader.file_info.filename') }}: {{ singleImageFile.name }}</p>
-                        <p :class="{ 'text-status-error': sizeExceedsMax(singleImageFile.size) }">
-                            {{ $t('image_uploader.file_info.filesize') }}: {{ formatBytes(singleImageFile.size) }}
-                        </p>
-                        <p v-if="sizeExceedsMax(singleImageFile.size)" class="text-status-error">
-                            {{ $t('image_uploader.file_info.max_size_exceeded', {
-                                maxSize:
-                                    formatBytes(imageConfig.max_size, true) }) }}
-                        </p>
-                        <p>{{ $t('image_uploader.file_info.filetype') }}: {{ singleImageFile.type }}</p>
+                    <div v-if="singleFile" class="mt-4 space-y-1 text-sm">
+                        <p>{{ t('image_uploader.file_info.filename') }}: {{ singleFile.name }}</p>
+                        <p>{{ t('image_uploader.file_info.filesize') }}: {{ formatBytes(singleFile.size) }}</p>
+                        <p>{{ t('image_uploader.file_info.filetype') }}: {{ singleFile.type }}</p>
                     </div>
                 </div>
 
                 <!-- Thumbnail grid (multiple mode or thumbnail preference) -->
                 <div v-else class="flex flex-wrap justify-center gap-2">
-                    <div v-for="(imageData, index) in previewImagesData" :key="index" class="relative w-24 h-24">
+                    <div v-for="(image, index) in images" :key="image.url" class="relative w-24 h-24">
                         <!-- Normal image -->
-                        <img v-if="!imageData.error && imageData.url" :src="imageData.url"
+                        <img v-if="!image.error" :src="image.url" alt=""
                             class="w-full h-full object-cover rounded-lg shadow" @error="handleImageError(index)"
                             @load="handleImageLoad(index)" />
 
                         <!-- Fallback for broken image -->
-                        <div v-else-if="imageData.error"
+                        <div v-else
                             class="w-full h-full bg-gray-100 rounded-lg shadow flex flex-col items-center justify-center text-gray-500 text-xs p-1">
                             <div class="text-lg">📷</div>
-                            <div class="text-center leading-3">{{ $t('image_uploader.errors.cannot_load_image') }}</div>
-                        </div>
-
-                        <!-- Loading state -->
-                        <div v-else-if="imageData.loading"
-                            class="w-full h-full bg-gray-200 rounded-lg shadow flex items-center justify-center text-gray-500 text-xs animate-pulse">
-                            {{ $t('image_uploader.preview.loading') }}
+                            <div class="text-center leading-3">{{ t('image_uploader.errors.cannot_load_image') }}</div>
                         </div>
 
                         <!-- Remove button -->
                         <button type="button"
                             class="absolute -top-2 -right-2 w-6 h-6 bg-status-error text-white rounded-full flex items-center justify-center text-sm font-bold hover:bg-red-600 hover:scale-110 transition-all shadow-md z-10"
-                            @click.stop="removeImage(index)" :aria-label="$t('image_uploader.preview.remove_image')">
+                            @click.stop="removeImage(index)" :aria-label="t('image_uploader.preview.remove_image')">
                             ✕
                         </button>
                     </div>
@@ -99,386 +246,3 @@
         </div>
     </div>
 </template>
-
-<script>
-import { usePage } from '@inertiajs/vue3';
-
-export default {
-    name: 'ImageUploader',
-    props: {
-        modelValue: {
-            type: [Object, String, Array],
-            required: false
-        },
-        multiple: {
-            type: Boolean,
-            default: false
-        },
-        previewSize: {
-            type: String,
-            default: 'thumbnail',
-            validator: (value) => ['large', 'thumbnail'].includes(value)
-        },
-        label: {
-            type: String,
-            required: false
-        },
-        feedback: {
-            type: [String, Array],
-            required: false
-        }
-    },
-    emits: ['update:modelValue', 'change'],
-    data() {
-        return {
-            uploadedImages: [],
-            imageStates: [],
-            errorMessage: '',
-            imageLoadError: null,
-            isDragging: false,
-            initialized: false,
-            isInitializing: false,
-            originalFileCount: 0,
-            originalFileNames: [],
-            cachedObjectUrls: new Map() // Map<File, string> to prevent memory leaks
-        };
-    },
-    async mounted() {
-        if (!this.initialized) {
-            this.initialized = true;
-            await this.initializeFromModelValue();
-        }
-    },
-    computed: {
-        imageConfig() {
-            const page = usePage();
-            return page.props.config?.images || {};
-        },
-        hasImages() {
-            return this.uploadedImages.length > 0;
-        },
-        hasChanges() {
-            // Check if count changed
-            if (this.uploadedImages.length !== this.originalFileCount) {
-                return true;
-            }
-            // Check if files changed (by name/path)
-            const currentNames = this.uploadedImages.map(item =>
-                typeof item === 'string' ? item : item.name
-            );
-            return !this.arraysEqual(currentNames, this.originalFileNames);
-        },
-        singleImageFile() {
-            if (this.multiple) return null;
-            const item = this.uploadedImages[0];
-            // Only return File objects (not string paths) for file info display
-            return item instanceof File ? item : null;
-        },
-        singleImageData() {
-            if (this.multiple || !this.uploadedImages[0]) return { url: null, error: false, loading: false };
-
-            const state = this.imageStates[0] || { loading: false, error: false };
-            const url = this.getOrCreateObjectURL(this.uploadedImages[0]);
-
-            return { url, error: state.error, loading: state.loading };
-        },
-        previewImagesData() {
-            if (!this.multiple && this.previewSize === 'large') return [];
-
-            return this.uploadedImages.map((file, index) => {
-                const state = this.imageStates[index] || { loading: false, error: false };
-                const url = this.getOrCreateObjectURL(file);
-
-                return { url, error: state.error, loading: state.loading };
-            });
-        }
-    },
-    methods: {
-        getOrCreateObjectURL(item) {
-            // Handle string paths (existing images)
-            if (typeof item === 'string') {
-                // If already a full path, return as-is
-                if (item.startsWith('/storage/') || item.startsWith('http')) {
-                    return item;
-                }
-                // Otherwise convert filename to full path
-                return `/storage/images/${item}`;
-            }
-
-            // Handle File objects (new uploads)
-            if (!(item instanceof File)) {
-                return null;
-            }
-
-            // Return cached URL if it exists
-            if (this.cachedObjectUrls.has(item)) {
-                return this.cachedObjectUrls.get(item);
-            }
-
-            // Create new URL and cache it
-            try {
-                const url = URL.createObjectURL(item);
-                this.cachedObjectUrls.set(item, url);
-                return url;
-            } catch (error) {
-                console.warn(this.$t('image_uploader.console.could_not_create_url'), error);
-                return null;
-            }
-        },
-        revokeObjectURL(file) {
-            if (this.cachedObjectUrls.has(file)) {
-                const url = this.cachedObjectUrls.get(file);
-                if (url && url.startsWith('blob:')) {
-                    URL.revokeObjectURL(url);
-                }
-                this.cachedObjectUrls.delete(file);
-            }
-        },
-        arraysEqual(a, b) {
-            if (a.length !== b.length) return false;
-            return a.every((val, index) => val === b[index]);
-        },
-        async initializeFromModelValue() {
-            if (!this.modelValue) return;
-
-            // Set flag to prevent emit during initialization
-            this.isInitializing = true;
-
-            if (this.multiple) {
-                // Multiple mode: modelValue should be array of strings (paths) or Files
-                const images = Array.isArray(this.modelValue) ? this.modelValue : [];
-                if (images.length > 0) {
-                    // Accept both strings (existing image paths) and Files (new uploads)
-                    this.uploadedImages = [...images];
-                    // Initialize states for all images
-                    this.imageStates = images.map(() => ({ loading: false, error: false }));
-                }
-            } else {
-                // Single mode: modelValue can be string (path) or File
-                if (typeof this.modelValue === 'string' || this.modelValue instanceof File) {
-                    this.uploadedImages = [this.modelValue];
-                    this.imageStates = [{ loading: false, error: false }];
-                }
-            }
-
-            // Set original state after initialization
-            this.setOriginalState();
-
-            // Clear initialization flag
-            this.isInitializing = false;
-
-            // Emit the data to parent (no conversion needed)
-            this.emitUpdate();
-        },
-        setOriginalState() {
-            this.originalFileCount = this.uploadedImages.length;
-            this.originalFileNames = this.uploadedImages.map(item =>
-                typeof item === 'string' ? item : item.name
-            );
-        },
-        triggerFileInput() {
-            this.$refs.fileInput.click();
-        },
-        handleDrop(event) {
-            this.isDragging = false;
-
-            try {
-                this.errorMessage = '';
-                const files = Array.from(event.dataTransfer.files);
-
-                // Validate files
-                const validFiles = files.filter(file => {
-                    if (!file.type.startsWith('image/')) {
-                        console.warn(this.$t('image_uploader.console.not_an_image', { filename: file.name }));
-                        return false;
-                    }
-                    return true;
-                });
-
-                if (validFiles.length !== files.length) {
-                    this.errorMessage = this.$t('image_uploader.errors.invalid_files');
-                }
-
-                if (validFiles.length > 0) {
-                    if (this.multiple) {
-                        // Multiple mode: add all files
-                        const startIndex = this.uploadedImages.length;
-                        validFiles.forEach((_, index) => {
-                            this.setImageState(startIndex + index, { loading: false, error: false });
-                        });
-                        this.uploadedImages.push(...validFiles);
-                    } else {
-                        // Single mode: only first file
-                        this.setImageState(0, { loading: false, error: false });
-                        this.uploadedImages = [validFiles[0]];
-                        this.imageStates = [{ loading: false, error: false }];
-                    }
-                    this.emitUpdate();
-                }
-            } catch (error) {
-                console.error(this.$t('image_uploader.console.processing_error'), error);
-                this.errorMessage = this.$t('image_uploader.errors.upload_error');
-            }
-        },
-        handleFiles(event) {
-            try {
-                this.errorMessage = '';
-                const files = Array.from(event.target.files);
-
-                // Validate files
-                const validFiles = files.filter(file => {
-                    if (!file.type.startsWith('image/')) {
-                        console.warn(this.$t('image_uploader.console.not_an_image', { filename: file.name }));
-                        return false;
-                    }
-                    return true;
-                });
-
-                if (validFiles.length !== files.length) {
-                    this.errorMessage = this.$t('image_uploader.errors.invalid_files');
-                }
-
-                if (validFiles.length > 0) {
-                    if (this.multiple) {
-                        // Multiple mode: add all files
-                        const startIndex = this.uploadedImages.length;
-                        validFiles.forEach((_, index) => {
-                            this.setImageState(startIndex + index, { loading: false, error: false });
-                        });
-                        this.uploadedImages.push(...validFiles);
-                    } else {
-                        // Single mode: only first file
-                        this.handleFileChange(validFiles[0]);
-                    }
-                    this.emitUpdate();
-                }
-
-                // Reset input
-                event.target.value = '';
-            } catch (error) {
-                console.error(this.$t('image_uploader.console.processing_error'), error);
-                this.errorMessage = this.$t('image_uploader.errors.upload_error');
-            }
-        },
-        handleFileChange(file) {
-            try {
-                // Cleanup old file's object URL if it exists (only for File objects)
-                if (this.uploadedImages[0] instanceof File) {
-                    this.revokeObjectURL(this.uploadedImages[0]);
-                }
-
-                this.uploadedImages = [file];
-                this.imageStates = [{ loading: false, error: false }];
-                this.errorMessage = '';
-                this.imageLoadError = null;
-            } catch (error) {
-                console.error(this.$t('image_uploader.console.processing_error'), error);
-                this.errorMessage = this.$t('image_uploader.errors.processing_error');
-                this.uploadedImages = [];
-                this.imageStates = [];
-            }
-        },
-        removeImage(index) {
-            try {
-                // Cleanup object URL to prevent memory leaks (only for File objects)
-                const item = this.uploadedImages[index];
-                if (item instanceof File) {
-                    this.revokeObjectURL(item);
-                }
-
-                this.uploadedImages.splice(index, 1);
-                this.imageStates.splice(index, 1);
-                this.emitUpdate();
-
-                // Clear error messages if there are no more images
-                if (this.uploadedImages.length === 0) {
-                    this.errorMessage = '';
-                    this.imageLoadError = null;
-                }
-
-            } catch (error) {
-                console.error(this.$t('image_uploader.console.remove_error'), error);
-            }
-        },
-        handleImageError(index) {
-            console.warn(this.$t('image_uploader.console.could_not_load', { index }));
-            if (!this.multiple && this.previewSize === 'large') {
-                this.imageLoadError = this.$t('image_uploader.errors.image_load_error');
-            } else {
-                this.setImageState(index, { loading: false, error: true });
-            }
-        },
-        handleImageLoad(index) {
-            if (!this.multiple && this.previewSize === 'large') {
-                this.imageLoadError = null;
-            } else {
-                this.setImageState(index, { loading: false, error: false });
-            }
-        },
-        setImageState(index, state) {
-            while (this.imageStates.length <= index) {
-                this.imageStates.push({ loading: false, error: false });
-            }
-            this.imageStates[index] = { ...this.imageStates[index], ...state };
-        },
-        emitUpdate() {
-            try {
-                // Don't emit during initialization
-                if (this.isInitializing) {
-                    return;
-                }
-
-                let value;
-                if (this.multiple) {
-                    // Multiple mode: emit array
-                    const validFiles = this.uploadedImages.filter((file, index) => {
-                        const state = this.imageStates[index];
-                        return !state || !state.error;
-                    });
-                    value = [...validFiles];
-                } else {
-                    // Single mode: emit single file or null
-                    const file = this.uploadedImages[0] || null;
-                    const state = this.imageStates[0];
-                    value = (!state || !state.error) ? file : null;
-                }
-
-                // Emit v-model update
-                this.$emit("update:modelValue", value);
-
-                // Emit change event with hasChanges flag
-                this.$emit("change", {
-                    files: value,
-                    hasChanges: this.hasChanges
-                });
-            } catch (error) {
-                console.error(this.$t('image_uploader.console.emit_error'), error);
-            }
-        },
-        formatBytes(bytes, isKb = false, decimals = 2) {
-            if (bytes === 0) return "0 Bytes";
-            bytes = isKb ? (bytes * 1000) : bytes;
-            const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
-            const i = Math.floor(Math.log(bytes) / Math.log(1024));
-            return parseFloat((bytes / Math.pow(1024, i)).toFixed(decimals)) + " " + sizes[i];
-        },
-        sizeExceedsMax(bytes) {
-            const maxBytes = (this.imageConfig?.max_size || 5000) * 1000;
-            return bytes > maxBytes;
-        }
-    },
-    beforeUnmount() {
-        try {
-            // Cleanup all cached object URLs
-            this.cachedObjectUrls.forEach((url, file) => {
-                if (url && url.startsWith('blob:')) {
-                    URL.revokeObjectURL(url);
-                }
-            });
-            this.cachedObjectUrls.clear();
-        } catch (error) {
-            console.error(this.$t('image_uploader.console.cleanup_error'), error);
-        }
-    }
-};
-</script>
