@@ -242,7 +242,7 @@ class Trip extends Model
 
     public function images(): MorphMany
     {
-        return $this->morphMany(Image::class, 'imageable')->where('is_primary', false);
+        return $this->morphMany(Image::class, 'imageable')->where('is_primary', false)->orderBy('order');
     }
 
     public function heroImage(): MorphOne

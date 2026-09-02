@@ -71,6 +71,8 @@ trait ManagesImages
      * 3. After commit: delete old storage files
      * 4. On failure: cleanup new uploads and rollback
      *
+     * The position of each item in $data is stored as the display order.
+     *
      * @param  string|UploadedFile|array<int, string|UploadedFile>  $data  Mixed array of paths (strings) and new uploads (UploadedFile).
      * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
      * @param  bool  $isPrimary  Whether the image(s) should be marked as is_primary.
@@ -79,17 +81,21 @@ trait ManagesImages
      */
     public function syncImages(string|UploadedFile|array $data, ImageRelation $relation, bool $isPrimary = false): void
     {
+        // Files and text inputs are merged separately by the request, so sort by key
+        // first to restore the submitted order before using positions as display order.
         $incomingData = is_array($data) ? $data : [$data];
+        ksort($incomingData);
+        $incomingData = array_values($incomingData);
 
-        // Separate incoming data into existing paths and new uploads
-        $incomingPaths = [];
-        $newUploads = [];
+        // Separate incoming data into existing paths and new uploads, keeping their position as order
+        $incomingPaths = []; // path => order
+        $newUploads = []; // [order => UploadedFile]
 
-        foreach ($incomingData as $item) {
+        foreach ($incomingData as $order => $item) {
             if (is_string($item)) {
-                $incomingPaths[] = basename($item);
+                $incomingPaths[basename($item)] = $order;
             } elseif ($item instanceof UploadedFile) {
-                $newUploads[] = $item;
+                $newUploads[$order] = $item;
             }
         }
 
@@ -125,9 +131,9 @@ trait ManagesImages
     /**
      * Upload new image files to storage.
      *
-     * @param  array<int, UploadedFile>  $uploads  Array of uploaded files.
+     * @param  array<int, UploadedFile>  $uploads  Uploaded files keyed by their display order.
      * @param  bool  $isPrimary  Whether images should be marked as is_primary.
-     * @return array<int, array{path: string, original_name: string, is_primary: bool, mime_type: string, size: int}>
+     * @return array<int, array{path: string, original_name: string, is_primary: bool, mime_type: string, size: int, order: int}>
      *
      * @throws RuntimeException If any operation fails
      */
@@ -135,7 +141,7 @@ trait ManagesImages
     {
         $uploadedFiles = [];
 
-        foreach ($uploads as $upload) {
+        foreach ($uploads as $order => $upload) {
             $fullPath = $upload->store(config('images.directory'), config('images.disk'));
 
             if (! $fullPath) {
@@ -148,6 +154,7 @@ trait ManagesImages
                 'is_primary' => $isPrimary,
                 'mime_type' => $upload->getClientMimeType(),
                 'size' => $upload->getSize() ?: 0,
+                'order' => $order,
             ];
         }
 
@@ -157,9 +164,10 @@ trait ManagesImages
     /**
      * Update image records in database transaction.
      *
-     * Removes old records, creates new records, and returns paths of deleted images.
+     * Removes old records, updates the order of kept records, creates new records,
+     * and returns paths of deleted images.
      *
-     * @param  array<int, string>  $incomingPaths  Array of existing image paths to keep.
+     * @param  array<string, int>  $incomingPaths  Existing image paths to keep, mapped to their display order.
      * @param  array<int, array>  $uploadedFiles  Array of newly uploaded file data.
      * @param  ImageRelation  $relation  Instance of enum with the name of the Eloquent relation.
      * @return array<int, string> Array of storage paths that should be deleted.
@@ -174,13 +182,17 @@ trait ManagesImages
 
             $model = $relation->getRelation($this);
             $existingPaths = $model->lockForUpdate()->pluck('path')->toArray();
-            $pathsToDelete = array_diff($existingPaths, $incomingPaths);
+            $pathsToDelete = array_diff($existingPaths, array_keys($incomingPaths));
 
             if (! empty($pathsToDelete)) {
                 $model->whereIn('path', $pathsToDelete)->forceDelete();
             }
 
             $storagePathsToDelete = $pathsToDelete;
+
+            foreach ($incomingPaths as $path => $order) {
+                $relation->getRelation($this)->where('path', $path)->update(['order' => $order]);
+            }
 
             foreach ($uploadedFiles as $file) {
                 $model->create([
@@ -189,6 +201,7 @@ trait ManagesImages
                     'is_primary' => $file['is_primary'],
                     'mime_type' => $file['mime_type'],
                     'size' => $file['size'],
+                    'order' => $file['order'],
                 ]);
             }
         });
