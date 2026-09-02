@@ -251,7 +251,8 @@ onBeforeUnmount(() => {
                 </div>
 
                 <!-- Thumbnail grid (multiple mode or thumbnail preference) -->
-                <div v-else ref="grid" class="flex flex-wrap justify-center gap-2" @click.stop>
+                <div v-else ref="grid" class="flex flex-wrap justify-center gap-2"
+                    @click="multiple && $event.stopPropagation()">
                     <div v-for="(image, index) in images" :key="image.url" class="relative w-24 h-24"
                         :class="{ 'cursor-grab active:cursor-grabbing': multiple }">
                         <!-- Normal image -->

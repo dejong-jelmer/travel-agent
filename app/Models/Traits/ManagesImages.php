@@ -84,7 +84,7 @@ trait ManagesImages
         // Files and text inputs are merged separately by the request, so sort by key
         // first to restore the submitted order before using positions as display order.
         $incomingData = is_array($data) ? $data : [$data];
-        ksort($incomingData);
+        ksort($incomingData, SORT_NUMERIC);
         $incomingData = array_values($incomingData);
 
         // Separate incoming data into existing paths and new uploads, keeping their position as order
