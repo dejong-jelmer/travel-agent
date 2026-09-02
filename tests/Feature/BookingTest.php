@@ -273,6 +273,43 @@ class BookingTest extends TestCase
         $this->assertContactWasUpdatedCorrectly($booking, $updatedPayload);
     }
 
+    public function test_updating_a_booking_without_a_snapshot_captures_one(): void
+    {
+        Setting::set(SettingKey::GuaranteeFund, '12.95');
+
+        $booking = $this->createBookingWithTravelersAndContact();
+        $booking->forceFill(['fees_and_funds' => null])->saveQuietly();
+
+        $payload = $this->generateUpdatePayload($booking);
+
+        $response = $this->put(route('admin.bookings.update', $booking), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking->refresh();
+
+        $this->assertSame(1295, $booking->fees_and_funds[SettingKey::GuaranteeFund->value]);
+        $this->assertSame(1295, $booking->fees_and_funds_total);
+    }
+
+    public function test_updating_a_booking_keeps_the_snapshot_it_already_has(): void
+    {
+        Setting::set(SettingKey::GuaranteeFund, '10.00');
+
+        $booking = $this->createBookingWithTravelersAndContact();
+        $capturedAtBooking = $booking->fees_and_funds;
+
+        $this->assertNotNull($capturedAtBooking, 'the booking should be created with a snapshot');
+
+        Setting::set(SettingKey::GuaranteeFund, '99.00');
+
+        $payload = $this->generateUpdatePayload($booking);
+        $this->put(route('admin.bookings.update', $booking), $payload)->assertSessionHasNoErrors();
+
+        $booking->refresh();
+
+        $this->assertSame($capturedAtBooking, $booking->fees_and_funds);
+    }
+
     public function test_booking_has_unique_reference()
     {
         $booking1 = Booking::factory()->for($this->trip, 'trip')->create();

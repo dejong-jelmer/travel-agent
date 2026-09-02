@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Enums\SettingKey;
 use App\Enums\Trip\ItemType;
-use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\TripItem;
 use Illuminate\Support\Collection;
@@ -30,15 +28,9 @@ class TripItemService
      */
     public static function aggregate(Trip $trip): Collection
     {
-        $feeParams = [
-            'trip.item.exclusion.fees.booking' => ['amount' => '€'.Setting::get(SettingKey::BookingFee, '27.50')],
-            'trip.item.exclusion.fees.guarantee_fund' => ['amount' => '€'.Setting::get(SettingKey::GuaranteeFund, '10')],
-            'trip.item.exclusion.fees.emergency_fund' => ['amount' => '€'.Setting::get(SettingKey::EmergencyFund, '2.50')],
-        ];
-
         return self::mergeItems(
             self::getTripItems($trip),
-            self::getDefaultItems(config('trip-default-items', []), $feeParams)
+            self::getDefaultItems(config('trip-default-items', []))
         );
     }
 
@@ -68,14 +60,14 @@ class TripItemService
      * @param  string  $model  The model class to instantiate (defaults to TripItem)
      * @return Collection Nested collection: [ItemType label => Collection<TripItem>]
      */
-    private static function getDefaultItems(array $tripDefaults, array $params = [], string $model = TripItem::class): Collection
+    private static function getDefaultItems(array $tripDefaults, string $model = TripItem::class): Collection
     {
         return collect($tripDefaults)
             ->mapWithKeys(fn ($items, $type) => [
                 ItemType::from($type)->label() => collect($items)
                     ->map(fn ($item) => new $model([
                         'type' => ItemType::from($type),
-                        'item' => __($item, $params[$item] ?? []),
+                        'item' => __($item),
                     ])),
             ]);
     }

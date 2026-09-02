@@ -3,6 +3,7 @@ import { computed, toRef } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { Plus, X, Info } from 'lucide-vue-next';
 import { useBookingPrice } from '@/Composables/useBookingPrice.js';
+import { formatCents } from '@/Support/money.js';
 
 const props = defineProps({
     booking: { type: Object, required: true },
@@ -10,6 +11,8 @@ const props = defineProps({
 
 const page = usePage();
 const costCategories = computed(() => page.props.cost_categories ?? []);
+
+const fmt = (cents) => formatCents(cents, page.props.locale);
 
 const costItems = toRef(props.booking, 'cost_items');
 
@@ -33,13 +36,6 @@ const {
     props.booking,
     computed(() => page.props.fees_and_funds ?? {}),
 );
-
-const fmt = (cents) =>
-    new Intl.NumberFormat('nl-NL', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2,
-    }).format((cents ?? 0) / 100);
 
 function addItem() {
     costItems.value.push({

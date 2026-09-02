@@ -31,11 +31,6 @@ return [
             'train_reservations' => 'Seat reservation on the train (when possible)',
         ],
         'exclusion' => [
-            'fees' => [
-                'booking' => 'Booking fee - :amount per booking',
-                'guarantee_fund' => 'STO guarantee fund - :amount per booking',
-                'emergency_fund' => 'Emergency fund - :amount per booking',
-            ],
             'additional_meals' => 'Additional meals',
             'excursions' => 'Additional activities & excursions',
             'transfers' => 'Local transportation',
