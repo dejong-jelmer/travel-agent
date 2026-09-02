@@ -75,7 +75,7 @@ const contactUrl = computed(() => {
                                 <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
                             </div>
                             <div class="p-0 laptop:p-6">
-                                <Slider :items="trip.images" :visible="1">
+                                <Slider :items="trip.images" :visible="3">
                                     <template #default="{ item, index }">
                                         <img :src="item.public_url" alt="Trip image"
                                             class="w-full h-36 tablet:h-full max-h-[500px] object-cover cursor-zoom-in"
