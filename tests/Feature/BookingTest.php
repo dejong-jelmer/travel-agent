@@ -86,6 +86,93 @@ class BookingTest extends TestCase
         $this->assertSame(261538, $booking->display_price);
     }
 
+    public function test_booking_calculates_price_with_a_fixed_margin_and_fee_per_adult(): void
+    {
+        $payload = $this->generateBookingPayload([
+            'numberOfAdults' => 2,
+            'numberOfChildren' => 1,
+            'cost_items' => [
+                ['category' => CostCategory::Train->value, 'label' => 'TGV Parijs–Bordeaux retour', 'amount_per_person' => 40000, 'quantity' => 2],
+                ['category' => CostCategory::Accommodation->value, 'label' => 'Boutiquehotel Sarlat', 'amount_per_person' => 45000, 'quantity' => 2],
+            ],
+            'margin_in_percentage' => false,
+            'margin_amount' => 50000,
+            'fee_per_person' => 2500,
+        ]);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail()->load('costItems');
+
+        $this->assertFalse($booking->margin_in_percentage);
+        $this->assertSame(170000, $booking->total_cost);
+        // 170000 cost + 50000 fixed margin + 2 adults x 2500 fee = 225000.
+        $this->assertSame(225000, $booking->calculated_price);
+        $this->assertSame(225000, $booking->display_price);
+    }
+
+    public function test_fees_and_funds_are_added_on_top_of_the_calculated_price(): void
+    {
+        Setting::set(SettingKey::BookingFee, '25.00');
+        Setting::set(SettingKey::GuaranteeFund, '10.00');
+        Setting::set(SettingKey::EmergencyFund, '2.50');
+
+        $payload = $this->generateBookingPayload([
+            'numberOfAdults' => 2,
+            'numberOfChildren' => 0,
+            'cost_items' => [
+                ['category' => CostCategory::Train->value, 'label' => 'TGV retour', 'amount_per_person' => 40000, 'quantity' => 2],
+                ['category' => CostCategory::Accommodation->value, 'label' => 'Boutiquehotel Sarlat', 'amount_per_person' => 45000, 'quantity' => 2],
+            ],
+            'margin_percentage' => 35,
+        ]);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail();
+
+        // MySQL reorders the keys of a JSON column, so compare per key.
+        $this->assertSame(2500, $booking->fees_and_funds[SettingKey::BookingFee->value]);
+        $this->assertSame(1000, $booking->fees_and_funds[SettingKey::GuaranteeFund->value]);
+        $this->assertSame(250, $booking->fees_and_funds[SettingKey::EmergencyFund->value]);
+
+        // 170000 / (1 - 0.35) = 261538, plus 3750 in fees and funds.
+        $this->assertSame(265288, $booking->calculated_price);
+        $this->assertSame(265288, $booking->display_price);
+    }
+
+    public function test_changing_the_fee_settings_leaves_an_existing_booking_untouched(): void
+    {
+        Setting::set(SettingKey::BookingFee, '25.00');
+
+        $response = $this->post(route('admin.bookings.store'), $this->generateBookingPayload());
+        $response->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail();
+        $priceAtBooking = $booking->calculated_price;
+
+        Setting::set(SettingKey::BookingFee, '99.00');
+        $booking->recalculatePrice();
+
+        $booking->refresh();
+        $this->assertSame(2500, $booking->fees_and_funds[SettingKey::BookingFee->value]);
+        $this->assertSame($priceAtBooking, $booking->calculated_price);
+    }
+
+    public function test_fixed_margin_requires_a_margin_amount_and_fee_per_person(): void
+    {
+        $payload = $this->generateBookingPayload([
+            'margin_in_percentage' => false,
+        ]);
+        unset($payload['margin_amount'], $payload['fee_per_person']);
+
+        $response = $this->post(route('admin.bookings.store'), $payload);
+
+        $response->assertSessionHasErrors(['margin_amount', 'fee_per_person']);
+    }
+
     public function test_final_price_overrides_calculated_price(): void
     {
         $payload = $this->generateBookingPayload([
@@ -184,6 +271,43 @@ class BookingTest extends TestCase
 
         $this->assertTravelersWereUpdatedCorrectly($booking, $updatedPayload);
         $this->assertContactWasUpdatedCorrectly($booking, $updatedPayload);
+    }
+
+    public function test_updating_a_booking_without_a_snapshot_captures_one(): void
+    {
+        Setting::set(SettingKey::GuaranteeFund, '12.95');
+
+        $booking = $this->createBookingWithTravelersAndContact();
+        $booking->forceFill(['fees_and_funds' => null])->saveQuietly();
+
+        $payload = $this->generateUpdatePayload($booking);
+
+        $response = $this->put(route('admin.bookings.update', $booking), $payload);
+        $response->assertSessionHasNoErrors();
+
+        $booking->refresh();
+
+        $this->assertSame(1295, $booking->fees_and_funds[SettingKey::GuaranteeFund->value]);
+        $this->assertSame(1295, $booking->fees_and_funds_total);
+    }
+
+    public function test_updating_a_booking_keeps_the_snapshot_it_already_has(): void
+    {
+        Setting::set(SettingKey::GuaranteeFund, '10.00');
+
+        $booking = $this->createBookingWithTravelersAndContact();
+        $capturedAtBooking = $booking->fees_and_funds;
+
+        $this->assertNotNull($capturedAtBooking, 'the booking should be created with a snapshot');
+
+        Setting::set(SettingKey::GuaranteeFund, '99.00');
+
+        $payload = $this->generateUpdatePayload($booking);
+        $this->put(route('admin.bookings.update', $booking), $payload)->assertSessionHasNoErrors();
+
+        $booking->refresh();
+
+        $this->assertSame($capturedAtBooking, $booking->fees_and_funds);
     }
 
     public function test_booking_has_unique_reference()

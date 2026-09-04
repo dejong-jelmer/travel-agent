@@ -2,6 +2,8 @@
 import { computed } from 'vue';
 import { Euro, Info } from 'lucide-vue-next';
 import { usePage } from '@inertiajs/vue3';
+import { useBookingPrice } from '@/Composables/useBookingPrice.js';
+import { formatCents } from '@/Support/money.js';
 
 const props = defineProps({
     booking: {
@@ -13,52 +15,30 @@ const props = defineProps({
 const page = usePage();
 const costCategories = computed(() => page.props.cost_categories ?? []);
 
+const fmt = (cents) => formatCents(cents, page.props.locale);
+
 const categoryLabel = (id) =>
     costCategories.value.find((c) => c.id === id)?.name ?? id;
 
-const fmt = (cents) =>
-    new Intl.NumberFormat('nl-NL', {
-        style: 'currency',
-        currency: 'EUR',
-        minimumFractionDigits: 2,
-    }).format((cents ?? 0) / 100);
-
-const itemSubtotalCents = (item) => {
-    const amount = Number(item.amount_per_person);
-    const quantity = Number(item.quantity);
-    if (!Number.isFinite(amount) || !Number.isFinite(quantity)) return 0;
-    return Math.round(amount * 100) * quantity;
-};
-
-const totalCostCents = computed(() =>
-    (props.booking.cost_items ?? []).reduce(
-        (acc, item) => acc + itemSubtotalCents(item),
-        0,
-    ),
+// Snapshot for an existing booking, current settings for a new one.
+const {
+    marginInPercentage,
+    adultCount,
+    costItemSubtotalCents,
+    totalCostCents,
+    fixedMarginCents,
+    marginCents,
+    feeTotalCents,
+    feesAndFundsRows,
+    calculatedPriceCents,
+    finalPriceCents,
+    hasOverride,
+    displayPriceCents,
+} = useBookingPrice(
+    props.booking,
+    computed(() => page.props.fees_and_funds ?? {}),
 );
 
-const marginFraction = computed(() => {
-    const m = Number(props.booking.margin_percentage);
-    if (!Number.isFinite(m)) return 0;
-    return Math.min(Math.max(m, 0), 95) / 100;
-});
-
-const calculatedPriceCents = computed(() => {
-    if (marginFraction.value >= 1) return 0;
-    return Math.round(totalCostCents.value / (1 - marginFraction.value));
-});
-
-const finalPriceCents = computed(() => {
-    const fp = props.booking.final_price;
-    if (fp === null || fp === '' || fp === undefined) return null;
-    return Math.round(Number(fp) * 100);
-});
-
-const hasOverride = computed(() => finalPriceCents.value !== null);
-
-const displayPriceCents = computed(() =>
-    hasOverride.value ? finalPriceCents.value : calculatedPriceCents.value,
-);
 </script>
 
 <template>
@@ -76,7 +56,7 @@ const displayPriceCents = computed(() =>
                     </span>
                     <span class="text-sm text-brand-light/70">{{ fmt(Math.round(Number(item.amount_per_person || 0) * 100)) }} × {{ item.quantity }}</span>
                     <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                    <span class="font-bold">{{ fmt(itemSubtotalCents(item)) }}</span>
+                    <span class="font-bold">{{ fmt(costItemSubtotalCents(item)) }}</span>
                 </span>
             </div>
 
@@ -92,9 +72,28 @@ const displayPriceCents = computed(() =>
             <div class="flex items-center">
                 <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
                 <span class="flex-1 flex items-center gap-2">
-                    <span>{{ $t('booking_steps.price.margin') }} ({{ booking.margin_percentage }}%)</span>
+                    <span v-if="marginInPercentage">{{ $t('booking_steps.price.margin') }} ({{ booking.margin_percentage }}%)</span>
+                    <span v-else>{{ $t('booking_steps.price.margin_fixed') }}</span>
                     <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                    <span class="font-bold">{{ fmt(calculatedPriceCents - totalCostCents) }}</span>
+                    <span class="font-bold">{{ fmt(marginInPercentage ? marginCents : fixedMarginCents) }}</span>
+                </span>
+            </div>
+
+            <div v-if="!marginInPercentage" class="flex items-center">
+                <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
+                <span class="flex-1 flex items-center gap-2">
+                    <span>{{ $t('booking_steps.price.fee_total', { count: adultCount }) }}</span>
+                    <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
+                    <span class="font-bold">{{ fmt(feeTotalCents) }}</span>
+                </span>
+            </div>
+
+            <div v-for="[key, cents] in feesAndFundsRows" :key="key" class="flex items-center">
+                <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
+                <span class="flex-1 flex items-center gap-2">
+                    <span>{{ $t(`booking_steps.overview.${key}`) }}</span>
+                    <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
+                    <span class="font-bold">{{ fmt(cents) }}</span>
                 </span>
             </div>
 

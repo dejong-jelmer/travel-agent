@@ -8,10 +8,10 @@ import { useMq } from 'vue3-mq'
 const { rootRef, visible, reveal } = useRevealEffect();
 const mq = useMq()
 
-// LigtBox
+// LightBox (single image per itinerary, so always index 0)
 const lightboxRef = ref(null)
-const openLightbox = (index) => {
-    lightboxRef.value?.open(index)
+const openLightbox = () => {
+    lightboxRef.value?.open(0)
 }
 const props = defineProps({
     itinerary: {
@@ -84,7 +84,7 @@ const props = defineProps({
                                 v-bind="reveal(50)"
                                 :class="visible ? 'opacity-100 translate-x-0' : (index % 2 === 0 ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
                                 class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out"
-                                @click="openLightbox(index)" />
+                                @click="openLightbox" />
                         </div>
                         <LightBox ref="lightboxRef" :images="[itinerary.image]" />
                     </div>

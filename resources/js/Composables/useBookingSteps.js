@@ -43,7 +43,13 @@ export function useBookingSteps(booking) {
         {
             id: BOOKING_STEPS.PRICE,
             label: i18n.global.t('booking_step_labels.price'),
-            fields: ["cost_items", "margin_percentage", "final_price"],
+            fields: [
+                "cost_items",
+                "margin_percentage",
+                "margin_amount",
+                "fee_per_person",
+                "final_price",
+            ],
             validate: () => validatePriceStep(booking.value),
         },
         {

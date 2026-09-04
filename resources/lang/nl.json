@@ -67,6 +67,11 @@
         "view_trip": "Bekijk reis",
         "expected": "Verwacht"
     },
+    "slider": {
+        "previous": "Vorige",
+        "next": "Volgende",
+        "go_to": "Ga naar positie {position}"
+    },
     "trip_itinerary": {
         "day": "Dag",
         "activities": "Activiteiten",
@@ -96,30 +101,18 @@
             "single_allowed": "Eén afbeelding toegestaan"
         },
         "errors": {
-            "invalid_files": "Sommige bestanden zijn geen geldige afbeeldingen en zijn overgeslagen.",
-            "upload_error": "Er is een fout opgetreden bij het uploaden van de bestanden.",
-            "processing_error": "Fout bij verwerken van het bestand.",
+            "invalid_type": "{filename}: bestandstype niet toegestaan (toegestaan: {types}).",
+            "too_large": "{filename}: bestand is groter dan {maxSize}.",
             "image_load_error": "Afbeelding kon niet worden geladen",
             "cannot_load_image": "Kan afbeelding niet laden"
         },
         "preview": {
-            "loading": "Laden…",
             "remove_image": "Verwijder afbeelding"
         },
         "file_info": {
             "filename": "Bestandsnaam",
             "filesize": "Bestandsgrootte",
-            "filetype": "Bestandstype",
-            "max_size_exceeded": "Maximale bestandsgrootte is {maxSize}"
-        },
-        "console": {
-            "not_an_image": "Bestand {filename} is geen afbeelding",
-            "could_not_load": "Afbeelding {index} kon niet worden geladen",
-            "could_not_create_url": "Kon preview URL niet maken:",
-            "processing_error": "Fout bij verwerken van bestanden:",
-            "remove_error": "Fout bij verwijderen van afbeelding:",
-            "emit_error": "Fout bij emit update:",
-            "cleanup_error": "Fout bij cleanup:"
+            "filetype": "Bestandstype"
         }
     },
     "newsletter": {
@@ -560,11 +553,11 @@
                 },
                 "guarantee_fund": {
                     "label": "Garantiefonds",
-                    "help": "Bijdrage aan het garantiefonds per persoon in euro."
+                    "help": "Bijdrage aan het garantiefonds per boeking in euro."
                 },
                 "emergency_fund": {
                     "label": "Calamiteitenfonds",
-                    "help": "Bijdrage aan het noodfonds per persoon in euro."
+                    "help": "Bijdrage aan het noodfonds per boeking in euro."
                 }
             },
             "submit": {
@@ -734,12 +727,16 @@
             },
             "total_cost": "Totale inkoop",
             "margin": "Marge (%)",
+            "margin_in_percentage": "Marge berekenen als percentage",
+            "margin_fixed": "Vast margebedrag (€)",
+            "fee_per_person": "Fee per persoon (€)",
+            "fee_total": "Fee ({count} volwassenen)",
             "margin_amount": "Marge in euro",
             "calculated_price": "Berekende prijs",
             "final_price": "Eindprijs (€)",
             "final_price_help": "Laat leeg om berekende prijs te gebruiken",
             "display_price": "Verkoopprijs",
-            "override_active": "De berekende prijs wordt overschreven."
+            "override_active": "De berekende prijs wordt overschreven. Toeslagen en fondsen zitten in dit bedrag."
         }
     },
     "hero": {
