@@ -1,7 +1,8 @@
 <script setup>
-import { ref, computed, onBeforeUnmount } from 'vue';
+import { ref, computed, watch, onBeforeUnmount } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
+import Sortable from 'sortablejs';
 
 const props = defineProps({
     modelValue: {
@@ -154,7 +155,37 @@ const formatBytes = (bytes, decimals = 2) => {
 // config('images.max_size') is in kilobytes, matching Laravel's `max:` rule.
 const maxBytes = computed(() => imageConfig.value.max_size * KB);
 
-onBeforeUnmount(() => images.value.forEach(revoke));
+// Drag-to-reorder thumbnails (multiple mode). The emitted array order is the display order.
+const grid = ref(null);
+let sortable = null;
+
+watch(grid, (el) => {
+    sortable?.destroy();
+    sortable = null;
+    if (!el || !props.multiple) return;
+
+    sortable = new Sortable(el, {
+        animation: 150,
+        // No native drag events, so the drop zone's dragover/drop handlers stay quiet while sorting.
+        forceFallback: true,
+        fallbackTolerance: 3,
+        delay: 150,
+        delayOnTouchOnly: true,
+        filter: 'button',
+        ghostClass: 'opacity-40',
+        onEnd: ({ oldIndex, newIndex }) => {
+            if (oldIndex === newIndex) return;
+            const [moved] = images.value.splice(oldIndex, 1);
+            images.value.splice(newIndex, 0, moved);
+            emitUpdate();
+        }
+    });
+});
+
+onBeforeUnmount(() => {
+    sortable?.destroy();
+    images.value.forEach(revoke);
+});
 </script>
 
 <template>
@@ -220,8 +251,10 @@ onBeforeUnmount(() => images.value.forEach(revoke));
                 </div>
 
                 <!-- Thumbnail grid (multiple mode or thumbnail preference) -->
-                <div v-else class="flex flex-wrap justify-center gap-2">
-                    <div v-for="(image, index) in images" :key="image.url" class="relative w-24 h-24">
+                <div v-else ref="grid" class="flex flex-wrap justify-center gap-2"
+                    @click="multiple && $event.stopPropagation()">
+                    <div v-for="(image, index) in images" :key="image.url" class="relative w-24 h-24"
+                        :class="{ 'cursor-grab active:cursor-grabbing': multiple }">
                         <!-- Normal image -->
                         <img v-if="!image.error" :src="image.url" alt=""
                             class="w-full h-full object-cover rounded-lg shadow" @error="handleImageError(index)"

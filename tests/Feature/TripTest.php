@@ -236,6 +236,62 @@ class TripTest extends TestCase
         }
     }
 
+    public function test_admin_can_reorder_trip_images(): void
+    {
+        $trip = Trip::factory()->create();
+        foreach (['a.jpg', 'b.jpg', 'c.jpg'] as $order => $path) {
+            $trip->images()->create([
+                'path' => $path,
+                'original_name' => $path,
+                'mime_type' => 'image/jpeg',
+                'size' => 1000,
+                'order' => $order,
+            ]);
+        }
+
+        $this->assertEquals(['a.jpg', 'b.jpg', 'c.jpg'], $trip->images()->pluck('path')->all());
+
+        $updateData = [
+            'trip_id' => $trip->id,
+            'name' => $trip->name,
+            'intro' => $trip->intro,
+            'description' => $trip->description,
+            'transport' => array_column([Transport::Train], 'value'),
+            'destinations' => $this->destinations->modelKeys(),
+            'highlights' => [['title' => 'highlight', 'description' => null]],
+            'published_at' => now()->addDay()->startOfDay()->toDateTimeString(),
+            'meta_title' => fake()->text(60),
+            'meta_description' => fake()->text(160),
+            'prices' => [
+                [
+                    'base_price_pp' => 999,
+                    'single_supplement' => 150,
+                    'valid_from' => now(),
+                    'valid_until' => now()->addMonths(12),
+                    'label' => PriceLabel::HighSeason->value,
+                ],
+            ],
+            // Reversed order, one image removed (b.jpg) and a new upload in the middle
+            'images' => [
+                'c.jpg',
+                UploadedFile::fake()->image('new.jpg'),
+                'a.jpg',
+            ],
+        ];
+
+        $response = $this->post(route('admin.trips.update', $trip), $updateData);
+        $response->assertRedirect(route('admin.trips.show', $trip));
+
+        $images = $trip->refresh()->images;
+
+        $this->assertCount(3, $images);
+        $this->assertEquals([0, 1, 2], $images->pluck('order')->all());
+        $this->assertEquals('c.jpg', $images[0]->path);
+        $this->assertEquals('new.jpg', $images[1]->original_name);
+        $this->assertEquals('a.jpg', $images[2]->path);
+        $this->assertDatabaseMissing('images', ['path' => 'b.jpg']);
+    }
+
     public function test_practical_info_accessor_returns_all_keys_with_stored_values(): void
     {
         $trip = Trip::factory()->create();

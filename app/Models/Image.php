@@ -20,6 +20,7 @@ class Image extends Model
     protected $fillable = [
         'path',
         'is_primary',
+        'order',
         'original_name',
         'mime_type',
         'size',
@@ -27,6 +28,7 @@ class Image extends Model
 
     protected $casts = [
         'is_primary' => 'boolean',
+        'order' => 'integer',
     ];
 
     protected $appends = [
