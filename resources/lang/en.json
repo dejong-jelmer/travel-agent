@@ -1015,13 +1015,13 @@
                 "12": "December"
             },
             "stations": {
-                "amsterdam": "Amsterdam Centraal",
-                "utrecht": "Utrecht Centraal",
-                "arnhem": "Arnhem Centraal",
-                "rotterdam": "Rotterdam Centraal",
-                "den_haag": "Den Haag Centraal",
-                "eindhoven": "Eindhoven Centraal",
-                "other": "Other / not sure yet"
+                "amsterdam": "Amsterdam Centraal (Eurostar/Nightjet)",
+                "schiphol": "Schiphol Airport (Eurostar)",
+                "utrecht": "Utrecht Centraal (Nightjet)",
+                "arnhem": "Arnhem Centraal (Nightjet)",
+                "rotterdam": "Rotterdam Centraal (Eurostar)",
+                "breda": "Breda Centraal (EuroCity)",
+                "other": "Anders / weet ik nog niet"
             }
         },
         "thanks": {

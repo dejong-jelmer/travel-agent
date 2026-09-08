@@ -1014,11 +1014,12 @@
                 "12": "December"
             },
             "stations": {
-                "amsterdam": "Amsterdam Centraal",
-                "schiphol": "Schiphol Airport",
-                "utrecht": "Utrecht Centraal",
-                "arnhem": "Arnhem Centraal",
-                "rotterdam": "Rotterdam Centraal",
+                "amsterdam": "Amsterdam Centraal (Eurostar/Nightjet)",
+                "schiphol": "Schiphol Airport (Eurostar)",
+                "utrecht": "Utrecht Centraal (Nightjet)",
+                "arnhem": "Arnhem Centraal (Nightjet)",
+                "rotterdam": "Rotterdam Centraal (Eurostar)",
+                "breda": "Breda Centraal (EuroCity)",
                 "other": "Anders / weet ik nog niet"
             }
         },
