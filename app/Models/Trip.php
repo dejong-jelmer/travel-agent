@@ -355,7 +355,7 @@ class Trip extends Model
     /**
      * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ...]
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{title: string, description: string|null}>|null, mixed>
      */
     protected function highlights(): Attribute
     {
@@ -412,12 +412,17 @@ class Trip extends Model
             'name' => $this->name,
             'description' => $this->meta_description,
             'image' => $this->og_image_url,
+            'url' => route('trips.show', $this->slug),
         ];
+
+        if ($itinerary = $this->toItinerarySchema()) {
+            $schema['itinerary'] = $itinerary;
+        }
 
         if (! $this->is_expected && $this->starting_from_price !== null) {
             $schema['offers'] = [
-                '@type' => 'Offer',
-                'price' => round($this->starting_from_price / 100, 2),
+                '@type' => 'AggregateOffer',
+                'lowPrice' => round($this->starting_from_price / 100, 2),
                 'priceCurrency' => config('seo.currency', 'EUR'),
                 'availability' => 'https://schema.org/InStock',
                 'url' => route('trips.show', $this->slug),
@@ -425,6 +430,55 @@ class Trip extends Model
         }
 
         return $schema;
+    }
+
+    /**
+     * Map the trip highlights onto a schema.org ItemList of tourist attractions.
+     *
+     * Highlights are stored as rows of `title` and `description`. The order is
+     * explicit so crawlers keep the editorial sequence instead of re-sorting.
+     *
+     * @return array<string, mixed>|null
+     */
+    private function toItinerarySchema(): ?array
+    {
+        $elements = [];
+
+        foreach ($this->highlights ?? [] as $highlight) {
+            $title = trim(strip_tags($highlight['title']));
+
+            if ($title === '') {
+                continue;
+            }
+
+            $item = [
+                '@type' => 'TouristAttraction',
+                'name' => $title,
+            ];
+
+            $description = trim(strip_tags((string) ($highlight['description'] ?? '')));
+
+            if ($description !== '') {
+                $item['description'] = "{$title}: {$description}";
+            }
+
+            $elements[] = [
+                '@type' => 'ListItem',
+                'position' => count($elements) + 1,
+                'item' => $item,
+            ];
+        }
+
+        if ($elements === []) {
+            return null;
+        }
+
+        return [
+            '@type' => 'ItemList',
+            'itemListOrder' => 'https://schema.org/ItemListOrderAscending',
+            'numberOfItems' => count($elements),
+            'itemListElement' => $elements,
+        ];
     }
 
     public function getRouteKeyName(): string

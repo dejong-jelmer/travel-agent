@@ -44,7 +44,9 @@ class TripController extends Controller
             'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
             'og_image' => $trip->og_image_url,
-        ], jsonLd: $trip->toTouristTripSchema());
+        ], jsonLd: array_merge($trip->toTouristTripSchema(), [
+            'provider' => $this->travelAgencySchema(),
+        ]));
 
         return Inertia::render('Trip/Show', [
             'title' => $seo['title'],
