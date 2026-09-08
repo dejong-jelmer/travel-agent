@@ -459,7 +459,7 @@ class Trip extends Model
             $description = trim(strip_tags((string) ($highlight['description'] ?? '')));
 
             if ($description !== '') {
-                $item['description'] = "{$title}: {$description}";
+                $item['description'] = ucfirst($description);
             }
 
             $elements[] = [
