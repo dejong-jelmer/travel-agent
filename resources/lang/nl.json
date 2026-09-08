@@ -153,8 +153,8 @@
         "intro": "Ik stel reizen samen met aandacht, naar bestemmingen die iets te vertellen hebben, en met de trein als uitgangspunt.",
         "usp-1": {
             "title": "De plek bepaalt de reis",
-            "description": "Ik kies bestemmingen en routes waar genoeg te beleven valt om de hele reis aan op te hangen: een stad, een streek, of een lijn die plekken met elkaar verbindt. De trein brengt je er comfortabel en duurzaam naartoe. Wat je dáár vindt, is waar het om draait.",
-            "highlight": "De bestemming is het doel"
+            "description": "Ik kies bestemmingen die een reis waard zijn: een stad, een streek of een lijn die steden met elkaar verbindt. De trein brengt je erheen. Wat je dáár vindt, is waar het om draait.",
+            "highlight": "Hoe je er komt, niet waarom je gaat"
         },
         "usp-2": {
             "title": "Slapen met karakter",
@@ -1014,12 +1014,12 @@
                 "12": "December"
             },
             "stations": {
-                "amsterdam": "Amsterdam Centraal",
-                "utrecht": "Utrecht Centraal",
-                "arnhem": "Arnhem Centraal",
-                "rotterdam": "Rotterdam Centraal",
-                "den_haag": "Den Haag Centraal",
-                "eindhoven": "Eindhoven Centraal",
+                "amsterdam": "Amsterdam Centraal (Eurostar/Nightjet)",
+                "schiphol": "Schiphol Airport (Eurostar)",
+                "utrecht": "Utrecht Centraal (Nightjet)",
+                "arnhem": "Arnhem Centraal (Nightjet)",
+                "rotterdam": "Rotterdam Centraal (Eurostar)",
+                "breda": "Breda Centraal (EuroCity)",
                 "other": "Anders / weet ik nog niet"
             }
         },

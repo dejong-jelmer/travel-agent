@@ -43,7 +43,12 @@ trait HasPageMetadata
     public function shareSeo(?string $key = null, array $overrides = [], ?array $jsonLd = null): array
     {
         $seo = $this->pageSeo($key, $overrides);
-        $seo['jsonLd'] = $jsonLd ?? $this->getJsonLd($key);
+        $schema = $jsonLd ?? $this->getJsonLd($key);
+
+        // Every schema gets the context, regardless of where it was built.
+        $seo['jsonLd'] = $schema === []
+            ? []
+            : array_merge(['@context' => 'https://schema.org'], $schema);
 
         return $seo;
     }
@@ -67,9 +72,7 @@ trait HasPageMetadata
 
     private function getJsonLd(?string $key): array
     {
-        return array_merge([
-            '@context' => 'https://schema.org',
-        ], $this->travelAgencySchema(), [
+        return array_merge($this->travelAgencySchema(), [
             'description' => $key ? __("{$key}.description") : __('seo.home.description'),
             'image' => asset(config('seo.default_og_image')),
             'logo' => asset(config('seo.logo')),

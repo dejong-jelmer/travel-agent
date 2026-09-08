@@ -65,7 +65,7 @@ const travelerOptions = computed(() => {
 })
 
 const stationOptions = computed(() => {
-    const keys = ['amsterdam', 'utrecht', 'arnhem', 'rotterdam', 'den_haag', 'eindhoven', 'other']
+    const keys = ['amsterdam', 'schiphol', 'utrecht', 'arnhem', 'rotterdam', 'breda', 'other']
     return keys.map((key) => ({
         id: t(`trip_request.form.stations.${key}`),
         name: t(`trip_request.form.stations.${key}`),
