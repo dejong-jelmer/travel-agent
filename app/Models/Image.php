@@ -24,6 +24,8 @@ class Image extends Model
         'original_name',
         'mime_type',
         'size',
+        'width',
+        'height',
     ];
 
     protected $casts = [
