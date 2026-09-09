@@ -22,9 +22,6 @@ const tripMeta = computed(() => ({
         })
     ]
 }))
-
-console.log(props.trip);
-
 </script>
 
 <template>

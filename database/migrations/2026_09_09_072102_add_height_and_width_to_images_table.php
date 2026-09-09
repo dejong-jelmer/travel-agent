@@ -23,8 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('images', function (Blueprint $table): void {
-            $table->dropColumn('width');
-            $table->dropColumn('height');
+            $table->dropColumn(['width', 'height']);
         });
     }
 };
