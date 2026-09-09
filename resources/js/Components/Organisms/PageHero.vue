@@ -22,12 +22,16 @@ const tripMeta = computed(() => ({
         })
     ]
 }))
+
+console.log(props.trip);
+
 </script>
 
 <template>
     <section
-        class="relative overflow-hidden h-[calc(100vh-theme(spacing.header-phone))] laptop:h-[calc(100vh-theme(spacing.header))] flex items-end"
-        :style="`background-image: url(${trip.hero_image?.public_url}); background-size: cover; background-position: center;`">
+        class="relative overflow-hidden h-[calc(100vh-theme(spacing.header-phone))] laptop:h-[calc(100vh-theme(spacing.header))] flex items-end">
+        <img :src="trip.hero_image?.public_url" :alt="`${trip.name} - ${trip.intro}`" :width="trip.hero_image?.width"
+            :height="trip.hero_image?.height" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
         <div class="absolute inset-0" :class="overlayClass" role="presentation"></div>
         <div
             class="relative z-10 w-full max-w-screen-tablet laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 pb-12 laptop:pb-20">

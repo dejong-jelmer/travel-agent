@@ -3,6 +3,7 @@
 namespace App\Models\Traits;
 
 use App\Enums\ImageRelation;
+use App\Models\Image;
 use BadMethodCallException;
 use Exception;
 use Illuminate\Http\Request;
@@ -34,13 +35,13 @@ trait ManagesImages
      */
     public function purgeImages(): void
     {
-        $images = $this->morphMany(\App\Models\Image::class, 'imageable')->withTrashed()->get();
+        $images = $this->morphMany(Image::class, 'imageable')->withTrashed()->get();
 
         $paths = $images->pluck('path')->toArray();
 
         $this->deleteStorageFiles($paths);
 
-        $this->morphMany(\App\Models\Image::class, 'imageable')->withTrashed()->forceDelete();
+        $this->morphMany(Image::class, 'imageable')->withTrashed()->forceDelete();
     }
 
     /**
@@ -142,6 +143,8 @@ trait ManagesImages
         $uploadedFiles = [];
 
         foreach ($uploads as $order => $upload) {
+            $dimensions = $this->readDimensions($upload);
+
             $fullPath = $upload->store(config('images.directory'), config('images.disk'));
 
             if (! $fullPath) {
@@ -154,6 +157,8 @@ trait ManagesImages
                 'is_primary' => $isPrimary,
                 'mime_type' => $upload->getClientMimeType(),
                 'size' => $upload->getSize() ?: 0,
+                'width' => $dimensions['width'],
+                'height' => $dimensions['height'],
                 'order' => $order,
             ];
         }
@@ -201,6 +206,8 @@ trait ManagesImages
                     'is_primary' => $file['is_primary'],
                     'mime_type' => $file['mime_type'],
                     'size' => $file['size'],
+                    'width' => $file['width'],
+                    'height' => $file['height'],
                     'order' => $file['order'],
                 ]);
             }
@@ -219,5 +226,33 @@ trait ManagesImages
         foreach ($paths as $path) {
             Storage::disk(config('images.disk'))->delete(config('images.directory').'/'.$path);
         }
+    }
+
+    /**
+     * Read the pixel dimensions of an uploaded image.
+     *
+     * Returns null values when the file cannot be read as an image, so callers can
+     * store the record without width and height rather than failing the upload.
+     *
+     * @return array{width: int|null, height: int|null}
+     */
+    private function readDimensions(UploadedFile $upload): array
+    {
+        $path = $upload->getRealPath();
+
+        if ($path === false) {
+            return ['width' => null, 'height' => null];
+        }
+
+        $dimensions = @getimagesize($path);
+
+        if ($dimensions === false) {
+            return ['width' => null, 'height' => null];
+        }
+
+        return [
+            'width' => $dimensions[0],
+            'height' => $dimensions[1],
+        ];
     }
 }
