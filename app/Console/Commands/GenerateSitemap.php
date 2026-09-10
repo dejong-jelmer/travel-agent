@@ -2,69 +2,31 @@
 
 namespace App\Console\Commands;
 
-use App\Models\BlogPost;
-use App\Models\Trip;
+use App\Services\SitemapBuilder;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\Route;
-use Spatie\Sitemap\Sitemap;
-use Spatie\Sitemap\Tags\Url;
 
 class GenerateSitemap extends Command
 {
-    protected $signature = 'sitemap:generate {--path= : Optional path to write the sitemap}';
+    protected $signature = 'sitemap:generate {--path= : Path to write the sitemap to}';
 
-    protected $description = 'Generate sitemap.xml with all public pages';
+    protected $description = 'Write the sitemap to a file for inspection or manual export';
 
     /**
-     * Generate a sitemap containing all publicly accessible pages.
+     * Write the sitemap to disk.
      *
-     * @return int Command exit code
+     * The site serves its sitemap from the /sitemap.xml route, so this command
+     * is not part of the deploy or the schedule. It defaults to a path outside
+     * the public directory on purpose: a file at public/sitemap.xml would be
+     * served by the web server instead of the route, and would go stale the
+     * moment a trip or blog post is published.
      */
-    public function handle(): int
+    public function handle(SitemapBuilder $builder): int
     {
-        $sitemap = Sitemap::create();
+        $path = $this->option('path') ?: storage_path('app/sitemap.xml');
 
-        // Static pages, via route name so that the URL is always canonical
-        $staticRoutes = [
-            'home',
-            'about',
-            'trips.index',
-            'blog.index',
-            'guarantee',
-            'vvkr',
-            'terms',
-            'privacy',
-        ];
+        $builder->build()->writeToFile($path);
 
-        foreach ($staticRoutes as $name) {
-            if (Route::has($name)) {
-                $sitemap->add(Url::create(route($name)));
-            } else {
-                $this->warn("Route '{$name}' not found, skipping...");
-            }
-        }
-
-        // Published trips
-        Trip::published()->get()->each(function (Trip $trip) use ($sitemap) {
-            $sitemap->add(
-                Url::create(route('trips.show', $trip->slug))
-                    ->setLastModificationDate($trip->updated_at)
-            );
-        });
-
-        // Published blogposts
-        BlogPost::published()->get()->each(function (BlogPost $post) use ($sitemap) {
-            $sitemap->add(
-                Url::create(route('blog.show', $post->slug))
-                    ->setLastModificationDate($post->updated_at)
-            );
-        });
-
-        $path = $this->option('path') ?: public_path('sitemap.xml');
-
-        $sitemap->writeToFile($path);
-
-        $this->info('Sitemap generated: '.$path);
+        $this->info('Sitemap written to: '.$path);
 
         return self::SUCCESS;
     }

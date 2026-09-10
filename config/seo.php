@@ -19,4 +19,7 @@ return [
         'en' => 'en_GB',
     ],
     'logo' => 'images/logos/logo-text.png',
+
+    // How long the rendered sitemap XML stays cached, in seconds.
+    'sitemap_cache_ttl' => 3600,
 ];
