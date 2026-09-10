@@ -4,12 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\BlogPost;
+use App\Services\OgImageService;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class BlogPostController extends Controller
 {
     use HasPageMetadata;
+
+    public function __construct(private readonly OgImageService $ogImages) {}
 
     public function index(): Response
     {
@@ -37,7 +40,10 @@ class BlogPostController extends Controller
         $overrides = [
             'title' => ($post->meta_title ?: $post->title).' | '.config('app.name'),
             'description' => $post->meta_description ?: $post->excerpt,
-            'og_image' => $post->heroImage?->public_url,
+            'og_type' => 'article',
+            'article_published_time' => $post->published_at?->toIso8601String(),
+            'article_modified_time' => $post->updated_at?->toIso8601String(),
+            ...$this->ogImageSeo($this->ogImages->forImage($post->heroImage, $post->title)),
         ];
 
         $jsonLd = array_merge(

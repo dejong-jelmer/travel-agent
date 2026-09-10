@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // alt text of the default Open Graph image (config seo.default_og_image)
+    'og_image_alt' => 'Sunlit platform beneath a historic station roof with a clock and departure boards',
+
     'home' => [
 
         'title' => 'Sustainable train journeys through Europe',

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\DTO\OgImageData;
+use App\Services\OgImageService;
+
 trait HasPageMetadata
 {
     /**
@@ -54,13 +57,32 @@ trait HasPageMetadata
     }
 
     /**
+     * Map an Open Graph image to the SEO keys the head partial renders.
+     *
+     * @return array{og_image: string, og_image_width: int, og_image_height: int, og_image_type: string, og_image_alt: string}
+     */
+    protected function ogImageSeo(OgImageData $image): array
+    {
+        return [
+            'og_image' => $image->url,
+            'og_image_width' => $image->width,
+            'og_image_height' => $image->height,
+            'og_image_type' => $image->type,
+            'og_image_alt' => $image->alt,
+        ];
+    }
+
+    /**
      * @param  string|null  $key  Translation key
      * @param  array  $overrides  Custom SEO values to override defaults
-     * @return array SEO metadata array with title, description, og_image
+     * @return array SEO metadata array with title, description, robots and the og image keys
      */
     private function pageSeo(?string $key = null, array $overrides = []): array
     {
-        $defaults = ['og_image' => asset(config('seo.default_og_image'))];
+        $defaults = [
+            'robots' => 'index, follow',
+            ...$this->ogImageSeo(app(OgImageService::class)->default()),
+        ];
 
         if ($key) {
             $defaults['title'] = __("{$key}.title").' | '.config('app.name');
@@ -74,7 +96,7 @@ trait HasPageMetadata
     {
         return array_merge($this->travelAgencySchema(), [
             'description' => $key ? __("{$key}.description") : __('seo.home.description'),
-            'image' => asset(config('seo.default_og_image')),
+            'image' => app(OgImageService::class)->default()->url,
             'logo' => asset(config('seo.logo')),
             'sameAs' => array_filter([
                 config('socials.instagram'),
