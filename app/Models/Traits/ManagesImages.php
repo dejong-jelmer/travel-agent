@@ -4,6 +4,7 @@ namespace App\Models\Traits;
 
 use App\Enums\ImageRelation;
 use App\Models\Image;
+use App\Services\OgImageService;
 use BadMethodCallException;
 use Exception;
 use Illuminate\Http\Request;
@@ -151,6 +152,10 @@ trait ManagesImages
                 throw new RuntimeException("Failed to upload image: {$upload->getClientOriginalName()}");
             }
 
+            if ($isPrimary) {
+                $this->generateOgImage(basename($fullPath));
+            }
+
             $uploadedFiles[] = [
                 'path' => basename($fullPath),
                 'original_name' => $upload->getClientOriginalName(),
@@ -225,6 +230,25 @@ trait ManagesImages
     {
         foreach ($paths as $path) {
             Storage::disk(config('images.disk'))->delete(config('images.directory').'/'.$path);
+            app(OgImageService::class)->delete($path);
+        }
+    }
+
+    /**
+     * Generate the Open Graph derivative of a hero image.
+     *
+     * A failure is logged instead of thrown: the page then falls back to the
+     * default og image, which is better than rejecting the upload.
+     */
+    private function generateOgImage(string $path): void
+    {
+        try {
+            app(OgImageService::class)->generate($path);
+        } catch (\Throwable $e) {
+            Log::warning('Og image generation failed', [
+                'path' => $path,
+                'error' => $e->getMessage(),
+            ]);
         }
     }
 

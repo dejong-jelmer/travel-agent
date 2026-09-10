@@ -1,6 +1,9 @@
 <?php
 
 return [
+    // alt text of the default Open Graph image (config seo.default_og_image)
+    'og_image_alt' => 'Zonovergoten perron onder een historische stationsoverkapping met klok en vertrekborden',
+
     'home' => [
         'title' => 'Duurzame treinreizen door Europa',
         'description' => 'Duurzame treinreizen door Europa, compleet verzorgd. Alle tickets en zorgvuldig gekozen accommodaties geregeld - je hoeft alleen nog in te stappen.',

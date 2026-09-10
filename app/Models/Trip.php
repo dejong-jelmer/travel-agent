@@ -8,6 +8,7 @@ use App\Enums\Trip\TripType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
+use App\Services\OgImageService;
 use App\Support\MoneyHelper;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -271,14 +272,14 @@ class Trip extends Model
     }
 
     /**
-     * Get the hero image URL for Open Graph usage.
+     * Get the Open Graph image URL: the hero image derivative, or the default image.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<string, never>
      */
     public function ogImageUrl(): Attribute
     {
         return Attribute::get(
-            fn () => $this->heroImage?->public_url ?? asset(config('seo.default_og_image')) // @phpstan-ignore nullsafe.neverNull
+            fn () => app(OgImageService::class)->forImage($this->heroImage, $this->name)->url
         );
     }
 

@@ -7,6 +7,7 @@ use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Trip;
 use App\Services\CountryService;
+use App\Services\OgImageService;
 use App\Services\TripItemService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -15,7 +16,10 @@ class TripController extends Controller
 {
     use HasPageMetadata;
 
-    public function __construct(private readonly CountryService $countryService) {}
+    public function __construct(
+        private readonly CountryService $countryService,
+        private readonly OgImageService $ogImages,
+    ) {}
 
     /**
      * Display a listing of the resource.
@@ -43,7 +47,7 @@ class TripController extends Controller
         $seo = $this->shareSeo(overrides: [
             'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
-            'og_image' => $trip->og_image_url,
+            ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->name)),
         ], jsonLd: array_merge($trip->toTouristTripSchema(), [
             'provider' => $this->travelAgencySchema(),
         ]));
