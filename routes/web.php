@@ -15,6 +15,7 @@ use App\Http\Controllers\BlogPostController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\Newsletter\SubscriptionController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripPriceController;
 use App\Http\Controllers\TripRequestController;
@@ -35,6 +36,9 @@ Route::get('/duurzaamheid', [HomeController::class, 'downloadSustainabilityDocum
 Route::get('/algemene-voorwaarden/download', [HomeController::class, 'downloadTerms'])
     ->middleware('throttle:10,1')
     ->name('terms.download');
+
+// Sitemap, served from a route so it can never go stale on disk or be lost on deploy
+Route::get('/sitemap.xml', SitemapController::class)->name('sitemap');
 
 // Trips
 Route::get('/reizen', [TripController::class, 'index'])->name('trips.index');
