@@ -57,7 +57,7 @@ const contactUrl = computed(() => {
     <Layout>
         <template v-slot:hero>
             <!-- Hero Section -->
-            <PageHero :trip="trip" />
+            <TripHero :trip="trip" />
 
         </template>
         <DecorativeLine />

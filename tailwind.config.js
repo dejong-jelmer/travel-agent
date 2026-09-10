@@ -46,9 +46,12 @@ export default {
                     info: "#0d6efd",
                 },
             },
-            spacing: {
-                header: "140px",
-                "header-phone": "200px",
+            "hero-offset": {
+                laptop: "140px",
+                phone: {
+                    default: "200px",
+                    trip: "250px",
+                },
             },
             screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
             keyframes: {
