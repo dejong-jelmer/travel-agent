@@ -33,7 +33,7 @@ onMounted(() => {
 <template>
     <div
         :class="visible && !scrolled ? 'opacity-100' : 'opacity-0 pointer-events-none'"
-        class="absolute bottom-8 left-1/2 -translate-x-1/2 transition-opacity duration-[1200ms] ease-in-out"
+        class="absolute bottom-2 laptop:bottom-8 left-1/2 -translate-x-1/2 transition-opacity duration-[1200ms] ease-in-out"
     >
         <ChevronDown
             :class="{ 'animate-bounce': !prefersReducedMotion }"

@@ -13,13 +13,14 @@ const { rootRef: storyRef, visible: storyVisible } = useRevealEffect()
 const { rootRef: convictionRef, visible: convictionVisible } = useRevealEffect()
 const { rootRef: pullquoteRef, visible: pullquoteVisible } = useRevealEffect()
 const { rootRef: promiseRef, visible: promiseVisible } = useRevealEffect()
+
 </script>
 
 <template>
     <Layout>
         <!-- Hero -->
         <template v-slot:hero>
-            <PageHero :image="heroImage" :title="t('about.hero.title')" :subtitle="t('about.hero.sub_title')" />
+            <PageHero :image="heroImage" :title="t('about.hero.title')" :subtitle="t('about.hero.sub_title')" :width="1920" :height="1920" />
         </template>
         <!-- Story -->
         <section class="bg-brand-secondary py-12 laptop:py-24">

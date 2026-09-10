@@ -13,7 +13,7 @@ const { t } = useI18n()
 <template>
     <Layout>
         <template v-slot:hero>
-            <Hero />
+            <HomeHero />
         </template>
         <main>
             <USP />
