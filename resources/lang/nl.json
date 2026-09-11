@@ -916,6 +916,7 @@
             "expected": "Verwacht"
         },
         "about_trip": "Waarom {trip}",
+        "gallery_image_alt": "Foto {position} van {trip}",
         "itinerary_heading": "Deze reis van dag tot dag",
         "card_tabs": {
             "about": "Over deze reis",

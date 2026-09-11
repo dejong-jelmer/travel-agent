@@ -1,6 +1,9 @@
 <script setup>
 defineProps({
     image: String,
+    // Image model with WebP variants, rendered through ResponsiveImage instead of `image`
+    responsiveImage: Object,
+    sizes: String,
     title: String,
     subtitle: String,
     alt: { type: String, default: ''},
@@ -21,7 +24,9 @@ defineProps({
     <section
         class="relative overflow-hidden flex items-end"
         :class="heightClass">
-        <img v-if="image" :src="image" :alt="alt" :width="width"
+        <ResponsiveImage v-if="responsiveImage" :image="responsiveImage" :sizes="sizes" :alt="alt"
+            fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
+        <img v-else-if="image" :src="image" :alt="alt" :width="width"
             :height="height" fetchpriority="high" class="absolute inset-0 h-full w-full object-cover" />
         <div class="absolute inset-0" :class="overlayClass" role="presentation"></div>
         <div

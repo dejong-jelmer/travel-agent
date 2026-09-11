@@ -3,7 +3,9 @@
 namespace App\Models\Traits;
 
 use App\Enums\ImageRelation;
+use App\Jobs\CreateImageVariants;
 use App\Models\Image;
+use App\Services\ImageVariantService;
 use App\Services\OgImageService;
 use BadMethodCallException;
 use Exception;
@@ -72,6 +74,7 @@ trait ManagesImages
      * 2. DB transaction: delete old records, create new records
      * 3. After commit: delete old storage files
      * 4. On failure: cleanup new uploads and rollback
+     * 5. Queue the generation of the WebP variants of new uploads
      *
      * The position of each item in $data is stored as the display order.
      *
@@ -128,6 +131,10 @@ trait ManagesImages
             // Throw original error
             throw $e;
         }
+
+        // Generate the WebP variants of the new uploads in the background
+        Image::whereIn('path', array_column($uploadedFiles, 'path'))
+            ->each(fn (Image $image) => CreateImageVariants::dispatch($image));
     }
 
     /**
@@ -231,6 +238,7 @@ trait ManagesImages
         foreach ($paths as $path) {
             Storage::disk(config('images.disk'))->delete(config('images.directory').'/'.$path);
             app(OgImageService::class)->delete($path);
+            app(ImageVariantService::class)->delete($path);
         }
     }
 

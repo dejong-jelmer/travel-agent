@@ -26,6 +26,12 @@ const openLightbox = (index) => {
     lightboxRef.value?.open(index)
 }
 
+// Rendered slide width per breakpoint (screens.js), following the layout around the Slider: the page
+// padding (px-4, tablet:px-6), from laptop on the two-thirds column (grid-cols-3, gap-12, max-w-screen-desktop),
+// the card border and padding (p-6, laptop:p-8), the slider padding (laptop:p-6) and the slide width set by
+// Slider (100% / visible slides - 2% margin). Update this when that layout changes.
+const gallerySizes = '(min-width: 1350px) 231px, (min-width: 900px) calc(20.9vw - 51px), (min-width: 600px) calc(48vw - 47px), calc(98vw - 80px)'
+
 // Inquiry card tabs
 const activeCardTab = ref('about')
 const cardTabs = computed(() => [
@@ -76,10 +82,12 @@ const contactUrl = computed(() => {
                             </div>
                             <div class="p-0 laptop:p-6">
                                 <Slider :items="trip.images" :visible="3">
-                                    <template #default="{ item, index }">
-                                        <img :src="item.public_url" alt="Trip image"
+                                    <template #default="{ item, index, loaded }">
+                                        <ResponsiveImage :image="item" :sizes="gallerySizes" :deferred="!loaded"
+                                            :loading="index === 0 ? 'eager' : undefined"
+                                            :alt="t('trip_show.gallery_image_alt', { trip: trip.name, position: index + 1 })"
                                             class="w-full h-36 tablet:h-full max-h-[500px] object-cover cursor-zoom-in"
-                                            :key="index" loading="lazy" @click="openLightbox(index)" />
+                                            :key="index" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
