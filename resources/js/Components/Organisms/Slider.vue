@@ -41,6 +41,14 @@ watch(maxIndex, (max) => {
     if (currentIndex.value > max) currentIndex.value = max;
 });
 
+// Slides are only fetched once they come into view. Native lazy loading does not help here,
+// because the slides sit side by side in a container that is itself within the viewport.
+const loadedCount = ref(0);
+
+watch([currentIndex, visibleItems], ([index, visible]) => {
+    loadedCount.value = Math.max(loadedCount.value, index + visible);
+}, { immediate: true });
+
 const WINDOW_SIZE = 5;
 
 const sizeForDistance = (distance) => {
@@ -80,6 +88,8 @@ const pointerX = (event) => event.clientX ?? event.touches?.[0]?.clientX;
 
 const startDrag = (event) => {
     isDragging.value = true;
+    // The next slide comes into view while dragging, so fetch it as well
+    loadedCount.value = Math.max(loadedCount.value, currentIndex.value + visibleItems.value + 1);
     hasDragged.value = false;
     startPosX.value = pointerX(event) ?? 0;
     prevTranslate.value = currentTranslate.value;
@@ -151,7 +161,7 @@ const endDrag = () => {
                             :style="{
                                 width: `calc(${100 / ((items < 3) ? 50 : visibleItems)}% - ${'2%'})`,
                             }">
-                            <slot :item="item" :index="index" />
+                            <slot :item="item" :index="index" :loaded="index < loadedCount" />
                         </div>
                     </div>
                 </div>

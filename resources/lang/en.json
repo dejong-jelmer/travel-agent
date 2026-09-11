@@ -917,6 +917,7 @@
             "expected": "Expected"
         },
         "about_trip": "About this trip",
+        "gallery_image_alt": "Photo {position} of {trip}",
         "itinerary_heading": "This trip day by day",
         "card_tabs": {
             "about": "About this trip",

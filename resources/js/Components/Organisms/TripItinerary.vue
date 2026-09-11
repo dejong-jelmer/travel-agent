@@ -1,5 +1,4 @@
 <script setup>
-import placeholder from '@/../images/placeholder.webp';
 import { Camera, BedDouble, AlertTriangle, Info } from 'lucide-vue-next';
 import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import { ref } from 'vue'
@@ -7,6 +6,10 @@ import { useMq } from 'vue3-mq'
 
 const { rootRef, visible, reveal } = useRevealEffect();
 const mq = useMq()
+
+// Rendered image width: w-48 from tablet on, below that the full content column, which on the trip page is the
+// viewport minus the page padding (px-4), the card border and padding (p-6), the day label (w-20) and the gap (gap-4).
+const imageSizes = '(min-width: 600px) 192px, calc(100vw - 178px)'
 
 // LightBox (single image per itinerary, so always index 0)
 const lightboxRef = ref(null)
@@ -80,7 +83,7 @@ const props = defineProps({
                     </div>
                     <div v-if="itinerary.image?.public_url" class="flex-shrink-0 w-full tablet:w-48 self-start">
                         <div class="rounded-md overflow-hidden">
-                            <img :src="itinerary.image?.public_url ?? placeholder" :alt="itinerary.title" loading="lazy"
+                            <ResponsiveImage :image="itinerary.image" :sizes="imageSizes" :alt="itinerary.title" loading="lazy"
                                 v-bind="reveal(50)"
                                 :class="visible ? 'opacity-100 translate-x-0' : (index % 2 === 0 ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
                                 class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out"
