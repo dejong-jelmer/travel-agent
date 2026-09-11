@@ -27,7 +27,6 @@
         type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font"
         type="font/woff2" crossorigin>
-    {{-- Poster van de home hero (HomeHero.vue), alleen daar nodig --}}
     @if (request()->routeIs('home'))
         <link rel="preload" href="{{ Vite::asset('resources/images/hero-poster.jpg') }}" as="image" type="image/jpeg">
     @endif
