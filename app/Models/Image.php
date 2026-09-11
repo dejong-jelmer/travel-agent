@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\ImageVariantService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -11,6 +12,9 @@ use Illuminate\Support\Facades\Storage;
 /**
  * @property string $public_url
  * @property string $full_path
+ * @property array<int, array{width: int, height: int, size: int}>|null $variants
+ * @property array<int, array{url: string, width: int, height: int}> $sources
+ * @property array{url: string, width: int, height: int}|null $fallback_source
  */
 class Image extends Model
 {
@@ -26,16 +30,20 @@ class Image extends Model
         'size',
         'width',
         'height',
+        'variants',
     ];
 
     protected $casts = [
         'is_primary' => 'boolean',
         'order' => 'integer',
+        'variants' => 'array',
     ];
 
     protected $appends = [
         'public_url',
         'full_path',
+        'sources',
+        'fallback_source',
     ];
 
     public function imageable()
@@ -63,5 +71,23 @@ class Image extends Model
     public function publicUrl(): Attribute
     {
         return Attribute::get(fn () => url(Storage::url($this->full_path)));
+    }
+
+    /**
+     * Get the URL and dimensions of the WebP variants, from narrow to wide.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{url: string, width: int, height: int}>, never>
+     */
+    public function sources(): Attribute
+    {
+        return Attribute::get(fn () => app(ImageVariantService::class)->sources($this));
+    }
+
+    /**
+     * Get the variant used as img src for browsers that ignore srcset, if the image has variants.
+     */
+    public function fallbackSource(): Attribute
+    {
+        return Attribute::get(fn () => app(ImageVariantService::class)->fallback($this));
     }
 }

@@ -11,7 +11,8 @@ const props = defineProps({
 // Image Lightbox
 const lightboxVisible = ref(false)
 const lightboxIndex = ref(0)
-const imageUrls = computed(() => props.images.map((img) => img.public_url))
+// The widest variant covers the viewport, while the original upload can be several megabytes
+const imageUrls = computed(() => props.images.map((img) => img.sources?.at(-1)?.url ?? img.public_url))
 
 // vue-easy-lightbox locks scrolling via `overflow-y: hidden` on <body>, but that
 // is not propagated to the viewport because <html> has `overflow-x: clip` (app.css).
