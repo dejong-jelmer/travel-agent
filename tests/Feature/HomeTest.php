@@ -43,6 +43,18 @@ class HomeTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_hero_poster_is_preloaded_only_on_home_page()
+    {
+        $home = $this->get(route('home'))->assertOk();
+        $this->assertMatchesRegularExpression(
+            '/<link rel="preload" href="[^"]*hero-poster[^"]*\.jpg" as="image" type="image\/jpeg">/',
+            $home->getContent()
+        );
+
+        $trips = $this->get(route('trips.index'))->assertOk();
+        $this->assertStringNotContainsString('hero-poster', $trips->getContent());
+    }
+
     public function test_about_page_returns_200()
     {
         $this->get(route('about'))->assertStatus(200);
