@@ -5,8 +5,7 @@ namespace App\Services;
 use App\Models\Image;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Drivers\Gd\Driver as GdDriver;
-use Intervention\Image\Drivers\Imagick\Driver as ImagickDriver;
+use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\WebpEncoder;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Interfaces\ImageInterface;
@@ -18,8 +17,7 @@ use RuntimeException;
  *
  * Uploads are stored as-is and are often far larger than the size they are displayed at. Each
  * image therefore gets a WebP variant per configured width, never upscaled, with its EXIF data
- * stripped. Imagick keeps the ICC colour profile while stripping; GD cannot write one, so with GD
- * browsers assume sRGB, which is the profile of every upload so far.
+ * stripped.
  */
 class ImageVariantService
 {
@@ -193,7 +191,7 @@ class ImageVariantService
 
     private function manager(): ImageManagerInterface
     {
-        return ImageManager::usingDriver(extension_loaded('imagick') ? ImagickDriver::class : GdDriver::class);
+        return ImageManager::usingDriver(Driver::class);
     }
 
     /**
