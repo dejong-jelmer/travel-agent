@@ -80,13 +80,14 @@ Route::get('admin/login', function () {
 })->middleware('guest');
 
 Route::get('admin/', fn () => Auth::check() ? to_route('admin.dashboard') : to_route('admin.login'));
-Route::post('admin/login', [AuthController::class, 'login'])->middleware('guest')->name('admin.login');
+Route::post('admin/login', [AuthController::class, 'login'])->middleware(['guest', 'throttle:5,1'])->name('admin.login');
 
 Route::prefix('admin')
     ->name('admin.')
-    ->middleware('auth')
+    ->middleware(['auth', 'admin'])
     ->group(function () {
-        Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+        // Any signed-in user must be able to sign out, admin or not
+        Route::get('/logout', [AuthController::class, 'logout'])->withoutMiddleware('admin')->name('logout');
         Route::get('/dashboard', [DashboardController::class, 'showDashboard'])->name('dashboard');
 
         // Trip resource routes
