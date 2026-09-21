@@ -119,9 +119,8 @@ I build and maintain this project on my own:
 
 1. Each change starts on a feature branch off `main`.
 2. Before committing I run the tests, Pint and PHPStan (Larastan level 5) locally.
-3. Commit messages follow the conventional commits style (`feat:`, `fix:`, `refactor:`).
-4. A pull request against `main` runs the same checks in CI, plus an automated AI review.
-5. A release is a pull request from `main` to `production`, which Forge deploys. See [docs/deployment.md](docs/deployment.md).
+3. A pull request against `main` runs the same checks in CI, plus an automated AI review.
+4. A release is a pull request from `main` to `production`, which Forge deploys. See [docs/deployment.md](docs/deployment.md).
 
 Code, comments and docblocks are written in English. User-facing strings live in translation files, never hardcoded.
 
