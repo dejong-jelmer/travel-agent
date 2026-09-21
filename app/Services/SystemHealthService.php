@@ -67,7 +67,7 @@ class SystemHealthService
                 'status' => 'warning',
                 'configured' => false,
                 'provider' => 'Mailjet',
-                'message' => __('health.email.not_configured'),
+                'message' => __('health.email.unconfigured'),
             ];
         } catch (Exception $e) {
             Log::error('Email health check failed', ['error' => $e->getMessage()]);

@@ -19,6 +19,13 @@ class AuthController extends Controller
         $this->appName = config('app.name');
     }
 
+    public function showLogin(): InertiaResponse
+    {
+        return Inertia::render('Auth/Login', [
+            'title' => __('auth.title_login').' - '.config('app.name'),
+        ]);
+    }
+
     public function login(Request $request): InertiaResponse|SymfonyResponse
     {
         $credentials = $request->validate([
