@@ -3,9 +3,7 @@
 [![run-tests](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml)
 [![GitHub Code Style Action Status](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml)
 
-A Laravel 12 + Inertia.js + Vue 3 application promoting sustainable European train travel. It combines a public Dutch website with a bilingual admin panel, and runs in production on Laravel Forge.
-
-> **Mission**: Making slow travel the standard for European trips through curated, culturally rich train-based journeys with minimal carbon footprint.
+A Laravel 12 + Inertia.js + Vue 3 application for travel company: Omdat we Reizen. It combines a public Dutch website with a bilingual admin panel, and runs in production on Laravel Forge.
 
 **Live site:** https://omdatwereizen.nl · **Built by:** Jelmer de Jong, solo, from first commit (February 2025) to production
 
