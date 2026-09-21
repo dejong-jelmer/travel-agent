@@ -69,6 +69,9 @@ function displayDate(entry) {
                             <p class="mt-1 text-sm text-gray-700/50">
                                 {{ trip.slug }}
                             </p>
+                            <a :href="route('trips.show', trip)" target="_blank" class="mt-1 text-sm text-brand-link underline">
+                                {{ route('trips.show', trip) }}
+                            </a>
                         </div>
                         <div class="flex space-x-2">
                             <IconLink icon="Pencil" :href="route('admin.trips.edit', trip)"

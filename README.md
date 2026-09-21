@@ -1,4 +1,4 @@
-# Sustainable Travel Agent
+# Omdat We Reizen: Sustainable Travel Agent
 ---
 [![run-tests](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/run-tests.yml)
 [![GitHub Code Style Action Status](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml/badge.svg)](https://github.com/dejong-jelmer/travel-agent/actions/workflows/lint.yml)
@@ -7,10 +7,28 @@ A Laravel 12 + Inertia.js + Vue 3 application promoting sustainable European tra
 
 > **Mission**: Making slow travel the standard for European trips through curated, culturally rich train-based journeys with minimal carbon footprint.
 
+**Live site:** <!-- TODO: add the production URL --> · **Built by:** Jelmer de Jong, solo, from first commit (February 2025) to production
+
+<!-- TODO: add 2-3 screenshots, e.g. docs/screenshots/home.png, trip-detail.png, admin-booking.png -->
+
+---
+
+## Project Highlights
+
+This is a real business application in daily use, not a demo. It covers the full path from content management to customer requests, bookings and transactional email. I designed, built, tested and deployed it on my own. These are the parts most worth a reviewer's time:
+
+- **A shared price specification for PHP and JavaScript.** The booking price is calculated on the server and live in the browser. The two implementations cannot share code, so they share [test vectors](tests/fixtures/booking-price-vectors.json) instead. If the formula changes on one side only, the other side's test fails. Amounts are handled as integer cents with `moneyphp/money`.
+- **A layered backend.** Form Request → DTO → Service → Model, with response macros and events driving the email flows. Controllers stay thin and the business rules can be unit tested in isolation.
+- **Privacy by design (GDPR).** Scheduled commands anonymize bookings and special requests and purge stale trip requests and unsubscribed subscribers, each with a `--dry-run` mode. Retention periods are configured in one place.
+- **Performance and SEO work.** Responsive WebP variants served through `srcset`, generated Open Graph images, JSON-LD structured data and a sitemap served from a route so it cannot go stale between deploys.
+- **Spam and abuse protection without CAPTCHAs.** Rate limiting, honeypots, server-side spam detection and obfuscated contact details.
+- **Quality gates on every pull request.** About 220 PHPUnit tests against MySQL, Vitest for the frontend, Pint, PHPStan (Larastan level 5) and an automated AI review. Deploys to production go through a separate `production` branch and Laravel Forge.
+
 ---
 
 ## Table of Contents
 
+- [Project Highlights](#project-highlights)
 - [Tech Stack](#tech-stack)
 - [Features](#features)
 - [Prerequisites](#prerequisites)
@@ -635,7 +653,9 @@ php artisan view:clear
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](https://mit-license.org/) for details.
+Copyright © 2025 Jelmer de Jong. All rights reserved.
+
+This repository is public so the code can be read and reviewed. No license is granted to copy, modify, distribute or use it, in whole or in part, without prior written permission.
 
 ---
 

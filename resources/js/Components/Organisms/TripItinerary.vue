@@ -51,9 +51,9 @@ const props = defineProps({
                 <!-- Header -->
                 <div class="flex items-start justify-between mb-4">
                     <div class="flex-1 min-w-0">
-                        <h4 class="text-base tablet:text-lg font-medium text-brand-primary mb-2">
+                        <h3 class="text-base tablet:text-lg font-medium text-brand-primary mb-2">
                             {{ itinerary.title }}
-                        </h4>
+                        </h3>
                         <div v-if="itinerary.accommodation" class="flex items-center gap-2 text-sm text-brand-text/70">
                             <BedDouble class="w-4 h-4" />
                             <span>{{ $t('trip_itinerary.accommodation_text') }} {{ itinerary.accommodation }}</span>
