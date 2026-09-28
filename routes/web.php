@@ -19,9 +19,7 @@ use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\TripController;
 use App\Http\Controllers\TripPriceController;
 use App\Http\Controllers\TripRequestController;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
-use Inertia\Inertia;
 
 // Homepage routes
 Route::get('/', [HomeController::class, 'home'])->name('home');
@@ -73,11 +71,7 @@ Route::get('/nieuwsbrief/bevestigen/{token}', [SubscriptionController::class, 'c
 Route::get('/nieuwsbrief/afmelden/{token}', [SubscriptionController::class, 'unsubscribe'])->name('newsletter.subscription.unsubscribe');
 
 // Admin routes
-Route::get('admin/login', function () {
-    return Inertia::render('Auth/Login', [
-        'title' => __('auth.title_login').' - '.config('app.name'),
-    ]);
-})->middleware('guest');
+Route::get('admin/login', [AuthController::class, 'showLogin'])->middleware('guest');
 
 Route::get('admin/', fn () => Auth::check() ? to_route('admin.dashboard') : to_route('admin.login'));
 Route::post('admin/login', [AuthController::class, 'login'])->middleware(['guest', 'throttle:5,1'])->name('admin.login');
@@ -140,22 +134,3 @@ Route::prefix('admin')
         // Blog posts
         Route::resource('posts', AdminBlogPostController::class);
     });
-
-// Test production health check
-Route::get('/health', function () {
-    try {
-        // Check database connection
-        DB::connection()->getPdo();
-
-        return response()->json([
-            'status' => 'healthy',
-            'timestamp' => now()->toIso8601String(),
-            'environment' => app()->environment(),
-        ], 200);
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'unhealthy',
-            'error' => 'Database connection failed',
-        ], 503);
-    }
-});

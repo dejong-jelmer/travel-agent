@@ -964,8 +964,8 @@
         "extra_trip_info": {
             "title": "How does an application work?",
             "steps-1": "You submit an application via the form on this page",
-            "steps-2": "I will contact you within two working days to discuss your wishes",
-            "steps-3": "You will receive a personalized, tailor-made travel proposal",
+            "steps-2": "I will contact you to discuss your wishes",
+            "steps-3": "You will receive a personalized travel proposal",
             "steps-4": "Upon agreement, I will arrange everything and ensure that you have all travel documents in hand on time"
         }
     },

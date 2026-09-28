@@ -79,7 +79,7 @@ const participantSummary = computed(() => {
                     <p class="text-xs font-semibold uppercase tracking-wide text-brand-light">
                         <i18n-t keypath="booking_steps.trip.choose_date" tag="span">
                             <template #date>
-                                <strong>{{ $t('booking_steps.trip.choose_date') }}</strong>
+                                <strong>{{ $t('booking_steps.trip.date') }}</strong>
                             </template>
                         </i18n-t>
                     </p>
@@ -112,7 +112,7 @@ const participantSummary = computed(() => {
                     <p class="text-xs font-semibold uppercase tracking-wide text-brand-light">
                         <i18n-t keypath="booking_steps.trip.choose_number" tag="span">
                             <template #number>
-                                <strong>{{ $t('booking_steps.trip.choose_number') }}</strong>
+                                <strong>{{ $t('booking_steps.trip.number') }}</strong>
                             </template>
                         </i18n-t>
                     </p>

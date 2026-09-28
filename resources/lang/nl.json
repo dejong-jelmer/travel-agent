@@ -963,8 +963,8 @@
         "extra_trip_info": {
             "title": "Hoe verloopt een aanvraag?",
             "steps-1": "Je dient een aanvraag in via het formulier op deze pagina",
-            "steps-2": "Ik neem binnen twee werkdagen contact met je op om je wensen door te nemen",
-            "steps-3": "Je ontvangt een persoonlijk reisvoorstel op maat",
+            "steps-2": "Ik neem contact met je op om je wensen door te nemen",
+            "steps-3": "Je ontvangt een persoonlijk reisvoorstel",
             "steps-4": "Bij akkoord regel ik alles en zorg ik dat je tijdig alle reisdocumenten in handen hebt"
         }
     },
