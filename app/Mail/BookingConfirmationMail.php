@@ -3,6 +3,7 @@
 namespace App\Mail;
 
 use App\Models\Booking;
+use App\Services\DefaultFormPdfService;
 use App\Services\TermsPdfService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
@@ -52,18 +53,28 @@ class BookingConfirmationMail extends Mailable
      */
     public function attachments(): array
     {
+        $attachments = [];
+
         try {
-            return [
-                Attachment::fromPath(app(TermsPdfService::class)->path())
-                    ->as(TermsPdfService::FILENAME)
-                    ->withMime('application/pdf'),
-            ];
+            $attachments[] = Attachment::fromPath(app(TermsPdfService::class)->path())
+                ->as(TermsPdfService::FILENAME)
+                ->withMime('application/pdf');
         } catch (\Exception $e) {
             Log::error('Failed to attach terms PDF to booking confirmation', [
                 'error' => $e->getMessage(),
             ]);
-
-            return [];
         }
+
+        try {
+            $attachments[] = Attachment::fromPath(app(DefaultFormPdfService::class)->path())
+                ->as(DefaultFormPdfService::FILENAME)
+                ->withMime('application/pdf');
+        } catch (\Exception $e) {
+            Log::error('Failed to attach default information form PDF to booking confirmation', [
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return $attachments;
     }
 }

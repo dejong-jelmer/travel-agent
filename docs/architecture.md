@@ -54,7 +54,7 @@ Located in `app/Services/`:
 - `ImageVariantService` - Responsive WebP variants of uploaded images
 - `OgImageService` - Open Graph images and derivatives of hero images
 - `SitemapBuilder` - Builds the sitemap served by `SitemapController`
-- `TermsPdfService` / `SustainabilityPdfService` - PDF document generation
+- `PdfService` - Abstract base for serving PDFs from the local disk (`TermsPdfService` generates its file when missing; `SustainabilityPdfService` and `DefaultFormPdfService` serve manually placed files in `storage/app/private`)
 - `DataTableService` - Admin datatable queries
 - `SystemHealthService` - Database, email and queue status for the admin dashboard
 - `Services/Validation/` - Shared validation rule sets per domain
