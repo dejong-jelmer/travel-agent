@@ -2,20 +2,12 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Storage;
-
-class SustainabilityPdfService
+class SustainabilityPdfService extends PdfService
 {
     public const FILENAME = 'reizen-met-aandacht.pdf';
 
-    private const STORAGE_PATH = 'sustainability/'.self::FILENAME;
-
-    public function path(): string
+    protected function storagePath(): string
     {
-        $disk = Storage::disk('local');
-
-        abort_unless($disk->exists(self::STORAGE_PATH), 404);
-
-        return $disk->path(self::STORAGE_PATH);
+        return 'sustainability/'.self::FILENAME;
     }
 }

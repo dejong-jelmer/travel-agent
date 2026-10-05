@@ -16,12 +16,14 @@ use App\Models\BookingTraveler;
 use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
+use App\Services\DefaultFormPdfService;
 use App\Services\TermsPdfService;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Tests\TestCase;
 
@@ -505,12 +507,28 @@ class BookingTest extends TestCase
         });
     }
 
-    public function test_booking_confirmation_mail_has_terms_pdf_attachment(): void
+    public function test_booking_confirmation_mail_has_terms_and_default_form_pdf_attachments(): void
     {
+        Storage::fake('local');
+        Storage::disk('local')->put('defaultforms/'.DefaultFormPdfService::FILENAME, '%PDF-1.7');
+
         $booking = Booking::factory()->for($this->trip, 'trip')->withTravelers(adults: 1)->create();
 
         $mail = new BookingConfirmationMail($booking);
         $attachments = $mail->attachments();
+
+        $this->assertCount(2, $attachments);
+        $this->assertSame(TermsPdfService::FILENAME, $attachments[0]->as);
+        $this->assertSame(DefaultFormPdfService::FILENAME, $attachments[1]->as);
+    }
+
+    public function test_booking_confirmation_mail_skips_default_form_when_file_is_missing(): void
+    {
+        Storage::fake('local');
+
+        $booking = Booking::factory()->for($this->trip, 'trip')->withTravelers(adults: 1)->create();
+
+        $attachments = (new BookingConfirmationMail($booking))->attachments();
 
         $this->assertCount(1, $attachments);
         $this->assertSame(TermsPdfService::FILENAME, $attachments[0]->as);

@@ -7,11 +7,16 @@ use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
-class TermsPdfService
+class TermsPdfService extends PdfService
 {
     public const FILENAME = 'algemene-voorwaarden-omdat-we-reizen.pdf';
 
     private const STORAGE_PATH = 'terms/'.self::FILENAME;
+
+    protected function storagePath(): string
+    {
+        return self::STORAGE_PATH;
+    }
 
     public function path(): string
     {
@@ -26,7 +31,7 @@ class TermsPdfService
             });
         }
 
-        return $disk->path(self::STORAGE_PATH);
+        return parent::path();
     }
 
     public function generate(): void
