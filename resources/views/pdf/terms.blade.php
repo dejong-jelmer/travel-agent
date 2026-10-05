@@ -359,36 +359,22 @@
             niet (volledig en/of tijdig) worden verleend, dan voert STO Garant de garantie
             uit. In de
             garantieregeling leest u hoe u daar in dat geval aanspraak op maakt.</p>
-        <h3>6.2. Aanbetaling</h3>
-        <p>Na de totstandkoming van de Overeenkomst ontvangt de Reiziger de bevestiging/factuur. Tegelijkertijd, of kort
-            daarna, ontvangt de Reiziger het betaalverzoek van STO Garant. De aanbetaling van 30% van de reissom dient
-            uiterlijk binnen 14 dagen na ontvangst van dit betaalverzoek te zijn voldaan. Eventuele boekingskosten en
-            kosten voor de garantieregeling dienen eveneens binnen deze termijn te worden voldaan.</p>
-        <h3>6.3. Restbetaling</h3>
-        <p>Het restant van de reissom dient uiterlijk 6 weken voor de aanvangsdatum van de Reis te zijn voldaan.</p>
+        <h3>6.2. Betaalwijze</h3>
+        <p>Na de totstandkoming van de Overeenkomst ontvangt de Reiziger de bevestiging/factuur. Tegelijkertijd, of kort daarna, ontvangt de Reiziger het betaalverzoek van STO Garant. De Reiziger betaalt de reissom via het platform van STO Garant, in één keer of in ten hoogste vier termijnen. Eventuele boekingskosten en kosten voor de garantieregeling dienen eveneens binnen de in het betaalverzoek vermelde termijn(en) te worden voldaan.</p>
+        <h3>6.3. Betalingsschema</h3>
+        <p>Het aantal termijnen en het bedrag en de uiterste betaaldatum van iedere termijn worden vermeld in het betaalverzoek van STO Garant. De Reiziger ontvangt voor iedere termijn een betaalverzoek.</p>
         <h3>6.4. Boeking kort voor vertrek</h3>
-        <p>Bij totstandkoming van de Overeenkomst binnen 6 weken voor de aanvangsdatum van de reis, dient de volledige
-            reissom per ommegaande na ontvangst van het betaalverzoek te worden voldaan. De betaling dient in ieder
-            geval voor aanvang van de reis door het platform van STO Garant te zijn ontvangen.</p>
+        <p>Indien de Overeenkomst kort voor aanvang van de Reis tot stand komt, kan de Organisator het aantal termijnen beperken of betaling in één keer verlangen. De volledige reissom dient in ieder geval voor aanvang van de Reis door het platform van STO Garant te zijn ontvangen.</p>
         <h3>6.5. Niet-terugbetaalbare elementen</h3>
-        <p>Sommige onderdelen van de Reis zijn 'niet-terugbetaalbaar'. Deze kosten worden door de Organisator na
-            ontvangst van de aanbetaling definitief voldaan aan leveranciers en bij annulering niet (volledig)
-            terugbetaald. Prijswijzigingen na het sluiten van de Overeenkomst zijn alleen mogelijk conform de wettelijke
-            bepalingen en Artikel 7 – Prijswijziging, van deze Voorwaarden.</p>
-        <h3>6.6. Verzuim</h3>
-        <p>Indien de Reiziger niet betaalt binnen de hierboven of op de factuur genoemde termijn, is de Reiziger zonder
-            dat een nadere ingebrekestelling is vereist in verzuim.</p>
-        <h3>6.7. Uitblijven van betaling</h3>
-        <p>Indien de Reiziger in verzuim is, kan de Organisator het toezenden van de Reisbescheiden zonder nadere
-            aankondiging opschorten tot de volledige betaling is ontvangen. Indien betaling ook na aanmaning uitblijft
-            of indien niet voor aanvang van de reis is betaald, heeft de Organisator het recht de Reiziger uit te
-            sluiten van deelname aan de Reis. De verplichting tot betaling blijft in dat geval bestaan. In plaats van de
-            Reiziger uit te sluiten van deelname kan de Organisator de Overeenkomst annuleren en de daarvoor
-            verschuldigde annuleringskosten bij de Reiziger in rekening brengen conform Artikel 11 – Annulering door de
-            Reiziger.</p>
-        <h3>6.8. Geen annulering door niet-betalen</h3>
-        <p>De Reiziger kan de boeking niet annuleren door simpelweg niet aan de financiële verplichtingen te voldoen.
-            Een annulering dient Schriftelijk te geschieden conform Artikel 11 – Annulering door de Reiziger.</p>
+        <p>Sommige onderdelen van de Reis zijn 'niet-terugbetaalbaar'. Deze kosten worden door de Organisator na totstandkoming van de Overeenkomst definitief voldaan aan leveranciers en bij annulering niet (volledig) terugbetaald. Prijswijzigingen na het sluiten van de Overeenkomst zijn alleen mogelijk conform de wettelijke bepalingen en Artikel 7 – Prijswijziging, van deze Voorwaarden.</p>
+        <h3>6.6. Verzuim en rente</h3>
+        <p>Indien de Reiziger niet betaalt binnen de in het betaalverzoek of op de factuur genoemde termijn, is de Reiziger zonder dat een nadere ingebrekestelling is vereist in verzuim en is over het openstaande bedrag de wettelijke rente verschuldigd.</p>
+        <h3>6.7. Incassokosten</h3>
+        <p>De Reiziger dient buitengerechtelijke incassokosten te betalen indien deze niet betaald heeft binnen de uiterste betalingstermijn die via een Schriftelijke aanmaning is gesteld. De buitengerechtelijke incassokosten bedragen: 15% van het gevorderde tot €2.500, 10% over de daaropvolgende €2.500, 5% over de daaropvolgende €5.000 en 1% over het meerdere.</p>
+        <h3>6.8. Uitblijven van betaling</h3>
+        <p>Indien de Reiziger in verzuim is, kan de Organisator het toezenden van de Reisbescheiden zonder nadere aankondiging opschorten tot de volledige betaling is ontvangen. Indien betaling ook na aanmaning uitblijft of indien niet voor aanvang van de reis is betaald, heeft de Organisator het recht de Reiziger uit te sluiten van deelname aan de Reis. De verplichting tot betaling blijft in dat geval bestaan. In plaats van de Reiziger uit te sluiten van deelname kan de Organisator de Overeenkomst annuleren en de daarvoor verschuldigde annuleringskosten bij de Reiziger in rekening brengen conform Artikel 11 – Annulering door de Reiziger.</p>
+        <h3>6.9. Geen annulering door niet-betalen</h3>
+        <p>De Reiziger kan de boeking niet annuleren door simpelweg niet aan de financiële verplichtingen te voldoen. Een annulering dient Schriftelijk te geschieden conform Artikel 11 – Annulering door de Reiziger.</p>
     </div>
 
     {{-- Artikel 7 --}}
@@ -478,8 +464,8 @@
         <h3>9.3. Afwijzing</h3>
         <p>Wanneer de gevraagde wijziging niet door de betrokken Reisdienstverleners kan worden gehonoreerd of om andere
             redenen niet uitvoerbaar is, blijft de oorspronkelijke Overeenkomst ongewijzigd van kracht. Indien de
-            Reiziger ondanks de afwijzing van uw wijzigingsverzoek vasthoudt aan de gewenste wijziging en de
-            oorspronkelijke Overeenkomst niet wilt nakomen, wordt dit beschouwd als een annulering van de Overeenkomst,
+            Reiziger ondanks de afwijzing van het wijzigingsverzoek vasthoudt aan de gewenste wijziging en de
+            oorspronkelijke Overeenkomst niet wil nakomen, wordt dit beschouwd als een annulering van de Overeenkomst,
             waarop de annuleringsvoorwaarden van Artikel 11 – Annulering door de Reiziger van toepassing zijn.</p>
         <h3>9.4. Uitzonderingen</h3>
         <p>Een verzoek tot wijziging van de vertrekdatum of een vermindering van het aantal betalende passagiers in een
@@ -493,7 +479,7 @@
         <h2>Artikel 10 – Indeplaatsstelling</h2>
         <h3>10.1. Voorwaarden en kennisgeving</h3>
         <p>De Reiziger, heeft het recht om de Reis over te dragen aan een andere persoon die voldoet aan alle aan de
-            Reis verbonden voorwaarden. De Reiziger verzoekt de Organisator uiterlijk 21 dagen voor aanvang van de Reis,
+            Reis verbonden voorwaarden. De Reiziger verzoekt de Organisator uiterlijk 7 dagen voor aanvang van de Reis,
             althans met inachtneming van een redelijke termijn waarbinnen de nodige handelingen kunnen worden verricht,
             om de persoon in de plaats te stellen. Overdracht is slechts mogelijk voor zover de voorwaarden van de
             betrokken Reisdienstverlener dit toelaten.</p>
@@ -515,34 +501,36 @@
             17:00 uur of buiten de Werkdagen om, wordt de eerst volgende Werkdag gezien als de datum van ontvangst.</p>
         <h3>11.3. Annuleringskosten</h3>
         <p>Bij opzegging van de Overeenkomst is de Reiziger de volgende gestandaardiseerde bedragen verschuldigd:</p>
-        <ul>
-            <li>tot en met 56 dagen vóór de dag van vertrek: 30% van de reissom (de
-                aanbetaling);</li>
-            <li>vanaf 55 dagen tot en met 42 dagen vóór de dag van vertrek: 50% van de
-                reissom;</li>
-            <li>vanaf 41 dagen tot en met 21 dagen vóór de dag van vertrek: 75% van de
-                reissom;</li>
-            <li>vanaf 20 dagen vóór de dag van vertrek tot en met de dag van vertrek: 100%
-                van de reissom.</li>
-        </ul>
-        <p>De Reiziger heeft het recht om aan te tonen dat de werkelijke
-            schade die de Organisator lijdt door de annulering lager is dan de
-            gestandaardiseerde bedragen. In dat geval zal de Organisator de lagere schade in
-            rekening brengen. Omgekeerd kan de Organisator hogere kosten in rekening brengen
-            indien de werkelijke kosten (conform Artikel 6.5 - Niet-terugbetaalbare
-            elementen) de staffel overstijgen.</p>
+        <ol type="a">
+            <li>vanaf boeking tot en met 56 dagen vóór de dag van vertrek: de niet-terugbetaalbare kosten van reeds aangeschafte vervoerstickets en reserveringen, plus 20% van het overige deel van de reissom;</li>
+            <li>vanaf 55 dagen tot en met 22 dagen vóór de dag van vertrek: de niet-terugbetaalbare kosten van reeds aangeschafte vervoerstickets en reserveringen, plus 50% van het overige deel van de reissom;</li>
+            <li>vanaf 21 dagen tot en met 7 dagen vóór de dag van vertrek: de niet-terugbetaalbare kosten van reeds aangeschafte vervoerstickets en reserveringen, plus 75% van het overige deel van de reissom;</li>
+            <li>vanaf 6 dagen vóór de dag van vertrek: 100% van de reissom.</li>
+        </ol>
+        <p>De Reiziger heeft het recht om aan te tonen dat de werkelijke schade die de Organisator lijdt door de annulering lager is dan de gestandaardiseerde bedragen. In dat geval zal de Organisator de lagere schade in rekening brengen.</p>
         <h3>11.4. Deelannulering</h3>
         <p>Bij vermindering van het aantal deelnemers van de Reis waarbij niet alle diensten evenredig kunnen worden
             verminderd (bijvoorbeeld bij accommodatie op basis van een kamerprijs), bedragen de verschuldigde
             annuleringskosten de reissom minus de werkelijke kostenbesparingen die de Organisator als gevolg van de
             deelannulering heeft. Indien van toepassing worden inkomsten uit werkelijk alternatief gebruik van de
-            vrijgekomen capaciteit op de annuleringskosten in mindering gebracht. Indien een reis niet-terugbetaalbaar
+            vrijgekomen capaciteit op de annuleringskosten in mindering gebracht. Indien een reis niet-terugbetaalbare
             elementen bevat, kan het mogelijk zijn dat deze niet per Reiziger geannuleerd kunnen worden, maar alleen
             voor het volledige gezelschap, met de bijbehorende kosten.</p>
         <h3>11.5. Annulering ná omboeking</h3>
         <p>Indien de Reiziger en de Organisator de Reis hebben omgeboekt naar een later moment en de Reiziger vervolgens
             de omgeboekte reis annuleert, bedragen de annuleringskosten ten minste het bedrag dat verschuldigd zou zijn
             geweest als deze op de datum van de oorspronkelijke omboeking zou zijn geannuleerd.</p>
+        <p>Voorbeeld: 14 dagen voor aanvang van de oorspronkelijke reis wordt de reis omgeboekt naar 1 jaar later. 6 maanden voor aanvang van de omgeboekte reis annuleert de Reiziger. Volgens de staffel zou dan categorie a gelden. Bij annulering op de datum van omboeking zou categorie c (75%) hebben gegolden. In dit geval geldt categorie c.</p>
+        <h3>11.6. Reistegoeden uit coulance</h3>
+        <p>Indien een Reis door de Reiziger is geannuleerd en er uit coulance een reistegoed wordt toegekend, geldt (tenzij andere voorwaarden door de Organisator worden gecommuniceerd):</p>
+        <ul>
+            <li>het reistegoed dient binnen één jaar na toekenning te zijn besteed;</li>
+            <li>de nieuwe Reis dient binnen twee jaar na toekenning van het reistegoed te zijn aangevangen;</li>
+            <li>het reistegoed is gebonden aan de Reiziger en niet overdraagbaar;</li>
+            <li>het reistegoed kan enkel worden ingezet voor dezelfde Reis op een later moment;</li>
+            <li>indien de Reis op een later moment duurder is, komt het prijsverschil voor rekening van de Reiziger;</li>
+            <li>indien de Reiziger de Reis annuleert die is geboekt met een uit coulance toegekend reistegoed, vervalt het reistegoed.</li>
+        </ul>
     </div>
 
     {{-- Artikel 12 --}}
@@ -737,7 +725,7 @@
         <p>Indien de Reiziger zodanige hinder of last veroorzaakt (inclusief wangedrag) dat daardoor de uitvoering van
             de reis in sterke mate wordt bemoeilijkt of de veiligheid van anderen in gevaar komt, kan hij door de
             Organisator of haar Reisdienstverleners van verdere deelname aan de reis worden uitgesloten. De Reiziger
-            heeft in een dergelijk geval geen recht op restitutie van gelden of (een gedeelte van) de reissom.</p>
+            heeft in een dergelijk geval geen recht op restitutie van gelden of (een gedeelte van) de reissom. Voordat de Reiziger wordt uitgesloten van deelname, krijgt de Reiziger eerst een mondelinge of schriftelijke waarschuwing, tenzij dit gezien de omstandigheden niet op zijn plaats is.</p>
         <h3>18.4. Controleren tijden terugreis</h3>
         <p>De Reiziger dient ten minste 24 uur voor aanvang van de geplande terugreis het exacte tijdstip van vertrek te
             verifiëren.</p>
@@ -751,7 +739,7 @@
             mogelijk te worden gemeld bij de betrokken Reisdienstverlener zodat deze een passende oplossing kan treffen.
             Indien de Non-conformiteit niet binnen redelijke termijn wordt opgelost door de Reisdienstverlener en
             afbreuk doet aan de kwaliteit van de Reis, dient deze onverwijld en zo volledig mogelijk onderbouwd, gemeld
-            te worden bij de Organisator.</p>
+            te worden bij de Organisator. Een melding bij de Organisator kan geschieden via WhatsApp, Signal, sms of telefoon en, op Werkdagen tijdens kantooruren, ook per e-mail.</p>
         <h3>19.2. Melding na de Reis</h3>
         <p>Als een Non-conformiteit niet bevredigend wordt opgelost tijdens de Reis, dient deze zo spoedig mogelijk,
             maar uiterlijk binnen twee maanden na het einde van de Reis Schriftelijk en gemotiveerd te worden ingediend
@@ -821,7 +809,7 @@
         <p>Indien de Reiziger bij de totstandkoming van de Overeenkomst bepaalde voorkeuren kenbaar maakt met betrekking
             tot de door de Organisator te leveren diensten (bv. ligging hotelkamer, zitplaats, dieetvoorkeur), zal met
             de opgegeven voorkeuren zoveel mogelijk rekening worden gehouden. Gezien de aard van bepaalde bestemmingen
-            of reistypes, kunnen aan deze voorkeuren kunnen echter geen rechten worden ontleend, ondanks eventuele
+            of reistypes, kunnen aan deze voorkeuren echter geen rechten worden ontleend, ondanks eventuele
             vermeldingen op Reisbescheiden of boekingsformulieren.</p>
         <h3>21.2. Vereisten</h3>
         <p>Indien de Reiziger uiterlijk bij het aangaan van de Overeenkomst specifieke vereisten kenbaar maakt die
