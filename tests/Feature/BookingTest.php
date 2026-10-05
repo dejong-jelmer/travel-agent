@@ -510,7 +510,7 @@ class BookingTest extends TestCase
     public function test_booking_confirmation_mail_has_terms_and_default_form_pdf_attachments(): void
     {
         Storage::fake('local');
-        Storage::disk('local')->put('defaultforms/standaardinformatieformulier-voor-pakketreisovereenkomsten', '%PDF-1.7');
+        Storage::disk('local')->put('defaultforms/'.DefaultFormPdfService::FILENAME, '%PDF-1.7');
 
         $booking = Booking::factory()->for($this->trip, 'trip')->withTravelers(adults: 1)->create();
 
