@@ -28,8 +28,9 @@ onMounted(() => {
     <div ref="rootRef" class="relative h-[calc(100vh-theme(hero-offset.phone.default))] laptop:h-[calc(100vh-theme(hero-offset.laptop))] flex px-6 overflow-hidden">
         <video ref="videoRef" :poster="heroImage" class="absolute inset-0 w-full h-full object-cover" preload="none"
             :src="heroVideo" :autoplay="!prefersReducedMotion" muted loop playsinline />
+        <!-- Darkens the top so the transparent nav stays readable on light footage -->
         <div
-            class="absolute inset-0 pointer-events-none ">
+            class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-brand-text/50 to-transparent pointer-events-none">
         </div>
 
         <div class="relative max-w-screen-wide laptop:max-w-screen-desktop w-fit mx-auto">

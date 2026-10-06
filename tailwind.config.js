@@ -37,6 +37,7 @@ export default {
                     subtle: "#afcb98",
                     earth: "#dcc7aa",
                     link: "#82b2ca",
+                    background: "#f5f5f5",
                 },
                 // Status feedback colors
                 status: {
@@ -47,10 +48,10 @@ export default {
                 },
             },
             "hero-offset": {
-                laptop: "140px",
+                laptop: "28px",
                 phone: {
-                    default: "200px",
-                    trip: "250px",
+                    default: "104px",
+                    trip: "154px",
                 },
             },
             screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
@@ -72,13 +73,11 @@ export default {
                             fontWeight: "600",
                             fontSize: theme("fontSize.xl")[0],
                             lineHeight: theme("fontSize.xl")[1].lineHeight,
-                            marginTop: theme("spacing.8"),
-                            marginBottom: theme("spacing.4"),
+                            marginBottom: theme("spacing.6"),
 
                             [`@media (min-width: ${screens.laptop})`]: {
                                 fontSize: theme("fontSize.2xl")[0],
                                 lineHeight: theme("fontSize.2xl")[1].lineHeight,
-                                marginTop: theme("spacing.10"),
                             },
                         },
                         h3: {
@@ -99,7 +98,7 @@ export default {
                             fontSize: theme("fontSize.base")[0],
                             lineHeight: theme("fontSize.base")[1].lineHeight,
                             marginTop: theme("spacing.0"),
-                            marginBottom: theme("spacing.2"),
+                            marginBottom: theme("spacing.4"),
                             [`@media (min-width: ${screens.tablet})`]: {
                                 fontSize: theme("fontSize.lg")[0],
                                 lineHeight: theme("fontSize.xl")[1].lineHeight,

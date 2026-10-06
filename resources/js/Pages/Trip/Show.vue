@@ -28,9 +28,9 @@ const openLightbox = (index) => {
 
 // Rendered slide width per breakpoint (screens.js), following the layout around the Slider: the page
 // padding (px-4, tablet:px-6), from laptop on the two-thirds column (grid-cols-3, gap-12, max-w-screen-desktop),
-// the card border and padding (p-6, laptop:p-8), the slider padding (laptop:p-6) and the slide width set by
-// Slider (100% / visible slides - 2% margin). Update this when that layout changes.
-const gallerySizes = '(min-width: 1350px) 231px, (min-width: 900px) calc(20.9vw - 51px), (min-width: 600px) calc(48vw - 47px), calc(98vw - 80px)'
+// the card border and padding (p-6, laptop:p-8), the slider wrapper (-mx-[1%], see the template) and the slide
+// width set by Slider (100% / visible slides - 2% margin). Update this when that layout changes.
+const gallerySizes = '(min-width: 1350px) 252px, (min-width: 900px) calc(21.3vw - 36px), (min-width: 600px) calc(49vw - 48px), calc(100vw - 82px)'
 
 // Inquiry card tabs
 const activeCardTab = ref('about')
@@ -51,6 +51,9 @@ const hasCountryInfo = computed(() =>
     ) ?? false
 )
 
+const hasKeyFacts = computed(() => props.trip.key_facts?.length > 0)
+const hasIntro = computed(() => Boolean(props.trip.intro))
+
 const contactUrl = computed(() => {
     const params = new URLSearchParams({ reis: props.trip.slug })
 
@@ -60,7 +63,7 @@ const contactUrl = computed(() => {
 </script>
 
 <template>
-    <Layout>
+    <Layout class="bg-brand-background">
         <template v-slot:hero>
             <!-- Hero Section -->
             <TripHero :trip="trip" />
@@ -69,24 +72,33 @@ const contactUrl = computed(() => {
         <DecorativeLine />
         <!-- Main Content -->
         <div
-            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-32 laptop:pb-0">
+            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-32 laptop:pb-0 bg-brand-background">
             <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">
 
                     <!-- Description & Highlights -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
+                    <div class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 p-6 laptop:p-8">
                         <div class="mb-8">
-                            <div class="w-full text-center">
-                                <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
+                            <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
+
+                            <!-- Intro and key facts: stacked on smaller screens, 60/40 from laptop up.
+                                 Whichever is missing leaves the other at full width. -->
+                            <div v-if="hasIntro || hasKeyFacts"
+                                :class="['grid grid-cols-1 gap-6 mb-6 laptop:gap-8 laptop:items-start', hasIntro && hasKeyFacts ? 'laptop:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : '']">
+                                <div v-if="hasIntro" class="prose prose-brand max-w-[68ch]" v-html="trip.intro"></div>
+                                <TripKeyFacts :facts="trip.key_facts" />
                             </div>
-                            <div class="p-0 laptop:p-6">
+
+                            <!-- Slider adds a 1% margin around every slide; the negative margin cancels it on the
+                                 outer edges so the photos span from the intro to the key facts edge to edge -->
+                            <div class="-mx-[1%] mb-6">
                                 <Slider :items="trip.images" :visible="3">
                                     <template #default="{ item, index, loaded }">
                                         <ResponsiveImage :image="item" :sizes="gallerySizes" :deferred="!loaded"
                                             :loading="index === 0 ? 'eager' : undefined"
                                             :alt="t('trip_show.gallery_image_alt', { trip: trip.name, position: index + 1 })"
-                                            class="w-full h-36 tablet:h-full max-h-[500px] object-cover cursor-zoom-in"
+                                            class="w-full h-36 tablet:h-full max-h-[500px] object-cover cursor-zoom-in rounded-xl shadow-sm"
                                             :key="index" @click="openLightbox(index)" />
                                     </template>
                                 </Slider>
@@ -107,9 +119,7 @@ const contactUrl = computed(() => {
                     <!-- Itinerary Section -->
                     <div
                         class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 overflow-hidden p-6 laptop:p-8">
-                        <div class="w-full text-center">
-                            <SectionHeader>{{ t('trip_show.itinerary_heading') }}</SectionHeader>
-                        </div>
+                        <SectionHeader>{{ t('trip_show.itinerary_heading') }}</SectionHeader>
                         <div v-if="trip.itineraries?.length" class="space-y-6">
                             <template v-for="(itinerary, index) in trip.itineraries" :key="index">
                                 <TripItinerary :itinerary="itinerary" :index="index" />

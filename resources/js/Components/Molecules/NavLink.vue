@@ -15,17 +15,25 @@ const props = defineProps({
         type: String,
         default: 'desktop',
         validator: (value) => ['desktop', 'mobile'].includes(value)
+    },
+    // White text for use on a transparent background (desktop only)
+    light: {
+        type: Boolean,
+        default: false
     }
 });
 
 const defaultClass = 'relative transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-brand-accent after:transition-all after:duration-300 hover:after:w-full';
 
 const variants = {
-    desktop: 'text-brand-primary text-sm laptop:text-base',
+    desktop: 'text-base laptop:text-lg font-bold',
     mobile: 'block px-4 py-3 text-brand-primary text-base font-medium rounded-lg mx-auto my-1.5 max-w-[140px] text-center'
 };
 
-const variantClass = computed(() => variants[props.variant]);
+const variantClass = computed(() => [
+    variants[props.variant],
+    props.variant === 'desktop' ? (props.light ? 'text-brand-secondary' : 'text-brand-primary') : '',
+]);
 
 const emit = defineEmits(['click']);
 

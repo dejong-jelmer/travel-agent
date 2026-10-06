@@ -30,16 +30,16 @@ const heroSizes = computed(() => {
     const factor = ratio.toFixed(3)
 
     return [
-        `(min-width: 900px) and ${tallerThanImage} calc((100vh - 140px) * ${factor})`,
+        `(min-width: 900px) and ${tallerThanImage} calc((100vh - 44px) * ${factor})`,
         '(min-width: 900px) 100vw',
-        `${tallerThanImage} calc((100vh - 250px) * ${factor})`,
+        `${tallerThanImage} calc((100vh - 154px) * ${factor})`,
         '100vw',
     ].join(', ')
 })
 </script>
 <template>
-    <PageHero :responsive-image="trip.hero_image" :sizes="heroSizes" :title="trip.name" :subtitle="trip.intro"
-        :alt="`${trip.name} - ${trip.intro}`"
+    <PageHero :responsive-image="trip.hero_image" :sizes="heroSizes" :title="trip.name" :subtitle="trip.subtitle"
+        :alt="`${trip.name} - ${trip.subtitle}`"
         height-class="h-[calc(100vh-theme(hero-offset.phone.trip))] laptop:h-[calc(100vh-theme(hero-offset.laptop))]">
         <template #meta>
             <p class="text-base tablet:text-xl font-poppins text-white">

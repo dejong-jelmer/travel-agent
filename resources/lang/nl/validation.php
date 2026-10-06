@@ -49,6 +49,13 @@ return [
         // Trip
         'highlights.*.title.required_with' => 'Vul een titel in bij deze omschrijving.',
         'highlights.*.title.distinct' => 'Deze titel is al gebruikt bij een ander hoogtepunt.',
+        'key_facts.max' => 'Je kunt maximaal :max punten invullen.',
+        'key_facts.*.label.required' => 'Vul een label in bij dit punt.',
+        'key_facts.*.label.max' => 'Een label mag maximaal :max tekens bevatten.',
+        'key_facts.*.value.required' => 'Vul een waarde in bij dit punt.',
+        'key_facts.*.value.max' => 'Een waarde mag maximaal :max tekens bevatten.',
+        'key_facts.*.icon.required' => 'Kies een icoon bij dit punt.',
+        'key_facts.*.icon.enum' => 'Kies een geldig icoon bij dit punt.',
 
         // Main booker
         'main_booker' => [

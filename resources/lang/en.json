@@ -334,6 +334,21 @@
                     },
                     "help": "Enter unique experiences and attractions of this trip"
                 },
+                "key_facts": {
+                    "label": "Your trip at a glance",
+                    "icon": {
+                        "label": "Icon"
+                    },
+                    "label_field": {
+                        "label": "Label",
+                        "placeholder": "E.g. Departure"
+                    },
+                    "value": {
+                        "label": "Value",
+                        "placeholder": "E.g. Amsterdam, Utrecht or Arnhem"
+                    },
+                    "help": "At most {max} points, each with an icon, a label (up to {label} characters) and a value (up to {value} characters), shown in this order. Every point needs a label."
+                },
                 "active": {
                     "label": "Active",
                     "help": "Is this trip available for booking?"
@@ -368,9 +383,12 @@
                     "label": "OG Image",
                     "help": "Image for social media sharing (Open Graph)"
                 },
+                "subtitle": {
+                    "label": "Subtitle",
+                    "placeholder": "Write a short subtitle…"
+                },
                 "intro": {
-                    "label": "Intro",
-                    "placeholder": "Write a short introduction…"
+                    "label": "Intro"
                 }
             },
             "submit": {
@@ -947,6 +965,7 @@
             "carefree_travel": "Carefree travel"
         },
         "highlights_heading": "What you'll see",
+        "key_facts_heading": "Your trip at a glance",
         "inquiry": {
             "title": "Plan this trip",
             "price_from": "From €{price},- p.p.",
@@ -1219,7 +1238,10 @@
                     "name": "Name",
                     "slug": "Slug",
                     "description": "Description",
-                    "intro": "Intro"
+                    "subtitle": "Subtitle",
+                    "intro": "Intro",
+                    "key_facts": "Your trip at a glance",
+                    "key_fact_missing_label": "Label missing"
                 },
                 "items": {
                     "no_items": "No items",

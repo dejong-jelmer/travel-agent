@@ -49,6 +49,13 @@ return [
         // Trip
         'highlights.*.title.required_with' => 'Please enter a title for this description.',
         'highlights.*.title.distinct' => 'This title is already used by another highlight.',
+        'key_facts.max' => 'You can enter at most :max points.',
+        'key_facts.*.label.required' => 'Enter a label for this point.',
+        'key_facts.*.label.max' => 'A label can contain at most :max characters.',
+        'key_facts.*.value.required' => 'Enter a value for this point.',
+        'key_facts.*.value.max' => 'A value can contain at most :max characters.',
+        'key_facts.*.icon.required' => 'Choose an icon for this point.',
+        'key_facts.*.icon.enum' => 'Choose a valid icon for this point.',
 
         // Main booker
         'main_booker' => [

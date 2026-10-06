@@ -22,8 +22,8 @@ const colonAfter = "after:content-[':_']";
     <ul class="space-y-4">
         <li v-for="(highlight, index) in items" :key="index" class="flex items-start gap-3">
             <span class="w-2 h-2 bg-brand-subtle rounded-full mt-2 flex-shrink-0" aria-hidden="true"></span>
-            <div class="text-brand-text">
-                <h3 class="inline font-medium" :class="highlight.description ? colonAfter : ''">{{ highlight.title }}</h3>
+            <div class="text-brand-text text-base">
+                <h3 class="inline font-bold" :class="highlight.description ? colonAfter : ''">{{ highlight.title }}</h3>
                 <p v-if="highlight.description" class="inline">{{ highlight.description }}</p>
             </div>
         </li>

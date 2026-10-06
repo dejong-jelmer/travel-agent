@@ -18,6 +18,21 @@ return [
         'child' => 'Kind',
     ],
 
+    // Key fact icons
+    'key_fact_icon' => [
+        'train' => 'Trein',
+        'night' => 'Nacht',
+        'clock' => 'Tijd',
+        'transfer' => 'Overstap',
+        'location' => 'Locatie',
+        'bed' => 'Overnachting',
+        'breakfast' => 'Ontbijt',
+        'mountain' => 'Bergen',
+        'calendar' => 'Kalender',
+        'sun' => 'Zon',
+        'info' => 'Informatie',
+    ],
+
     // Items
     'item' => [
         'type' => [
