@@ -25,12 +25,15 @@ if (! function_exists('emptyFormRequestToArray')) {
     }
 }
 
-if (! function_exists('nullifyEmptyHtml')) {
+if (! function_exists('dropBlankListItems')) {
     /**
-     * Null out rich text values that hold no visible content
-     * TipTap submits "<p></p>" for an empty editor
+     * Drop blank entries from a list field and reindex it
+     * The dynamic input lists always submit an empty trailing row, which must not count towards `max` rules
+     * An entry made of several fields is blank when all its fields are, ignoring the `$ignoredKeys` (e.g. a preselected icon)
+     *
+     * @param  array<int, string>  $ignoredKeys
      */
-    function nullifyEmptyHtml(FormRequest $formRequest, string $field): void
+    function dropBlankListItems(FormRequest $formRequest, string $field, array $ignoredKeys = []): void
     {
         $values = $formRequest->input($field);
 
@@ -38,14 +41,38 @@ if (! function_exists('nullifyEmptyHtml')) {
             return;
         }
 
+        $isBlank = fn ($value) => is_null($value) || (is_string($value) && trim($value) === '');
+
         $formRequest->merge([
-            $field => array_map(
-                fn ($value) => preg_replace('/\s+/u', '', html_entity_decode(strip_tags((string) $value))) === ''
-                    ? null
-                    : $value,
-                $values
-            ),
+            $field => array_values(array_filter(
+                $values,
+                fn ($item) => is_array($item)
+                    ? ! collect($item)->except($ignoredKeys)->every($isBlank)
+                    : ! $isBlank($item)
+            )),
         ]);
+    }
+}
+
+if (! function_exists('nullifyEmptyHtml')) {
+    /**
+     * Null out rich text values that hold no visible content
+     * TipTap submits "<p></p>" for an empty editor
+     * Works on a single rich text field as well as on an array of them
+     */
+    function nullifyEmptyHtml(FormRequest $formRequest, string $field): void
+    {
+        $values = $formRequest->input($field);
+
+        $nullifyIfEmpty = fn ($value) => preg_replace('/\s+/u', '', html_entity_decode(strip_tags((string) $value))) === ''
+            ? null
+            : $value;
+
+        if (is_array($values)) {
+            $formRequest->merge([$field => array_map($nullifyIfEmpty, $values)]);
+        } elseif (is_string($values)) {
+            $formRequest->merge([$field => $nullifyIfEmpty($values)]);
+        }
     }
 }
 

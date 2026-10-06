@@ -1,6 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue';
 
+const props = defineProps({
+    // White button on a transparent background
+    light: { type: Boolean, default: false },
+});
+
 const isOpen = ref(false);
 
 const toggleMenu = () => {
@@ -11,8 +16,12 @@ const closeMenu = () => {
     isOpen.value = false;
 };
 
+// While open the button gets a light background, so it keeps the default colours
 const buttonClasses = computed(() => [
-    'tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10 border-brand-primary text-brand-primary hover:bg-brand-secondary backdrop-blur-sm',
+    'tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10 backdrop-blur-sm',
+    props.light && !isOpen.value
+        ? 'border-white text-white hover:bg-white/20'
+        : 'border-brand-primary text-brand-primary hover:bg-brand-secondary',
     { 'bg-brand-secondary': isOpen.value }
 ]);
 

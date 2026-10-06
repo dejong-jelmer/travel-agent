@@ -38,8 +38,8 @@ const heroSizes = computed(() => {
 })
 </script>
 <template>
-    <PageHero :responsive-image="trip.hero_image" :sizes="heroSizes" :title="trip.name" :subtitle="trip.intro"
-        :alt="`${trip.name} - ${trip.intro}`"
+    <PageHero :responsive-image="trip.hero_image" :sizes="heroSizes" :title="trip.name" :subtitle="trip.subtitle"
+        :alt="`${trip.name} - ${trip.subtitle}`"
         height-class="h-[calc(100vh-theme(hero-offset.phone.trip))] laptop:h-[calc(100vh-theme(hero-offset.laptop))]">
         <template #meta>
             <p class="text-base tablet:text-xl font-poppins text-white">

@@ -134,8 +134,37 @@ function displayDate(entry) {
                                     </div>
                                     <div>
                                         <label class="text-sm font-medium text-gray-700">{{
+                                            t('admin.trips.show.details.subtitle') }}</label>
+                                        <p class="mt-1 text-gray-900">{{ trip.subtitle }}</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">{{
                                             t('admin.trips.show.details.intro') }}</label>
-                                        <p class="mt-1 text-gray-900">{{ trip.intro }}</p>
+                                        <div v-if="trip.intro"
+                                            class="prose prose-brand max-w-none text-lg text-brand-text leading-relaxed"
+                                            v-html="trip.intro"></div>
+                                        <p v-else class="mt-1 text-gray-900">-</p>
+                                    </div>
+                                    <div>
+                                        <label class="text-sm font-medium text-gray-700">{{
+                                            t('admin.trips.show.details.key_facts') }}</label>
+                                        <ul v-if="trip.key_facts?.length" class="mt-2 space-y-3">
+                                            <li v-for="(fact, index) in trip.key_facts" :key="index"
+                                                class="flex items-start gap-3">
+                                                <KeyFactIcon :icon="fact.icon"
+                                                    class="mt-0.5 h-5 w-5 flex-shrink-0 text-brand-primary" />
+                                                <div>
+                                                    <p v-if="fact.label" class="text-sm font-semibold text-gray-700">
+                                                        {{ fact.label }}
+                                                    </p>
+                                                    <p v-else class="text-sm italic text-status-error">
+                                                        {{ t('admin.trips.show.details.key_fact_missing_label') }}
+                                                    </p>
+                                                    <p class="text-gray-900">{{ fact.value }}</p>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                        <p v-else class="mt-1 text-gray-900">-</p>
                                     </div>
                                     <div>
                                         <label class="text-sm font-medium text-gray-700">{{

@@ -39,7 +39,7 @@ const props = defineProps({ trip: Object });
                 <!-- Description -->
                 <div class="min-h-[80px]">
                     <p class="text-sm text-brand-text line-clamp-3 leading-relaxed">
-                        {{ trip.intro }}
+                        {{ trip.subtitle }}
                     </p>
                 </div>
 

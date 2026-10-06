@@ -334,6 +334,21 @@
                     },
                     "help": "Voer unieke ervaringen en attracties van deze reis in"
                 },
+                "key_facts": {
+                    "label": "Je reis in het kort",
+                    "icon": {
+                        "label": "Icoon"
+                    },
+                    "label_field": {
+                        "label": "Label",
+                        "placeholder": "Bijv. Vertrek"
+                    },
+                    "value": {
+                        "label": "Waarde",
+                        "placeholder": "Bijv. Amsterdam, Utrecht of Arnhem"
+                    },
+                    "help": "Maximaal {max} punten, elk met een icoon, een label (maximaal {label} tekens) en een waarde (maximaal {value} tekens), getoond in deze volgorde. Elk punt heeft een label nodig."
+                },
                 "active": {
                     "label": "Actief",
                     "help": "Is deze reis beschikbaar voor boeken?"
@@ -368,9 +383,12 @@
                     "label": "OG Image",
                     "help": "Afbeelding voor social media delen (Open Graph)"
                 },
+                "subtitle": {
+                    "label": "Ondertitel",
+                    "placeholder": "Schrijf een korte ondertitel…"
+                },
                 "intro": {
-                    "label": "Intro",
-                    "placeholder": "Schrijf een korte introductie…"
+                    "label": "Intro"
                 }
             },
             "submit": {
@@ -946,6 +964,7 @@
             "carefree_travel": "Zorgeloos op reis"
         },
         "highlights_heading": "Wat er te zien en te doen is",
+        "key_facts_heading": "Je reis in het kort",
         "inquiry": {
             "title": "Plan deze reis",
             "price_from": "Vanaf €{price},- p.p.",
@@ -1218,7 +1237,10 @@
                     "name": "Naam",
                     "slug": "Slug",
                     "description": "Beschrijving",
-                    "intro": "Intro"
+                    "subtitle": "Ondertitel",
+                    "intro": "Intro",
+                    "key_facts": "Je reis in het kort",
+                    "key_fact_missing_label": "Label ontbreekt"
                 },
                 "items": {
                     "no_items": "Geen items",

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Transport;
+use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\TripType;
 use App\Models\Traits\HasFormattedDates;
@@ -38,6 +39,12 @@ class Trip extends Model
         SoftDeletes,
         Sortable;
 
+    public const MAX_KEY_FACTS = 6;
+
+    public const MAX_KEY_FACT_LABEL_LENGTH = 20;
+
+    public const MAX_KEY_FACT_VALUE_LENGTH = 60;
+
     protected $perPage = 10;
 
     protected array $formattedDates = [
@@ -47,12 +54,14 @@ class Trip extends Model
     protected $fillable = [
         'name',
         'slug',
+        'subtitle',
         'intro',
         'description',
         'transport',
         'featured',
         'published_at',
         'highlights',
+        'key_facts',
         'practical_info',
         'blocked_dates',
         'min_advance_days',
@@ -73,6 +82,7 @@ class Trip extends Model
     protected $casts = [
         'transport' => 'array',
         'highlights' => 'array',
+        'key_facts' => 'array',
         'practical_info' => 'array',
         'blocked_dates' => 'array',
         'min_advance_days' => 'integer',
@@ -368,6 +378,32 @@ class Trip extends Model
                         'description' => trim((string) ($highlight['description'] ?? '')) ?: null,
                     ])
                     ->filter(fn (array $highlight) => $highlight['title'] !== '')
+                    ->values()
+                    ->all()
+            )
+        );
+    }
+
+    /**
+     * Get the key facts, stored as an ordered list of ['label' => ..., 'value' => ..., 'icon' => ...]
+     *
+     * Entries without a label and a value are dropped on write, a missing icon falls back to the default icon.
+     * A trip without key facts yields an empty list.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{label: string, value: string, icon: string}>, mixed>
+     */
+    protected function keyFacts(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => json_decode($value ?? '[]', true),
+            set: fn ($value) => json_encode(
+                collect(is_array($value) ? $value : [])
+                    ->map(fn ($fact) => [
+                        'label' => trim((string) ($fact['label'] ?? '')),
+                        'value' => trim((string) ($fact['value'] ?? '')),
+                        'icon' => (string) ($fact['icon'] ?? '') ?: KeyFactIcon::default()->value,
+                    ])
+                    ->filter(fn (array $fact) => $fact['label'] !== '' || $fact['value'] !== '')
                     ->values()
                     ->all()
             )

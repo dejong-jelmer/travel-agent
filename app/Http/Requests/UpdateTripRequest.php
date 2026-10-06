@@ -25,10 +25,14 @@ class UpdateTripRequest extends FormRequest
     protected function prepareForValidation(): void
     {
         //  Default to empty array's on null
-        emptyFormRequestToArray($this, ['highlights', 'transport', 'items', 'prices', 'blocked_dates']);
+        emptyFormRequestToArray($this, ['highlights', 'key_facts', 'transport', 'items', 'prices', 'blocked_dates']);
+
+        // Ignore the empty trailing row of the key facts input (its preselected icon does not count)
+        dropBlankListItems($this, 'key_facts', ignoredKeys: ['icon']);
 
         // Null out rich text sections left empty in the editor
         nullifyEmptyHtml($this, 'practical_info');
+        nullifyEmptyHtml($this, 'intro');
 
         // Cast FormData string to integer
         if ($this->filled('min_advance_days')) {
@@ -57,6 +61,7 @@ class UpdateTripRequest extends FormRequest
     {
         return array_merge(
             TripValidationRules::basic(),
+            TripValidationRules::keyFacts(),
             TripValidationRules::prices(),
             TripValidationRules::settings(),
             TripValidationRules::seo(),

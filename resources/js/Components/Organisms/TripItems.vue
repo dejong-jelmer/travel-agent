@@ -31,7 +31,7 @@ const icons = {
                     <div class="bg-white">
                         <ul class="space-y-2">
                             <li v-for="(tripItem, index) in items" :key="index"
-                                class="flex items-center gap-2">
+                                class="flex items-start gap-2">
                                 <div class="flex-shrink-0">
                                     <component
                                         :is="icons[tripItem.type]"
@@ -40,7 +40,7 @@ const icons = {
                                             'text-status-error': tripItem.type === 'exclusion',
                                             'text-brand-accent': tripItem.type === 'optional',
                                         }"
-                                        class="w-3 h-3"
+                                        class="w-5 h-5 mt-1"
                                     />
                                 </div>
                                 <span class="text-sm tablet:text-base text-brand-text leading-relaxed flex-1">

@@ -4,7 +4,9 @@ namespace App\Services\Validation;
 
 use App\Enums\Transport;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PriceLabel;
+use App\Models\Trip;
 use App\Rules\NoOverlappingPricePeriods;
 use Illuminate\Validation\Rule;
 
@@ -17,8 +19,19 @@ class TripValidationRules
             'highlights' => ['nullable', 'array'],
             'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct:ignore_case', 'required_with:highlights.*.description'],
             'highlights.*.description' => ['nullable', 'string', 'max:500'],
-            'intro' => ['required', 'string', 'max:255'],
+            'subtitle' => ['required', 'string', 'max:255'],
+            'intro' => ['nullable', 'string'],
             'description' => ['required', 'string'],
+        ];
+    }
+
+    public static function keyFacts(): array
+    {
+        return [
+            'key_facts' => ['nullable', 'array', 'max:'.Trip::MAX_KEY_FACTS],
+            'key_facts.*.label' => ['required', 'string', 'max:'.Trip::MAX_KEY_FACT_LABEL_LENGTH],
+            'key_facts.*.value' => ['required', 'string', 'max:'.Trip::MAX_KEY_FACT_VALUE_LENGTH],
+            'key_facts.*.icon' => ['required', 'string', Rule::enum(KeyFactIcon::class)],
         ];
     }
 

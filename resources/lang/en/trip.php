@@ -18,6 +18,21 @@ return [
         'child' => 'Child',
     ],
 
+    // Key fact icons
+    'key_fact_icon' => [
+        'train' => 'Train',
+        'night' => 'Night',
+        'clock' => 'Time',
+        'transfer' => 'Transfer',
+        'location' => 'Location',
+        'bed' => 'Overnight stay',
+        'breakfast' => 'Breakfast',
+        'mountain' => 'Mountains',
+        'calendar' => 'Calendar',
+        'sun' => 'Sun',
+        'info' => 'Information',
+    ],
+
     // Items
     'item' => [
         'type' => [

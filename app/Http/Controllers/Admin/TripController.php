@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\ImageRelation;
 use App\Enums\Transport;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
 use App\Http\Controllers\Controller;
@@ -60,6 +61,7 @@ class TripController extends Controller
             'typeOptions' => ItemType::options(),
             'transportOptions' => Transport::options(),
             'priceLabelOptions' => PriceLabel::options(),
+            'keyFactIconOptions' => KeyFactIcon::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
@@ -127,6 +129,7 @@ class TripController extends Controller
             'typeOptions' => ItemType::options(),
             'transportOptions' => Transport::options(),
             'priceLabelOptions' => PriceLabel::options(),
+            'keyFactIconOptions' => KeyFactIcon::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),
         ]);

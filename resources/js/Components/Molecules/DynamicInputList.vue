@@ -10,15 +10,29 @@ const props = defineProps({
     placeholder: String,
     // Optional: renders an input per field, items become objects instead of strings.
     // Shape: [{ key, label, placeholder }]
+    // A field of type 'icon' renders an IconSelect instead: [{ key, label, type: 'icon', options, default }].
+    // It starts on its default and does not count when deciding whether a row is blank.
     fields: {
         type: Array,
         required: false,
         default: null,
     },
+    // Optional: grid classes for the fields of a row
+    fieldsClass: {
+        type: String,
+        required: false,
+        default: 'tablet:grid-cols-2',
+    },
     sortable: {
         type: Boolean,
         required: false,
         default: false,
+    },
+    // Optional: maximum number of filled rows; no empty row is offered once it is reached.
+    max: {
+        type: Number,
+        required: false,
+        default: null,
     },
     required: {
         type: Boolean,
@@ -43,15 +57,24 @@ const items = computed({
 })
 
 const blankItem = () => props.fields
-    ? Object.fromEntries(props.fields.map((field) => [field.key, '']))
+    ? Object.fromEntries(props.fields.map((field) => [field.key, field.default ?? '']))
     : ''
 
 const isBlank = (item) => props.fields
-    ? props.fields.every((field) => !item?.[field.key])
+    ? props.fields.every((field) => field.type === 'icon' || !item?.[field.key])
     : item === ''
 
+const atMax = () => props.max !== null
+    && items.value.filter((item) => !isBlank(item)).length >= props.max
+
+// The empty row at the end that invites the next entry; absent once the maximum is reached.
+const isTrailingBlank = (index) => index === items.value.length - 1 && isBlank(items.value[index])
+
+// Index of the last row holding content, which cannot move further down.
+const lastFilledIndex = () => items.value.length - (isTrailingBlank(items.value.length - 1) ? 2 : 1)
+
 watchEffect(() => {
-    if (items.value.length === 0 || !isBlank(items.value[items.value.length - 1])) {
+    if (items.value.length === 0 || (!isBlank(items.value[items.value.length - 1]) && !atMax())) {
         items.value.push(blankItem())
     }
 })
@@ -61,7 +84,7 @@ const handleInput = (index) => {
     const isLastItem = index === items.value.length - 1
     const blank = isBlank(items.value[index])
 
-    if (!blank && isLastItem) {
+    if (!blank && isLastItem && !atMax()) {
         items.value.push(blankItem())
     }
     if (blank && items.value.length > 1 && !isLastItem) {
@@ -87,7 +110,7 @@ const move = (index, offset) => {
             <slot name="label">{{ label }}</slot>
         </Label>
         <div v-for="(item, index) in items" :key="`${name}-${index}`" role="group" class="flex items-start gap-2 group">
-            <div v-if="sortable" class="flex flex-col" :class="{ 'invisible': index === items.length - 1 }">
+            <div v-if="sortable" class="flex flex-col" :class="{ 'invisible': isTrailingBlank(index) }">
                 <button
                     type="button"
                     :disabled="index === 0"
@@ -100,7 +123,7 @@ const move = (index, offset) => {
                 </button>
                 <button
                     type="button"
-                    :disabled="index >= items.length - 2"
+                    :disabled="index >= lastFilledIndex()"
                     :title="$t('forms.actions.move_down')"
                     :aria-label="$t('forms.actions.move_down')"
                     class="p-1 text-gray-400 hover:text-gray-700 disabled:opacity-30 disabled:hover:text-gray-400 disabled:cursor-not-allowed"
@@ -109,20 +132,28 @@ const move = (index, offset) => {
                     <ChevronDown class="h-4 w-4" />
                 </button>
             </div>
-            <div class="flex-1" :class="fields ? 'grid gap-2 tablet:grid-cols-2' : ''">
+            <div class="flex-1" :class="fields ? `grid gap-2 ${fieldsClass}` : ''">
                 <template v-if="fields">
-                    <Input
-                        v-for="field in fields"
-                        :key="field.key"
-                        type="text"
-                        :name="`${name}.${index}.${field.key}`"
-                        :label="field.label"
-                        :showLabel="false"
-                        v-model="items[index][field.key]"
-                        :placeholder="field.placeholder"
-                        :feedback="feedback[`${name}.${index}.${field.key}`] ?? null"
-                        @keyup="handleInput(index)"
-                    />
+                    <template v-for="field in fields" :key="field.key">
+                        <IconSelect
+                            v-if="field.type === 'icon'"
+                            :label="field.label"
+                            :options="field.options"
+                            v-model="items[index][field.key]"
+                            :feedback="feedback[`${name}.${index}.${field.key}`] ?? null"
+                        />
+                        <Input
+                            v-else
+                            type="text"
+                            :name="`${name}.${index}.${field.key}`"
+                            :label="field.label"
+                            :showLabel="false"
+                            v-model="items[index][field.key]"
+                            :placeholder="field.placeholder"
+                            :feedback="feedback[`${name}.${index}.${field.key}`] ?? null"
+                            @keyup="handleInput(index)"
+                        />
+                    </template>
                 </template>
                 <Input
                     v-else
@@ -137,7 +168,7 @@ const move = (index, offset) => {
                 />
             </div>
             <DeleteButton
-                v-if="items.length > 1 && index !== items.length - 1"
+                v-if="items.length > 1 && !isTrailingBlank(index)"
                 @delete="deleteItem(index)"
             />
         </div>

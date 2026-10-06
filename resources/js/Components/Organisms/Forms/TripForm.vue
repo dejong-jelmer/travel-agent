@@ -13,6 +13,7 @@ const props = defineProps({
     typeOptions: Object,
     transportOptions: Object,
     priceLabelOptions: Object,
+    keyFactIconOptions: Array,
     practicalSections: Object,
 });
 
@@ -50,6 +51,34 @@ watch([minAdvanceValue, minAdvanceUnit], ([val, unit]) => {
     const num = Number(val)
     props.form.min_advance_days = num > 0 ? Math.round(num * unitMultiplier[unit]) : null
 })
+
+// Keep in sync with Trip::MAX_KEY_FACTS, Trip::MAX_KEY_FACT_LABEL_LENGTH and Trip::MAX_KEY_FACT_VALUE_LENGTH
+const KEY_FACTS_MAX = 6
+const KEY_FACT_LABEL_MAX_LENGTH = 20
+const KEY_FACT_VALUE_MAX_LENGTH = 60
+
+// Matches KeyFactIcon::default()
+const KEY_FACT_DEFAULT_ICON = 'info'
+
+const keyFactFields = computed(() => [
+    {
+        key: 'icon',
+        type: 'icon',
+        label: t('forms.trip.fields.key_facts.icon.label'),
+        options: props.keyFactIconOptions ?? [],
+        default: KEY_FACT_DEFAULT_ICON,
+    },
+    {
+        key: 'label',
+        label: t('forms.trip.fields.key_facts.label_field.label'),
+        placeholder: t('forms.trip.fields.key_facts.label_field.placeholder'),
+    },
+    {
+        key: 'value',
+        label: t('forms.trip.fields.key_facts.value.label'),
+        placeholder: t('forms.trip.fields.key_facts.value.placeholder'),
+    },
+])
 
 const highlightFields = computed(() => [
     {
@@ -140,9 +169,12 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                     :required="true" v-model="form.name" :feedback="form.errors.name"
                                     :placeholder="t('forms.trip.fields.name.placeholder')" />
 
-                                 <Input type="text" name="intro" :label="t('forms.trip.fields.intro.label')"
-                                    :required="true" v-model="form.intro" :feedback="form.errors.intro"
-                                    :placeholder="t('forms.trip.fields.intro.placeholder')" />
+                                 <Input type="text" name="subtitle" :label="t('forms.trip.fields.subtitle.label')"
+                                    :required="true" v-model="form.subtitle" :feedback="form.errors.subtitle"
+                                    :placeholder="t('forms.trip.fields.subtitle.placeholder')" />
+                                <Label for-field="intro">{{ t('forms.trip.fields.intro.label') }}</Label>
+                                <TipTap name="intro" v-model="form.intro" :feedback="form.errors.intro" />
+                                <FormFeedback :message="form.errors.intro" />
                                 <Label for-field="description" :required="true">{{ t('forms.trip.fields.description.label') }}</Label>
                                 <TipTap name="description" :required="true" v-model="form.description" :feedback="form.errors.description" />
                                 <FormFeedback :message="form.errors.description" />
@@ -150,6 +182,17 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                     :label="t('forms.trip.fields.highlights.label')"
                                     :fields="highlightFields" :sortable="true"
                                     :feedback="form.errors" />
+                                <div>
+                                    <DynamicInputList :items="form.key_facts" name="key_facts"
+                                        :label="t('forms.trip.fields.key_facts.label')"
+                                        :fields="keyFactFields" fields-class="tablet:grid-cols-[13rem_10rem_minmax(0,1fr)]"
+                                        :sortable="true" :max="KEY_FACTS_MAX"
+                                        :feedback="form.errors" />
+                                    <FormFeedback :message="form.errors.key_facts" />
+                                    <p class="mt-2 text-xs text-gray-700/30">
+                                        {{ t('forms.trip.fields.key_facts.help', { max: KEY_FACTS_MAX, label: KEY_FACT_LABEL_MAX_LENGTH, value: KEY_FACT_VALUE_MAX_LENGTH }) }}
+                                    </p>
+                                </div>
                             </TabPanel>
 
                             <TabPanel class="p-6">

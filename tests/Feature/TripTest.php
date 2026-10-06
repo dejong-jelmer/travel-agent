@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Enums\Transport;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
 use App\Models\Destination;
@@ -16,6 +17,7 @@ use Database\Seeders\CountrySeeder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
@@ -76,7 +78,8 @@ class TripTest extends TestCase
         $tripData = [
             'trip_id' => null,
             'name' => fake()->words(2, true),
-            'intro' => fake()->text(150),
+            'subtitle' => fake()->text(150),
+            'intro' => '<p>'.fake()->paragraph().'</p>',
             'description' => fake()->paragraph(),
             'transport' => [Transport::Train->value],
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
@@ -110,6 +113,7 @@ class TripTest extends TestCase
 
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
+        $this->assertEquals($tripData['subtitle'], $trip->subtitle);
         $this->assertEquals($tripData['intro'], $trip->intro);
         $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
@@ -168,7 +172,8 @@ class TripTest extends TestCase
         $updateData = [
             'trip_id' => $trip->id,
             'name' => 'Updated trip name',
-            'intro' => fake()->text(150),
+            'subtitle' => fake()->text(150),
+            'intro' => '<p>'.fake()->paragraph().'</p>',
             'description' => fake()->paragraph(),
             'transport' => array_column([Transport::Bus, Transport::Airplane], 'value'),
             'heroImage' => UploadedFile::fake()->image('updated-featured.jpg'),
@@ -201,6 +206,7 @@ class TripTest extends TestCase
         $response->assertRedirect(route('admin.trips.show', $trip));
 
         $this->assertEquals($updateData['name'], $trip->name);
+        $this->assertEquals($updateData['subtitle'], $trip->subtitle);
         $this->assertEquals($updateData['intro'], $trip->intro);
         $this->assertEquals($updateData['description'], $trip->description);
         $this->assertEquals($updateData['published_at'], $trip->published_at);
@@ -254,6 +260,7 @@ class TripTest extends TestCase
         $updateData = [
             'trip_id' => $trip->id,
             'name' => $trip->name,
+            'subtitle' => $trip->subtitle,
             'intro' => $trip->intro,
             'description' => $trip->description,
             'transport' => array_column([Transport::Train], 'value'),
@@ -386,6 +393,304 @@ class TripTest extends TestCase
         $response = $this->post(route('admin.trips.update', $trip), $payload);
 
         $response->assertSessionHasErrors('highlights.0.title');
+    }
+
+    // Subtitle and intro tests
+    public function test_trip_show_passes_subtitle_and_intro_as_props(): void
+    {
+        $trip = Trip::factory()->create([
+            'subtitle' => 'Met de nachttrein naar Verona',
+            'intro' => '<p>Een <strong>inleiding</strong>.</p>',
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('trip.subtitle', 'Met de nachttrein naar Verona')
+                ->where('trip.intro', '<p>Een <strong>inleiding</strong>.</p>')
+        );
+    }
+
+    public function test_trip_show_passes_null_intro_without_one(): void
+    {
+        $trip = Trip::factory()->create(['intro' => null]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('trip.intro', null)
+                ->where('trip.subtitle', $trip->subtitle)
+        );
+    }
+
+    public function test_trip_metadata_ignores_subtitle_and_intro(): void
+    {
+        $trip = Trip::factory()->create([
+            'subtitle' => 'Unique subtitle marker',
+            'intro' => '<p>Unique intro marker</p>',
+            'description' => '<p>Reis met de trein door Europa.</p>',
+            'meta_description' => null,
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('seo.description', 'Reis met de trein door Europa.')
+        );
+        $this->assertStringNotContainsString('Unique subtitle marker', $trip->meta_description);
+        $this->assertStringNotContainsString('Unique intro marker', $trip->meta_description);
+        $this->assertSame('Reis met de trein door Europa.', $trip->toTouristTripSchema()['description']);
+    }
+
+    public function test_trip_update_saves_intro_and_subtitle(): void
+    {
+        $trip = Trip::factory()->create(['intro' => null]);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'subtitle' => 'Updated subtitle',
+            'intro' => '<p>Updated intro</p>',
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame('Updated subtitle', $trip->fresh()->subtitle);
+        $this->assertSame('<p>Updated intro</p>', $trip->fresh()->intro);
+    }
+
+    public function test_trip_update_nullifies_an_empty_editor_intro(): void
+    {
+        $trip = Trip::factory()->create(['intro' => '<p>Existing intro</p>']);
+        $payload = $this->generateTripUpdatePayload($trip, ['intro' => '<p></p>']);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertNull($trip->fresh()->intro);
+    }
+
+    public function test_trip_update_requires_a_subtitle(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, ['subtitle' => '']);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('subtitle');
+    }
+
+    // Key facts tests
+    public function test_trip_show_passes_key_facts_with_label_value_and_icon_in_stored_order(): void
+    {
+        $keyFacts = [
+            ['label' => 'Vertrek', 'value' => 'Amsterdam, Utrecht of Arnhem', 'icon' => 'train'],
+            ['label' => 'Reistijd', 'value' => 'Ca. 15 uur', 'icon' => 'clock'],
+            ['label' => 'Overstap', 'value' => '1x, in Innsbruck', 'icon' => 'transfer'],
+        ];
+        $trip = Trip::factory()->create(['key_facts' => $keyFacts]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('trip.key_facts', $keyFacts)
+        );
+    }
+
+    public function test_trip_show_passes_empty_key_facts_without_any(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('trip.key_facts', [])
+        );
+    }
+
+    public function test_trip_update_saves_key_facts_in_submitted_order_and_ignores_blank_rows(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => [
+                ['label' => 'Second', 'value' => 'Second value', 'icon' => 'sun'],
+                ['label' => 'First', 'value' => 'First value', 'icon' => 'bed'],
+                ['label' => '', 'value' => '', 'icon' => 'info'],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertEquals(
+            [
+                ['label' => 'Second', 'value' => 'Second value', 'icon' => 'sun'],
+                ['label' => 'First', 'value' => 'First value', 'icon' => 'bed'],
+            ],
+            $trip->fresh()->key_facts
+        );
+    }
+
+    public function test_trip_update_accepts_a_trip_without_key_facts(): void
+    {
+        $trip = Trip::factory()->create(['key_facts' => [['label' => 'Vertrek', 'value' => 'Amsterdam', 'icon' => 'train']]]);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => [['label' => '', 'value' => '', 'icon' => 'info']],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame([], $trip->fresh()->key_facts);
+    }
+
+    public function test_trip_update_rejects_more_than_the_maximum_number_of_key_facts(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => array_map(
+                fn (int $i) => ['label' => "Label {$i}", 'value' => "Value {$i}", 'icon' => 'train'],
+                range(1, Trip::MAX_KEY_FACTS + 1)
+            ),
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('key_facts');
+    }
+
+    public function test_trip_update_rejects_a_key_fact_without_a_label(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => [['label' => '', 'value' => 'Amsterdam', 'icon' => 'train']],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('key_facts.0.label');
+    }
+
+    public function test_trip_update_rejects_a_key_fact_without_a_value(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => [['label' => 'Vertrek', 'value' => '', 'icon' => 'train']],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('key_facts.0.value');
+    }
+
+    public function test_trip_update_rejects_a_key_fact_without_an_icon(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => [['label' => 'Vertrek', 'value' => 'Amsterdam']],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('key_facts.0.icon');
+    }
+
+    public function test_trip_update_rejects_an_unknown_key_fact_icon(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => [['label' => 'Vertrek', 'value' => 'Amsterdam', 'icon' => 'rocket']],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('key_facts.0.icon');
+    }
+
+    public function test_trip_update_rejects_a_key_fact_label_and_value_that_are_too_long(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'key_facts' => [
+                ['label' => 'Short label', 'value' => 'Short value', 'icon' => 'train'],
+                [
+                    'label' => str_repeat('a', Trip::MAX_KEY_FACT_LABEL_LENGTH + 1),
+                    'value' => str_repeat('a', Trip::MAX_KEY_FACT_VALUE_LENGTH + 1),
+                    'icon' => 'train',
+                ],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors(['key_facts.1.label', 'key_facts.1.value']);
+        $response->assertSessionDoesntHaveErrors(['key_facts.0.label', 'key_facts.0.value']);
+    }
+
+    public function test_trip_update_accepts_a_key_fact_of_the_maximum_length(): void
+    {
+        $trip = Trip::factory()->create();
+        $keyFact = [
+            'label' => str_repeat('a', Trip::MAX_KEY_FACT_LABEL_LENGTH),
+            'value' => str_repeat('b', Trip::MAX_KEY_FACT_VALUE_LENGTH),
+            'icon' => 'mountain',
+        ];
+        $payload = $this->generateTripUpdatePayload($trip, ['key_facts' => [$keyFact]]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        // MySQL reorders the keys of a JSON column, so compare without regard to key order
+        $this->assertEquals([$keyFact], $trip->fresh()->key_facts);
+    }
+
+    public function test_trip_edit_passes_key_fact_icon_options(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $response = $this->get(route('admin.trips.edit', $trip));
+
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Trip/Edit')
+                ->has('keyFactIconOptions', count(KeyFactIcon::cases()))
+        );
+    }
+
+    public function test_key_facts_migration_moves_existing_text_to_value(): void
+    {
+        $trip = Trip::factory()->create();
+        DB::table('trips')->where('id', $trip->id)->update([
+            'key_facts' => json_encode(['Vertrek vanaf Amsterdam', 'Ca. 15 uur']),
+        ]);
+        $withoutKeyFacts = Trip::factory()->create();
+
+        $migration = require database_path('migrations/2026_10_06_140000_convert_key_facts_to_label_value_icon.php');
+        $migration->up();
+
+        $this->assertEquals([
+            ['label' => '', 'value' => 'Vertrek vanaf Amsterdam', 'icon' => KeyFactIcon::default()->value],
+            ['label' => '', 'value' => 'Ca. 15 uur', 'icon' => KeyFactIcon::default()->value],
+        ], $trip->fresh()->key_facts);
+        $this->assertSame([], $withoutKeyFacts->fresh()->key_facts);
+
+        $migration->down();
+
+        $this->assertSame(
+            ['Vertrek vanaf Amsterdam', 'Ca. 15 uur'],
+            json_decode(DB::table('trips')->where('id', $trip->id)->value('key_facts'), true)
+        );
     }
 
     // Blocked dates validation tests
@@ -556,6 +861,7 @@ class TripTest extends TestCase
     {
         return array_merge([
             'name' => $trip->name,
+            'subtitle' => $trip->subtitle,
             'intro' => $trip->intro,
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),

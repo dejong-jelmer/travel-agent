@@ -1,8 +1,10 @@
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
+    // White trigger on a transparent background (desktop only)
+    light: { type: Boolean, default: false },
     label: { type: String, required: true },
     href: { type: String, default: null }, // optional: when set the trigger label navigates
     items: { type: Array, default: () => [] }, // [{ label, href, download? }]
@@ -14,6 +16,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits(['close']);
+
+const triggerColor = computed(() => (props.light ? 'text-white' : 'text-brand-primary'));
 
 // Download/external items render as a plain anchor; everything else as an SPA Link.
 const getLinkComponent = (item) => (item.download ? 'a' : Link);
@@ -54,14 +58,16 @@ function handleItemClick() {
             <Link
                 v-if="href"
                 :href="href"
-                class="relative text-brand-primary text-sm laptop:text-base transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-brand-accent after:transition-all after:duration-300 hover:after:w-full"
+                :class="triggerColor"
+                class="relative text-base laptop:text-lg font-bold transition-all duration-200 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-brand-accent after:transition-all after:duration-300 hover:after:w-full"
             >
                 {{ label }}
             </Link>
             <button
                 v-if="href"
                 @click="isOpen = !isOpen"
-                class="p-0.5 text-brand-primary hover:text-brand-accent transition-colors duration-200 focus:outline-none"
+                :class="triggerColor"
+                class="p-0.5 hover:text-brand-accent transition-colors duration-200 focus:outline-none"
                 :aria-expanded="isOpen"
                 :aria-label="label"
             >
@@ -79,10 +85,14 @@ function handleItemClick() {
             <button
                 v-else
                 @click="isOpen = !isOpen"
-                class="flex items-center gap-0.5 text-brand-primary text-sm laptop:text-base hover:text-brand-accent transition-colors duration-200 focus:outline-none"
+                :class="triggerColor"
+                class="flex items-center gap-0.5 text-base laptop:text-lg font-bold focus:outline-none"
                 :aria-expanded="isOpen"
             >
-                <span>{{ label }}</span>
+                <span
+                    class="relative after:absolute after:bottom-0 after:left-0 after:h-0.5 after:bg-brand-accent after:transition-all after:duration-300 hover:after:w-full"
+                    :class="isOpen ? 'after:w-full' : 'after:w-0'"
+                >{{ label }}</span>
                 <svg
                     class="w-3.5 h-3.5 transition-transform duration-200"
                     :class="{ 'rotate-180': isOpen }"

@@ -92,8 +92,8 @@ function submit() {
             <h2 class="text-xl tablet:text-2xl font-semibold text-brand-primary">
                 {{ t('trip_request.form.title', { tripName: trip.name }) }}
             </h2>
-            <p v-if="trip.intro" class="text-sm text-brand-text/70 mt-2 leading-relaxed">
-                {{ trip.intro }}
+            <p v-if="trip.subtitle" class="text-sm text-brand-text/70 mt-2 leading-relaxed">
+                {{ trip.subtitle }}
             </p>
         </div>
 
