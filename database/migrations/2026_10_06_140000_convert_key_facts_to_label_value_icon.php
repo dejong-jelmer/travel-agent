@@ -19,6 +19,9 @@ return new class extends Migration
         ]);
     }
 
+    /**
+     * Lossy by design: only `value` survives the rollback, the label and icon of each key fact are dropped.
+     */
     public function down(): void
     {
         $this->convert(fn (mixed $fact) => is_array($fact) ? (string) ($fact['value'] ?? '') : $fact);

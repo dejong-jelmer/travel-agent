@@ -395,13 +395,13 @@ class Trip extends Model
     protected function keyFacts(): Attribute
     {
         return Attribute::make(
-            get: fn (?string $value) => json_decode($value ?? '[]', true),
+            get: fn (?string $value) => json_decode($value ?? '[]', true) ?? [],
             set: fn ($value) => json_encode(
                 collect(is_array($value) ? $value : [])
                     ->map(fn ($fact) => [
                         'label' => trim((string) ($fact['label'] ?? '')),
                         'value' => trim((string) ($fact['value'] ?? '')),
-                        'icon' => (string) ($fact['icon'] ?? '') ?: KeyFactIcon::default()->value,
+                        'icon' => KeyFactIcon::tryFrom((string) ($fact['icon'] ?? ''))?->value ?? KeyFactIcon::default()->value,
                     ])
                     ->filter(fn (array $fact) => $fact['label'] !== '' || $fact['value'] !== '')
                     ->values()
