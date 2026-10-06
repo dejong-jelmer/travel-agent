@@ -70,14 +70,11 @@ export default {
                         h2: {
                             color: theme("colors.brand.primary"),
                             fontWeight: "600",
-                            fontSize: theme("fontSize.lg")[0],
-                            lineHeight: theme("fontSize.lg")[1].lineHeight,
+                            fontSize: theme("fontSize.xl")[0],
+                            lineHeight: theme("fontSize.xl")[1].lineHeight,
                             marginTop: theme("spacing.8"),
-                            marginBottom: theme("spacing.0"),
-                            [`@media (min-width: ${screens.tablet})`]: {
-                                fontSize: theme("fontSize.xl")[0],
-                                lineHeight: theme("fontSize.xl")[1].lineHeight,
-                            },
+                            marginBottom: theme("spacing.4"),
+
                             [`@media (min-width: ${screens.laptop})`]: {
                                 fontSize: theme("fontSize.2xl")[0],
                                 lineHeight: theme("fontSize.2xl")[1].lineHeight,
@@ -99,13 +96,13 @@ export default {
                         p: {
                             color: theme("colors.brand.text"),
                             fontWeight: "400",
-                            fontSize: theme("fontSize.sm")[0],
-                            lineHeight: theme("fontSize.sm")[1].lineHeight,
+                            fontSize: theme("fontSize.base")[0],
+                            lineHeight: theme("fontSize.base")[1].lineHeight,
                             marginTop: theme("spacing.0"),
                             marginBottom: theme("spacing.2"),
                             [`@media (min-width: ${screens.tablet})`]: {
-                                fontSize: theme("fontSize.base")[0],
-                                lineHeight: theme("fontSize.base")[1].lineHeight,
+                                fontSize: theme("fontSize.lg")[0],
+                                lineHeight: theme("fontSize.xl")[1].lineHeight,
                             },
                         },
                     },

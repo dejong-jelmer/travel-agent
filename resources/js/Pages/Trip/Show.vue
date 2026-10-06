@@ -92,7 +92,7 @@ const contactUrl = computed(() => {
                                 </Slider>
                                 <LightBox ref="lightboxRef" :images="trip.images" />
                             </div>
-                            <div class="prose prose-brand max-w-none" v-html="trip.description"></div>
+                            <div class="prose prose-brand max-w-[68ch]" v-html="trip.description"></div>
                         </div>
 
                         <!-- Highlights -->
