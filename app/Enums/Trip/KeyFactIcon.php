@@ -5,6 +5,10 @@ namespace App\Enums\Trip;
 use App\Enums\Traits\HasTranslatableLabel;
 use App\Enums\Traits\Selectable;
 
+/**
+ * Keep in sync with the icon map in resources/js/Components/Atoms/KeyFactIcon.vue: a case that is missing there
+ * silently renders the default icon.
+ */
 enum KeyFactIcon: string
 {
     use HasTranslatableLabel,

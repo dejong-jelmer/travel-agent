@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Two separate Schema::table calls on purpose: Laravel runs added columns before a rename within one blueprint,
+     * so the new `intro` would be added while the old `intro` still exists.
+     */
     public function up(): void
     {
         Schema::table('trips', function (Blueprint $table) {

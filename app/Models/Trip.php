@@ -401,7 +401,7 @@ class Trip extends Model
                     ->map(fn ($fact) => [
                         'label' => trim((string) ($fact['label'] ?? '')),
                         'value' => trim((string) ($fact['value'] ?? '')),
-                        'icon' => KeyFactIcon::tryFrom((string) ($fact['icon'] ?? ''))?->value ?? KeyFactIcon::default()->value,
+                        'icon' => KeyFactIcon::tryFrom((string) ($fact['icon'] ?? ''))->value ?? KeyFactIcon::default()->value,
                     ])
                     ->filter(fn (array $fact) => $fact['label'] !== '' || $fact['value'] !== '')
                     ->values()
