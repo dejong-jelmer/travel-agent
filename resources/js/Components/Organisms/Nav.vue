@@ -65,7 +65,7 @@ const links = computed(() => ({
 </script>
 
 <template>
-    <nav class="py-2 transition-colors duration-300"
+    <nav class="relative py-2 transition-colors duration-300"
         :class="scrolled ? 'bg-white' : 'bg-transparent'">
         <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto h-20 laptop:h-24 px-6 laptop:px-8 flex items-center justify-between">
             <!-- Logo -->

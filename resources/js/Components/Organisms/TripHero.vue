@@ -30,9 +30,9 @@ const heroSizes = computed(() => {
     const factor = ratio.toFixed(3)
 
     return [
-        `(min-width: 900px) and ${tallerThanImage} calc((100vh - 140px) * ${factor})`,
+        `(min-width: 900px) and ${tallerThanImage} calc((100vh - 44px) * ${factor})`,
         '(min-width: 900px) 100vw',
-        `${tallerThanImage} calc((100vh - 250px) * ${factor})`,
+        `${tallerThanImage} calc((100vh - 154px) * ${factor})`,
         '100vw',
     ].join(', ')
 })

@@ -48,10 +48,10 @@ export default {
                 },
             },
             "hero-offset": {
-                laptop: "44px",
+                laptop: "28px",
                 phone: {
-                    default: "200px",
-                    trip: "250px",
+                    default: "104px",
+                    trip: "154px",
                 },
             },
             screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
