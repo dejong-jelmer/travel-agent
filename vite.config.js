@@ -19,6 +19,8 @@ export default defineConfig(({ mode }) => {
     return {
         plugins,
         test: {
+            // Only scan the app's own sources, so copies in git worktrees under .claude/ are not picked up
+            dir: "resources/js",
             globals: true,
             environment: "happy-dom",
             pool: "vmThreads",

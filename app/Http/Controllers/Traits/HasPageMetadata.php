@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\DTO\BreadcrumbTrail;
 use App\DTO\OgImageData;
 use App\Services\OgImageService;
 
@@ -41,12 +42,18 @@ trait HasPageMetadata
      * @param  string|null  $key  Translation key
      * @param  array|null  $jsonLd  Custom JSON-LD schema: null → generic TravelAgency
      *                              fallback, [] → no schema, array → that exact schema
+     * @param  BreadcrumbTrail|null  $breadcrumbs  Trail added to the schema as a BreadcrumbList
      * @return array SEO metadata array with title, description, og_image, jsonLd
      */
-    public function shareSeo(?string $key = null, array $overrides = [], ?array $jsonLd = null): array
+    public function shareSeo(?string $key = null, array $overrides = [], ?array $jsonLd = null, ?BreadcrumbTrail $breadcrumbs = null): array
     {
         $seo = $this->pageSeo($key, $overrides);
         $schema = $jsonLd ?? $this->getJsonLd($key);
+
+        // The BreadcrumbList sits next to the page schema in a @graph, so one script tag holds both.
+        if ($breadcrumbs) {
+            $schema = ['@graph' => array_values(array_filter([$schema, $breadcrumbs->toSchema()]))];
+        }
 
         // Every schema gets the context, regardless of where it was built.
         $seo['jsonLd'] = $schema === []

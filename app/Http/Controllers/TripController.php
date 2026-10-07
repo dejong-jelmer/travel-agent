@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\BreadcrumbTrail;
 use App\Enums\Destination\TravelInfo;
 use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
@@ -44,13 +45,17 @@ class TripController extends Controller
     {
         $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items']);
 
+        $breadcrumbs = BreadcrumbTrail::home()
+            ->add(__('trip.title_index'), route('trips.index'))
+            ->add($trip->name);
+
         $seo = $this->shareSeo(overrides: [
             'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
             ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->name)),
         ], jsonLd: array_merge($trip->toTouristTripSchema(), [
             'provider' => $this->travelAgencySchema(),
-        ]));
+        ]), breadcrumbs: $breadcrumbs);
 
         return Inertia::render('Trip/Show', [
             'title' => $seo['title'],
@@ -58,6 +63,7 @@ class TripController extends Controller
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
+            'breadcrumbs' => $breadcrumbs->toArray(),
             'seo' => $seo,
         ]);
     }
