@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
-import Breadcrumbs from "@/Components/Atoms/Breadcrumbs.vue";
+import Breadcrumbs from "@/Components/Molecules/Breadcrumbs.vue";
 import i18n from '@/plugins/i18n.js';
 
 const mountBreadcrumbs = (breadcrumbs) => mount(Breadcrumbs, {
