@@ -13,7 +13,7 @@ const props = defineProps({
 
 const user = usePage().props.auth?.user ?? {};
 const flash = usePage().props.flash ?? {};
-const breadcrumbs = usePage().props.breadcrumbs ?? {};
+const breadcrumbs = usePage().props.breadcrumbs;
 const sideMenuOpen = ref(false);
 
 // User initialen voor avatar (overgenomen van SideMenu)

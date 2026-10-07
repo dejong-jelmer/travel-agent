@@ -12,7 +12,8 @@ const props = defineProps({
     },
     tripItems: Object,
     practicalSections: Object,
-    travelInfoSections: Object
+    travelInfoSections: Object,
+    breadcrumbs: Array
 })
 
 const { t } = useI18n()
@@ -63,7 +64,7 @@ const contactUrl = computed(() => {
 </script>
 
 <template>
-    <Layout class="bg-brand-background">
+    <Layout>
         <template v-slot:hero>
             <!-- Hero Section -->
             <TripHero :trip="trip" />
@@ -72,7 +73,8 @@ const contactUrl = computed(() => {
         <DecorativeLine />
         <!-- Main Content -->
         <div
-            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-32 laptop:pb-0 bg-brand-background">
+            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 pt-4 tablet:pt-6 laptop:pt-8 pb-32 tablet:pb-12 laptop:pb-0 bg-brand-background">
+            <PageBreadcrumbs :items="breadcrumbs" class="mb-4 laptop:mb-6" />
             <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">

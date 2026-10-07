@@ -26,7 +26,8 @@
         "about": "About me",
         "blog": "Blog",
         "home": "Home",
-        "more": "More"
+        "more": "More",
+        "breadcrumbs": "Breadcrumbs"
     },
     "trips": {
         "title": "Where would you go?",

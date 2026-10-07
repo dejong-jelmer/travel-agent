@@ -158,7 +158,7 @@ class Breadcrumbs
             self::dashboardCrumb(),
             self::tripCrumb(),
             ['label' => $trip->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [$trip]],
-            ['label' => __('itinerary.title_index'), 'route' => null],
+            ['label' => __('itinerary.title_index'), 'route' => 'admin.trips.itineraries.index', 'params' => [$trip]],
         ];
     }
 

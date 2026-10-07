@@ -26,7 +26,8 @@
         "about": "Over mij",
         "blog": "Mijn verhalen",
         "home": "Home",
-        "more": "Meer"
+        "more": "Meer",
+        "breadcrumbs": "Kruimelpad"
     },
     "trips": {
         "title": "Waar ga jij heen?",
