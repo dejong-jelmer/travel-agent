@@ -45,7 +45,6 @@ class TripFactory extends Factory
             'name' => $name,
             'slug' => $slug,
             'subtitle' => fake()->text(100),
-            'intro' => '<p>'.fake()->paragraph().'</p>',
             'description' => $this->generateDescription($city),
             'featured' => true,
             'published_at' => today()->toDateTimeString(),

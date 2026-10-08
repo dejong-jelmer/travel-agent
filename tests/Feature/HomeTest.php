@@ -74,7 +74,8 @@ class HomeTest extends TestCase
             ->where('trip.name', $trip->name)
             ->where('trip.slug', $trip->slug)
             ->where('trip.duration', $trip->duration)
-            ->where('trip.description', $trip->description)
+            ->missing('trip.description')
+            ->where('descriptionSections.0.html', $trip->description)
             ->where('trip.featured', $trip->featured)
             ->where('trip.published_at', $trip->published_at->toISOString())
         );

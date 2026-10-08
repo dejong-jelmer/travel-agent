@@ -172,9 +172,6 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                  <Input type="text" name="subtitle" :label="t('forms.trip.fields.subtitle.label')"
                                     :required="true" v-model="form.subtitle" :feedback="form.errors.subtitle"
                                     :placeholder="t('forms.trip.fields.subtitle.placeholder')" />
-                                <Label for-field="intro">{{ t('forms.trip.fields.intro.label') }}</Label>
-                                <TipTap name="intro" v-model="form.intro" :feedback="form.errors.intro" />
-                                <FormFeedback :message="form.errors.intro" />
                                 <Label for-field="description" :required="true">{{ t('forms.trip.fields.description.label') }}</Label>
                                 <TipTap name="description" :required="true" v-model="form.description" :feedback="form.errors.description" />
                                 <FormFeedback :message="form.errors.description" />

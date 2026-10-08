@@ -45,7 +45,6 @@ class TripItemTest extends TestCase
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
             'subtitle' => fake()->text(150),
-            'intro' => '<p>'.fake()->paragraph().'</p>',
             'description' => fake()->paragraph(),
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [UploadedFile::fake()->image('img.jpg')],

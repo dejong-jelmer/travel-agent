@@ -398,9 +398,6 @@
                 "subtitle": {
                     "label": "Subtitle",
                     "placeholder": "Write a short subtitle…"
-                },
-                "intro": {
-                    "label": "Intro"
                 }
             },
             "submit": {
@@ -1253,7 +1250,6 @@
                     "slug": "Slug",
                     "description": "Description",
                     "subtitle": "Subtitle",
-                    "intro": "Intro",
                     "key_facts": "Your trip at a glance",
                     "key_fact_missing_label": "Label missing"
                 },

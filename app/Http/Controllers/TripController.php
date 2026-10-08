@@ -9,6 +9,7 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Trip;
 use App\Services\CountryService;
 use App\Services\OgImageService;
+use App\Services\TripContentParser;
 use App\Services\TripItemService;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -20,6 +21,7 @@ class TripController extends Controller
     public function __construct(
         private readonly CountryService $countryService,
         private readonly OgImageService $ogImages,
+        private readonly TripContentParser $contentParser,
     ) {}
 
     /**
@@ -59,7 +61,9 @@ class TripController extends Controller
 
         return Inertia::render('Trip/Show', [
             'title' => $seo['title'],
-            'trip' => $trip,
+            // The description is only sent split into sections, so its HTML does not go along twice
+            'trip' => $trip->makeHidden('description'),
+            'descriptionSections' => $this->contentParser->sections($trip->description),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),

@@ -55,7 +55,6 @@ class Trip extends Model
         'name',
         'slug',
         'subtitle',
-        'intro',
         'description',
         'transport',
         'featured',
