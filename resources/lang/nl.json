@@ -73,6 +73,17 @@
         "next": "Volgende",
         "go_to": "Ga naar positie {position}"
     },
+    "photo_slider": {
+        "previous": "Vorige foto",
+        "next": "Volgende foto"
+    },
+    "lightbox": {
+        "close": "Sluiten",
+        "zoom": "In- of uitzoomen",
+        "previous": "Vorige foto",
+        "next": "Volgende foto",
+        "error": "De foto kan niet worden geladen"
+    },
     "trip_itinerary": {
         "day": "Dag",
         "activities": "Activiteiten",
@@ -936,6 +947,7 @@
         },
         "about_trip": "Waarom {trip}",
         "gallery_image_alt": "Foto {position} van {trip}",
+        "gallery_label": "Foto's van {trip}",
         "itinerary_heading": "Deze reis van dag tot dag",
         "card_tabs": {
             "about": "Over deze reis",
@@ -966,6 +978,7 @@
         },
         "highlights_heading": "Wat er te zien en te doen is",
         "key_facts_heading": "Je reis in het kort",
+        "trip_items_heading": "Wat zit erbij",
         "inquiry": {
             "title": "Plan deze reis",
             "price_from": "Vanaf €{price},- p.p.",

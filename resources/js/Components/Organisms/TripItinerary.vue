@@ -13,8 +13,9 @@ const imageSizes = '(min-width: 600px) 192px, calc(100vw - 178px)'
 
 // LightBox (single image per itinerary, so always index 0)
 const lightboxRef = ref(null)
+const thumbnail = ref(null)
 const openLightbox = () => {
-    lightboxRef.value?.open(0)
+    lightboxRef.value?.open(0, [thumbnail.value])
 }
 const props = defineProps({
     itinerary: {
@@ -83,11 +84,15 @@ const props = defineProps({
                     </div>
                     <div v-if="itinerary.image?.public_url" class="flex-shrink-0 w-full tablet:w-48 self-start">
                         <div class="rounded-md overflow-hidden">
-                            <ResponsiveImage :image="itinerary.image" :sizes="imageSizes" :alt="itinerary.title" loading="lazy"
-                                v-bind="reveal(50)"
-                                :class="visible ? 'opacity-100 translate-x-0' : (index % 2 === 0 ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
-                                class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out"
-                                @click="openLightbox" />
+                            <!-- The wrapper clips anything outside the image, so the focus outline is drawn inside -->
+                            <button ref="thumbnail" type="button" aria-haspopup="dialog"
+                                class="block w-full rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand-accent"
+                                @click="openLightbox">
+                                <ResponsiveImage :image="itinerary.image" :sizes="imageSizes" :alt="itinerary.title" loading="lazy"
+                                    v-bind="reveal(50)"
+                                    :class="visible ? 'opacity-100 translate-x-0' : (index % 2 === 0 ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
+                                    class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out" />
+                            </button>
                         </div>
                         <LightBox ref="lightboxRef" :images="[itinerary.image]" />
                     </div>

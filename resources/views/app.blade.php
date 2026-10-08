@@ -47,7 +47,9 @@
 
 <body class="font-poppins">
     @inertia
-    @include('cookie-consent::index')
+    @if (app()->env === 'production')
+        @include('cookie-consent::index')
+    @endif
 </body>
 
 </html>

@@ -54,6 +54,10 @@ export default {
                     trip: "154px",
                 },
             },
+            // Height of the sticky header while scrolled (Nav: h-24 + py-2 + border-b)
+            "header-height": {
+                laptop: "113px",
+            },
             screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
             keyframes: {
                 "slide-left-right": {
