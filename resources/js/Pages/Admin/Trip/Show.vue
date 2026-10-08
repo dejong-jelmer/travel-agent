@@ -139,14 +139,6 @@ function displayDate(entry) {
                                     </div>
                                     <div>
                                         <label class="text-sm font-medium text-gray-700">{{
-                                            t('admin.trips.show.details.intro') }}</label>
-                                        <div v-if="trip.intro"
-                                            class="prose prose-brand max-w-none text-lg text-brand-text leading-relaxed"
-                                            v-html="trip.intro"></div>
-                                        <p v-else class="mt-1 text-gray-900">-</p>
-                                    </div>
-                                    <div>
-                                        <label class="text-sm font-medium text-gray-700">{{
                                             t('admin.trips.show.details.key_facts') }}</label>
                                         <ul v-if="trip.key_facts?.length" class="mt-2 space-y-3">
                                             <li v-for="(fact, index) in trip.key_facts" :key="index"

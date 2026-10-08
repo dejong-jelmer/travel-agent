@@ -79,7 +79,6 @@ class TripTest extends TestCase
             'trip_id' => null,
             'name' => fake()->words(2, true),
             'subtitle' => fake()->text(150),
-            'intro' => '<p>'.fake()->paragraph().'</p>',
             'description' => fake()->paragraph(),
             'transport' => [Transport::Train->value],
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
@@ -114,7 +113,6 @@ class TripTest extends TestCase
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
         $this->assertEquals($tripData['subtitle'], $trip->subtitle);
-        $this->assertEquals($tripData['intro'], $trip->intro);
         $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals($tripData['highlights'], $trip->highlights);
         $this->assertTrue($trip->published_at->isSameDay($tripData['published_at']));
@@ -173,7 +171,6 @@ class TripTest extends TestCase
             'trip_id' => $trip->id,
             'name' => 'Updated trip name',
             'subtitle' => fake()->text(150),
-            'intro' => '<p>'.fake()->paragraph().'</p>',
             'description' => fake()->paragraph(),
             'transport' => array_column([Transport::Bus, Transport::Airplane], 'value'),
             'heroImage' => UploadedFile::fake()->image('updated-featured.jpg'),
@@ -207,7 +204,6 @@ class TripTest extends TestCase
 
         $this->assertEquals($updateData['name'], $trip->name);
         $this->assertEquals($updateData['subtitle'], $trip->subtitle);
-        $this->assertEquals($updateData['intro'], $trip->intro);
         $this->assertEquals($updateData['description'], $trip->description);
         $this->assertEquals($updateData['published_at'], $trip->published_at);
         $this->assertEquals($updateData['meta_title'], $trip->meta_title);
@@ -261,7 +257,6 @@ class TripTest extends TestCase
             'trip_id' => $trip->id,
             'name' => $trip->name,
             'subtitle' => $trip->subtitle,
-            'intro' => $trip->intro,
             'description' => $trip->description,
             'transport' => array_column([Transport::Train], 'value'),
             'destinations' => $this->destinations->modelKeys(),
@@ -395,12 +390,12 @@ class TripTest extends TestCase
         $response->assertSessionHasErrors('highlights.0.title');
     }
 
-    // Subtitle and intro tests
-    public function test_trip_show_passes_subtitle_and_intro_as_props(): void
+    // Subtitle and description section tests
+    public function test_trip_show_passes_subtitle_and_description_sections_as_props(): void
     {
         $trip = Trip::factory()->create([
             'subtitle' => 'Met de nachttrein naar Verona',
-            'intro' => '<p>Een <strong>inleiding</strong>.</p>',
+            'description' => '<p>Vooraf.</p><h2>De reis</h2><p>Een <strong>nachttrein</strong>.</p><h2>De stad</h2><p>Verona.</p>',
         ]);
 
         $response = $this->get(route('trips.show', $trip));
@@ -410,29 +405,18 @@ class TripTest extends TestCase
             fn (AssertableInertia $page) => $page
                 ->component('Trip/Show')
                 ->where('trip.subtitle', 'Met de nachttrein naar Verona')
-                ->where('trip.intro', '<p>Een <strong>inleiding</strong>.</p>')
+                ->missing('trip.description')
+                ->where('descriptionSections', [
+                    ['key' => 'de-reis', 'title' => 'De reis', 'html' => '<p>Vooraf.</p><p>Een <strong>nachttrein</strong>.</p>'],
+                    ['key' => 'de-stad', 'title' => 'De stad', 'html' => '<p>Verona.</p>'],
+                ])
         );
     }
 
-    public function test_trip_show_passes_null_intro_without_one(): void
-    {
-        $trip = Trip::factory()->create(['intro' => null]);
-
-        $response = $this->get(route('trips.show', $trip));
-
-        $response->assertOk();
-        $response->assertInertia(
-            fn (AssertableInertia $page) => $page
-                ->where('trip.intro', null)
-                ->where('trip.subtitle', $trip->subtitle)
-        );
-    }
-
-    public function test_trip_metadata_ignores_subtitle_and_intro(): void
+    public function test_trip_metadata_ignores_subtitle(): void
     {
         $trip = Trip::factory()->create([
             'subtitle' => 'Unique subtitle marker',
-            'intro' => '<p>Unique intro marker</p>',
             'description' => '<p>Reis met de trein door Europa.</p>',
             'meta_description' => null,
         ]);
@@ -445,34 +429,35 @@ class TripTest extends TestCase
                 ->where('seo.description', 'Reis met de trein door Europa.')
         );
         $this->assertStringNotContainsString('Unique subtitle marker', $trip->meta_description);
-        $this->assertStringNotContainsString('Unique intro marker', $trip->meta_description);
         $this->assertSame('Reis met de trein door Europa.', $trip->toTouristTripSchema()['description']);
     }
 
-    public function test_trip_update_saves_intro_and_subtitle(): void
+    public function test_trip_metadata_falls_back_to_the_whole_description_across_its_sections(): void
     {
-        $trip = Trip::factory()->create(['intro' => null]);
-        $payload = $this->generateTripUpdatePayload($trip, [
-            'subtitle' => 'Updated subtitle',
-            'intro' => '<p>Updated intro</p>',
+        $trip = Trip::factory()->create([
+            'description' => '<h2>De reis</h2><p>Met de trein.</p><h2>De stad</h2><p>Verona.</p>',
+            'meta_description' => null,
         ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('seo.description', 'De reis Met de trein. De stad Verona.')
+        );
+        $this->assertSame('De reis Met de trein. De stad Verona.', $trip->toTouristTripSchema()['description']);
+    }
+
+    public function test_trip_update_saves_subtitle(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, ['subtitle' => 'Updated subtitle']);
 
         $response = $this->post(route('admin.trips.update', $trip), $payload);
 
         $response->assertSessionHasNoErrors();
         $this->assertSame('Updated subtitle', $trip->fresh()->subtitle);
-        $this->assertSame('<p>Updated intro</p>', $trip->fresh()->intro);
-    }
-
-    public function test_trip_update_nullifies_an_empty_editor_intro(): void
-    {
-        $trip = Trip::factory()->create(['intro' => '<p>Existing intro</p>']);
-        $payload = $this->generateTripUpdatePayload($trip, ['intro' => '<p></p>']);
-
-        $response = $this->post(route('admin.trips.update', $trip), $payload);
-
-        $response->assertSessionHasNoErrors();
-        $this->assertNull($trip->fresh()->intro);
     }
 
     public function test_trip_update_requires_a_subtitle(): void
@@ -862,7 +847,6 @@ class TripTest extends TestCase
         return array_merge([
             'name' => $trip->name,
             'subtitle' => $trip->subtitle,
-            'intro' => $trip->intro,
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),
             'destinations' => $this->destinations->modelKeys(),

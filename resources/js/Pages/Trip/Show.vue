@@ -10,6 +10,11 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    // Shape: [{ key, title, html }], the description split on its H2 headings
+    descriptionSections: {
+        type: Array,
+        default: () => []
+    },
     tripItems: Object,
     practicalSections: Object,
     travelInfoSections: Object,
@@ -90,7 +95,11 @@ const hasCountryInfo = computed(() =>
 )
 
 const hasKeyFacts = computed(() => props.trip.key_facts?.length > 0)
-const hasIntro = computed(() => Boolean(props.trip.intro))
+const hasHighlights = computed(() => props.trip.highlights?.length > 0)
+
+// The first section of the description opens the page next to the key facts, the others get a card each
+const leadSection = computed(() => props.descriptionSections[0] ?? null)
+const storySections = computed(() => props.descriptionSections.slice(1))
 
 const contactUrl = computed(() => {
     const params = new URLSearchParams({ reis: props.trip.slug })
@@ -116,46 +125,49 @@ const contactUrl = computed(() => {
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">
 
-                    <!-- Description & Highlights -->
+                    <!-- First description section, key facts & gallery -->
                     <div class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 p-6 laptop:p-8">
-                        <div class="mb-8">
-                            <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
+                        <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
 
-                            <!-- Intro and key facts: stacked on smaller screens, 60/40 from laptop up.
-                                 Whichever is missing leaves the other at full width. -->
-                            <div v-if="hasIntro || hasKeyFacts"
-                                :class="['grid grid-cols-1 gap-6 mb-6 laptop:gap-8 laptop:items-start', hasIntro && hasKeyFacts ? 'laptop:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : '']">
-                                <div v-if="hasIntro" class="prose prose-brand max-w-[68ch]" v-html="trip.intro"></div>
-                                <TripKeyFacts :facts="trip.key_facts" />
+                        <!-- First description section and key facts: stacked on smaller screens, 60/40 from laptop up.
+                             Whichever is missing leaves the other at full width. -->
+                        <div v-if="leadSection || hasKeyFacts"
+                            :class="['grid grid-cols-1 gap-6 mb-6 laptop:gap-8 laptop:items-start', leadSection && hasKeyFacts ? 'laptop:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : '']">
+                            <div v-if="leadSection">
+                                <h2 v-if="leadSection.title" class="text-[26px] font-semibold text-brand-primary mb-4">
+                                    {{ leadSection.title }}
+                                </h2>
+                                <div class="prose prose-brand max-w-[68ch]" v-html="leadSection.html"></div>
                             </div>
-
-                            <div class="mb-6">
-                                <PhotoSlider :items="trip.images" :label="t('trip_show.gallery_label', { trip: trip.name })">
-                                    <template #default="{ item, index, loaded }">
-                                        <!-- The slider clips anything outside the photos, so the focus outline is drawn inside -->
-                                        <button type="button" :ref="(el) => thumbnails[index] = el" aria-haspopup="dialog"
-                                            class="block w-full rounded-xl cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand-accent"
-                                            @click="openLightbox(index)">
-                                            <ResponsiveImage :image="item" :sizes="gallerySizes" :deferred="!loaded"
-                                                :loading="index === 0 ? 'eager' : undefined"
-                                                :alt="t('trip_show.gallery_image_alt', { trip: trip.name, position: index + 1 })"
-                                                class="w-full aspect-[4/3] tablet:aspect-[4/5] object-cover rounded-xl" />
-                                        </button>
-                                    </template>
-                                </PhotoSlider>
-                                <LightBox ref="lightboxRef" :images="trip.images" />
-                            </div>
-                            <div class="prose prose-brand max-w-[68ch]" v-html="trip.description"></div>
+                            <TripKeyFacts :facts="trip.key_facts" />
                         </div>
 
-                        <!-- Highlights -->
-                        <div class="border-t border-brand-accent/20 pt-8">
-                            <h3 class="text-lg font-semibold text-brand-primary mb-4">
-                                {{ t('trip_show.highlights_heading') }}
-                            </h3>
-                            <Highlights :highlights="trip.highlights" />
-                        </div>
+                        <PhotoSlider :items="trip.images" :label="t('trip_show.gallery_label', { trip: trip.name })">
+                            <template #default="{ item, index, loaded }">
+                                <!-- The slider clips anything outside the photos, so the focus outline is drawn inside -->
+                                <button type="button" :ref="(el) => thumbnails[index] = el" aria-haspopup="dialog"
+                                    class="block w-full rounded-xl cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand-accent"
+                                    @click="openLightbox(index)">
+                                    <ResponsiveImage :image="item" :sizes="gallerySizes" :deferred="!loaded"
+                                        :loading="index === 0 ? 'eager' : undefined"
+                                        :alt="t('trip_show.gallery_image_alt', { trip: trip.name, position: index + 1 })"
+                                        class="w-full aspect-[4/3] tablet:aspect-[4/5] object-cover rounded-xl" />
+                                </button>
+                            </template>
+                        </PhotoSlider>
+                        <LightBox ref="lightboxRef" :images="trip.images" />
                     </div>
+
+                    <!-- Other description sections, a card each -->
+                    <div v-if="storySections.length" class="space-y-8">
+                        <TripStorySection v-for="section in storySections" :key="section.key" :section="section" />
+                    </div>
+
+                    <!-- Highlights -->
+                    <BaseCard v-if="hasHighlights" aria-labelledby="trip-highlights-heading">
+                        <SectionHeader id="trip-highlights-heading">{{ t('trip_show.highlights_heading') }}</SectionHeader>
+                        <Highlights :highlights="trip.highlights" />
+                    </BaseCard>
 
                     <!-- Inclusions & Exclusions -->
                     <TripItems :trip-items="tripItems" />

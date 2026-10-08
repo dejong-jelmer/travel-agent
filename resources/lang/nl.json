@@ -398,9 +398,6 @@
                 "subtitle": {
                     "label": "Ondertitel",
                     "placeholder": "Schrijf een korte ondertitel…"
-                },
-                "intro": {
-                    "label": "Intro"
                 }
             },
             "submit": {
@@ -1252,7 +1249,6 @@
                     "slug": "Slug",
                     "description": "Beschrijving",
                     "subtitle": "Ondertitel",
-                    "intro": "Intro",
                     "key_facts": "Je reis in het kort",
                     "key_fact_missing_label": "Label ontbreekt"
                 },

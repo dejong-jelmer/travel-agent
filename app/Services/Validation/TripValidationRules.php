@@ -20,7 +20,6 @@ class TripValidationRules
             'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct:ignore_case', 'required_with:highlights.*.description'],
             'highlights.*.description' => ['nullable', 'string', 'max:500'],
             'subtitle' => ['required', 'string', 'max:255'],
-            'intro' => ['nullable', 'string'],
             'description' => ['required', 'string'],
         ];
     }

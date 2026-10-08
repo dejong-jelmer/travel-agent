@@ -32,7 +32,6 @@ class UpdateTripRequest extends FormRequest
 
         // Null out rich text sections left empty in the editor
         nullifyEmptyHtml($this, 'practical_info');
-        nullifyEmptyHtml($this, 'intro');
 
         // Cast FormData string to integer
         if ($this->filled('min_advance_days')) {
