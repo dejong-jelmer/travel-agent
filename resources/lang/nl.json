@@ -366,6 +366,13 @@
                     "none": "Geen",
                     "help": "Deze sectie van de beschrijving krijgt op de reispagina een donkere kaart. De keuzes zijn de H2-koppen in de beschrijving, behalve de eerste: die staat altijd in de bovenste kaart."
                 },
+                "section_images": {
+                    "label": "Foto's bij de beschrijving",
+                    "help": "Kies per sectie van de beschrijving een foto uit de galerij. Die staat op de reispagina naast de kaart van de sectie. De keuzes zijn de H2-koppen in de beschrijving, behalve de eerste. Nieuwe foto's kun je kiezen nadat de reis is opgeslagen.",
+                    "none": "Geen foto",
+                    "image_alt": "Foto {position} uit de galerij",
+                    "empty": "De galerij heeft nog geen opgeslagen foto's. Nieuwe foto's kun je kiezen nadat de reis is opgeslagen."
+                },
                 "active": {
                     "label": "Actief",
                     "help": "Is deze reis beschikbaar voor boeken?"

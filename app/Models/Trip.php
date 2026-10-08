@@ -57,6 +57,7 @@ class Trip extends Model
         'subtitle',
         'description',
         'journey_section',
+        'section_images',
         'transport',
         'featured',
         'published_at',
@@ -406,6 +407,27 @@ class Trip extends Model
                     ->filter(fn (array $fact) => $fact['label'] !== '' || $fact['value'] !== '')
                     ->values()
                     ->all()
+            )
+        );
+    }
+
+    /**
+     * Get the photos shown next to the description sections, stored as ['section key' => image id]
+     *
+     * Sections without a photo are dropped on write. Stored as an object, so a numeric section key stays a key.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<string, int>, mixed>
+     */
+    protected function sectionImages(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => json_decode($value ?? '{}', true) ?? [],
+            set: fn ($value) => json_encode(
+                collect(is_array($value) ? $value : [])
+                    ->filter(fn ($imageId) => filled($imageId))
+                    ->map(fn ($imageId) => (int) $imageId)
+                    ->all(),
+                JSON_FORCE_OBJECT
             )
         );
     }

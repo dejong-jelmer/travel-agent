@@ -10,7 +10,8 @@ const props = defineProps({
         type: Object,
         required: true
     },
-    // Shape: [{ key, title, html, variant }], the description split on its H2 headings, variant light or dark
+    // Shape: [{ key, title, html, variant, image_id }], the description split on its H2 headings, variant light or
+    // dark, image_id the gallery image shown next to the section or null
     descriptionSections: {
         type: Array,
         default: () => []
@@ -99,7 +100,25 @@ const hasHighlights = computed(() => props.trip.highlights?.length > 0)
 
 // The first section of the description opens the page next to the key facts, the others get a card each
 const leadSection = computed(() => props.descriptionSections[0] ?? null)
-const storySections = computed(() => props.descriptionSections.slice(1))
+// A card can have a photo from the gallery next to it, with the same alt text as in the slider. The photos alternate
+// between left and right, starting left, counting only the sections that have one.
+const storySections = computed(() => {
+    let photoCount = 0
+
+    return props.descriptionSections.slice(1).map((section) => {
+        const index = props.trip.images?.findIndex(image => image.id === section.image_id) ?? -1
+        if (index === -1) {
+            return { ...section, image: null }
+        }
+
+        return {
+            ...section,
+            image: props.trip.images[index],
+            imageAlt: t('trip_show.gallery_image_alt', { trip: props.trip.name, position: index + 1 }),
+            imageSide: photoCount++ % 2 === 0 ? 'left' : 'right',
+        }
+    })
+})
 
 const contactUrl = computed(() => {
     const params = new URLSearchParams({ reis: props.trip.slug })
@@ -161,7 +180,8 @@ const contactUrl = computed(() => {
                     <!-- Other description sections, a card each -->
                     <div v-if="storySections.length" class="space-y-8">
                         <TripStorySection v-for="section in storySections" :key="section.key" :section="section"
-                            :variant="section.variant" />
+                            :variant="section.variant" :image="section.image" :image-alt="section.imageAlt"
+                            :image-side="section.imageSide" />
                     </div>
 
                     <!-- Highlights -->

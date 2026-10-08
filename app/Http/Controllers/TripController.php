@@ -77,15 +77,24 @@ class TripController extends Controller
      * light. The first section opens the page in the top card and always stays light, as does every section when
      * the stored key no longer matches a title.
      *
-     * @return list<array{key: string, title: string|null, html: string, variant: 'light'|'dark'}>
+     * Every section after the first also gets the id of the gallery image shown next to it, or null without one.
+     *
+     * @return list<array{key: string, title: string|null, html: string, variant: 'light'|'dark', image_id: int|null}>
      */
     private function descriptionSections(Trip $trip): array
     {
         $sections = $this->contentParser->sections($trip->description);
+        $sectionImages = $trip->section_images;
+        $galleryIds = $trip->images->modelKeys();
 
-        return array_map(fn (array $section, int $index) => [
-            ...$section,
-            'variant' => $index > 0 && $section['key'] === $trip->journey_section ? 'dark' : 'light',
-        ], $sections, array_keys($sections));
+        return array_map(function (array $section, int $index) use ($trip, $sectionImages, $galleryIds) {
+            $imageId = $index > 0 ? ($sectionImages[$section['key']] ?? null) : null;
+
+            return [
+                ...$section,
+                'variant' => $index > 0 && $section['key'] === $trip->journey_section ? 'dark' : 'light',
+                'image_id' => in_array($imageId, $galleryIds, true) ? $imageId : null,
+            ];
+        }, $sections, array_keys($sections));
     }
 }

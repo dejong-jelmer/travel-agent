@@ -21,6 +21,11 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [Image], the saved gallery images that can be shown next to a description section
+    galleryImages: {
+        type: Array,
+        default: () => []
+    },
     practicalSections: Object,
 });
 
@@ -116,6 +121,22 @@ const refreshSectionOptions = debounce((description) => {
 }, 500)
 
 watch(() => props.form.description, refreshSectionOptions)
+
+// Every section that can become the journey section can also get a photo. Only saved gallery images that are still
+// in the gallery can be chosen, in gallery order: new uploads get an id once the trip is saved. The server ignores
+// the keys of sections no longer in the description and cleans them up on save.
+const sectionImageOptions = computed(() => (props.form.images ?? [])
+    .map((source, index) => ({
+        image: props.galleryImages.find(image => image.path === source),
+        position: index + 1,
+    }))
+    .filter(option => option.image))
+
+const isSectionImage = (sectionKey, imageId) => (props.form.section_images?.[sectionKey] ?? null) === imageId
+const hasSectionImage = (sectionKey) => sectionImageOptions.value.some(({ image }) => isSectionImage(sectionKey, image.id))
+const setSectionImage = (sectionKey, imageId) => {
+    props.form.section_images[sectionKey] = imageId
+}
 
 const highlightFields = computed(() => [
     {
@@ -335,6 +356,46 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.trip.fields.gallery.help') }}
                             </p>
+                        </div>
+
+                        <div v-if="sectionOptions.length" class="space-y-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-brand-text">
+                                    {{ t('forms.trip.fields.section_images.label') }}
+                                </h3>
+                                <p class="mt-1 text-xs text-brand-light">
+                                    {{ t('forms.trip.fields.section_images.help') }}
+                                </p>
+                            </div>
+                            <p v-if="!sectionImageOptions.length" class="text-sm text-brand-light">
+                                {{ t('forms.trip.fields.section_images.empty') }}
+                            </p>
+                            <template v-else>
+                                <fieldset v-for="section in sectionOptions" :key="section.id">
+                                    <legend class="mb-2 text-sm text-brand-text">{{ section.name }}</legend>
+                                    <div class="flex flex-wrap gap-3">
+                                        <label class="cursor-pointer">
+                                            <input type="radio" class="peer sr-only" :name="`section_image_${section.id}`"
+                                                :checked="!hasSectionImage(section.id)"
+                                                @change="setSectionImage(section.id, null)" />
+                                            <span
+                                                class="flex items-center justify-center w-24 h-16 px-2 rounded-lg border border-brand-primary/20 text-center text-xs text-brand-light peer-checked:border-brand-primary peer-checked:ring-2 peer-checked:ring-brand-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-accent">
+                                                {{ t('forms.trip.fields.section_images.none') }}
+                                            </span>
+                                        </label>
+                                        <label v-for="{ image, position } in sectionImageOptions" :key="image.id"
+                                            class="cursor-pointer">
+                                            <input type="radio" class="peer sr-only" :name="`section_image_${section.id}`"
+                                                :checked="isSectionImage(section.id, image.id)"
+                                                @change="setSectionImage(section.id, image.id)" />
+                                            <ResponsiveImage :image="image" sizes="96px" loading="lazy"
+                                                :alt="t('forms.trip.fields.section_images.image_alt', { position })"
+                                                class="w-24 h-16 object-cover rounded-lg opacity-70 peer-checked:opacity-100 peer-checked:ring-2 peer-checked:ring-brand-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-accent" />
+                                        </label>
+                                    </div>
+                                    <FormFeedback :message="form.errors[`section_images.${section.id}`]" />
+                                </fieldset>
+                            </template>
                         </div>
                     </div>
                 </section>

@@ -57,6 +57,8 @@ return [
         'key_facts.*.icon.required' => 'Choose an icon for this point.',
         'key_facts.*.icon.enum' => 'Choose a valid icon for this point.',
         'journey_section.in' => 'Choose a section from the description, or choose "None".',
+        'section_images.*.integer' => 'Choose a photo from the gallery of this trip, or choose "No photo".',
+        'section_images.*.in' => 'Choose a photo from the gallery of this trip, or choose "No photo".',
 
         // Main booker
         'main_booker' => [

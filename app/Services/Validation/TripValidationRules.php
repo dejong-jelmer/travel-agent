@@ -41,6 +41,18 @@ class TripValidationRules
         ];
     }
 
+    /**
+     * Every section photo is one of the gallery images of the trip. The request already drops the keys that are not
+     * a section of the submitted description.
+     */
+    public static function sectionImages(Trip $trip): array
+    {
+        return [
+            'section_images' => ['array'],
+            'section_images.*' => ['integer', Rule::in($trip->images()->pluck('id')->all())],
+        ];
+    }
+
     public static function keyFacts(): array
     {
         return [
