@@ -73,6 +73,17 @@
         "next": "Next",
         "go_to": "Go to position {position}"
     },
+    "photo_slider": {
+        "previous": "Previous photo",
+        "next": "Next photo"
+    },
+    "lightbox": {
+        "close": "Close",
+        "zoom": "Zoom in or out",
+        "previous": "Previous photo",
+        "next": "Next photo",
+        "error": "The photo could not be loaded"
+    },
     "trip_itinerary": {
         "day": "Day",
         "activities": "Activities",
@@ -937,6 +948,7 @@
         },
         "about_trip": "About this trip",
         "gallery_image_alt": "Photo {position} of {trip}",
+        "gallery_label": "Photos of {trip}",
         "itinerary_heading": "This trip day by day",
         "card_tabs": {
             "about": "About this trip",
@@ -967,6 +979,7 @@
         },
         "highlights_heading": "What you'll see",
         "key_facts_heading": "Your trip at a glance",
+        "trip_items_heading": "What's included",
         "inquiry": {
             "title": "Plan this trip",
             "price_from": "From €{price},- p.p.",
