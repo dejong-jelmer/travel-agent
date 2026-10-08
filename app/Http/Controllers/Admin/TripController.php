@@ -165,6 +165,11 @@ class TripController extends Controller
         // Sync images array (handles mix of existing paths and new uploads)
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
             $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
+
+            // A section photo that was removed from the gallery in this same save no longer exists
+            $trip->update([
+                'section_images' => array_intersect($trip->section_images, $trip->images()->pluck('id')->all()),
+            ]);
         }
 
         if (count($destinations)) {

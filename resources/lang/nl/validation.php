@@ -57,6 +57,8 @@ return [
         'key_facts.*.icon.required' => 'Kies een icoon bij dit punt.',
         'key_facts.*.icon.enum' => 'Kies een geldig icoon bij dit punt.',
         'journey_section.in' => 'Kies een sectie die in de beschrijving staat, of kies "Geen".',
+        'section_images.*.integer' => 'Kies een foto uit de galerij van deze reis, of kies "Geen foto".',
+        'section_images.*.in' => 'Kies een foto uit de galerij van deze reis, of kies "Geen foto".',
 
         // Main booker
         'main_booker' => [

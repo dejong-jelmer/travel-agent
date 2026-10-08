@@ -413,8 +413,8 @@ class TripTest extends TestCase
                 ->where('trip.subtitle', 'Met de nachttrein naar Verona')
                 ->missing('trip.description')
                 ->where('descriptionSections', [
-                    ['key' => 'de-reis', 'title' => 'De reis', 'html' => '<p>Vooraf.</p><p>Een <strong>nachttrein</strong>.</p>', 'variant' => 'light'],
-                    ['key' => 'de-stad', 'title' => 'De stad', 'html' => '<p>Verona.</p>', 'variant' => 'light'],
+                    ['key' => 'de-reis', 'title' => 'De reis', 'html' => '<p>Vooraf.</p><p>Een <strong>nachttrein</strong>.</p>', 'variant' => 'light', 'image_id' => null],
+                    ['key' => 'de-stad', 'title' => 'De stad', 'html' => '<p>Verona.</p>', 'variant' => 'light', 'image_id' => null],
                 ])
         );
     }
@@ -1020,6 +1020,172 @@ class TripTest extends TestCase
         $response->assertForbidden();
     }
 
+    // Section image tests
+
+    public function test_trip_update_saves_a_photo_for_the_sections_after_the_first(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        [$first, $second] = $this->createGalleryImages($trip, 2);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'section_images' => [
+                'met-de-nachttrein-naar-verona' => (string) $second->id,
+                'aankomst' => (string) $first->id,
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        // The database may store the keys of a JSON object in another order
+        $sectionImages = $trip->fresh()->section_images;
+        $this->assertCount(2, $sectionImages);
+        $this->assertSame($second->id, $sectionImages['met-de-nachttrein-naar-verona']);
+        $this->assertSame($first->id, $sectionImages['aankomst']);
+    }
+
+    public function test_trip_update_removes_the_photo_of_a_section_set_to_no_photo(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        [$image] = $this->createGalleryImages($trip, 1);
+        $trip->update(['section_images' => ['aankomst' => $image->id]]);
+        $payload = $this->generateTripUpdatePayload($trip, ['section_images' => ['aankomst' => '']]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame([], $trip->fresh()->section_images);
+    }
+
+    public function test_trip_update_rejects_a_section_photo_of_another_trip(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        $this->createGalleryImages($trip, 1);
+        [$otherImage] = $this->createGalleryImages(Trip::factory()->create(), 1);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'section_images' => ['aankomst' => (string) $otherImage->id],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('section_images.aankomst');
+        $this->assertSame([], $trip->fresh()->section_images);
+    }
+
+    public function test_trip_update_rejects_the_hero_image_as_section_photo(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        $heroImage = $trip->heroImage()->create([
+            'path' => 'hero.jpg',
+            'original_name' => 'hero.jpg',
+            'mime_type' => 'image/jpeg',
+            'size' => 1000,
+            'is_primary' => true,
+        ]);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'section_images' => ['aankomst' => (string) $heroImage->id],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('section_images.aankomst');
+    }
+
+    public function test_trip_update_ignores_and_cleans_up_photos_of_sections_no_longer_in_the_description(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        [$first, $second] = $this->createGalleryImages($trip, 2);
+        [$otherImage] = $this->createGalleryImages(Trip::factory()->create(), 1);
+        $trip->update(['section_images' => ['met-de-nachttrein-naar-verona' => $first->id]]);
+
+        // The journey heading was renamed, and the form still holds the photos of the old key and an unknown one
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'description' => '<h2>Welkom in Verona</h2><p>De stad.</p><h2>Met de dagtrein naar Verona</h2><p>Overdag.</p>',
+            'section_images' => [
+                'met-de-nachttrein-naar-verona' => (string) $first->id,
+                'met-de-dagtrein-naar-verona' => (string) $second->id,
+                'onbekende-sectie' => (string) $otherImage->id,
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame(['met-de-dagtrein-naar-verona' => $second->id], $trip->fresh()->section_images);
+    }
+
+    public function test_trip_update_ignores_a_photo_for_the_first_section(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        [$image] = $this->createGalleryImages($trip, 1);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'section_images' => ['welkom-in-verona' => (string) $image->id],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame([], $trip->fresh()->section_images);
+    }
+
+    public function test_trip_update_drops_the_photo_of_a_section_when_it_is_removed_from_the_gallery(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        [$removed, $kept] = $this->createGalleryImages($trip, 2);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'images' => [$kept->path],
+            'section_images' => [
+                'met-de-nachttrein-naar-verona' => (string) $kept->id,
+                'aankomst' => (string) $removed->id,
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertDatabaseMissing('images', ['id' => $removed->id]);
+        $this->assertSame(['met-de-nachttrein-naar-verona' => $kept->id], $trip->fresh()->section_images);
+    }
+
+    public function test_trip_show_passes_the_photo_of_each_section(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        [, $image] = $this->createGalleryImages($trip, 2);
+        $trip->update(['section_images' => ['aankomst' => $image->id]]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('descriptionSections.0.image_id', null)
+                ->where('descriptionSections.1.image_id', null)
+                ->where('descriptionSections.2.key', 'aankomst')
+                ->where('descriptionSections.2.image_id', $image->id)
+        );
+    }
+
+    public function test_trip_show_passes_no_photo_for_the_first_section_or_an_image_outside_the_gallery(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        [$image] = $this->createGalleryImages($trip, 1);
+        [$otherImage] = $this->createGalleryImages(Trip::factory()->create(), 1);
+        // Stored before the sections were reordered, or before the image was removed from the gallery
+        $trip->update(['section_images' => [
+            'welkom-in-verona' => $image->id,
+            'aankomst' => $otherImage->id,
+        ]]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('descriptionSections.0.image_id', null)
+                ->where('descriptionSections.2.image_id', null)
+        );
+    }
+
     // Helper Methods
 
     private function generateTripUpdatePayload(Trip $trip, array $overrides = []): array
@@ -1043,6 +1209,20 @@ class TripTest extends TestCase
                 ],
             ],
         ], $overrides);
+    }
+
+    /**
+     * @return \Illuminate\Support\Collection<int, Image>
+     */
+    private function createGalleryImages(Trip $trip, int $count): \Illuminate\Support\Collection
+    {
+        return collect(range(1, $count))->map(fn (int $number) => $trip->images()->create([
+            'path' => "gallery-{$trip->id}-{$number}.jpg",
+            'original_name' => "gallery-{$number}.jpg",
+            'mime_type' => 'image/jpeg',
+            'size' => 1000,
+            'order' => $number - 1,
+        ]));
     }
 
     // Duration auto-calculation tests

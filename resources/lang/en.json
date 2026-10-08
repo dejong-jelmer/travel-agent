@@ -366,6 +366,13 @@
                     "none": "None",
                     "help": "This section of the description gets a dark card on the trip page. The choices are the H2 headings in the description, except the first: that one always sits in the top card."
                 },
+                "section_images": {
+                    "label": "Photos with the description",
+                    "help": "Choose a photo from the gallery for each section of the description. It is shown next to the card of the section on the trip page. The choices are the H2 headings in the description, except the first. New photos can be chosen once the trip is saved.",
+                    "none": "No photo",
+                    "image_alt": "Photo {position} of the gallery",
+                    "empty": "The gallery has no saved photos yet. New photos can be chosen once the trip is saved."
+                },
                 "active": {
                     "label": "Active",
                     "help": "Is this trip available for booking?"
