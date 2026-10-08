@@ -56,6 +56,7 @@ class Trip extends Model
         'slug',
         'subtitle',
         'description',
+        'journey_section',
         'transport',
         'featured',
         'published_at',

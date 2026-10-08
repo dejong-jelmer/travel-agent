@@ -10,7 +10,7 @@ const props = defineProps({
         type: Object,
         required: true
     },
-    // Shape: [{ key, title, html }], the description split on its H2 headings
+    // Shape: [{ key, title, html, variant }], the description split on its H2 headings, variant light or dark
     descriptionSections: {
         type: Array,
         default: () => []
@@ -160,7 +160,8 @@ const contactUrl = computed(() => {
 
                     <!-- Other description sections, a card each -->
                     <div v-if="storySections.length" class="space-y-8">
-                        <TripStorySection v-for="section in storySections" :key="section.key" :section="section" />
+                        <TripStorySection v-for="section in storySections" :key="section.key" :section="section"
+                            :variant="section.variant" />
                     </div>
 
                     <!-- Highlights -->

@@ -12,13 +12,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\DataTableRequest;
+use App\Http\Requests\TripDescriptionSectionsRequest;
 use App\Http\Requests\UpdateTripRequest;
 use App\Models\Destination;
 use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\SlugService;
+use App\Services\TripContentParser;
 use App\Services\TripItemService;
 use App\Support\MoneyHelper;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -30,7 +33,8 @@ class TripController extends Controller
 
     public function __construct(
         private DataTableService $dataTableService,
-        private TripItemService $tripItemService
+        private TripItemService $tripItemService,
+        private TripContentParser $contentParser
     ) {}
 
     /**
@@ -130,6 +134,7 @@ class TripController extends Controller
             'transportOptions' => Transport::options(),
             'priceLabelOptions' => PriceLabel::options(),
             'keyFactIconOptions' => KeyFactIcon::options(),
+            'journeySectionOptions' => $this->journeySectionOptions($trip->description),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),
         ]);
@@ -177,6 +182,28 @@ class TripController extends Controller
 
         return redirect()->route('admin.trips.show', $trip)
             ->with('success', __('trip.updated'));
+    }
+
+    /**
+     * Get the sections that can become the journey section for the description being edited.
+     */
+    public function descriptionSections(TripDescriptionSectionsRequest $request): JsonResponse
+    {
+        return response()->json($this->journeySectionOptions($request->validated('description')));
+    }
+
+    /**
+     * Map the titled sections after the first one onto select options, keyed by the section key.
+     *
+     * @return list<array{id: string, name: string}>
+     */
+    private function journeySectionOptions(?string $description): array
+    {
+        return collect($this->contentParser->storySections($description))
+            ->filter(fn (array $section) => $section['title'] !== null)
+            ->map(fn (array $section) => ['id' => $section['key'], 'name' => $section['title']])
+            ->values()
+            ->all();
     }
 
     /**

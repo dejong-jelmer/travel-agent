@@ -7,6 +7,7 @@ use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\UserRole;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -25,6 +26,11 @@ use Tests\TestCase;
 class TripTest extends TestCase
 {
     use RefreshDatabase;
+
+    // A description with a lead section and two sections that can become the journey section
+    private const JOURNEY_DESCRIPTION = '<p>Vooraf.</p><h2>Welkom in Verona</h2><p>De stad.</p>'
+        .'<h2>Met de nachttrein naar Verona</h2><p>Een <a href="https://example.com">nachttrein</a>.</p>'
+        .'<h2>Aankomst</h2><p>Porta Nuova.</p>';
 
     private User $admin;
 
@@ -407,8 +413,8 @@ class TripTest extends TestCase
                 ->where('trip.subtitle', 'Met de nachttrein naar Verona')
                 ->missing('trip.description')
                 ->where('descriptionSections', [
-                    ['key' => 'de-reis', 'title' => 'De reis', 'html' => '<p>Vooraf.</p><p>Een <strong>nachttrein</strong>.</p>'],
-                    ['key' => 'de-stad', 'title' => 'De stad', 'html' => '<p>Verona.</p>'],
+                    ['key' => 'de-reis', 'title' => 'De reis', 'html' => '<p>Vooraf.</p><p>Een <strong>nachttrein</strong>.</p>', 'variant' => 'light'],
+                    ['key' => 'de-stad', 'title' => 'De stad', 'html' => '<p>Verona.</p>', 'variant' => 'light'],
                 ])
         );
     }
@@ -838,6 +844,180 @@ class TripTest extends TestCase
         $this->assertStringNotContainsString('<', $metaDescription);
         $this->assertStringStartsWith('Reis met de trein door Europa.', $metaDescription);
         $this->assertLessThanOrEqual(config('seo.meta_description_max_length'), strlen($metaDescription));
+    }
+
+    // Journey section tests
+
+    public function test_trip_update_saves_a_journey_section_from_the_submitted_description(): void
+    {
+        $trip = Trip::factory()->create(['description' => '<h2>Welkom in Verona</h2><p>De stad.</p>']);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'description' => self::JOURNEY_DESCRIPTION,
+            'journey_section' => 'met-de-nachttrein-naar-verona',
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame('met-de-nachttrein-naar-verona', $trip->fresh()->journey_section);
+    }
+
+    public function test_trip_update_saves_an_empty_journey_section_as_null(): void
+    {
+        $trip = Trip::factory()->create([
+            'description' => self::JOURNEY_DESCRIPTION,
+            'journey_section' => 'aankomst',
+        ]);
+        $payload = $this->generateTripUpdatePayload($trip, ['journey_section' => '']);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertNull($trip->fresh()->journey_section);
+    }
+
+    public function test_trip_update_rejects_a_journey_section_that_is_not_in_the_submitted_description(): void
+    {
+        // The key exists in the saved description, but no longer in the submitted one
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'description' => '<h2>Welkom in Verona</h2><p>De stad.</p><h2>Met de dagtrein naar Verona</h2><p>Overdag.</p>',
+            'journey_section' => 'met-de-nachttrein-naar-verona',
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('journey_section');
+        $this->assertNull($trip->fresh()->journey_section);
+    }
+
+    public function test_trip_update_rejects_the_first_section_as_journey_section(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+        $payload = $this->generateTripUpdatePayload($trip, ['journey_section' => 'welkom-in-verona']);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('journey_section');
+    }
+
+    public function test_trip_store_rejects_a_journey_section_that_is_not_in_the_description(): void
+    {
+        $response = $this->post(route('admin.trips.store'), [
+            'description' => self::JOURNEY_DESCRIPTION,
+            'journey_section' => 'onbekende-sectie',
+        ]);
+
+        $response->assertSessionHasErrors('journey_section');
+    }
+
+    public function test_trip_show_gives_the_journey_section_the_dark_variant(): void
+    {
+        $trip = Trip::factory()->create([
+            'description' => self::JOURNEY_DESCRIPTION,
+            'journey_section' => 'met-de-nachttrein-naar-verona',
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('descriptionSections.0.key', 'welkom-in-verona')
+                ->where('descriptionSections.0.variant', 'light')
+                ->where('descriptionSections.1.key', 'met-de-nachttrein-naar-verona')
+                ->where('descriptionSections.1.variant', 'dark')
+                ->where('descriptionSections.2.key', 'aankomst')
+                ->where('descriptionSections.2.variant', 'light')
+        );
+    }
+
+    public function test_trip_show_keeps_all_sections_light_for_an_outdated_journey_section(): void
+    {
+        // The title of the journey section was changed after it was chosen
+        $trip = Trip::factory()->create([
+            'description' => self::JOURNEY_DESCRIPTION,
+            'journey_section' => 'met-de-dagtrein-naar-verona',
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->has('descriptionSections', 3)
+                ->where('descriptionSections.0.variant', 'light')
+                ->where('descriptionSections.1.variant', 'light')
+                ->where('descriptionSections.2.variant', 'light')
+        );
+    }
+
+    public function test_trip_show_keeps_the_first_section_light_as_journey_section(): void
+    {
+        // The chosen section became the first one after the sections were reordered
+        $trip = Trip::factory()->create([
+            'description' => self::JOURNEY_DESCRIPTION,
+            'journey_section' => 'welkom-in-verona',
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('descriptionSections.0.key', 'welkom-in-verona')
+                ->where('descriptionSections.0.variant', 'light')
+        );
+    }
+
+    public function test_trip_edit_passes_the_sections_after_the_first_as_journey_section_options(): void
+    {
+        $trip = Trip::factory()->create(['description' => self::JOURNEY_DESCRIPTION]);
+
+        $response = $this->get(route('admin.trips.edit', $trip));
+
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Trip/Edit')
+                ->where('journeySectionOptions', [
+                    ['id' => 'met-de-nachttrein-naar-verona', 'name' => 'Met de nachttrein naar Verona'],
+                    ['id' => 'aankomst', 'name' => 'Aankomst'],
+                ])
+        );
+    }
+
+    public function test_description_sections_returns_the_titled_sections_after_the_first_for_the_edited_description(): void
+    {
+        $response = $this->postJson(route('admin.trips.description-sections'), [
+            'description' => self::JOURNEY_DESCRIPTION.'<h2></h2><p>Zonder titel.</p>',
+        ]);
+
+        $response->assertOk();
+        $response->assertExactJson([
+            ['id' => 'met-de-nachttrein-naar-verona', 'name' => 'Met de nachttrein naar Verona'],
+            ['id' => 'aankomst', 'name' => 'Aankomst'],
+        ]);
+    }
+
+    public function test_description_sections_returns_no_options_for_an_empty_description(): void
+    {
+        $response = $this->postJson(route('admin.trips.description-sections'), ['description' => null]);
+
+        $response->assertOk();
+        $response->assertExactJson([]);
+    }
+
+    public function test_description_sections_is_forbidden_for_a_non_admin_user(): void
+    {
+        $this->actingAs(User::factory()->create(['role' => UserRole::Guest]));
+
+        $response = $this->postJson(route('admin.trips.description-sections'), [
+            'description' => self::JOURNEY_DESCRIPTION,
+        ]);
+
+        $response->assertForbidden();
     }
 
     // Helper Methods

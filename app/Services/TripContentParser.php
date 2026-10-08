@@ -59,6 +59,17 @@ class TripContentParser
     }
 
     /**
+     * The sections after the first one: the first section opens the trip page next to the key facts, the others
+     * each get a card of their own.
+     *
+     * @return list<array{key: string, title: string|null, html: string}>
+     */
+    public function storySections(?string $html): array
+    {
+        return array_slice($this->sections($html), 1);
+    }
+
+    /**
      * Give every section a key based on the slug of its title, numbered from -2 when the slug is already taken.
      *
      * @param  list<array{title: string|null, html: string}>  $sections

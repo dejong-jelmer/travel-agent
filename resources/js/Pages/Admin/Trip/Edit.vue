@@ -8,6 +8,7 @@ const props = defineProps({
     transportOptions: Object,
     priceLabelOptions: Object,
     keyFactIconOptions: Array,
+    journeySectionOptions: Array,
     practicalSections: Object,
 });
 
@@ -23,6 +24,7 @@ const initializePracticalInfo = () => {
 const form = useForm({
     ...props.trip,
     destinations: props.trip.destinations?.map(destination => destination.id) ?? [],
+    journey_section: props.trip.journey_section ?? "",
     heroImage: props.trip.hero_image?.public_url ?? null,
     images: props.trip.image_paths ?? [],
     items: props.trip.items ?? [],
@@ -53,6 +55,7 @@ function submit() {
             :transport-options="transportOptions"
             :price-label-options="priceLabelOptions"
             :key-fact-icon-options="keyFactIconOptions"
+            :journey-section-options="journeySectionOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

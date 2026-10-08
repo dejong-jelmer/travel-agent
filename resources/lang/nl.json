@@ -361,6 +361,11 @@
                     },
                     "help": "Maximaal {max} punten, elk met een icoon, een label (maximaal {label} tekens) en een waarde (maximaal {value} tekens), getoond in deze volgorde. Elk punt heeft een label nodig."
                 },
+                "journey_section": {
+                    "label": "Sectie over de reis",
+                    "none": "Geen",
+                    "help": "Deze sectie van de beschrijving krijgt op de reispagina een donkere kaart. De keuzes zijn de H2-koppen in de beschrijving, behalve de eerste: die staat altijd in de bovenste kaart."
+                },
                 "active": {
                     "label": "Actief",
                     "help": "Is deze reis beschikbaar voor boeken?"

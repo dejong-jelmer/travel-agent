@@ -56,6 +56,7 @@ return [
         'key_facts.*.value.max' => 'Een waarde mag maximaal :max tekens bevatten.',
         'key_facts.*.icon.required' => 'Kies een icoon bij dit punt.',
         'key_facts.*.icon.enum' => 'Kies een geldig icoon bij dit punt.',
+        'journey_section.in' => 'Kies een sectie die in de beschrijving staat, of kies "Geen".',
 
         // Main booker
         'main_booker' => [

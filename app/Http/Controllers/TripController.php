@@ -63,12 +63,29 @@ class TripController extends Controller
             'title' => $seo['title'],
             // The description is only sent split into sections, so its HTML does not go along twice
             'trip' => $trip->makeHidden('description'),
-            'descriptionSections' => $this->contentParser->sections($trip->description),
+            'descriptionSections' => $this->descriptionSections($trip),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
             'breadcrumbs' => $breadcrumbs->toArray(),
             'seo' => $seo,
         ]);
+    }
+
+    /**
+     * Split the description into sections and give each a variant: the journey section is shown dark, all others
+     * light. The first section opens the page in the top card and always stays light, as does every section when
+     * the stored key no longer matches a title.
+     *
+     * @return list<array{key: string, title: string|null, html: string, variant: 'light'|'dark'}>
+     */
+    private function descriptionSections(Trip $trip): array
+    {
+        $sections = $this->contentParser->sections($trip->description);
+
+        return array_map(fn (array $section, int $index) => [
+            ...$section,
+            'variant' => $index > 0 && $section['key'] === $trip->journey_section ? 'dark' : 'light',
+        ], $sections, array_keys($sections));
     }
 }
