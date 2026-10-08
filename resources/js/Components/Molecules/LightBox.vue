@@ -49,12 +49,14 @@ const slide = (image, thumbnail) => {
 
 let lightbox = null
 
-// Opens the image at `index`; `thumbnails` are the elements the images open from, in the same order
+// Opens the image at `index`; `thumbnails` are the elements the images open from, in the same order.
+// A click next to the image closes it (PhotoSwipe's default bgClickAction).
 function open(index, thumbnails = []) {
+    // Cancels a previous open() that is still loading PhotoSwipe, so only the latest one opens and gets destroyed on unmount
+    lightbox?.destroy()
     lightbox = new PhotoSwipeLightbox({
         dataSource: props.images.map((image, i) => slide(image, thumbnails[i])),
         pswpModule: () => import('photoswipe'),
-        bgClickAction: false,
         closeTitle: t('lightbox.close'),
         zoomTitle: t('lightbox.zoom'),
         arrowPrevTitle: t('lightbox.previous'),

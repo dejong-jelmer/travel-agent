@@ -58,11 +58,24 @@ describe("LightBox", () => {
 
         expect(lightbox.loadAndOpen).toHaveBeenCalledWith(1);
         expect(lightbox.options).toMatchObject({
-            bgClickAction: false,
             closeTitle: i18n.global.t('lightbox.close'),
             arrowPrevTitle: i18n.global.t('lightbox.previous'),
             arrowNextTitle: i18n.global.t('lightbox.next'),
         });
+    });
+
+    it("closes on a click next to the image", () => {
+        expect(open(0).options.bgClickAction).toBeUndefined();
+    });
+
+    it("destroys the previous lightbox when opening again", () => {
+        const wrapper = mount(LightBox, { props: { images: [withVariants] } });
+        wrapper.vm.open(0);
+        wrapper.vm.open(0);
+
+        expect(instances[0].destroy).toHaveBeenCalled();
+        expect(instances[1].destroy).not.toHaveBeenCalled();
+        expect(instances[1].loadAndOpen).toHaveBeenCalledWith(0);
     });
 
     it("offers every variant as srcset, sized to the widest one", () => {
