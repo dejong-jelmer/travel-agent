@@ -48,6 +48,7 @@ class CreateTripRequest extends FormRequest
     {
         return array_merge(
             TripValidationRules::basic(),
+            TripValidationRules::journeySection($this->input('description')),
             TripValidationRules::keyFacts(),
             TripValidationRules::prices(),
             TripValidationRules::settings(),

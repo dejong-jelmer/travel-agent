@@ -8,6 +8,7 @@ use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PriceLabel;
 use App\Models\Trip;
 use App\Rules\NoOverlappingPricePeriods;
+use App\Services\TripContentParser;
 use Illuminate\Validation\Rule;
 
 class TripValidationRules
@@ -21,6 +22,22 @@ class TripValidationRules
             'highlights.*.description' => ['nullable', 'string', 'max:500'],
             'subtitle' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * The journey section is empty or the key of a section in the submitted description. The first section opens
+     * the trip page in the top card and cannot be chosen.
+     */
+    public static function journeySection(mixed $description): array
+    {
+        $keys = array_column(
+            app(TripContentParser::class)->storySections(is_string($description) ? $description : null),
+            'key'
+        );
+
+        return [
+            'journey_section' => ['nullable', 'string', Rule::in($keys)],
         ];
     }
 

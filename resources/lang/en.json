@@ -361,6 +361,11 @@
                     },
                     "help": "At most {max} points, each with an icon, a label (up to {label} characters) and a value (up to {value} characters), shown in this order. Every point needs a label."
                 },
+                "journey_section": {
+                    "label": "Section about the journey",
+                    "none": "None",
+                    "help": "This section of the description gets a dark card on the trip page. The choices are the H2 headings in the description, except the first: that one always sits in the top card."
+                },
                 "active": {
                     "label": "Active",
                     "help": "Is this trip available for booking?"

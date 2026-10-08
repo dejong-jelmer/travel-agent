@@ -87,6 +87,7 @@ Route::prefix('admin')
         // Trip resource routes
         Route::resource('/trips', AdminTripController::class)->except(['update']);
         Route::post('/trips/update/{trip}', [AdminTripController::class, 'update'])->name('trips.update');
+        Route::post('/trips/description-sections', [AdminTripController::class, 'descriptionSections'])->name('trips.description-sections');
 
         // Trip prices
         Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');

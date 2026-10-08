@@ -56,6 +56,7 @@ return [
         'key_facts.*.value.max' => 'A value can contain at most :max characters.',
         'key_facts.*.icon.required' => 'Choose an icon for this point.',
         'key_facts.*.icon.enum' => 'Choose a valid icon for this point.',
+        'journey_section.in' => 'Choose a section from the description, or choose "None".',
 
         // Main booker
         'main_booker' => [

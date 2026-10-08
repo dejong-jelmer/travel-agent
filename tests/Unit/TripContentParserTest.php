@@ -86,4 +86,14 @@ class TripContentParserTest extends TestCase
         $this->assertCount(1, $sections);
         $this->assertSame('<blockquote><h2>Citaat</h2></blockquote>', $sections[0]['html']);
     }
+
+    public function test_story_sections_are_the_sections_after_the_first(): void
+    {
+        $this->assertSame(
+            ['de-reis', 'de-stad'],
+            array_column($this->parser->storySections('<h2>Welkom</h2><p>A.</p><h2>De reis</h2><p>B.</p><h2>De stad</h2><p>C.</p>'), 'key')
+        );
+        $this->assertSame([], $this->parser->storySections('<p>Alleen tekst.</p>'));
+        $this->assertSame([], $this->parser->storySections(null));
+    }
 }

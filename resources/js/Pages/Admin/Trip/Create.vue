@@ -23,6 +23,7 @@ const form = useForm({
     name: "",
     subtitle: "",
     description: "",
+    journey_section: "",
     duration: "",
     transport: [],
     destinations: [],

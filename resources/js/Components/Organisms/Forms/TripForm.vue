@@ -4,6 +4,8 @@ import { usePage } from '@inertiajs/vue3';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useCharacterCounter } from '@/Composables/useCharacterCounter.js';
 import { useI18n } from 'vue-i18n';
+import { debounce } from 'lodash';
+import { fetchApi } from '@/fetchApi';
 import TripItemsTab from './TripItemsTab.vue';
 
 const emit = defineEmits(['submit']);
@@ -14,6 +16,11 @@ const props = defineProps({
     transportOptions: Object,
     priceLabelOptions: Object,
     keyFactIconOptions: Array,
+    // Shape: [{ id, name }], the sections of the saved description that can become the journey section
+    journeySectionOptions: {
+        type: Array,
+        default: () => []
+    },
     practicalSections: Object,
 });
 
@@ -79,6 +86,36 @@ const keyFactFields = computed(() => [
         placeholder: t('forms.trip.fields.key_facts.value.placeholder'),
     },
 ])
+
+// The sections that can become the journey section follow the H2 headings in the editor: the content parser on the
+// server splits the description, so the keys match the ones the trip page and the validation use
+const sectionOptions = ref(props.journeySectionOptions)
+const journeySectionSelectOptions = computed(() => [
+    { id: '', name: t('forms.trip.fields.journey_section.none') },
+    ...sectionOptions.value,
+])
+
+let latestSectionsRequest = 0
+const refreshSectionOptions = debounce((description) => {
+    const request = ++latestSectionsRequest
+    fetchApi(route('admin.trips.description-sections'), {
+        method: 'POST',
+        body: { description },
+    })
+        .then((options) => {
+            // Only the answer for the latest description counts
+            if (request !== latestSectionsRequest) return
+            sectionOptions.value = options
+
+            // A renamed or removed heading is no longer a section, so the choice falls back to none
+            if (props.form.journey_section && !options.some(option => option.id === props.form.journey_section)) {
+                props.form.journey_section = ''
+            }
+        })
+        .catch((error) => console.error(error))
+}, 500)
+
+watch(() => props.form.description, refreshSectionOptions)
 
 const highlightFields = computed(() => [
     {
@@ -175,6 +212,15 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 <Label for-field="description" :required="true">{{ t('forms.trip.fields.description.label') }}</Label>
                                 <TipTap name="description" :required="true" v-model="form.description" :feedback="form.errors.description" />
                                 <FormFeedback :message="form.errors.description" />
+                                <div>
+                                    <Select name="journey_section" v-model="form.journey_section"
+                                        :label="t('forms.trip.fields.journey_section.label')"
+                                        :options="journeySectionSelectOptions"
+                                        :feedback="form.errors.journey_section" />
+                                    <p class="mt-2 text-xs text-gray-700/30">
+                                        {{ t('forms.trip.fields.journey_section.help') }}
+                                    </p>
+                                </div>
                                 <DynamicInputList :items="form.highlights" name="highlights"
                                     :label="t('forms.trip.fields.highlights.label')"
                                     :fields="highlightFields" :sortable="true"
