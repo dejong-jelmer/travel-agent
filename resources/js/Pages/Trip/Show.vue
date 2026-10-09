@@ -21,6 +21,12 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [{ id, type, day_from, day_to, title, description, accommodation_label, remark, image }], the itinerary
+    // ready for display, see TripItinerary
+    itinerary: {
+        type: Array,
+        default: () => []
+    },
     tripItems: Object,
     practicalSections: Object,
     travelInfoSections: Object,
@@ -188,28 +194,17 @@ const contactUrl = computed(() => {
                             :image-side="section.imageSide" />
                     </div>
 
+                    <!-- Itinerary -->
+                    <TripItinerary :items="itinerary" />
+
                     <!-- Highlights -->
                     <TripHighlights :highlights="highlights" />
 
                     <!-- Inclusions & Exclusions -->
-                    <TripItems :trip-items="tripItems" />
-
-                    <!-- Itinerary Section -->
-                    <div
-                        class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 overflow-hidden p-6 laptop:p-8">
-                        <SectionHeader>{{ t('trip_show.itinerary_heading') }}</SectionHeader>
-                        <div v-if="trip.itineraries?.length" class="space-y-6">
-                            <template v-for="(itinerary, index) in trip.itineraries" :key="index">
-                                <TripItinerary :itinerary="itinerary" :index="index" />
-                            </template>
-                        </div>
-                        <p v-else class="text-brand-light">
-                            {{ t('trip_show.tab_content.itinerary_empty') }}
-                        </p>
-                    </div>
+                    <TripItems v-reveal :trip-items="tripItems" />
 
                     <!-- Plan this trip -->
-                    <TripPlanCard @request="requestModalOpen = !requestModalOpen" />
+                    <TripPlanCard v-reveal @request="requestModalOpen = !requestModalOpen" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->

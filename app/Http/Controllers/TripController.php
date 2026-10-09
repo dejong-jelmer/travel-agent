@@ -8,6 +8,7 @@ use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Trip;
 use App\Services\CountryService;
+use App\Services\ItineraryService;
 use App\Services\OgImageService;
 use App\Services\TripContentParser;
 use App\Services\TripItemService;
@@ -22,6 +23,7 @@ class TripController extends Controller
         private readonly CountryService $countryService,
         private readonly OgImageService $ogImages,
         private readonly TripContentParser $contentParser,
+        private readonly ItineraryService $itineraries,
     ) {}
 
     /**
@@ -61,11 +63,12 @@ class TripController extends Controller
 
         return Inertia::render('Trip/Show', [
             'title' => $seo['title'],
-            // The description is only sent split into sections and the highlights only ready for display, so neither
-            // goes along twice
-            'trip' => $trip->makeHidden(['description', 'highlights']),
+            // The description is only sent split into sections, the highlights and the itinerary only ready for
+            // display, so none of them goes along twice
+            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries']),
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
+            'itinerary' => $this->itineraries->forDisplay($trip),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),

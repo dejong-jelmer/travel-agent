@@ -3,6 +3,7 @@ import { useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     itinerary: Object,
+    typeOptions: Array,
 });
 
 const form = useForm({
@@ -18,7 +19,7 @@ function submit() {
 <template>
     <Admin>
         <div class="bg-white rounded-lg shadow p-4 tablet:p-6 laptop:p-10 desktop:p-12">
-            <ItineraryForm :form="form" @submit="submit" />
+            <ItineraryForm :form="form" :type-options="typeOptions" @submit="submit" />
         </div>
     </Admin>
 </template>

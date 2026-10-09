@@ -1,12 +1,8 @@
 <script setup>
-import { useRevealEffect } from '@/Composables/useRevealEffect.js';
-
 const props = defineProps({
     trips: Array,
     countries: Array,
 });
-
-const { rootRef, visible, reveal } = useRevealEffect();
 
 </script>
 
@@ -17,11 +13,10 @@ const { rootRef, visible, reveal } = useRevealEffect();
                 {{ $t('trips.title') }}
             </SectionHeader>
 
-            <div ref="rootRef" class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
+            <!-- The cards of a row come into view one after the other (three columns from laptop on) -->
+            <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
                 <TripCard v-for="(trip, index) in trips" :key="trip.id" :trip="trip"
-                    class="transition-all duration-1000 ease-out"
-                    v-bind="reveal(Math.min(index, 5) * 75)"
-                    :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'" />
+                    v-reveal="{ delay: (index % 3) * 80 }" />
             </div>
 
             <!-- Empty state -->

@@ -43,13 +43,14 @@ const imageSizes = '(min-width: 1350px) 276px, (min-width: 900px) calc(22.2vw - 
 
 <template>
     <div :class="image ? gridClass : undefined">
-        <!-- The photo is positioned absolutely, so it follows the height of the card instead of adding its own -->
-        <div v-if="image" class="relative aspect-[16/10] tablet:aspect-auto tablet:min-h-[280px]"
+        <!-- The photo is positioned absolutely, so it follows the height of the card instead of adding its own.
+             It fades in, while the card also moves up as it comes into view. -->
+        <div v-if="image" v-reveal="{ fade: true }" class="relative aspect-[16/10] tablet:aspect-auto tablet:min-h-[280px]"
             :class="{ 'tablet:order-last': imageSide === 'right' }">
             <ResponsiveImage :image="image" :sizes="imageSizes" :alt="imageAlt" loading="lazy"
                 class="absolute inset-0 w-full h-full object-cover rounded-xl" />
         </div>
-        <BaseCard :variant="variant" :aria-labelledby="section.title ? headingId : undefined">
+        <BaseCard v-reveal :variant="variant" :aria-labelledby="section.title ? headingId : undefined">
             <h2 v-if="section.title" :id="headingId" class="text-[26px] font-semibold mb-4" :class="headingClass">
                 {{ section.title }}
             </h2>

@@ -86,7 +86,7 @@
     },
     "trip_itinerary": {
         "day": "Dag",
-        "activities": "Activiteiten",
+        "travel_day": "Reisdag",
         "accommodation": "Overnachting",
         "accommodation_text": "Je verblijft in",
         "transport": "Vervoer"
@@ -441,7 +441,7 @@
                     "subtitle": "Upload afbeelding voor deze reisdag"
                 },
                 "details": {
-                    "subtitle": "Verblijf, activiteiten en faciliteiten"
+                    "subtitle": "Verblijf en opmerking"
                 }
             },
             "fields": {
@@ -457,6 +457,9 @@
                 "day_to": {
                     "label": "Reisdagen reeks einde",
                     "placeholder": "Eind reeks"
+                },
+                "type": {
+                    "label": "Soort dag"
                 },
                 "title": {
                     "label": "Titel",
@@ -481,10 +484,6 @@
                 "accommodation": {
                     "label": "Verblijf",
                     "placeholder": "bijv. Hotel Central Amsterdam"
-                },
-                "activities": {
-                    "label": "Activiteiten",
-                    "placeholder": "bijv. Stadswandeling, museumbezoek"
                 },
                 "distance": {
                     "label": "Afstand (km)",
@@ -971,7 +970,6 @@
         },
         "country_heading": "Over het land",
         "tab_content": {
-            "itinerary_empty": "Gedetailleerd reisprogramma wordt binnenkort toegevoegd",
             "inclusive_placeholder": "Inbegrepen en niet inbegrepen informatie komt hier.",
             "practical_placeholder": "Praktische informatie over de reis komt hier.",
             "extra_placeholder": "Extra informatie over deze reis komt hier."

@@ -2,7 +2,9 @@
 import { useI18n } from 'vue-i18n';
 
 const props = defineProps({
-    form: Object
+    form: Object,
+    // Shape: [{ id, name }], the itinerary types (ItineraryType::options())
+    typeOptions: Array
 });
 
 const emit = defineEmits(['submit']);
@@ -46,6 +48,8 @@ const { t } = useI18n();
                         <p class="text-xs text-gray-700/30">
                             {{ t('forms.itinerary.fields.day_from.help') }}
                         </p>
+                        <Select name="type" :label="t('forms.itinerary.fields.type.label')" :required="true"
+                            v-model="form.type" :options="typeOptions" :feedback="form.errors.type" />
                         <Input type="text" name="title" :label="t('forms.itinerary.fields.title.label')"
                             :required="true" v-model="form.title" :feedback="form.errors.title"
                             :placeholder="t('forms.itinerary.fields.title.placeholder')" />
@@ -84,9 +88,6 @@ const { t } = useI18n();
                         <Input type="text" name="accommodation" :label="t('forms.itinerary.fields.accommodation.label')"
                             :required="false" v-model="form.accommodation" :feedback="form.errors.accommodation"
                             :placeholder="t('forms.itinerary.fields.accommodation.placeholder')" />
-                        <DynamicInputList name="activities" :label="t('forms.itinerary.fields.activities.label')"
-                            :required="false" :items="form.activities" :feedback="form.errors"
-                            :placeholder="t('forms.itinerary.fields.activities.placeholder')" />
                             <Input type="text" name="remark" :label="t('forms.itinerary.fields.remark.label')"
                             :required="false" v-model="form.remark" :feedback="form.errors.remark"
                             :placeholder="t('forms.itinerary.fields.remark.placeholder')" />

@@ -30,6 +30,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection $image_paths
  * @property string $destinations_formatted
  * @property Image|null $heroImage
+ * @property \Illuminate\Database\Eloquent\Collection<int, Itinerary> $itineraries
  * @property array<int, array{value: string, label: string}> $transport_formatted
  */
 class Trip extends Model

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" class="scroll-smooth">
+<html lang="{{ app()->getLocale() }}" class="scroll-smooth" data-reveal="{{ config('app.reveal_animations') ? 'on' : 'off' }}">
 
 <head>
     <meta charset="utf-8" />

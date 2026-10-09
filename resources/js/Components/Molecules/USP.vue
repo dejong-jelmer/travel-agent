@@ -1,16 +1,12 @@
 <script setup>
 import { CheckCircle } from '@lucide/vue';
-import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 
 import usp1 from '@/../images/usp1.jpg';
 import usp2 from '@/../images/usp2.jpg';
 import usp3 from '@/../images/usp3.jpg';
 
-const { rootRef, visible, reveal } = useRevealEffect();
-
 const usps = [
     {
-        revealDelay: 0,
         image: usp1,
         titleKey: 'usp.usp-1.title',
         descriptionKey: 'usp.usp-1.description',
@@ -18,7 +14,6 @@ const usps = [
         alt: 'usp.usp-1.highlight'
     },
     {
-        revealDelay: 50,
         image: usp2,
         titleKey: 'usp.usp-2.title',
         descriptionKey: 'usp.usp-2.description',
@@ -26,7 +21,6 @@ const usps = [
         alt: 'usp.usp-2.highlight'
     },
     {
-        revealDelay: 100,
         image: usp3,
         titleKey: 'usp.usp-3.title',
         descriptionKey: 'usp.usp-3.description',
@@ -36,7 +30,7 @@ const usps = [
 ];
 </script>
 <template>
-    <section ref="rootRef" id="over-de-reizen" class="py-12 tablet:py-24 max-w-6xl mx-auto px-4 scroll-mt-36">
+    <section id="over-de-reizen" class="py-12 tablet:py-24 max-w-6xl mx-auto px-4 scroll-mt-36">
 
         <!-- Header -->
         <div class="text-center mb-6 laptop:mb-12">
@@ -46,12 +40,10 @@ const usps = [
             </p>
         </div>
 
-        <!-- USP Cards -->
+        <!-- USP Cards, the cards of a row coming into view one after the other (three columns from laptop on) -->
         <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
-            <Card v-for="(usp, index) in usps" :key="index"
-                class="transition-all duration-1000 ease-out relative overflow-hidden group flex flex-col"
-                v-bind="reveal(usp.revealDelay)"
-                :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'">
+            <Card v-for="(usp, index) in usps" :key="index" v-reveal="{ delay: (index % 3) * 80 }"
+                class="relative overflow-hidden group flex flex-col">
                 <!-- Header afbeelding -->
                 <div class="h-48 overflow-hidden">
                     <img :src="usp.image"
@@ -84,8 +76,7 @@ const usps = [
         </div>
 
         <!-- Bottom CTA -->
-        <div v-bind="reveal(300)" :class="visible ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-12'"
-            class="transition-all duration-1000 ease-out text-center mt-12">
+        <div v-reveal class="text-center mt-12">
             <div
                 class="inline-flex items-center gap-3 bg-white rounded-full px-6 py-3 shadow-sm border border-brand-subtle/20 text-sm laptop:text-base">
                 <span class="text-brand-primary font-medium">{{ $t('usp.cta.text') }}</span>

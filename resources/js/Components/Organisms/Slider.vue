@@ -1,13 +1,11 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import { useI18n } from 'vue-i18n';
-import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import { ChevronRightIcon } from '@heroicons/vue/24/outline'
 import { useMq } from "vue3-mq";
 
 const mq = useMq();
 const { t } = useI18n();
-const { rootRef, visible: revealed, reveal } = useRevealEffect();
 
 const props = defineProps({
     items: {
@@ -132,7 +130,9 @@ const endDrag = () => {
 };
 </script>
 <template>
-    <section ref="rootRef">
+    <!-- Comes into view as a whole: slides outside the overflow count as out of view, so revealing them one by one
+         would only fade them in once dragged into view -->
+    <section v-reveal>
         <div class="flex items-center justify-center group gap-2"
             :class="{ 'tablet:px-6 laptop:px-12': !internalArrows }">
             <!-- External arrows (internalArrows=false) -->
@@ -156,8 +156,7 @@ const endDrag = () => {
                         cursor: isDragging ? 'grabbing' : 'grab',
                     }" @click.capture="cancelClickAfterDrag" @dragstart.prevent v-touch:press="startDrag"
                         v-touch:drag="onDrag" v-touch:release="endDrag">
-                        <div v-for="(item, index) in items" :key="item.id ?? index" class="flex-shrink-0 m-[1%] select-none transition-all duration-1000 ease-out"
-                            v-bind="reveal(Math.min(index, 2) * 50)" :class="revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'"
+                        <div v-for="(item, index) in items" :key="item.id ?? index" class="flex-shrink-0 m-[1%] select-none"
                             :style="{
                                 width: `calc(${100 / ((items < 3) ? 50 : visibleItems)}% - ${'2%'})`,
                             }">
