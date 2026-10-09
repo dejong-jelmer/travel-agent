@@ -36,13 +36,12 @@ const imageSizes = '(min-width: 1071px) 220px, (min-width: 900px) calc(66.7vw - 
             <li v-for="(item, index) in items" :key="item.id"
                 class="grid grid-cols-[32px_minmax(0,1fr)] tablet:grid-cols-[44px_minmax(0,1fr)] gap-x-5">
                 <!-- Rail: the marker with a line below it down to the next item. Hidden from screen readers, as the
-                     label next to it names the day as well. It only fades in, so the line keeps reaching the next
-                     marker while the content next to it moves up. -->
-                <div v-reveal="{ fade: true }" class="flex flex-col items-center" aria-hidden="true">
+                     label next to it names the day as well. -->
+                <div class="flex flex-col items-center" aria-hidden="true">
                     <!-- Round, or a pill for a range of days; a pill wider than the rail overflows it on both sides -->
                     <span
                         class="flex items-center justify-center h-8 min-w-8 tablet:h-9 tablet:min-w-9 px-2 rounded-full whitespace-nowrap"
-                        :class="item.type === 'night_train'
+                        :class="isTravelDay(item)
                             ? 'bg-brand-text text-brand-secondary'
                             : 'bg-white border-2 border-brand-primary text-sm font-semibold text-brand-primary'">
                         <MoonStar v-if="item.type === 'night_train'" class="w-4 h-4 tablet:w-[18px] tablet:h-[18px]" />
@@ -53,7 +52,7 @@ const imageSizes = '(min-width: 1071px) 220px, (min-width: 900px) calc(66.7vw - 
                 </div>
 
                 <!-- The space below an item sits inside it, so the rail line runs on to the next marker -->
-                <div v-reveal class="min-w-0 [container-type:inline-size]"
+                <div class="min-w-0 [container-type:inline-size]"
                     :class="{ 'pb-8 tablet:pb-9': index < items.length - 1 }">
                     <p class="text-[12.5px] uppercase tracking-[0.14em] text-brand-primary/85">
                         {{ label(item) }}

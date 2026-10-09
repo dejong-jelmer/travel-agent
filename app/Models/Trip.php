@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Transport;
 use App\Enums\Trip\HighlightCategory;
+use App\Enums\Trip\ItineraryType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\TripType;
@@ -32,6 +33,7 @@ use Illuminate\Support\Str;
  * @property Image|null $heroImage
  * @property \Illuminate\Database\Eloquent\Collection<int, Itinerary> $itineraries
  * @property array<int, array{value: string, label: string}> $transport_formatted
+ * @property bool|null $has_night_train
  */
 class Trip extends Model
 {
@@ -168,6 +170,18 @@ class Trip extends Model
     protected function published(Builder $query): void
     {
         $query->where('published_at', '<=', today());
+    }
+
+    /**
+     * Scope a query to add whether the trip has a night train item in its itinerary, as has_night_train, which
+     * travel_mode is derived from.
+     */
+    #[Scope]
+    protected function withTravelMode(Builder $query): void
+    {
+        $query->withExists([
+            'itineraries as has_night_train' => fn (Builder $itineraries) => $itineraries->where('type', ItineraryType::NightTrain),
+        ]);
     }
 
     protected function publishedAtFormatted(): Attribute
@@ -366,6 +380,21 @@ class Trip extends Model
                 ])
                 ->toArray()
         );
+    }
+
+    /**
+     * Get how the trip travels, as shown on the trip cards: by night train when its itinerary has a night train item,
+     * otherwise by day train, with value 'night_train' or 'day_train'. Needs the withTravelMode() scope on the query.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array{value: string, label: string}, never>
+     */
+    protected function travelMode(): Attribute
+    {
+        return Attribute::get(function () {
+            $mode = $this->has_night_train ? 'night_train' : 'day_train';
+
+            return ['value' => $mode, 'label' => (string) __("trip.travel_mode.{$mode}")];
+        });
     }
 
     /**

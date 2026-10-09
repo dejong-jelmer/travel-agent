@@ -26,7 +26,9 @@ class HomeController extends Controller
 
         return Inertia::render('Home', [
             'title' => $seo['title'],
-            'trips' => Trip::with(['destinations', 'heroImage'])->published()->featured()->orderBy('published_at', 'desc')->get(),
+            // The trip cards have no use for the gallery paths, which would fetch every trip's gallery
+            'trips' => Trip::with(['destinations', 'heroImage', 'prices'])->withTravelMode()->published()->featured()
+                ->orderBy('published_at', 'desc')->get()->append('travel_mode')->makeHidden('image_paths'),
             'seo' => $seo,
         ]);
     }

@@ -2,9 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Trip\ItineraryType;
 use App\Mail\AdminContactFormNotificationMail;
 use App\Models\Destination;
+use App\Models\Itinerary;
 use App\Models\Trip;
+use App\Models\TripPrice;
 use App\Services\TermsPdfService;
 use Database\Seeders\CountrySeeder;
 use Faker\Generator;
@@ -41,6 +44,62 @@ class HomeTest extends TestCase
         ]);
 
         $response->assertStatus(200);
+    }
+
+    public function test_home_page_passes_the_travel_mode_and_duration_of_each_trip()
+    {
+        $trip = Trip::factory()->create();
+        Itinerary::factory()->for($trip)->create(['type' => ItineraryType::Train, 'day_from' => 1]);
+        Itinerary::factory()->for($trip)->create(['type' => ItineraryType::Stay, 'day_from' => 2, 'day_to' => 6]);
+
+        $this->get(route('home'))
+            ->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
+                ->has('trips', 1)
+                ->where('trips.0.duration', 6)
+                ->where('trips.0.travel_mode', ['value' => 'day_train', 'label' => 'Dagtrein'])
+            );
+    }
+
+    public function test_a_trip_with_a_night_train_item_travels_by_night_train_and_any_other_by_day_train()
+    {
+        $nightTrain = Trip::factory()->create(['published_at' => today()]);
+        Itinerary::factory()->for($nightTrain)->create(['type' => ItineraryType::NightTrain, 'day_from' => 1]);
+        Itinerary::factory()->for($nightTrain)->create(['type' => ItineraryType::Stay, 'day_from' => 2]);
+
+        $dayTrain = Trip::factory()->create(['published_at' => today()->subDay()]);
+        Itinerary::factory()->for($dayTrain)->create(['type' => ItineraryType::Train, 'day_from' => 1]);
+        Itinerary::factory()->for($dayTrain)->create(['type' => ItineraryType::Stay, 'day_from' => 2]);
+
+        $withoutItinerary = Trip::factory()->create(['published_at' => today()->subDays(2)]);
+
+        $this->get(route('home'))
+            ->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
+                ->has('trips', 3)
+                ->where('trips.0.id', $nightTrain->id)
+                ->where('trips.0.travel_mode', ['value' => 'night_train', 'label' => 'Nachttrein'])
+                ->where('trips.1.id', $dayTrain->id)
+                ->where('trips.1.travel_mode', ['value' => 'day_train', 'label' => 'Dagtrein'])
+                ->where('trips.2.id', $withoutItinerary->id)
+                ->where('trips.2.travel_mode', ['value' => 'day_train', 'label' => 'Dagtrein'])
+            );
+    }
+
+    public function test_home_page_loads_the_trips_without_a_query_per_trip()
+    {
+        $trips = Trip::factory()->count(3)->withHeroImage()->withImages(2)
+            ->has(TripPrice::factory()->count(2), 'prices')
+            ->hasAttached(Destination::factory())
+            ->create();
+        Itinerary::factory()->for($trips->first())->create(['type' => ItineraryType::NightTrain]);
+
+        $this->assertNoLazyLoading(fn () => $this->get(route('home'))
+            ->assertInertia(fn (AssertableInertia $page) => $page->component('Home')
+                ->has('trips', 3)
+                ->whereType('trips.0.price_formatted', 'string')
+                ->whereType('trips.0.destinations_formatted', 'string')
+                ->missing('trips.0.image_paths')
+            )
+        );
     }
 
     public function test_hero_poster_is_preloaded_only_on_home_page()

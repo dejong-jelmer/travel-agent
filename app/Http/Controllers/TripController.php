@@ -31,7 +31,9 @@ class TripController extends Controller
      */
     public function index(): Response
     {
-        $trips = Trip::with(['heroImage', 'prices'])->published()->get();
+        // The trip cards have no use for the gallery paths, which would fetch every trip's gallery
+        $trips = Trip::with(['heroImage', 'prices', 'destinations.country'])->withTravelMode()->published()->get()
+            ->append('travel_mode')->makeHidden('image_paths');
         $seo = $this->shareSeo('seo.trips');
 
         return Inertia::render('Trip/Index', [

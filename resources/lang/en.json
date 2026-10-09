@@ -70,12 +70,7 @@
     },
     "slider": {
         "previous": "Previous",
-        "next": "Next",
-        "go_to": "Go to position {position}"
-    },
-    "photo_slider": {
-        "previous": "Previous photo",
-        "next": "Next photo"
+        "next": "Next"
     },
     "lightbox": {
         "close": "Close",
@@ -161,26 +156,19 @@
         "special_requests_consent": "I consent to the processing of the health and/or diet-related data provided by me for the purpose of my trip."
     },
     "usp": {
-        "heading": "About our journeys",
+        "heading": "How I put a trip together",
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
         "usp-1": {
             "title": "The place sets the journey",
-            "description": "I choose destinations and routes with enough to discover to build a whole trip around: a city, a region, or a line that ties places together. The train gets you there comfortably and sustainably - what you find once you arrive is what it's all about.",
-            "highlight": "The destination is the point"
+            "description": "I choose destinations and routes with enough to discover to build a whole trip around: a city, a region, or a line that ties places together. The train gets you there comfortably and sustainably - what you find once you arrive is what it's all about."
         },
         "usp-2": {
             "title": "Staying for character",
-            "description": "I look for places to stay with a sense of place - a house, a family-run hotel, somewhere with a story of its own. Sometimes the best one is a stop further down the line; as far as I'm concerned, that's worth the extra ride.",
-            "highlight": "Character as the starting point"
+            "description": "I look for places to stay with a sense of place - a house, a family-run hotel, somewhere with a story of its own. Sometimes the best one is a stop further down the line; as far as I'm concerned, that's worth the extra ride."
         },
         "usp-3": {
             "title": "Every trip has a thread",
-            "description": "An angle that turns a place or region into a story. In the Vézère valley it's the prehistory you keep following from cave to cave; elsewhere a layer of time, or a region you only learn to read once you know what to look for. A trip that stays with you, long after you're home.",
-            "highlight": "A distinct angle for every trip"
-        },
-        "cta": {
-            "text": "Ready for your next adventure?",
-            "link": "Discover all trips"
+            "description": "An angle that turns a place or region into a story. In the Vézère valley it's the prehistory you keep following from cave to cave; elsewhere a layer of time, or a region you only learn to read once you know what to look for. A trip that stays with you, long after you're home."
         }
     },
     "forms": {
@@ -913,6 +901,7 @@
         "heading": "About Omdat We Reizen",
         "intro": "We travel in our own way, and increasingly seek depth, connection, and that one destination that allows us to see things differently. At the same time, there is friction: travel comes at a price, for the environment and for the place where we arrive. I curate trips with care, a good story, and the train as the starting point. What underpins my journeys is the destination: what there is to experience and the story a place tells.",
         "our_trips_heading": "Our trips",
+        "all_trips_link": "Discover all trips",
         "contact_cta": {
             "heading": "Have a question?",
             "body": "I'd love to tell you more about the routes, the planning, or simply what awaits you.",

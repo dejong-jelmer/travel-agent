@@ -21,8 +21,7 @@ const buttonClasses = computed(() => [
     'tablet:hidden relative p-3 rounded-lg border-2 transition-all duration-300 z-10 backdrop-blur-sm',
     props.light && !isOpen.value
         ? 'border-white text-white hover:bg-white/20'
-        : 'border-brand-primary text-brand-primary hover:bg-brand-secondary',
-    { 'bg-brand-secondary': isOpen.value }
+        : 'border-brand-primary text-brand-primary'
 ]);
 
 defineExpose({

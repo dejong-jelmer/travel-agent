@@ -63,19 +63,14 @@
         }
     },
     "trip_card": {
-        "days": "reisdagen",
+        "days": "dagen",
         "sustainable_travel": "Duurzaam reizen",
         "view_trip": "Bekijk reis",
         "expected": "Verwacht"
     },
     "slider": {
         "previous": "Vorige",
-        "next": "Volgende",
-        "go_to": "Ga naar positie {position}"
-    },
-    "photo_slider": {
-        "previous": "Vorige foto",
-        "next": "Volgende foto"
+        "next": "Volgende"
     },
     "lightbox": {
         "close": "Sluiten",
@@ -161,26 +156,19 @@
         "special_requests_consent": "Ik geef toestemming voor het verwerken van de door mij opgegeven gezondheids- en/of dieetgerelateerde gegevens ten behoeve van mijn reis."
     },
     "usp": {
-        "heading": "Over onze reizen",
+        "heading": "Zo stel ik een reis samen",
         "intro": "Ik stel reizen samen met aandacht, naar bestemmingen die iets te vertellen hebben, en met de trein als uitgangspunt.",
         "usp-1": {
             "title": "De plek bepaalt de reis",
-            "description": "Ik kies bestemmingen die een reis waard zijn: een stad, een streek of een lijn die steden met elkaar verbindt. De trein brengt je erheen. Wat je dáár vindt, is waar het om draait.",
-            "highlight": "Hoe je er komt, niet waarom je gaat"
+            "description": "Ik kies bestemmingen die een reis waard zijn: een stad, een streek of een lijn die steden met elkaar verbindt. De trein brengt je erheen. Wat je dáár vindt, is waar het om draait."
         },
         "usp-2": {
             "title": "Slapen met karakter",
-            "description": "Ik zoek accommodaties met sfeer die bij de plek passen. Een huis, een familiehotel, iets met een verhaal. En altijd goed te bereiken met trein, tram of bus.",
-            "highlight": "Karakter als uitgangspunt"
+            "description": "Ik zoek accommodaties met sfeer die bij de plek passen. Een huis, een familiehotel, iets met een verhaal. En altijd goed te bereiken met trein, tram of bus."
         },
         "usp-3": {
             "title": "Elke reis een rode draad",
-            "description": "Een invalshoek die een plek of streek tot een verhaal maakt. In de Vézère-vallei is dat de prehistorie; elders een tijdlaag of een streek die je pas leert lezen als je weet waar je naar kijkt. Zo'n reis blijft je bij, lang nadat je thuis bent.",
-            "highlight": "Een eigen invalshoek per reis"
-        },
-        "cta": {
-            "text": "Waar ga jij heen?",
-            "link": "Ontdek alle reizen"
+            "description": "Een invalshoek die een plek of streek tot een verhaal maakt. In de Vézère-vallei is dat de prehistorie; elders een tijdlaag of een streek die je pas leert lezen als je weet waar je naar kijkt. Zo'n reis blijft je bij, lang nadat je thuis bent."
         }
     },
     "forms": {
@@ -912,6 +900,7 @@
         "heading": "Meer mens. Omdat we reizen",
         "intro": "Ik stel reizen samen met aandacht, een goed verhaal en de trein als vertrekpunt. Wat mijn reizen dragt, is de bestemming: wat er te beleven valt en het verhaal dat de plek te vertelten heeft.",
         "our_trips_heading": "De reizen",
+        "all_trips_link": "Ontdek alle reizen",
         "contact_cta": {
             "eyebrow": "Contact",
             "heading": "Heb je een vraag?",
