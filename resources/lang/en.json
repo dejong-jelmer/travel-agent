@@ -344,7 +344,14 @@
                         "label": "Description",
                         "placeholder": "Short description…"
                     },
-                    "help": "Enter unique experiences and attractions of this trip"
+                    "category": {
+                        "label": "Category",
+                        "none": "None"
+                    },
+                    "label_field": {
+                        "label": "Own label (optional)"
+                    },
+                    "help": "Enter unique experiences and attractions of this trip. A category adds an icon and a label above the title; an own label (up to {label} characters) replaces the default label."
                 },
                 "key_facts": {
                     "label": "Your trip at a glance",

@@ -3,6 +3,7 @@
 namespace App\Services\Validation;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PriceLabel;
@@ -18,8 +19,11 @@ class TripValidationRules
         return [
             'name' => ['required', 'string', 'max:255'],
             'highlights' => ['nullable', 'array'],
-            'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct:ignore_case', 'required_with:highlights.*.description'],
+            'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct:ignore_case', 'required_with:highlights.*.description,highlights.*.label'],
             'highlights.*.description' => ['nullable', 'string', 'max:500'],
+            // An own label replaces the default label of the category, so without a category it is never shown
+            'highlights.*.category' => ['nullable', 'string', Rule::enum(HighlightCategory::class), 'required_with:highlights.*.label'],
+            'highlights.*.label' => ['nullable', 'string', 'max:'.Trip::MAX_HIGHLIGHT_LABEL_LENGTH],
             'subtitle' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
         ];

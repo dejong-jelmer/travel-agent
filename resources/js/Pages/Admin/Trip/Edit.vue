@@ -8,6 +8,7 @@ const props = defineProps({
     transportOptions: Object,
     priceLabelOptions: Object,
     keyFactIconOptions: Array,
+    highlightCategoryOptions: Array,
     journeySectionOptions: Array,
     practicalSections: Object,
 });
@@ -57,6 +58,7 @@ function submit() {
             :transport-options="transportOptions"
             :price-label-options="priceLabelOptions"
             :key-fact-icon-options="keyFactIconOptions"
+            :highlight-category-options="highlightCategoryOptions"
             :journey-section-options="journeySectionOptions"
             :gallery-images="trip.images"
             :practical-sections="practicalSections"

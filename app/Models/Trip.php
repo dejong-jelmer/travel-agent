@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\TripType;
@@ -44,6 +45,8 @@ class Trip extends Model
     public const MAX_KEY_FACT_LABEL_LENGTH = 20;
 
     public const MAX_KEY_FACT_VALUE_LENGTH = 60;
+
+    public const MAX_HIGHLIGHT_LABEL_LENGTH = 24;
 
     protected $perPage = 10;
 
@@ -365,18 +368,33 @@ class Trip extends Model
     }
 
     /**
-     * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ...]
+     * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ..., 'category' => ..., 'label' => ...]
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{title: string, description: string|null}>|null, mixed>
+     * The category is cast to a HighlightCategory; highlights stored before categories existed, or with a category
+     * that no longer exists, get none. The label is the own label that replaces the default label of the category.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{title: string, description: string|null, category: HighlightCategory|null, label: string|null}>|null, mixed>
      */
     protected function highlights(): Attribute
     {
         return Attribute::make(
+            get: fn (?string $value) => $value === null ? null : collect(json_decode($value, true) ?? [])
+                ->map(fn (array $highlight) => [
+                    'title' => $highlight['title'],
+                    'description' => $highlight['description'] ?? null,
+                    'category' => HighlightCategory::tryFrom((string) ($highlight['category'] ?? '')),
+                    'label' => $highlight['label'] ?? null,
+                ])
+                ->all(),
             set: fn ($value) => json_encode(
                 collect(is_array($value) ? $value : [])
                     ->map(fn ($highlight) => [
                         'title' => trim((string) ($highlight['title'] ?? '')),
                         'description' => trim((string) ($highlight['description'] ?? '')) ?: null,
+                        'category' => ($highlight['category'] ?? null) instanceof HighlightCategory
+                            ? $highlight['category']->value
+                            : HighlightCategory::tryFrom((string) ($highlight['category'] ?? ''))?->value,
+                        'label' => trim((string) ($highlight['label'] ?? '')) ?: null,
                     ])
                     ->filter(fn (array $highlight) => $highlight['title'] !== '')
                     ->values()

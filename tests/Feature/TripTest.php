@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
@@ -120,7 +121,10 @@ class TripTest extends TestCase
         $this->assertEquals($tripData['name'], $trip->name);
         $this->assertEquals($tripData['subtitle'], $trip->subtitle);
         $this->assertEquals($tripData['description'], $trip->description);
-        $this->assertEquals($tripData['highlights'], $trip->highlights);
+        $this->assertEquals(
+            array_map(fn (array $highlight) => [...$highlight, 'category' => null, 'label' => null], $tripData['highlights']),
+            $trip->highlights
+        );
         $this->assertTrue($trip->published_at->isSameDay($tripData['published_at']));
         $this->assertCount(2, $trip->destinations);
 
@@ -377,9 +381,74 @@ class TripTest extends TestCase
 
         $response->assertSessionHasNoErrors();
         $this->assertEquals([
-            ['title' => 'highlight 1', 'description' => 'description 1'],
-            ['title' => 'highlight 2', 'description' => null],
+            ['title' => 'highlight 1', 'description' => 'description 1', 'category' => null, 'label' => null],
+            ['title' => 'highlight 2', 'description' => null, 'category' => null, 'label' => null],
         ], $trip->fresh()->highlights);
+    }
+
+    public function test_trip_update_saves_highlight_category_and_own_label(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'highlights' => [
+                ['title' => 'Arena di Verona', 'description' => null, 'category' => 'roman', 'label' => 'Romeins theater'],
+                ['title' => 'Lago di Garda', 'description' => null, 'category' => 'water', 'label' => ''],
+                ['title' => 'Piazza delle Erbe', 'description' => null, 'category' => '', 'label' => ''],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertEquals([
+            ['title' => 'Arena di Verona', 'description' => null, 'category' => HighlightCategory::Roman, 'label' => 'Romeins theater'],
+            ['title' => 'Lago di Garda', 'description' => null, 'category' => HighlightCategory::Water, 'label' => null],
+            ['title' => 'Piazza delle Erbe', 'description' => null, 'category' => null, 'label' => null],
+        ], $trip->fresh()->highlights);
+    }
+
+    public function test_trip_update_rejects_an_unknown_highlight_category(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'highlights' => [
+                ['title' => 'Arena di Verona', 'description' => null, 'category' => 'colosseum', 'label' => null],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('highlights.0.category');
+    }
+
+    public function test_trip_update_rejects_a_highlight_label_that_is_too_long(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'highlights' => [
+                ['title' => 'Arena di Verona', 'description' => null, 'category' => 'roman', 'label' => str_repeat('a', Trip::MAX_HIGHLIGHT_LABEL_LENGTH)],
+                ['title' => 'Teatro Romano', 'description' => null, 'category' => 'roman', 'label' => str_repeat('a', Trip::MAX_HIGHLIGHT_LABEL_LENGTH + 1)],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionDoesntHaveErrors('highlights.0.label');
+        $response->assertSessionHasErrors('highlights.1.label');
+    }
+
+    public function test_trip_update_rejects_an_own_label_without_category(): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, [
+            'highlights' => [
+                ['title' => 'Arena di Verona', 'description' => null, 'category' => '', 'label' => 'Romeins theater'],
+            ],
+        ]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('highlights.0.category');
     }
 
     public function test_trip_update_rejects_a_description_without_title(): void
@@ -507,6 +576,103 @@ class TripTest extends TestCase
             fn (AssertableInertia $page) => $page
                 ->component('Trip/Show')
                 ->where('trip.key_facts', [])
+        );
+    }
+
+    // Highlights display tests
+    public function test_trip_show_passes_highlights_with_the_icon_and_default_label_of_their_category(): void
+    {
+        $trip = Trip::factory()->create(['highlights' => [
+            ['title' => 'Arena di Verona', 'description' => 'Een Romeins amfitheater midden in de stad.', 'category' => 'roman'],
+            ['title' => 'Lascaux IV', 'description' => null, 'category' => 'prehistory'],
+            ['title' => 'Grotte de Font-de-Gaume', 'description' => null, 'category' => 'cave'],
+        ]]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->missing('trip.highlights')
+                ->where('highlights', [
+                    [
+                        'title' => 'Arena di Verona',
+                        'description' => 'Een Romeins amfitheater midden in de stad.',
+                        'category' => 'roman',
+                        'icon' => 'Landmark',
+                        'label' => HighlightCategory::Roman->label(),
+                    ],
+                    [
+                        'title' => 'Lascaux IV',
+                        'description' => null,
+                        'category' => 'prehistory',
+                        'icon' => 'LascauxHorse',
+                        'label' => HighlightCategory::Prehistory->label(),
+                    ],
+                    [
+                        'title' => 'Grotte de Font-de-Gaume',
+                        'description' => null,
+                        'category' => 'cave',
+                        'icon' => 'Cave',
+                        'label' => HighlightCategory::Cave->label(),
+                    ],
+                ])
+        );
+    }
+
+    public function test_trip_show_passes_the_own_label_of_a_highlight_instead_of_the_default_label(): void
+    {
+        $trip = Trip::factory()->create(['highlights' => [
+            ['title' => 'Arena di Verona', 'description' => null, 'category' => 'roman', 'label' => 'Romeins theater'],
+        ]]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('highlights.0.icon', 'Landmark')
+                ->where('highlights.0.label', 'Romeins theater')
+        );
+    }
+
+    public function test_trip_show_passes_no_icon_and_no_label_for_a_highlight_without_category(): void
+    {
+        // A highlight stored before categories existed has no category or label keys at all
+        $trip = Trip::factory()->create();
+        DB::table('trips')->where('id', $trip->id)->update([
+            'highlights' => json_encode([['title' => 'Lago di Garda', 'description' => 'Het grootste meer van Italië.']]),
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('highlights', [
+                    [
+                        'title' => 'Lago di Garda',
+                        'description' => 'Het grootste meer van Italië.',
+                        'category' => null,
+                        'icon' => null,
+                        'label' => null,
+                    ],
+                ])
+        );
+    }
+
+    public function test_trip_show_passes_empty_highlights_without_any(): void
+    {
+        $trip = Trip::factory()->create(['highlights' => []]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('highlights', [])
         );
     }
 

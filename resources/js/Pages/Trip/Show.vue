@@ -16,6 +16,11 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [{ title, description, category, icon, label }], the highlights ready for display, see TripHighlights
+    highlights: {
+        type: Array,
+        default: () => []
+    },
     tripItems: Object,
     practicalSections: Object,
     travelInfoSections: Object,
@@ -96,7 +101,6 @@ const hasCountryInfo = computed(() =>
 )
 
 const hasKeyFacts = computed(() => props.trip.key_facts?.length > 0)
-const hasHighlights = computed(() => props.trip.highlights?.length > 0)
 
 // The first section of the description opens the page next to the key facts, the others get a card each
 const leadSection = computed(() => props.descriptionSections[0] ?? null)
@@ -185,10 +189,7 @@ const contactUrl = computed(() => {
                     </div>
 
                     <!-- Highlights -->
-                    <BaseCard v-if="hasHighlights" aria-labelledby="trip-highlights-heading">
-                        <SectionHeader id="trip-highlights-heading">{{ t('trip_show.highlights_heading') }}</SectionHeader>
-                        <Highlights :highlights="trip.highlights" />
-                    </BaseCard>
+                    <TripHighlights :highlights="highlights" />
 
                     <!-- Inclusions & Exclusions -->
                     <TripItems :trip-items="tripItems" />
