@@ -1,8 +1,8 @@
 <script setup>
 import { computed, markRaw } from 'vue';
 import {
-    TrainFront, MoonStar, Clock, ArrowLeftRight, MapPin, BedDouble, Coffee, Mountain, CalendarDays, Sun, Info,
-} from 'lucide-vue-next';
+    TrainFront, MoonStar, Clock, ArrowLeftRight, MapPin, BedDouble, Coffee, MountainSnow, CalendarDays, Sun, Info,
+} from '@lucide/vue';
 
 const props = defineProps({
     // Value of the KeyFactIcon enum; an unknown or missing value falls back to the neutral icon
@@ -21,7 +21,7 @@ const icons = {
     location: markRaw(MapPin),
     bed: markRaw(BedDouble),
     breakfast: markRaw(Coffee),
-    mountain: markRaw(Mountain),
+    mountain: markRaw(MountainSnow),
     calendar: markRaw(CalendarDays),
     sun: markRaw(Sun),
     info: markRaw(Info),

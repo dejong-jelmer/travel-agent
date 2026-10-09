@@ -1,6 +1,6 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
-import { ChevronRight } from 'lucide-vue-next'
+import { ChevronRight } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 
 // Trail of { label, url } items from BreadcrumbTrail::toArray(); the last item is the current page

@@ -1,5 +1,5 @@
 <script setup>
-import { Phone, ShieldCheck } from 'lucide-vue-next';
+import { Phone, ShieldCheck } from '@lucide/vue';
 import portrait from '@/../images/me_thumb.webp';
 
 defineEmits(['request']);

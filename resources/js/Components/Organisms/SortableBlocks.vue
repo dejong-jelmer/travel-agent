@@ -1,7 +1,7 @@
 <script>
 import { ref, onMounted, watch } from "vue";
 import Sortable from "sortablejs";
-import { GripVertical } from "lucide-vue-next";
+import { GripVertical } from "@lucide/vue";
 
 export default {
     components: {

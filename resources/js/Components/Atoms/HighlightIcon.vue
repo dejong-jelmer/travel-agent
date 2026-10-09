@@ -1,13 +1,13 @@
 <script setup>
 import { computed, markRaw } from 'vue';
 import {
-    Landmark, Church, Castle, Palette, Drama, Binoculars, Store, Footprints, Mountain, Flower2, Waves, UtensilsCrossed,
-    Wine, Signpost, MapPin,
-} from 'lucide-vue-next';
-import CaveIcon from './CaveIcon.vue';
-import LascauxHorseIcon from './LascauxHorseIcon.vue';
-import HistoricTownIcon from './HistoricTownIcon.vue';
-import HistoricCityIcon from './HistoricCityIcon.vue';
+    Landmark, Church, Castle, Palette, Drama, Binoculars, Store, Footprints, MountainSnow, Flower2, Waves, UtensilsCrossed,
+    Grape, Signpost, Rose, MapPin,
+} from '@lucide/vue';
+import CaveIcon from '@/Icons/CaveIcon.vue';
+import LascauxHorseIcon from '@/Icons/LascauxHorseIcon.vue';
+import HistoricTownIcon from '@/Icons/HistoricTownIcon.vue';
+import HistoricCityIcon from '@/Icons/HistoricCityIcon.vue';
 
 const props = defineProps({
     // Icon name from HighlightCategory::icon(); a missing or unknown name renders nothing
@@ -27,13 +27,14 @@ const icons = {
     Binoculars: markRaw(Binoculars),
     Store: markRaw(Store),
     Footprints: markRaw(Footprints),
-    Mountain: markRaw(Mountain),
+    MountainSnow: markRaw(MountainSnow),
     Flower2: markRaw(Flower2),
     Waves: markRaw(Waves),
     UtensilsCrossed: markRaw(UtensilsCrossed),
-    Wine: markRaw(Wine),
+    Grape: markRaw(Grape),
     Signpost: markRaw(Signpost),
     MapPin: markRaw(MapPin),
+    Rose: markRaw(Rose),
     Cave: markRaw(CaveIcon),
     LascauxHorse: markRaw(LascauxHorseIcon),
     HistoricTown: markRaw(HistoricTownIcon),

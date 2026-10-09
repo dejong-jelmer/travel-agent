@@ -1,5 +1,5 @@
 <script setup>
-    import { AtSign } from 'lucide-vue-next'
+    import { AtSign } from '@lucide/vue'
 </script>
 
 <template>

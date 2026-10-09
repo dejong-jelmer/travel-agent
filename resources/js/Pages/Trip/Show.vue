@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from 'lucide-vue-next';
+import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from '@lucide/vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'

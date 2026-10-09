@@ -2,7 +2,7 @@
 import { ref } from "vue"
 import { useForm } from '@inertiajs/vue3'
 import { useToast } from "vue-toastification"
-import { LoaderCircle } from "lucide-vue-next"
+import { LoaderCircle } from "@lucide/vue"
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

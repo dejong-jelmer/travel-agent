@@ -2,7 +2,7 @@
 import { computed } from 'vue'
 import { usePage } from '@inertiajs/vue3';
 import VueDatePicker from '@vuepic/vue-datepicker'
-import { CalendarDays } from 'lucide-vue-next'
+import { CalendarDays } from '@lucide/vue'
 import '@vuepic/vue-datepicker/dist/main.css'
 
 const page = usePage();

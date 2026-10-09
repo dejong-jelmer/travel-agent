@@ -6,7 +6,7 @@ import Travelers from '@/Components/Organisms/BookingSteps/Travelers.vue';
 import Contact from '@/Components/Organisms/BookingSteps/Contact.vue';
 import Price from '@/Components/Organisms/BookingSteps/Price.vue';
 import Overview from '@/Components/Organisms/BookingSteps/Overview.vue';
-import { LoaderCircle, TrainFront, Users, Home, Euro, ClipboardList } from 'lucide-vue-next'
+import { LoaderCircle, TrainFront, Users, Home, Euro, ClipboardList } from '@lucide/vue'
 
 const stepIcons = {
     trip: TrainFront,

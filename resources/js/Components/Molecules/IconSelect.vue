@@ -1,7 +1,7 @@
 <script setup>
 import { computed } from 'vue';
 import { Listbox, ListboxButton, ListboxOptions, ListboxOption } from '@headlessui/vue';
-import { ChevronDown } from 'lucide-vue-next';
+import { ChevronDown } from '@lucide/vue';
 
 const props = defineProps({
     modelValue: String,

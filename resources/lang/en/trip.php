@@ -53,6 +53,7 @@ return [
         'prehistory' => 'Prehistory',
         'cave' => 'Cave',
         'day_trip' => 'Day trips',
+        'romantic' => 'Romantic',
         'other' => 'Sight',
     ],
 

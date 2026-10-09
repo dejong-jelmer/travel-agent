@@ -2,7 +2,7 @@
 import { router } from '@inertiajs/vue3'
 import { shallowRef, markRaw } from 'vue';
 
-import {Trash2, Pencil, Eye, Route, Save, Plus, Send, RefreshCcw } from 'lucide-vue-next';
+import {Trash2, Pencil, Eye, Route, Save, Plus, Send, RefreshCcw } from '@lucide/vue';
 
 const props = defineProps({
     icon: {

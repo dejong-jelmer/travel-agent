@@ -53,6 +53,7 @@ return [
         'prehistory' => 'Prehistorie',
         'cave' => 'Grot',
         'day_trip' => 'Dagtochten',
+        'romantic' => 'Romantiek',
         'other' => 'Bezienswaardigheid',
     ],
 

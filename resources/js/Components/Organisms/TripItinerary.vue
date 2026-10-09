@@ -1,5 +1,5 @@
 <script setup>
-import { Camera, BedDouble, AlertTriangle, Info } from 'lucide-vue-next';
+import { Camera, BedDouble, AlertTriangle, Info } from '@lucide/vue';
 import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import { ref } from 'vue'
 import { useMq } from 'vue3-mq'

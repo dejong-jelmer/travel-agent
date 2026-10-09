@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, watchEffect, ref } from 'vue';
-import { Plus, Minus, ChevronUp, ChevronDown } from 'lucide-vue-next';
+import { Plus, Minus, ChevronUp, ChevronDown } from '@lucide/vue';
 
 
 const props = defineProps({

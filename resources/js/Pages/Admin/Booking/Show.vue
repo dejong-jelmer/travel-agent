@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { usePage } from '@inertiajs/vue3';
-import { FileText, User, Users, Activity, Receipt } from 'lucide-vue-next';
+import { FileText, User, Users, Activity, Receipt } from '@lucide/vue';
 import { feesAndFundsEntries, sumCostItems, sumFeesAndFunds } from '@/Support/bookingPrice.js';
 import { formatCents } from '@/Support/money.js';
 

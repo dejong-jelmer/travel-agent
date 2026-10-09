@@ -5,7 +5,7 @@ import {
     CalendarCheck2,
     RouteOff,
     SquareCheckBig,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 
 const props = defineProps({
     status: {

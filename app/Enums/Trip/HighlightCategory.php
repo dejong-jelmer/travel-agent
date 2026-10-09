@@ -32,6 +32,7 @@ enum HighlightCategory: string
     case Prehistory = 'prehistory';
     case Cave = 'cave';
     case DayTrip = 'day_trip';
+    case Romantic = 'romantic';
     case Other = 'other';
 
     /**
@@ -50,13 +51,14 @@ enum HighlightCategory: string
             self::Viewpoint => 'Binoculars',
             self::Square => 'Store',
             self::Walk => 'Footprints',
-            self::Mountain => 'Mountain',
+            self::Mountain => 'MountainSnow',
             self::Garden => 'Flower2',
             self::Water => 'Waves',
             self::Food => 'UtensilsCrossed',
-            self::Wine => 'Wine',
+            self::Wine => 'Grape',
             self::Prehistory => 'LascauxHorse',
             self::Cave => 'Cave',
+            self::Romantic => 'Rose',
             self::DayTrip => 'Signpost',
             self::Other => 'MapPin',
         };

@@ -1,5 +1,5 @@
 <script setup>
-import { TriangleAlert } from 'lucide-vue-next';
+import { TriangleAlert } from '@lucide/vue';
 
     const props =  defineProps({
         form: {

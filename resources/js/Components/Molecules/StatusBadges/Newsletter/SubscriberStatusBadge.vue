@@ -4,7 +4,7 @@ import {
     Clock,
     AlertCircle,
     X,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 
 const props = defineProps({
     status: {

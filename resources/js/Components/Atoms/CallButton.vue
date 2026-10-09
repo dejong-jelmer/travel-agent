@@ -1,5 +1,5 @@
 <script setup>
-    import { Phone } from 'lucide-vue-next';
+    import { Phone } from '@lucide/vue';
 </script>
 
 <template>
