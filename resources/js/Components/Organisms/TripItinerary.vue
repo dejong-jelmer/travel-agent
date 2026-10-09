@@ -41,7 +41,7 @@ const imageSizes = '(min-width: 1071px) 220px, (min-width: 900px) calc(66.7vw - 
                     <!-- Round, or a pill for a range of days; a pill wider than the rail overflows it on both sides -->
                     <span
                         class="flex items-center justify-center h-8 min-w-8 tablet:h-9 tablet:min-w-9 px-2 rounded-full whitespace-nowrap"
-                        :class="isTravelDay(item)
+                        :class="item.type === 'night_train'
                             ? 'bg-brand-text text-brand-secondary'
                             : 'bg-white border-2 border-brand-primary text-sm font-semibold text-brand-primary'">
                         <MoonStar v-if="item.type === 'night_train'" class="w-4 h-4 tablet:w-[18px] tablet:h-[18px]" />
