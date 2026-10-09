@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 
@@ -80,11 +80,34 @@ const update = () => {
     loadedCount.value = Math.max(loadedCount.value, Math.ceil((scrollLeft + clientWidth) / slideStep()) + ahead)
 }
 
-// Scrolls one slide; the smooth animation comes from the motion-safe:scroll-smooth class
+// One measurement per frame is enough while scrolling, or when several images in the slides load at once
+let frame = null
+const scheduleUpdate = () => {
+    if (frame) return
+    frame = requestAnimationFrame(() => {
+        frame = null
+        update()
+    })
+}
+
+// Scrolls one slide; the smooth animation comes from the motion-safe:scroll-smooth class. A button fading out at
+// the start or end still takes clicks, which do nothing.
 const scroll = (direction) => {
     if (direction < 0 ? atStart.value : atEnd.value) return
     track.value.scrollBy({ left: direction * slideStep() })
 }
+
+// A button that hides while it has the focus, such as next after the last click, hands the focus to the other one,
+// so keyboard users keep their place. The focus is read before the DOM update, and handed over once v-show has
+// displayed the other button again, which happens after post-flush watchers.
+const previousButton = ref(null)
+const nextButton = ref(null)
+watch([atStart, atEnd], async ([start, end]) => {
+    const focused = document.activeElement
+    await nextTick()
+    if (start && !end && focused === previousButton.value) nextButton.value?.focus()
+    if (end && !start && focused === nextButton.value) previousButton.value?.focus()
+})
 
 let resizeObserver = null
 onMounted(() => {
@@ -92,14 +115,19 @@ onMounted(() => {
     resizeObserver = new ResizeObserver(update)
     resizeObserver.observe(track.value)
 })
-onBeforeUnmount(() => resizeObserver?.disconnect())
+onBeforeUnmount(() => {
+    resizeObserver?.disconnect()
+    cancelAnimationFrame(frame)
+})
 </script>
 
 <template>
     <div>
         <div class="relative">
-            <!-- No tabindex: the slides hold focusable content (the lightbox buttons), which keyboard users scroll through -->
-            <div ref="track" role="region" :aria-label="label" :style="trackStyle" @scroll.passive="update"
+            <!-- No tabindex: the slides hold focusable content (the lightbox buttons), which keyboard users scroll through.
+                 Load events do not bubble, so the images in the slides are caught in the capture phase. -->
+            <div ref="track" role="region" :aria-label="label" :style="trackStyle" @scroll.passive="scheduleUpdate"
+                @load.capture="scheduleUpdate"
                 class="flex overflow-x-auto snap-x snap-mandatory motion-safe:scroll-smooth rounded-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div v-for="(item, index) in items" :key="item.id ?? index"
                     class="shrink-0 snap-start w-[--slide-width-phone] tablet:w-[--slide-width-tablet] laptop:w-[--slide-width-laptop]">
@@ -107,16 +135,26 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
                 </div>
             </div>
 
-            <!-- aria-disabled instead of disabled: a disabled button drops the keyboard focus at the start or end -->
+            <!-- Hidden at the start or end: they fade out, unless reduced motion is preferred, after which display: none
+                 takes them out of the tab order -->
             <template v-if="overflows">
-                <button type="button" :aria-label="t('slider.previous')" :aria-disabled="atStart" @click="scroll(-1)"
-                    class="hidden tablet:flex absolute top-1/2 -translate-y-1/2 -left-[18px] items-center justify-center w-11 h-11 rounded-full bg-white border border-brand-accent/20 shadow-md shadow-brand-text/[0.12] text-brand-primary transition-opacity aria-disabled:opacity-40 aria-disabled:cursor-not-allowed">
-                    <ChevronLeft class="w-5 h-5" aria-hidden="true" />
-                </button>
-                <button type="button" :aria-label="t('slider.next')" :aria-disabled="atEnd" @click="scroll(1)"
-                    class="hidden tablet:flex absolute top-1/2 -translate-y-1/2 -right-[18px] items-center justify-center w-11 h-11 rounded-full bg-white border border-brand-accent/20 shadow-md shadow-brand-text/[0.12] text-brand-primary transition-opacity aria-disabled:opacity-40 aria-disabled:cursor-not-allowed">
-                    <ChevronRight class="w-5 h-5" aria-hidden="true" />
-                </button>
+                <Transition enter-active-class="motion-safe:transition-opacity motion-safe:duration-200"
+                    enter-from-class="opacity-0" leave-active-class="motion-safe:transition-opacity motion-safe:duration-200"
+                    leave-to-class="opacity-0">
+                    <button v-show="!atStart" ref="previousButton" type="button" :aria-label="t('slider.previous')"
+                        @click="scroll(-1)"
+                        class="hidden tablet:flex absolute top-1/2 -translate-y-1/2 -left-[18px] items-center justify-center w-11 h-11 rounded-full bg-white border border-brand-accent/20 shadow-md shadow-brand-text/[0.12] text-brand-primary">
+                        <ChevronLeft class="w-5 h-5" aria-hidden="true" />
+                    </button>
+                </Transition>
+                <Transition enter-active-class="motion-safe:transition-opacity motion-safe:duration-200"
+                    enter-from-class="opacity-0" leave-active-class="motion-safe:transition-opacity motion-safe:duration-200"
+                    leave-to-class="opacity-0">
+                    <button v-show="!atEnd" ref="nextButton" type="button" :aria-label="t('slider.next')" @click="scroll(1)"
+                        class="hidden tablet:flex absolute top-1/2 -translate-y-1/2 -right-[18px] items-center justify-center w-11 h-11 rounded-full bg-white border border-brand-accent/20 shadow-md shadow-brand-text/[0.12] text-brand-primary">
+                        <ChevronRight class="w-5 h-5" aria-hidden="true" />
+                    </button>
+                </Transition>
             </template>
         </div>
 
