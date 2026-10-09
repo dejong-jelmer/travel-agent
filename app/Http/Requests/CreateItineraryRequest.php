@@ -18,15 +18,6 @@ class CreateItineraryRequest extends FormRequest
     }
 
     /**
-     * Prepare the request for validation
-     */
-    protected function prepareForValidation(): void
-    {
-        //  Default to empty array's on null
-        emptyFormRequestToArray($this, 'activities');
-    }
-
-    /**
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>

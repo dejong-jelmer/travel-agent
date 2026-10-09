@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Trip\ItineraryType;
 use App\Models\Image;
 use App\Models\Itinerary;
 use App\Models\Trip;
@@ -10,6 +11,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class ItineraryTest extends TestCase
@@ -73,7 +75,9 @@ class ItineraryTest extends TestCase
         $response = $this->get(route('admin.trips.itineraries.create', $this->trip));
 
         $response->assertInertia(
-            fn (AssertableInertia $page) => $page->component('Admin/Trip/Itinerary/Create')
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Trip/Itinerary/Create')
+                ->where('typeOptions', ItineraryType::options())
         );
 
         $response->assertStatus(200);
@@ -85,6 +89,7 @@ class ItineraryTest extends TestCase
 
         $itineraryData = [
             'trip_id' => $trip->id,
+            'type' => 'night_train',
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
             'day_from' => fake()->numberBetween(1, 4),
@@ -98,6 +103,7 @@ class ItineraryTest extends TestCase
 
         $itinerary = Itinerary::where('trip_id', $trip->id)->firstOrFail();
 
+        $this->assertSame(ItineraryType::NightTrain, $itinerary->type);
         $this->assertEquals($itineraryData['title'], $itinerary->title);
         $this->assertEquals($itineraryData['description'], $itinerary->description);
         $this->assertEquals($itineraryData['day_from'], $itinerary->day_from);
@@ -121,6 +127,8 @@ class ItineraryTest extends TestCase
                 ->has('itinerary')
                 ->where('itinerary.id', $this->itinerary->id)
                 ->where('itinerary.title', $this->itinerary->title)
+                ->where('itinerary.type', 'stay')
+                ->where('typeOptions', ItineraryType::options())
                 ->etc()
         );
 
@@ -131,6 +139,7 @@ class ItineraryTest extends TestCase
     {
         $itineraryData = [
             'trip_id' => $this->trip->id,
+            'type' => 'train',
             'title' => fake()->city().' - '.fake()->city(),
             'description' => fake()->text(500),
             'day_from' => fake()->numberBetween(9, 20),
@@ -144,6 +153,7 @@ class ItineraryTest extends TestCase
 
         $itinerary = $this->itinerary->fresh();
 
+        $this->assertSame(ItineraryType::Train, $itinerary->type);
         $this->assertEquals($itineraryData['title'], $itinerary->title);
         $this->assertEquals($itineraryData['description'], $itinerary->description);
         $this->assertEquals($itineraryData['day_from'], $itinerary->day_from);
@@ -155,6 +165,61 @@ class ItineraryTest extends TestCase
         $this->assertEquals($itineraryData['image']->getClientOriginalName(), $image->original_name);
         $this->assertEquals('image/jpeg', $image->mime_type);
         Storage::disk(config('images.disk'))->assertExists(config('images.directory')."/{$image->path}");
+    }
+
+    public static function itineraryTypes(): array
+    {
+        return array_map(fn (ItineraryType $type) => [$type], ItineraryType::cases());
+    }
+
+    #[DataProvider('itineraryTypes')]
+    public function test_admin_can_create_an_itinerary_of_every_type(ItineraryType $type): void
+    {
+        $trip = Trip::factory()->create();
+
+        $response = $this->post(route('admin.trips.itineraries.store', $trip), [
+            ...$this->validItineraryData($trip),
+            'type' => $type->value,
+        ]);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame($type, Itinerary::where('trip_id', $trip->id)->firstOrFail()->type);
+    }
+
+    public static function invalidTypes(): array
+    {
+        return [
+            'missing' => [null],
+            'empty' => [''],
+            'unknown' => ['bus'],
+        ];
+    }
+
+    #[DataProvider('invalidTypes')]
+    public function test_itinerary_cannot_be_created_with_an_invalid_type(?string $type): void
+    {
+        $trip = Trip::factory()->create();
+
+        $response = $this->post(route('admin.trips.itineraries.store', $trip), [
+            ...$this->validItineraryData($trip),
+            'type' => $type,
+        ]);
+
+        $response->assertSessionHasErrors('type');
+        $this->assertDatabaseMissing('itineraries', ['trip_id' => $trip->id]);
+    }
+
+    #[DataProvider('invalidTypes')]
+    public function test_itinerary_cannot_be_updated_with_an_invalid_type(?string $type): void
+    {
+        $response = $this->post(route('admin.itineraries.update', $this->itinerary), [
+            ...$this->validItineraryData($this->trip),
+            'day_from' => 100,
+            'type' => $type,
+        ]);
+
+        $response->assertSessionHasErrors('type');
+        $this->assertSame(ItineraryType::Stay, $this->itinerary->fresh()->type);
     }
 
     public function test_admin_can_softdelete_an_itinerary(): void
@@ -179,5 +244,19 @@ class ItineraryTest extends TestCase
             'imageable_type' => Itinerary::class,
             'deleted_at' => null,
         ]);
+    }
+
+    /**
+     * A valid request for an itinerary item of the trip, for the tests that only vary one field.
+     */
+    private function validItineraryData(Trip $trip): array
+    {
+        return [
+            'trip_id' => $trip->id,
+            'type' => ItineraryType::Stay->value,
+            'title' => 'Aankomst in Verona',
+            'description' => 'Een dag in de stad.',
+            'day_from' => 1,
+        ];
     }
 }

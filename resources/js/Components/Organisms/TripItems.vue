@@ -35,9 +35,9 @@ const icons = {
                         <component
                             :is="icons[tripItem.type]"
                             :class="{
-                                'text-brand-primary': tripItem.type === 'inclusion',
+                                'text-brand-accent': tripItem.type === 'inclusion',
                                 'text-brand-light': tripItem.type === 'exclusion',
-                                'text-brand-accent': tripItem.type === 'optional',
+                                'text-brand-primary': tripItem.type === 'optional',
                             }"
                             class="w-4 h-4 mt-1 flex-shrink-0"
                         />

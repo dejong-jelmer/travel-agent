@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\Transport;
 use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\ItineraryType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
@@ -673,6 +674,111 @@ class TripTest extends TestCase
             fn (AssertableInertia $page) => $page
                 ->component('Trip/Show')
                 ->where('highlights', [])
+        );
+    }
+
+    // Itinerary display tests
+    public function test_trip_show_passes_the_itinerary_in_the_order_set_in_the_admin(): void
+    {
+        $trip = Trip::factory()->create();
+        $stay = Itinerary::factory()->create([
+            'trip_id' => $trip->id,
+            'type' => ItineraryType::Stay,
+            'day_from' => 2,
+            'day_to' => 4,
+            'title' => 'Drie dagen Verona',
+            'remark' => 'Lunch niet inbegrepen',
+            'order' => 2,
+        ]);
+        $train = Itinerary::factory()->create(['trip_id' => $trip->id, 'type' => ItineraryType::Train, 'day_from' => 5, 'order' => 3]);
+        $nightTrain = Itinerary::factory()->create(['trip_id' => $trip->id, 'type' => ItineraryType::NightTrain, 'day_from' => 1, 'order' => 1]);
+        $image = Image::factory()->create(['imageable_id' => $stay->id, 'imageable_type' => Itinerary::class]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->missing('trip.itineraries')
+                ->has('itinerary', 3)
+                ->where('itinerary.0.id', $nightTrain->id)
+                ->where('itinerary.0.type', 'night_train')
+                ->where('itinerary.0.day_from', 1)
+                ->where('itinerary.0.day_to', null)
+                ->where('itinerary.0.image', null)
+                ->where('itinerary.1.id', $stay->id)
+                ->where('itinerary.1.type', 'stay')
+                ->where('itinerary.1.day_from', 2)
+                ->where('itinerary.1.day_to', 4)
+                ->where('itinerary.1.title', 'Drie dagen Verona')
+                ->where('itinerary.1.remark', 'Lunch niet inbegrepen')
+                ->where('itinerary.1.image.id', $image->id)
+                ->where('itinerary.1.image.public_url', $image->public_url)
+                ->has('itinerary.1.image.sources')
+                ->where('itinerary.2.id', $train->id)
+                ->where('itinerary.2.type', 'train')
+                ->where('itinerary.2.day_from', 5)
+        );
+    }
+
+    public function test_trip_show_passes_an_empty_itinerary_without_any_items(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->missing('trip.itineraries')
+                ->where('itinerary', [])
+        );
+    }
+
+    public function test_trip_show_gives_the_accommodation_label_only_to_the_first_item_of_each_run_with_the_same_accommodation(): void
+    {
+        $trip = Trip::factory()->create();
+        $items = [
+            ['day_from' => 1, 'day_to' => null, 'accommodation' => 'Hotel Aurora'],
+            ['day_from' => 2, 'day_to' => 4, 'accommodation' => 'Hotel Aurora'],
+            ['day_from' => 5, 'day_to' => null, 'accommodation' => 'Hotel Gabbia'],
+            ['day_from' => 6, 'day_to' => null, 'accommodation' => null],
+            ['day_from' => 7, 'day_to' => null, 'accommodation' => 'Hotel Gabbia'],
+            ['day_from' => 8, 'day_to' => null, 'accommodation' => 'Hotel Aurora'],
+        ];
+        foreach ($items as $index => $item) {
+            Itinerary::factory()->create([...$item, 'trip_id' => $trip->id, 'order' => $index + 1]);
+        }
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                // A run counts every day of a range: day 1 plus days 2-4
+                ->where('itinerary.0.accommodation_label', 'Je verblijft 4 nachten in Hotel Aurora')
+                ->where('itinerary.1.accommodation_label', null)
+                ->where('itinerary.2.accommodation_label', 'Je verblijft in Hotel Gabbia')
+                ->where('itinerary.3.accommodation_label', null)
+                // A day without accommodation ends the run, so the same accommodation after it starts a new one
+                ->where('itinerary.4.accommodation_label', 'Je verblijft in Hotel Gabbia')
+                ->where('itinerary.5.accommodation_label', 'Je verblijft in Hotel Aurora')
+        );
+    }
+
+    public function test_trip_show_counts_every_day_of_a_single_range_in_the_accommodation_label(): void
+    {
+        $trip = Trip::factory()->create();
+        Itinerary::factory()->create(['trip_id' => $trip->id, 'day_from' => 3, 'day_to' => 6, 'accommodation' => 'Hotel Aurora']);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('itinerary.0.accommodation_label', 'Je verblijft 4 nachten in Hotel Aurora')
         );
     }
 

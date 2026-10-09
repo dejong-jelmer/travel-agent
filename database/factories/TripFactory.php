@@ -98,7 +98,6 @@ class TripFactory extends Factory
             Itinerary::factory()
                 ->withImage()
                 ->withRemarks()
-                ->withActivities()
                 ->count(fake()->numberBetween(6, 14))
                 ->withIncrementingDays()
                 ->withIncrementingOrder()

@@ -86,7 +86,7 @@
     },
     "trip_itinerary": {
         "day": "Day",
-        "activities": "Activities",
+        "travel_day": "Travel day",
         "accommodation": "Accommodation",
         "accommodation_text": "You will stay at",
         "transport": "Transport"
@@ -441,7 +441,7 @@
                     "subtitle": "Upload image for this travel day"
                 },
                 "details": {
-                    "subtitle": "Accommodation, activities and facilities"
+                    "subtitle": "Accommodation and remark"
                 }
             },
             "fields": {
@@ -457,6 +457,9 @@
                 "day_to": {
                     "label": "Itinerary range end",
                     "placeholder": "End range"
+                },
+                "type": {
+                    "label": "Day type"
                 },
                 "title": {
                     "label": "Title",
@@ -481,10 +484,6 @@
                 "accommodation": {
                     "label": "Accommodation",
                     "placeholder": "e.g. Hotel Central Amsterdam"
-                },
-                "activities": {
-                    "label": "Activities",
-                    "placeholder": "e.g. City walk, museum visit"
                 },
                 "distance": {
                     "label": "Distance (km)",
@@ -972,7 +971,6 @@
         },
         "country_heading": "About the country",
         "tab_content": {
-            "itinerary_empty": "Detailed itinerary will be added soon",
             "inclusive_placeholder": "Included and excluded information comes here.",
             "practical_placeholder": "Practical information about the trip comes here.",
             "extra_placeholder": "Extra information about this trip comes here."

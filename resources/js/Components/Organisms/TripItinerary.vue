@@ -1,111 +1,91 @@
 <script setup>
-import { Camera, BedDouble, AlertTriangle, Info } from '@lucide/vue';
-import { useRevealEffect } from '@/Composables/useRevealEffect.js';
-import { ref } from 'vue'
-import { useMq } from 'vue3-mq'
+import { BedDouble, Info, MoonStar, TrainFront } from '@lucide/vue';
+import { useI18n } from 'vue-i18n';
 
-const { rootRef, visible, reveal } = useRevealEffect();
-const mq = useMq()
+defineProps({
+    // Shape: [{ id, type, day_from, day_to, title, description, accommodation_label, remark, image }], see
+    // ItineraryService::forDisplay. A trip without itinerary passes an empty list and the section is not shown.
+    items: { type: Array, default: () => [] },
+});
 
-// Rendered image width: w-48 from tablet on, below that the full content column, which on the trip page is the
-// viewport minus the page padding (px-4), the card border and padding (p-6), the day label (w-20) and the gap (gap-4).
-const imageSizes = '(min-width: 600px) 192px, calc(100vw - 178px)'
+const { t } = useI18n();
 
-// LightBox (single image per itinerary, so always index 0)
-const lightboxRef = ref(null)
-const thumbnail = ref(null)
-const openLightbox = () => {
-    lightboxRef.value?.open(0, [thumbnail.value])
-}
-const props = defineProps({
-    itinerary: {
-        type: Object,
-        required: true
-    },
-    isAdmin: {
-        type: Boolean,
-        default: false
-    },
-    index: {
-        type: Number,
-        default: 0
-    }
-})
+const isTravelDay = (item) => item.type !== 'stay';
+
+// The day or range of days, e.g. "3" or "3-6"
+const days = (item) => item.day_to ? `${item.day_from}-${item.day_to}` : `${item.day_from}`;
+
+const label = (item) => isTravelDay(item)
+    ? `${t('trip_itinerary.day')} ${days(item)} · ${t('trip_itinerary.travel_day')}`
+    : `${t('trip_itinerary.day')} ${days(item)}`;
+
+// Rendered photo width per breakpoint (screens.js). The photo sits next to the text at 220px once the content column
+// is at least 520px wide (the container query in the template), otherwise above it at the full column width. That
+// column is the viewport minus the page padding (px-4, tablet:px-6), from laptop on the two-thirds column
+// (grid-cols-3, gap-12, max-w-screen-desktop), the card border and padding (px-5, tablet:px-10) and the rail with its
+// gap (32px, tablet:44px, plus 20px). It reaches 520px at a 714px viewport, drops below it when the sidebar appears at
+// 900px and reaches it again at 1071px. Update this when that layout changes.
+const imageSizes = '(min-width: 1071px) 220px, (min-width: 900px) calc(66.7vw - 194px), (min-width: 714px) 220px, (min-width: 600px) calc(100vw - 194px), calc(100vw - 126px)';
 </script>
+
 <template>
-    <div ref="rootRef" class="relative">
-        <!-- Timeline (vertical) -->
-        <div class="absolute left-4 top-16 bottom-0 w-px bg-brand-subtle/30"></div>
+    <BaseCard v-if="items?.length" aria-labelledby="trip-itinerary-heading">
+        <SectionHeader id="trip-itinerary-heading">{{ $t('trip_show.itinerary_heading') }}</SectionHeader>
 
-        <!-- Itinerary item -->
-        <div class="group relative flex gap-4 tablet:gap-8 pb-10 last:pb-0">
-            <!-- Day label -->
-            <div class="relative flex-shrink-0 w-20 tablet:w-24 pt-1">
-                <span class="text-sm tablet:text-base font-light text-brand-primary/60 tabular-nums">
-                    {{ $t('trip_itinerary.day') }} {{ itinerary.day_from }}<span v-if="itinerary.day_to">-{{
-                        itinerary.day_to }}</span>
-                </span>
-            </div>
+        <ol>
+            <li v-for="(item, index) in items" :key="item.id"
+                class="grid grid-cols-[32px_minmax(0,1fr)] tablet:grid-cols-[44px_minmax(0,1fr)] gap-x-5">
+                <!-- Rail: the marker with a line below it down to the next item. Hidden from screen readers, as the
+                     label next to it names the day as well. -->
+                <div class="flex flex-col items-center" aria-hidden="true">
+                    <!-- Round, or a pill for a range of days; a pill wider than the rail overflows it on both sides -->
+                    <span
+                        class="flex items-center justify-center h-8 min-w-8 tablet:h-9 tablet:min-w-9 px-2 rounded-full whitespace-nowrap"
+                        :class="isTravelDay(item)
+                            ? 'bg-brand-text text-brand-secondary'
+                            : 'bg-white border-2 border-brand-primary text-sm font-semibold text-brand-primary'">
+                        <MoonStar v-if="item.type === 'night_train'" class="w-4 h-4 tablet:w-[18px] tablet:h-[18px]" />
+                        <TrainFront v-else-if="item.type === 'train'" class="w-4 h-4 tablet:w-[18px] tablet:h-[18px]" />
+                        <template v-else>{{ days(item) }}</template>
+                    </span>
+                    <span v-if="index < items.length - 1" class="w-0.5 flex-1 bg-brand-accent/20"></span>
+                </div>
 
-            <!-- Content -->
-            <div class="flex-1 min-w-0">
-                <!-- Header -->
-                <div class="flex items-start justify-between mb-4">
-                    <div class="flex-1 min-w-0">
-                        <h3 class="text-base tablet:text-lg font-medium text-brand-primary mb-2">
-                            {{ itinerary.title }}
-                        </h3>
-                        <div v-if="itinerary.accommodation" class="flex items-center gap-2 text-sm text-brand-text/70">
-                            <BedDouble class="w-4 h-4" />
-                            <span>{{ $t('trip_itinerary.accommodation_text') }} {{ itinerary.accommodation }}</span>
+                <!-- The space below an item sits inside it, so the rail line runs on to the next marker -->
+                <div class="min-w-0 [container-type:inline-size]"
+                    :class="{ 'pb-8 tablet:pb-9': index < items.length - 1 }">
+                    <p class="text-[12.5px] uppercase tracking-[0.14em] text-brand-primary/85">
+                        {{ label(item) }}
+                    </p>
+                    <h3 class="mt-1 text-[21px] leading-snug font-semibold text-brand-primary">
+                        {{ item.title }}
+                    </h3>
+                    <!-- mt-[3px] centres the 16px icon on the first line of text -->
+                    <p v-if="item.accommodation_label"
+                        class="flex items-start gap-2 mt-1.5 text-[14px] tablet:text-[14.5px] leading-[1.5] text-brand-primary/85">
+                        <BedDouble class="w-4 h-4 mt-[3px] flex-shrink-0" aria-hidden="true" />
+                        <span>{{ item.accommodation_label }}</span>
+                    </p>
+
+                    <!-- Photo above the text, or to the right of it once the column has room for both -->
+                    <div
+                        class="flex flex-col gap-4 mt-4 [@container(min-width:520px)]:flex-row [@container(min-width:520px)]:items-start [@container(min-width:520px)]:gap-6">
+                        <ResponsiveImage v-if="item.image" :image="item.image" :sizes="imageSizes" :alt="item.title"
+                            loading="lazy"
+                            class="w-full aspect-[16/10] flex-shrink-0 object-cover rounded-xl [@container(min-width:520px)]:order-last [@container(min-width:520px)]:w-[220px] [@container(min-width:520px)]:aspect-[4/3]" />
+                        <div class="flex-1 min-w-0">
+                            <p class="text-[16.5px] leading-[1.75] text-brand-text">
+                                {{ item.description }}
+                            </p>
+                            <p v-if="item.remark"
+                                class="flex items-start gap-2 mt-[14px] text-[14px] tablet:text-[14.5px] leading-[1.5] text-brand-primary/85">
+                                <Info class="w-4 h-4 mt-[3px] flex-shrink-0" aria-hidden="true" />
+                                <span>{{ item.remark }}</span>
+                            </p>
                         </div>
                     </div>
-
-                    <!-- Admin Controls -->
-                    <div v-if="isAdmin"
-                        class="flex gap-2 ml-4 flex-shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-150">
-                        <IconLink type="info" icon="Pencil" :href="route('admin.itineraries.edit', itinerary)"
-                            v-tippy="$t('itinerary.edit')" />
-                        <IconLink type="delete" icon="Trash2" :href="route('admin.itineraries.destroy', itinerary)"
-                            method="delete" :showConfirm="true" :prompt="$t('itinerary.delete_confirm')"
-                            v-tippy="$t('itinerary.delete')" />
-                    </div>
                 </div>
-
-                <!-- Description + optional image -->
-                <div
-                    :class="['flex flex-col gap-6 items-start', index % 2 === 0 ? 'tablet:flex-row' : 'tablet:flex-row-reverse']">
-                    <div class="flex-1 min-w-0">
-                        <p v-bind="reveal(50)"
-                            :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
-                            class="text-brand-text leading-relaxed text-sm tablet:text-base transition-all duration-200 ease-out">
-                            {{ itinerary.description }}
-                        </p>
-                    </div>
-                    <div v-if="itinerary.image?.public_url" class="flex-shrink-0 w-full tablet:w-48 self-start">
-                        <div class="rounded-md overflow-hidden">
-                            <!-- The wrapper clips anything outside the image, so the focus outline is drawn inside -->
-                            <button ref="thumbnail" type="button" aria-haspopup="dialog"
-                                class="block w-full rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand-accent"
-                                @click="openLightbox">
-                                <ResponsiveImage :image="itinerary.image" :sizes="imageSizes" :alt="itinerary.title" loading="lazy"
-                                    v-bind="reveal(50)"
-                                    :class="visible ? 'opacity-100 translate-x-0' : (index % 2 === 0 ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
-                                    class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out" />
-                            </button>
-                        </div>
-                        <LightBox ref="lightboxRef" :images="[itinerary.image]" />
-                    </div>
-                    <div v-else class="hidden tablet:block flex-shrink-0 tablet:w-48 self-start" aria-hidden="true">
-                    </div>
-                </div>
-
-                <!-- Remark -->
-                <div v-if="itinerary.remark" class="flex items-start gap-3 mt-6 text-sm text-brand-text/70">
-                    <Info class="w-4 h-4 text-brand-primary/50 flex-shrink-0 mt-0.5" />
-                    <p>{{ itinerary.remark }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+            </li>
+        </ol>
+    </BaseCard>
 </template>
