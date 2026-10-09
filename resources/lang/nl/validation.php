@@ -47,8 +47,11 @@ return [
         'special_requests_consent_required' => 'Je moet toestemming geven voor het verwerken van de door jou ingevulde bijzonderheden.',
 
         // Trip
-        'highlights.*.title.required_with' => 'Vul een titel in bij deze omschrijving.',
+        'highlights.*.title.required_with' => 'Vul een titel in bij dit hoogtepunt.',
         'highlights.*.title.distinct' => 'Deze titel is al gebruikt bij een ander hoogtepunt.',
+        'highlights.*.category.enum' => 'Kies een geldige categorie bij dit hoogtepunt.',
+        'highlights.*.category.required_with' => 'Kies een categorie bij dit eigen label.',
+        'highlights.*.label.max' => 'Een eigen label mag maximaal :max tekens bevatten.',
         'key_facts.max' => 'Je kunt maximaal :max punten invullen.',
         'key_facts.*.label.required' => 'Vul een label in bij dit punt.',
         'key_facts.*.label.max' => 'Een label mag maximaal :max tekens bevatten.',

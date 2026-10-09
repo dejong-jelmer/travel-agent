@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
-import { ArrowUpDown, ArrowUp, ArrowDown, Search, Filter } from 'lucide-vue-next';
+import { ArrowUpDown, ArrowUp, ArrowDown, Search, Filter } from '@lucide/vue';
 import { debounce } from 'lodash';
 
 const props = defineProps({

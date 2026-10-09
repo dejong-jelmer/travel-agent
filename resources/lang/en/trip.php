@@ -33,6 +33,30 @@ return [
         'info' => 'Information',
     ],
 
+    // Highlight categories
+    'highlight_category' => [
+        'roman' => 'Roman',
+        'church' => 'Church',
+        'castle' => 'Castle',
+        'historic_village' => 'Historic village',
+        'historic_city' => 'Historic city',
+        'museum' => 'Museum',
+        'theater' => 'Theatre',
+        'viewpoint' => 'Viewpoint',
+        'square' => 'Square and market',
+        'walk' => 'Walk',
+        'mountain' => 'Mountains',
+        'garden' => 'Garden and park',
+        'water' => 'River and lake',
+        'food' => 'Food',
+        'wine' => 'Wine',
+        'prehistory' => 'Prehistory',
+        'cave' => 'Cave',
+        'day_trip' => 'Day trips',
+        'romantic' => 'Romantic',
+        'other' => 'Sight',
+    ],
+
     // Items
     'item' => [
         'type' => [

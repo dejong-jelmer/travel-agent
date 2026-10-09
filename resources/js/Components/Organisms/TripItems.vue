@@ -1,7 +1,7 @@
 <script setup>
 import { computed, markRaw } from 'vue';
 
-import { Check, X, Plus } from 'lucide-vue-next';
+import { Check, X, Plus } from '@lucide/vue';
 
 const props = defineProps({
     tripItems: {

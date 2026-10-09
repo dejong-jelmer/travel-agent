@@ -1,6 +1,6 @@
 <script setup>
 import { computed, onMounted, watchEffect, ref } from 'vue';
-import { Plus, Minus, ChevronUp, ChevronDown } from 'lucide-vue-next';
+import { Plus, Minus, ChevronUp, ChevronDown } from '@lucide/vue';
 
 
 const props = defineProps({
@@ -9,8 +9,8 @@ const props = defineProps({
     name: String,
     placeholder: String,
     // Optional: renders an input per field, items become objects instead of strings.
-    // Shape: [{ key, label, placeholder }]
-    // A field of type 'icon' renders an IconSelect instead: [{ key, label, type: 'icon', options, default }].
+    // Shape: [{ key, label, placeholder }], where placeholder can also be a function that gets the row's item
+    // A field of type 'icon' renders an IconSelect instead: [{ key, label, type: 'icon', options, default, iconComponent }].
     // It starts on its default and does not count when deciding whether a row is blank.
     fields: {
         type: Array,
@@ -109,7 +109,8 @@ const move = (index, offset) => {
         <Label :for="label" :required="required">
             <slot name="label">{{ label }}</slot>
         </Label>
-        <div v-for="(item, index) in items" :key="`${name}-${index}`" role="group" class="flex items-start gap-2 group">
+        <!-- The border turns red while the delete button is hovered, matching the button's own hover color -->
+        <div v-for="(item, index) in items" :key="`${name}-${index}`" role="group" class="flex items-start gap-2 p-4 group border border-transparent hover:border-gray-400/50 has-[[data-delete]:hover]:border-red-500 rounded-lg">
             <div v-if="sortable" class="flex flex-col" :class="{ 'invisible': isTrailingBlank(index) }">
                 <button
                     type="button"
@@ -139,6 +140,7 @@ const move = (index, offset) => {
                             v-if="field.type === 'icon'"
                             :label="field.label"
                             :options="field.options"
+                            :icon-component="field.iconComponent"
                             v-model="items[index][field.key]"
                             :feedback="feedback[`${name}.${index}.${field.key}`] ?? null"
                         />
@@ -149,7 +151,7 @@ const move = (index, offset) => {
                             :label="field.label"
                             :showLabel="false"
                             v-model="items[index][field.key]"
-                            :placeholder="field.placeholder"
+                            :placeholder="typeof field.placeholder === 'function' ? field.placeholder(item) : field.placeholder"
                             :feedback="feedback[`${name}.${index}.${field.key}`] ?? null"
                             @keyup="handleInput(index)"
                         />
@@ -169,6 +171,7 @@ const move = (index, offset) => {
             </div>
             <DeleteButton
                 v-if="items.length > 1 && !isTrailingBlank(index)"
+                data-delete
                 @delete="deleteItem(index)"
             />
         </div>

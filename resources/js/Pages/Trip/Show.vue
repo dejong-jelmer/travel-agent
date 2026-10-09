@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from 'lucide-vue-next';
+import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from '@lucide/vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
@@ -13,6 +13,11 @@ const props = defineProps({
     // Shape: [{ key, title, html, variant, image_id }], the description split on its H2 headings, variant light or
     // dark, image_id the gallery image shown next to the section or null
     descriptionSections: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: [{ title, description, category, icon, label }], the highlights ready for display, see TripHighlights
+    highlights: {
         type: Array,
         default: () => []
     },
@@ -96,7 +101,6 @@ const hasCountryInfo = computed(() =>
 )
 
 const hasKeyFacts = computed(() => props.trip.key_facts?.length > 0)
-const hasHighlights = computed(() => props.trip.highlights?.length > 0)
 
 // The first section of the description opens the page next to the key facts, the others get a card each
 const leadSection = computed(() => props.descriptionSections[0] ?? null)
@@ -185,10 +189,7 @@ const contactUrl = computed(() => {
                     </div>
 
                     <!-- Highlights -->
-                    <BaseCard v-if="hasHighlights" aria-labelledby="trip-highlights-heading">
-                        <SectionHeader id="trip-highlights-heading">{{ t('trip_show.highlights_heading') }}</SectionHeader>
-                        <Highlights :highlights="trip.highlights" />
-                    </BaseCard>
+                    <TripHighlights :highlights="highlights" />
 
                     <!-- Inclusions & Exclusions -->
                     <TripItems :trip-items="tripItems" />

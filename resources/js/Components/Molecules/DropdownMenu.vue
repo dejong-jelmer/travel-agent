@@ -1,6 +1,6 @@
 <script setup>
 import { computed, ref } from 'vue';
-import { EllipsisVertical } from 'lucide-vue-next';
+import { EllipsisVertical } from '@lucide/vue';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import { useElementBounding, useWindowSize } from '@vueuse/core';
 

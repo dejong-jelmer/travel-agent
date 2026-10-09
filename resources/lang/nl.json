@@ -344,7 +344,14 @@
                         "label": "Omschrijving",
                         "placeholder": "Korte toelichting…"
                     },
-                    "help": "Voer unieke ervaringen en attracties van deze reis in"
+                    "category": {
+                        "label": "Categorie",
+                        "none": "Geen"
+                    },
+                    "label_field": {
+                        "label": "Eigen label (optioneel)"
+                    },
+                    "help": "Voer unieke ervaringen en attracties van deze reis in. Met een categorie krijgt een hoogtepunt een icoon en een label boven de titel; een eigen label (maximaal {label} tekens) vervangt het standaardlabel."
                 },
                 "key_facts": {
                     "label": "Je reis in het kort",

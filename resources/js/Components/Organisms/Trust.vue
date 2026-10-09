@@ -2,7 +2,7 @@
 // import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRevealEffect } from '@/Composables/useRevealEffect.js';
-import { Package, ShieldCheck, UserRound } from 'lucide-vue-next';
+import { Package, ShieldCheck, UserRound } from '@lucide/vue';
 import portrait from '@/../images/me.webp';
 import vvkrLogo from '@/../images/vvkr.png';
 

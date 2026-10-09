@@ -5,7 +5,7 @@ import {
     FileStack,
     Send,
     X,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 
 const props = defineProps({
     status: {

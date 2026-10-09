@@ -1,6 +1,6 @@
 <script setup>
 import { computed } from 'vue';
-import { Euro, Info } from 'lucide-vue-next';
+import { Euro, Info } from '@lucide/vue';
 import { usePage } from '@inertiajs/vue3';
 import { useBookingPrice } from '@/Composables/useBookingPrice.js';
 import { formatCents } from '@/Support/money.js';

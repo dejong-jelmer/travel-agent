@@ -1,5 +1,5 @@
 <script setup>
-import { CheckCircle } from 'lucide-vue-next';
+import { CheckCircle } from '@lucide/vue';
 import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 
 import usp1 from '@/../images/usp1.jpg';

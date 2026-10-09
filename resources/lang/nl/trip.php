@@ -33,6 +33,30 @@ return [
         'info' => 'Informatie',
     ],
 
+    // Highlight categories
+    'highlight_category' => [
+        'roman' => 'Romeins',
+        'church' => 'Kerk',
+        'castle' => 'Kasteel',
+        'historic_village' => 'Historisch dorp',
+        'historic_city' => 'Historische stad',
+        'museum' => 'Museum',
+        'theater' => 'Theater',
+        'viewpoint' => 'Uitzicht',
+        'square' => 'Plein en markt',
+        'walk' => 'Wandeling',
+        'mountain' => 'Bergen',
+        'garden' => 'Tuin en park',
+        'water' => 'Rivier en meer',
+        'food' => 'Eten',
+        'wine' => 'Wijn',
+        'prehistory' => 'Prehistorie',
+        'cave' => 'Grot',
+        'day_trip' => 'Dagtochten',
+        'romantic' => 'Romantiek',
+        'other' => 'Bezienswaardigheid',
+    ],
+
     // Items
     'item' => [
         'type' => [

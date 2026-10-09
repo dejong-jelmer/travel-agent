@@ -61,9 +61,11 @@ class TripController extends Controller
 
         return Inertia::render('Trip/Show', [
             'title' => $seo['title'],
-            // The description is only sent split into sections, so its HTML does not go along twice
-            'trip' => $trip->makeHidden('description'),
+            // The description is only sent split into sections and the highlights only ready for display, so neither
+            // goes along twice
+            'trip' => $trip->makeHidden(['description', 'highlights']),
             'descriptionSections' => $this->descriptionSections($trip),
+            'highlights' => $this->highlights($trip),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
@@ -96,5 +98,22 @@ class TripController extends Controller
                 'image_id' => in_array($imageId, $galleryIds, true) ? $imageId : null,
             ];
         }, $sections, array_keys($sections));
+    }
+
+    /**
+     * The highlights ready for display: a highlight with a category gets the name of its icon and the label shown
+     * above the title, its own label or else the default label of the category. Without a category both are null.
+     *
+     * @return list<array{title: string, description: string|null, category: string|null, icon: string|null, label: string|null}>
+     */
+    private function highlights(Trip $trip): array
+    {
+        return array_map(fn (array $highlight) => [
+            'title' => $highlight['title'],
+            'description' => $highlight['description'],
+            'category' => $highlight['category']?->value,
+            'icon' => $highlight['category']?->icon(),
+            'label' => $highlight['category'] ? ($highlight['label'] ?? $highlight['category']->label()) : null,
+        ], $trip->highlights ?? []);
     }
 }

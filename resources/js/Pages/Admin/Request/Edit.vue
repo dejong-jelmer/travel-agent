@@ -1,7 +1,7 @@
 <script setup>
 import { useForm } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
-import { FileText, Activity, Link } from 'lucide-vue-next';
+import { FileText, Activity, Link } from '@lucide/vue';
 
 const { t } = useI18n();
 

@@ -1,6 +1,6 @@
 <script setup>
 import { computed, markRaw } from 'vue';
-import { TrainFront, Ship, Bus, Car, ArrowLeftRight, Plane, Circle } from 'lucide-vue-next';
+import { TrainFront, Ship, Bus, Car, ArrowLeftRight, Plane, Circle } from '@lucide/vue';
 
 const props = defineProps({
     enum: {

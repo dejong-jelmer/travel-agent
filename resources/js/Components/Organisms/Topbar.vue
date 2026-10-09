@@ -1,5 +1,5 @@
 <script setup>
-import { Leaf, Phone } from 'lucide-vue-next';
+import { Leaf, Phone } from '@lucide/vue';
 import vvkrLogo from '@/../images/vvkr.png'
 
 </script>

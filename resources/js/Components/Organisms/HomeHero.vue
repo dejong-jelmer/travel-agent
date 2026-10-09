@@ -5,7 +5,7 @@ import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import heroVideo from '@/../videos/home-hero.mp4';
 import heroImage from '@/../images/hero-poster.jpg';
 import { useMq } from 'vue3-mq';
-import { ArrowDown } from 'lucide-vue-next';
+import { ArrowDown } from '@lucide/vue';
 
 const { t } = useI18n();
 const mq = useMq();

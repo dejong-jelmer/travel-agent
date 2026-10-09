@@ -1,5 +1,5 @@
 <script setup>
-import { User } from "lucide-vue-next";
+import { User } from "@lucide/vue";
 import { computed, toRef } from 'vue'
 
 const props = defineProps({

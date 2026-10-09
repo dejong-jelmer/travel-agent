@@ -4,7 +4,7 @@ import {
     PhoneCall,
     ArrowRightLeft,
     Archive,
-} from 'lucide-vue-next';
+} from '@lucide/vue';
 
 const props = defineProps({
     status: {

@@ -1,7 +1,7 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
-import { CircleCheckBig, Phone } from 'lucide-vue-next'
+import { CircleCheckBig, Phone } from '@lucide/vue'
 
 const props = defineProps({
     trip: {

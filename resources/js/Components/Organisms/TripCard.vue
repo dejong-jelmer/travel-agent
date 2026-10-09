@@ -1,7 +1,7 @@
 <script setup>
 import { Link } from "@inertiajs/vue3";
 import placeholder from "@/../images/placeholder.webp";
-import { Clock, Route } from "lucide-vue-next";
+import { Clock, Route } from "@lucide/vue";
 
 const props = defineProps({ trip: Object });
 

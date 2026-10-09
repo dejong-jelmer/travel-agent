@@ -7,6 +7,7 @@ const props = defineProps({
     transportOptions: Object,
     priceLabelOptions: Object,
     keyFactIconOptions: Array,
+    highlightCategoryOptions: Array,
     practicalSections: Object,
 });
 
@@ -55,6 +56,7 @@ function submit() {
             :transport-options="transportOptions"
             :price-label-options="priceLabelOptions"
             :key-fact-icon-options="keyFactIconOptions"
+            :highlight-category-options="highlightCategoryOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

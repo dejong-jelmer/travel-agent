@@ -16,6 +16,11 @@ const props = defineProps({
     transportOptions: Object,
     priceLabelOptions: Object,
     keyFactIconOptions: Array,
+    // Shape: [{ id, name, icon }], the cases of the HighlightCategory enum with their default label and icon name
+    highlightCategoryOptions: {
+        type: Array,
+        default: () => []
+    },
     // Shape: [{ id, name }], the sections of the saved description that can become the journey section
     journeySectionOptions: {
         type: Array,
@@ -138,7 +143,30 @@ const setSectionImage = (sectionKey, imageId) => {
     props.form.section_images[sectionKey] = imageId
 }
 
+// Keep in sync with Trip::MAX_HIGHLIGHT_LABEL_LENGTH
+const HIGHLIGHT_LABEL_MAX_LENGTH = 24
+
+// The own label shows the default label of the chosen category as its placeholder
+const highlightCategoryLabel = (category) =>
+    props.highlightCategoryOptions.find(option => option.id === category)?.name ?? null
+
 const highlightFields = computed(() => [
+    {
+        key: 'category',
+        type: 'icon',
+        label: t('forms.trip.fields.highlights.category.label'),
+        options: [
+            { id: '', name: t('forms.trip.fields.highlights.category.none') },
+            ...props.highlightCategoryOptions,
+        ],
+        default: '',
+        iconComponent: 'HighlightIcon',
+    },
+    {
+        key: 'label',
+        label: t('forms.trip.fields.highlights.label_field.label'),
+        placeholder: (item) => highlightCategoryLabel(item?.category) ?? t('forms.trip.fields.highlights.label_field.label'),
+    },
     {
         key: 'title',
         label: t('forms.trip.fields.highlights.title.label'),
@@ -148,7 +176,7 @@ const highlightFields = computed(() => [
         key: 'description',
         label: t('forms.trip.fields.highlights.description.label'),
         placeholder: t('forms.trip.fields.highlights.description.placeholder'),
-    },
+    }
 ])
 
 const { length: metaTitleLength, charsLeft: metaTitleCharsLeft, counterClass: metaTitleClass } = useCharacterCounter(
@@ -242,10 +270,15 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                         {{ t('forms.trip.fields.journey_section.help') }}
                                     </p>
                                 </div>
-                                <DynamicInputList :items="form.highlights" name="highlights"
-                                    :label="t('forms.trip.fields.highlights.label')"
-                                    :fields="highlightFields" :sortable="true"
-                                    :feedback="form.errors" />
+                                <div>
+                                    <DynamicInputList :items="form.highlights" name="highlights"
+                                        :label="t('forms.trip.fields.highlights.label')"
+                                        :fields="highlightFields" :sortable="true"
+                                        :feedback="form.errors" />
+                                    <p class="mt-2 text-xs text-gray-700/30">
+                                        {{ t('forms.trip.fields.highlights.help', { label: HIGHLIGHT_LABEL_MAX_LENGTH }) }}
+                                    </p>
+                                </div>
                                 <div>
                                     <DynamicInputList :items="form.key_facts" name="key_facts"
                                         :label="t('forms.trip.fields.key_facts.label')"
