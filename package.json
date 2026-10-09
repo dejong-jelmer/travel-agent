@@ -48,5 +48,8 @@
         "vue3-mq": "^4.0.2",
         "vue3-touch-events": "^5.0.13",
         "ziggy-js": "^2.5.2"
+    },
+    "allowScripts": {
+        "esbuild@0.25.12": true
     }
 }
