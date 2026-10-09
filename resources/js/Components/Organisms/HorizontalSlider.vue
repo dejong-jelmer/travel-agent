@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 
@@ -98,14 +98,16 @@ const scroll = (direction) => {
 }
 
 // A button that hides while it has the focus, such as next after the last click, hands the focus to the other one,
-// so keyboard users keep their place. Runs after the DOM update, once the other button is displayed again.
+// so keyboard users keep their place. The focus is read before the DOM update, and handed over once v-show has
+// displayed the other button again, which happens after post-flush watchers.
 const previousButton = ref(null)
 const nextButton = ref(null)
-watch([atStart, atEnd], ([start, end]) => {
+watch([atStart, atEnd], async ([start, end]) => {
     const focused = document.activeElement
+    await nextTick()
     if (start && !end && focused === previousButton.value) nextButton.value?.focus()
     if (end && !start && focused === nextButton.value) previousButton.value?.focus()
-}, { flush: 'post' })
+})
 
 let resizeObserver = null
 onMounted(() => {
