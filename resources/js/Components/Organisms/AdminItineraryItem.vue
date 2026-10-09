@@ -1,10 +1,8 @@
 <script setup>
 import { Camera, BedDouble, AlertTriangle, Info } from '@lucide/vue';
-import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import { ref } from 'vue'
 import { useMq } from 'vue3-mq'
 
-const { rootRef, visible, reveal } = useRevealEffect();
 const mq = useMq()
 
 // Rendered image width: w-48 from tablet on, below that the full content column, which on the trip page is the
@@ -33,7 +31,7 @@ const props = defineProps({
 })
 </script>
 <template>
-    <div ref="rootRef" class="relative">
+    <div class="relative">
         <!-- Timeline (vertical) -->
         <div class="absolute left-4 top-16 bottom-0 w-px bg-brand-subtle/30"></div>
 
@@ -76,9 +74,7 @@ const props = defineProps({
                 <div
                     :class="['flex flex-col gap-6 items-start', index % 2 === 0 ? 'tablet:flex-row' : 'tablet:flex-row-reverse']">
                     <div class="flex-1 min-w-0">
-                        <p v-bind="reveal(50)"
-                            :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'"
-                            class="text-brand-text leading-relaxed text-sm tablet:text-base transition-all duration-200 ease-out">
+                        <p class="text-brand-text leading-relaxed text-sm tablet:text-base">
                             {{ itinerary.description }}
                         </p>
                     </div>
@@ -89,9 +85,7 @@ const props = defineProps({
                                 class="block w-full rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand-accent"
                                 @click="openLightbox">
                                 <ResponsiveImage :image="itinerary.image" :sizes="imageSizes" :alt="itinerary.title" loading="lazy"
-                                    v-bind="reveal(50)"
-                                    :class="visible ? 'opacity-100 translate-x-0' : (index % 2 === 0 ? 'opacity-0 translate-x-4' : 'opacity-0 -translate-x-4')"
-                                    class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90 transition-all duration-200 ease-out" />
+                                    class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90" />
                             </button>
                         </div>
                         <LightBox ref="lightboxRef" :images="[itinerary.image]" />

@@ -2,7 +2,6 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
-import { useRevealEffect } from '@/Composables/useRevealEffect.js'
 
 defineProps({
     items: {
@@ -17,7 +16,6 @@ defineProps({
 })
 
 const { t } = useI18n()
-const { rootRef, visible: revealed } = useRevealEffect()
 
 // A native scroll container with CSS scroll snapping: one slide at 84% with the next peeking in on phones,
 // three slides from tablet on. The buttons and the progress bar follow its scroll position.
@@ -66,8 +64,7 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
 </script>
 
 <template>
-    <div ref="rootRef" class="transition-all duration-1000 ease-out"
-        :class="revealed ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'">
+    <div>
         <div class="relative">
             <!-- No tabindex: the slides hold focusable content (the lightbox buttons), which keyboard users scroll through -->
             <div ref="track" role="region" :aria-label="label" @scroll.passive="update"

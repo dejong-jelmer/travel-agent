@@ -201,10 +201,10 @@ const contactUrl = computed(() => {
                     <TripHighlights :highlights="highlights" />
 
                     <!-- Inclusions & Exclusions -->
-                    <TripItems :trip-items="tripItems" />
+                    <TripItems v-reveal :trip-items="tripItems" />
 
                     <!-- Plan this trip -->
-                    <TripPlanCard @request="requestModalOpen = !requestModalOpen" />
+                    <TripPlanCard v-reveal @request="requestModalOpen = !requestModalOpen" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->

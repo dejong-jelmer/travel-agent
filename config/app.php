@@ -91,6 +91,10 @@ return [
 
     'phone_region' => 'NL',
 
+    // Scroll reveal animations (the v-reveal directive), passed to the frontend as data-reveal on <html>. Off shows
+    // every element right away.
+    'reveal_animations' => (bool) env('REVEAL_ANIMATIONS', true),
+
     /*
     |--------------------------------------------------------------------------
     | Encryption Key

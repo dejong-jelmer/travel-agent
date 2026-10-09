@@ -13,9 +13,10 @@ defineProps({
             {{ $t('trip_show.highlights_heading') }}
         </h2>
 
-        <!-- Two columns from tablet up, stacked on phones -->
+        <!-- Two columns from tablet up, stacked on phones. The second tile of a row comes into view a little later. -->
         <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4">
-            <BaseCard v-for="highlight in highlights" :key="highlight.title" as="article" padding="compact">
+            <BaseCard v-for="(highlight, index) in highlights" :key="highlight.title" v-reveal="{ delay: index % 2 ? 80 : 0 }"
+                as="article" padding="compact">
                 <!-- Category: brand-primary/85 instead of brand-light keeps the small label at 4.9:1 on white (WCAG AA) -->
                 <div v-if="highlight.category" class="flex items-center gap-[10px] mb-3">
                     <HighlightIcon :icon="highlight.icon" :stroke-width="1.8"
