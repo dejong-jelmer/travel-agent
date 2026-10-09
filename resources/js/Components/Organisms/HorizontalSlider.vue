@@ -1,9 +1,9 @@
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { ChevronLeft, ChevronRight } from '@lucide/vue'
 import { useI18n } from 'vue-i18n'
 
-defineProps({
+const props = defineProps({
     items: {
         type: Array,
         required: true,
@@ -13,13 +13,45 @@ defineProps({
         type: String,
         required: true,
     },
+    // Number of slides side by side from laptop on
+    visible: {
+        type: Number,
+        default: 3,
+    },
+    // Number of slides side by side on tablets, the same as from laptop on when not given
+    tabletVisible: {
+        type: Number,
+        default: null,
+    },
+    // Width of a slide on phones, leaving room for the next one to peek in
+    mobileWidth: {
+        type: String,
+        default: '84%',
+    },
+    // Space between the slides, in px
+    gap: {
+        type: Number,
+        default: 12,
+    },
 })
 
 const { t } = useI18n()
 
-// A native scroll container with CSS scroll snapping: one slide at 84% with the next peeking in on phones,
-// three slides from tablet on. The buttons and the progress bar follow its scroll position.
+// A native scroll container with CSS scroll snapping: one slide at the mobile width with the next peeking in on
+// phones, the visible number of slides side by side from tablet on. The buttons and the progress bar follow its
+// scroll position.
 const track = ref(null)
+
+// Width of a slide when `count` slides fill the track, with the gaps between them
+const slideWidth = (count) => `calc((100% - ${(count - 1) * props.gap}px) / ${count})`
+
+// The widths per breakpoint (screens.js) go to the slides as custom properties, picked by their width classes
+const trackStyle = computed(() => ({
+    gap: `${props.gap}px`,
+    '--slide-width-phone': props.mobileWidth,
+    '--slide-width-tablet': slideWidth(props.tabletVisible ?? props.visible),
+    '--slide-width-laptop': slideWidth(props.visible),
+}))
 const overflows = ref(false)
 const atStart = ref(true)
 const atEnd = ref(true)
@@ -67,21 +99,21 @@ onBeforeUnmount(() => resizeObserver?.disconnect())
     <div>
         <div class="relative">
             <!-- No tabindex: the slides hold focusable content (the lightbox buttons), which keyboard users scroll through -->
-            <div ref="track" role="region" :aria-label="label" @scroll.passive="update"
-                class="flex gap-3 overflow-x-auto snap-x snap-mandatory motion-safe:scroll-smooth rounded-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div ref="track" role="region" :aria-label="label" :style="trackStyle" @scroll.passive="update"
+                class="flex overflow-x-auto snap-x snap-mandatory motion-safe:scroll-smooth rounded-xl [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 <div v-for="(item, index) in items" :key="item.id ?? index"
-                    class="shrink-0 snap-start w-[84%] tablet:w-[calc((100%-24px)/3)]">
+                    class="shrink-0 snap-start w-[--slide-width-phone] tablet:w-[--slide-width-tablet] laptop:w-[--slide-width-laptop]">
                     <slot :item="item" :index="index" :loaded="index < loadedCount" />
                 </div>
             </div>
 
             <!-- aria-disabled instead of disabled: a disabled button drops the keyboard focus at the start or end -->
             <template v-if="overflows">
-                <button type="button" :aria-label="t('photo_slider.previous')" :aria-disabled="atStart" @click="scroll(-1)"
+                <button type="button" :aria-label="t('slider.previous')" :aria-disabled="atStart" @click="scroll(-1)"
                     class="hidden tablet:flex absolute top-1/2 -translate-y-1/2 -left-[18px] items-center justify-center w-11 h-11 rounded-full bg-white border border-brand-accent/20 shadow-md shadow-brand-text/[0.12] text-brand-primary transition-opacity aria-disabled:opacity-40 aria-disabled:cursor-not-allowed">
                     <ChevronLeft class="w-5 h-5" aria-hidden="true" />
                 </button>
-                <button type="button" :aria-label="t('photo_slider.next')" :aria-disabled="atEnd" @click="scroll(1)"
+                <button type="button" :aria-label="t('slider.next')" :aria-disabled="atEnd" @click="scroll(1)"
                     class="hidden tablet:flex absolute top-1/2 -translate-y-1/2 -right-[18px] items-center justify-center w-11 h-11 rounded-full bg-white border border-brand-accent/20 shadow-md shadow-brand-text/[0.12] text-brand-primary transition-opacity aria-disabled:opacity-40 aria-disabled:cursor-not-allowed">
                     <ChevronRight class="w-5 h-5" aria-hidden="true" />
                 </button>

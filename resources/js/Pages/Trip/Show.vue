@@ -45,10 +45,10 @@ const openLightbox = (index) => {
     lightboxRef.value?.open(index, thumbnails)
 }
 
-// Rendered slide width per breakpoint (screens.js), following the layout around the PhotoSlider: the page
+// Rendered slide width per breakpoint (screens.js), following the layout around the HorizontalSlider: the page
 // padding (px-4, tablet:px-6), from laptop on the two-thirds column (grid-cols-3, gap-12, max-w-screen-desktop),
-// the card border and padding (p-6, laptop:p-8) and the slide width set by PhotoSlider (84% on phones, from
-// tablet on a third of the width minus two 12px gaps). Update this when that layout changes.
+// the card border and padding (p-6, laptop:p-8) and the default slide width of HorizontalSlider (84% on phones,
+// from tablet on a third of the width minus two 12px gaps). Update this when that layout changes.
 const gallerySizes = '(min-width: 1350px) 254px, (min-width: 900px) calc(22.2vw - 46px), (min-width: 600px) calc(33.3vw - 41px), calc(84vw - 69px)'
 
 // Inquiry card tabs
@@ -171,7 +171,7 @@ const contactUrl = computed(() => {
                             <TripKeyFacts :facts="trip.key_facts" />
                         </div>
 
-                        <PhotoSlider :items="trip.images" :label="t('trip_show.gallery_label', { trip: trip.name })">
+                        <HorizontalSlider :items="trip.images" :label="t('trip_show.gallery_label', { trip: trip.name })">
                             <template #default="{ item, index, loaded }">
                                 <!-- The slider clips anything outside the photos, so the focus outline is drawn inside -->
                                 <button type="button" :ref="(el) => thumbnails[index] = el" aria-haspopup="dialog"
@@ -183,7 +183,7 @@ const contactUrl = computed(() => {
                                         class="w-full aspect-[4/3] tablet:aspect-[4/5] object-cover rounded-xl" />
                                 </button>
                             </template>
-                        </PhotoSlider>
+                        </HorizontalSlider>
                         <LightBox ref="lightboxRef" :images="trip.images" />
                     </div>
 
@@ -214,7 +214,7 @@ const contactUrl = computed(() => {
                         :class="{ 'laptop:sticky': sidebarFits }">
                         <!-- Inquiry Card -->
                         <div ref="inquiryCard"
-                            class="bg-white rounded-2xl shadow-lg border border-brand-accent/20 overflow-hidden scroll-mt-[125px]">
+                            class="bg-white rounded-2xl border border-brand-accent/20 overflow-hidden scroll-mt-[125px]">
                             <!-- Tab Headers -->
                             <div class="border-b border-brand-accent/20">
                                 <nav class="flex">

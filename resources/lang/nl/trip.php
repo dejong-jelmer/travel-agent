@@ -116,4 +116,10 @@ return [
         'transfer' => 'Transfer',
         'airplane' => 'Vliegtuig',
     ],
+
+    // How a trip travels, shown on the trip cards: by night train when its itinerary has a night train
+    'travel_mode' => [
+        'night_train' => 'Nachttrein',
+        'day_train' => 'Dagtrein',
+    ],
 ];

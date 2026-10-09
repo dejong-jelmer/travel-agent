@@ -59,16 +59,6 @@ export default {
                 laptop: "113px",
             },
             screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
-            keyframes: {
-                "slide-left-right": {
-                    "0%, 100%": { transform: "translateX(0px)" },
-                    "33%": { transform: "translateX(-25px)" },
-                    "66%": { transform: "translateX(25px)" },
-                },
-            },
-            animation: {
-                "wiggle-x": "slide-left-right 6s ease-in-out infinite",
-            },
             typography: ({ theme }) => ({
                 brand: {
                     css: {

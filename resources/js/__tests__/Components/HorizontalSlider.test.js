@@ -1,12 +1,12 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import { mount } from "@vue/test-utils";
-import PhotoSlider from "@/Components/Organisms/PhotoSlider.vue";
+import HorizontalSlider from "@/Components/Organisms/HorizontalSlider.vue";
 import i18n from '@/plugins/i18n.js';
 
 const items = [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }];
 
-const mountSlider = () => mount(PhotoSlider, {
-    props: { items, label: 'Photos of Verona' },
+const mountSlider = (props = {}) => mount(HorizontalSlider, {
+    props: { items, label: 'Photos of Verona', ...props },
     slots: {
         default: `<template #default="{ item, loaded }"><img :alt="'Photo ' + item.id" :data-loaded="loaded" /></template>`,
     },
@@ -29,10 +29,10 @@ const layout = async (wrapper, { scrollLeft = 0, scrollWidth, clientWidth, slide
     return track;
 };
 
-const previous = (wrapper) => wrapper.find(`button[aria-label="${i18n.global.t('photo_slider.previous')}"]`);
-const next = (wrapper) => wrapper.find(`button[aria-label="${i18n.global.t('photo_slider.next')}"]`);
+const previous = (wrapper) => wrapper.find(`button[aria-label="${i18n.global.t('slider.previous')}"]`);
+const next = (wrapper) => wrapper.find(`button[aria-label="${i18n.global.t('slider.next')}"]`);
 
-describe("PhotoSlider", () => {
+describe("HorizontalSlider", () => {
     afterEach(() => vi.restoreAllMocks());
 
     it("renders a labelled scroll region with every photo", () => {
@@ -73,6 +73,27 @@ describe("PhotoSlider", () => {
 
         await next(wrapper).trigger('click');
         expect(track.scrollBy).toHaveBeenCalledWith({ left: 212 });
+    });
+
+    it("sizes the slides as three side by side with a 12px gap by default", () => {
+        const track = mountSlider().find('[role="region"]').element;
+
+        expect(track.style.gap).toBe('12px');
+        expect(track.style.getPropertyValue('--slide-width-phone')).toBe('84%');
+        expect(track.style.getPropertyValue('--slide-width-tablet')).toBe('calc((100% - 24px) / 3)');
+        expect(track.style.getPropertyValue('--slide-width-laptop')).toBe('calc((100% - 24px) / 3)');
+    });
+
+    it("sizes the slides from the props, with the laptop count on tablets unless given", () => {
+        const track = (props) => mountSlider(props).find('[role="region"]').element;
+
+        const custom = track({ visible: 4, tabletVisible: 2, mobileWidth: '80%', gap: 24 });
+        expect(custom.style.gap).toBe('24px');
+        expect(custom.style.getPropertyValue('--slide-width-phone')).toBe('80%');
+        expect(custom.style.getPropertyValue('--slide-width-tablet')).toBe('calc((100% - 24px) / 2)');
+        expect(custom.style.getPropertyValue('--slide-width-laptop')).toBe('calc((100% - 72px) / 4)');
+
+        expect(track({ visible: 2 }).style.getPropertyValue('--slide-width-tablet')).toBe('calc((100% - 12px) / 2)');
     });
 
     it("only loads the photos in view, and one ahead once scrolling starts", async () => {
