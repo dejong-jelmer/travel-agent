@@ -21,6 +21,17 @@ defineEmits(['request']);
                 <p class="text-base text-brand-text leading-relaxed">
                     {{ $t('trip_show.inquiry.explanation') }}
                 </p>
+                <!-- Request button with the phone number next to it -->
+                <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
+                    <Button @click="$emit('request')" class="flex justify-center items-center">
+                        {{ $t('trip_show.inquiry.cta_make_request') }}
+                    </Button>
+                    <span class="flex items-center gap-2 text-brand-primary">
+                        <Phone class="w-4 h-4 flex-shrink-0" />
+                        <!-- Filled with the decoded phone number by Layout (anti-spam) -->
+                        <a href="#" class="tel-field font-semibold text-brand-primary"></a>
+                    </span>
+                </div>
 
                 <!-- How a request works -->
                 <div>
@@ -59,17 +70,7 @@ defineEmits(['request']);
                     </div>
                 </div>
 
-                <!-- Request button with the phone number next to it -->
-                <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-                    <Button @click="$emit('request')" class="flex justify-center items-center">
-                        {{ $t('trip_show.inquiry.cta_make_request') }}
-                    </Button>
-                    <span class="flex items-center gap-2 text-brand-primary">
-                        <Phone class="w-4 h-4 flex-shrink-0" />
-                        <!-- Filled with the decoded phone number by Layout (anti-spam) -->
-                        <a href="#" class="tel-field font-semibold text-brand-primary"></a>
-                    </span>
-                </div>
+
 
                 <!-- Payment guarantee -->
                 <div class="bg-brand-subtle/10 rounded-lg border border-brand-subtle/30 p-4 tablet:p-6">

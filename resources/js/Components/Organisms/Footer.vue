@@ -99,7 +99,7 @@ const year = new Date().getFullYear();
                                 </svg>
                                 <address class="-mt-0.5 not-italic text-white hover:underline">
                                     <a :href="contact.mapsLink" target="_blank">
-                                        {{ contact.fullAddress }}
+                                        {{ contact.fullAddress }} <br> (Geen bezoekadres)
                                     </a>
                                 </address>
                             </li>
