@@ -3,9 +3,14 @@
 namespace App\Services\Validation;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HeroFocus;
+use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PriceLabel;
+use App\Models\Trip;
 use App\Rules\NoOverlappingPricePeriods;
+use App\Services\TripContentParser;
 use Illuminate\Validation\Rule;
 
 class TripValidationRules
@@ -15,10 +20,51 @@ class TripValidationRules
         return [
             'name' => ['required', 'string', 'max:255'],
             'highlights' => ['nullable', 'array'],
-            'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct:ignore_case', 'required_with:highlights.*.description'],
+            'highlights.*.title' => ['nullable', 'string', 'max:255', 'distinct:ignore_case', 'required_with:highlights.*.description,highlights.*.label'],
             'highlights.*.description' => ['nullable', 'string', 'max:500'],
-            'intro' => ['required', 'string', 'max:255'],
+            // An own label replaces the default label of the category, so without a category it is never shown
+            'highlights.*.category' => ['nullable', 'string', Rule::enum(HighlightCategory::class), 'required_with:highlights.*.label'],
+            'highlights.*.label' => ['nullable', 'string', 'max:'.Trip::MAX_HIGHLIGHT_LABEL_LENGTH],
+            'subtitle' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string'],
+        ];
+    }
+
+    /**
+     * The journey section is empty or the key of a section in the submitted description. The first section opens
+     * the trip page in the top card and cannot be chosen.
+     */
+    public static function journeySection(mixed $description): array
+    {
+        $keys = array_column(
+            app(TripContentParser::class)->storySections(is_string($description) ? $description : null),
+            'key'
+        );
+
+        return [
+            'journey_section' => ['nullable', 'string', Rule::in($keys)],
+        ];
+    }
+
+    /**
+     * Every section photo is one of the gallery images of the trip. The request already drops the keys that are not
+     * a section of the submitted description.
+     */
+    public static function sectionImages(Trip $trip): array
+    {
+        return [
+            'section_images' => ['array'],
+            'section_images.*' => ['integer', Rule::in($trip->images()->pluck('id')->all())],
+        ];
+    }
+
+    public static function keyFacts(): array
+    {
+        return [
+            'key_facts' => ['nullable', 'array', 'max:'.Trip::MAX_KEY_FACTS],
+            'key_facts.*.label' => ['required', 'string', 'max:'.Trip::MAX_KEY_FACT_LABEL_LENGTH],
+            'key_facts.*.value' => ['required', 'string', 'max:'.Trip::MAX_KEY_FACT_VALUE_LENGTH],
+            'key_facts.*.icon' => ['required', 'string', Rule::enum(KeyFactIcon::class)],
         ];
     }
 
@@ -83,6 +129,16 @@ class TripValidationRules
     {
         return [
             'heroImage' => ['nullable', ...ImageValidationRules::baseImageOrString()],
+        ];
+    }
+
+    /**
+     * The focus point is one of the positions of the 3x3 grid in the admin form; empty keeps the hero image centred.
+     */
+    public static function heroFocus(): array
+    {
+        return [
+            'hero_focus' => ['nullable', 'string', Rule::enum(HeroFocus::class)],
         ];
     }
 

@@ -4,6 +4,8 @@ import { usePage } from '@inertiajs/vue3';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
 import { useCharacterCounter } from '@/Composables/useCharacterCounter.js';
 import { useI18n } from 'vue-i18n';
+import { debounce } from 'lodash';
+import { fetchApi } from '@/fetchApi';
 import TripItemsTab from './TripItemsTab.vue';
 
 const emit = defineEmits(['submit']);
@@ -13,6 +15,27 @@ const props = defineProps({
     typeOptions: Object,
     transportOptions: Object,
     priceLabelOptions: Object,
+    keyFactIconOptions: Array,
+    // Shape: [{ id, name, icon }], the cases of the HighlightCategory enum with their default label and icon name
+    highlightCategoryOptions: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: [{ id, name }], the cases of the HeroFocus enum: the nine focus points of the hero image
+    heroFocusOptions: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: [{ id, name }], the sections of the saved description that can become the journey section
+    journeySectionOptions: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: [Image], the saved gallery images that can be shown next to a description section
+    galleryImages: {
+        type: Array,
+        default: () => []
+    },
     practicalSections: Object,
 });
 
@@ -51,7 +74,104 @@ watch([minAdvanceValue, minAdvanceUnit], ([val, unit]) => {
     props.form.min_advance_days = num > 0 ? Math.round(num * unitMultiplier[unit]) : null
 })
 
+// Keep in sync with Trip::MAX_KEY_FACTS, Trip::MAX_KEY_FACT_LABEL_LENGTH and Trip::MAX_KEY_FACT_VALUE_LENGTH
+const KEY_FACTS_MAX = 6
+const KEY_FACT_LABEL_MAX_LENGTH = 20
+const KEY_FACT_VALUE_MAX_LENGTH = 60
+
+// Matches KeyFactIcon::default()
+const KEY_FACT_DEFAULT_ICON = 'info'
+
+const keyFactFields = computed(() => [
+    {
+        key: 'icon',
+        type: 'icon',
+        label: t('forms.trip.fields.key_facts.icon.label'),
+        options: props.keyFactIconOptions ?? [],
+        default: KEY_FACT_DEFAULT_ICON,
+    },
+    {
+        key: 'label',
+        label: t('forms.trip.fields.key_facts.label_field.label'),
+        placeholder: t('forms.trip.fields.key_facts.label_field.placeholder'),
+    },
+    {
+        key: 'value',
+        label: t('forms.trip.fields.key_facts.value.label'),
+        placeholder: t('forms.trip.fields.key_facts.value.placeholder'),
+    },
+])
+
+// The sections that can become the journey section follow the H2 headings in the editor: the content parser on the
+// server splits the description, so the keys match the ones the trip page and the validation use
+const sectionOptions = ref(props.journeySectionOptions)
+const journeySectionSelectOptions = computed(() => [
+    { id: '', name: t('forms.trip.fields.journey_section.none') },
+    ...sectionOptions.value,
+])
+
+let latestSectionsRequest = 0
+const refreshSectionOptions = debounce((description) => {
+    const request = ++latestSectionsRequest
+    fetchApi(route('admin.trips.description-sections'), {
+        method: 'POST',
+        body: { description },
+    })
+        .then((options) => {
+            // Only the answer for the latest description counts
+            if (request !== latestSectionsRequest) return
+            sectionOptions.value = options
+
+            // A renamed or removed heading is no longer a section, so the choice falls back to none
+            if (props.form.journey_section && !options.some(option => option.id === props.form.journey_section)) {
+                props.form.journey_section = ''
+            }
+        })
+        .catch((error) => console.error(error))
+}, 500)
+
+watch(() => props.form.description, refreshSectionOptions)
+
+// Every section that can become the journey section can also get a photo. Only saved gallery images that are still
+// in the gallery can be chosen, in gallery order: new uploads get an id once the trip is saved. The server ignores
+// the keys of sections no longer in the description and cleans them up on save.
+const sectionImageOptions = computed(() => (props.form.images ?? [])
+    .map((source, index) => ({
+        image: props.galleryImages.find(image => image.path === source),
+        position: index + 1,
+    }))
+    .filter(option => option.image))
+
+const isSectionImage = (sectionKey, imageId) => (props.form.section_images?.[sectionKey] ?? null) === imageId
+const hasSectionImage = (sectionKey) => sectionImageOptions.value.some(({ image }) => isSectionImage(sectionKey, image.id))
+const setSectionImage = (sectionKey, imageId) => {
+    props.form.section_images[sectionKey] = imageId
+}
+
+// Keep in sync with Trip::MAX_HIGHLIGHT_LABEL_LENGTH
+const HIGHLIGHT_LABEL_MAX_LENGTH = 24
+
+// The own label shows the default label of the chosen category as its placeholder
+const highlightCategoryLabel = (category) =>
+    props.highlightCategoryOptions.find(option => option.id === category)?.name ?? null
+
 const highlightFields = computed(() => [
+    {
+        key: 'category',
+        type: 'icon',
+        label: t('forms.trip.fields.highlights.category.label'),
+        options: [
+            { id: '', name: t('forms.trip.fields.highlights.category.none') },
+            ...props.highlightCategoryOptions,
+        ],
+        default: '',
+        iconComponent: 'HighlightIcon',
+    },
+    {
+        key: 'label',
+        label: t('forms.trip.fields.highlights.label_field.label'),
+        placeholder: (item) => highlightCategoryLabel(item?.category) ?? t('forms.trip.fields.highlights.label_field.label'),
+    },
     {
         key: 'title',
         label: t('forms.trip.fields.highlights.title.label'),
@@ -61,7 +181,7 @@ const highlightFields = computed(() => [
         key: 'description',
         label: t('forms.trip.fields.highlights.description.label'),
         placeholder: t('forms.trip.fields.highlights.description.placeholder'),
-    },
+    }
 ])
 
 const { length: metaTitleLength, charsLeft: metaTitleCharsLeft, counterClass: metaTitleClass } = useCharacterCounter(
@@ -140,16 +260,41 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                     :required="true" v-model="form.name" :feedback="form.errors.name"
                                     :placeholder="t('forms.trip.fields.name.placeholder')" />
 
-                                 <Input type="text" name="intro" :label="t('forms.trip.fields.intro.label')"
-                                    :required="true" v-model="form.intro" :feedback="form.errors.intro"
-                                    :placeholder="t('forms.trip.fields.intro.placeholder')" />
+                                 <Input type="text" name="subtitle" :label="t('forms.trip.fields.subtitle.label')"
+                                    :required="true" v-model="form.subtitle" :feedback="form.errors.subtitle"
+                                    :placeholder="t('forms.trip.fields.subtitle.placeholder')" />
                                 <Label for-field="description" :required="true">{{ t('forms.trip.fields.description.label') }}</Label>
                                 <TipTap name="description" :required="true" v-model="form.description" :feedback="form.errors.description" />
                                 <FormFeedback :message="form.errors.description" />
-                                <DynamicInputList :items="form.highlights" name="highlights"
-                                    :label="t('forms.trip.fields.highlights.label')"
-                                    :fields="highlightFields" :sortable="true"
-                                    :feedback="form.errors" />
+                                <div>
+                                    <Select name="journey_section" v-model="form.journey_section"
+                                        :label="t('forms.trip.fields.journey_section.label')"
+                                        :options="journeySectionSelectOptions"
+                                        :feedback="form.errors.journey_section" />
+                                    <p class="mt-2 text-xs text-gray-700/30">
+                                        {{ t('forms.trip.fields.journey_section.help') }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <DynamicInputList :items="form.highlights" name="highlights"
+                                        :label="t('forms.trip.fields.highlights.label')"
+                                        :fields="highlightFields" :sortable="true"
+                                        :feedback="form.errors" />
+                                    <p class="mt-2 text-xs text-gray-700/30">
+                                        {{ t('forms.trip.fields.highlights.help', { label: HIGHLIGHT_LABEL_MAX_LENGTH }) }}
+                                    </p>
+                                </div>
+                                <div>
+                                    <DynamicInputList :items="form.key_facts" name="key_facts"
+                                        :label="t('forms.trip.fields.key_facts.label')"
+                                        :fields="keyFactFields" fields-class="tablet:grid-cols-[13rem_10rem_minmax(0,1fr)]"
+                                        :sortable="true" :max="KEY_FACTS_MAX"
+                                        :feedback="form.errors" />
+                                    <FormFeedback :message="form.errors.key_facts" />
+                                    <p class="mt-2 text-xs text-gray-700/30">
+                                        {{ t('forms.trip.fields.key_facts.help', { max: KEY_FACTS_MAX, label: KEY_FACT_LABEL_MAX_LENGTH, value: KEY_FACT_VALUE_MAX_LENGTH }) }}
+                                    </p>
+                                </div>
                             </TabPanel>
 
                             <TabPanel class="p-6">
@@ -239,6 +384,17 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                             </p>
                         </div>
 
+                        <div v-if="form.heroImage">
+                            <p class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ t('forms.trip.fields.hero_focus.label') }}
+                            </p>
+                            <FocusPointPicker v-model="form.hero_focus" :image="form.heroImage" :options="heroFocusOptions"
+                                :label="t('forms.trip.fields.hero_focus.label')" :feedback="form.errors.hero_focus" />
+                            <p class="mt-2 text-xs text-gray-700/30">
+                                {{ t('forms.trip.fields.hero_focus.help') }}
+                            </p>
+                        </div>
+
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ t('forms.trip.fields.gallery.label') }}
@@ -249,6 +405,46 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.trip.fields.gallery.help') }}
                             </p>
+                        </div>
+
+                        <div v-if="sectionOptions.length" class="space-y-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-brand-text">
+                                    {{ t('forms.trip.fields.section_images.label') }}
+                                </h3>
+                                <p class="mt-1 text-xs text-brand-light">
+                                    {{ t('forms.trip.fields.section_images.help') }}
+                                </p>
+                            </div>
+                            <p v-if="!sectionImageOptions.length" class="text-sm text-brand-light">
+                                {{ t('forms.trip.fields.section_images.empty') }}
+                            </p>
+                            <template v-else>
+                                <fieldset v-for="section in sectionOptions" :key="section.id">
+                                    <legend class="mb-2 text-sm text-brand-text">{{ section.name }}</legend>
+                                    <div class="flex flex-wrap gap-3">
+                                        <label class="cursor-pointer">
+                                            <input type="radio" class="peer sr-only" :name="`section_image_${section.id}`"
+                                                :checked="!hasSectionImage(section.id)"
+                                                @change="setSectionImage(section.id, null)" />
+                                            <span
+                                                class="flex items-center justify-center w-24 h-16 px-2 rounded-lg border border-brand-primary/20 text-center text-xs text-brand-light peer-checked:border-brand-primary peer-checked:ring-2 peer-checked:ring-brand-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-accent">
+                                                {{ t('forms.trip.fields.section_images.none') }}
+                                            </span>
+                                        </label>
+                                        <label v-for="{ image, position } in sectionImageOptions" :key="image.id"
+                                            class="cursor-pointer">
+                                            <input type="radio" class="peer sr-only" :name="`section_image_${section.id}`"
+                                                :checked="isSectionImage(section.id, image.id)"
+                                                @change="setSectionImage(section.id, image.id)" />
+                                            <ResponsiveImage :image="image" sizes="96px" loading="lazy"
+                                                :alt="t('forms.trip.fields.section_images.image_alt', { position })"
+                                                class="w-24 h-16 object-cover rounded-lg opacity-70 peer-checked:opacity-100 peer-checked:ring-2 peer-checked:ring-brand-primary peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand-accent" />
+                                        </label>
+                                    </div>
+                                    <FormFeedback :message="form.errors[`section_images.${section.id}`]" />
+                                </fieldset>
+                            </template>
                         </div>
                     </div>
                 </section>

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\ImageRelation;
+use App\Enums\Trip\ItineraryType;
 use App\Models\Image;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Database\Eloquent\Factories\Sequence;
@@ -13,8 +14,6 @@ use Illuminate\Database\Eloquent\Factories\Sequence;
 class ItineraryFactory extends Factory
 {
     private const TITLE_PREFIXES = ['Aankomst in ', 'Verblijf in ', 'Vertrek uit '];
-
-    private const ACTIVITIES = ['Stadswandeling', 'Museumbezoek', 'Fietstocht', 'Boottocht'];
 
     private const REMARKS = [
         'Museum toegang niet inbegrepen in de prijs',
@@ -31,6 +30,7 @@ class ItineraryFactory extends Factory
     public function definition(): array
     {
         return [
+            'type' => ItineraryType::Stay,
             'title' => fake()->randomElement(self::TITLE_PREFIXES).fake()->city(),
             'description' => fake()->paragraph(3),
             'day_from' => 1,
@@ -65,13 +65,6 @@ class ItineraryFactory extends Factory
     {
         return $this->state(fn (array $attributes) => [
             'remark' => fake()->optional(0.1)->randomElement(self::REMARKS),
-        ]);
-    }
-
-    public function withActivities(): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'activities' => fake()->optional()->randomElements(self::ACTIVITIES, fake()->numberBetween(1, 4)) ?? [],
         ]);
     }
 }

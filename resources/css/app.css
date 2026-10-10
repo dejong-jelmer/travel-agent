@@ -124,8 +124,63 @@ body {
 
 }
 
-/* vue-easy-lightbox: prevent native page panning/pinch-zoom while the lightbox is open (touch handlers of the library do not preventDefault) */
-.vel-modal {
-    touch-action: none;
-    overscroll-behavior: contain;
+/* Hero heights. vh comes first as the fallback for browsers without svh; svh is measured with the browser bars shown,
+   so the hero does not jump when the iOS address bar collapses on scroll. Together with the Topbar above it, the home
+   hero fills 88% of the screen, so the intro just peeks below it; the page hero (PageHero: trips, about) keeps the
+   content after it close to the fold. */
+@layer utilities {
+    .h-hero-home {
+        height: calc(88vh - theme('topbar-height.DEFAULT'));
+        height: calc(88svh - theme('topbar-height.DEFAULT'));
+        min-height: 520px;
+    }
+
+    .h-hero-page {
+        height: 58vh;
+        height: 58svh;
+        min-height: 380px;
+    }
+
+    @screen laptop {
+        .h-hero-page {
+            height: clamp(420px, 65vh, 720px);
+            height: clamp(420px, 65svh, 720px);
+        }
+    }
+}
+
+/* Scroll reveal, set by the v-reveal directive (resources/js/Directives/reveal.js). The directive only adds these
+   classes when the animations are switched on, so without JavaScript every element stays visible. Outside a layer,
+   so Tailwind keeps the classes although they only appear in JavaScript. The movement uses the separate translate
+   property, which adds up with the transform that Tailwind utilities set instead of overriding it. */
+.reveal {
+    transition: opacity 560ms cubic-bezier(0.2, 0.7, 0.2, 1), translate 560ms cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.reveal:not(.is-revealed) {
+    opacity: 0;
+    translate: 0 14px;
+}
+
+/* Photos only fade in */
+.reveal-fade:not(.is-revealed) {
+    translate: none;
+}
+
+/* A delay staggers elements that sit side by side; on phones those are stacked, so it only applies from tablet on */
+@screen tablet {
+    .reveal {
+        transition-delay: var(--reveal-delay, 0ms);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .reveal {
+        transition: none;
+    }
+
+    .reveal:not(.is-revealed) {
+        opacity: 1;
+        translate: none;
+    }
 }

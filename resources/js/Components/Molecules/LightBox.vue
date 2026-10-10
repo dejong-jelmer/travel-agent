@@ -1,42 +1,72 @@
 <script setup>
-import VueEasyLightbox from 'vue-easy-lightbox'
+import PhotoSwipeLightbox from 'photoswipe/lightbox'
+import 'photoswipe/style.css'
+import { onBeforeUnmount } from 'vue'
+import { useI18n } from 'vue-i18n'
 
-import { ref, computed, watch, onBeforeUnmount } from 'vue'
+// Renders nothing: PhotoSwipe adds its own dialog to the end of <body>
+defineOptions({ render: () => null })
+
 const props = defineProps({
     images: {
         type: Array,
         required: true
     }
 })
-// Image Lightbox
-const lightboxVisible = ref(false)
-const lightboxIndex = ref(0)
-// The widest variant covers the viewport, while the original upload can be several megabytes
-const imageUrls = computed(() => props.images.map((img) => img.sources?.at(-1)?.url ?? img.public_url))
 
-// vue-easy-lightbox locks scrolling via `overflow-y: hidden` on <body>, but that
-// is not propagated to the viewport because <html> has `overflow-x: clip` (app.css).
-// Lock the root element ourselves while the lightbox is open.
-const lockScroll = (locked) => {
-    document.documentElement.style.overflowY = locked ? 'hidden' : ''
-}
-watch(lightboxVisible, lockScroll)
-onBeforeUnmount(() => lockScroll(false))
+const { t } = useI18n()
 
-function open(index) {
-  lightboxIndex.value = index
-  lightboxVisible.value = true
+// A thumbnail scrolled out of view in a slider has no visible spot to zoom from or back to; PhotoSwipe fades instead
+const isInView = (element) => {
+    const rect = element.getBoundingClientRect()
+    for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+        if (getComputedStyle(parent).overflowX === 'visible') continue
+        const clip = parent.getBoundingClientRect()
+        if (rect.left < clip.left || rect.right > clip.right) return false
+    }
+    return true
 }
+
+// Every slide offers the WebP variants as srcset; PhotoSwipe sets `sizes` to the displayed width, so the browser
+// picks the smallest variant that is sharp enough. Width and height are those of the widest file, the furthest
+// PhotoSwipe zooms in. Alt text and placeholder come from the thumbnail, if there is one.
+const slide = (image, thumbnail) => {
+    const widest = image.sources?.at(-1) ?? { url: image.public_url, width: image.width, height: image.height }
+    const thumbnailImage = thumbnail?.querySelector('img')
+
+    return {
+        src: widest.url,
+        srcset: image.sources?.map((source) => `${source.url} ${source.width}w`).join(', ') || undefined,
+        width: widest.width,
+        height: widest.height,
+        alt: thumbnailImage?.alt,
+        msrc: thumbnailImage?.currentSrc,
+        element: thumbnail && isInView(thumbnail) ? thumbnail : undefined,
+        // Thumbnails use object-cover, so they show a crop of the image
+        thumbCropped: true,
+    }
+}
+
+let lightbox = null
+
+// Opens the image at `index`; `thumbnails` are the elements the images open from, in the same order.
+// A click next to the image closes it (PhotoSwipe's default bgClickAction).
+function open(index, thumbnails = []) {
+    // Cancels a previous open() that is still loading PhotoSwipe, so only the latest one opens and gets destroyed on unmount
+    lightbox?.destroy()
+    lightbox = new PhotoSwipeLightbox({
+        dataSource: props.images.map((image, i) => slide(image, thumbnails[i])),
+        pswpModule: () => import('photoswipe'),
+        closeTitle: t('lightbox.close'),
+        zoomTitle: t('lightbox.zoom'),
+        arrowPrevTitle: t('lightbox.previous'),
+        arrowNextTitle: t('lightbox.next'),
+        errorMsg: t('lightbox.error'),
+    })
+    lightbox.loadAndOpen(index)
+}
+
+onBeforeUnmount(() => lightbox?.destroy())
 
 defineExpose({ open })
 </script>
-
-<template>
-    <VueEasyLightbox
-        :visible="lightboxVisible"
-        :imgs="imageUrls"
-        :index="lightboxIndex"
-        :rotate-disabled="true"
-        :mask-closable="false"
-        @hide="lightboxVisible = false" />
-</template>

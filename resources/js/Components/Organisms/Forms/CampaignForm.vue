@@ -2,7 +2,7 @@
 import { computed, ref } from 'vue';
 import { router } from '@inertiajs/vue3';
 import { TabGroup, TabList, Tab, TabPanels, TabPanel } from '@headlessui/vue';
-import { Check, Clock } from 'lucide-vue-next';
+import { Check, Clock } from '@lucide/vue';
 import { useCharacterCounter } from '@/Composables/useCharacterCounter.js';
 import { useI18n } from 'vue-i18n';
 

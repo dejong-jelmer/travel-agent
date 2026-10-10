@@ -18,6 +18,58 @@ return [
         'child' => 'Kind',
     ],
 
+    // Key fact icons
+    'key_fact_icon' => [
+        'train' => 'Trein',
+        'night' => 'Nacht',
+        'clock' => 'Tijd',
+        'transfer' => 'Overstap',
+        'location' => 'Locatie',
+        'bed' => 'Overnachting',
+        'breakfast' => 'Ontbijt',
+        'mountain' => 'Bergen',
+        'calendar' => 'Kalender',
+        'sun' => 'Zon',
+        'info' => 'Informatie',
+    ],
+
+    // Hero focus points
+    'hero_focus' => [
+        '0% 0%' => 'Linksboven',
+        '50% 0%' => 'Middenboven',
+        '100% 0%' => 'Rechtsboven',
+        '0% 50%' => 'Links',
+        '50% 50%' => 'Midden',
+        '100% 50%' => 'Rechts',
+        '0% 100%' => 'Linksonder',
+        '50% 100%' => 'Middenonder',
+        '100% 100%' => 'Rechtsonder',
+    ],
+
+    // Highlight categories
+    'highlight_category' => [
+        'roman' => 'Romeins',
+        'church' => 'Kerk',
+        'castle' => 'Kasteel',
+        'historic_village' => 'Historisch dorp',
+        'historic_city' => 'Historische stad',
+        'museum' => 'Museum',
+        'theater' => 'Theater',
+        'viewpoint' => 'Uitzicht',
+        'square' => 'Plein en markt',
+        'walk' => 'Wandeling',
+        'mountain' => 'Bergen',
+        'garden' => 'Tuin en park',
+        'water' => 'Rivier en meer',
+        'food' => 'Eten',
+        'wine' => 'Wijn',
+        'prehistory' => 'Prehistorie',
+        'cave' => 'Grot',
+        'day_trip' => 'Dagtochten',
+        'romantic' => 'Romantiek',
+        'other' => 'Bezienswaardigheid',
+    ],
+
     // Items
     'item' => [
         'type' => [
@@ -76,5 +128,11 @@ return [
         'taxi' => 'Taxi',
         'transfer' => 'Transfer',
         'airplane' => 'Vliegtuig',
+    ],
+
+    // How a trip travels, shown on the trip cards: by night train when its itinerary has a night train
+    'travel_mode' => [
+        'night_train' => 'Nachttrein',
+        'day_train' => 'Dagtrein',
     ],
 ];

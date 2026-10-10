@@ -1,5 +1,5 @@
 <script setup>
-import { Briefcase, Calendar, Train, Users, User, Phone, Mail, AtSign } from "lucide-vue-next";
+import { Briefcase, Calendar, Train, Users, User, Phone, Mail, AtSign } from "@lucide/vue";
 import { useDateFormatter } from '@/Composables/useDateFormatter.js'
 
 const { formattedDate } = useDateFormatter();

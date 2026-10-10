@@ -2,37 +2,36 @@
 
 namespace App\Models;
 
-use App\Models\Traits\CastsStringArray;
+use App\Enums\Trip\ItineraryType;
 use App\Models\Traits\ManagesImages;
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property Trip $trip
+ * @property Image|null $image
  */
 class Itinerary extends Model
 {
-    use CastsStringArray,
-        HasFactory,
+    use HasFactory,
         ManagesImages,
         SoftDeletes;
 
     protected $fillable = [
         'trip_id',
+        'type',
         'title',
         'day_from',
         'day_to',
         'description',
         'accommodation',
-        'activities',
         'remark',
         'order',
     ];
 
     protected $casts = [
-        'activities' => 'array',
+        'type' => ItineraryType::class,
     ];
 
     protected static function boot()
@@ -69,17 +68,5 @@ class Itinerary extends Model
             $itinerary->order = $order++;
             $itinerary->save();
         }
-    }
-
-    /**
-     * Get the itinerary activities
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array|null, string>
-     */
-    protected function activities(): Attribute
-    {
-        return Attribute::make(
-            set: fn ($value) => $this->castStringArray($value)
-        );
     }
 }

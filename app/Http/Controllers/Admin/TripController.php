@@ -4,20 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
 use App\Enums\Transport;
+use App\Enums\Trip\HeroFocus;
+use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
 use App\Http\Requests\DataTableRequest;
+use App\Http\Requests\TripDescriptionSectionsRequest;
 use App\Http\Requests\UpdateTripRequest;
 use App\Models\Destination;
 use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\SlugService;
+use App\Services\TripContentParser;
 use App\Services\TripItemService;
 use App\Support\MoneyHelper;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -29,7 +35,8 @@ class TripController extends Controller
 
     public function __construct(
         private DataTableService $dataTableService,
-        private TripItemService $tripItemService
+        private TripItemService $tripItemService,
+        private TripContentParser $contentParser
     ) {}
 
     /**
@@ -60,6 +67,9 @@ class TripController extends Controller
             'typeOptions' => ItemType::options(),
             'transportOptions' => Transport::options(),
             'priceLabelOptions' => PriceLabel::options(),
+            'keyFactIconOptions' => KeyFactIcon::options(),
+            'highlightCategoryOptions' => HighlightCategory::options(),
+            'heroFocusOptions' => HeroFocus::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
@@ -127,6 +137,10 @@ class TripController extends Controller
             'typeOptions' => ItemType::options(),
             'transportOptions' => Transport::options(),
             'priceLabelOptions' => PriceLabel::options(),
+            'keyFactIconOptions' => KeyFactIcon::options(),
+            'highlightCategoryOptions' => HighlightCategory::options(),
+            'heroFocusOptions' => HeroFocus::options(),
+            'journeySectionOptions' => $this->journeySectionOptions($trip->description),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),
         ]);
@@ -157,6 +171,11 @@ class TripController extends Controller
         // Sync images array (handles mix of existing paths and new uploads)
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {
             $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
+
+            // A section photo that was removed from the gallery in this same save no longer exists
+            $trip->update([
+                'section_images' => array_intersect($trip->section_images, $trip->images()->pluck('id')->all()),
+            ]);
         }
 
         if (count($destinations)) {
@@ -174,6 +193,28 @@ class TripController extends Controller
 
         return redirect()->route('admin.trips.show', $trip)
             ->with('success', __('trip.updated'));
+    }
+
+    /**
+     * Get the sections that can become the journey section for the description being edited.
+     */
+    public function descriptionSections(TripDescriptionSectionsRequest $request): JsonResponse
+    {
+        return response()->json($this->journeySectionOptions($request->validated('description')));
+    }
+
+    /**
+     * Map the titled sections after the first one onto select options, keyed by the section key.
+     *
+     * @return list<array{id: string, name: string}>
+     */
+    private function journeySectionOptions(?string $description): array
+    {
+        return collect($this->contentParser->storySections($description))
+            ->filter(fn (array $section) => $section['title'] !== null)
+            ->map(fn (array $section) => ['id' => $section['key'], 'name' => $section['title']])
+            ->values()
+            ->all();
     }
 
     /**

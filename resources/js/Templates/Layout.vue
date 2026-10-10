@@ -31,9 +31,12 @@ Object.entries(flash).forEach(([type, message]) => {
 </script>
 
 <template>
-    <main class="overflow-hidden">
+    <main class="overflow-x-clip bg-brand-background">
         <Topbar class="z-50" />
-        <Nav class="z-50 sticky top-0 inset-x-0" />
+        <!-- With a hero the wrapper has no height, so the nav floats over the hero image instead of pushing it down -->
+        <div class="z-50 sticky top-0 inset-x-0" :class="{ 'h-0': $slots.hero }">
+            <Nav :over-hero="!!$slots.hero" />
+        </div>
         <slot name="hero"></slot>
         <slot></slot>
         <Footer :showContact="showContact"/>

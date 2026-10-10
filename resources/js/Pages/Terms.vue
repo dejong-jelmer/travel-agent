@@ -1,6 +1,6 @@
 <script setup>
 import { ref } from 'vue';
-import { Download, Loader2 } from 'lucide-vue-next';
+import { Download, Loader2 } from '@lucide/vue';
 
 const companyName = window.appName;
 

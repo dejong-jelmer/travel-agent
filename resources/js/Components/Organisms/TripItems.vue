@@ -1,7 +1,7 @@
 <script setup>
 import { computed, markRaw } from 'vue';
 
-import { Check, X, Plus } from 'lucide-vue-next';
+import { Check, X, Plus } from '@lucide/vue';
 
 const props = defineProps({
     tripItems: {
@@ -19,45 +19,39 @@ const icons = {
 </script>
 
 <template>
-    <div class="space-y-6">
-        <template v-if="tripItems && Object.keys(tripItems).length > 0">
-            <template v-for="(items, type) in tripItems" :key="type">
-                <!-- Type Section (Inclusief/Exclusief) -->
-                <div class="space-y-2">
-                    <h3 class="text-base font-semibold text-brand-primary mb-2">
-                        {{ type }}
-                    </h3>
+    <BaseCard aria-labelledby="trip-items-heading">
+        <SectionHeader id="trip-items-heading">{{ $t('trip_show.trip_items_heading') }}</SectionHeader>
 
-                    <div class="bg-white">
-                        <ul class="space-y-2">
-                            <li v-for="(tripItem, index) in items" :key="index"
-                                class="flex items-center gap-2">
-                                <div class="flex-shrink-0">
-                                    <component
-                                        :is="icons[tripItem.type]"
-                                        :class="{
-                                            'text-status-success': tripItem.type === 'inclusion',
-                                            'text-status-error': tripItem.type === 'exclusion',
-                                            'text-brand-accent': tripItem.type === 'optional',
-                                        }"
-                                        class="w-3 h-3"
-                                    />
-                                </div>
-                                <span class="text-sm tablet:text-base text-brand-text leading-relaxed flex-1">
-                                    {{ tripItem.item }}
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </template>
-        </template>
+        <!-- One column per type (Inclusief/Exclusief/Optioneel): side by side from tablet up, stacked on phones -->
+        <div v-if="tripItems && Object.keys(tripItems).length > 0" class="grid grid-cols-1 tablet:grid-cols-2 gap-8">
+            <div v-for="(items, type) in tripItems" :key="type">
+                <h3 class="text-lg font-semibold text-brand-primary mb-3">
+                    {{ type }}
+                </h3>
+
+                <ul class="space-y-3">
+                    <li v-for="(tripItem, index) in items" :key="index" class="flex items-start gap-2">
+                        <!-- mt-1 centres the 16px icon on the first 24px line of text instead of the whole item -->
+                        <component
+                            :is="icons[tripItem.type]"
+                            :class="{
+                                'text-brand-accent': tripItem.type === 'inclusion',
+                                'text-brand-light': tripItem.type === 'exclusion',
+                                'text-brand-primary': tripItem.type === 'optional',
+                            }"
+                            class="w-4 h-4 mt-1 flex-shrink-0"
+                        />
+                        <span class="text-[15.5px] leading-[1.55] text-brand-text flex-1">
+                            {{ tripItem.item }}
+                        </span>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
         <!-- Empty State -->
-        <div v-else class="bg-white rounded-lg border border-brand-accent/20 p-6 tablet:p-8 text-center">
-            <p class="text-brand-light">
-                {{ $t('trip_show.tab_content.inclusive_placeholder') }}
-            </p>
-        </div>
-    </div>
+        <p v-else class="text-brand-light">
+            {{ $t('trip_show.tab_content.inclusive_placeholder') }}
+        </p>
+    </BaseCard>
 </template>

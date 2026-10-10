@@ -6,6 +6,9 @@ const props = defineProps({
     typeOptions: Object,
     transportOptions: Object,
     priceLabelOptions: Object,
+    keyFactIconOptions: Array,
+    highlightCategoryOptions: Array,
+    heroFocusOptions: Array,
     practicalSections: Object,
 });
 
@@ -20,16 +23,19 @@ const initializePracticalInfo = () => {
 
 const form = useForm({
     name: "",
-    intro: "",
+    subtitle: "",
     description: "",
+    journey_section: "",
     duration: "",
     transport: [],
     destinations: [],
     heroImage: null,
+    hero_focus: null,
     images: [],
     featured: false,
     published_at: new Date(),
     highlights: [],
+    key_facts: [],
     items: [],
     prices: [],
     blocked_dates: { dates: [], weekdays: [] },
@@ -51,6 +57,9 @@ function submit() {
             :type-options="typeOptions"
             :transport-options="transportOptions"
             :price-label-options="priceLabelOptions"
+            :key-fact-icon-options="keyFactIconOptions"
+            :highlight-category-options="highlightCategoryOptions"
+            :hero-focus-options="heroFocusOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

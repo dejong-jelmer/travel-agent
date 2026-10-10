@@ -1,5 +1,5 @@
 <script setup>
-import { ChevronDown } from 'lucide-vue-next';
+import { ChevronDown } from '@lucide/vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue';
 
 const props = defineProps({

@@ -1,6 +1,6 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from 'lucide-vue-next';
+import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
+import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from '@lucide/vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
@@ -10,9 +10,27 @@ const props = defineProps({
         type: Object,
         required: true
     },
+    // Shape: [{ key, title, html, variant, image_id }], the description split on its H2 headings, variant light or
+    // dark, image_id the gallery image shown next to the section or null
+    descriptionSections: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: [{ title, description, category, icon, label }], the highlights ready for display, see TripHighlights
+    highlights: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: [{ id, type, day_from, day_to, title, description, accommodation_label, remark, image }], the itinerary
+    // ready for display, see TripItinerary
+    itinerary: {
+        type: Array,
+        default: () => []
+    },
     tripItems: Object,
     practicalSections: Object,
-    travelInfoSections: Object
+    travelInfoSections: Object,
+    breadcrumbs: Array
 })
 
 const { t } = useI18n()
@@ -20,17 +38,18 @@ const { t } = useI18n()
 // Modal
 const requestModalOpen = ref(false)
 
-// LightBox
+// LightBox, opening from the gallery buttons
 const lightboxRef = ref(null)
+const thumbnails = []
 const openLightbox = (index) => {
-    lightboxRef.value?.open(index)
+    lightboxRef.value?.open(index, thumbnails)
 }
 
-// Rendered slide width per breakpoint (screens.js), following the layout around the Slider: the page
+// Rendered slide width per breakpoint (screens.js), following the layout around the HorizontalSlider: the page
 // padding (px-4, tablet:px-6), from laptop on the two-thirds column (grid-cols-3, gap-12, max-w-screen-desktop),
-// the card border and padding (p-6, laptop:p-8), the slider padding (laptop:p-6) and the slide width set by
-// Slider (100% / visible slides - 2% margin). Update this when that layout changes.
-const gallerySizes = '(min-width: 1350px) 231px, (min-width: 900px) calc(20.9vw - 51px), (min-width: 600px) calc(48vw - 47px), calc(98vw - 80px)'
+// the card border and padding (BaseCard compact, p-6) and the default slide width of HorizontalSlider (84% on
+// phones, from tablet on a third of the width minus two 12px gaps). Update this when that layout changes.
+const gallerySizes = '(min-width: 1350px) 259px, (min-width: 900px) calc(22.2vw - 41px), (min-width: 600px) calc(33.3vw - 41px), calc(84vw - 69px)'
 
 // Inquiry card tabs
 const activeCardTab = ref('about')
@@ -42,14 +61,95 @@ const cardTabs = computed(() => [
 const inquiryCard = ref(null)
 const openCardTab = (id) => {
     activeCardTab.value = id
-    inquiryCard.value?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    inquiryCard.value?.$el.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
+
+// Sidebar: sticky from laptop up, but only while it fits in the window below its top offset. When the whole sidebar
+// is too tall, only the part from the divider above 'Plan this trip' sticks: the sidebar is pulled up by the height
+// of the tabs, so those scroll away. When even that part does not fit, it scrolls along with the page.
+// Re-checked whenever its height changes (tab switch, country info) or the window resizes.
+const sidebar = ref(null)
+const planStart = ref(null)
+const sidebarSticky = ref(false)
+const SIDEBAR_BOTTOM_GAP = 16
+// Pixels the sticky offset is pulled up, set as --sidebar-pull (negative) on the sidebar, see its top class
+let sidebarPull = 0
+
+const updateSidebarFits = async () => {
+    const el = sidebar.value
+    // The top offset comes from the laptop:top-[...] class, which includes the pull; below laptop it is 'auto' and
+    // sticky does not apply
+    const top = (parseFloat(getComputedStyle(el).top) || 0) + sidebarPull
+    const room = window.innerHeight - SIDEBAR_BOTTOM_GAP - top
+    const tabsHeight = Math.round(planStart.value.getBoundingClientRect().top - el.getBoundingClientRect().top)
+
+    let sticky = true
+    let pull = 0
+    if (el.offsetHeight > room) {
+        pull = tabsHeight
+        sticky = el.offsetHeight - tabsHeight <= room
+    }
+    if (!sticky) {
+        pull = 0
+    }
+    if (sticky === sidebarSticky.value && pull === sidebarPull) {
+        return
+    }
+
+    // A stuck sidebar that loses its tabs or stops sticking at all drops back to the top of its column, far above the
+    // window when the page is scrolled down. Scroll the page along so it stays where it was and the tab just clicked
+    // stays in view. A change in the pull of an already pulled sidebar keeps the divider in place, so needs no scroll.
+    const lostSticky = sidebarSticky.value && (!sticky || (pull > 0 && sidebarPull === 0))
+    const topBefore = el.getBoundingClientRect().top
+    sidebarPull = pull
+    el.style.setProperty('--sidebar-pull', `${-pull}px`)
+    sidebarSticky.value = sticky
+    if (lostSticky) {
+        await nextTick()
+        window.scrollBy({ top: el.parentElement.getBoundingClientRect().top - topBefore, behavior: 'instant' })
+    }
+}
+
+let sidebarObserver = null
+onMounted(() => {
+    sidebarObserver = new ResizeObserver(updateSidebarFits)
+    sidebarObserver.observe(sidebar.value)
+    window.addEventListener('resize', updateSidebarFits)
+})
+onBeforeUnmount(() => {
+    sidebarObserver?.disconnect()
+    window.removeEventListener('resize', updateSidebarFits)
+})
 
 const hasCountryInfo = computed(() =>
     props.trip.destinations?.some(destination =>
         Object.keys(props.travelInfoSections ?? {}).some(key => destination.travel_info?.[key])
     ) ?? false
 )
+
+const hasKeyFacts = computed(() => props.trip.key_facts?.length > 0)
+
+// The first section of the description opens the page next to the key facts, the others get a card each
+const leadSection = computed(() => props.descriptionSections[0] ?? null)
+// A card can have a photo from the gallery next to it, with the same alt text as in the slider. The photos alternate
+// between left and right, starting left, counting only the sections that have one.
+const storySections = computed(() => {
+    let photoCount = 0
+
+    return props.descriptionSections.slice(1).map((section) => {
+        const index = props.trip.images?.findIndex(image => image.id === section.image_id) ?? -1
+        if (index === -1) {
+            return { ...section, image: null }
+        }
+
+        return {
+            ...section,
+            image: props.trip.images[index],
+            imageAlt: t('trip_show.gallery_image_alt', { trip: props.trip.name, position: index + 1 }),
+            imageSide: photoCount++ % 2 === 0 ? 'left' : 'right',
+        }
+    })
+})
 
 const contactUrl = computed(() => {
     const params = new URLSearchParams({ reis: props.trip.slug })
@@ -69,64 +169,74 @@ const contactUrl = computed(() => {
         <DecorativeLine />
         <!-- Main Content -->
         <div
-            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 py-8 tablet:py-12 laptop:py-16 pb-32 laptop:pb-0">
+            class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto mb-1 tablet:mb-8 desktop:mb-10 px-4 tablet:px-6 pt-4 tablet:pt-6 laptop:pt-8 pb-32 tablet:pb-12 laptop:pb-0 bg-brand-background">
+            <PageBreadcrumbs :items="breadcrumbs" class="mb-4 laptop:mb-6" />
             <div class="grid grid-cols-1 laptop:grid-cols-3 gap-12">
                 <!-- Left Column - Main Content -->
                 <div class="laptop:col-span-2 space-y-12">
 
-                    <!-- Description & Highlights -->
-                    <div class="bg-white rounded-2xl shadow-sm border border-brand-primary/20 p-6 laptop:p-8">
-                        <div class="mb-8">
-                            <div class="w-full text-center">
-                                <SectionHeader>{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
+                    <!-- First description section, key facts & gallery -->
+                    <BaseCard padding="compact" aria-labelledby="trip-about-heading">
+                        <SectionHeader id="trip-about-heading">{{ t('trip_show.about_trip', { trip: trip.name }) }}</SectionHeader>
+
+                        <!-- First description section and key facts: stacked on smaller screens, 60/40 from laptop up.
+                             Whichever is missing leaves the other at full width. -->
+                        <div v-if="leadSection || hasKeyFacts"
+                            :class="['grid grid-cols-1 gap-6 mb-6 laptop:gap-8 laptop:items-start', leadSection && hasKeyFacts ? 'laptop:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]' : '']">
+                            <div v-if="leadSection">
+                                <h2 v-if="leadSection.title" class="text-[26px] font-semibold text-brand-primary mb-4">
+                                    {{ leadSection.title }}
+                                </h2>
+                                <div class="prose prose-brand max-w-[68ch]" v-html="leadSection.html"></div>
                             </div>
-                            <div class="p-0 laptop:p-6">
-                                <Slider :items="trip.images" :visible="3">
-                                    <template #default="{ item, index, loaded }">
-                                        <ResponsiveImage :image="item" :sizes="gallerySizes" :deferred="!loaded"
-                                            :loading="index === 0 ? 'eager' : undefined"
-                                            :alt="t('trip_show.gallery_image_alt', { trip: trip.name, position: index + 1 })"
-                                            class="w-full h-36 tablet:h-full max-h-[500px] object-cover cursor-zoom-in"
-                                            :key="index" @click="openLightbox(index)" />
-                                    </template>
-                                </Slider>
-                                <LightBox ref="lightboxRef" :images="trip.images" />
-                            </div>
-                            <div class="prose prose-brand max-w-none" v-html="trip.description"></div>
+                            <TripKeyFacts :facts="trip.key_facts" />
                         </div>
 
-                        <!-- Highlights -->
-                        <div class="border-t border-brand-accent/20 pt-8">
-                            <h3 class="text-lg font-semibold text-brand-primary mb-4">
-                                {{ t('trip_show.highlights_heading') }}
-                            </h3>
-                            <Highlights :highlights="trip.highlights" />
-                        </div>
-                    </div>
-
-                    <!-- Itinerary Section -->
-                    <div
-                        class="bg-white rounded-2xl shadow-sm border border-brand-accent/20 overflow-hidden p-6 laptop:p-8">
-                        <div class="w-full text-center">
-                            <SectionHeader>{{ t('trip_show.itinerary_heading') }}</SectionHeader>
-                        </div>
-                        <div v-if="trip.itineraries?.length" class="space-y-6">
-                            <template v-for="(itinerary, index) in trip.itineraries" :key="index">
-                                <TripItinerary :itinerary="itinerary" :index="index" />
+                        <HorizontalSlider :items="trip.images" :label="t('trip_show.gallery_label', { trip: trip.name })">
+                            <template #default="{ item, index, loaded }">
+                                <!-- The slider clips anything outside the photos, so the focus outline is drawn inside -->
+                                <button type="button" :ref="(el) => thumbnails[index] = el" aria-haspopup="dialog"
+                                    class="block w-full rounded-xl cursor-zoom-in focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand-accent"
+                                    @click="openLightbox(index)">
+                                    <ResponsiveImage :image="item" :sizes="gallerySizes" :deferred="!loaded"
+                                        :loading="index === 0 ? 'eager' : undefined"
+                                        :alt="t('trip_show.gallery_image_alt', { trip: trip.name, position: index + 1 })"
+                                        class="w-full aspect-[4/3] tablet:aspect-[4/5] object-cover rounded-xl" />
+                                </button>
                             </template>
-                        </div>
-                        <p v-else class="text-brand-light">
-                            {{ t('trip_show.tab_content.itinerary_empty') }}
-                        </p>
+                        </HorizontalSlider>
+                        <LightBox ref="lightboxRef" :images="trip.images" />
+                    </BaseCard>
+
+                    <!-- Other description sections, a card each -->
+                    <div v-if="storySections.length" class="space-y-8">
+                        <TripStorySection v-for="section in storySections" :key="section.key" :section="section"
+                            :variant="section.variant" :image="section.image" :image-alt="section.imageAlt"
+                            :image-side="section.imageSide" />
                     </div>
+
+                    <!-- Itinerary -->
+                    <TripItinerary :items="itinerary" />
+
+                    <!-- Highlights -->
+                    <TripHighlights :highlights="highlights" />
+
+                    <!-- Inclusions & Exclusions -->
+                    <TripItems v-reveal :trip-items="tripItems" />
+
+                    <!-- Plan this trip -->
+                    <TripPlanCard v-reveal @request="requestModalOpen = !requestModalOpen" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->
                 <div class="laptop:col-span-1">
-                    <div class="space-y-6">
+                    <!-- top: 16px below the sticky header (header-height in tailwind.config.js), minus the pull set by
+                         updateSidebarFits; sticky only while it fits, see there -->
+                    <div ref="sidebar"
+                        class="space-y-6 laptop:top-[calc(theme(header-height.laptop)+16px+var(--sidebar-pull,0px))]"
+                        :class="{ 'laptop:sticky': sidebarSticky }">
                         <!-- Inquiry Card -->
-                        <div ref="inquiryCard"
-                            class="bg-white rounded-2xl shadow-lg border border-brand-accent/20 overflow-hidden scroll-mt-[125px]">
+                        <BaseCard ref="inquiryCard" padding="none" class="overflow-hidden scroll-mt-[125px]">
                             <!-- Tab Headers -->
                             <div class="border-b border-brand-accent/20">
                                 <nav class="flex">
@@ -143,7 +253,7 @@ const contactUrl = computed(() => {
                             </div>
 
                             <!-- Tab Content -->
-                            <div class="p-6 laptop:p-8 space-y-2 laptop:space-y-4">
+                            <div class="p-6 space-y-2 laptop:space-y-4">
                                 <template v-if="activeCardTab === 'about'">
                                     <p class="flex flex-col space-y-1 text-base text-brand-text mt-1">
                                         <span class="font-bold">
@@ -158,9 +268,6 @@ const contactUrl = computed(() => {
                                             {{ t('trip_show.inquiry.duration_label', { duration: trip.duration }) }}
                                         </span>
                                     </p>
-                                    <div class="border-t border-brand-accent/20" role="presentation"></div>
-
-                                    <TripItems :trip-items="tripItems" />
                                 </template>
 
                                 <template v-else-if="activeCardTab === 'practical'">
@@ -198,17 +305,16 @@ const contactUrl = computed(() => {
                                 </template>
                             </div>
 
-                            <div class="px-6 laptop:px-8 space-y-2 laptop:space-y-4">
+                            <div ref="planStart" class="px-6 space-y-2 laptop:space-y-3">
                                 <div class="border-t border-brand-accent/20" role="presentation"></div>
                                 <h3 class="text-base tablet:text-lg font-semibold text-brand-primary mb-2">
                                     {{ t('trip_show.inquiry.title') }}
                                 </h3>
-                                <!-- Explanation -->
                                 <p class="text-base text-brand-text leading-relaxed">
                                     {{ t('trip_show.inquiry.explanation') }}
                                 </p>
                             </div>
-                            <div class="p-6 laptop:p-8 space-y-6 laptop:space-y-12">
+                            <div class="p-6 space-y-6">
 
 
 
@@ -252,11 +358,7 @@ const contactUrl = computed(() => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <!-- Extra Info -->
-                        <TripExtraInfo />
-
+                        </BaseCard>
                     </div>
                 </div>
             </div>

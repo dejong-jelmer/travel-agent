@@ -22,6 +22,7 @@ import screens from './screens.js';
 import VueHoneypot from 'vue-honeypot'
 import '@vuepic/vue-datepicker/dist/main.css';
 import i18n from './plugins/i18n';
+import reveal from './Directives/reveal.js';
 
 import.meta.glob([
   '../images/**',
@@ -66,6 +67,7 @@ createInertiaApp({
                     placement: 'right'
                 }
             });
+            app.directive('reveal', reveal)
             // Register components globally; heavy admin components are loaded async
             const getName = (path) => path.split('/').pop().replace(/\.[^/.]+$/, '')
 

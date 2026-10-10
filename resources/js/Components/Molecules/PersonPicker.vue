@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed } from 'vue'
-import { UserPlus } from 'lucide-vue-next'
+import { UserPlus } from '@lucide/vue'
 
 const props = defineProps({
     modelValue: {

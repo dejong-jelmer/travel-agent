@@ -26,7 +26,8 @@
         "about": "About me",
         "blog": "Blog",
         "home": "Home",
-        "more": "More"
+        "more": "More",
+        "breadcrumbs": "Breadcrumbs"
     },
     "trips": {
         "title": "Where would you go?",
@@ -69,12 +70,18 @@
     },
     "slider": {
         "previous": "Previous",
-        "next": "Next",
-        "go_to": "Go to position {position}"
+        "next": "Next"
+    },
+    "lightbox": {
+        "close": "Close",
+        "zoom": "Zoom in or out",
+        "previous": "Previous photo",
+        "next": "Next photo",
+        "error": "The photo could not be loaded"
     },
     "trip_itinerary": {
         "day": "Day",
-        "activities": "Activities",
+        "travel_day": "Travel day",
         "accommodation": "Accommodation",
         "accommodation_text": "You will stay at",
         "transport": "Transport"
@@ -149,26 +156,19 @@
         "special_requests_consent": "I consent to the processing of the health and/or diet-related data provided by me for the purpose of my trip."
     },
     "usp": {
-        "heading": "About our journeys",
+        "heading": "How I put a trip together",
         "intro": "I put together trips with care, a good story, and the train as the starting point.",
         "usp-1": {
             "title": "The place sets the journey",
-            "description": "I choose destinations and routes with enough to discover to build a whole trip around: a city, a region, or a line that ties places together. The train gets you there comfortably and sustainably - what you find once you arrive is what it's all about.",
-            "highlight": "The destination is the point"
+            "description": "I choose destinations and routes with enough to discover to build a whole trip around: a city, a region, or a line that ties places together. The train gets you there comfortably and sustainably - what you find once you arrive is what it's all about."
         },
         "usp-2": {
             "title": "Staying for character",
-            "description": "I look for places to stay with a sense of place - a house, a family-run hotel, somewhere with a story of its own. Sometimes the best one is a stop further down the line; as far as I'm concerned, that's worth the extra ride.",
-            "highlight": "Character as the starting point"
+            "description": "I look for places to stay with a sense of place - a house, a family-run hotel, somewhere with a story of its own. Sometimes the best one is a stop further down the line; as far as I'm concerned, that's worth the extra ride."
         },
         "usp-3": {
             "title": "Every trip has a thread",
-            "description": "An angle that turns a place or region into a story. In the Vézère valley it's the prehistory you keep following from cave to cave; elsewhere a layer of time, or a region you only learn to read once you know what to look for. A trip that stays with you, long after you're home.",
-            "highlight": "A distinct angle for every trip"
-        },
-        "cta": {
-            "text": "Ready for your next adventure?",
-            "link": "Discover all trips"
+            "description": "An angle that turns a place or region into a story. In the Vézère valley it's the prehistory you keep following from cave to cave; elsewhere a layer of time, or a region you only learn to read once you know what to look for. A trip that stays with you, long after you're home."
         }
     },
     "forms": {
@@ -268,6 +268,10 @@
                     "change": "Change main image",
                     "select": "Select an image"
                 },
+                "hero_focus": {
+                    "label": "Focal point",
+                    "help": "Choose which part of the photo stays in view when the hero crops it, on desktop and mobile"
+                },
                 "gallery": {
                     "label": "Gallery Images",
                     "help": "Upload images for the gallery",
@@ -332,7 +336,41 @@
                         "label": "Description",
                         "placeholder": "Short description…"
                     },
-                    "help": "Enter unique experiences and attractions of this trip"
+                    "category": {
+                        "label": "Category",
+                        "none": "None"
+                    },
+                    "label_field": {
+                        "label": "Own label (optional)"
+                    },
+                    "help": "Enter unique experiences and attractions of this trip. A category adds an icon and a label above the title; an own label (up to {label} characters) replaces the default label."
+                },
+                "key_facts": {
+                    "label": "Your trip at a glance",
+                    "icon": {
+                        "label": "Icon"
+                    },
+                    "label_field": {
+                        "label": "Label",
+                        "placeholder": "E.g. Departure"
+                    },
+                    "value": {
+                        "label": "Value",
+                        "placeholder": "E.g. Amsterdam, Utrecht or Arnhem"
+                    },
+                    "help": "At most {max} points, each with an icon, a label (up to {label} characters) and a value (up to {value} characters), shown in this order. Every point needs a label."
+                },
+                "journey_section": {
+                    "label": "Section about the journey",
+                    "none": "None",
+                    "help": "This section of the description gets a dark card on the trip page. The choices are the H2 headings in the description, except the first: that one always sits in the top card."
+                },
+                "section_images": {
+                    "label": "Photos with the description",
+                    "help": "Choose a photo from the gallery for each section of the description. It is shown next to the card of the section on the trip page. The choices are the H2 headings in the description, except the first. New photos can be chosen once the trip is saved.",
+                    "none": "No photo",
+                    "image_alt": "Photo {position} of the gallery",
+                    "empty": "The gallery has no saved photos yet. New photos can be chosen once the trip is saved."
                 },
                 "active": {
                     "label": "Active",
@@ -368,9 +406,9 @@
                     "label": "OG Image",
                     "help": "Image for social media sharing (Open Graph)"
                 },
-                "intro": {
-                    "label": "Intro",
-                    "placeholder": "Write a short introduction…"
+                "subtitle": {
+                    "label": "Subtitle",
+                    "placeholder": "Write a short subtitle…"
                 }
             },
             "submit": {
@@ -395,7 +433,7 @@
                     "subtitle": "Upload image for this travel day"
                 },
                 "details": {
-                    "subtitle": "Accommodation, activities and facilities"
+                    "subtitle": "Accommodation and remark"
                 }
             },
             "fields": {
@@ -411,6 +449,9 @@
                 "day_to": {
                     "label": "Itinerary range end",
                     "placeholder": "End range"
+                },
+                "type": {
+                    "label": "Day type"
                 },
                 "title": {
                     "label": "Title",
@@ -435,10 +476,6 @@
                 "accommodation": {
                     "label": "Accommodation",
                     "placeholder": "e.g. Hotel Central Amsterdam"
-                },
-                "activities": {
-                    "label": "Activities",
-                    "placeholder": "e.g. City walk, museum visit"
                 },
                 "distance": {
                     "label": "Distance (km)",
@@ -868,6 +905,7 @@
         "heading": "About Omdat We Reizen",
         "intro": "We travel in our own way, and increasingly seek depth, connection, and that one destination that allows us to see things differently. At the same time, there is friction: travel comes at a price, for the environment and for the place where we arrive. I curate trips with care, a good story, and the train as the starting point. What underpins my journeys is the destination: what there is to experience and the story a place tells.",
         "our_trips_heading": "Our trips",
+        "all_trips_link": "Discover all trips",
         "contact_cta": {
             "heading": "Have a question?",
             "body": "I'd love to tell you more about the routes, the planning, or simply what awaits you.",
@@ -918,6 +956,7 @@
         },
         "about_trip": "About this trip",
         "gallery_image_alt": "Photo {position} of {trip}",
+        "gallery_label": "Photos of {trip}",
         "itinerary_heading": "This trip day by day",
         "card_tabs": {
             "about": "About this trip",
@@ -925,7 +964,6 @@
         },
         "country_heading": "About the country",
         "tab_content": {
-            "itinerary_empty": "Detailed itinerary will be added soon",
             "inclusive_placeholder": "Included and excluded information comes here.",
             "practical_placeholder": "Practical information about the trip comes here.",
             "extra_placeholder": "Extra information about this trip comes here."
@@ -947,6 +985,8 @@
             "carefree_travel": "Carefree travel"
         },
         "highlights_heading": "What you'll see",
+        "key_facts_heading": "Your trip at a glance",
+        "trip_items_heading": "What's included",
         "inquiry": {
             "title": "Plan this trip",
             "price_from": "From €{price},- p.p.",
@@ -1219,7 +1259,9 @@
                     "name": "Name",
                     "slug": "Slug",
                     "description": "Description",
-                    "intro": "Intro"
+                    "subtitle": "Subtitle",
+                    "key_facts": "Your trip at a glance",
+                    "key_fact_missing_label": "Label missing"
                 },
                 "items": {
                     "no_items": "No items",

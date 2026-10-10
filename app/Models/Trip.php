@@ -3,6 +3,10 @@
 namespace App\Models;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HeroFocus;
+use App\Enums\Trip\HighlightCategory;
+use App\Enums\Trip\ItineraryType;
+use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\TripType;
 use App\Models\Traits\HasFormattedDates;
@@ -28,7 +32,10 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection $image_paths
  * @property string $destinations_formatted
  * @property Image|null $heroImage
+ * @property HeroFocus|null $hero_focus
+ * @property \Illuminate\Database\Eloquent\Collection<int, Itinerary> $itineraries
  * @property array<int, array{value: string, label: string}> $transport_formatted
+ * @property bool|null $has_night_train
  */
 class Trip extends Model
 {
@@ -37,6 +44,14 @@ class Trip extends Model
         ManagesImages,
         SoftDeletes,
         Sortable;
+
+    public const MAX_KEY_FACTS = 6;
+
+    public const MAX_KEY_FACT_LABEL_LENGTH = 20;
+
+    public const MAX_KEY_FACT_VALUE_LENGTH = 60;
+
+    public const MAX_HIGHLIGHT_LABEL_LENGTH = 24;
 
     protected $perPage = 10;
 
@@ -47,12 +62,16 @@ class Trip extends Model
     protected $fillable = [
         'name',
         'slug',
-        'intro',
+        'subtitle',
         'description',
+        'journey_section',
+        'section_images',
+        'hero_focus',
         'transport',
         'featured',
         'published_at',
         'highlights',
+        'key_facts',
         'practical_info',
         'blocked_dates',
         'min_advance_days',
@@ -73,12 +92,15 @@ class Trip extends Model
     protected $casts = [
         'transport' => 'array',
         'highlights' => 'array',
+        'key_facts' => 'array',
         'practical_info' => 'array',
         'blocked_dates' => 'array',
         'min_advance_days' => 'integer',
         'published_at' => 'date',
         'featured' => 'boolean',
         'type' => TripType::class,
+        // Null keeps the hero image centred
+        'hero_focus' => HeroFocus::class,
     ];
 
     // Sortable properties
@@ -153,6 +175,18 @@ class Trip extends Model
     protected function published(Builder $query): void
     {
         $query->where('published_at', '<=', today());
+    }
+
+    /**
+     * Scope a query to add whether the trip has a night train item in its itinerary, as has_night_train, which
+     * travel_mode is derived from.
+     */
+    #[Scope]
+    protected function withTravelMode(Builder $query): void
+    {
+        $query->withExists([
+            'itineraries as has_night_train' => fn (Builder $itineraries) => $itineraries->where('type', ItineraryType::NightTrain),
+        ]);
     }
 
     protected function publishedAtFormatted(): Attribute
@@ -354,22 +388,99 @@ class Trip extends Model
     }
 
     /**
-     * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ...]
+     * Get how the trip travels, as shown on the trip cards: by night train when its itinerary has a night train item,
+     * otherwise by day train, with value 'night_train' or 'day_train'. Needs the withTravelMode() scope on the query.
      *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{title: string, description: string|null}>|null, mixed>
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array{value: string, label: string}, never>
+     */
+    protected function travelMode(): Attribute
+    {
+        return Attribute::get(function () {
+            $mode = $this->has_night_train ? 'night_train' : 'day_train';
+
+            return ['value' => $mode, 'label' => (string) __("trip.travel_mode.{$mode}")];
+        });
+    }
+
+    /**
+     * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ..., 'category' => ..., 'label' => ...]
+     *
+     * The category is cast to a HighlightCategory; highlights stored before categories existed, or with a category
+     * that no longer exists, get none. The label is the own label that replaces the default label of the category.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{title: string, description: string|null, category: HighlightCategory|null, label: string|null}>|null, mixed>
      */
     protected function highlights(): Attribute
     {
         return Attribute::make(
+            get: fn (?string $value) => $value === null ? null : collect(json_decode($value, true) ?? [])
+                ->map(fn (array $highlight) => [
+                    'title' => $highlight['title'],
+                    'description' => $highlight['description'] ?? null,
+                    'category' => HighlightCategory::tryFrom((string) ($highlight['category'] ?? '')),
+                    'label' => $highlight['label'] ?? null,
+                ])
+                ->all(),
             set: fn ($value) => json_encode(
                 collect(is_array($value) ? $value : [])
                     ->map(fn ($highlight) => [
                         'title' => trim((string) ($highlight['title'] ?? '')),
                         'description' => trim((string) ($highlight['description'] ?? '')) ?: null,
+                        'category' => ($highlight['category'] ?? null) instanceof HighlightCategory
+                            ? $highlight['category']->value
+                            : HighlightCategory::tryFrom((string) ($highlight['category'] ?? ''))?->value,
+                        'label' => trim((string) ($highlight['label'] ?? '')) ?: null,
                     ])
                     ->filter(fn (array $highlight) => $highlight['title'] !== '')
                     ->values()
                     ->all()
+            )
+        );
+    }
+
+    /**
+     * Get the key facts, stored as an ordered list of ['label' => ..., 'value' => ..., 'icon' => ...]
+     *
+     * Entries without a label and a value are dropped on write, a missing icon falls back to the default icon.
+     * A trip without key facts yields an empty list.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{label: string, value: string, icon: string}>, mixed>
+     */
+    protected function keyFacts(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => json_decode($value ?? '[]', true) ?? [],
+            set: fn ($value) => json_encode(
+                collect(is_array($value) ? $value : [])
+                    ->map(fn ($fact) => [
+                        'label' => trim((string) ($fact['label'] ?? '')),
+                        'value' => trim((string) ($fact['value'] ?? '')),
+                        'icon' => KeyFactIcon::tryFrom((string) ($fact['icon'] ?? ''))->value ?? KeyFactIcon::default()->value,
+                    ])
+                    ->filter(fn (array $fact) => $fact['label'] !== '' || $fact['value'] !== '')
+                    ->values()
+                    ->all()
+            )
+        );
+    }
+
+    /**
+     * Get the photos shown next to the description sections, stored as ['section key' => image id]
+     *
+     * Sections without a photo are dropped on write. Stored as an object, so a numeric section key stays a key.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<string, int>, mixed>
+     */
+    protected function sectionImages(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => json_decode($value ?? '{}', true) ?? [],
+            set: fn ($value) => json_encode(
+                collect(is_array($value) ? $value : [])
+                    ->filter(fn ($imageId) => filled($imageId))
+                    ->map(fn ($imageId) => (int) $imageId)
+                    ->all(),
+                JSON_FORCE_OBJECT
             )
         );
     }

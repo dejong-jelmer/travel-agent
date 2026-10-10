@@ -44,7 +44,7 @@ class TripItemTest extends TestCase
         return array_merge([
             'name' => fake()->words(2, true),
             'slug' => fake()->slug(),
-            'intro' => fake()->text(150),
+            'subtitle' => fake()->text(150),
             'description' => fake()->paragraph(),
             'heroImage' => UploadedFile::fake()->image('hero.jpg'),
             'images' => [UploadedFile::fake()->image('img.jpg')],
@@ -150,6 +150,41 @@ class TripItemTest extends TestCase
                 ->has('tripItems')
                 ->has('tripItems.'.ItemType::Inclusion->label())
                 ->has('tripItems.'.ItemType::Exclusion->label())
+        );
+    }
+
+    public function test_public_trip_show_passes_trip_items_grouped_by_type(): void
+    {
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Inclusion, 'item' => 'Train tickets included']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Exclusion, 'item' => 'Booking fees']);
+        TripItem::create(['trip_id' => $this->trip->id, 'type' => ItemType::Optional, 'item' => 'Sleeper cabin upgrade']);
+
+        // Trip items are appended to the default items from config
+        $defaults = config('trip-default-items');
+        $inclusions = count($defaults[ItemType::Inclusion->value]);
+        $exclusions = count($defaults[ItemType::Exclusion->value]);
+
+        $inclusion = 'tripItems.'.ItemType::Inclusion->label();
+        $exclusion = 'tripItems.'.ItemType::Exclusion->label();
+        $optional = 'tripItems.'.ItemType::Optional->label();
+
+        $response = $this->get(route('trips.show', $this->trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->has('tripItems', 3)
+                ->has($inclusion, $inclusions + 1)
+                ->where("{$inclusion}.0.item", __($defaults[ItemType::Inclusion->value][0]))
+                ->where("{$inclusion}.{$inclusions}.item", 'Train tickets included')
+                ->where("{$inclusion}.{$inclusions}.type", ItemType::Inclusion->value)
+                ->has($exclusion, $exclusions + 1)
+                ->where("{$exclusion}.{$exclusions}.item", 'Booking fees')
+                ->where("{$exclusion}.{$exclusions}.type", ItemType::Exclusion->value)
+                ->has($optional, 1)
+                ->where("{$optional}.0.item", 'Sleeper cabin upgrade')
+                ->where("{$optional}.0.type", ItemType::Optional->value)
         );
     }
 

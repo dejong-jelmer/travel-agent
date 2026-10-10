@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
+use App\Enums\Trip\ItineraryType;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateItineraryRequest;
@@ -49,6 +50,7 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Trip/Itinerary/Create', [
             'trip' => $trip,
+            'typeOptions' => ItineraryType::options(),
             'title' => $this->pageTitle('itinerary.title_create'),
         ]);
     }
@@ -79,6 +81,7 @@ class ItineraryController extends Controller
     {
         return Inertia::render('Admin/Trip/Itinerary/Edit', [
             'itinerary' => $itinerary->load('image'),
+            'typeOptions' => ItineraryType::options(),
             'title' => $this->pageTitle('itinerary.title_edit'),
         ]);
     }

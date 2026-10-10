@@ -47,8 +47,21 @@ return [
         'special_requests_consent_required' => 'You must give consent to process the special requests you entered.',
 
         // Trip
-        'highlights.*.title.required_with' => 'Please enter a title for this description.',
+        'highlights.*.title.required_with' => 'Please enter a title for this highlight.',
         'highlights.*.title.distinct' => 'This title is already used by another highlight.',
+        'highlights.*.category.enum' => 'Choose a valid category for this highlight.',
+        'highlights.*.category.required_with' => 'Choose a category for this own label.',
+        'highlights.*.label.max' => 'An own label can contain at most :max characters.',
+        'key_facts.max' => 'You can enter at most :max points.',
+        'key_facts.*.label.required' => 'Enter a label for this point.',
+        'key_facts.*.label.max' => 'A label can contain at most :max characters.',
+        'key_facts.*.value.required' => 'Enter a value for this point.',
+        'key_facts.*.value.max' => 'A value can contain at most :max characters.',
+        'key_facts.*.icon.required' => 'Choose an icon for this point.',
+        'key_facts.*.icon.enum' => 'Choose a valid icon for this point.',
+        'journey_section.in' => 'Choose a section from the description, or choose "None".',
+        'section_images.*.integer' => 'Choose a photo from the gallery of this trip, or choose "No photo".',
+        'section_images.*.in' => 'Choose a photo from the gallery of this trip, or choose "No photo".',
 
         // Main booker
         'main_booker' => [

@@ -24,7 +24,7 @@ function updateOrder(orderedItinerary) {
             </div>
             <SortableBlocks :blocks="trip.itineraries" @update:order="updateOrder" class="space-y-6">
                 <template v-slot:default="slotProps">
-                    <TripItinerary :isAdmin="!!user.id" :itinerary="slotProps.block" />
+                    <AdminItineraryItem :isAdmin="!!user.id" :itinerary="slotProps.block" />
                 </template>
             </SortableBlocks>
         </div>

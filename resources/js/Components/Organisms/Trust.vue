@@ -1,13 +1,11 @@
 <script setup>
 // import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { useRevealEffect } from '@/Composables/useRevealEffect.js';
-import { Package, ShieldCheck, UserRound } from 'lucide-vue-next';
+import { Package, ShieldCheck, UserRound } from '@lucide/vue';
 import portrait from '@/../images/me.webp';
 import vvkrLogo from '@/../images/vvkr.png';
 
 const { t } = useI18n();
-const { rootRef, visible, reveal } = useRevealEffect();
 
 const points = [
     {
@@ -31,12 +29,11 @@ const points = [
 </script>
 
 <template>
-    <section ref="rootRef" class="bg-white py-16 tablet:py-24 px-6 laptop:px-8">
+    <section class="bg-white py-16 tablet:py-24 px-6 laptop:px-8">
         <div class="max-w-screen-wide laptop:max-w-screen-desktop mx-auto">
 
             <div class="grid grid-cols-1 laptop:grid-cols-2 gap-10 laptop:gap-16 items-center">
-                <div v-bind="reveal(0)" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                    class="transition-all duration-1000 ease-out flex flex-col tablet:flex-row items-start gap-6 laptop:gap-8 text-center tablet:text-left">
+                <div v-reveal class="flex flex-col tablet:flex-row items-start gap-6 laptop:gap-8 text-center tablet:text-left">
                     <figure class="shrink-0 -rotate-3 bg-white p-2 pb-6 rounded-sm self-center laptop:self-start
                         shadow-[0_14px_30px_-10px_rgba(30,45,61,0.4)]
                         motion-safe:transition-transform motion-safe:duration-300
@@ -69,8 +66,8 @@ const points = [
                         </DefaultLink>
                     </div>
                 </div>
-                <div v-bind="reveal(150)" :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'"
-                    class="transition-all duration-1000 ease-out">
+                <!-- Next to the introduction from laptop on, so it comes into view a little later -->
+                <div v-reveal="{ delay: 80 }">
                     <div class="bg-brand-secondary rounded-2xl p-8 tablet:p-10">
                         <h3 class="font-poppins text-base tablet:text-lg font-medium text-brand-primary mb-8">
                             {{ t('about_trust.trust_heading') }}

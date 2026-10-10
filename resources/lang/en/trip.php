@@ -18,6 +18,58 @@ return [
         'child' => 'Child',
     ],
 
+    // Key fact icons
+    'key_fact_icon' => [
+        'train' => 'Train',
+        'night' => 'Night',
+        'clock' => 'Time',
+        'transfer' => 'Transfer',
+        'location' => 'Location',
+        'bed' => 'Overnight stay',
+        'breakfast' => 'Breakfast',
+        'mountain' => 'Mountains',
+        'calendar' => 'Calendar',
+        'sun' => 'Sun',
+        'info' => 'Information',
+    ],
+
+    // Hero focus points
+    'hero_focus' => [
+        '0% 0%' => 'Top left',
+        '50% 0%' => 'Top centre',
+        '100% 0%' => 'Top right',
+        '0% 50%' => 'Left',
+        '50% 50%' => 'Centre',
+        '100% 50%' => 'Right',
+        '0% 100%' => 'Bottom left',
+        '50% 100%' => 'Bottom centre',
+        '100% 100%' => 'Bottom right',
+    ],
+
+    // Highlight categories
+    'highlight_category' => [
+        'roman' => 'Roman',
+        'church' => 'Church',
+        'castle' => 'Castle',
+        'historic_village' => 'Historic village',
+        'historic_city' => 'Historic city',
+        'museum' => 'Museum',
+        'theater' => 'Theatre',
+        'viewpoint' => 'Viewpoint',
+        'square' => 'Square and market',
+        'walk' => 'Walk',
+        'mountain' => 'Mountains',
+        'garden' => 'Garden and park',
+        'water' => 'River and lake',
+        'food' => 'Food',
+        'wine' => 'Wine',
+        'prehistory' => 'Prehistory',
+        'cave' => 'Cave',
+        'day_trip' => 'Day trips',
+        'romantic' => 'Romantic',
+        'other' => 'Sight',
+    ],
+
     // Items
     'item' => [
         'type' => [
@@ -76,5 +128,11 @@ return [
         'taxi' => 'Taxi',
         'transfer' => 'Transfer',
         'airplane' => 'Airplane',
+    ],
+
+    // How a trip travels, shown on the trip cards: by night train when its itinerary has a night train
+    'travel_mode' => [
+        'night_train' => 'Night train',
+        'day_train' => 'Day train',
     ],
 ];

@@ -26,7 +26,8 @@
         "about": "Over mij",
         "blog": "Mijn verhalen",
         "home": "Home",
-        "more": "Meer"
+        "more": "Meer",
+        "breadcrumbs": "Kruimelpad"
     },
     "trips": {
         "title": "Waar ga jij heen?",
@@ -62,19 +63,25 @@
         }
     },
     "trip_card": {
-        "days": "reisdagen",
+        "days": "dagen",
         "sustainable_travel": "Duurzaam reizen",
         "view_trip": "Bekijk reis",
         "expected": "Verwacht"
     },
     "slider": {
         "previous": "Vorige",
-        "next": "Volgende",
-        "go_to": "Ga naar positie {position}"
+        "next": "Volgende"
+    },
+    "lightbox": {
+        "close": "Sluiten",
+        "zoom": "In- of uitzoomen",
+        "previous": "Vorige foto",
+        "next": "Volgende foto",
+        "error": "De foto kan niet worden geladen"
     },
     "trip_itinerary": {
         "day": "Dag",
-        "activities": "Activiteiten",
+        "travel_day": "Reisdag",
         "accommodation": "Overnachting",
         "accommodation_text": "Je verblijft in",
         "transport": "Vervoer"
@@ -149,26 +156,19 @@
         "special_requests_consent": "Ik geef toestemming voor het verwerken van de door mij opgegeven gezondheids- en/of dieetgerelateerde gegevens ten behoeve van mijn reis."
     },
     "usp": {
-        "heading": "Over onze reizen",
+        "heading": "Zo stel ik een reis samen",
         "intro": "Ik stel reizen samen met aandacht, naar bestemmingen die iets te vertellen hebben, en met de trein als uitgangspunt.",
         "usp-1": {
             "title": "De plek bepaalt de reis",
-            "description": "Ik kies bestemmingen die een reis waard zijn: een stad, een streek of een lijn die steden met elkaar verbindt. De trein brengt je erheen. Wat je dáár vindt, is waar het om draait.",
-            "highlight": "Hoe je er komt, niet waarom je gaat"
+            "description": "Ik kies bestemmingen die een reis waard zijn: een stad, een streek of een lijn die steden met elkaar verbindt. De trein brengt je erheen. Wat je dáár vindt, is waar het om draait."
         },
         "usp-2": {
             "title": "Slapen met karakter",
-            "description": "Ik zoek accommodaties met sfeer die bij de plek passen. Een huis, een familiehotel, iets met een verhaal. En altijd goed te bereiken met trein, tram of bus.",
-            "highlight": "Karakter als uitgangspunt"
+            "description": "Ik zoek accommodaties met sfeer die bij de plek passen. Een huis, een familiehotel, iets met een verhaal. En altijd goed te bereiken met trein, tram of bus."
         },
         "usp-3": {
             "title": "Elke reis een rode draad",
-            "description": "Een invalshoek die een plek of streek tot een verhaal maakt. In de Vézère-vallei is dat de prehistorie; elders een tijdlaag of een streek die je pas leert lezen als je weet waar je naar kijkt. Zo'n reis blijft je bij, lang nadat je thuis bent.",
-            "highlight": "Een eigen invalshoek per reis"
-        },
-        "cta": {
-            "text": "Waar ga jij heen?",
-            "link": "Ontdek alle reizen"
+            "description": "Een invalshoek die een plek of streek tot een verhaal maakt. In de Vézère-vallei is dat de prehistorie; elders een tijdlaag of een streek die je pas leert lezen als je weet waar je naar kijkt. Zo'n reis blijft je bij, lang nadat je thuis bent."
         }
     },
     "forms": {
@@ -268,6 +268,10 @@
                     "change": "Wijzig hoofdafbeelding",
                     "select": "Selecteer een afbeelding"
                 },
+                "hero_focus": {
+                    "label": "Focuspunt",
+                    "help": "Kies welk deel van de foto in beeld blijft wanneer de hero de foto bijsnijdt, op desktop en mobiel"
+                },
                 "gallery": {
                     "label": "Galerij Afbeeldingen",
                     "help": "Upload afbeeldingen voor de galerij",
@@ -332,7 +336,41 @@
                         "label": "Omschrijving",
                         "placeholder": "Korte toelichting…"
                     },
-                    "help": "Voer unieke ervaringen en attracties van deze reis in"
+                    "category": {
+                        "label": "Categorie",
+                        "none": "Geen"
+                    },
+                    "label_field": {
+                        "label": "Eigen label (optioneel)"
+                    },
+                    "help": "Voer unieke ervaringen en attracties van deze reis in. Met een categorie krijgt een hoogtepunt een icoon en een label boven de titel; een eigen label (maximaal {label} tekens) vervangt het standaardlabel."
+                },
+                "key_facts": {
+                    "label": "Je reis in het kort",
+                    "icon": {
+                        "label": "Icoon"
+                    },
+                    "label_field": {
+                        "label": "Label",
+                        "placeholder": "Bijv. Vertrek"
+                    },
+                    "value": {
+                        "label": "Waarde",
+                        "placeholder": "Bijv. Amsterdam, Utrecht of Arnhem"
+                    },
+                    "help": "Maximaal {max} punten, elk met een icoon, een label (maximaal {label} tekens) en een waarde (maximaal {value} tekens), getoond in deze volgorde. Elk punt heeft een label nodig."
+                },
+                "journey_section": {
+                    "label": "Sectie over de reis",
+                    "none": "Geen",
+                    "help": "Deze sectie van de beschrijving krijgt op de reispagina een donkere kaart. De keuzes zijn de H2-koppen in de beschrijving, behalve de eerste: die staat altijd in de bovenste kaart."
+                },
+                "section_images": {
+                    "label": "Foto's bij de beschrijving",
+                    "help": "Kies per sectie van de beschrijving een foto uit de galerij. Die staat op de reispagina naast de kaart van de sectie. De keuzes zijn de H2-koppen in de beschrijving, behalve de eerste. Nieuwe foto's kun je kiezen nadat de reis is opgeslagen.",
+                    "none": "Geen foto",
+                    "image_alt": "Foto {position} uit de galerij",
+                    "empty": "De galerij heeft nog geen opgeslagen foto's. Nieuwe foto's kun je kiezen nadat de reis is opgeslagen."
                 },
                 "active": {
                     "label": "Actief",
@@ -368,9 +406,9 @@
                     "label": "OG Image",
                     "help": "Afbeelding voor social media delen (Open Graph)"
                 },
-                "intro": {
-                    "label": "Intro",
-                    "placeholder": "Schrijf een korte introductie…"
+                "subtitle": {
+                    "label": "Ondertitel",
+                    "placeholder": "Schrijf een korte ondertitel…"
                 }
             },
             "submit": {
@@ -395,7 +433,7 @@
                     "subtitle": "Upload afbeelding voor deze reisdag"
                 },
                 "details": {
-                    "subtitle": "Verblijf, activiteiten en faciliteiten"
+                    "subtitle": "Verblijf en opmerking"
                 }
             },
             "fields": {
@@ -411,6 +449,9 @@
                 "day_to": {
                     "label": "Reisdagen reeks einde",
                     "placeholder": "Eind reeks"
+                },
+                "type": {
+                    "label": "Soort dag"
                 },
                 "title": {
                     "label": "Titel",
@@ -435,10 +476,6 @@
                 "accommodation": {
                     "label": "Verblijf",
                     "placeholder": "bijv. Hotel Central Amsterdam"
-                },
-                "activities": {
-                    "label": "Activiteiten",
-                    "placeholder": "bijv. Stadswandeling, museumbezoek"
                 },
                 "distance": {
                     "label": "Afstand (km)",
@@ -867,6 +904,7 @@
         "heading": "Meer mens. Omdat we reizen",
         "intro": "Ik stel reizen samen met aandacht, een goed verhaal en de trein als vertrekpunt. Wat mijn reizen dragt, is de bestemming: wat er te beleven valt en het verhaal dat de plek te vertelten heeft.",
         "our_trips_heading": "De reizen",
+        "all_trips_link": "Ontdek alle reizen",
         "contact_cta": {
             "eyebrow": "Contact",
             "heading": "Heb je een vraag?",
@@ -917,6 +955,7 @@
         },
         "about_trip": "Waarom {trip}",
         "gallery_image_alt": "Foto {position} van {trip}",
+        "gallery_label": "Foto's van {trip}",
         "itinerary_heading": "Deze reis van dag tot dag",
         "card_tabs": {
             "about": "Over deze reis",
@@ -924,7 +963,6 @@
         },
         "country_heading": "Over het land",
         "tab_content": {
-            "itinerary_empty": "Gedetailleerd reisprogramma wordt binnenkort toegevoegd",
             "inclusive_placeholder": "Inbegrepen en niet inbegrepen informatie komt hier.",
             "practical_placeholder": "Praktische informatie over de reis komt hier.",
             "extra_placeholder": "Extra informatie over deze reis komt hier."
@@ -946,12 +984,14 @@
             "carefree_travel": "Zorgeloos op reis"
         },
         "highlights_heading": "Wat er te zien en te doen is",
+        "key_facts_heading": "Je reis in het kort",
+        "trip_items_heading": "Wat zit erbij",
         "inquiry": {
             "title": "Plan deze reis",
             "price_from": "Vanaf €{price},- p.p.",
             "expected": "Prijs op aanvraag",
             "duration_label": "{duration} dagen",
-            "explanation": "Ik kijk graag met je naar de beste periode en je voorkeuren. Niets is definitief tot we het samen hebben afgestemd.",
+            "explanation": "Ik kijk graag met je naar de beste periode en je voorkeuren.",
             "cta_make_request": "Vraag voorstel aan",
             "cta_send_message": "Stel een vraag",
             "preferred_period_label": "Voorkeursperiode (optioneel)",
@@ -1218,7 +1258,9 @@
                     "name": "Naam",
                     "slug": "Slug",
                     "description": "Beschrijving",
-                    "intro": "Intro"
+                    "subtitle": "Ondertitel",
+                    "key_facts": "Je reis in het kort",
+                    "key_fact_missing_label": "Label ontbreekt"
                 },
                 "items": {
                     "no_items": "Geen items",

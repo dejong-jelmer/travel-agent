@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Traits;
 
+use App\DTO\BreadcrumbTrail;
 use App\DTO\OgImageData;
+use App\Models\Image;
 use App\Services\OgImageService;
 
 trait HasPageMetadata
@@ -41,12 +43,18 @@ trait HasPageMetadata
      * @param  string|null  $key  Translation key
      * @param  array|null  $jsonLd  Custom JSON-LD schema: null → generic TravelAgency
      *                              fallback, [] → no schema, array → that exact schema
+     * @param  BreadcrumbTrail|null  $breadcrumbs  Trail added to the schema as a BreadcrumbList
      * @return array SEO metadata array with title, description, og_image, jsonLd
      */
-    public function shareSeo(?string $key = null, array $overrides = [], ?array $jsonLd = null): array
+    public function shareSeo(?string $key = null, array $overrides = [], ?array $jsonLd = null, ?BreadcrumbTrail $breadcrumbs = null): array
     {
         $seo = $this->pageSeo($key, $overrides);
         $schema = $jsonLd ?? $this->getJsonLd($key);
+
+        // The BreadcrumbList sits next to the page schema in a @graph, so one script tag holds both.
+        if ($breadcrumbs) {
+            $schema = ['@graph' => array_values(array_filter([$schema, $breadcrumbs->toSchema()]))];
+        }
 
         // Every schema gets the context, regardless of where it was built.
         $seo['jsonLd'] = $schema === []
@@ -69,6 +77,36 @@ trait HasPageMetadata
             'og_image_height' => $image->height,
             'og_image_type' => $image->type,
             'og_image_alt' => $image->alt,
+        ];
+    }
+
+    /**
+     * Map the hero image of a page to the SEO key the root view renders as a preload link, so the browser starts
+     * fetching it before the page's JavaScript has rendered the image.
+     *
+     * The srcset matches the one ResponsiveImage renders, so with the same sizes the browser picks the same file for
+     * both and fetches it only once. An image without variants yet is preloaded as its original upload.
+     *
+     * @param  string  $sizes  The sizes the page renders the image with
+     * @return array{preload_image?: array{href: string, srcset: string|null, sizes: string|null}}
+     */
+    protected function preloadImageSeo(?Image $image, string $sizes): array
+    {
+        if (! $image) {
+            return [];
+        }
+
+        $srcset = implode(', ', array_map(
+            fn (array $source) => "{$source['url']} {$source['width']}w",
+            $image->sources
+        ));
+
+        return [
+            'preload_image' => [
+                'href' => $image->fallback_source['url'] ?? $image->public_url,
+                'srcset' => $srcset ?: null,
+                'sizes' => $srcset ? $sizes : null,
+            ],
         ];
     }
 

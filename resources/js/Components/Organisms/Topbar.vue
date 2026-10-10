@@ -1,10 +1,10 @@
 <script setup>
-import { Leaf, Phone } from 'lucide-vue-next';
+import { Leaf, Phone } from '@lucide/vue';
 import vvkrLogo from '@/../images/vvkr.png'
 
 </script>
 <template>
-    <div class="w-full bg-brand-secondary">
+    <div class="w-full bg-brand-background border-b border-brand-accent">
         <div class="max-w-screen-desktop mx-auto px-6 laptop:px-8 py-2 flex justify-end">
             <div class="flex items-center gap-x-2 laptop:gap-x-3">
                 <a href="https://www.vvkr.nl/" title="Aangesloten bij VvKR - Vereniging van Kleinschalige Reisorganisaties" target="_blank" rel="noopener noreferrer"

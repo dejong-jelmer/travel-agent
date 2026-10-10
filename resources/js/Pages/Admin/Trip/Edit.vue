@@ -7,6 +7,10 @@ const props = defineProps({
     typeOptions: Object,
     transportOptions: Object,
     priceLabelOptions: Object,
+    keyFactIconOptions: Array,
+    highlightCategoryOptions: Array,
+    heroFocusOptions: Array,
+    journeySectionOptions: Array,
     practicalSections: Object,
 });
 
@@ -22,6 +26,9 @@ const initializePracticalInfo = () => {
 const form = useForm({
     ...props.trip,
     destinations: props.trip.destinations?.map(destination => destination.id) ?? [],
+    journey_section: props.trip.journey_section ?? "",
+    // Spread into an object: PHP sends a trip without section photos as an empty array
+    section_images: { ...props.trip.section_images },
     heroImage: props.trip.hero_image?.public_url ?? null,
     images: props.trip.image_paths ?? [],
     items: props.trip.items ?? [],
@@ -51,6 +58,11 @@ function submit() {
             :type-options="typeOptions"
             :transport-options="transportOptions"
             :price-label-options="priceLabelOptions"
+            :key-fact-icon-options="keyFactIconOptions"
+            :highlight-category-options="highlightCategoryOptions"
+            :hero-focus-options="heroFocusOptions"
+            :journey-section-options="journeySectionOptions"
+            :gallery-images="trip.images"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}" class="scroll-smooth">
+<html lang="{{ app()->getLocale() }}" class="scroll-smooth" data-reveal="{{ config('app.reveal_animations') ? 'on' : 'off' }}">
 
 <head>
     <meta charset="utf-8" />
@@ -27,9 +27,11 @@
         type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font"
         type="font/woff2" crossorigin>
-    @if (request()->routeIs('home'))
-        <link rel="preload" href="{{ Vite::asset('resources/images/hero-poster.jpg') }}" as="image" type="image/jpeg">
-    @endif
+    {{-- The hero image of the page, set through its seo prop (HasPageMetadata::preloadImageSeo) --}}
+    @isset($page['props']['seo']['preload_image'])
+        @php($preloadImage = $page['props']['seo']['preload_image'])
+        <link rel="preload" as="image" href="{{ $preloadImage['href'] }}" @if ($preloadImage['srcset']) imagesrcset="{{ $preloadImage['srcset'] }}" imagesizes="{{ $preloadImage['sizes'] }}" @endif fetchpriority="high">
+    @endisset
     <style>
         .js-cookie-consent {
             opacity: 0;
@@ -47,7 +49,9 @@
 
 <body class="font-poppins">
     @inertia
-    @include('cookie-consent::index')
+    @if (app()->env === 'production')
+        @include('cookie-consent::index')
+    @endif
 </body>
 
 </html>

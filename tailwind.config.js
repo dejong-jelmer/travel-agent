@@ -37,6 +37,7 @@ export default {
                     subtle: "#afcb98",
                     earth: "#dcc7aa",
                     link: "#82b2ca",
+                    background: "#f5f5f5",
                 },
                 // Status feedback colors
                 status: {
@@ -46,42 +47,28 @@ export default {
                     info: "#0d6efd",
                 },
             },
-            "hero-offset": {
-                laptop: "140px",
-                phone: {
-                    default: "200px",
-                    trip: "250px",
-                },
+            // Height of the Topbar above the nav (py-2 + h-7 logos + border-b), the same on every screen
+            "topbar-height": {
+                DEFAULT: "45px",
+            },
+            // Height of the sticky header while scrolled (Nav: h-24 + py-2 + border-b)
+            "header-height": {
+                laptop: "113px",
             },
             screens: screens, // {phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px'}
-            keyframes: {
-                "slide-left-right": {
-                    "0%, 100%": { transform: "translateX(0px)" },
-                    "33%": { transform: "translateX(-25px)" },
-                    "66%": { transform: "translateX(25px)" },
-                },
-            },
-            animation: {
-                "wiggle-x": "slide-left-right 6s ease-in-out infinite",
-            },
             typography: ({ theme }) => ({
                 brand: {
                     css: {
                         h2: {
                             color: theme("colors.brand.primary"),
                             fontWeight: "600",
-                            fontSize: theme("fontSize.lg")[0],
-                            lineHeight: theme("fontSize.lg")[1].lineHeight,
-                            marginTop: theme("spacing.8"),
-                            marginBottom: theme("spacing.0"),
-                            [`@media (min-width: ${screens.tablet})`]: {
-                                fontSize: theme("fontSize.xl")[0],
-                                lineHeight: theme("fontSize.xl")[1].lineHeight,
-                            },
+                            fontSize: theme("fontSize.xl")[0],
+                            lineHeight: theme("fontSize.xl")[1].lineHeight,
+                            marginBottom: theme("spacing.6"),
+
                             [`@media (min-width: ${screens.laptop})`]: {
                                 fontSize: theme("fontSize.2xl")[0],
                                 lineHeight: theme("fontSize.2xl")[1].lineHeight,
-                                marginTop: theme("spacing.10"),
                             },
                         },
                         h3: {
@@ -99,13 +86,13 @@ export default {
                         p: {
                             color: theme("colors.brand.text"),
                             fontWeight: "400",
-                            fontSize: theme("fontSize.sm")[0],
-                            lineHeight: theme("fontSize.sm")[1].lineHeight,
+                            fontSize: theme("fontSize.base")[0],
+                            lineHeight: theme("fontSize.base")[1].lineHeight,
                             marginTop: theme("spacing.0"),
-                            marginBottom: theme("spacing.2"),
+                            marginBottom: theme("spacing.4"),
                             [`@media (min-width: ${screens.tablet})`]: {
-                                fontSize: theme("fontSize.base")[0],
-                                lineHeight: theme("fontSize.base")[1].lineHeight,
+                                fontSize: theme("fontSize.lg")[0],
+                                lineHeight: theme("fontSize.xl")[1].lineHeight,
                             },
                         },
                     },

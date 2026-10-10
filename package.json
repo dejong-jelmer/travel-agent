@@ -26,6 +26,7 @@
         "@headlessui/vue": "^1.7.23",
         "@heroicons/vue": "^2.2.0",
         "@inertiajs/vue3": "^2.0.3",
+        "@lucide/vue": "^1.54.0",
         "@tiptap/extension-image": "^3.20.4",
         "@tiptap/extension-link": "^3.20.4",
         "@tiptap/extension-text-style": "^3.23.1",
@@ -35,11 +36,10 @@
         "@vuepic/vue-datepicker": "^11.0.2",
         "@vueuse/core": "^14.2.1",
         "lodash": "^4.17.21",
-        "lucide-vue-next": "^0.524.0",
+        "photoswipe": "^5.4.4",
         "sortablejs": "^1.15.6",
         "tippy.js": "^6.2.5",
         "vue": "^3.5.13",
-        "vue-easy-lightbox": "^1.19.0",
         "vue-honeypot": "^3.0.1",
         "vue-i18n": "^10.0.8",
         "vue-lazyload": "^3.0.0",
@@ -48,5 +48,8 @@
         "vue3-mq": "^4.0.2",
         "vue3-touch-events": "^5.0.13",
         "ziggy-js": "^2.5.2"
+    },
+    "allowScripts": {
+        "esbuild@0.25.12": true
     }
 }

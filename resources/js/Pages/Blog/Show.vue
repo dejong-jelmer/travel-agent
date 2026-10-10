@@ -2,10 +2,7 @@
 import { usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { useDateFormatter } from '@/Composables/useDateFormatter';
-import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import { computed } from 'vue';
-
-const { rootRef, visible, reveal } = useRevealEffect();
 
 const props = defineProps({
     post: Object,
@@ -33,10 +30,8 @@ const { formattedDate } = useDateFormatter();
             </header>
 
             <!-- Featured Image -->
-            <div ref="rootRef" v-if="post.hero_image" class="max-w-4xl mx-auto mb-12 ">
-                <img :src="post.hero_image.public_url" :alt="post.title" v-bind="reveal(Math.min(index, 5) * 75)"
-                    :class="visible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'"
-                    class="w-full rounded-lg object-cover transition-all duration-1000 ease-out" />
+            <div v-if="post.hero_image" class="max-w-4xl mx-auto mb-12 ">
+                <img :src="post.hero_image.public_url" :alt="post.title" class="w-full rounded-lg object-cover" />
             </div>
 
             <!-- Body -->

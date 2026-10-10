@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { Link, usePage } from "@inertiajs/vue3"
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { LayoutPanelTop, MessageSquareText } from 'lucide-vue-next'
+import { LayoutPanelTop, MessageSquareText } from '@lucide/vue'
 import {
     XMarkIcon,
     ChevronRightIcon,
