@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HeroFocus;
 use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItineraryType;
 use App\Enums\Trip\KeyFactIcon;
@@ -31,6 +32,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Support\Collection $image_paths
  * @property string $destinations_formatted
  * @property Image|null $heroImage
+ * @property HeroFocus|null $hero_focus
  * @property \Illuminate\Database\Eloquent\Collection<int, Itinerary> $itineraries
  * @property array<int, array{value: string, label: string}> $transport_formatted
  * @property bool|null $has_night_train
@@ -64,6 +66,7 @@ class Trip extends Model
         'description',
         'journey_section',
         'section_images',
+        'hero_focus',
         'transport',
         'featured',
         'published_at',
@@ -96,6 +99,8 @@ class Trip extends Model
         'published_at' => 'date',
         'featured' => 'boolean',
         'type' => TripType::class,
+        // Null keeps the hero image centred
+        'hero_focus' => HeroFocus::class,
     ];
 
     // Sortable properties

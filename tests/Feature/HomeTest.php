@@ -106,7 +106,7 @@ class HomeTest extends TestCase
     {
         $home = $this->get(route('home'))->assertOk();
         $this->assertMatchesRegularExpression(
-            '/<link rel="preload" href="[^"]*hero-poster[^"]*\.jpg" as="image" type="image\/jpeg">/',
+            '/<link rel="preload" as="image" href="[^"]*hero-poster[^"]*\.jpg"\s+fetchpriority="high">/',
             $home->getContent()
         );
 

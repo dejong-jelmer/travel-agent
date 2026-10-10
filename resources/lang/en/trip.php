@@ -33,6 +33,19 @@ return [
         'info' => 'Information',
     ],
 
+    // Hero focus points
+    'hero_focus' => [
+        '0% 0%' => 'Top left',
+        '50% 0%' => 'Top centre',
+        '100% 0%' => 'Top right',
+        '0% 50%' => 'Left',
+        '50% 50%' => 'Centre',
+        '100% 50%' => 'Right',
+        '0% 100%' => 'Bottom left',
+        '50% 100%' => 'Bottom centre',
+        '100% 100%' => 'Bottom right',
+    ],
+
     // Highlight categories
     'highlight_category' => [
         'roman' => 'Roman',

@@ -268,6 +268,10 @@
                     "change": "Wijzig hoofdafbeelding",
                     "select": "Selecteer een afbeelding"
                 },
+                "hero_focus": {
+                    "label": "Focuspunt",
+                    "help": "Kies welk deel van de foto in beeld blijft wanneer de hero de foto bijsnijdt, op desktop en mobiel"
+                },
                 "gallery": {
                     "label": "Galerij Afbeeldingen",
                     "help": "Upload afbeeldingen voor de galerij",

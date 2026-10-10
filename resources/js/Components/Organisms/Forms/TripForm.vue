@@ -21,6 +21,11 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [{ id, name }], the cases of the HeroFocus enum: the nine focus points of the hero image
+    heroFocusOptions: {
+        type: Array,
+        default: () => []
+    },
     // Shape: [{ id, name }], the sections of the saved description that can become the journey section
     journeySectionOptions: {
         type: Array,
@@ -376,6 +381,17 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                 :feedback="form.errors.heroImage" />
                             <p class="mt-2 text-xs text-gray-700/30">
                                 {{ t('forms.trip.fields.hero_image.help') }}
+                            </p>
+                        </div>
+
+                        <div v-if="form.heroImage">
+                            <p class="block text-sm font-medium text-gray-700 mb-2">
+                                {{ t('forms.trip.fields.hero_focus.label') }}
+                            </p>
+                            <FocusPointPicker v-model="form.hero_focus" :image="form.heroImage" :options="heroFocusOptions"
+                                :label="t('forms.trip.fields.hero_focus.label')" :feedback="form.errors.hero_focus" />
+                            <p class="mt-2 text-xs text-gray-700/30">
+                                {{ t('forms.trip.fields.hero_focus.help') }}
                             </p>
                         </div>
 

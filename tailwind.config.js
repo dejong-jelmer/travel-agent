@@ -47,12 +47,9 @@ export default {
                     info: "#0d6efd",
                 },
             },
-            "hero-offset": {
-                laptop: "28px",
-                phone: {
-                    default: "104px",
-                    trip: "154px",
-                },
+            // Height of the Topbar above the nav (py-2 + h-7 logos + border-b), the same on every screen
+            "topbar-height": {
+                DEFAULT: "45px",
             },
             // Height of the sticky header while scrolled (Nav: h-24 + py-2 + border-b)
             "header-height": {

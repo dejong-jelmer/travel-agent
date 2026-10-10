@@ -25,7 +25,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div ref="rootRef" class="relative h-[calc(100vh-theme(hero-offset.phone.default))] laptop:h-[calc(100vh-theme(hero-offset.laptop))] flex px-6 overflow-hidden">
+    <div ref="rootRef" class="relative h-hero-home flex px-6 overflow-hidden">
         <video ref="videoRef" :poster="heroImage" class="absolute inset-0 w-full h-full object-cover" preload="none"
             :src="heroVideo" :autoplay="!prefersReducedMotion" muted loop playsinline />
         <!-- Darkens the top so the transparent nav stays readable on light footage -->

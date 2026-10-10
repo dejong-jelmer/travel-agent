@@ -56,6 +56,7 @@ class CreateTripRequest extends FormRequest
             TripValidationRules::destinations(),
             TripValidationRules::transport(),
             TripValidationRules::heroImageStore(),
+            TripValidationRules::heroFocus(),
             TripValidationRules::imagesStore(),
             TripValidationRules::items(),
             TripValidationRules::practicalInfo(),
