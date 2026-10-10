@@ -33,6 +33,19 @@ return [
         'info' => 'Informatie',
     ],
 
+    // Hero focus points
+    'hero_focus' => [
+        '0% 0%' => 'Linksboven',
+        '50% 0%' => 'Middenboven',
+        '100% 0%' => 'Rechtsboven',
+        '0% 50%' => 'Links',
+        '50% 50%' => 'Midden',
+        '100% 50%' => 'Rechts',
+        '0% 100%' => 'Linksonder',
+        '50% 100%' => 'Middenonder',
+        '100% 100%' => 'Rechtsonder',
+    ],
+
     // Highlight categories
     'highlight_category' => [
         'roman' => 'Romeins',

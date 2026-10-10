@@ -9,6 +9,7 @@ const props = defineProps({
     priceLabelOptions: Object,
     keyFactIconOptions: Array,
     highlightCategoryOptions: Array,
+    heroFocusOptions: Array,
     journeySectionOptions: Array,
     practicalSections: Object,
 });
@@ -59,6 +60,7 @@ function submit() {
             :price-label-options="priceLabelOptions"
             :key-fact-icon-options="keyFactIconOptions"
             :highlight-category-options="highlightCategoryOptions"
+            :hero-focus-options="heroFocusOptions"
             :journey-section-options="journeySectionOptions"
             :gallery-images="trip.images"
             :practical-sections="practicalSections"

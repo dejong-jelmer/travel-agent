@@ -124,6 +124,31 @@ body {
 
 }
 
+/* Hero heights. vh comes first as the fallback for browsers without svh; svh is measured with the browser bars shown,
+   so the hero does not jump when the iOS address bar collapses on scroll. Together with the Topbar above it, the home
+   hero fills 88% of the screen, so the intro just peeks below it; the page hero (PageHero: trips, about) keeps the
+   content after it close to the fold. */
+@layer utilities {
+    .h-hero-home {
+        height: calc(88vh - theme('topbar-height.DEFAULT'));
+        height: calc(88svh - theme('topbar-height.DEFAULT'));
+        min-height: 520px;
+    }
+
+    .h-hero-page {
+        height: 58vh;
+        height: 58svh;
+        min-height: 380px;
+    }
+
+    @screen laptop {
+        .h-hero-page {
+            height: clamp(420px, 65vh, 720px);
+            height: clamp(420px, 65svh, 720px);
+        }
+    }
+}
+
 /* Scroll reveal, set by the v-reveal directive (resources/js/Directives/reveal.js). The directive only adds these
    classes when the animations are switched on, so without JavaScript every element stays visible. Outside a layer,
    so Tailwind keeps the classes although they only appear in JavaScript. The movement uses the separate translate

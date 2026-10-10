@@ -11,6 +11,7 @@ use App\Services\SustainabilityPdfService;
 use App\Services\TermsPdfService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Vite;
 use Inertia\Inertia;
 use Inertia\Response;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -22,7 +23,10 @@ class HomeController extends Controller
 
     public function home(): Response
     {
-        $seo = $this->shareSeo('seo.home');
+        $seo = $this->shareSeo('seo.home', [
+            // The poster of the hero video, shown until the video plays. A video poster cannot have a srcset.
+            'preload_image' => ['href' => Vite::asset('resources/images/hero-poster.jpg'), 'srcset' => null, 'sizes' => null],
+        ]);
 
         return Inertia::render('Home', [
             'title' => $seo['title'],

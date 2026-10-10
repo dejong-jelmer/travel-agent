@@ -27,9 +27,11 @@
         type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font"
         type="font/woff2" crossorigin>
-    @if (request()->routeIs('home'))
-        <link rel="preload" href="{{ Vite::asset('resources/images/hero-poster.jpg') }}" as="image" type="image/jpeg">
-    @endif
+    {{-- The hero image of the page, set through its seo prop (HasPageMetadata::preloadImageSeo) --}}
+    @isset($page['props']['seo']['preload_image'])
+        @php($preloadImage = $page['props']['seo']['preload_image'])
+        <link rel="preload" as="image" href="{{ $preloadImage['href'] }}" @if ($preloadImage['srcset']) imagesrcset="{{ $preloadImage['srcset'] }}" imagesizes="{{ $preloadImage['sizes'] }}" @endif fetchpriority="high">
+    @endisset
     <style>
         .js-cookie-consent {
             opacity: 0;

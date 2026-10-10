@@ -3,6 +3,7 @@
 namespace App\Services\Validation;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HeroFocus;
 use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
@@ -128,6 +129,16 @@ class TripValidationRules
     {
         return [
             'heroImage' => ['nullable', ...ImageValidationRules::baseImageOrString()],
+        ];
+    }
+
+    /**
+     * The focus point is one of the positions of the 3x3 grid in the admin form; empty keeps the hero image centred.
+     */
+    public static function heroFocus(): array
+    {
+        return [
+            'hero_focus' => ['nullable', 'string', Rule::enum(HeroFocus::class)],
         ];
     }
 

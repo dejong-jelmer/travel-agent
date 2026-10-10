@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Enums\Transport;
+use App\Enums\Trip\HeroFocus;
 use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\ItineraryType;
@@ -23,6 +24,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Inertia\Testing\AssertableInertia;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class TripTest extends TestCase
@@ -953,6 +955,110 @@ class TripTest extends TestCase
         $this->assertSame(
             ['Vertrek vanaf Amsterdam', 'Ca. 15 uur'],
             json_decode(DB::table('trips')->where('id', $trip->id)->value('key_facts'), true)
+        );
+    }
+
+    // Hero focus tests
+    public static function heroFocusPoints(): array
+    {
+        return array_map(fn (HeroFocus $focus) => [$focus], HeroFocus::cases());
+    }
+
+    #[DataProvider('heroFocusPoints')]
+    public function test_trip_update_saves_every_hero_focus_point_of_the_grid(HeroFocus $focus): void
+    {
+        $trip = Trip::factory()->create();
+        $payload = $this->generateTripUpdatePayload($trip, ['hero_focus' => $focus->value]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertSame($focus, $trip->fresh()->hero_focus);
+    }
+
+    public function test_trip_update_accepts_an_empty_hero_focus(): void
+    {
+        $trip = Trip::factory()->create(['hero_focus' => HeroFocus::TopRight]);
+        $payload = $this->generateTripUpdatePayload($trip, ['hero_focus' => '']);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasNoErrors();
+        $this->assertNull($trip->fresh()->hero_focus);
+    }
+
+    public static function invalidHeroFocusPoints(): array
+    {
+        return [
+            'percentages outside the grid' => ['60% 55%'],
+            'keyword' => ['center'],
+            'keyword pair' => ['left top'],
+            'single percentage' => ['50%'],
+            'trailing declaration' => ['50% 50%; display: none'],
+        ];
+    }
+
+    #[DataProvider('invalidHeroFocusPoints')]
+    public function test_trip_update_rejects_a_hero_focus_outside_the_grid(string $focus): void
+    {
+        $trip = Trip::factory()->create(['hero_focus' => HeroFocus::TopRight]);
+        $payload = $this->generateTripUpdatePayload($trip, ['hero_focus' => $focus]);
+
+        $response = $this->post(route('admin.trips.update', $trip), $payload);
+
+        $response->assertSessionHasErrors('hero_focus');
+        $this->assertSame(HeroFocus::TopRight, $trip->fresh()->hero_focus);
+    }
+
+    public function test_trip_store_rejects_a_hero_focus_outside_the_grid(): void
+    {
+        $response = $this->post(route('admin.trips.store'), ['hero_focus' => '60% 55%']);
+
+        $response->assertSessionHasErrors('hero_focus');
+        $this->assertDatabaseCount('trips', 0);
+    }
+
+    public function test_trip_show_passes_the_hero_focus_as_prop(): void
+    {
+        $trip = Trip::factory()->create(['hero_focus' => HeroFocus::BottomLeft]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('trip.hero_focus', '0% 100%')
+        );
+    }
+
+    public function test_trip_show_passes_no_hero_focus_for_a_trip_without_one(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('trip.hero_focus', null)
+        );
+    }
+
+    public function test_trip_edit_passes_the_hero_focus_options_in_grid_order(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $response = $this->get(route('admin.trips.edit', $trip));
+
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Trip/Edit')
+                ->has('heroFocusOptions', 9)
+                ->where('heroFocusOptions.0', ['id' => '0% 0%', 'name' => __('trip.hero_focus.0% 0%')])
+                ->where('heroFocusOptions.4.id', '50% 50%')
+                ->where('heroFocusOptions.8.id', '100% 100%')
         );
     }
 

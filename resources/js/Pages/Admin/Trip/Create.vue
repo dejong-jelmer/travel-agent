@@ -8,6 +8,7 @@ const props = defineProps({
     priceLabelOptions: Object,
     keyFactIconOptions: Array,
     highlightCategoryOptions: Array,
+    heroFocusOptions: Array,
     practicalSections: Object,
 });
 
@@ -29,6 +30,7 @@ const form = useForm({
     transport: [],
     destinations: [],
     heroImage: null,
+    hero_focus: null,
     images: [],
     featured: false,
     published_at: new Date(),
@@ -57,6 +59,7 @@ function submit() {
             :price-label-options="priceLabelOptions"
             :key-fact-icon-options="keyFactIconOptions"
             :highlight-category-options="highlightCategoryOptions"
+            :hero-focus-options="heroFocusOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

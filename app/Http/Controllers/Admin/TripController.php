@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\ImageRelation;
 use App\Enums\Transport;
+use App\Enums\Trip\HeroFocus;
 use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
@@ -68,6 +69,7 @@ class TripController extends Controller
             'priceLabelOptions' => PriceLabel::options(),
             'keyFactIconOptions' => KeyFactIcon::options(),
             'highlightCategoryOptions' => HighlightCategory::options(),
+            'heroFocusOptions' => HeroFocus::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
@@ -137,6 +139,7 @@ class TripController extends Controller
             'priceLabelOptions' => PriceLabel::options(),
             'keyFactIconOptions' => KeyFactIcon::options(),
             'highlightCategoryOptions' => HighlightCategory::options(),
+            'heroFocusOptions' => HeroFocus::options(),
             'journeySectionOptions' => $this->journeySectionOptions($trip->description),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),

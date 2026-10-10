@@ -86,6 +86,7 @@ class UpdateTripRequest extends FormRequest
             TripValidationRules::destinations(),
             TripValidationRules::transport(),
             TripValidationRules::heroImageUpdate(),
+            TripValidationRules::heroFocus(),
             TripValidationRules::imagesUpdate(),
             TripValidationRules::items(),
             TripValidationRules::practicalInfo(),
