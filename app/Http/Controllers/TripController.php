@@ -6,6 +6,7 @@ use App\DTO\BreadcrumbTrail;
 use App\Enums\Destination\TravelInfo;
 use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Models\Testimonial;
 use App\Models\Trip;
 use App\Services\CountryService;
 use App\Services\ItineraryService;
@@ -73,6 +74,7 @@ class TripController extends Controller
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
             'itinerary' => $this->itineraries->forDisplay($trip),
+            'testimonials' => $this->testimonials($trip),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
@@ -122,5 +124,32 @@ class TripController extends Controller
             'icon' => $highlight['category']?->icon(),
             'label' => $highlight['category'] ? ($highlight['label'] ?? $highlight['category']->label()) : null,
         ], $trip->highlights ?? []);
+    }
+
+    /**
+     * The published testimonials of the trip in their order, ready for display: the full account split into
+     * paragraphs (none without one) and the travel date as month and year. Without published testimonials the list
+     * is empty and the section is not shown.
+     *
+     * No rating or Review structured data is derived from them: a personal story is no customer review, and there
+     * are no ratings to aggregate.
+     *
+     * @return list<array{id: int, quote: string, paragraphs: list<string>, author_name: string, author_context: string|null, travelled_in: string|null, photo: \App\Models\Image|null, link_url: string|null, link_label: string|null}>
+     */
+    private function testimonials(Trip $trip): array
+    {
+        return $trip->testimonials()->published()->with('image')->orderBy('sort_order')->orderBy('id')->get()
+            ->map(fn (Testimonial $testimonial) => [
+                'id' => $testimonial->id,
+                'quote' => $testimonial->quote,
+                'paragraphs' => $testimonial->bodyParagraphs(),
+                'author_name' => $testimonial->author_name,
+                'author_context' => $testimonial->author_context,
+                'travelled_in' => $testimonial->travelled_on?->locale(app()->getLocale())->isoFormat('MMMM YYYY'),
+                'photo' => $testimonial->image,
+                'link_url' => $testimonial->link_url,
+                'link_label' => $testimonial->link_label,
+            ])
+            ->all();
     }
 }

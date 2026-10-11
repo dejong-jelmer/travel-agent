@@ -33,6 +33,11 @@ const props = defineProps({
         type: [Array, Function],
         default: null,
     },
+    // Picks a month instead of a day; the model is then the first day of that month, as 'yyyy-MM-dd'
+    monthPicker: {
+        type: Boolean,
+        default: false,
+    },
 })
 
 const emit = defineEmits(['update:modelValue'])
@@ -47,7 +52,7 @@ const locale = computed(() => { return page.props.locale })
 const format = (date) =>
 
     new Intl.DateTimeFormat(locale.value, {
-        day: '2-digit',
+        ...(props.monthPicker ? {} : { day: '2-digit' }),
         month: 'long',
         year: 'numeric',
         ...(props.enableTimePicker ? {
@@ -61,7 +66,8 @@ const format = (date) =>
     <div>
         <VueDatePicker v-model="model" :locale="locale" :placeholder="$t('date_picker.placeholder')" :enable-time-picker="enableTimePicker"
             teleport="body" :format="format" :min-date="props.minDate || null" :max-date="props.maxDate || null"
-            :disabled-dates="disabledDates"
+            :disabled-dates="disabledDates" :month-picker="monthPicker"
+            :model-type="monthPicker ? 'yyyy-MM-dd' : undefined"
             :state="!!feedback ? false : null" arrow-navigation auto-apply>
             <template #input-icon>
                 <CalendarDays class="ml-1 h-5 w-auto text-brand-accent" />
