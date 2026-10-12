@@ -44,7 +44,11 @@ class TermsPdfService extends PdfService
         ];
 
         try {
-            $pdf = Pdf::loadView('pdf.terms', $data)->setPaper('a4');
+            // Embed only the glyphs the document uses instead of the full DejaVu Sans font.
+            // laravel-dompdf turns subsetting off by default, which makes the PDF about ten times larger.
+            $pdf = Pdf::loadView('pdf.terms', $data)
+                ->setPaper('a4')
+                ->setOption('isFontSubsettingEnabled', true);
             $output = $pdf->output();
 
             Storage::disk('local')->put(self::STORAGE_PATH, $output);
