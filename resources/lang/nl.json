@@ -706,7 +706,7 @@
             "fields": {
                 "trip": {
                     "label": "Reis",
-                    "general": "Algemeen (niet bij een reis)"
+                    "general": "Algemeen (op de homepage)"
                 },
                 "quote": {
                     "label": "Citaat",
@@ -1004,7 +1004,8 @@
             "newsletter_link": "nieuwsbrief"
         },
         "pullquote": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur.",
-        "pullquote_source": "Jelmer de Jong"
+        "pullquote_source": "Jelmer de Jong",
+        "testimonials_label": "Ervaringen"
     },
     "about_trust": {
         "eyebrow": "De maker",

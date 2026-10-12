@@ -38,7 +38,7 @@ class TripRequestController extends Controller
 
     public function edit(TripRequest $tripRequest): Response
     {
-        $bookingOptions = Booking::with('trip')
+        $bookingOptions = Booking::with(['trip' => fn ($q) => $q->withTrashed()])
             ->whereNull('anonymized_at')
             ->orderByDesc('id')
             ->get()

@@ -6,10 +6,11 @@ use App\Models\Testimonial;
 use App\Models\Trip;
 use Database\Seeders\CountrySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Testing\TestResponse;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
-class TripTestimonialsTest extends TestCase
+class TestimonialDisplayTest extends TestCase
 {
     use RefreshDatabase;
 
@@ -110,13 +111,76 @@ class TripTestimonialsTest extends TestCase
             );
     }
 
-    public function test_the_page_has_no_review_or_rating_structured_data(): void
+    public function test_the_trip_page_has_no_review_or_rating_structured_data(): void
     {
         $trip = Trip::factory()->create();
         Testimonial::factory()->published()->for($trip)->create();
         Testimonial::factory()->published()->personal()->for($trip)->create();
 
-        $response = $this->get(route('trips.show', $trip))->assertOk();
+        $this->assertNoReviewStructuredData($this->get(route('trips.show', $trip)), 'TouristTrip');
+    }
+
+    // Homepage
+
+    public function test_only_the_published_general_testimonials_are_passed_to_the_homepage_in_their_order(): void
+    {
+        $second = Testimonial::factory()->published()->create(['sort_order' => 5]);
+        $first = Testimonial::factory()->published()->personal()->create(['sort_order' => 2]);
+        Testimonial::factory()->create(['sort_order' => 1]);
+        Testimonial::factory()->published()->for(Trip::factory())->create(['sort_order' => 1]);
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->component('Home')
+                ->has('testimonials', 2)
+                ->where('testimonials.0.id', $first->id)
+                ->where('testimonials.0.author_context', 'Mijn vader, over zijn reis naar de Vézère-vallei')
+                ->where('testimonials.1.id', $second->id)
+            );
+    }
+
+    public function test_a_general_testimonial_is_passed_to_the_homepage_ready_for_display(): void
+    {
+        Testimonial::factory()->published()->create([
+            'body' => "Eerste alinea.\r\n\r\nTweede alinea.",
+            'travelled_on' => '2022-03-01',
+        ]);
+
+        $this->get(route('home'))
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->where('testimonials.0.paragraphs', ['Eerste alinea.', 'Tweede alinea.'])
+                ->where('testimonials.0.travelled_in', 'maart 2022')
+            );
+    }
+
+    public function test_the_homepage_passes_an_empty_list_without_published_general_testimonials(): void
+    {
+        Testimonial::factory()->create();
+        Testimonial::factory()->published()->for(Trip::factory())->create();
+
+        $this->get(route('home'))
+            ->assertOk()
+            ->assertInertia(fn (AssertableInertia $page) => $page
+                ->where('testimonials', [])
+            );
+    }
+
+    public function test_the_homepage_has_no_review_or_rating_structured_data(): void
+    {
+        Testimonial::factory()->published()->create();
+        Testimonial::factory()->published()->personal()->create();
+
+        $this->assertNoReviewStructuredData($this->get(route('home')), 'TravelAgency');
+    }
+
+    /**
+     * Assert that the JSON-LD of the page describes the given type, but no review or rating, at any depth, and that
+     * no rating terms appear anywhere else in the page.
+     */
+    private function assertNoReviewStructuredData(TestResponse $response, string $pageType): void
+    {
+        $response->assertOk();
 
         preg_match_all('#<script type="application/ld\+json">\s*(.+?)\s*</script>#s', $response->getContent(), $matches);
         $this->assertNotEmpty($matches[1], 'The page renders no JSON-LD block.');
@@ -126,7 +190,7 @@ class TripTestimonialsTest extends TestCase
             $types = [];
             $this->collectKeysAndTypes(json_decode($block, true, flags: JSON_THROW_ON_ERROR), $keys, $types);
 
-            $this->assertContains('TouristTrip', $types);
+            $this->assertContains($pageType, $types);
             $this->assertEmpty(array_intersect($types, ['Review', 'AggregateRating', 'Rating']));
             $this->assertEmpty(array_intersect($keys, ['review', 'reviews', 'reviewRating', 'aggregateRating', 'ratingValue']));
         }

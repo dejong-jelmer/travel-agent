@@ -74,6 +74,49 @@ class Testimonial extends Model
     }
 
     /**
+     * Testimonials not tied to a trip, shown on the homepage.
+     */
+    #[Scope]
+    protected function general(Builder $query): void
+    {
+        $query->whereNull('trip_id');
+    }
+
+    /**
+     * The published testimonials with their photo, in the order set in the admin.
+     */
+    #[Scope]
+    protected function forDisplay(Builder $query): void
+    {
+        $this->published($query);
+        $query->with('image')->orderBy('sort_order')->orderBy('id');
+    }
+
+    /**
+     * The testimonial ready for display: the full account split into paragraphs (none without one) and the travel
+     * date as month and year.
+     *
+     * No rating or Review structured data is derived from testimonials: a personal story is no customer review, and
+     * there are no ratings to aggregate.
+     *
+     * @return array{id: int, quote: string, paragraphs: list<string>, author_name: string, author_context: string|null, travelled_in: string|null, photo: Image|null, link_url: string|null, link_label: string|null}
+     */
+    public function toDisplay(): array
+    {
+        return [
+            'id' => $this->id,
+            'quote' => $this->quote,
+            'paragraphs' => $this->bodyParagraphs(),
+            'author_name' => $this->author_name,
+            'author_context' => $this->author_context,
+            'travelled_in' => $this->travelled_on?->locale(app()->getLocale())->isoFormat('MMMM YYYY'),
+            'photo' => $this->image,
+            'link_url' => $this->link_url,
+            'link_label' => $this->link_label,
+        ];
+    }
+
+    /**
      * The full account split into paragraphs on its blank lines. A single line break within a paragraph becomes a
      * space, as text pasted from an email often breaks its lines at a fixed width.
      *
