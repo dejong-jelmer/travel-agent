@@ -11,8 +11,10 @@ class TermsPdfServiceTest extends TestCase
     public function test_generated_pdf_embeds_only_font_subsets(): void
     {
         Storage::fake('local');
+        $service = app(TermsPdfService::class);
 
-        $pdf = file_get_contents(app(TermsPdfService::class)->path());
+        $service->generate();
+        $pdf = file_get_contents($service->path());
 
         // A subset font name starts with a tag of six capital letters and a plus sign, like "SUBAAB+DejaVuSans".
         preg_match_all('#/BaseFont\s*/([^\s/]+)#', $pdf, $matches);
