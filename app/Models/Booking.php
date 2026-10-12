@@ -243,7 +243,7 @@ class Booking extends Model
     }
 
     /**
-     * Travelers for this booking: the main booker first, then in order of creation.
+     * Travelers for this booking: the main booker first, then by id.
      *
      * The main booker is looked up on the traveler's own booking row, not taken
      * from $this->main_booker_id: eager loading builds this relation on an empty
