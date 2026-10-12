@@ -22,13 +22,15 @@ php artisan migrate --force
 npm ci && npm run build
 php artisan config:cache
 php artisan view:cache
+php artisan terms:generate-pdf
 php artisan queue:restart
 ```
 
-Two things are worth remembering when you change the deploy script:
+Three things are worth remembering when you change the deploy script:
 
 - `queue:restart` is required after every deploy, otherwise the queue daemon keeps running the old code.
 - Re-running `config:cache` is what makes a changed environment variable take effect.
+- `terms:generate-pdf` rewrites the stored terms PDF. The app only generates it when the file is missing, and `storage/` is shared between releases, so without this step a changed terms version, template or PDF setting never reaches the download or the booking confirmation mail.
 
 Deploys use the zero downtime layout, where each release gets its own directory and `current` is a symlink to the active one. Anything written into the release directory at runtime is gone after the next deploy, which is why generated files do not belong in `public/`.
 
@@ -56,11 +58,11 @@ Commands live in `app/Console/Commands/` and are auto-discovered. The schedule i
 
 These commands accept `--dry-run` to preview without changing anything, plus `--years` or `--days` to override the retention period from `config/privacy.php`.
 
-Five commands are not scheduled and are run manually:
+Five commands are not scheduled. They are run manually, except that the deploy script also runs `terms:generate-pdf`:
 
 - `sitemap:generate` - Write the sitemap to a file, for inspection or a manual export. The site itself serves `/sitemap.xml` from a route, so this is not needed in production.
 - `newsletter:send-scheduled-campaigns` - Dispatch campaigns that are queued for sending
-- `terms:generate-pdf` - Regenerate the terms and conditions PDF
+- `terms:generate-pdf` - Regenerate the terms and conditions PDF. Production runs it on every deploy, locally you run it after changing the terms view or version.
 - `image-variants:generate` - Generate the responsive WebP variants of all uploaded images
 - `og-images:generate` - Generate the Open Graph derivatives of all hero images (`--force` regenerates existing ones)
 
