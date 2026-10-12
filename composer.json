@@ -44,6 +44,9 @@
         },
         "files": [
             "app/Helpers/helpers.php"
+        ],
+        "exclude-from-classmap": [
+            "app/Travel/Tests/"
         ]
     },
     "autoload-dev": {
