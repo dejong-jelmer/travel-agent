@@ -8,6 +8,8 @@ use App\Enums\Booking\Status;
 use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Events\BookingCreated;
+use App\Listeners\NotifyAdminOfNewBooking;
+use App\Listeners\SendBookingConfirmationEmail;
 use App\Mail\AdminBookingNotificationMail;
 use App\Mail\BookingConfirmationMail;
 use App\Models\Booking;
@@ -19,12 +21,14 @@ use App\Models\User;
 use App\Services\DefaultFormPdfService;
 use App\Services\TermsPdfService;
 use Carbon\Carbon;
+use Closure;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Tests\TestCase;
 
 class BookingTest extends TestCase
@@ -340,6 +344,105 @@ class BookingTest extends TestCase
         $this->assertTrue($booking->mainBooker->is($traveler));
     }
 
+    // Main booker ordering tests
+
+    /**
+     * Every way a booking's travelers get loaded.
+     *
+     * Eager loading builds the relation on an empty Booking, so it must not
+     * depend on attributes of the booking it is loaded for.
+     *
+     * @return array<string, array{0: Closure(Booking): Booking}>
+     */
+    public static function travelerLoaders(): array
+    {
+        $relations = ['travelers', 'adults', 'children'];
+
+        return [
+            'lazy access' => [fn (Booking $booking) => $booking],
+            'load()' => [fn (Booking $booking) => $booking->load($relations)],
+            'loadMissing()' => [fn (Booking $booking) => $booking->loadMissing($relations)],
+            'with()' => [fn (Booking $booking) => Booking::with($relations)->findOrFail($booking->id)],
+        ];
+    }
+
+    #[DataProvider('travelerLoaders')]
+    public function test_travelers_list_the_main_booker_first(Closure $load): void
+    {
+        $booking = $load(Booking::findOrFail($this->createBookingWithLastAdultAsMainBooker()->id));
+
+        $this->assertSame(['Charlie', 'Alpha', 'Bravo', 'Delta'], $booking->travelers->pluck('first_name')->all());
+        $this->assertSame(['Charlie', 'Alpha', 'Bravo'], $booking->adults->pluck('first_name')->all());
+        $this->assertSame(['Delta'], $booking->children->pluck('first_name')->all());
+    }
+
+    public function test_eager_loading_several_bookings_lists_each_main_booker_first(): void
+    {
+        $first = $this->createBookingWithLastAdultAsMainBooker();
+        $second = $this->createBookingWithLastAdultAsMainBooker();
+
+        $bookings = Booking::with(['travelers', 'adults'])->whereKey([$first->id, $second->id])->get();
+
+        $this->assertCount(2, $bookings);
+
+        foreach ($bookings as $booking) {
+            $this->assertSame($booking->main_booker_id, $booking->travelers->first()->id);
+            $this->assertSame($booking->main_booker_id, $booking->adults->first()->id);
+        }
+    }
+
+    public function test_admin_booking_show_page_lists_the_main_booker_first(): void
+    {
+        $booking = $this->createBookingWithLastAdultAsMainBooker();
+
+        $response = $this->get(route('admin.bookings.show', $booking))->assertOk();
+
+        $this->assertSame(['Charlie', 'Alpha', 'Bravo'], array_column($response->inertiaProps('booking.adults'), 'first_name'));
+        $this->assertSame(['Delta'], array_column($response->inertiaProps('booking.children'), 'first_name'));
+    }
+
+    public function test_admin_booking_edit_page_lists_the_main_booker_first(): void
+    {
+        $booking = $this->createBookingWithLastAdultAsMainBooker();
+
+        $response = $this->get(route('admin.bookings.edit', $booking))->assertOk();
+
+        $this->assertSame(['Charlie', 'Alpha', 'Bravo', 'Delta'], array_column($response->inertiaProps('db_booking.travelers'), 'first_name'));
+        $this->assertSame(['Charlie', 'Alpha', 'Bravo'], array_column($response->inertiaProps('db_booking.adults'), 'first_name'));
+    }
+
+    public function test_booking_confirmation_mail_lists_the_main_booker_first(): void
+    {
+        Mail::fake();
+
+        $booking = $this->createBookingWithLastAdultAsMainBooker();
+
+        (new SendBookingConfirmationEmail)->handle(new BookingCreated(Booking::findOrFail($booking->id)));
+
+        Mail::assertSent(BookingConfirmationMail::class, function (BookingConfirmationMail $mail) {
+            // Anchor on the travelers heading: the greeting above it already names the main booker.
+            $mail->assertSeeInOrderInHtml(['Reizigers (4 personen)', 'Charlie Tester', 'Alpha Tester', 'Bravo Tester', 'Delta Tester']);
+
+            return true;
+        });
+    }
+
+    public function test_admin_booking_notification_mail_lists_the_main_booker_first(): void
+    {
+        Mail::fake();
+
+        $booking = $this->createBookingWithLastAdultAsMainBooker();
+
+        (new NotifyAdminOfNewBooking)->handle(new BookingCreated(Booking::findOrFail($booking->id)));
+
+        Mail::assertSent(AdminBookingNotificationMail::class, function (AdminBookingNotificationMail $mail) {
+            // Anchor on the travelers heading: the main booker block above it already shows the name.
+            $mail->assertSeeInOrderInHtml(['Alle Reizigers', 'Charlie Tester', 'Alpha Tester', 'Bravo Tester', 'Delta Tester']);
+
+            return true;
+        });
+    }
+
     // Blocked dates backend enforcement tests
     public function test_booking_is_rejected_when_departure_date_is_a_blocked_weekday(): void
     {
@@ -535,6 +638,42 @@ class BookingTest extends TestCase
     }
 
     // Helper Methods
+
+    /**
+     * A booking with adults Alpha, Bravo and Charlie and child Delta, created
+     * in that order, where Charlie is the main booker. The main booker's id is
+     * therefore not the lowest traveler id, so id order alone cannot put
+     * Charlie first.
+     */
+    private function createBookingWithLastAdultAsMainBooker(): Booking
+    {
+        $booking = Booking::factory()->for($this->trip, 'trip')->create();
+
+        $adults = collect(['Alpha', 'Bravo', 'Charlie'])
+            ->map(fn (string $name) => BookingTraveler::factory()->adult()->create([
+                'booking_id' => $booking->id,
+                'first_name' => $name,
+                'last_name' => 'Tester',
+            ]));
+
+        BookingTraveler::factory()->child()->create([
+            'booking_id' => $booking->id,
+            'first_name' => 'Delta',
+            'last_name' => 'Tester',
+        ]);
+
+        $mainBooker = $adults->last();
+
+        $booking->update(['main_booker_id' => $mainBooker->id]);
+
+        BookingContact::factory()->create([
+            'booking_id' => $booking->id,
+            'name' => $mainBooker->full_name,
+        ]);
+
+        return $booking;
+    }
+
     private function getUpdateOverrides(): array
     {
         return [
