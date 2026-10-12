@@ -242,10 +242,20 @@ class Booking extends Model
         return $this->belongsTo(TripPrice::class);
     }
 
+    /**
+     * Travelers for this booking: the main booker first, then in order of creation.
+     *
+     * The main booker is looked up on the traveler's own booking row, not taken
+     * from $this->main_booker_id: eager loading builds this relation on an empty
+     * Booking, where that attribute is null.
+     */
     public function travelers(): HasMany
     {
         return $this->hasMany(BookingTraveler::class)
-            ->orderByRaw('CASE WHEN id = ? THEN 0 ELSE 1 END', [$this->main_booker_id]);
+            ->orderByRaw(
+                'CASE WHEN booking_travelers.id = (SELECT bookings.main_booker_id FROM bookings WHERE bookings.id = booking_travelers.booking_id) THEN 0 ELSE 1 END'
+            )
+            ->orderBy('booking_travelers.id');
     }
 
     public function adults(): HasMany
