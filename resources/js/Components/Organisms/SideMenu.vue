@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { Link, usePage } from "@inertiajs/vue3"
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { LayoutPanelTop, MessageSquareText } from '@lucide/vue'
+import { LayoutPanelTop, MessageSquareText, Quote } from '@lucide/vue'
 import {
     XMarkIcon,
     ChevronRightIcon,
@@ -42,6 +42,7 @@ const collapsedItems = ref({
     trips: false,
     destinations: false,
     blog_posts: false,
+    testimonials: false,
 })
 
 // Menu structuur met categorieën
@@ -167,6 +168,23 @@ const menuGroups = computed(() => [
                     {
                         label: t('admin_menu.items.new_blog_post'),
                         path: new URL(route('admin.posts.create'), window.location.origin).pathname,
+                        icon: PlusIcon,
+                    },
+                ]
+            },
+            {
+                id: 'testimonials',
+                label: t('admin_menu.items.testimonials'),
+                icon: Quote,
+                children: [
+                    {
+                        label: t('admin_menu.items.all_testimonials'),
+                        path: new URL(route('admin.testimonials.index'), window.location.origin).pathname,
+                        icon: Quote,
+                    },
+                    {
+                        label: t('admin_menu.items.new_testimonial'),
+                        path: new URL(route('admin.testimonials.create'), window.location.origin).pathname,
                         icon: PlusIcon,
                     },
                 ]

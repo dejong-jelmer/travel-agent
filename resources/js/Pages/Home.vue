@@ -7,6 +7,11 @@ import { Link } from '@inertiajs/vue3';
 const props = defineProps({
     // Every trip comes with travel_mode, see TripCard
     trips: Array,
+    // The published testimonials not tied to a trip, see HomeTestimonials
+    testimonials: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const { t } = useI18n()
@@ -79,7 +84,9 @@ const showTripsRow = computed(() => mq.tabletPlus && props.trips.length <= 3)
             <Newsletter v-reveal />
             <Trust />
             <DecorativeLine />
-            <PullQuote />
+            <!-- The testimonials take the place of the quote; without them the quote stays -->
+            <HomeTestimonials v-if="testimonials.length" :testimonials="testimonials" />
+            <PullQuote v-else />
         </main>
     </Layout>
 </template>

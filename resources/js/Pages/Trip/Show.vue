@@ -27,6 +27,12 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [{ id, quote, paragraphs, author_name, author_context, travelled_in, photo, link_url, link_label }], the
+    // published testimonials ready for display, see TripTestimonials
+    testimonials: {
+        type: Array,
+        default: () => []
+    },
     tripItems: Object,
     practicalSections: Object,
     travelInfoSections: Object,
@@ -220,6 +226,9 @@ const contactUrl = computed(() => {
 
                     <!-- Highlights -->
                     <TripHighlights :highlights="highlights" />
+
+                    <!-- Testimonials -->
+                    <TripTestimonials :testimonials="testimonials" />
 
                     <!-- Inclusions & Exclusions -->
                     <TripItems v-reveal :trip-items="tripItems" />
