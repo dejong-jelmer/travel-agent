@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { Link, usePage } from "@inertiajs/vue3"
 import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } from '@headlessui/vue'
-import { LayoutPanelTop, MessageSquareText, Quote } from '@lucide/vue'
+import { LayoutPanelTop, Library, MessageSquareText, Quote } from '@lucide/vue'
 import {
     XMarkIcon,
     ChevronRightIcon,
@@ -92,6 +92,11 @@ const menuGroups = computed(() => [
                         badge: 'requests',
                     },
                 ]
+            },
+            {
+                label: t('admin_menu.items.travel_library'),
+                path: new URL(route('admin.travel-library'), window.location.origin).pathname,
+                icon: Library,
             },
         ]
     },

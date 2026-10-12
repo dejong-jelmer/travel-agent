@@ -56,12 +56,39 @@ readonly class TravelDocumentData
     }
 
     /**
-     * The cities of the journey stations and of the stays, in order of appearance. Arrival routes are left out: they
-     * run within the city of their accommodation.
+     * The journeys and stays in the order of the trip. The two lists are merged by date, each keeping its own order:
+     * position orders within a list, the date between them. A journey goes before a stay that starts on its day, as
+     * the travelers arrive before they check in. Whatever has no date waits for the other list.
+     *
+     * @return list<JourneyData|StayData>
+     */
+    public function schedule(): array
+    {
+        $journeys = $this->journeys;
+        $stays = $this->stays;
+        $schedule = [];
+
+        while ($journeys !== [] && $stays !== []) {
+            $journeyDate = $journeys[0]->date;
+            $stayDate = $stays[0]->arrival;
+
+            $schedule[] = $stayDate === null || ($journeyDate !== null && $journeyDate->lte($stayDate))
+                ? array_shift($journeys)
+                : array_shift($stays);
+        }
+
+        return [...$schedule, ...$journeys, ...$stays];
+    }
+
+    /**
+     * The cities of the journey stations and of the stays, in order of appearance, with their pharmacies. Arrival
+     * routes are left out: they run within the city of their accommodation.
+     *
+     * Expects the stations and accommodations of the booking to be loaded with their city.
      *
      * @return EloquentCollection<int, City>
      */
-    private static function citiesOf(Booking $booking): EloquentCollection
+    public static function citiesOf(Booking $booking): EloquentCollection
     {
         $cities = $booking->journeys
             ->flatMap(fn (Journey $journey) => $journey->legs)

@@ -100,6 +100,32 @@ class AdminRoutesTest extends TestCase
         $this->assertSame('Den Helder', $leg->transitLines->sole()->pivot->direction);
     }
 
+    public function test_a_leg_is_added_as_the_plan_page_sends_it(): void
+    {
+        $journey = Journey::factory()->create();
+        $station = Station::factory()->create();
+
+        // A night train: the page places the arrival on the next day and sends the moments without a time zone.
+        $this->post(route('admin.journeys.legs.store', $journey), [
+            'type' => LegType::Train->value,
+            'from_station_id' => $station->id,
+            'to_station_id' => Station::factory()->create()->id,
+            'departure_at' => '2026-08-11T23:10',
+            'arrival_at' => '2026-08-12T07:05',
+            'duration_minutes' => null,
+            'number' => null,
+            'carriage' => null,
+            'seat' => null,
+            'note' => null,
+            'transit_lines' => [['id' => TransitLine::factory()->create()->id, 'direction' => null]],
+        ])->assertSessionHasNoErrors();
+
+        $leg = $journey->legs()->sole();
+        $this->assertSame('2026-08-12 07:05', $leg->arrival_at?->format('Y-m-d H:i'));
+        $this->assertSame(475, $leg->duration);
+        $this->assertNull($leg->transitLines->sole()->pivot->direction);
+    }
+
     public function test_a_leg_that_breaks_an_invariant_gets_the_message_on_its_field(): void
     {
         $journey = Journey::factory()->create();

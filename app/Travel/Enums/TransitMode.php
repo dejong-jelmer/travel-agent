@@ -15,4 +15,18 @@ enum TransitMode: string
     case Tram = 'tram';
     case Bus = 'bus';
     case Ferry = 'ferry';
+
+    /**
+     * The Dutch name, as the library shows it.
+     */
+    public function label(): string
+    {
+        return match ($this) {
+            self::Train => 'Trein',
+            self::Metro => 'Metro',
+            self::Tram => 'Tram',
+            self::Bus => 'Bus',
+            self::Ferry => 'Veerboot',
+        };
+    }
 }
