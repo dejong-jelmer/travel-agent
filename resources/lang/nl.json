@@ -79,6 +79,11 @@
         "next": "Volgende foto",
         "error": "De foto kan niet worden geladen"
     },
+    "quote_block": {
+        "expand": "Lees het hele verslag",
+        "collapse": "Verslag inklappen",
+        "read_story": "Lees het hele verhaal"
+    },
     "trip_itinerary": {
         "day": "Dag",
         "travel_day": "Reisdag",
@@ -672,6 +677,82 @@
                 "create": "Blogpost aanmaken",
                 "update": "Blogpost bijwerken"
             }
+        },
+        "testimonial": {
+            "new_heading": "Nieuwe ervaring aanmaken",
+            "edit_heading": "Ervaring bewerken",
+            "subheading": "Een citaat van iemand die gereisd heeft, eventueel met het hele verslag eronder",
+            "sections": {
+                "content": {
+                    "title": "Citaat en verslag",
+                    "subtitle": "Het citaat staat groot op de pagina, het verslag klapt eronder uit"
+                },
+                "author": {
+                    "title": "Schrijver",
+                    "subtitle": "Naam en context staan altijd onder het citaat"
+                },
+                "link": {
+                    "title": "Link",
+                    "subtitle": "Naar een langer verhaal, bijvoorbeeld in Mijn verhalen"
+                },
+                "photo": {
+                    "title": "Foto",
+                    "subtitle": "Klein en rond naast de naam"
+                },
+                "publication": {
+                    "title": "Publicatie"
+                }
+            },
+            "fields": {
+                "trip": {
+                    "label": "Reis",
+                    "general": "Algemeen (op de homepage)"
+                },
+                "quote": {
+                    "label": "Citaat",
+                    "placeholder": "Het fragment dat groot als citaat getoond wordt"
+                },
+                "body": {
+                    "label": "Volledig verslag",
+                    "help": "Een witregel begint een nieuwe alinea."
+                },
+                "author_name": {
+                    "label": "Naam"
+                },
+                "relationship": {
+                    "label": "Relatie",
+                    "placeholder": "Kies de relatie"
+                },
+                "author_context": {
+                    "label": "Context",
+                    "placeholder": "Bijvoorbeeld: Mijn vader, over zijn reis naar de Vézère-vallei",
+                    "help": "Verplicht bij een persoonlijk verhaal."
+                },
+                "travelled_on": {
+                    "label": "Gereisd in"
+                },
+                "link_url": {
+                    "label": "Link",
+                    "placeholder": "https://"
+                },
+                "link_label": {
+                    "label": "Linktekst",
+                    "placeholder": "Lees het hele verhaal"
+                },
+                "is_published": {
+                    "label": "Gepubliceerd",
+                    "help": "Alleen gepubliceerde ervaringen staan op de site."
+                }
+            },
+            "character_counter": {
+                "current": "{current} van {max} tekens",
+                "too_many": "{count} te veel",
+                "remaining": "Nog {count} over"
+            },
+            "submit": {
+                "create": "Ervaring aanmaken",
+                "update": "Ervaring bijwerken"
+            }
         }
     },
     "booking_steps": {
@@ -866,6 +947,9 @@
             "blog": "Blog",
             "all_blog_posts": "Alle Blogposts",
             "new_blog_post": "Nieuwe Blogpost",
+            "testimonials": "Ervaringen",
+            "all_testimonials": "Alle ervaringen",
+            "new_testimonial": "Nieuwe ervaring",
             "home": "Home",
             "settings": "Instellingen",
             "logout": "Uitloggen"
@@ -919,9 +1003,9 @@
             "message_middle2": "pagina. Wil je als eerste weten wanneer de eerste reis online staat? Schrijf je in voor mijn",
             "newsletter_link": "nieuwsbrief"
         },
-        "pullquote_eyebrow": "Citaat",
         "pullquote": "Reizen is voor mij anders dan vakantie. Het is het verschil tussen literatuur en lectuur.",
-        "pullquote_source": "Jelmer de Jong"
+        "pullquote_source": "Jelmer de Jong",
+        "testimonials_label": "Ervaringen"
     },
     "about_trust": {
         "eyebrow": "De maker",
@@ -984,6 +1068,7 @@
             "carefree_travel": "Zorgeloos op reis"
         },
         "highlights_heading": "Wat er te zien en te doen is",
+        "testimonials_label": "Ervaringen",
         "key_facts_heading": "Je reis in het kort",
         "trip_items_heading": "Wat zit erbij",
         "inquiry": {
@@ -1359,6 +1444,26 @@
                 "published_at": "Publicatiedatum",
                 "created_at": "Aangemaakt op",
                 "featured_image": "Uitgelichte afbeelding"
+            }
+        },
+        "testimonials": {
+            "index": {
+                "title": "Ervaringen",
+                "drag_help": "Sleep de ervaringen in de volgorde waarin ze op de site staan.",
+                "general": "Algemeen",
+                "no_testimonials": "Je hebt nog geen ervaringen toegevoegd."
+            },
+            "status": {
+                "published": "Gepubliceerd",
+                "draft": "Niet gepubliceerd"
+            },
+            "actions": {
+                "create": "Voeg een ervaring toe",
+                "edit": "Bewerk deze ervaring",
+                "delete": "Verwijder ervaring",
+                "delete_confirm": "Weet je zeker dat je deze ervaring wilt verwijderen?",
+                "publish": "Publiceren",
+                "unpublish": "Offline halen"
             }
         },
         "trip_request": {

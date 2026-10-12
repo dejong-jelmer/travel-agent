@@ -6,6 +6,7 @@ use App\DTO\ContactFormData;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\SubmitContactRequest;
 use App\Mail\AdminContactFormNotificationMail;
+use App\Models\Testimonial;
 use App\Models\Trip;
 use App\Services\SustainabilityPdfService;
 use App\Services\TermsPdfService;
@@ -33,6 +34,10 @@ class HomeController extends Controller
             // The trip cards have no use for the gallery paths, which would fetch every trip's gallery
             'trips' => Trip::with(['destinations', 'heroImage', 'prices'])->withTravelMode()->published()->featured()
                 ->orderBy('published_at', 'desc')->get()->append('travel_mode')->makeHidden('image_paths'),
+            // The published testimonials not tied to a trip, ready for display; they take the place of the quote
+            'testimonials' => Testimonial::general()->forDisplay()->get()
+                ->map(fn (Testimonial $testimonial) => $testimonial->toDisplay())
+                ->all(),
             'seo' => $seo,
         ]);
     }

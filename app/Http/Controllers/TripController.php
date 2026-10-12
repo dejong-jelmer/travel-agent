@@ -6,6 +6,7 @@ use App\DTO\BreadcrumbTrail;
 use App\Enums\Destination\TravelInfo;
 use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Models\Testimonial;
 use App\Models\Trip;
 use App\Services\CountryService;
 use App\Services\ItineraryService;
@@ -73,6 +74,7 @@ class TripController extends Controller
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
             'itinerary' => $this->itineraries->forDisplay($trip),
+            'testimonials' => $this->testimonials($trip),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
@@ -122,5 +124,18 @@ class TripController extends Controller
             'icon' => $highlight['category']?->icon(),
             'label' => $highlight['category'] ? ($highlight['label'] ?? $highlight['category']->label()) : null,
         ], $trip->highlights ?? []);
+    }
+
+    /**
+     * The published testimonials of the trip in their order, ready for display (see Testimonial::toDisplay()).
+     * Without published testimonials the list is empty and the section is not shown.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function testimonials(Trip $trip): array
+    {
+        return $trip->testimonials()->forDisplay()->get()
+            ->map(fn (Testimonial $testimonial) => $testimonial->toDisplay())
+            ->all();
     }
 }

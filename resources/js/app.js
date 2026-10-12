@@ -6,7 +6,7 @@ import { createApp, h, defineAsyncComponent } from 'vue'
 // Keep this list in sync with the negative glob patterns in the eager registration below.
 const ASYNC_COMPONENTS = [
     'BookingForm', 'TripForm', 'DestinationForm', 'CampaignForm', 'ItineraryForm',
-    'BlogPostForm', 'TripPricesManager', 'TripItemsTab',
+    'BlogPostForm', 'TestimonialForm', 'TripPricesManager', 'TripItemsTab',
     'DataTable', 'SortableBlocks', 'TipTap', 'ImageUploader',
     'BlockedDatesManager', 'LightBox', 'DatePicker',
 ]
@@ -77,7 +77,7 @@ createInertiaApp({
             const eagerGlobs = [
                 import.meta.glob([
                     './Components/**/*.vue',
-                    '!**/{BookingForm,TripForm,DestinationForm,CampaignForm,ItineraryForm,BlogPostForm,TripPricesManager,TripItemsTab,DataTable,SortableBlocks,TipTap,ImageUploader,BlockedDatesManager,LightBox,DatePicker}.vue',
+                    '!**/{BookingForm,TripForm,DestinationForm,CampaignForm,ItineraryForm,BlogPostForm,TestimonialForm,TripPricesManager,TripItemsTab,DataTable,SortableBlocks,TipTap,ImageUploader,BlockedDatesManager,LightBox,DatePicker}.vue',
                 ], { eager: true }),
                 import.meta.glob('./Templates/*.vue', { eager: true }),
                 import.meta.glob('./Icons/*.vue', { eager: true }),

@@ -222,6 +222,14 @@ class Trip extends Model
         return $this->hasMany(Itinerary::class)->orderBy('order');
     }
 
+    /**
+     * @return HasMany<Testimonial, $this>
+     */
+    public function testimonials(): HasMany
+    {
+        return $this->hasMany(Testimonial::class);
+    }
+
     public function recalculateDuration(): void
     {
         $max = $this->itineraries()

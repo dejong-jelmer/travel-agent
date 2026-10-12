@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\Newsletter\CampaignController;
 use App\Http\Controllers\Admin\Newsletter\SubscriberController;
 use App\Http\Controllers\Admin\SettingsController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\TripController as AdminTripController;
 use App\Http\Controllers\Admin\TripRequestController as AdminTripRequestController;
 use App\Http\Controllers\Auth\AuthController;
@@ -134,4 +135,9 @@ Route::prefix('admin')
 
         // Blog posts
         Route::resource('posts', AdminBlogPostController::class);
+
+        // Testimonials; the order route goes before the resource, whose update route would catch it
+        Route::patch('/testimonials/order', [TestimonialController::class, 'updateOrder'])->name('testimonials.order');
+        Route::patch('/testimonials/{testimonial}/publish', [TestimonialController::class, 'togglePublished'])->name('testimonials.publish');
+        Route::resource('testimonials', TestimonialController::class)->except(['show']);
     });

@@ -22,6 +22,7 @@ class AdminAuthorizationTest extends TestCase
             'trip requests' => ['admin.trip-requests.index'],
             'newsletter subscribers' => ['admin.newsletter.subscribers.index'],
             'settings' => ['admin.settings.edit'],
+            'testimonials' => ['admin.testimonials.index'],
         ];
     }
 
