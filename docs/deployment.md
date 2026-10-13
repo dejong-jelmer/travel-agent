@@ -19,16 +19,18 @@ The script is managed in the Forge panel, not in this repository. It performs th
 git pull origin production
 composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 php artisan migrate --force
-npm ci && npm run build
+npm ci && npm run build:ssr
 php artisan config:cache
 php artisan view:cache
 php artisan terms:generate-pdf
 php artisan queue:restart
+php artisan inertia:stop-ssr
 ```
 
-Three things are worth remembering when you change the deploy script:
+Four things are worth remembering when you change the deploy script:
 
 - `queue:restart` is required after every deploy, otherwise the queue daemon keeps running the old code.
+- `npm run build:ssr` builds the browser bundle and the SSR bundle in `bootstrap/ssr/`. `inertia:stop-ssr` makes the SSR server exit, after which its daemon starts it again with the new bundle; without it, the server keeps rendering the old pages, which then no longer match the new browser bundle. Run it after the new release is active.
 - Re-running `config:cache` is what makes a changed environment variable take effect.
 - `terms:generate-pdf` rewrites the stored terms PDF. The app only generates it when the file is missing, and `storage/` is shared between releases, so without this step a changed terms version, template or PDF setting never reaches the download or the booking confirmation mail.
 
@@ -40,6 +42,9 @@ Deploys use the zero downtime layout, where each release gets its own directory 
 | ------------ | --------------- | -------------------------------------------------------------------------------------------------------------------- |
 | Scheduler    | Forge Scheduler | Runs `php artisan schedule:run` every minute, which drives `routes/console.php`                                      |
 | Queue worker | Forge Daemon    | Runs `php artisan queue:work` on the `database` queue connection, needed for newsletter campaigns and mail listeners |
+| SSR server   | Forge Daemon    | Runs `php artisan inertia:start-ssr` in the `current` directory, renders the first visit of public pages to HTML      |
+
+The site keeps working when the SSR server is down: Laravel then sends the page without HTML and the browser renders it, as before server-side rendering. Visitors only see the content a little later, and search engines get an empty page, so treat a stopped SSR daemon as a problem for SEO rather than an outage. `php artisan inertia:check-ssr` tells whether it is running. See [frontend.md](frontend.md#server-side-rendering) for how it works.
 
 ## Environment
 

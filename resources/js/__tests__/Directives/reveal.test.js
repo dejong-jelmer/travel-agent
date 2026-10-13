@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { mount } from "@vue/test-utils";
-import { h, ref, withDirectives } from "vue";
+import { createSSRApp, h, ref, withDirectives } from "vue";
+import { renderToString } from "vue/server-renderer";
 
 // Stands in for the browser's IntersectionObserver, so a test decides when an element comes into view
 class MockIntersectionObserver {
@@ -33,6 +34,19 @@ const mountWithReveal = (value, classes = ref('')) => mount({
     render: () => withDirectives(h('div', { class: classes.value }, 'Day 1'), [[reveal, value]]),
 });
 
+// Renders a div with v-reveal on the server and hydrates it in the document, with the div at `top` in the viewport
+const hydrateWithReveal = async (top) => {
+    const component = { render: () => withDirectives(h('div', 'Day 1'), [[reveal]]) };
+    const container = document.createElement('div');
+    container.innerHTML = await renderToString(createSSRApp(component));
+    document.body.appendChild(container);
+
+    vi.spyOn(container.firstElementChild, 'getBoundingClientRect').mockReturnValue({ top, bottom: top + 100 });
+    createSSRApp(component).mount(container);
+
+    return container.firstElementChild;
+};
+
 // Ends the transition of one property on the element, as the browser would
 const endTransition = (el, propertyName, type = 'transitionend') => {
     const event = new Event(type);
@@ -63,6 +77,7 @@ describe("v-reveal", () => {
     afterEach(() => {
         window.IntersectionObserver = originalIntersectionObserver;
         delete document.documentElement.dataset.reveal;
+        document.body.innerHTML = '';
         vi.restoreAllMocks();
     });
 
@@ -143,6 +158,20 @@ describe("v-reveal", () => {
 
         expect(el.classList.contains('reveal')).toBe(false);
         expect(MockIntersectionObserver.instances).toHaveLength(0);
+    });
+
+    it("leaves a server-rendered element that is already in view visible when it hydrates", async () => {
+        const el = await hydrateWithReveal(100);
+
+        expect(el.classList.contains('reveal')).toBe(false);
+        expect(MockIntersectionObserver.instances).toHaveLength(0);
+    });
+
+    it("hides a server-rendered element below the fold until it comes into view", async () => {
+        const el = await hydrateWithReveal(window.innerHeight + 100);
+
+        expect(el.classList.contains('reveal')).toBe(true);
+        expect(observer().observe).toHaveBeenCalledWith(el);
     });
 
     it("leaves the element visible without IntersectionObserver support", () => {

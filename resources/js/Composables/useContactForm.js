@@ -1,5 +1,6 @@
 // resources/js/Composables/useContactForm.js
 import { reactive, ref } from 'vue'
+import { usePage } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
 import { useToast } from 'vue-toastification'
 import { fetchApi } from '@/fetchApi'
@@ -8,7 +9,9 @@ export function useContactForm() {
     const { t } = useI18n()
     const toast = useToast()
 
-    const urlParams = new URLSearchParams(window.location.search)
+    // From the page url rather than window.location, which does not exist during server-side rendering. The base only
+    // makes the relative url parseable.
+    const urlParams = new URL(usePage().url, 'http://localhost').searchParams
     const tripSlug = urlParams.get('reis') || ''
     const period = urlParams.get('periode') || ''
 

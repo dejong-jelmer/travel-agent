@@ -127,8 +127,8 @@ Code, comments and docblocks are written in English. User-facing strings live in
 ## Further Documentation
 
 - [Architecture](docs/architecture.md) - DTOs, services, events, response macros, routing and configuration
-- [Frontend](docs/frontend.md) - Component structure, composables, breakpoints, fonts and color palette
-- [Deployment](docs/deployment.md) - Release pipeline, Forge deploy script, server processes, console commands and scheduled tasks
+- [Frontend](docs/frontend.md) - Component structure, server-side rendering, composables, breakpoints, fonts and color palette
+- [Deployment](docs/deployment.md) - Release pipeline, Forge deploy script, server processes (including the SSR server), console commands and scheduled tasks
 - [SEO](docs/seo.md) - Meta tags, structured data, Open Graph images and the sitemap
 - [Localization](docs/localization.md) - Dutch public site and bilingual admin panel
 - [Troubleshooting](docs/troubleshooting.md) - Common local, CI and production issues

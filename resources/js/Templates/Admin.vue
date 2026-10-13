@@ -5,6 +5,7 @@ import { useToastWatcher } from '@/Composables/useToastWatcher.js';
 import { watchEffect, computed, ref } from 'vue';
 import { Menu, MenuButton, MenuItems, MenuItem } from '@headlessui/vue';
 import { Bars3Icon, ArrowRightStartOnRectangleIcon, ChevronDownIcon } from '@heroicons/vue/24/outline';
+import appName from '@/appName.js';
 
 const props = defineProps({
     title: String,
@@ -25,7 +26,7 @@ const userInitials = computed(() => {
 });
 
 watchEffect(() => {
-    document.title = usePage().props.title || `${window.appName} - Admin`;
+    document.title = usePage().props.title || `${appName} - Admin`;
 });
 
 Object.entries(flash).forEach(([type, message]) => {

@@ -2,7 +2,6 @@
 import { useI18n } from 'vue-i18n';
 import { Link, usePage } from "@inertiajs/vue3";
 import { computed, ref, onMounted, onBeforeUnmount } from 'vue';
-import { route } from 'ziggy-js';
 
 const props = defineProps({
     // The nav floats over a hero image, so it uses white menu items while transparent
