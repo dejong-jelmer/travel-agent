@@ -42,7 +42,8 @@
         </script>
     @endif
     @include('seo')
-    @routes
+    {{-- Public pages leave the admin routes out (config/ziggy.php) --}}
+    @routes(request()->is('admin*') ? null : 'public')
     @vite('resources/js/app.js')
     @inertiaHead
 </head>
