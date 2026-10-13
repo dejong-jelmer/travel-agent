@@ -1,7 +1,8 @@
 <script setup>
 import { computed } from 'vue';
+import appName from '@/appName.js';
 
-const companyName = window.appName;
+const companyName = appName;
 
 </script>
 <template>

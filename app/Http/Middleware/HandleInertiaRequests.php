@@ -3,8 +3,10 @@
 namespace App\Http\Middleware;
 
 use App\Services\ContactDetailsService;
+use Closure;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Tighten\Ziggy\Ziggy;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -28,6 +30,33 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
+     * Turns server-side rendering off for the requests that do not need it, for the duration of the request: the SSR
+     * gateway only reads the config, which outlives the request in a long-running process (Octane, a test).
+     *
+     * @see https://inertiajs.com/server-side-rendering
+     */
+    public function handle(Request $request, Closure $next)
+    {
+        $ssrEnabled = config('inertia.ssr.enabled');
+        config(['inertia.ssr.enabled' => $this->ssrEnabled($request)]);
+
+        try {
+            return parent::handle($request, $next);
+        } finally {
+            config(['inertia.ssr.enabled' => $ssrEnabled]);
+        }
+    }
+
+    /**
+     * Whether the first visit of the page is rendered on the SSR server (`php artisan inertia:start-ssr`). Admin pages
+     * are not: they sit behind a login, so search engines never see them, and their editors only work in a browser.
+     */
+    protected function ssrEnabled(Request $request): bool
+    {
+        return config('inertia.ssr.enabled') && ! $request->is('admin*');
+    }
+
+    /**
      * Define the props that are shared by default.
      *
      * @see https://inertiajs.com/shared-data
@@ -41,6 +70,12 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'locale' => app()->getLocale(),
             'locales' => availableLocales() ?: ['nl', 'en'],
+            // The route list for route() on the SSR server, which has no @routes script. Only a first visit is
+            // rendered there; the Inertia visits that follow run in the browser and leave it out.
+            'ziggy' => fn () => $request->inertia() || ! $this->ssrEnabled($request) ? null : [
+                ...(new Ziggy)->toArray(),
+                'location' => $request->url(),
+            ],
             'auth' => [
                 'user' => $request->user()?->only(['id', 'name', 'role']) ?: null,
             ],

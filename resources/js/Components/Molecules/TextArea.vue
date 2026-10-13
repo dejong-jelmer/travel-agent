@@ -34,10 +34,11 @@ defineProps({
         <p v-if="description" class="text-sm text-brand-text/70 mb-2 leading-relaxed">
            <slot name="description">{{ description }}</slot>
         </p>
+        <!-- Self-closing: whitespace between the tags would count as content next to :value, which the server renders
+             differently from the browser -->
         <textarea v-bind="$attrs" :id="name" :value="modelValue" :rows="rows"
             @input="$emit('update:modelValue', $event.target.value)" class="form-input" :placeholder="placeholder"
-            :required="required">
-        </textarea>
+            :required="required" />
         <FormFeedback v-if="feedback" :message="feedback" />
     </div>
 </template>

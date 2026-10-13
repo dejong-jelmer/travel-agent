@@ -1,8 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 import { Download, Loader2 } from '@lucide/vue';
+import appName from '@/appName.js';
 
-const companyName = window.appName;
+const companyName = appName;
 
 const props = defineProps({
     contact: Object,
