@@ -134,7 +134,7 @@ class TripFactory extends Factory
                 $locale = CountryService::getLocaleByCountryCode(
                     $destination->country_code,
                 );
-                $city = fake($locale)->unique()->city();
+                $city = fake($locale)->city();
                 $name = "{$city}";
                 $slug = SlugService::generateUniqueFor(Trip::class, $name, $trip->id);
                 $duration = fake()->numberBetween(6, 14);
