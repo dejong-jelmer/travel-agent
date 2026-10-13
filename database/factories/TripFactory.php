@@ -14,6 +14,7 @@ use App\Models\Trip;
 use App\Models\TripItem;
 use App\Models\TripPrice;
 use App\Services\CountryService;
+use App\Services\SlugService;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -36,9 +37,11 @@ class TripFactory extends Factory
      */
     public function definition(): array
     {
-        $city = fake()->city();
+        // unique() keeps names distinct within a test, SlugService keeps slugs unique the same
+        // way the app does: the nl_NL list has names that share a slug ("Kapel Avezaath", "Kapel-Avezaath").
+        $city = fake()->unique()->city();
         $name = $city;
-        $slug = Str::slug($name);
+        $slug = SlugService::generateUniqueFor(Trip::class, $name);
         $duration = fake()->numberBetween(6, 14);
 
         return [
@@ -133,7 +136,7 @@ class TripFactory extends Factory
                 );
                 $city = fake($locale)->city();
                 $name = "{$city}";
-                $slug = Str::slug($name);
+                $slug = SlugService::generateUniqueFor(Trip::class, $name, $trip->id);
                 $duration = fake()->numberBetween(6, 14);
 
                 $trip->update([
