@@ -43,6 +43,15 @@ class ServerSideRenderingTest extends TestCase
         Http::assertNothingSent();
     }
 
+    public function test_an_admin_page_leaves_ssr_on_for_the_requests_after_it(): void
+    {
+        $this->get('/admin/login')->assertOk();
+
+        $this->get(route('about'))
+            ->assertOk()
+            ->assertSee('Rendered on the server');
+    }
+
     public function test_an_inertia_visit_leaves_the_route_list_out(): void
     {
         $version = (new HandleInertiaRequests)->version(new Request);

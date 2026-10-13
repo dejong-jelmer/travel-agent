@@ -27,7 +27,7 @@ const userInitials = computed(() => {
 
 watchEffect(() => {
     document.title = usePage().props.title || `${appName} - Admin`;
-});
+}, { flush: 'post' });
 
 Object.entries(flash).forEach(([type, message]) => {
     useToastWatcher(message, type);

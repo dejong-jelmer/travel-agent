@@ -30,17 +30,21 @@ class HandleInertiaRequests extends Middleware
     }
 
     /**
-     * Turns server-side rendering off for the requests that do not need it, before the parent middleware runs.
+     * Turns server-side rendering off for the requests that do not need it, for the duration of the request: the SSR
+     * gateway only reads the config, which outlives the request in a long-running process (Octane, a test).
      *
      * @see https://inertiajs.com/server-side-rendering
      */
     public function handle(Request $request, Closure $next)
     {
-        if (! $this->ssrEnabled($request)) {
-            config(['inertia.ssr.enabled' => false]);
-        }
+        $ssrEnabled = config('inertia.ssr.enabled');
+        config(['inertia.ssr.enabled' => $this->ssrEnabled($request)]);
 
-        return parent::handle($request, $next);
+        try {
+            return parent::handle($request, $next);
+        } finally {
+            config(['inertia.ssr.enabled' => $ssrEnabled]);
+        }
     }
 
     /**
@@ -68,7 +72,7 @@ class HandleInertiaRequests extends Middleware
             'locales' => availableLocales() ?: ['nl', 'en'],
             // The route list for route() on the SSR server, which has no @routes script. Only a first visit is
             // rendered there; the Inertia visits that follow run in the browser and leave it out.
-            'ziggy' => fn () => $request->inertia() || ! config('inertia.ssr.enabled') ? null : [
+            'ziggy' => fn () => $request->inertia() || ! $this->ssrEnabled($request) ? null : [
                 ...(new Ziggy)->toArray(),
                 'location' => $request->url(),
             ],
