@@ -3,6 +3,7 @@ import { watchEffect, onMounted } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { useToastWatcher } from '@/Composables/useToastWatcher.js';
 import { emailLinks, phoneLinks } from '@/Composables/useAntiSpamLinks.js';
+import appName from '@/appName.js';
 
 
 const props = defineProps({
@@ -21,9 +22,11 @@ onMounted(() => {
     phoneLinks(encodedPhone, '.tel-field');
 });
 
+// Flush 'post' keeps this out of server-side rendering, where there is no document; the title of the first page
+// comes from the <title> tag in seo.blade.php
 watchEffect(() => {
-    document.title = page.props.title || window.appName
-});
+    document.title = page.props.title || appName
+}, { flush: 'post' });
 
 Object.entries(flash).forEach(([type, message]) => {
     useToastWatcher(message, type);

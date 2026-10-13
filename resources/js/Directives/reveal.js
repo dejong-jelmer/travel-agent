@@ -11,6 +11,9 @@
  * config('app.reveal_animations')), when the visitor prefers reduced motion or when the browser has no
  * IntersectionObserver. As the hidden start state hangs on the .reveal class set here, everything stays visible
  * without JavaScript as well.
+ *
+ * The same goes for an element that is already in view when the server-rendered HTML hydrates: the visitor sees it
+ * before the JavaScript runs, so hiding it then would make it blink. Elements further down still fade in.
  */
 
 const MAX_DELAY = 400;
@@ -28,6 +31,17 @@ const revealed = new WeakSet();
 const isEnabled = () => document.documentElement.dataset.reveal === 'on'
     && !window.matchMedia('(prefers-reduced-motion: reduce)').matches
     && 'IntersectionObserver' in window;
+
+// Only a hydrating element is in the document before it mounts; a new one gets inserted after beforeMount
+const isHydratingInView = (el) => {
+    if (!el.isConnected) {
+        return false;
+    }
+
+    const { top, bottom } = el.getBoundingClientRect();
+
+    return top < window.innerHeight && bottom > 0;
+};
 
 // Steps aside once the fade has ended (or was cancelled), leaving the element as if the directive was never there
 const finish = (el) => {
@@ -80,7 +94,7 @@ const apply = (el) => {
 
 export default {
     beforeMount(el, { value }) {
-        if (!isEnabled()) {
+        if (!isEnabled() || isHydratingInView(el)) {
             return;
         }
 

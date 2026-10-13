@@ -1,7 +1,6 @@
 <script setup>
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { useMq } from 'vue3-mq'
 import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
@@ -15,11 +14,11 @@ const props = defineProps({
 });
 
 const { t } = useI18n()
-const mq = useMq()
 
 // From tablet on up to three trips sit side by side in a centred row; with more trips, and always on phones, they
-// go in a slider
-const showTripsRow = computed(() => mq.tabletPlus && props.trips.length <= 3)
+// go in a slider. The breakpoint is applied in CSS rather than with vue3-mq, as the server cannot know the screen
+// width: this way the server-rendered HTML fits every screen and hydrates without a mismatch.
+const hasTripsRow = computed(() => props.trips.length <= 3)
 
 </script>
 
@@ -54,14 +53,14 @@ const showTripsRow = computed(() => mq.tabletPlus && props.trips.length <= 3)
                     </template>
                     <template v-else>
                         <!-- The cards come into view one after the other -->
-                        <div v-if="showTripsRow" class="flex flex-wrap justify-center gap-8">
+                        <div v-if="hasTripsRow" class="hidden tablet:flex flex-wrap justify-center gap-8">
                             <TripCard v-for="(trip, index) in trips" :key="trip.id" :trip="trip"
                                 v-reveal="{ delay: index * 80 }" class="grow basis-[280px] max-w-[400px]" />
                         </div>
                         <!-- Comes into view as a whole: cards outside the scroll area count as out of view, so revealing
                              them one by one would only fade them in once scrolled into view -->
-                        <HorizontalSlider v-else v-reveal :items="trips" :label="t('home.our_trips_heading')"
-                            :tablet-visible="2" :gap="24">
+                        <HorizontalSlider v-reveal :class="{ 'tablet:hidden': hasTripsRow }" :items="trips"
+                            :label="t('home.our_trips_heading')" :tablet-visible="2" :gap="24">
                             <template #default="{ item }">
                                 <!-- Room for the card shadow, which the scroll area would cut off -->
                                 <div class="h-full py-2">

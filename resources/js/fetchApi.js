@@ -1,6 +1,7 @@
-const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
 export async function fetchApi(url, options = {}) {
+    // Read on each request rather than on import, as the module is also loaded during server-side rendering
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
     const response = await fetch(url, {
         ...options,
         headers: {

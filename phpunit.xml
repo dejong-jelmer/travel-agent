@@ -30,5 +30,6 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="FILESYSTEM_DISK" value="public"/>
+        <env name="INERTIA_SSR_ENABLED" value="false"/>
     </php>
 </phpunit>

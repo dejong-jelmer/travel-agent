@@ -2,6 +2,7 @@
 import { usePage } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
 import vvkrLogo from '@/../images/vvkr.png'
+import appName from '@/appName.js'
 
 const props = defineProps({
     showContact: {
@@ -12,7 +13,7 @@ const props = defineProps({
 
 const page = usePage();
 const contact = page.props.contact;
-const companyName = window.appName;
+const companyName = appName;
 const year = new Date().getFullYear();
 </script>
 <template>
