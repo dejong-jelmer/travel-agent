@@ -64,7 +64,7 @@ class SampleTripSeeder extends Seeder
     private function seedTransitLines(): void
     {
         foreach ([
-            ['Eurostar', TransitMode::Train, null, null],
+            ['Eurostar', TransitMode::Train, null, 'https://www.eurostar.com/nl-nl/reisinformatie/dienstregeling/{%leg_number%}?date={%journey_date%}'],
             ['TGV INOUI', TransitMode::Train, null, null],
             ['TER NA L31', TransitMode::Train, null, null],
             ['TER NA L34', TransitMode::Train, null, null],

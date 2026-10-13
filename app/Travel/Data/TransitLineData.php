@@ -16,15 +16,18 @@ readonly class TransitLineData
     ) {}
 
     /**
-     * Takes a line loaded through a leg: the direction lives on the pivot.
+     * Takes a line loaded through a leg: the direction lives on the pivot, and the leg gives the values of the
+     * variables in the information link.
+     *
+     * @param  array<string, string|null>  $variables
      */
-    public static function fromModel(TransitLine $line): self
+    public static function fromModel(TransitLine $line, array $variables = []): self
     {
         return new self(
             mode: $line->mode,
             name: $line->name,
             color: $line->color,
-            infoLink: $line->info_link,
+            infoLink: $line->info_link === null ? null : InfoLink::fill($line->info_link, $variables),
             direction: $line->pivot->direction,
         );
     }

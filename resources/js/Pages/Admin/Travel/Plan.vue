@@ -236,9 +236,9 @@ const deleteStay = (stay) =>
                                 <Pill class="h-4 w-4 text-gray-400 flex-shrink-0" />
                                 <h2 class="text-lg font-semibold text-gray-700">Apotheken</h2>
                             </div>
-                            <p class="mt-1 text-sm text-gray-700/30 pl-6">Per plaats op de route.</p>
+                            <p class="mt-1 text-sm text-gray-700/30 pl-6">Per plaats van een verblijf, zoals in de reisdocumenten.</p>
                         </div>
-                        <p v-if="!cities.length" class="p-6 text-sm text-gray-500 italic">Nog geen plaatsen.</p>
+                        <p v-if="!cities.length" class="p-6 text-sm text-gray-500 italic">Nog geen verblijven.</p>
                         <ul v-else class="divide-y divide-gray-100">
                             <li v-for="city in cities" :key="city.id" class="px-6 py-3 text-sm">
                                 <p class="font-medium text-gray-900">{{ city.name }}</p>

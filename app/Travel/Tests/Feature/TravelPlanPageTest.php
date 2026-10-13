@@ -72,15 +72,15 @@ class TravelPlanPageTest extends TestCase
                 ->where('stays.1.accommodation.arrival_route.2.type', 'walk'));
     }
 
-    public function test_it_shows_the_cities_of_the_trip_with_their_pharmacies(): void
+    public function test_it_shows_the_cities_of_the_stays_with_their_pharmacies_as_the_documents_do(): void
     {
         $this->get(route('admin.bookings.travel-plan', $this->booking))
             ->assertInertia(fn (AssertableInertia $page) => $page
-                ->has('cities', 7)
-                ->where('cities.0.name', 'Nijmegen')
-                ->has('cities.0.pharmacies', 0)
-                ->where('cities.4.name', 'Bordeaux')
-                ->where('cities.4.pharmacies.0.name', 'Pharmacie de la Place Picard'));
+                ->has('cities', 2)
+                ->where('cities.0.name', 'Les Eyzies')
+                ->where('cities.0.pharmacies.0.name', 'Pharmacie de la Préhistoire')
+                ->where('cities.1.name', 'Bordeaux')
+                ->where('cities.1.pharmacies.0.name', 'Pharmacie de la Place Picard'));
     }
 
     public function test_it_passes_the_dutch_labels_of_the_types_and_which_leg_types_carry_lines(): void

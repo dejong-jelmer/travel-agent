@@ -27,8 +27,14 @@ readonly class LegData
         public array $transitLines,
     ) {}
 
-    public static function fromModel(Leg $leg): self
+    /**
+     * @param  CarbonInterface|null  $journeyDate  The date of the journey of the leg; an arrival route has none.
+     */
+    public static function fromModel(Leg $leg, ?CarbonInterface $journeyDate = null): self
     {
+        // The values of the variables in the information links of the lines, see InfoLink::VARIABLES.
+        $variables = ['leg_number' => $leg->number, 'journey_date' => $journeyDate?->toDateString()];
+
         return new self(
             type: $leg->type,
             fromStation: $leg->fromStation?->name,
@@ -40,7 +46,7 @@ readonly class LegData
             carriage: $leg->carriage,
             seat: $leg->seat,
             note: $leg->note,
-            transitLines: $leg->transitLines->map(fn (TransitLine $line) => TransitLineData::fromModel($line))->all(),
+            transitLines: $leg->transitLines->map(fn (TransitLine $line) => TransitLineData::fromModel($line, $variables))->all(),
         );
     }
 }

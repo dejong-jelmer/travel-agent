@@ -54,7 +54,7 @@ class ScheduleTest extends TestCase
      */
     private function document(array $journeys, array $stays): TravelDocumentData
     {
-        return new TravelDocumentData('Titel', [], $journeys, $stays, []);
+        return new TravelDocumentData('Titel', [], $journeys, $stays, [], []);
     }
 
     private function journey(string $label, ?string $date): JourneyData

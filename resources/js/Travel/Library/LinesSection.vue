@@ -38,7 +38,12 @@ const lineForm = ref(null);
                         :style="line.color ? { backgroundColor: line.color } : null" aria-hidden="true" />
                     <p class="font-medium text-gray-900">{{ line.name }}</p>
                     <p class="text-gray-500">{{ modes[line.mode] }}</p>
-                    <a v-if="line.info_link" :href="line.info_link" target="_blank" rel="noopener"
+                    <!-- A link with variables, such as {%leg_number%}, only leads somewhere for a leg: here it is no link. -->
+                    <span v-if="line.info_link_has_variables" class="text-gray-400" :title="line.info_link" role="img"
+                        :aria-label="`Informatielink per etappe: ${line.info_link}`">
+                        <ExternalLink class="h-4 w-4" aria-hidden="true" />
+                    </span>
+                    <a v-else-if="line.info_link" :href="line.info_link" target="_blank" rel="noopener"
                         class="text-gray-400 hover:text-brand-link" :aria-label="`Informatie over ${line.name}`">
                         <ExternalLink class="h-4 w-4" aria-hidden="true" />
                     </a>

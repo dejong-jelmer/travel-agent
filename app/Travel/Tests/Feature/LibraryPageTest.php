@@ -53,10 +53,13 @@ class LibraryPageTest extends TestCase
         $this->get(route('admin.travel-library', 'lines'))
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->has('transitLines', 9)
+                ->where('transitLines.0.name', 'Eurostar')
+                ->where('transitLines.0.info_link_has_variables', true)
                 ->where('transitLines.1', fn ($line) => $line['name'] === 'Lijn 4'
                     && $line['mode'] === 'metro'
                     && $line['color'] === '#8e2367'
-                    && str_starts_with($line['info_link'], 'https://'))
+                    && str_starts_with($line['info_link'], 'https://')
+                    && $line['info_link_has_variables'] === false)
                 ->where('transitModeOptions.4', ['id' => 'ferry', 'name' => 'Veerboot']));
     }
 

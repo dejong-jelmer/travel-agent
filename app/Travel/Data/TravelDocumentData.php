@@ -7,6 +7,7 @@ use App\Travel\Models\City;
 use App\Travel\Models\Journey;
 use App\Travel\Models\Leg;
 use App\Travel\Models\Stay;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 
 /**
@@ -16,10 +17,18 @@ use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 readonly class TravelDocumentData
 {
     /**
+     * The country the travelers set out from and return to. The documents tell about the other countries.
+     */
+    public const HOME_COUNTRY = 'NL';
+
+    /**
      * @param  list<string>  $travelerNames
      * @param  list<JourneyData>  $journeys
      * @param  list<StayData>  $stays
      * @param  list<CityData>  $cities  The cities the trip passes through, each with its pharmacies.
+     * @param  list<CityData>  $stayCities  The cities the travelers stay in, in the order of the stays, each once: the
+     *                                      places where a pharmacy is nearby.
+     * @param  string|null  $emergencyPhone  The number the travelers call when they are stuck.
      */
     public function __construct(
         public string $title,
@@ -27,14 +36,17 @@ readonly class TravelDocumentData
         public array $journeys,
         public array $stays,
         public array $cities,
+        public array $stayCities,
+        public ?string $emergencyPhone = null,
     ) {}
 
     /**
-     * The caller passes the title and the traveler names, so the module never reaches into the trip or its travelers.
+     * The caller passes what lives outside the module: the title, the traveler names and the emergency number. So the
+     * module never reaches into the trip, its travelers or the app's contact details.
      *
      * @param  list<string>  $travelerNames
      */
-    public static function fromBooking(Booking $booking, string $title, array $travelerNames): self
+    public static function fromBooking(Booking $booking, string $title, array $travelerNames, ?string $emergencyPhone = null): self
     {
         $booking->loadMissing([
             'journeys.legs.fromStation.city',
@@ -52,7 +64,71 @@ readonly class TravelDocumentData
             journeys: $booking->journeys->map(fn (Journey $journey) => JourneyData::fromModel($journey))->all(),
             stays: $booking->stays->map(fn (Stay $stay) => StayData::fromModel($stay))->all(),
             cities: self::citiesOf($booking)->map(fn (City $city) => CityData::fromModel($city))->all(),
+            stayCities: self::stayCitiesOf($booking)->map(fn (City $city) => CityData::fromModel($city))->all(),
+            emergencyPhone: $emergencyPhone,
         );
+    }
+
+    /**
+     * The first day of the trip: the earliest journey or arrival.
+     */
+    public function firstDay(): ?CarbonInterface
+    {
+        $days = array_filter([
+            ...array_map(fn (JourneyData $journey) => $journey->date, $this->journeys),
+            ...array_map(fn (StayData $stay) => $stay->arrival, $this->stays),
+        ]);
+
+        return $days === [] ? null : min($days);
+    }
+
+    /**
+     * The last day of the trip: the latest journey or departure.
+     */
+    public function lastDay(): ?CarbonInterface
+    {
+        $days = array_filter([
+            ...array_map(fn (JourneyData $journey) => $journey->date, $this->journeys),
+            ...array_map(fn (StayData $stay) => $stay->departure, $this->stays),
+        ]);
+
+        return $days === [] ? null : max($days);
+    }
+
+    public function nights(): int
+    {
+        return array_sum(array_map(fn (StayData $stay) => $stay->nights ?? 0, $this->stays));
+    }
+
+    /**
+     * The countries the trip goes to, in order of appearance, as ISO codes. The home country is left out: the
+     * practical information and the emergency numbers are about abroad.
+     *
+     * @return list<string>
+     */
+    public function destinations(): array
+    {
+        $countries = array_map(fn (CityData $city) => $city->country, $this->cities);
+
+        return array_values(array_unique(array_diff($countries, [self::HOME_COUNTRY])));
+    }
+
+    /**
+     * Whether any leg runs on a line of this name, such as Eurostar, whose advice the documents add.
+     */
+    public function usesLine(string $name): bool
+    {
+        foreach ($this->journeys as $journey) {
+            foreach ($journey->legs as $leg) {
+                foreach ($leg->transitLines as $line) {
+                    if (stripos($line->name, $name) !== false) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -97,6 +173,21 @@ readonly class TravelDocumentData
             ->filter()
             ->unique('id')
             ->values();
+
+        return (new EloquentCollection($cities))->load('pharmacies');
+    }
+
+    /**
+     * The cities of the stays, in the order of the stays, each once, with their pharmacies: the places where a
+     * pharmacy is nearby. A city the trip only passes through has none to show.
+     *
+     * Expects the accommodations of the stays to be loaded with their city.
+     *
+     * @return EloquentCollection<int, City>
+     */
+    public static function stayCitiesOf(Booking $booking): EloquentCollection
+    {
+        $cities = $booking->stays->map(fn (Stay $stay) => $stay->accommodation->city)->filter()->unique('id')->values();
 
         return (new EloquentCollection($cities))->load('pharmacies');
     }

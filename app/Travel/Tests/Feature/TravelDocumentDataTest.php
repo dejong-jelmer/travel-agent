@@ -68,6 +68,24 @@ class TravelDocumentDataTest extends TestCase
         );
     }
 
+    public function test_each_leg_fills_in_the_info_link_of_its_lines_or_leaves_it_out_without_a_value(): void
+    {
+        $booking = $this->booking();
+        TransitLine::where('name', 'TGV INOUI')->update(['info_link' => 'https://trein.example/{%leg_number%}?date={%journey_date%}']);
+        TransitLine::where('name', 'Tram C')->update(['info_link' => 'https://tram.example/{%journey_date%}']);
+        TransitLine::where('name', 'Tram D')->update(['info_link' => 'https://tram.example']);
+
+        $document = TravelDocumentData::fromBooking($booking, 'Titel', []);
+
+        $this->assertSame('https://trein.example/8413?date=2026-08-11', $document->journeys[0]->legs[0]->transitLines[0]->infoLink);
+        $this->assertNull($document->journeys[1]->legs[0]->transitLines[0]->infoLink, 'The train back has no number.');
+        $this->assertSame(
+            [null, 'https://tram.example'],
+            array_map(fn (TransitLineData $line) => $line->infoLink, $document->stays[1]->accommodation->arrivalRoute[0]->transitLines),
+            'An arrival route belongs to no journey, so it has no date.',
+        );
+    }
+
     public function test_it_derives_the_cities_of_the_journey_stations_and_the_stays_with_their_pharmacies(): void
     {
         $document = TravelDocumentData::fromBooking($this->booking(), 'Titel', []);
@@ -81,6 +99,31 @@ class TravelDocumentDataTest extends TestCase
             collect($document->cities)->mapWithKeys(fn (CityData $city) => [
                 $city->name => array_map(fn (PharmacyData $pharmacy) => $pharmacy->name, $city->pharmacies),
             ])->all(),
+        );
+    }
+
+    public function test_the_cities_of_the_stays_come_in_the_order_of_the_stays_each_once(): void
+    {
+        $booking = $this->booking();
+        City::where('name', 'Paris')->sole()->pharmacies()->create(['name' => 'Pharmacie de la Gare Montparnasse']);
+        $booking->stays()->create([
+            'accommodation_id' => $booking->stays()->where('position', 0)->sole()->accommodation_id,
+            'arrival' => '2026-08-16',
+            'departure' => '2026-08-17',
+            'position' => 2,
+        ]);
+
+        $document = TravelDocumentData::fromBooking($booking, 'Titel', []);
+
+        $this->assertSame(
+            [
+                'Les Eyzies' => ['Pharmacie de la Préhistoire'],
+                'Bordeaux' => ['Pharmacie de la Place Picard'],
+            ],
+            collect($document->stayCities)->mapWithKeys(fn (CityData $city) => [
+                $city->name => array_map(fn (PharmacyData $pharmacy) => $pharmacy->name, $city->pharmacies),
+            ])->all(),
+            'Paris is only passed through, and Les Eyzies comes once for its two stays.',
         );
     }
 

@@ -5,10 +5,16 @@ namespace App\Travel\Documents;
 use Carbon\CarbonInterface;
 
 /**
- * How the documents write dates, times and durations: in Dutch, and as wall-clock times at the place itself.
+ * How the documents write dates, times, durations and contact details: in Dutch, as the design writes them, and as
+ * wall-clock times at the place itself.
  */
 class Format
 {
+    /**
+     * A transfer this short gets a warning.
+     */
+    public const SHORT_TRANSFER_MINUTES = 15;
+
     /**
      * 'dinsdag 11 augustus'
      */
@@ -18,11 +24,55 @@ class Format
     }
 
     /**
-     * 'di 11 aug'
+     * 'DI', '11' and 'aug', for the day tile of a journey.
+     *
+     * @return array{weekday: string, day: string, month: string}
      */
-    public static function shortDate(?CarbonInterface $date): string
+    public static function day(CarbonInterface $date): array
     {
-        return $date ? str_replace('.', '', $date->locale('nl')->isoFormat('dd D MMM')) : '';
+        $date = $date->locale('nl');
+
+        return [
+            'weekday' => mb_strtoupper(str_replace('.', '', $date->isoFormat('dd'))),
+            'day' => $date->isoFormat('D'),
+            'month' => str_replace('.', '', $date->isoFormat('MMM')),
+        ];
+    }
+
+    /**
+     * '11 – 16 augustus 2026', '30 juli – 2 augustus 2026' or '30 december 2026 – 2 januari 2027'.
+     */
+    public static function period(?CarbonInterface $first, ?CarbonInterface $last): string
+    {
+        if ($first === null || $last === null) {
+            return '';
+        }
+
+        $first = $first->locale('nl');
+        $last = $last->locale('nl');
+
+        return match (true) {
+            $first->isSameDay($last) => $last->isoFormat('D MMMM YYYY'),
+            $first->isSameMonth($last) => $first->isoFormat('D').' – '.$last->isoFormat('D MMMM YYYY'),
+            $first->isSameYear($last) => $first->isoFormat('D MMMM').' – '.$last->isoFormat('D MMMM YYYY'),
+            default => $first->isoFormat('D MMMM YYYY').' – '.$last->isoFormat('D MMMM YYYY'),
+        };
+    }
+
+    /**
+     * '11 – 14 aug' or '30 jul – 2 aug', for a stay.
+     */
+    public static function shortPeriod(?CarbonInterface $first, ?CarbonInterface $last): string
+    {
+        if ($first === null || $last === null) {
+            return '';
+        }
+
+        $month = fn (CarbonInterface $date) => str_replace('.', '', $date->locale('nl')->isoFormat('MMM'));
+
+        return $first->isSameMonth($last)
+            ? "{$first->day} – {$last->day} {$month($last)}"
+            : "{$first->day} {$month($first)} – {$last->day} {$month($last)}";
     }
 
     /**
@@ -42,18 +92,7 @@ class Format
     }
 
     /**
-     * 'Inchecken vanaf 16:00, uitchecken voor 11:30', from the time columns, leaving out what is not known.
-     */
-    public static function checkTimes(?string $checkIn, ?string $checkOut): string
-    {
-        return ucfirst(implode(', ', array_filter([
-            $checkIn === null ? null : 'inchecken vanaf '.self::timeOfDay($checkIn),
-            $checkOut === null ? null : 'uitchecken voor '.self::timeOfDay($checkOut),
-        ])));
-    }
-
-    /**
-     * '54 min', '2 u', '2 u 16 min'
+     * '54 min', '1u00', '3u07'
      */
     public static function duration(?int $minutes): string
     {
@@ -61,14 +100,7 @@ class Format
             return '';
         }
 
-        $hours = intdiv($minutes, 60);
-        $rest = $minutes % 60;
-
-        return match (true) {
-            $hours === 0 => "{$rest} min",
-            $rest === 0 => "{$hours} u",
-            default => "{$hours} u {$rest} min",
-        };
+        return $minutes < 60 ? "{$minutes} min" : sprintf('%du%02d', intdiv($minutes, 60), $minutes % 60);
     }
 
     /**
@@ -84,27 +116,82 @@ class Format
     }
 
     /**
-     * 'Nr. 8413 · Rijtuig 8 - onder · Stoel 824', leaving out what the ticket does not have.
+     * 'direct', '1 overstap', '5 overstappen'
      */
-    public static function ticket(?string $number, ?string $carriage, ?string $seat): string
+    public static function changes(int $changes): string
     {
-        return implode(' · ', array_filter([
-            $number === null ? null : "Nr. {$number}",
-            $carriage === null ? null : "Rijtuig {$carriage}",
-            $seat === null ? null : "Stoel {$seat}",
-        ]));
+        return match ($changes) {
+            0 => 'direct',
+            1 => '1 overstap',
+            default => "{$changes} overstappen",
+        };
     }
 
     /**
-     * 'Nijmegen → Utrecht Centraal'. A transfer stays at one station; an arrival route can start without one.
+     * 'Frankrijk', 'Frankrijk en Spanje', 'Frankrijk, Spanje en Portugal'
+     *
+     * @param  list<string>  $names
      */
-    public static function stations(?string $from, ?string $to): string
+    public static function list(array $names): string
     {
-        return match (true) {
-            $from !== null && $to !== null => $from === $to ? $from : "{$from} → {$to}",
-            $from !== null => $from,
-            $to !== null => "→ {$to}",
-            default => '',
-        };
+        $last = array_pop($names);
+
+        return $names === [] ? (string) $last : implode(', ', $names).' en '.$last;
+    }
+
+    /**
+     * The street and the place of an address, which the documents set on two lines: '54 Avenue de la Préhistoire'
+     * and '24620 Les Eyzies-de-Tayac-Sireuil'.
+     *
+     * @return list<string>
+     */
+    public static function addressLines(string $address): array
+    {
+        return array_map('trim', explode(',', $address, 2));
+    }
+
+    /**
+     * The address as a link that opens in a map.
+     */
+    public static function mapUrl(string $address): string
+    {
+        return 'https://maps.google.com/?q='.urlencode($address);
+    }
+
+    /**
+     * The number to dial: '+33 (0)5 53 06 97 06' becomes 'tel:+33553069706'.
+     */
+    public static function phoneUrl(string $phone): string
+    {
+        return 'tel:'.preg_replace('/[^\d+]/', '', str_replace('(0)', '', $phone));
+    }
+
+    /**
+     * Walking directions as steps, one per sentence or line.
+     *
+     * @return list<string>
+     */
+    public static function steps(?string $directions): array
+    {
+        if ($directions === null || trim($directions) === '') {
+            return [];
+        }
+
+        return array_values(array_filter(
+            array_map('trim', preg_split('/(?<=[.!?])\s+|\R+/u', trim($directions)) ?: []),
+            fn (string $step) => $step !== '',
+        ));
+    }
+
+    /**
+     * The short name on the badge of a line: 'Lijn 4' gives '4', 'Tram C' gives 'C', a longer last word its first
+     * letter.
+     */
+    public static function lineBadge(string $name): string
+    {
+        $words = preg_split('/\s+/', trim($name)) ?: [$name];
+        $last = (string) end($words);
+
+        return mb_strlen($last) <= 3 ? $last : mb_substr($last, 0, 1);
     }
 }

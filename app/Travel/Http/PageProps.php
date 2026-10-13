@@ -3,6 +3,7 @@
 namespace App\Travel\Http;
 
 use App\Models\Booking;
+use App\Travel\Data\InfoLink;
 use App\Travel\Data\TravelDocumentData;
 use App\Travel\Enums\AccommodationType;
 use App\Travel\Enums\LegType;
@@ -66,7 +67,7 @@ class PageProps
                 'nights' => $stay->nights,
                 'accommodation' => self::accommodation($stay->accommodation),
             ])->all(),
-            'cities' => TravelDocumentData::citiesOf($booking)->map(fn (City $city) => self::city($city))->all(),
+            'cities' => TravelDocumentData::stayCitiesOf($booking)->map(fn (City $city) => self::city($city))->all(),
             'shareLink' => self::shareLink($booking),
             'legTypeOptions' => self::legTypeOptions(),
             'accommodationTypeOptions' => self::accommodationTypeOptions(),
@@ -180,6 +181,7 @@ class PageProps
             'mode' => $line->mode,
             'color' => $line->color,
             'info_link' => $line->info_link,
+            'info_link_has_variables' => $line->info_link !== null && InfoLink::hasVariables($line->info_link),
         ])->all();
     }
 

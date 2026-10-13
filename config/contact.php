@@ -5,6 +5,7 @@ return [
     'last_name' => env('CONTACT_LAST_NAME', ''),
     'full_name' => env('CONTACT_FIRST_NAME', '').' '.env('CONTACT_LAST_NAME', ''),
     'phone' => env('CONTACT_PHONE', ''),
+    'emergency_phone' => env('EMERGENCY_PHONE', ''),
     'mail' => env('CONTACT_MAIL', ''),
     'address' => env('CONTACT_ADDRESS', ''),
     'postal_code' => env('CONTACT_POSTAL', ''),

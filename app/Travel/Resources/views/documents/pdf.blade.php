@@ -1,3 +1,14 @@
+{{-- The PDF: the three parts after each other, each from a new page and with its tab marked. dompdf takes one font
+    per family and weight, normal or bold, so each weight of Manrope is a family of its own. --}}
+@use('App\Travel\Documents\TravelDocuments')
+@php
+    $medium = 'pdf';
+    $tabs = [];
+    foreach (array_keys(TravelDocuments::PARTS) as $part) {
+        $tabs[$part] = "#{$part}";
+    }
+    $stayHref = fn (int $number) => "#verblijf-{$number}";
+@endphp
 <!DOCTYPE html>
 <html lang="nl">
 
@@ -5,158 +16,45 @@
     <meta charset="utf-8">
     <title>Reisdocumenten - {{ $document->title }}</title>
     <style>
-        @page {
-            size: A4;
-            margin: 18mm 16mm 20mm 16mm;
-        }
+        @font-face { font-family: 'manrope'; font-weight: normal; src: url('{{ $fonts }}/Manrope-Regular.ttf') format('truetype'); }
+        @font-face { font-family: 'manrope'; font-weight: bold; src: url('{{ $fonts }}/Manrope-Bold.ttf') format('truetype'); }
+        @font-face { font-family: 'manrope-semibold'; src: url('{{ $fonts }}/Manrope-SemiBold.ttf') format('truetype'); }
+        @font-face { font-family: 'manrope-extrabold'; src: url('{{ $fonts }}/Manrope-ExtraBold.ttf') format('truetype'); }
 
-        body {
-            font-family: DejaVu Sans, sans-serif;
-            font-size: 9pt;
-            line-height: 1.45;
-            color: #1e2d3d;
-        }
+        @page { margin: 0; }
 
-        .header {
-            background-color: #2d5f6e;
-            color: #ffffff;
-            margin: -18mm -16mm 18px -16mm;
-            padding: 26px 16mm 18px 16mm;
-        }
+        @include('travel::documents.parts.styles')
 
-        .header .kicker {
-            font-size: 8pt;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #a3bccb;
-            margin: 0;
-        }
-
-        .header h1 {
-            font-size: 20pt;
-            margin: 2px 0 4px 0;
-        }
-
-        .header p {
-            font-size: 9pt;
-            margin: 0;
-        }
-
-        .part + .part {
-            page-break-before: always;
-        }
-
-        h2 {
-            font-size: 14pt;
-            color: #2d5f6e;
-            border-bottom: 2px solid #afcb98;
-            padding-bottom: 3px;
-            margin: 0 0 8px 0;
-        }
-
-        h3 {
-            font-size: 11pt;
-            margin: 14px 0 4px 0;
-        }
-
-        h4 {
-            font-size: 9.5pt;
-            margin: 10px 0 2px 0;
-        }
-
-        p {
-            margin: 0 0 4px 0;
-        }
-
-        .muted {
-            color: #6b7280;
-            font-weight: normal;
-        }
-
-        .note {
-            font-style: italic;
-            color: #4b5563;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        tr {
-            page-break-inside: avoid;
-        }
-
-        table.legs td {
-            padding: 5px 4px;
-            border-bottom: 1px solid #e5e7eb;
-            vertical-align: top;
-        }
-
-        .legs-time {
-            width: 23%;
-            white-space: nowrap;
-        }
-
-        .legs-duration {
-            width: 13%;
-            text-align: right;
-            white-space: nowrap;
-            color: #6b7280;
-        }
-
-        .dot {
-            display: inline-block;
-            width: 7px;
-            height: 7px;
-            border-radius: 4px;
-        }
-
-        .stay {
-            background-color: #f5f0e8;
-            padding: 7px 10px;
-            margin: 12px 0;
-        }
-
-        .accommodation {
-            margin-bottom: 18px;
-        }
-
-        table.facts th {
-            text-align: left;
-            font-weight: normal;
-            color: #6b7280;
-            width: 26%;
-            padding: 2px 0;
-            vertical-align: top;
-        }
-
-        table.facts td {
-            padding: 2px 0;
-        }
-
-        .walk {
-            margin-top: 6px;
-        }
-
-        .city {
-            margin-bottom: 8px;
-        }
+        body { font-family: 'manrope'; }
+        .w6 { font-family: 'manrope-semibold'; font-weight: normal; }
+        .w7, strong { font-family: 'manrope'; font-weight: bold; }
+        .w8 { font-family: 'manrope-extrabold'; font-weight: normal; }
+        .part { page-break-before: always; }
+        .part-first { page-break-before: auto; }
+        {{-- Room at the top of each page: dompdf repeats the padding of the body on every page, where it cuts off that
+            of any other block. The header of a part pulls itself up into it. --}}
+        body { padding-top: 24px; }
+        .top { margin-top: -24px; }
+        {{-- dompdf sets an underline by the font height times its ratio, which puts it through the text, as it does
+            the border of an inline element: the links of the PDF go without. Its own stylesheet underlines :link,
+            which outweighs a plain a. --}}
+        a:link { text-decoration: none; }
+        {{-- dompdf puts an image with vertical-align: middle at the top of the line; 1px under the baseline its
+            middle is that of the capitals. --}}
+        .button img, .info-link img { vertical-align: -1px; }
     </style>
 </head>
 
 <body>
-    <div class="header">
-        <p class="kicker">Reisdocumenten</p>
-        <h1>{{ $document->title }}</h1>
-        @if ($document->travelerNames !== [])
-            <p>{{ implode(', ', $document->travelerNames) }}</p>
-        @endif
-    </div>
-
-    @include('travel::documents.parts.schedule')
-    @include('travel::documents.parts.accommodations')
-    @include('travel::documents.parts.practical')
+    @foreach (TravelDocuments::PARTS as $part => $label)
+        <div @class(['part', 'part-first' => $loop->first]) id="{{ $part }}">
+            @include('travel::documents.parts.header', ['active' => $part])
+            <main class="main">
+                @include("travel::documents.parts.{$part}")
+            </main>
+            @include('travel::documents.parts.footer')
+        </div>
+    @endforeach
 </body>
 
 </html>

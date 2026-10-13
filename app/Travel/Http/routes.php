@@ -61,6 +61,11 @@ Route::prefix('reisdocumenten')
     ->name('travel.documents.')
     ->middleware([SubstituteBindings::class, 'throttle:60,1'])
     ->group(function () {
+        Route::get('/lettertypen/{font}', [SharedDocumentController::class, 'font'])
+            ->whereIn('font', ['manrope-latin.woff2', 'manrope-latin-ext.woff2'])
+            ->name('font');
         Route::get('/{shareLink}', [SharedDocumentController::class, 'show'])->name('shared');
+        Route::get('/{shareLink}/verblijf', [SharedDocumentController::class, 'stays'])->name('shared.stays');
+        Route::get('/{shareLink}/praktisch', [SharedDocumentController::class, 'practical'])->name('shared.practical');
         Route::get('/{shareLink}/pdf', [SharedDocumentController::class, 'pdf'])->name('shared.pdf');
     });

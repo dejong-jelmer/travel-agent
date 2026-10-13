@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Travel\Contracts\BookingDetails;
 use App\Travel\Database\Seeders\SampleTripSeeder;
 use App\Travel\Documents\TravelDocuments;
+use App\Travel\Models\City;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -32,18 +33,30 @@ class TravelDocumentsTest extends TestCase
             {
                 return ['Anna de Vries', 'Bram de Vries'];
             }
+
+            public function emergencyPhone(Booking $booking): string
+            {
+                return '+31 6 12 34 56 78';
+            }
         });
 
         $this->seed(SampleTripSeeder::class);
         $this->booking = Booking::where('internal_notes', SampleTripSeeder::BOOKING_NOTE)->sole();
     }
 
-    public function test_the_document_shows_the_title_the_travelers_and_the_three_parts(): void
+    public function test_each_part_has_the_title_the_travelers_its_own_tab_and_the_emergency_numbers(): void
     {
         $html = $this->render();
 
-        foreach (['De Vézère-vallei &amp; Bordeaux', 'Anna de Vries, Bram de Vries', 'Reisschema', 'Accommodaties', 'Praktische informatie'] as $text) {
-            $this->assertStringContainsString($text, $html);
+        foreach (['reisschema', 'verblijf', 'praktisch'] as $part) {
+            $this->assertSeeInOrder(substr($html, (int) strpos($html, "id=\"{$part}\"")), [
+                '<h1 class="w8">De Vézère-vallei &amp; Bordeaux</h1>',
+                'Voor Anna de Vries en Bram de Vries',
+                "href=\"#{$part}\" class=\"tab tab-active w7\"",
+                'Noodnummer Frankrijk',
+                '112 of 15',
+                'href="tel:+31612345678">+31 6 12 34 56 78</a>',
+            ]);
         }
     }
 
@@ -51,52 +64,68 @@ class TravelDocumentsTest extends TestCase
     {
         $this->assertSeeInOrder($this->render(), [
             'Heenreis',
-            'Overnachten</strong> in Hotel Le Cro-Magnon, Les Eyzies',
+            'Verblijf · 3 nachten',
+            'Hotel Le Cro-Magnon',
             'Reisdag 2',
-            'Overnachten</strong> in Guest house L&#039;Esprit des Chartrons, Bordeaux',
+            'Verblijf · 2 nachten',
+            'Guest house L&#039;Esprit des Chartrons',
             'Terugreis',
-            'Accommodaties',
+            'id="verblijf"',
         ]);
     }
 
     public function test_the_schedule_shows_each_leg_with_its_times_lines_and_ticket(): void
     {
         $this->assertSeeInOrder($this->render(), [
-            'dinsdag 11 augustus',
-            '<span>05:43</span><span class="legs-to"> – </span><span>06:37</span>',
-            'Trein</strong> · Nijmegen → Utrecht Centraal',
-            'NS Intercity <span class="muted">richting Den Helder</span>',
+            '<div class="day-weekday w8">DI</div>',
+            '<div class="day-number w8">11</div>',
+            '<div class="day-month w6">aug</div>',
+            'Nijmegen → Les Eyzies',
+            '05:43 – 18:15 · 5 overstappen',
+            'NS Intercity',
+            'richting Den Helder',
             '54 min',
-            'Overstap</strong> · Utrecht Centraal',
-            '11 min',
-            'Nr. 9416 · Rijtuig 7 · Stoel 34',
-            '3 u 7 min',
+            '<td class="time w8">05:43</td>',
+            'Nijmegen',
+            '<td class="time w8">06:37</td>',
+            'Utrecht Centraal',
+            'Overstappen in <strong class="ink w7">Utrecht Centraal</strong>',
+            '11 min · kort',
+            'Eurostar',
+            'trein 9416',
+            '3u07',
+            'Rijtuig 7',
+            'Stoel 34',
+            'href="https://www.eurostar.com/nl-nl/reisinformatie/dienstregeling/9416?date=2026-08-11"',
         ]);
     }
 
     public function test_the_accommodations_show_their_details_and_the_way_from_the_station(): void
     {
         $this->assertSeeInOrder($this->render(), [
-            'Accommodaties',
+            'id="verblijf"',
+            'Verblijf 2 · 14 – 16 aug · 2 nachten',
+            'Bordeaux',
             'Guest house L&#039;Esprit des Chartrons',
-            'Guesthouse in Bordeaux',
-            'vr 14 aug – zo 16 aug · 2 nachten',
-            'Inchecken vanaf 16:00, uitchecken voor 11:30',
             '17 bis Rue Borie, 33300 Bordeaux',
-            'Van het station naar de deur',
-            'Tram</strong> · Bordeaux Saint-Jean',
-            'Tram C <span class="muted">richting Parc des Expositions</span>',
+            'vanaf 16:00',
+            'tot 11:30',
+            'Vanaf Bordeaux Saint-Jean',
+            'aria-label="Tram C">C</div>',
+            'Parc des Expositions',
             'Steek de trambaan over',
         ]);
     }
 
-    public function test_the_practical_information_lists_the_pharmacies_of_the_places_with_one(): void
+    public function test_the_practical_information_lists_the_pharmacies_of_the_places_the_travelers_stay(): void
     {
-        $html = $this->render();
-        $practical = substr($html, (int) strpos($html, 'Praktische informatie'));
+        City::where('name', 'Paris')->sole()->pharmacies()->create(['name' => 'Pharmacie de la Gare Montparnasse']);
 
-        $this->assertStringContainsString('Pharmacie de la Place Picard', $practical);
-        $this->assertStringContainsString('Pharmacie de la Préhistoire', $practical);
+        $html = $this->render();
+        $practical = substr($html, (int) strpos($html, 'id="praktisch"'));
+
+        $this->assertSeeInOrder($practical, ['Apotheken in de buurt', 'Les Eyzies', 'Pharmacie de la Préhistoire', 'Bordeaux', 'Pharmacie de la Place Picard']);
+        $this->assertStringNotContainsString('Pharmacie de la Gare Montparnasse', $practical);
         $this->assertStringNotContainsString('Nijmegen', $practical);
     }
 
@@ -123,7 +152,7 @@ class TravelDocumentsTest extends TestCase
     {
         $documents = app(TravelDocuments::class);
 
-        return view('travel::documents.pdf', ['document' => $documents->for($this->booking)])->render();
+        return view('travel::documents.pdf', ['document' => $documents->for($this->booking), 'fonts' => TravelDocuments::fontPath()])->render();
     }
 
     /**

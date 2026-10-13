@@ -135,6 +135,23 @@ class LibraryWriteTest extends TestCase
         $this->assertModelMissing($line);
     }
 
+    public function test_the_info_link_of_a_transit_line_may_hold_the_variables_of_a_leg(): void
+    {
+        $line = ['mode' => TransitMode::Train->value, 'name' => 'Eurostar'];
+        $eurostar = 'https://www.eurostar.com/nl-nl/reisinformatie/dienstregeling/{%leg_number%}?date={%journey_date%}';
+
+        $this->post(route('admin.transit-lines.store'), [...$line, 'info_link' => $eurostar])->assertSessionHasNoErrors();
+        $this->assertSame($eurostar, TransitLine::sole()->info_link);
+
+        $this->post(route('admin.transit-lines.store'), [...$line, 'info_link' => 'https://www.eurostar.com/{%leg_nummer%}'])
+            ->assertSessionHasErrors(['info_link' => 'De informatielink kent {%leg_nummer%} niet. Gebruik {%leg_number%} of {%journey_date%}.']);
+        $this->post(route('admin.transit-lines.store'), [...$line, 'info_link' => 'www.eurostar.com/{%leg_number%}'])
+            ->assertSessionHasErrors(['info_link' => 'De informatielink is geen geldige url.']);
+        $this->post(route('admin.transit-lines.store'), [...$line, 'info_link' => 'https://www.eurostar.com/{leg_number}'])
+            ->assertSessionHasErrors(['info_link' => 'De informatielink is geen geldige url.']);
+        $this->assertSame(1, TransitLine::count());
+    }
+
     public function test_a_transit_line_that_legs_use_keeps_its_mode_and_is_kept(): void
     {
         $line = TransitLine::factory()->create(['mode' => TransitMode::Train, 'name' => 'TGV INOUI']);

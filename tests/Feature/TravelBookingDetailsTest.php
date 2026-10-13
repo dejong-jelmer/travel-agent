@@ -35,4 +35,15 @@ class TravelBookingDetailsTest extends TestCase
         $this->assertCount(3, $names);
         $this->assertSame("{$mainBooker->first_name} {$mainBooker->last_name}", $names[0]);
     }
+
+    public function test_the_emergency_phone_comes_from_the_config_and_is_left_out_while_it_is_empty(): void
+    {
+        $booking = Booking::factory()->make();
+
+        config(['contact.emergency_phone' => '+31 6 12 34 56 78']);
+        $this->assertSame('+31 6 12 34 56 78', app(BookingDetails::class)->emergencyPhone($booking));
+
+        config(['contact.emergency_phone' => '']);
+        $this->assertNull(app(BookingDetails::class)->emergencyPhone($booking));
+    }
 }

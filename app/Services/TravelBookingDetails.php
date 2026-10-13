@@ -6,7 +6,8 @@ use App\Models\Booking;
 use App\Travel\Contracts\BookingDetails;
 
 /**
- * Gives the travel module the trip title and the travelers of a booking, which it may not read itself.
+ * Gives the travel module the trip title and the travelers of a booking, and the emergency number, which it may not
+ * read itself.
  */
 class TravelBookingDetails implements BookingDetails
 {
@@ -22,5 +23,10 @@ class TravelBookingDetails implements BookingDetails
     public function travelerNames(Booking $booking): array
     {
         return $booking->travelers()->get()->pluck('full_name')->values()->all();
+    }
+
+    public function emergencyPhone(Booking $booking): ?string
+    {
+        return config('contact.emergency_phone') ?: null;
     }
 }

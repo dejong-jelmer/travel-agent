@@ -81,6 +81,50 @@ class SampleTripTest extends TestCase
         );
     }
 
+    public function test_the_document_knows_the_period_the_nights_and_the_countries_abroad(): void
+    {
+        $this->assertSame('2026-08-11', $this->document->firstDay()?->toDateString());
+        $this->assertSame('2026-08-16', $this->document->lastDay()?->toDateString());
+        $this->assertSame(5, $this->document->nights());
+        $this->assertSame(['FR'], $this->document->destinations());
+        $this->assertTrue($this->document->usesLine('Eurostar'));
+        $this->assertFalse($this->document->usesLine('Thalys'));
+    }
+
+    public function test_each_journey_knows_its_cities_its_times_and_its_changes(): void
+    {
+        $this->assertSame(
+            [
+                ['Nijmegen', 'Les Eyzies', '05:43', '18:15', 5],
+                ['Les Eyzies', 'Bordeaux', '06:35', '08:58', 1],
+                ['Bordeaux', 'Rotterdam', '12:46', '19:02', 1],
+            ],
+            array_map(fn (JourneyData $journey) => [
+                $journey->from,
+                $journey->to,
+                $journey->departsAt()?->format('H:i'),
+                $journey->arrivesAt()?->format('H:i'),
+                $journey->changes(),
+            ], $this->document->journeys),
+        );
+    }
+
+    public function test_each_eurostar_links_to_its_own_timetable(): void
+    {
+        $eurostars = collect($this->document->journeys)
+            ->flatMap(fn (JourneyData $journey) => $journey->legs)
+            ->flatMap(fn (LegData $leg) => $leg->transitLines)
+            ->filter(fn (TransitLineData $line) => $line->name === 'Eurostar');
+
+        $this->assertSame(
+            [
+                'https://www.eurostar.com/nl-nl/reisinformatie/dienstregeling/9416?date=2026-08-11',
+                'https://www.eurostar.com/nl-nl/reisinformatie/dienstregeling/9363?date=2026-08-16',
+            ],
+            $eurostars->map(fn (TransitLineData $line) => $line->infoLink)->values()->all(),
+        );
+    }
+
     public function test_the_bordeaux_accommodation_has_a_three_leg_arrival_route(): void
     {
         $guestHouse = $this->document->stays[1]->accommodation;
