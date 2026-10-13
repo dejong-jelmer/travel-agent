@@ -30,6 +30,7 @@ class ServerSideRenderingTest extends TestCase
             ->assertSee('Rendered on the server');
 
         Http::assertSent(fn (ClientRequest $request) => isset($request['props']['ziggy']['routes']['home'])
+            && ! isset($request['props']['ziggy']['routes']['admin.login'])
             && $request['props']['ziggy']['location'] === route('about'));
     }
 

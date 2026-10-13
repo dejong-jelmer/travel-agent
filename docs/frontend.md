@@ -52,6 +52,7 @@ Hydration only works when the server and the browser produce exactly the same HT
 - **No markup that depends on the screen.** The server does not know the viewport, so use Tailwind breakpoints (`hidden tablet:flex`) instead of `vue3-mq` to decide what to render (see the trips on `Home.vue`).
 - **The url comes from Inertia.** Use `usePage().url` rather than `window.location` (see `useContactForm.js`).
 - **`route()` works on both sides.** The browser gets the route list from `@routes`, the SSR server from the `ziggy` prop. Use the global `route()` rather than importing it from `ziggy-js`.
+- **Public pages do not know the admin routes.** They get the `public` group from `config/ziggy.php`, which leaves out `admin.*`, so their HTML does not list the admin area. An Inertia visit keeps the route list of the page it started on, so a link from a public page into the admin has to be a plain `<a>` (a full page load) rather than an Inertia `<Link>`.
 - **Module level state is shared between visitors.** One Node process renders the pages of every visitor, so a module level variable that changes per request leaks into other requests. The shared `i18n` instance is safe only because the public site always renders in Dutch.
 
 To spot a mismatch, run `npm run build:ssr` with `php artisan inertia:start-ssr` and open the page: the browser console reports `Hydration completed but contains mismatches`.

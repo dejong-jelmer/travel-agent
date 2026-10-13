@@ -71,9 +71,10 @@ class HandleInertiaRequests extends Middleware
             'locale' => app()->getLocale(),
             'locales' => availableLocales() ?: ['nl', 'en'],
             // The route list for route() on the SSR server, which has no @routes script. Only a first visit is
-            // rendered there; the Inertia visits that follow run in the browser and leave it out.
+            // rendered there; the Inertia visits that follow run in the browser and leave it out. The SSR server only
+            // renders public pages, so it gets the same public group as their @routes (config/ziggy.php).
             'ziggy' => fn () => $request->inertia() || ! $this->ssrEnabled($request) ? null : [
-                ...(new Ziggy)->toArray(),
+                ...(new Ziggy('public'))->toArray(),
                 'location' => $request->url(),
             ],
             'auth' => [
