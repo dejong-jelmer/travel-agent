@@ -21,6 +21,12 @@ class Reorder
     public function handle(HasOneOrMany $children, array $ids): void
     {
         DB::transaction(function () use ($children, $ids) {
+            // Lock the parent, as nextPosition() does, so a reorder waits for a create or another reorder of the same
+            // children: it checks the ids against the children as they are, and two reorders cannot deadlock on rows
+            // they update in a different order.
+            $parent = $children->getParent();
+            $parent->newQuery()->whereKey($parent->getKey())->lockForUpdate()->first();
+
             $current = $children->get()->keyBy(fn (Model $child) => $child->getKey());
 
             $given = $ids;

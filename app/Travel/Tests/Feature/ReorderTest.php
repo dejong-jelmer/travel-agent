@@ -8,6 +8,7 @@ use App\Travel\Models\Journey;
 use App\Travel\Models\Leg;
 use App\Travel\Models\Stay;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
@@ -24,6 +25,19 @@ class ReorderTest extends TestCase
 
         $this->assertSame([$third->id, $first->id, $second->id], $journey->legs()->pluck('id')->all());
         $this->assertSame([0, 1, 2], $journey->legs()->pluck('position')->all());
+    }
+
+    public function test_it_locks_the_parent_before_it_reads_the_children(): void
+    {
+        $journey = Journey::factory()->create();
+        [$first, $second, $third] = $this->legsOf($journey);
+
+        DB::enableQueryLog();
+        app(Reorder::class)->handle($journey->legs(), [$third->id, $first->id, $second->id]);
+        $queries = array_column(DB::getQueryLog(), 'query');
+
+        $this->assertMatchesRegularExpression('/^select .* from `travel_journeys` where .* for update$/', $queries[0]);
+        $this->assertStringContainsString('from `travel_legs`', $queries[1]);
     }
 
     public function test_it_reorders_the_journeys_and_the_stays_of_a_booking(): void
