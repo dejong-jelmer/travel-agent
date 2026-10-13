@@ -11,6 +11,7 @@ use App\Travel\Models\Leg;
 use App\Travel\Models\Station;
 use App\Travel\Models\Stay;
 use App\Travel\Models\TransitLine;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -71,6 +72,19 @@ class InvariantTest extends TestCase
 
         app(SyncLegTransitLines::class)->handle($tramLeg, [[$tramLine->id, 'Hippodrome']]);
         $this->assertDatabaseHas('travel_leg_transit_line', ['leg_id' => $tramLeg->id, 'transit_line_id' => $tramLine->id]);
+    }
+
+    public function test_the_lines_of_a_leg_exist_or_nothing_changes(): void
+    {
+        $train = Leg::factory()->train()->create();
+        $line = TransitLine::factory()->create();
+        app(SyncLegTransitLines::class)->handle($train, [[$line->id, 'Den Helder']]);
+
+        $this->assertThrows(
+            fn () => app(SyncLegTransitLines::class)->handle($train, [[$line->id, 'Amsterdam'], [$line->id + 1000, null]]),
+            ModelNotFoundException::class,
+        );
+        $this->assertSame(['Den Helder'], $train->transitLines()->pluck('direction')->all());
     }
 
     public function test_4_an_arrival_route_has_no_times(): void
