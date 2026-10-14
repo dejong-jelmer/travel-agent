@@ -2,10 +2,21 @@
 // import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { Package, ShieldCheck, UserRound } from '@lucide/vue';
-import portrait from '@/../images/me.webp';
+import portrait480 from '@/../images/me-480.webp';
+import portrait960 from '@/../images/me-960.webp';
 import vvkrLogo from '@/../images/vvkr.png';
 
 const { t } = useI18n();
+
+// The portrait in the shape of an uploaded image with its variants, for ResponsiveImage. The 4:3 photo is cropped to
+// a square of 144px (176px from laptop on), so it is rendered 4/3 as wide as that.
+const portrait = {
+    sources: [
+        { url: portrait480, width: 480 },
+        { url: portrait960, width: 960 },
+    ],
+    fallback_source: { url: portrait960, width: 960, height: 720 },
+};
 
 const points = [
     {
@@ -38,7 +49,8 @@ const points = [
                         shadow-[0_14px_30px_-10px_rgba(30,45,61,0.4)]
                         motion-safe:transition-transform motion-safe:duration-300
                         motion-safe:hover:rotate-0 motion-safe:hover:scale-[1.02]">
-                        <img :src="portrait" :alt="t('about_trust.portrait_alt')"
+                        <ResponsiveImage :image="portrait" sizes="(min-width: 900px) 235px, 192px"
+                            :alt="t('about_trust.portrait_alt')"
                             class="w-36 h-36 laptop:w-44 laptop:h-44 object-cover object-[65%_center] rounded-[2px]"
                             loading="lazy" />
                     </figure>
