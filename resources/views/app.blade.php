@@ -23,9 +23,10 @@
     <!-- Theme color voor browser UI -->
     <meta name="theme-color" content="#f5f0e8" media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#1e2d3d" media="(prefers-color-scheme: dark)">
+    {{-- The weights above the fold: bold for the hero titles, regular for the text. Other weights load on use. --}}
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-Regular.woff2') }}" as="font"
         type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font"
+    <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-Bold.woff2') }}" as="font"
         type="font/woff2" crossorigin>
     {{-- The hero image of the page, set through its seo prop (HasPageMetadata::preloadImageSeo); one per media query
          when the page shows a different image per screen --}}
