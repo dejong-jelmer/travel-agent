@@ -4,7 +4,7 @@ import { useI18n } from 'vue-i18n';
 import { Package, ShieldCheck, UserRound } from '@lucide/vue';
 import portrait480 from '@/../images/me-480.webp';
 import portrait960 from '@/../images/me-960.webp';
-import vvkrLogo from '@/../images/vvkr.png';
+import vvkrLogo from '@/../images/vvkr.webp';
 
 const { t } = useI18n();
 
@@ -104,8 +104,8 @@ const points = [
                                 <a href="https://www.vvkr.nl/" target="_blank" rel="noopener noreferrer"
                                     aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                     class="block transition hover:scale-110 ease-in-out duration-300">
-                                    <img :src="vvkrLogo" alt="Logo VvKR - Vereniging van Kleinschalige Reisorganisaties"
-                                        class="h-8" aria-hidden="true">
+                                    <img :src="vvkrLogo" width="240" height="149" alt="Logo VvKR - Vereniging van Kleinschalige Reisorganisaties"
+                                        class="h-8 w-auto" aria-hidden="true">
                                 </a>
                                 <a href="https://www.sto-garant.nl/" target="_blank" rel="noopener noreferrer"
                                     aria-label="STO Garant"

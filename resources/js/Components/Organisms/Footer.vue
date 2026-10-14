@@ -1,7 +1,7 @@
 <script setup>
 import { usePage } from "@inertiajs/vue3";
 import { Link } from "@inertiajs/vue3";
-import vvkrLogo from '@/../images/vvkr.png'
+import vvkrLogo from '@/../images/vvkr.webp'
 import appName from '@/appName.js'
 
 const props = defineProps({
@@ -120,7 +120,7 @@ const year = new Date().getFullYear();
                                 target="_blank" rel="noopener noreferrer"
                                 aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                 class="flex-1 rounded-lg p-2 transition hover:scale-110 ease-in-out duration-300">
-                                <img :src="vvkrLogo" alt="Logo VvKR - Vereniging van Kleinschalige Reisorganisaties"
+                                <img :src="vvkrLogo" width="240" height="149" alt="Logo VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                     class="h-[50px] w-[80px]">
                             </a>
                             <a href="https://www.thegreenwebfoundation.org/green-web-check/?url=omdatwereizen.nl"
