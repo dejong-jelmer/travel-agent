@@ -82,7 +82,11 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
                     </div>
                 </div>
 
-                <VueHoneypot ref="honeypot" />
+                <!-- The honeypot field that bots fill in. vue-honeypot hides it from view itself; the wrapper also keeps
+                     its "Name" label from screen readers and search snippets, and stays out of the layout like the field. -->
+                <div aria-hidden="true" data-nosnippet class="absolute">
+                    <VueHoneypot ref="honeypot" />
+                </div>
 
                 <div class="flex justify-end mt-8">
                     <Button>{{ t('forms.contact.submit_button') }} →</Button>

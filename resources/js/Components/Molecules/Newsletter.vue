@@ -84,8 +84,11 @@ function submit() {
                         :placeholder="$t('newsletter.form.email_placeholder')" :feedback="form.errors.email"
                         @change="form.clearErrors('email'); alreadySubscribed = false" />
                 </div>
-                <!-- Setup the honeypot -->
-                <vue-honeypot ref="honeypot" />
+                <!-- The honeypot field that bots fill in. vue-honeypot hides it from view itself; the wrapper also keeps
+                     its "Name" label from screen readers and search snippets, and stays out of the layout like the field. -->
+                <div aria-hidden="true" data-nosnippet class="absolute">
+                    <vue-honeypot ref="honeypot" />
+                </div>
 
                 <!-- onderste rij: privacy links, knop rechts -->
                 <div class="flex flex-col-reverse gap-6 tablet:flex-row tablet:items-center tablet:justify-between">
