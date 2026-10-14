@@ -2,7 +2,6 @@
 // without mismatches.
 import { defineAsyncComponent } from 'vue'
 import { ZiggyVue } from 'ziggy-js'
-import VueTippy from 'vue-tippy'
 import { Vue3Mq } from 'vue3-mq'
 import Vue3TouchEvents from 'vue3-touch-events'
 import Toast from 'vue-toastification'
@@ -52,11 +51,6 @@ export function setupApp(app, props, ziggy) {
     app.use(Vue3Mq, {
         breakpoints: screens
     });
-    app.use(VueTippy, {
-        defaultProps: {
-            placement: 'right'
-        }
-    });
     app.directive('reveal', reveal)
 
     // Register every component globally by its file name: the eager ones as they are, the others async
@@ -69,4 +63,24 @@ export function setupApp(app, props, ziggy) {
     }
 
     return app
+}
+
+/**
+ * Installs what only the admin uses, loaded on demand so it stays out of the bundle of the public pages. Admin pages
+ * are never rendered on the server (HandleInertiaRequests::ssrEnabled), so app.js installs these in the browser before
+ * it mounts an admin page. Links from the public pages into the admin are plain links, so the first page decides.
+ *
+ * @param {import('vue').App} app
+ */
+export async function setupAdmin(app) {
+    const [{ default: VueTippy }] = await Promise.all([
+        import('vue-tippy'),
+        import('tippy.js/dist/tippy.css'),
+    ])
+
+    app.use(VueTippy, {
+        defaultProps: {
+            placement: 'right'
+        }
+    })
 }

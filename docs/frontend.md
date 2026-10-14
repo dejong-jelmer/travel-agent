@@ -36,7 +36,7 @@ All components in `Components/`, `Templates/` and `Icons/` are registered global
 
 ## Server-Side Rendering
 
-The first visit of a public page is rendered to HTML on a Node server (`resources/js/ssr.js`), so visitors and search engines get the content before any JavaScript runs. The browser then hydrates that HTML (`resources/js/app.js`): Vue takes over the existing markup instead of building it again. Both entry points build the app through `setupApp.js`, so the plugins and global components are always the same on either side. Admin pages are not rendered on the server (`HandleInertiaRequests::ssrEnabled`), and neither is anything when the SSR server is down: those pages render in the browser as before.
+The first visit of a public page is rendered to HTML on a Node server (`resources/js/ssr.js`), so visitors and search engines get the content before any JavaScript runs. The browser then hydrates that HTML (`resources/js/app.js`): Vue takes over the existing markup instead of building it again. Both entry points build the app through `setupApp.js`, so the plugins and global components are always the same on either side. Admin pages are not rendered on the server (`HandleInertiaRequests::ssrEnabled`), and neither is anything when the SSR server is down: those pages render in the browser as before. What only the admin uses is installed by `setupAdmin` (also in `setupApp.js`), loaded on demand in the browser before an admin page mounts, so it stays out of the bundle of the public pages.
 
 ```bash
 npm run build:ssr                # Builds the browser bundle and the SSR bundle (bootstrap/ssr/ssr.js)
