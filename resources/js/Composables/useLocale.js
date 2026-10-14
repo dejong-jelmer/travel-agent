@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { usePage, router } from "@inertiajs/vue3";
 import { useI18n } from "vue-i18n";
+import { loadLocaleMessages } from "@/plugins/i18n.js";
 
 export function useLocale() {
     const { locale: i18nLocale } = useI18n();
@@ -29,7 +30,8 @@ export function useLocale() {
             return;
         }
 
-        router.post(
+        // Only Dutch comes with the bundle, so the messages of the new locale are loaded before the page shows it
+        loadLocaleMessages(newLocale).then(() => router.post(
             route("locale.switch"),
             {
                 locale: newLocale,
@@ -41,7 +43,7 @@ export function useLocale() {
                     i18nLocale.value = newLocale;
                 },
             }
-        );
+        ));
     };
 
     return {

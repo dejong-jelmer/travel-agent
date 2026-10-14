@@ -6,7 +6,7 @@ import Vue3TouchEvents from 'vue3-touch-events'
 import Toast from 'vue-toastification'
 import VueHoneypot from 'vue-honeypot'
 import toastOptions from './toastOptions.js'
-import i18n from './plugins/i18n'
+import i18n, { loadLocaleMessages } from './plugins/i18n'
 import reveal from './Directives/reveal.js'
 
 // The components the public pages render are registered eagerly, so the server renders them and the browser hydrates
@@ -61,16 +61,19 @@ export function setupApp(app, props, ziggy) {
 }
 
 /**
- * Installs what only the admin uses, loaded on demand so it stays out of the bundle of the public pages. Admin pages
- * are never rendered on the server (HandleInertiaRequests::ssrEnabled), so app.js installs these in the browser before
- * it mounts an admin page. Links from the public pages into the admin are plain links, so the first page decides.
+ * Installs what only the admin uses, loaded on demand so it stays out of the bundle of the public pages: the tooltips
+ * and the messages of the admin's locale when that is not Dutch. Admin pages are never rendered on the server
+ * (HandleInertiaRequests::ssrEnabled), so app.js installs these in the browser before it mounts an admin page. Links
+ * from the public pages into the admin are plain links, so the first page decides.
  *
  * @param {import('vue').App} app
+ * @param {string} locale The locale of the first page
  */
-export async function setupAdmin(app) {
+export async function setupAdmin(app, locale) {
     const [{ default: VueTippy }] = await Promise.all([
         import('vue-tippy'),
         import('tippy.js/dist/tippy.css'),
+        loadLocaleMessages(locale),
     ])
 
     app.use(VueTippy, {

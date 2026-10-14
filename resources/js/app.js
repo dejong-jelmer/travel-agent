@@ -31,7 +31,7 @@ createInertiaApp({
 
         // An admin page first gets what only the admin uses; a public page mounts at once
         if (props.initialPage.url.startsWith('/admin')) {
-            setupAdmin(app).then(() => app.mount(el))
+            setupAdmin(app, props.initialPage.props.locale).then(() => app.mount(el))
         } else {
             app.mount(el)
         }
