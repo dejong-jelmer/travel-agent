@@ -3,7 +3,8 @@ import { ref, onMounted } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import heroVideo from '@/../videos/home-hero.mp4';
-import heroImage from '@/../images/hero-poster.jpg';
+import heroImage from '@/../images/hero-poster.webp';
+import heroImagePortrait from '@/../images/hero-poster-portrait.webp';
 import { useMq } from 'vue3-mq';
 import { ArrowDown } from '@lucide/vue';
 
@@ -26,7 +27,15 @@ onMounted(() => {
 
 <template>
     <div ref="rootRef" class="relative h-hero-home flex px-6 overflow-hidden">
-        <video ref="videoRef" :poster="heroImage" class="absolute inset-0 w-full h-full object-cover" preload="none"
+        <!-- The poster, behind the video until it plays. A picture rather than the poster attribute, which cannot vary
+             per screen: a portrait hero only shows the middle of the frame, at the same scale, so portrait screens get
+             that center crop. The media query matches the preload in HomeController::home. -->
+        <picture>
+            <source media="(max-aspect-ratio: 3/5)" :srcset="heroImagePortrait">
+            <img :src="heroImage" alt="" width="1280" height="720" fetchpriority="high"
+                class="absolute inset-0 w-full h-full object-cover">
+        </picture>
+        <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover" preload="none"
             :src="heroVideo" :autoplay="!prefersReducedMotion" muted loop playsinline />
         <!-- Darkens the top so the transparent nav stays readable on light footage -->
         <div

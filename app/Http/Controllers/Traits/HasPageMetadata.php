@@ -87,8 +87,10 @@ trait HasPageMetadata
      * The srcset matches the one ResponsiveImage renders, so with the same sizes the browser picks the same file for
      * both and fetches it only once. An image without variants yet is preloaded as its original upload.
      *
+     * The key holds a list, as a page can preload a different image per screen through `media` (see the home page).
+     *
      * @param  string  $sizes  The sizes the page renders the image with
-     * @return array{preload_image?: array{href: string, srcset: string|null, sizes: string|null}}
+     * @return array{preload_images?: list<array{href: string, srcset: string|null, sizes: string|null, media: string|null}>}
      */
     protected function preloadImageSeo(?Image $image, string $sizes): array
     {
@@ -102,11 +104,12 @@ trait HasPageMetadata
         ));
 
         return [
-            'preload_image' => [
+            'preload_images' => [[
                 'href' => $image->fallback_source['url'] ?? $image->public_url,
                 'srcset' => $srcset ?: null,
                 'sizes' => $srcset ? $sizes : null,
-            ],
+                'media' => null,
+            ]],
         ];
     }
 

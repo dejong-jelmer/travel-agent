@@ -27,11 +27,11 @@
         type="font/woff2" crossorigin>
     <link rel="preload" href="{{ Vite::asset('resources/fonts/poppins/Poppins-SemiBold.woff2') }}" as="font"
         type="font/woff2" crossorigin>
-    {{-- The hero image of the page, set through its seo prop (HasPageMetadata::preloadImageSeo) --}}
-    @isset($page['props']['seo']['preload_image'])
-        @php($preloadImage = $page['props']['seo']['preload_image'])
-        <link rel="preload" as="image" href="{{ $preloadImage['href'] }}" @if ($preloadImage['srcset']) imagesrcset="{{ $preloadImage['srcset'] }}" imagesizes="{{ $preloadImage['sizes'] }}" @endif fetchpriority="high">
-    @endisset
+    {{-- The hero image of the page, set through its seo prop (HasPageMetadata::preloadImageSeo); one per media query
+         when the page shows a different image per screen --}}
+    @foreach ($page['props']['seo']['preload_images'] ?? [] as $preloadImage)
+        <link rel="preload" as="image" href="{{ $preloadImage['href'] }}" @if ($preloadImage['srcset']) imagesrcset="{{ $preloadImage['srcset'] }}" imagesizes="{{ $preloadImage['sizes'] }}" @endif @if ($preloadImage['media']) media="{{ $preloadImage['media'] }}" @endif fetchpriority="high">
+    @endforeach
     <style>
         .js-cookie-consent {
             opacity: 0;
