@@ -13,10 +13,11 @@ const props = defineProps({
                 {{ $t('trips.title') }}
             </SectionHeader>
 
-            <!-- The cards of a row come into view one after the other (three columns from laptop on) -->
+            <!-- The cards of a row come into view one after the other (three columns from laptop on). The first card is
+                 in view on every screen, so its image is not lazy loaded. -->
             <div class="grid grid-cols-1 tablet:grid-cols-2 laptop:grid-cols-3 gap-8">
                 <TripCard v-for="(trip, index) in trips" :key="trip.id" :trip="trip"
-                    v-reveal="{ delay: (index % 3) * 80 }" />
+                    :loading="index === 0 ? 'eager' : 'lazy'" v-reveal="{ delay: (index % 3) * 80 }" />
             </div>
 
             <!-- Empty state -->
