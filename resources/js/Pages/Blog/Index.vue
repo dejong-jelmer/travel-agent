@@ -28,9 +28,10 @@ const { formattedDate } = useDateFormatter();
                     <Card>
                         <!-- Featured Image -->
                         <div class="aspect-[16/10] overflow-hidden bg-gray-100">
-                            <img v-if="post.hero_image"
-                                :src="post.hero_image.public_url"
-                                :alt="post.title"
+                            <!-- The first card is in view on every screen, so its image is not lazy loaded -->
+                            <ResponsiveImage v-if="post.hero_image" :image="post.hero_image"
+                                sizes="(min-width: 900px) 360px, (min-width: 600px) 50vw, 100vw" :alt="post.title"
+                                :loading="index === 0 ? 'eager' : 'lazy'"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                             <div v-else class="w-full h-full flex items-center justify-center text-gray-300">
                                 <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">

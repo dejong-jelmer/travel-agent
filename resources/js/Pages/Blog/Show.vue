@@ -31,7 +31,8 @@ const { formattedDate } = useDateFormatter();
 
             <!-- Featured Image -->
             <div v-if="post.hero_image" class="max-w-4xl mx-auto mb-12 ">
-                <img :src="post.hero_image.public_url" :alt="post.title" class="w-full rounded-lg object-cover" />
+                <ResponsiveImage :image="post.hero_image" sizes="(min-width: 928px) 896px, calc(100vw - 32px)"
+                    :alt="post.title" class="w-full rounded-lg object-cover" />
             </div>
 
             <!-- Body -->
