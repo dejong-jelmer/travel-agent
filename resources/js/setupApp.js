@@ -2,7 +2,6 @@
 // without mismatches.
 import { defineAsyncComponent } from 'vue'
 import { ZiggyVue } from 'ziggy-js'
-import Vue3TouchEvents from 'vue3-touch-events'
 import Toast from 'vue-toastification'
 import VueHoneypot from 'vue-honeypot'
 import toastOptions from './toastOptions.js'
@@ -36,7 +35,6 @@ export const resolvePage = name => {
  */
 export function setupApp(app, props, ziggy) {
     app.use(ZiggyVue, ziggy)
-    app.use(Vue3TouchEvents)
     app.use(Toast, toastOptions)
     app.use(VueHoneypot)
     app.use(i18n)
