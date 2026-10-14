@@ -3,7 +3,6 @@ import '../css/app.css';
 import { createApp, createSSRApp, h } from 'vue'
 import { createInertiaApp, router } from '@inertiajs/vue3'
 import "vue-toastification/dist/index.css";
-import '@vuepic/vue-datepicker/dist/main.css';
 import { resolvePage, setupApp } from './setupApp.js';
 
 import.meta.glob([
