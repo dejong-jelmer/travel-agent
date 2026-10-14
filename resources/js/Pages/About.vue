@@ -1,9 +1,25 @@
 <script setup>
 import { useI18n } from 'vue-i18n'
 import heroImage from '@/../images/about.webp'
+import heroImage960 from '@/../images/about-960.webp'
+import heroImage1440 from '@/../images/about-1440.webp'
 import meImage from '@/../images/me.webp'
 
 const { t, tm } = useI18n()
+
+// The hero in the shape of an uploaded image with its variants, so PageHero renders it with a srcset
+const hero = {
+    sources: [
+        { url: heroImage960, width: 960 },
+        { url: heroImage1440, width: 1440 },
+        { url: heroImage, width: 1920 },
+    ],
+    fallback_source: { url: heroImage1440, width: 1440, height: 1440 },
+}
+
+// The square photo covers the hero, so it is as wide as the hero is wide or high, whichever is more: the hero is at
+// most 65vh and at least 420px high (h-hero-page)
+const HERO_SIZES = 'max(100vw, 65vh, 420px)'
 
 const myStory = tm('about.my_story')
 const missionStatement = tm('about.promise_statement')
@@ -14,7 +30,7 @@ const missionStatement = tm('about.promise_statement')
     <Layout>
         <!-- Hero -->
         <template v-slot:hero>
-            <PageHero :image="heroImage" :title="t('about.hero.title')" :subtitle="t('about.hero.sub_title')" :width="1920" :height="1920" />
+            <PageHero :responsive-image="hero" :sizes="HERO_SIZES" :title="t('about.hero.title')" :subtitle="t('about.hero.sub_title')" />
         </template>
         <!-- Story -->
         <section class="bg-brand-secondary py-12 laptop:py-24">
