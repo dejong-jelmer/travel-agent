@@ -32,7 +32,7 @@ resources/js/
     └── useToastWatcher.js       # Flash message toasts
 ```
 
-All components in `Components/`, `Templates/` and `Icons/` are registered globally in `setupApp.js`, so pages use them without imports.
+All components in `Components/`, `Templates/` and `Icons/` are registered globally in `setupApp.js`, so pages use them without imports. The ones the public pages render are listed in `EAGER_COMPONENTS` and come with the main bundle; all others (the admin, the booking steps, heavy editors) are loaded when they are first rendered, so visitors of the public site do not download them. A component that a public page starts to use belongs in that list: left out, it still works, but it hydrates only once its own chunk has loaded.
 
 ## Server-Side Rendering
 
