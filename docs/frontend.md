@@ -49,7 +49,7 @@ Hydration only works when the server and the browser produce exactly the same HT
 
 - **No browser APIs during setup.** `window`, `document`, `localStorage` and `matchMedia` do not exist on the server. Use them in `onMounted` or in event handlers, which only run in the browser. Module level code runs on the server too, so the same goes there.
 - **DOM side effects in a `watchEffect` get `{ flush: 'post' }`.** A plain `watchEffect` runs once on the server as well; with `flush: 'post'` it only runs after mounting (see `document.title` in `Layout.vue`).
-- **No markup that depends on the screen.** The server does not know the viewport, so use Tailwind breakpoints (`hidden tablet:flex`) instead of `vue3-mq` to decide what to render (see the trips on `Home.vue`).
+- **No markup that depends on the screen.** The server does not know the viewport, so use Tailwind breakpoints (`hidden tablet:flex`) to decide what to render (see the trips on `Home.vue`). A decision that has to be made in JavaScript, such as whether to load a video, goes in `onMounted` with `matchMedia` and the breakpoints from `screens.js` (see `HomeHero.vue`).
 - **The url comes from Inertia.** Use `usePage().url` rather than `window.location` (see `useContactForm.js`).
 - **`route()` works on both sides.** The browser gets the route list from `@routes`, the SSR server from the `ziggy` prop. Use the global `route()` rather than importing it from `ziggy-js`.
 - **Public pages do not know the admin routes.** They get the `public` group from `config/ziggy.php`, which leaves out `admin.*`, so their HTML does not list the admin area. An Inertia visit keeps the route list of the page it started on, so a link from a public page into the admin has to be a plain `<a>` (a full page load) rather than an Inertia `<Link>`.
@@ -59,7 +59,7 @@ To spot a mismatch, run `npm run build:ssr` with `php artisan inertia:start-ssr`
 
 ## Theme
 
-**Breakpoints** (`resources/js/screens.js`, used by Tailwind and `vue3-mq`):
+**Breakpoints** (`resources/js/screens.js`, used by Tailwind and by `matchMedia` in components):
 
 ```js
 { phone: '0px', tablet: '600px', laptop: '900px', desktop: '1350px', wide: '1600px' }

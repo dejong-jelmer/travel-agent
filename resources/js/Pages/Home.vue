@@ -16,8 +16,8 @@ const props = defineProps({
 const { t } = useI18n()
 
 // From tablet on up to three trips sit side by side in a centred row; with more trips, and always on phones, they
-// go in a slider. The breakpoint is applied in CSS rather than with vue3-mq, as the server cannot know the screen
-// width: this way the server-rendered HTML fits every screen and hydrates without a mismatch.
+// go in a slider. The breakpoint is applied in CSS rather than in JavaScript, as the server cannot know the
+// screen width: this way the server-rendered HTML fits every screen and hydrates without a mismatch.
 const hasTripsRow = computed(() => props.trips.length <= 3)
 
 </script>

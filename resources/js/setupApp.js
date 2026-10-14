@@ -2,12 +2,10 @@
 // without mismatches.
 import { defineAsyncComponent } from 'vue'
 import { ZiggyVue } from 'ziggy-js'
-import { Vue3Mq } from 'vue3-mq'
 import Vue3TouchEvents from 'vue3-touch-events'
 import Toast from 'vue-toastification'
 import VueHoneypot from 'vue-honeypot'
 import toastOptions from './toastOptions.js'
-import screens from './screens.js'
 import i18n from './plugins/i18n'
 import reveal from './Directives/reveal.js'
 
@@ -48,9 +46,6 @@ export function setupApp(app, props, ziggy) {
         i18n.global.locale.value = props.initialPage.props.locale;
     }
 
-    app.use(Vue3Mq, {
-        breakpoints: screens
-    });
     app.directive('reveal', reveal)
 
     // Register every component globally by its file name: the eager ones as they are, the others async
