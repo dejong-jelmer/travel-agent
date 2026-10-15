@@ -397,6 +397,6 @@ const contactUrl = computed(() => {
         </div>
     </Layout>
     <Modal :open="requestModalOpen" @close="requestModalOpen = false">
-        <TripRequestForm :trip="trip" />
+        <TripRequestForm :trip="trip" @submitted="requestModalOpen = false" />
     </Modal>
 </template>

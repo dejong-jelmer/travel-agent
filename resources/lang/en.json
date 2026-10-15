@@ -1127,6 +1127,7 @@
             "consent_privacy_link": "privacy policy",
             "submit_button": "Request a proposal",
             "submit_processing": "Sending...",
+            "success": "Thank you! Your request has been received. I will contact you as soon as possible.",
             "months": {
                 "1": "January",
                 "2": "February",
@@ -1150,12 +1151,6 @@
                 "breda": "Breda Centraal (EuroCity)",
                 "other": "Anders / weet ik nog niet"
             }
-        },
-        "thanks": {
-            "title": "Your request has been received.",
-            "message": "I have received your message and will contact you within two working days - by phone if you provided a number, otherwise by email. We'll discuss together what you have in mind, which period suits you best, and what can make this trip special for you.",
-            "question_prefix": "Have a question in the meantime? Feel free to call:",
-            "back_to_trips": "Back to trips"
         }
     },
     "date_picker": {
