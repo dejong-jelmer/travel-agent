@@ -3,6 +3,11 @@
 namespace App\Travel\Tests\Feature;
 
 use App\Models\User;
+use App\Travel\Actions\DeleteAccommodation;
+use App\Travel\Actions\DeleteCity;
+use App\Travel\Actions\DeleteStation;
+use App\Travel\Actions\DeleteTransitLine;
+use App\Travel\Actions\UpdateTransitLine;
 use App\Travel\Enums\AccommodationType;
 use App\Travel\Enums\LegType;
 use App\Travel\Enums\TransitMode;
@@ -15,6 +20,7 @@ use App\Travel\Models\Station;
 use App\Travel\Models\Stay;
 use App\Travel\Models\TransitLine;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 class LibraryWriteTest extends TestCase
@@ -206,6 +212,41 @@ class LibraryWriteTest extends TestCase
             ->assertSessionHasErrors(['accommodation' => 'Deze accommodatie hoort bij 1 verblijf. Haal haar daar eerst weg.']);
 
         $this->assertModelExists($stay->accommodation);
+    }
+
+    /**
+     * A race cannot be played out in one process, so this checks what the guarantee rests on: each delete locks its
+     * row before it counts what uses it, so a leg or stay that would take the row waits for the delete.
+     */
+    public function test_each_delete_locks_its_row_before_it_checks_what_uses_it(): void
+    {
+        DB::enableQueryLog();
+
+        foreach ([
+            [DeleteStation::class, Station::factory()->create(), 'travel_stations'],
+            [DeleteTransitLine::class, TransitLine::factory()->create(), 'travel_transit_lines'],
+            [DeleteAccommodation::class, Accommodation::factory()->create(), 'travel_accommodations'],
+            [DeleteCity::class, City::factory()->create(), 'travel_cities'],
+        ] as [$action, $model, $table]) {
+            DB::flushQueryLog();
+            app($action)->handle($model);
+            $queries = array_column(DB::getQueryLog(), 'query');
+
+            $this->assertMatchesRegularExpression("/^select .* from `{$table}` where .* for update$/", $queries[0], $action);
+            $this->assertModelMissing($model);
+        }
+    }
+
+    public function test_a_line_is_locked_before_its_legs_are_counted(): void
+    {
+        $line = TransitLine::factory()->create(['mode' => TransitMode::Train]);
+
+        DB::enableQueryLog();
+        app(UpdateTransitLine::class)->handle($line, ['mode' => TransitMode::Bus->value]);
+        $queries = array_column(DB::getQueryLog(), 'query');
+
+        $this->assertMatchesRegularExpression('/^select .* from `travel_transit_lines` where .* for update$/', $queries[0]);
+        $this->assertSame(TransitMode::Bus, $line->refresh()->mode);
     }
 
     public function test_a_non_admin_cannot_write_to_the_library(): void

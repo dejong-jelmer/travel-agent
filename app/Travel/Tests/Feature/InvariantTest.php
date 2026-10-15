@@ -13,6 +13,7 @@ use App\Travel\Models\Stay;
 use App\Travel\Models\TransitLine;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 
 /**
@@ -85,6 +86,22 @@ class InvariantTest extends TestCase
             ModelNotFoundException::class,
         );
         $this->assertSame(['Den Helder'], $train->transitLines()->pluck('direction')->all());
+    }
+
+    /**
+     * A race cannot be played out in one process, so this checks what the guarantee rests on: the mode of the lines is
+     * read with a shared lock, so a change of mode waits for the sync, or the sync for the change.
+     */
+    public function test_the_lines_are_read_with_a_shared_lock(): void
+    {
+        $train = Leg::factory()->train()->create();
+        $line = TransitLine::factory()->create();
+
+        DB::enableQueryLog();
+        app(SyncLegTransitLines::class)->handle($train, [[$line->id, 'Den Helder']]);
+        $read = collect(DB::getQueryLog())->pluck('query')->first(fn (string $query) => str_contains($query, 'from `travel_transit_lines`'));
+
+        $this->assertMatchesRegularExpression('/ lock in share mode$/', (string) $read);
     }
 
     public function test_4_an_arrival_route_has_no_times(): void
