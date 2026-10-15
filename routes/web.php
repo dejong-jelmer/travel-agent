@@ -47,8 +47,6 @@ Route::get('reizen/{trip:slug}', [TripController::class, 'show'])->name('trips.s
 Route::post('/reis/{trip:slug}/aanvraag', [TripRequestController::class, 'store'])
     ->middleware('throttle:frontend-form-actions')
     ->name('trip-requests.store');
-Route::get('/reis/{trip:slug}/aanvraag/bedankt', [TripRequestController::class, 'thanks'])
-    ->name('trip-requests.thanks');
 
 // Blog
 Route::get('/mijn-verhalen', [BlogPostController::class, 'index'])->name('blog.index');

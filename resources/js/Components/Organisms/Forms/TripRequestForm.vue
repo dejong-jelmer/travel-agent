@@ -2,6 +2,7 @@
 import { computed, ref, watch } from 'vue'
 import { useForm } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
+import { useToast } from 'vue-toastification'
 import { LoaderCircle } from '@lucide/vue'
 
 const props = defineProps({
@@ -11,7 +12,10 @@ const props = defineProps({
     },
 })
 
+const emit = defineEmits(['submitted'])
+
 const { t } = useI18n()
+const toast = useToast()
 
 const form = useForm({
     name: '',
@@ -81,6 +85,10 @@ function submit() {
 
     form.post(route('trip-requests.store', props.trip.slug), {
         preserveScroll: true,
+        onSuccess: () => {
+            toast.success(t('trip_request.form.success'))
+            emit('submitted')
+        },
     })
 }
 </script>

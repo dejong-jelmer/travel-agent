@@ -4,7 +4,6 @@ return [
     // Page titles
     'title_index' => 'Aanvragen',
     'title_edit' => 'Aanvragen bewerken',
-    'thanks_page_title' => 'Aanvraag ontvangen',
 
     // Flash messages
     'updated' => 'Aanvraag is succesvol aangepast.',
