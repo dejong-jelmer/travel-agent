@@ -39,7 +39,7 @@ class TripRequestTest extends TestCase
         $response = $this->post(route('trip-requests.store', $this->trip), $payload);
 
         $response->assertSessionHasNoErrors();
-        $response->assertRedirect(route('trip-requests.thanks', $this->trip));
+        $response->assertRedirect(route('trips.show', $this->trip));
 
         $this->assertDatabaseHas('trip_requests', [
             'trip_id' => $this->trip->id,
@@ -54,25 +54,14 @@ class TripRequestTest extends TestCase
         ]);
     }
 
-    public function test_request_redirects_to_thanks_page_after_submit(): void
+    public function test_request_redirects_to_trip_page_after_submit(): void
     {
         $response = $this->post(
             route('trip-requests.store', $this->trip),
             $this->generateTripRequestPayload()
         );
 
-        $response->assertRedirect(route('trip-requests.thanks', $this->trip));
-    }
-
-    public function test_thanks_page_renders_with_trip_data(): void
-    {
-        $this->get(route('trip-requests.thanks', $this->trip))
-            ->assertStatus(200)
-            ->assertInertia(fn (AssertableInertia $page) => $page
-                ->component('TripRequest/Thanks')
-                ->where('trip.id', $this->trip->id)
-                ->where('trip.slug', $this->trip->slug)
-            );
+        $response->assertRedirect(route('trips.show', $this->trip));
     }
 
     public function test_request_combines_year_and_month_into_yyyy_mm_format(): void

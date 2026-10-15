@@ -1125,6 +1125,7 @@
             "consent_privacy_link": "privacybeleid",
             "submit_button": "Vraag voorstel aan",
             "submit_processing": "Bezig met versturen...",
+            "success": "Bedankt! Je aanvraag is binnen. Ik neem zo snel mogelijk contact met je op.",
             "months": {
                 "1": "Januari",
                 "2": "Februari",
@@ -1148,12 +1149,6 @@
                 "breda": "Breda Centraal (EuroCity)",
                 "other": "Anders / weet ik nog niet"
             }
-        },
-        "thanks": {
-            "title": "Je aanvraag is binnen.",
-            "message": "Ik heb je bericht ontvangen en neem binnen twee werkdagen contact met je op, via de telefoon als je die hebt ingevuld, anders per e-mail. Dan nemen we samen door wat je voor ogen hebt, welke periode het beste past, en wat deze reis voor jou bijzonder kan maken.",
-            "question_prefix": "Heb je in de tussentijd een vraag? Je mag altijd bellen:",
-            "back_to_trips": "Terug naar de reizen"
         }
     },
     "date_picker": {

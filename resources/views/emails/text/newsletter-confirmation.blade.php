@@ -1,30 +1,29 @@
-Welkom bij de nieuwsbrief!
+@extends('emails.text.default')
+@section('content')
+Hallo {!! $subscriber->name ?? strtok($subscriber->email, '@') !!},
 
-Hallo {{ $subscriber->name ?? strtok($subscriber->email, '@') }},
+Welkom bij de nieuwsbrief
 
-Wat leuk dat je erbij bent. Ik bouw Omdat We Reizen op als reismaker die kiest voor de bestemming als het uitgangspunt - met aandacht voor de plek en het verhaal. Via deze nieuwsbrief deel ik wat ik onderweg tegenkom en waar ik mee bezig ben.
+Wat leuk dat je erbij bent. Ik bouw {!! config('app.name') !!} op als reismaker die de bestemming als uitgangspunt neemt, met aandacht voor de plek en het verhaal. Via deze nieuwsbrief deel ik wat ik onderweg tegenkom en waar ik mee bezig ben.
 
-Je hebt je ingeschreven met het e-mailadres: {{ $subscriber->email }}
+Je hebt je ingeschreven met {!! $subscriber->email !!}. Bevestig je inschrijving via de link hieronder, dan ben je er helemaal bij.
 
-Om je aanmelding af te ronden vraag ik je nog even je inschrijving te bevestigen via de onderstaande link.
+Inschrijving bevestigen:
+{!! route('newsletter.subscription.confirm', $subscriber->confirmation_token) !!}
 
-Bevestig je aanmelding:
-{{ route('newsletter.subscription.confirm', $subscriber->confirmation_token) }}
-
-(Deze link is {{ config('newsletter.subscription.confirmation_expires_after') }} uur geldig.)
+Deze link is {!! config('newsletter.subscription.confirmation_expires_after') !!} uur geldig.
 
 == Wat kun je verwachten? ==
 
-- Updates over nieuwe reizen die ik samenstel.
-- Persoonlijke ervaringen en verhalen.
+- Nieuwe reizen die ik samenstel.
+- Persoonlijke ervaringen en verhalen van onderweg.
 - Achtergrond bij bestemmingen.
 
-Privacy: ik gebruik je e-mailadres uitsluitend voor de nieuwsbrief en delen het nooit met derden. Je kunt je op elk moment weer uitschrijven.
+Ik gebruik je e-mailadres alleen voor de nieuwsbrief en deel het nooit met anderen. Je kunt je altijd weer uitschrijven:
+{!! route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token) !!}
 
-Wil je je afmelden? Dat kan altijd via:
-{{ route('newsletter.subscription.unsubscribe', $subscriber->unsubscribe_token) }}
+Hartelijke groet,
 
-Met vriendelijke groet,
-
-{{ config('contact.full_name') }}
-{{ config('app.name') }}
+{!! config('contact.first_name') !!}
+{!! config('app.name') !!}
+@endsection
