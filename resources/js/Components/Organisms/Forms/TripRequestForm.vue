@@ -198,7 +198,11 @@ function submit() {
             </Checkbox>
         </div>
 
-        <VueHoneypot ref="honeypot" />
+        <!-- The honeypot field that bots fill in. vue-honeypot hides it from view itself; the wrapper also keeps
+             its "Name" label from screen readers and search snippets, and stays out of the layout like the field. -->
+        <div aria-hidden="true" data-nosnippet class="absolute">
+            <VueHoneypot ref="honeypot" />
+        </div>
 
         <!-- Submit -->
         <div class="flex justify-center">

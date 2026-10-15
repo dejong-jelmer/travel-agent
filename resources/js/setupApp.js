@@ -2,24 +2,24 @@
 // without mismatches.
 import { defineAsyncComponent } from 'vue'
 import { ZiggyVue } from 'ziggy-js'
-import VueTippy from 'vue-tippy'
-import { Vue3Mq } from 'vue3-mq'
-import Vue3TouchEvents from 'vue3-touch-events'
 import Toast from 'vue-toastification'
 import VueHoneypot from 'vue-honeypot'
 import toastOptions from './toastOptions.js'
-import screens from './screens.js'
-import i18n from './plugins/i18n'
+import i18n, { loadLocaleMessages } from './plugins/i18n'
 import reveal from './Directives/reveal.js'
 
-// Heavy, route-specific components are loaded async so they stay out of the main bundle.
-// Keep this list in sync with the negative glob patterns in the eager registration below.
-const ASYNC_COMPONENTS = [
-    'BookingForm', 'TripForm', 'DestinationForm', 'CampaignForm', 'ItineraryForm',
-    'BlogPostForm', 'TestimonialForm', 'TripPricesManager', 'TripItemsTab',
-    'DataTable', 'SortableBlocks', 'TipTap', 'ImageUploader',
-    'BlockedDatesManager', 'LightBox', 'DatePicker',
-]
+// The components the public pages render are registered eagerly, so the server renders them and the browser hydrates
+// them at once. All others (the admin, the booking steps, heavy editors such as TipTap and the LightBox) are loaded
+// when they are first rendered, which keeps them out of the bundle every visitor downloads. A component that a public
+// page starts to use belongs in this list: left out, it still works, but hydrates only once its own chunk has loaded.
+const EAGER_COMPONENTS = import.meta.glob([
+    './Components/Atoms/{Button,CallButton,DecorativeLine,DefaultLink,FormFeedback,HighlightIcon,KeyFactIcon,Label,MailButton,Pill,ResponsiveImage,ScrollIndicator,SectionHeader}.vue',
+    './Components/Molecules/{BaseCard,Card,Checkbox,Input,MobileMenu,Modal,NavDropdown,NavLink,Newsletter,PageBreadcrumbs,PriceBadge,PullQuote,QuoteBlock,Select,TextArea,USP}.vue',
+    './Components/Organisms/{Footer,HomeHero,HomeTestimonials,HorizontalSlider,Nav,PageHero,TestimonialSlider,Topbar,TripCard,TripHero,TripHighlights,TripItems,TripItinerary,TripKeyFacts,TripPlanCard,TripStorySection,TripTestimonials,TripTravelInfo,Trust}.vue',
+    './Components/Organisms/Forms/{ContactForm,TripRequestForm}.vue',
+    './Templates/{Layout,NewsletterTemplate}.vue',
+    './Icons/{Logo,LogoWhite,Sto,StoSmall}.vue',
+], { eager: true })
 
 export const resolvePage = name => {
     const pages = import.meta.glob('./Pages/**/*.vue')
@@ -35,7 +35,6 @@ export const resolvePage = name => {
  */
 export function setupApp(app, props, ziggy) {
     app.use(ZiggyVue, ziggy)
-    app.use(Vue3TouchEvents)
     app.use(Toast, toastOptions)
     app.use(VueHoneypot)
     app.use(i18n)
@@ -45,46 +44,39 @@ export function setupApp(app, props, ziggy) {
         i18n.global.locale.value = props.initialPage.props.locale;
     }
 
-    app.use(Vue3Mq, {
-        breakpoints: screens
-    });
+    app.directive('reveal', reveal)
+
+    // Register every component globally by its file name: the eager ones as they are, the others async
+    const getName = (path) => path.split('/').pop().replace(/\.[^/.]+$/, '')
+    const loaders = import.meta.glob(['./Components/**/*.vue', './Templates/*.vue', './Icons/*.vue'])
+
+    for (const [path, loader] of Object.entries(loaders)) {
+        const module = EAGER_COMPONENTS[path]
+        app.component(getName(path), module ? (module.default ?? module) : defineAsyncComponent(loader))
+    }
+
+    return app
+}
+
+/**
+ * Installs what only the admin uses, loaded on demand so it stays out of the bundle of the public pages: the tooltips
+ * and the messages of the admin's locale when that is not Dutch. Admin pages are never rendered on the server
+ * (HandleInertiaRequests::ssrEnabled), so app.js installs these in the browser before it mounts an admin page. Links
+ * from the public pages into the admin are plain links, so the first page decides.
+ *
+ * @param {import('vue').App} app
+ * @param {string} locale The locale of the first page
+ */
+export async function setupAdmin(app, locale) {
+    const [{ default: VueTippy }] = await Promise.all([
+        import('vue-tippy'),
+        import('tippy.js/dist/tippy.css'),
+        loadLocaleMessages(locale),
+    ])
+
     app.use(VueTippy, {
         defaultProps: {
             placement: 'right'
         }
-    });
-    app.directive('reveal', reveal)
-
-    // Register components globally; heavy admin components are loaded async
-    const getName = (path) => path.split('/').pop().replace(/\.[^/.]+$/, '')
-
-    // Eagerly register all non-async components. Heavy, route-specific components are
-    // excluded from the eager glob so they are not pulled into the main bundle; they are
-    // registered async below and code-split into their own chunks.
-    const eagerGlobs = [
-        import.meta.glob([
-            './Components/**/*.vue',
-            '!**/{BookingForm,TripForm,DestinationForm,CampaignForm,ItineraryForm,BlogPostForm,TestimonialForm,TripPricesManager,TripItemsTab,DataTable,SortableBlocks,TipTap,ImageUploader,BlockedDatesManager,LightBox,DatePicker}.vue',
-        ], { eager: true }),
-        import.meta.glob('./Templates/*.vue', { eager: true }),
-        import.meta.glob('./Icons/*.vue', { eager: true }),
-    ]
-    for (const glob of eagerGlobs) {
-        for (const [path, module] of Object.entries(glob)) {
-            const name = getName(path)
-            if (!ASYNC_COMPONENTS.includes(name)) {
-                app.component(name, module.default ?? module)
-            }
-        }
-    }
-
-    // Lazily register async components (loader is a function → defineAsyncComponent works correctly)
-    for (const [path, loader] of Object.entries(import.meta.glob('./Components/**/*.vue'))) {
-        const name = getName(path)
-        if (ASYNC_COMPONENTS.includes(name)) {
-            app.component(name, defineAsyncComponent(loader))
-        }
-    }
-
-    return app
+    })
 }

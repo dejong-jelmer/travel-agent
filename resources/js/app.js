@@ -1,10 +1,8 @@
-import './bootstrap';
 import '../css/app.css';
 import { createApp, createSSRApp, h } from 'vue'
 import { createInertiaApp, router } from '@inertiajs/vue3'
 import "vue-toastification/dist/index.css";
-import '@vuepic/vue-datepicker/dist/main.css';
-import { resolvePage, setupApp } from './setupApp.js';
+import { resolvePage, setupAdmin, setupApp } from './setupApp.js';
 
 import.meta.glob([
   '../images/**',
@@ -30,6 +28,12 @@ createInertiaApp({
         const app = (el.hasChildNodes() ? createSSRApp : createApp)({ render: () => h(App, props) });
         app.use(plugin)
         setupApp(app, props)
-        app.mount(el);
+
+        // An admin page first gets what only the admin uses; a public page mounts at once
+        if (props.initialPage.url.startsWith('/admin')) {
+            setupAdmin(app, props.initialPage.props.locale).then(() => app.mount(el))
+        } else {
+            app.mount(el)
+        }
     },
 })

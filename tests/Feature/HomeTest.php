@@ -105,8 +105,13 @@ class HomeTest extends TestCase
     public function test_hero_poster_is_preloaded_only_on_home_page()
     {
         $home = $this->get(route('home'))->assertOk();
+        // One preload per source of the picture in HomeHero: the center crop on portrait screens, the whole frame elsewhere
         $this->assertMatchesRegularExpression(
-            '/<link rel="preload" as="image" href="[^"]*hero-poster[^"]*\.jpg"\s+fetchpriority="high">/',
+            '/<link rel="preload" as="image" href="[^"]*hero-poster-portrait-[^"]*\.webp"\s+media="\(max-aspect-ratio: 3\/5\)"\s+fetchpriority="high">/',
+            $home->getContent()
+        );
+        $this->assertMatchesRegularExpression(
+            '/<link rel="preload" as="image" href="[^"]*hero-poster-(?!portrait-)[^"]*\.webp"\s+media="not all and \(max-aspect-ratio: 3\/5\)"\s+fetchpriority="high">/',
             $home->getContent()
         );
 
