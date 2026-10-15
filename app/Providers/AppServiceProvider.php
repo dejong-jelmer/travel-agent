@@ -8,6 +8,8 @@ use App\Models\Booking;
 use App\Models\Setting;
 use App\Models\TripRequest;
 use App\Responses\BookingResponse;
+use App\Services\TravelBookingDetails;
+use App\Travel\Contracts\BookingDetails;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Session;
@@ -24,6 +26,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
+        $this->app->bind(BookingDetails::class, TravelBookingDetails::class);
+
         if ($this->app->environment('testing')) {
             $this->app->register(FakerPhoneServiceProvider::class);
         }
