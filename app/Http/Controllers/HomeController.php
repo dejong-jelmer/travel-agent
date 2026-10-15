@@ -25,8 +25,23 @@ class HomeController extends Controller
     public function home(): Response
     {
         $seo = $this->shareSeo('seo.home', [
-            // The poster of the hero video, shown until the video plays. A video poster cannot have a srcset.
-            'preload_image' => ['href' => Vite::asset('resources/images/hero-poster.jpg'), 'srcset' => null, 'sizes' => null],
+            // The poster of the hero video, which HomeHero shows as a picture: a center crop of the frame on portrait
+            // screens, the whole frame elsewhere. The media queries match the picture's, so the browser only preloads
+            // the image it is going to show.
+            'preload_images' => [
+                [
+                    'href' => Vite::asset('resources/images/hero-poster-portrait.webp'),
+                    'srcset' => null,
+                    'sizes' => null,
+                    'media' => '(max-aspect-ratio: 3/5)',
+                ],
+                [
+                    'href' => Vite::asset('resources/images/hero-poster.webp'),
+                    'srcset' => null,
+                    'sizes' => null,
+                    'media' => 'not all and (max-aspect-ratio: 3/5)',
+                ],
+            ],
         ]);
 
         return Inertia::render('Home', [

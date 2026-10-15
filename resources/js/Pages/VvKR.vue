@@ -1,5 +1,5 @@
 <script setup>
-import vvkrLogo from '@/../images/vvkr.png'
+import vvkrLogo from '@/../images/vvkr.webp'
 
 </script>
 <template>
@@ -21,8 +21,8 @@ import vvkrLogo from '@/../images/vvkr.png'
                                     <a href="https://www.vvkr.nl/" target="_blank" rel="noopener noreferrer"
                                         aria-label="VvKR - Vereniging van Kleinschalige Reisorganisaties"
                                         class="block flex-none transition hover:scale-110 ease-in-out duration-300">
-                                        <img :src="vvkrLogo" alt="VvKR - Vereniging van Kleinschalige Reisorganisaties"
-                                            class="h-7" aria-hidden="true">
+                                        <img :src="vvkrLogo" width="240" height="149" alt="VvKR - Vereniging van Kleinschalige Reisorganisaties"
+                                            class="h-7 w-auto" aria-hidden="true">
                                     </a>
                                     De VvKR - Vereniging van Kleinschalige Reisorganisaties
                                 </h2>

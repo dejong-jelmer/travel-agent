@@ -3,7 +3,6 @@
 return [
     'title_index' => 'Requests',
     'title_edit' => 'Edit request',
-    'thanks_page_title' => 'Request received',
 
     // Flash messages
     'updated' => 'Request updated successfully.',
@@ -29,9 +28,9 @@ return [
 
     'mail' => [
         'confirmation_subject' => 'Your request for :trip has been received',
+        'confirmation_title' => 'Your request has been received',
         'confirmation_greeting' => 'Dear :name,',
-        'confirmation_intro' => 'Thank you for your request for :trip. I have received your message and will personally get in touch within two working days - by phone if you provided a number, otherwise by email.',
-        'confirmation_next_steps' => 'In that conversation, we will look together at which period suits you best, what your preferences are, and what can make this trip special for you. Feel free to take your time to write down any questions, wishes or concerns; the more I know, the better I can tailor the trip to you personally.',
+        'confirmation_intro' => 'Thank you for your request for :trip. I have received your message and will get in touch as soon as possible.',
         'confirmation_summary_header' => 'What you requested',
         'confirmation_summary_intro' => 'Just to be sure, here is a summary of the details you shared with me. If something is incorrect or you would like to add anything, simply reply to this email and I will update it before I call you back.',
         'confirmation_what_to_expect_header' => 'What to expect from our call',
@@ -39,7 +38,6 @@ return [
         'confirmation_what_to_expect_2' => 'We will look together at the price indication and what is and is not included in the trip.',
         'confirmation_what_to_expect_3' => 'You will have ample opportunity to ask questions - there is no obligation to book straight away.',
         'confirmation_question' => 'Do you have a question in the meantime, or would you like to add something to your request? Feel free to call me or simply reply to this email.',
-        'confirmation_phone_label' => 'Phone: ',
         'confirmation_closing' => 'Talk soon,',
 
         'notification_subject' => 'New request: :trip - :name',
@@ -47,7 +45,6 @@ return [
         'notification_subheader' => 'Trip: :trip',
         'notification_received_at' => 'Received at',
 
-        'notification_section_trip' => 'Trip',
         'notification_section_contact' => 'Contact details',
         'notification_section_preferences' => 'Trip preferences',
         'notification_section_notes' => 'Notes',

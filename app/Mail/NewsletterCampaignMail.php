@@ -49,6 +49,7 @@ class NewsletterCampaignMail extends Mailable
 
         return new Content(
             view: 'emails.newsletter-campaign',
+            text: 'emails.text.newsletter-campaign',
             with: [
                 'campaign' => $this->campaign,
                 'subscriber' => $subscriber,

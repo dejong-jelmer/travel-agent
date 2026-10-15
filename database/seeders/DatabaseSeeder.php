@@ -24,7 +24,8 @@ class DatabaseSeeder extends Seeder
         $disk = Storage::disk(config('images.disk'));
         $dir = config('images.directory');
         $files = $disk->allFiles($dir);
-        if (! empty($files)) {
+        // only local, not on production
+        if (app()->env === 'local' && ! empty($files)) {
             $disk->delete($files);
         }
 

@@ -1,33 +1,64 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRevealEffect } from '@/Composables/useRevealEffect.js';
 import heroVideo from '@/../videos/home-hero.mp4';
-import heroImage from '@/../images/hero-poster.jpg';
-import { useMq } from 'vue3-mq';
+import heroImage from '@/../images/hero-poster.webp';
+import heroImagePortrait from '@/../images/hero-poster-portrait.webp';
+import screens from '@/screens.js';
 import { ArrowDown } from '@lucide/vue';
 
 const { t } = useI18n();
-const mq = useMq();
 
 const { rootRef, visible, reveal } = useRevealEffect();
 
 const videoRef = ref(null)
-const prefersReducedMotion = ref(false)
+
+// The video gets its source only once the page has loaded, so it does not compete with the poster, the fonts and the
+// scripts for the connection. The server-rendered HTML therefore has no src or autoplay, which would start the
+// download at once.
+const startVideo = () => {
+    const video = videoRef.value
+    if (!video) return
+
+    // Loading a source resets the playback rate to the default one
+    video.defaultPlaybackRate = 0.8
+    video.playbackRate = 0.8
+    video.autoplay = true
+    video.src = heroVideo
+}
 
 onMounted(() => {
-    prefersReducedMotion.value = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    // Phones (below the tablet breakpoint), visitors who ask to save data and visitors who prefer reduced motion keep
+    // the poster. Hiding the video with CSS would not stop the download.
+    const keepPoster = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+        || !window.matchMedia(`(min-width: ${screens.tablet})`).matches
+        || navigator.connection?.saveData
 
-    if (videoRef.value && !prefersReducedMotion.value) {
-        videoRef.value.playbackRate = 0.8
+    if (keepPoster) return
+
+    // After an Inertia visit the page has loaded long before
+    if (document.readyState === 'complete') {
+        startVideo()
+    } else {
+        window.addEventListener('load', startVideo, { once: true })
     }
 })
+
+onBeforeUnmount(() => window.removeEventListener('load', startVideo))
 </script>
 
 <template>
     <div ref="rootRef" class="relative h-hero-home flex px-6 overflow-hidden">
-        <video ref="videoRef" :poster="heroImage" class="absolute inset-0 w-full h-full object-cover" preload="none"
-            :src="heroVideo" :autoplay="!prefersReducedMotion" muted loop playsinline />
+        <!-- The poster, behind the video until it plays. A picture rather than the poster attribute, which cannot vary
+             per screen: a portrait hero only shows the middle of the frame, at the same scale, so portrait screens get
+             that center crop. The media query matches the preload in HomeController::home. -->
+        <picture>
+            <source media="(max-aspect-ratio: 3/5)" :srcset="heroImagePortrait">
+            <img :src="heroImage" alt="" width="1280" height="720" fetchpriority="high"
+                class="absolute inset-0 w-full h-full object-cover">
+        </picture>
+        <video ref="videoRef" class="absolute inset-0 w-full h-full object-cover" preload="none" muted loop playsinline />
         <!-- Darkens the top so the transparent nav stays readable on light footage -->
         <div
             class="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-brand-text/50 to-transparent pointer-events-none">

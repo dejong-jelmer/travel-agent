@@ -421,7 +421,8 @@ class BookingTest extends TestCase
 
         Mail::assertSent(BookingConfirmationMail::class, function (BookingConfirmationMail $mail) {
             // Anchor on the travelers heading: the greeting above it already names the main booker.
-            $mail->assertSeeInOrderInHtml(['Reizigers (4 personen)', 'Charlie Tester', 'Alpha Tester', 'Bravo Tester', 'Delta Tester']);
+            $mail->assertSeeInOrderInHtml(['Reizigers', 'Charlie Tester', 'Alpha Tester', 'Bravo Tester', 'Delta Tester']);
+            $mail->assertSeeInOrderInText(['== Reizigers ==', '1. Charlie Tester', '2. Alpha Tester', '3. Bravo Tester', '4. Delta Tester']);
 
             return true;
         });
@@ -437,7 +438,8 @@ class BookingTest extends TestCase
 
         Mail::assertSent(AdminBookingNotificationMail::class, function (AdminBookingNotificationMail $mail) {
             // Anchor on the travelers heading: the main booker block above it already shows the name.
-            $mail->assertSeeInOrderInHtml(['Alle Reizigers', 'Charlie Tester', 'Alpha Tester', 'Bravo Tester', 'Delta Tester']);
+            $mail->assertSeeInOrderInHtml(['Reizigers', '4 personen', 'Charlie Tester', 'Alpha Tester', 'Bravo Tester', 'Delta Tester']);
+            $mail->assertSeeInOrderInText(['== Reizigers ==', '1. Charlie Tester', '2. Alpha Tester', '3. Bravo Tester', '4. Delta Tester']);
 
             return true;
         });

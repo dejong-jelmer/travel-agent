@@ -11,8 +11,10 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
 
 <template>
     <section id="contact" class="relative overflow-hidden bg-brand-primary scroll-mt-[120px]">
+        <!-- The decorative question mark comes from CSS, so it is not part of the page text. aria-hidden also keeps
+             the generated content from screen readers. -->
         <span aria-hidden="true"
-            class="pointer-events-none select-none absolute -top-24 right-52 font-serif leading-none text-white/[0.045] text-[20rem] laptop:text-[28rem]">?</span>
+            class="pointer-events-none select-none absolute -top-24 right-52 font-serif leading-none text-white/[0.045] text-[20rem] laptop:text-[28rem] before:content-['?']"></span>
 
         <div
             class="relative z-10 max-w-screen-wide laptop:max-w-screen-desktop mx-auto px-6 laptop:px-8 pt-20 tablet:pt-28">
@@ -82,7 +84,11 @@ const { form, errors, honeypot, submit, resetObject } = useContactForm()
                     </div>
                 </div>
 
-                <VueHoneypot ref="honeypot" />
+                <!-- The honeypot field that bots fill in. vue-honeypot hides it from view itself; the wrapper also keeps
+                     its "Name" label from screen readers and search snippets, and stays out of the layout like the field. -->
+                <div aria-hidden="true" data-nosnippet class="absolute">
+                    <VueHoneypot ref="honeypot" />
+                </div>
 
                 <div class="flex justify-end mt-8">
                     <Button>{{ t('forms.contact.submit_button') }} →</Button>

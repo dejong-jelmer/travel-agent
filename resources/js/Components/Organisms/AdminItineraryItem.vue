@@ -1,9 +1,6 @@
 <script setup>
 import { Camera, BedDouble, AlertTriangle, Info } from '@lucide/vue';
 import { ref } from 'vue'
-import { useMq } from 'vue3-mq'
-
-const mq = useMq()
 
 // Rendered image width: w-48 from tablet on, below that the full content column, which on the trip page is the
 // viewport minus the page padding (px-4), the card border and padding (p-6), the day label (w-20) and the gap (gap-4).

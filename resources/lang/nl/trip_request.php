@@ -4,7 +4,6 @@ return [
     // Page titles
     'title_index' => 'Aanvragen',
     'title_edit' => 'Aanvragen bewerken',
-    'thanks_page_title' => 'Aanvraag ontvangen',
 
     // Flash messages
     'updated' => 'Aanvraag is succesvol aangepast.',
@@ -33,9 +32,9 @@ return [
     // Mail - Confirmation to requester
     'mail' => [
         'confirmation_subject' => 'Je aanvraag voor :trip is binnen',
+        'confirmation_title' => 'Je aanvraag is binnen',
         'confirmation_greeting' => 'Beste :name,',
-        'confirmation_intro' => 'Bedankt voor je aanvraag voor :trip. Ik heb je bericht goed ontvangen en neem binnen twee werkdagen persoonlijk contact met je op - via de telefoon als je een nummer hebt ingevuld, anders per e-mail.',
-        'confirmation_next_steps' => 'In dat gesprek kijken we samen naar welke periode het beste past, wat je voorkeuren zijn, en wat deze reis voor jou bijzonder kan maken. Neem gerust de tijd om al je vragen, wensen en eventuele bedenkingen op te schrijven; hoe meer ik weet, hoe beter ik de reis voor jou kan inrichten.',
+        'confirmation_intro' => 'Bedankt voor je aanvraag voor :trip. Ik heb je bericht goed ontvangen en neem zo snel mogelijk contact met je op.',
         'confirmation_summary_header' => 'Wat je hebt aangevraagd',
         'confirmation_summary_intro' => 'Voor de zekerheid hieronder een overzicht van de gegevens die je aan me hebt doorgegeven. Klopt er iets niet, of wil je nog iets aanvullen? Stuur me gewoon een berichtje terug, dan pas ik het aan voordat ik je terugbel.',
         'confirmation_what_to_expect_header' => 'Wat kun je van het gesprek verwachten?',
@@ -43,7 +42,6 @@ return [
         'confirmation_what_to_expect_2' => 'We kijken samen naar de prijsindicatie en wat er wel en niet bij de reis is inbegrepen.',
         'confirmation_what_to_expect_3' => 'Je krijgt ruim de gelegenheid om vragen te stellen - er is geen verplichting om direct te boeken.',
         'confirmation_question' => 'Heb je in de tussentijd nog een vraag of wil je iets toevoegen aan je aanvraag? Je mag me altijd bellen of gewoon op deze e-mail antwoorden.',
-        'confirmation_phone_label' => 'Telefoon: ',
         'confirmation_closing' => 'Tot snel,',
 
         // Mail - Notification to owner
@@ -52,7 +50,6 @@ return [
         'notification_subheader' => 'Reis: :trip',
         'notification_received_at' => 'Ontvangen op',
 
-        'notification_section_trip' => 'Reis',
         'notification_section_contact' => 'Contactgegevens',
         'notification_section_preferences' => 'Reisvoorkeuren',
         'notification_section_notes' => 'Bijzonderheden',

@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, onUnmounted } from 'vue';
+import { onMounted, onUnmounted, watch } from 'vue';
 
 const props = defineProps({
     open: {
@@ -14,8 +14,20 @@ const handleEscape = (e) => {
     }
 };
 
+// Keeps the page behind the modal from scrolling. On the html element, not the body: its overflow-x (app.css) makes
+// it the scroll container of the page. The gutter keeps the page from shifting when the scrollbar disappears.
+const lockScroll = (locked) => {
+    document.documentElement.style.overflow = locked ? 'hidden' : '';
+    document.documentElement.style.scrollbarGutter = locked ? 'stable' : '';
+};
+
+watch(() => props.open, lockScroll, { immediate: true });
+
 onMounted(() => document.addEventListener('keydown', handleEscape));
-onUnmounted(() => document.removeEventListener('keydown', handleEscape));
+onUnmounted(() => {
+    document.removeEventListener('keydown', handleEscape);
+    lockScroll(false);
+});
 
 const emit = defineEmits(["close"]);
 

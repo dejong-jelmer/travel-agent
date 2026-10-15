@@ -37,6 +37,7 @@ class AdminBookingFailedMail extends Mailable
     {
         return new Content(
             view: 'emails.admin.booking-failed',
+            text: 'emails.text.admin.booking-failed',
         );
     }
 

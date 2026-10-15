@@ -36,7 +36,8 @@ class AdminBookingNotificationMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.admin.booking-notification'
+            view: 'emails.admin.booking-notification',
+            text: 'emails.text.admin.booking-notification',
         );
     }
 

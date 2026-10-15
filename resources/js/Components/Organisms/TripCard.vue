@@ -4,7 +4,18 @@ import placeholder from "@/../images/placeholder.webp";
 import { ArrowRight, Moon, TrainFront } from "@lucide/vue";
 
 // The trip comes with travel_mode ({ value: 'night_train' or 'day_train', label }), see Trip::travelMode()
-const props = defineProps({ trip: Object });
+const props = defineProps({
+    trip: Object,
+    // Eager for a card that is in view when the page opens, such as the first one on the trips page
+    loading: {
+        type: String,
+        default: 'lazy',
+    },
+});
+
+// Rendered width of the card: the full width (or most of it, in the slider) on phones, two side by side on tablets,
+// and from laptop on three in a row of at most about 420px each
+const IMAGE_SIZES = '(min-width: 900px) 420px, (min-width: 600px) 50vw, 100vw';
 
 </script>
 <template>
@@ -14,8 +25,10 @@ const props = defineProps({ trip: Object });
 
         <!-- Image, positioned absolutely: in the flex column a taller photo would otherwise stretch the 16/10 box -->
         <div class="relative aspect-[16/10]">
-            <img :src="trip.hero_image?.public_url || placeholder" :alt="trip.name"
-                class="absolute inset-0 w-full h-full object-cover" loading="lazy" />
+            <ResponsiveImage v-if="trip.hero_image" :image="trip.hero_image" :sizes="IMAGE_SIZES" :alt="trip.name"
+                :loading="loading" class="absolute inset-0 w-full h-full object-cover" />
+            <img v-else :src="placeholder" :alt="trip.name" width="600" height="600"
+                class="absolute inset-0 w-full h-full object-cover" :loading="loading" />
             <PriceBadge class="absolute top-3 right-3" :price="trip.price_formatted" :expected="trip.is_expected"
                 :expected-label="$t('trip_card.expected')" />
         </div>
