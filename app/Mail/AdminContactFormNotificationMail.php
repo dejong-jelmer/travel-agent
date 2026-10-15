@@ -37,6 +37,7 @@ class AdminContactFormNotificationMail extends Mailable
     {
         return new Content(
             view: 'emails.admin.contact-form-notification',
+            text: 'emails.text.admin.contact-form-notification',
             with: ['contact' => $this->contact]
         );
     }

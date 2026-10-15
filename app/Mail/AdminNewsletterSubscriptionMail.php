@@ -36,7 +36,8 @@ class AdminNewsletterSubscriptionMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.admin.newsletter-subscription-notification'
+            view: 'emails.admin.newsletter-subscription-notification',
+            text: 'emails.text.admin.newsletter-subscription-notification',
         );
     }
 
