@@ -75,6 +75,7 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                             </div>
                         </div>
                         <div class="flex space-x-2">
+                            <IconLink type="info" icon="Route" :href="route('admin.bookings.travel-plan', booking)" v-tippy="'Reisplan'" />
                             <IconLink type="info" icon="Pencil" :href="route('admin.bookings.edit', booking)"
                                 v-tippy="t('admin.booking.actions.edit')" />
                             <IconLink type="delete" icon="Trash2" :href="route('admin.bookings.destroy', booking)"

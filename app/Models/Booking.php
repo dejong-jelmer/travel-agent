@@ -8,6 +8,8 @@ use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\Sortable;
+use App\Travel\Models\Journey;
+use App\Travel\Models\Stay;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -261,6 +263,23 @@ class Booking extends Model
     public function adults(): HasMany
     {
         return $this->travelers()->where('type', TravelerType::Adult->value);
+    }
+
+    /*  Travel relations */
+    /**
+     * @return HasMany<Journey, $this>
+     */
+    public function journeys(): HasMany
+    {
+        return $this->hasMany(Journey::class)->orderBy('position');
+    }
+
+    /**
+     * @return HasMany<Stay, $this>
+     */
+    public function stays(): HasMany
+    {
+        return $this->hasMany(Stay::class)->orderBy('position');
     }
 
     /**

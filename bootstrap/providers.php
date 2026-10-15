@@ -5,4 +5,5 @@ return [
     App\Providers\ContactDetailsServiceProvider::class,
     App\Providers\EventServiceProvider::class,
     Mailjet\LaravelMailjet\MailjetServiceProvider::class,
+    App\Travel\TravelServiceProvider::class,
 ];
