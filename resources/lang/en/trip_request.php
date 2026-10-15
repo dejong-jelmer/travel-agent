@@ -30,7 +30,7 @@ return [
         'confirmation_subject' => 'Your request for :trip has been received',
         'confirmation_title' => 'Your request has been received',
         'confirmation_greeting' => 'Dear :name,',
-        'confirmation_intro' => 'Thank you for your request for :trip. I have received your message and will get in touch as soon as posible.',
+        'confirmation_intro' => 'Thank you for your request for :trip. I have received your message and will get in touch as soon as possible.',
         'confirmation_summary_header' => 'What you requested',
         'confirmation_summary_intro' => 'Just to be sure, here is a summary of the details you shared with me. If something is incorrect or you would like to add anything, simply reply to this email and I will update it before I call you back.',
         'confirmation_what_to_expect_header' => 'What to expect from our call',

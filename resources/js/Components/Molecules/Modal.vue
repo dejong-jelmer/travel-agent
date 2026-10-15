@@ -21,7 +21,7 @@ const lockScroll = (locked) => {
     document.documentElement.style.scrollbarGutter = locked ? 'stable' : '';
 };
 
-watch(() => props.open, lockScroll);
+watch(() => props.open, lockScroll, { immediate: true });
 
 onMounted(() => document.addEventListener('keydown', handleEscape));
 onUnmounted(() => {
