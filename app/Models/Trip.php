@@ -257,15 +257,70 @@ class Trip extends Model
     }
 
     /**
-     * Get the lowest base price per person across all price rows.
+     * Get the lowest price per person in cents: across all price rows for an individual trip, across the departures
+     * a visitor can still join for a group trip.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<float|null, never>
      */
     protected function startingFromPrice(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->prices->min('base_price_pp')
+            get: fn () => $this->format === TripFormat::Group
+                ? $this->startingFromDeparturePrice()
+                : $this->prices->min('base_price_pp')
         );
+    }
+
+    /**
+     * The lowest price per person of the departures shown on the site. A departure without a price of its own
+     * counts with the price of the trip for its day of departure. Full departures are left out, so the price is one
+     * a visitor can still get; when every departure is full, the lowest of those is shown.
+     */
+    private function startingFromDeparturePrice(): ?int
+    {
+        $available = [];
+        $full = [];
+
+        /** @var Departure $departure */
+        foreach ($this->visibleDepartures as $departure) {
+            $price = $departure->price_per_person ?? $this->priceRowFor($departure)?->base_price_pp;
+
+            if ($price === null) {
+                continue;
+            }
+
+            if ($departure->isFull()) {
+                $full[] = (int) $price;
+            } else {
+                $available[] = (int) $price;
+            }
+        }
+
+        return match (true) {
+            $available !== [] => min($available),
+            $full !== [] => min($full),
+            default => null,
+        };
+    }
+
+    /**
+     * The price row of the trip that is valid on the day a departure leaves, the most recent one first, as
+     * PriceCalculatorService picks it.
+     */
+    private function priceRowFor(Departure $departure): ?TripPrice
+    {
+        $match = null;
+
+        /** @var TripPrice $price */
+        foreach ($this->prices as $price) {
+            $isValid = $price->valid_from->lte($departure->departs_on) && $price->valid_until->gte($departure->departs_on);
+
+            if ($isValid && ($match === null || $price->valid_from->gt($match->valid_from))) {
+                $match = $price;
+            }
+        }
+
+        return $match;
     }
 
     /**
@@ -345,6 +400,26 @@ class Trip extends Model
     public function departures(): HasMany
     {
         return $this->hasMany(Departure::class)->orderBy('departs_on');
+    }
+
+    /**
+     * The departures the public site shows, with their participant counts: not cancelled and still to leave.
+     *
+     * @return HasMany<Departure, $this>
+     */
+    public function visibleDepartures(): HasMany
+    {
+        return $this->departures()->visibleToVisitors()->withParticipantCounts();
+    }
+
+    /**
+     * Scope a query to load what the starting price of a trip is made of, so a list of trips does not run a query
+     * per trip for it.
+     */
+    #[Scope]
+    protected function withStartingPrice(Builder $query): void
+    {
+        $query->with(['prices', 'visibleDepartures']);
     }
 
     public function tripRequests(): HasMany

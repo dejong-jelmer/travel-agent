@@ -47,8 +47,8 @@ class HomeController extends Controller
         return Inertia::render('Home', [
             'title' => $seo['title'],
             // The trip cards have no use for the gallery paths, which would fetch every trip's gallery
-            'trips' => Trip::with(['destinations', 'heroImage', 'prices'])->withTravelMode()->published()->featured()
-                ->orderBy('published_at', 'desc')->get()->append(['travel_mode', 'type_display', 'format_display'])->makeHidden('image_paths'),
+            'trips' => Trip::with(['destinations', 'heroImage'])->withStartingPrice()->withTravelMode()->published()->featured()
+                ->orderBy('published_at', 'desc')->get()->append(['travel_mode', 'type_display', 'format_display'])->makeHidden(['image_paths', 'visibleDepartures']),
             // The published testimonials not tied to a trip, ready for display; they take the place of the quote
             'testimonials' => Testimonial::general()->forDisplay()->get()
                 ->map(fn (Testimonial $testimonial) => $testimonial->toDisplay())

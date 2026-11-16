@@ -61,7 +61,8 @@ class Breadcrumbs
             'admin.trips.departures.index' => [
                 self::dashboardCrumb(),
                 self::tripCrumb(),
-                ['label' => request()->route('trip')->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [request()->route('trip')]],
+                // The slug, not the trip itself: the trail is sent to the page, which would serialize the whole trip
+                ['label' => request()->route('trip')->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [request()->route('trip')->slug]],
                 ['label' => __('departure.title_index'), 'route' => null],
             ],
 

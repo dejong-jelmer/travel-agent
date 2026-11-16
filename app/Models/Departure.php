@@ -94,6 +94,15 @@ class Departure extends Model
     }
 
     /**
+     * Scope a query to the departures the public site shows: not cancelled and still to leave.
+     */
+    #[Scope]
+    protected function visibleToVisitors(Builder $query): void
+    {
+        $query->whereNull('cancelled_at')->whereDate('departs_on', '>', today());
+    }
+
+    /**
      * Scope a query to load the participant counts with the departures, as occupied_seats and
      * confirmed_participants, in the same query. Use it wherever more than one departure is shown: without it
      * occupiedSeats() and confirmedParticipants() run a query per departure.
