@@ -9,6 +9,7 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Testimonial;
 use App\Models\Trip;
 use App\Services\CountryService;
+use App\Services\DepartureListing;
 use App\Services\ItineraryService;
 use App\Services\OgImageService;
 use App\Services\TripContentParser;
@@ -25,6 +26,7 @@ class TripController extends Controller
         private readonly OgImageService $ogImages,
         private readonly TripContentParser $contentParser,
         private readonly ItineraryService $itineraries,
+        private readonly DepartureListing $departures,
     ) {}
 
     /**
@@ -50,7 +52,7 @@ class TripController extends Controller
      */
     public function show(Trip $trip): Response
     {
-        $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items']);
+        $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items', 'prices', 'visibleDepartures']);
 
         $breadcrumbs = BreadcrumbTrail::home()
             ->add(__('trip.title_index'), route('trips.index'))
@@ -70,7 +72,10 @@ class TripController extends Controller
             'title' => $seo['title'],
             // The description is only sent split into sections, the highlights and the itinerary only ready for
             // display, so none of them goes along twice
-            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries'])->append(['type_display', 'format_display']),
+            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries', 'visibleDepartures'])->append(['type_display', 'format_display']),
+            // The departures of a group trip that can still be requested; empty for an individual trip
+            'departures' => $this->departures->forTrip($trip),
+            'departureFees' => $this->departures->feesPerBooking(),
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
             'itinerary' => $this->itineraries->forDisplay($trip),

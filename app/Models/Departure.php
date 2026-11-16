@@ -182,6 +182,23 @@ class Departure extends Model
     }
 
     /**
+     * The last day a visitor can request a place: the trip's minimum number of days in advance before the day of
+     * departure, and at the latest the day before it.
+     */
+    public function lastRequestDate(?int $advanceDays): Carbon
+    {
+        return $this->departs_on->copy()->subDays(max(1, (int) $advanceDays));
+    }
+
+    /**
+     * Whether the public site still offers this departure, given the trip's minimum number of days in advance.
+     */
+    public function acceptsRequests(?int $advanceDays): bool
+    {
+        return ! $this->isCancelled() && today()->lte($this->lastRequestDate($advanceDays));
+    }
+
+    /**
      * Whether the admin still has to decide if the departure goes ahead.
      */
     public function awaitsDecision(): bool

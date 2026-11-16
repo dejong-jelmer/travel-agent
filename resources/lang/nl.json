@@ -1136,6 +1136,21 @@
             "steps-2": "Ik neem contact met je op om je wensen door te nemen",
             "steps-3": "Je ontvangt een persoonlijk reisvoorstel",
             "steps-4": "Bij akkoord regel ik alles en zorg ik dat je tijdig alle reisdocumenten in handen hebt"
+        },
+        "departures": {
+            "title": "Vertrekdata",
+            "intro": "Je reist op een van deze data, samen met andere reizigers.",
+            "none": "Er staan nu geen vertrekdata gepland.",
+            "per_person": "per persoon",
+            "single_supplement": "eenpersoonskamer + {price}",
+            "guaranteed": "Vertrek gegarandeerd",
+            "minimum": "Gaat door vanaf {min} deelnemers.",
+            "decision": "Uiterlijk {date} hoor je of de reis doorgaat.",
+            "seats_left": "Nog {count} plaats | Nog {count} plaatsen",
+            "full": "Vol",
+            "full_interest": "Wil je horen als er een plek vrijkomt?",
+            "cta": "Doe een aanvraag",
+            "fees": "Prijzen zijn per persoon. Per boeking komt daar {amount} bij: {items}."
         }
     },
     "trip_request": {

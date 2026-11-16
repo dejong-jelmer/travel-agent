@@ -272,7 +272,7 @@ class Trip extends Model
     }
 
     /**
-     * The lowest price per person of the departures shown on the site. A departure without a price of its own
+     * The lowest price per person of the departures a visitor can still request. A departure without a price of its own
      * counts with the price of the trip for its day of departure. Full departures are left out, so the price is one
      * a visitor can still get; when every departure is full, the lowest of those is shown.
      */
@@ -281,8 +281,7 @@ class Trip extends Model
         $available = [];
         $full = [];
 
-        /** @var Departure $departure */
-        foreach ($this->visibleDepartures as $departure) {
+        foreach ($this->requestableDepartures() as $departure) {
             $price = $departure->price_per_person ?? $this->priceRowFor($departure)?->base_price_pp;
 
             if ($price === null) {
@@ -410,6 +409,26 @@ class Trip extends Model
     public function visibleDepartures(): HasMany
     {
         return $this->departures()->visibleToVisitors()->withParticipantCounts();
+    }
+
+    /**
+     * The departures a visitor can still request a place on: the visible ones that leave no sooner than the trip's
+     * minimum number of days in advance.
+     *
+     * @return \Illuminate\Support\Collection<int, Departure>
+     */
+    public function requestableDepartures(): \Illuminate\Support\Collection
+    {
+        $requestable = [];
+
+        /** @var Departure $departure */
+        foreach ($this->visibleDepartures as $departure) {
+            if ($departure->acceptsRequests($this->min_advance_days)) {
+                $requestable[] = $departure;
+            }
+        }
+
+        return collect($requestable);
     }
 
     /**

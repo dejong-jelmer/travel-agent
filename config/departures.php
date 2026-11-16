@@ -38,4 +38,17 @@ return [
 
     'decision_warning_days' => 7,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Few seats
+    |--------------------------------------------------------------------------
+    |
+    | The public site names the number of places left on a departure only
+    | when it is this number or fewer. Above it nothing is said, so a
+    | departure with room does not read as a countdown.
+    |
+    */
+
+    'few_seats_threshold' => 4,
+
 ];

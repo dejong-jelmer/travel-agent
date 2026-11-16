@@ -33,6 +33,16 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: see TripDepartures. The departures of a group trip that can still be requested, empty for an individual trip
+    departures: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: { total, items }, what a booking on a departure pays once on top of the price per person
+    departureFees: {
+        type: Object,
+        default: () => ({ total: 0, items: {} })
+    },
     tripItems: Object,
     practicalSections: Object,
     travelInfoSections: Object,
@@ -43,6 +53,15 @@ const { t } = useI18n()
 
 // Modal
 const requestModalOpen = ref(false)
+
+// A group trip is requested on one of its departures; the one a visitor picked in the list is kept for the form
+const isGroupTrip = computed(() => props.trip.format === 'group')
+const requestedDeparture = ref(null)
+
+function requestDeparture(departure) {
+    requestedDeparture.value = departure
+    requestModalOpen.value = true
+}
 
 // LightBox, opening from the gallery buttons
 const lightboxRef = ref(null)
@@ -224,6 +243,10 @@ const contactUrl = computed(() => {
                         </HorizontalSlider>
                         <LightBox ref="lightboxRef" :images="trip.images" />
                     </BaseCard>
+
+                    <!-- The departures of a group trip: the dates are what a visitor needs first to decide -->
+                    <TripDepartures v-if="isGroupTrip" v-reveal :departures="departures" :fees="departureFees"
+                        @request="requestDeparture" />
 
                     <!-- Other description sections, a card each -->
                     <div v-if="storySections.length" class="space-y-8">
