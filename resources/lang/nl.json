@@ -810,7 +810,15 @@
             "adult_singular": "volwassene",
             "adult_plural": "volwassenen",
             "child_singular": "kind",
-            "child_plural": "kinderen"
+            "child_plural": "kinderen",
+            "choose_departure": "Kies een vertrek",
+            "no_departure_chosen": "Geen vertrek gekozen",
+            "no_departures": "Deze groepsreis heeft geen vertrekken waarop je nog kunt boeken. Voeg eerst een vertrek toe.",
+            "manage_departures": "Vertrekken beheren",
+            "seats_left": "nog {count} plek vrij | nog {count} plekken vrij",
+            "full": "vol",
+            "no_price": "geen prijs ingesteld",
+            "group_notice": "Dit is een groepsreis: de datums komen van het vertrek."
         },
         "contact": {
             "heading": "Contactgegevens",
@@ -879,7 +887,13 @@
             "final_price": "Eindprijs (€)",
             "final_price_help": "Laat leeg om berekende prijs te gebruiken",
             "display_price": "Verkoopprijs",
-            "override_active": "De berekende prijs wordt overschreven. Toeslagen en fondsen zitten in dit bedrag."
+            "override_active": "De berekende prijs wordt overschreven. Toeslagen en fondsen zitten in dit bedrag.",
+            "departure_heading": "Prijs van het vertrek",
+            "departure_intro": "Een groepsreis verkoop je tegen de vaste prijs van het vertrek. Kostenposten en marge horen bij het vertrek, niet bij de boeking.",
+            "travelers_total": "{count} × prijs per persoon",
+            "single_rooms": "Eenpersoonskamers",
+            "single_rooms_help": "Per kamer geldt de toeslag van {amount}. Maximaal één per volwassene.",
+            "single_rooms_total": "{count} × toeslag eenpersoonskamer"
         }
     },
     "hero": {
@@ -927,7 +941,11 @@
             "missing_cost_items": "Voeg ten minste één kostenpost toe.",
             "invalid_amount": "Voer een geldig bedrag in.",
             "invalid_quantity": "Voer een geldig aantal in (1 t/m 20).",
-            "invalid_margin": "Voer een marge in tussen 0 en 95%."
+            "invalid_margin": "Voer een marge in tussen 0 en 95%.",
+            "missing_departure": "Kies een vertrek.",
+            "not_enough_seats": "Op dit vertrek is nog plek voor {available}, je boekt voor {requested}.",
+            "departure_without_price": "Dit vertrek heeft geen prijs. Stel eerst een prijs in op het vertrek of op de reis.",
+            "invalid_single_rooms": "Kies 0 tot {max} eenpersoonskamers."
         },
         "fields": {
             "first_name": "Voornaam",
@@ -1617,8 +1635,11 @@
                     "price_per_person": "Prijs per persoon",
                     "single_supplement": "Eenpersoonstoeslag",
                     "total": "Totaal",
-                    "no_cost_items": "Geen kostenposten vastgelegd voor deze boeking."
-                }
+                    "no_cost_items": "Geen kostenposten vastgelegd voor deze boeking.",
+                    "group_subtitle": "De vaste prijs van het vertrek, zoals vastgelegd bij deze boeking"
+                },
+                "departure": "Vertrek",
+                "departure_link": "Bekijk het vertrek"
             },
             "create": {
                 "title": "Nieuwe boeking aanmaken",

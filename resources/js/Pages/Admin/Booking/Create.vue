@@ -21,6 +21,11 @@ function onTripChange(id) {
         Object.assign(selectedTrip, found)
         booking.booking.trip = found
         booking.booking.departure_date = null
+        booking.booking.return_date = null
+        // The departure belongs to the trip that was selected before
+        booking.booking.departure_id = null
+        booking.booking.departure = null
+        booking.booking.single_rooms = null
     }
 }
 </script>

@@ -25,7 +25,7 @@ export function useBookingSteps(booking) {
         {
             id: BOOKING_STEPS.TRIP,
             label: i18n.global.t('booking_step_labels.trip'),
-            fields: ["departure_date", "return_date"],
+            fields: ["departure_date", "return_date", "departure_id", "participants"],
             validate: () => validateTripStep(booking.value),
         },
         {
@@ -49,6 +49,7 @@ export function useBookingSteps(booking) {
                 "margin_amount",
                 "fee_per_person",
                 "final_price",
+                "single_rooms",
             ],
             validate: () => validatePriceStep(booking.value),
         },

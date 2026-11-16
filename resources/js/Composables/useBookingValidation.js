@@ -13,6 +13,7 @@
 import { useDateFormatter } from "@/Composables/useDateFormatter.js";
 import { emailRegex, phoneRegex, postalCodeRegex } from "@/Validators/regex.js";
 import i18n from "@/plugins/i18n.js";
+import { isGroupBooking, effectiveSingleRooms } from "@/Composables/useDeparturePrice.js";
 
 const { isValidDate } = useDateFormatter();
 
@@ -295,6 +296,27 @@ export function useBookingValidation() {
      */
     function validatePriceStep(bookingData) {
         const errors = {};
+
+        // A booking on a departure has no cost items or margin, only single rooms and an optional final price
+        if (isGroupBooking(bookingData)) {
+            const adults = Number(bookingData?.participants?.adults) || 0;
+            const singleRooms = effectiveSingleRooms(bookingData);
+
+            if (bookingData?.departure?.price_per_person == null) {
+                errors["departure_id"] = t("validation.errors.departure_without_price");
+            }
+            if (!Number.isInteger(singleRooms) || singleRooms < 0 || singleRooms > adults) {
+                errors["single_rooms"] = t("validation.errors.invalid_single_rooms", { max: adults });
+            }
+            if (bookingData?.final_price !== null && bookingData?.final_price !== "" && bookingData?.final_price !== undefined) {
+                const finalPrice = Number(bookingData.final_price);
+                if (!Number.isFinite(finalPrice) || finalPrice < 0) {
+                    errors["final_price"] = t("validation.errors.invalid_amount");
+                }
+            }
+
+            return errors;
+        }
         const items = bookingData?.cost_items ?? [];
 
         if (items.length === 0) {
@@ -375,6 +397,24 @@ export function useBookingValidation() {
 
         if (!bookingData) {
             return { trip: t("validation.errors.missing_booking_data") };
+        }
+
+        // A group trip is booked on a departure, which brings the dates and has a limited number of places
+        if (isGroupBooking(bookingData)) {
+            if (!bookingData.departure_id) {
+                errors["departure_id"] = t("validation.errors.missing_departure");
+
+                return errors;
+            }
+
+            const available = bookingData.departure?.available_seats;
+            const requested = (Number(bookingData.participants?.adults) || 0) + (Number(bookingData.participants?.children) || 0);
+
+            if (Number.isInteger(available) && requested > available) {
+                errors["participants"] = t("validation.errors.not_enough_seats", { available, requested });
+            }
+
+            return errors;
         }
 
         if (!bookingData.departure_date) {

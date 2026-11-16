@@ -24,6 +24,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
+use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
 class GroupBookingTest extends TestCase
@@ -539,6 +540,77 @@ class GroupBookingTest extends TestCase
         ]))->assertSessionHasNoErrors();
 
         $this->assertSame(0, Booking::firstOrFail()->single_rooms);
+    }
+
+    // The wizard and the booking pages
+
+    public function test_wizard_gets_the_departures_of_a_group_trip_that_can_still_be_booked(): void
+    {
+        $this->occupy(2, Status::Confirmed);
+        $fallsBack = Departure::factory()->for($this->trip)->create([
+            'departs_on' => today()->addMonths(4),
+            'returns_on' => today()->addMonths(4)->addDays(7),
+            'price_per_person' => null,
+            'single_supplement' => null,
+        ]);
+        Departure::factory()->for($this->trip)->cancelled()->create();
+        Departure::factory()->for($this->trip)->create(['departs_on' => today(), 'returns_on' => today()->addDays(7)]);
+        $individual = Trip::factory()->create();
+        $tripPrice = $this->trip->prices()->whereDate('valid_from', '<=', $fallsBack->departs_on)->whereDate('valid_until', '>=', $fallsBack->departs_on)->firstOrFail();
+
+        $this->get(route('admin.bookings.create'))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Booking/Create')
+                ->where('trips', function ($trips) use ($individual, $fallsBack, $tripPrice) {
+                    $trips = collect($trips)->keyBy('id');
+                    $departures = collect($trips[$this->trip->id]['departures']);
+
+                    return $trips[$this->trip->id]['format'] === 'group'
+                        && $trips[$individual->id]['departures'] === []
+                        && $departures->pluck('id')->all() === [$this->departure->id, $fallsBack->id]
+                        && $departures[0]['available_seats'] === 4
+                        && $departures[0]['booking_price_per_person'] === 120000
+                        && $departures[0]['booking_single_supplement'] === 15000
+                        // No price of its own: the price of the trip for the day of departure
+                        && $departures[1]['price_per_person'] === null
+                        && $departures[1]['booking_price_per_person'] === (int) $tripPrice->base_price_pp
+                        && $departures[1]['booking_single_supplement'] === (int) $tripPrice->single_supplement;
+                })
+        );
+    }
+
+    public function test_wizard_marks_a_departure_without_any_price(): void
+    {
+        $this->trip->prices()->delete();
+        $this->departure->update(['price_per_person' => null]);
+
+        $this->get(route('admin.bookings.create'))->assertInertia(
+            fn (AssertableInertia $page) => $page->where('trips', function ($trips) {
+                $departure = collect($trips)->firstWhere('id', $this->trip->id)['departures'][0];
+
+                return $departure['booking_price_per_person'] === null && $departure['booking_single_supplement'] === null;
+            })
+        );
+    }
+
+    public function test_booking_pages_get_the_departure_and_the_price_snapshot(): void
+    {
+        $booking = $this->createBooking(adults: 1);
+
+        $this->get(route('admin.bookings.show', $booking))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('booking.departure_id', $this->departure->id)
+                ->where('booking.departure.id', $this->departure->id)
+                ->where('booking.price_per_person', 120000)
+                ->where('booking.single_supplement', 15000)
+                ->where('booking.single_rooms', 1)
+                ->where('booking.display_price', 135000)
+        );
+        $this->get(route('admin.bookings.edit', $booking))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('db_booking.departure.id', $this->departure->id)
+                ->where('db_booking.single_rooms', 1)
+        );
     }
 
     // Helpers

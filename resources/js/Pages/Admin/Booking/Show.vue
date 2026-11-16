@@ -1,9 +1,9 @@
 <script setup>
 import { computed } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { usePage } from '@inertiajs/vue3';
+import { Link, usePage } from '@inertiajs/vue3';
 import { FileText, User, Users, Activity, Receipt } from '@lucide/vue';
-import { feesAndFundsEntries, sumCostItems, sumFeesAndFunds } from '@/Support/bookingPrice.js';
+import { calculateDeparturePrice, feesAndFundsEntries, sumCostItems, sumFeesAndFunds } from '@/Support/bookingPrice.js';
 import { formatCents } from '@/Support/money.js';
 
 const { t } = useI18n();
@@ -56,6 +56,16 @@ const percentageMarginCents = computed(
         (props.booking.margin_amount ?? 0) -
         feeTotalCents.value,
 );
+
+// A booking on a departure of a group trip is sold at the price snapshotted on it
+const isGroup = computed(() => props.booking.departure_id !== null && props.booking.departure_id !== undefined);
+const groupTravelers = computed(() => (props.booking.total_adults ?? 0) + (props.booking.total_children ?? 0));
+const groupPrice = computed(() => calculateDeparturePrice({
+    pricePerPersonCents: props.booking.price_per_person,
+    singleSupplementCents: props.booking.single_supplement,
+    travelers: groupTravelers.value,
+    singleRooms: props.booking.single_rooms,
+}));
 
 const hasOverride = computed(() => props.booking.final_price !== null && props.booking.final_price !== undefined);
 </script>
@@ -124,6 +134,14 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.return_date') }}
                                 </dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.return_date_formatted }}</dd>
+                            </div>
+                            <div v-if="isGroup" class="px-6 py-4 grid grid-cols-3 gap-4 items-start" data-testid="departure-row">
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.departure') }}</dt>
+                                <dd class="text-sm col-span-2">
+                                    <Link :href="route('admin.departures.show', booking.departure_id)" class="text-brand-link underline">
+                                        {{ t('admin.booking.show.departure_link') }}
+                                    </Link>
+                                </dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.created_at') }}
@@ -262,10 +280,48 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                                 <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.pricing.title')
                                     }}</h2>
                             </div>
-                            <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.pricing.subtitle') }}
+                            <p class="mt-1 text-sm text-gray-700/30 pl-6">
+                                {{ isGroup ? t('admin.booking.show.pricing.group_subtitle') : t('admin.booking.show.pricing.subtitle') }}
                             </p>
                         </div>
-                        <div class="p-6 space-y-3">
+
+                        <!-- A booking on a departure: the fixed price of the departure -->
+                        <div v-if="isGroup" class="p-6 space-y-3" data-testid="group-pricing">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">
+                                    {{ t('booking_steps.price.travelers_total', { count: groupTravelers }) }} ({{ formatPrice(booking.price_per_person) }})
+                                </span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(groupPrice.baseTotalCents) }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">
+                                    {{ t('booking_steps.price.single_rooms_total', { count: booking.single_rooms }) }} ({{ formatPrice(booking.single_supplement) }})
+                                </span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(groupPrice.supplementTotalCents) }}</span>
+                            </div>
+                            <div v-for="[key, cents] in feesAndFundsRows" :key="key"
+                                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">{{ t(`booking_steps.overview.${key}`) }}</span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(cents) }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.calculated_price') }}</span>
+                                <span class="font-semibold text-gray-900" :class="{ 'line-through opacity-50': hasOverride }">
+                                    {{ formatPrice(booking.calculated_price) }}
+                                </span>
+                            </div>
+                            <div v-if="hasOverride"
+                                class="flex items-center justify-between p-3 bg-brand-accent/10 rounded-lg border border-brand-accent/30">
+                                <span class="text-sm font-medium text-brand-accent">{{ t('booking_steps.price.final_price') }}</span>
+                                <span class="font-semibold text-brand-accent">{{ formatPrice(booking.final_price) }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 bg-brand-primary/5 rounded-lg border border-brand-primary/20">
+                                <span class="text-sm font-semibold text-gray-700">{{ t('booking_steps.price.display_price') }}</span>
+                                <span class="text-lg font-bold text-brand-primary">{{ formatPrice(booking.display_price) }}</span>
+                            </div>
+                        </div>
+
+                        <div v-else class="p-6 space-y-3">
                             <div v-if="costItems.length === 0" class="text-sm text-gray-500 italic">
                                 {{ t('admin.booking.show.pricing.no_cost_items') }}
                             </div>

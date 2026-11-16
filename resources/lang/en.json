@@ -810,7 +810,15 @@
             "adult_singular": "adult",
             "adult_plural": "adults",
             "child_singular": "child",
-            "child_plural": "children"
+            "child_plural": "children",
+            "choose_departure": "Choose a departure",
+            "no_departure_chosen": "No departure chosen",
+            "no_departures": "This group trip has no departures that can still be booked. Add a departure first.",
+            "manage_departures": "Manage departures",
+            "seats_left": "{count} place left | {count} places left",
+            "full": "full",
+            "no_price": "no price set",
+            "group_notice": "This is a group trip: the dates come from the departure."
         },
         "contact": {
             "heading": "Contact details",
@@ -879,7 +887,13 @@
             "final_price": "Final price (€)",
             "final_price_help": "Leave empty to use calculated price",
             "display_price": "Sales price",
-            "override_active": "The calculated price is being overridden. Fees and funds are included in this amount."
+            "override_active": "The calculated price is being overridden. Fees and funds are included in this amount.",
+            "departure_heading": "Price of the departure",
+            "departure_intro": "A group trip is sold at the fixed price of the departure. Cost items and margin belong to the departure, not to the booking.",
+            "travelers_total": "{count} × price per person",
+            "single_rooms": "Single rooms",
+            "single_rooms_help": "Every room carries the supplement of {amount}. At most one per adult.",
+            "single_rooms_total": "{count} × single room supplement"
         }
     },
     "hero": {
@@ -927,7 +941,11 @@
             "missing_cost_items": "Add at least one cost item.",
             "invalid_amount": "Enter a valid amount.",
             "invalid_quantity": "Enter a valid quantity (1–20).",
-            "invalid_margin": "Enter a margin between 0 and 95%."
+            "invalid_margin": "Enter a margin between 0 and 95%.",
+            "missing_departure": "Choose a departure.",
+            "not_enough_seats": "This departure has room for {available} more, you are booking for {requested}.",
+            "departure_without_price": "This departure has no price. Set a price on the departure or on the trip first.",
+            "invalid_single_rooms": "Choose 0 to {max} single rooms."
         },
         "fields": {
             "first_name": "First name",
@@ -1619,8 +1637,11 @@
                     "price_per_person": "Price per person",
                     "single_supplement": "Single supplement",
                     "total": "Total",
-                    "no_cost_items": "No cost items recorded for this booking."
-                }
+                    "no_cost_items": "No cost items recorded for this booking.",
+                    "group_subtitle": "The fixed price of the departure, as recorded on this booking"
+                },
+                "departure": "Departure",
+                "departure_link": "View the departure"
             },
             "create": {
                 "title": "Create new booking",

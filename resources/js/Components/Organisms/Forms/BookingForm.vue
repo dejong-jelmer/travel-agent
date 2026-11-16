@@ -1,6 +1,7 @@
 <script setup>
 import { computed, toRef } from 'vue';
 import { useBookingSteps } from '@/Composables/useBookingSteps.js';
+import { isGroupBooking, departureBookingPayload } from '@/Composables/useDeparturePrice.js';
 import Trip from '@/Components/Organisms/BookingSteps/Trip.vue';
 import Travelers from '@/Components/Organisms/BookingSteps/Travelers.vue';
 import Contact from '@/Components/Organisms/BookingSteps/Contact.vue';
@@ -77,7 +78,7 @@ function handleSubmit() {
         return;
     }
 
-    booking.value.transform((data) => ({
+    booking.value.transform((data) => isGroupBooking(data) ? departureBookingPayload(data) : ({
         ...data,
         cost_items: (data.cost_items ?? []).map((item, index) => ({
             category: item.category,

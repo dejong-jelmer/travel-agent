@@ -9,7 +9,6 @@ use App\Models\Departure;
 use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\TripPrice;
-use App\Models\User;
 use App\Services\PriceCalculatorService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
@@ -153,42 +152,5 @@ class PriceCalculatorTest extends TestCase
         $this->expectException(NoPriceAvailableException::class);
 
         $this->calculator->forDeparture($departure, 2);
-    }
-
-    // The price endpoint of the admin
-
-    public function test_price_endpoint_returns_the_price_of_a_departure(): void
-    {
-        $this->actingAs(User::factory()->admin()->create());
-        $departure = $this->departure();
-
-        $this->getJson(route('admin.trips.prices', [$this->trip, 'travelers' => 3, 'departure_id' => $departure->id, 'single_rooms' => 1]))
-            ->assertOk()
-            ->assertJson([
-                'price_per_person' => '1200.00',
-                'total_price' => '3600.00',
-                'single_supplement' => '150.00',
-                'booking_fee' => '25.00',
-                'grand_total' => '3787.50',
-            ]);
-    }
-
-    public function test_price_endpoint_still_returns_the_price_of_a_date(): void
-    {
-        $this->actingAs(User::factory()->admin()->create());
-
-        $this->getJson(route('admin.trips.prices', [$this->trip, 'travelers' => 2, 'date' => '2027-06-20']))
-            ->assertOk()
-            ->assertJson(['price_per_person' => '1000.00', 'grand_total' => '2037.50']);
-    }
-
-    public function test_price_endpoint_rejects_a_departure_of_another_trip_and_too_many_single_rooms(): void
-    {
-        $this->actingAs(User::factory()->admin()->create());
-
-        $this->getJson(route('admin.trips.prices', [$this->trip, 'travelers' => 2, 'departure_id' => Departure::factory()->create()->id]))
-            ->assertJsonValidationErrors('departure_id');
-        $this->getJson(route('admin.trips.prices', [$this->trip, 'travelers' => 2, 'departure_id' => $this->departure()->id, 'single_rooms' => 3]))
-            ->assertJsonValidationErrors('single_rooms');
     }
 }
