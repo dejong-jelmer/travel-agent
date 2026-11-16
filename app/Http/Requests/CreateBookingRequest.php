@@ -8,6 +8,7 @@ use App\Http\Requests\Traits\ValidatesMainBooker;
 use App\Models\Departure;
 use App\Models\Setting;
 use App\Models\Trip;
+use App\Models\TripRequest;
 use App\Services\Validation\BlockedDateValidator;
 use App\Services\Validation\BookingValidationRules;
 use Carbon\Carbon;
@@ -131,6 +132,12 @@ class CreateBookingRequest extends FormRequest
             $this->dateRules(),
             [
                 'trip.id' => ['required', Rule::exists(Trip::class, 'id')],
+                // The request of the same trip the booking is made from, as long as it has no booking yet
+                'trip_request_id' => [
+                    'nullable',
+                    'integer',
+                    Rule::exists(TripRequest::class, 'id')->whereNull('booking_id')->where('trip_id', $this->input('trip.id')),
+                ],
                 'has_confirmed' => ['accepted'],
                 'has_accepted_conditions' => ['accepted'],
                 'travelers' => [

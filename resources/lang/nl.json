@@ -1601,7 +1601,9 @@
                 "seats_now": "nu {available} van {max} plekken vrij",
                 "single_room": "Eenpersoonskamer",
                 "yes": "Ja",
-                "no": "Nee"
+                "no": "Nee",
+                "make_booking": "Maak boeking",
+                "view_booking": "Bekijk de gekoppelde boeking"
             },
             "interest_only": "Vertrek was vol: wil horen als er een plek vrijkomt",
             "interest_short": "wacht op plek"
@@ -1686,7 +1688,9 @@
             "create": {
                 "title": "Nieuwe boeking aanmaken",
                 "subtitle": "Selecteer een reis en vul de boekingsgegevens in.",
-                "select_trip": "Selecteer een reis"
+                "select_trip": "Selecteer een reis",
+                "from_request": "Je maakt een boeking vanuit de aanvraag van {name}. Wat de aanvraag vertelt, is al ingevuld; de boeking wordt na opslaan aan de aanvraag gekoppeld.",
+                "view_request": "Bekijk de aanvraag"
             }
         },
         "destinations": {

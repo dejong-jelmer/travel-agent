@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { usePage } from '@inertiajs/vue3';
 import { formatDate } from '@/Departures/format.js';
 import { formatCents } from '@/Support/money.js';
+import { applyDeparture, canBookDeparture } from '@/Composables/useDeparturePrice.js';
 
 // The departures of a group trip to book on, instead of free dates. Picking one sets the dates of the booking.
 const props = defineProps({
@@ -13,23 +14,10 @@ const page = usePage();
 const locale = computed(() => page.props.locale);
 const departures = computed(() => props.booking.trip?.departures ?? []);
 
-const canBeBooked = (departure) => departure.available_seats > 0 && departure.booking_price_per_person !== null;
+const canBeBooked = canBookDeparture;
 
 function pick(departure) {
-    if (!canBeBooked(departure)) return;
-
-    props.booking.departure_id = departure.id;
-    props.booking.departure = {
-        id: departure.id,
-        departs_on: departure.departs_on,
-        returns_on: departure.returns_on,
-        available_seats: departure.available_seats,
-        price_per_person: departure.booking_price_per_person,
-        single_supplement: departure.booking_single_supplement,
-    };
-    props.booking.departure_date = new Date(`${departure.departs_on}T00:00:00`);
-    props.booking.return_date = new Date(`${departure.returns_on}T00:00:00`);
-    props.booking.clearErrors('departure_id');
+    applyDeparture(props.booking, departure);
 }
 </script>
 

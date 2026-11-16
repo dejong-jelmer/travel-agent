@@ -94,6 +94,8 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         departure_id: db_booking?.departure_id ?? null,
         departure,
         single_rooms: db_booking?.single_rooms ?? null,
+        // The request this booking is made from, which is linked to it on save
+        trip_request_id: null,
         status: db_booking?.status || null,
         payment_status: db_booking?.payment_status || null,
         participants: {

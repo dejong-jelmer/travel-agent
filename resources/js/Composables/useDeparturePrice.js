@@ -107,3 +107,32 @@ export function departureBookingPayload(data) {
                 : Math.round(Number(data.final_price) * 100),
     };
 }
+
+/**
+ * Whether the wizard can book on a departure: it has places left and a price.
+ */
+export const canBookDeparture = (departure) =>
+    !!departure && departure.available_seats > 0 && departure.booking_price_per_person !== null;
+
+/**
+ * Put a departure from the wizard's list on the booking form, with its dates.
+ * Returns false, and changes nothing, for a departure that cannot be booked.
+ */
+export function applyDeparture(booking, departure) {
+    if (!canBookDeparture(departure)) return false;
+
+    booking.departure_id = departure.id;
+    booking.departure = {
+        id: departure.id,
+        departs_on: departure.departs_on,
+        returns_on: departure.returns_on,
+        available_seats: departure.available_seats,
+        price_per_person: departure.booking_price_per_person,
+        single_supplement: departure.booking_single_supplement,
+    };
+    booking.departure_date = new Date(`${departure.departs_on}T00:00:00`);
+    booking.return_date = new Date(`${departure.returns_on}T00:00:00`);
+    booking.clearErrors?.('departure_id');
+
+    return true;
+}

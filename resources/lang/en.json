@@ -1603,7 +1603,9 @@
                 "seats_now": "{available} of {max} places free now",
                 "single_room": "Single room",
                 "yes": "Yes",
-                "no": "No"
+                "no": "No",
+                "make_booking": "Make booking",
+                "view_booking": "View the linked booking"
             },
             "interest_only": "Departure was full: would like to hear when a place comes free",
             "interest_short": "waiting for a place"
@@ -1688,7 +1690,9 @@
             "create": {
                 "title": "Create new booking",
                 "subtitle": "Select a trip and fill in the booking details.",
-                "select_trip": "Select a trip"
+                "select_trip": "Select a trip",
+                "from_request": "You are making a booking from the request of {name}. What the request tells is filled in; the booking is linked to the request on save.",
+                "view_request": "View the request"
             }
         },
         "destinations": {

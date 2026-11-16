@@ -30,6 +30,7 @@ class CreateBookingData implements Arrayable
         public readonly ?int $fee_per_person,
         public readonly ?int $final_price,
         public readonly ?int $single_rooms = null,
+        public readonly ?int $trip_request_id = null,
     ) {}
 
     /**
@@ -63,6 +64,7 @@ class CreateBookingData implements Arrayable
             fee_per_person: $parsed['fee_per_person'],
             final_price: $parsed['final_price'],
             single_rooms: isset($validated['single_rooms']) ? (int) $validated['single_rooms'] : null,
+            trip_request_id: isset($validated['trip_request_id']) ? (int) $validated['trip_request_id'] : null,
         );
     }
 }

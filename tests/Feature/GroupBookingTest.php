@@ -8,6 +8,7 @@ use App\Enums\Booking\Status;
 use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Enums\Trip\TripFormat;
+use App\Enums\TripRequest\Status as TripRequestStatus;
 use App\Events\BookingFailed;
 use App\Events\DepartureMinimumReached;
 use App\Mail\AdminDepartureMinimumReachedMail;
@@ -18,6 +19,7 @@ use App\Models\BookingTraveler;
 use App\Models\Departure;
 use App\Models\Setting;
 use App\Models\Trip;
+use App\Models\TripRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -611,6 +613,93 @@ class GroupBookingTest extends TestCase
                 ->where('db_booking.departure.id', $this->departure->id)
                 ->where('db_booking.single_rooms', 1)
         );
+    }
+
+    // A booking made from a request
+
+    public function test_wizard_starts_with_the_request_it_is_made_from(): void
+    {
+        $tripRequest = TripRequest::factory()->for($this->trip)->create([
+            'departure_id' => $this->departure->id,
+            'travelers_count' => 3,
+            'single_room' => true,
+            'name' => 'Anne de Vries',
+            'email' => 'anne@example.com',
+            'phone' => '0612345678',
+        ]);
+
+        $this->get(route('admin.bookings.create', ['trip_request' => $tripRequest->id]))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Booking/Create')
+                ->where('fromRequest', [
+                    'id' => $tripRequest->id,
+                    'trip_id' => $this->trip->id,
+                    'departure_id' => $this->departure->id,
+                    'travelers_count' => 3,
+                    'single_room' => true,
+                    'name' => 'Anne de Vries',
+                    'email' => 'anne@example.com',
+                    'phone' => '0612345678',
+                ])
+        );
+    }
+
+    public function test_wizard_ignores_a_request_that_already_has_a_booking(): void
+    {
+        $tripRequest = TripRequest::factory()->for($this->trip)->create(['booking_id' => $this->occupy(1)->id]);
+
+        $this->get(route('admin.bookings.create', ['trip_request' => $tripRequest->id]))
+            ->assertInertia(fn (AssertableInertia $page) => $page->where('fromRequest', null));
+        $this->get(route('admin.bookings.create'))
+            ->assertInertia(fn (AssertableInertia $page) => $page->where('fromRequest', null));
+    }
+
+    public function test_saving_a_booking_made_from_a_request_links_and_converts_the_request(): void
+    {
+        $tripRequest = TripRequest::factory()->for($this->trip)->create(['departure_id' => $this->departure->id, 'status' => TripRequestStatus::Contacted]);
+
+        $this->post(route('admin.bookings.store'), $this->payload(overrides: ['trip_request_id' => $tripRequest->id]))
+            ->assertSessionHasNoErrors();
+
+        $tripRequest->refresh();
+        $this->assertSame(Booking::firstOrFail()->id, $tripRequest->booking_id);
+        $this->assertSame(TripRequestStatus::Converted, $tripRequest->status);
+    }
+
+    public function test_booking_cannot_take_a_request_of_another_trip_or_one_that_has_a_booking(): void
+    {
+        $otherTrip = TripRequest::factory()->create();
+        $linked = TripRequest::factory()->for($this->trip)->create(['booking_id' => $this->occupy(1)->id]);
+
+        foreach ([$otherTrip, $linked] as $tripRequest) {
+            $this->post(route('admin.bookings.store'), $this->payload(overrides: ['trip_request_id' => $tripRequest->id]))
+                ->assertSessionHasErrors('trip_request_id');
+        }
+
+        $this->assertNull($otherTrip->fresh()->booking_id);
+        $this->assertSame(1, Booking::count());
+    }
+
+    public function test_request_stays_open_when_the_booking_fails(): void
+    {
+        $this->occupy(6);
+        $tripRequest = TripRequest::factory()->for($this->trip)->create(['departure_id' => $this->departure->id, 'status' => TripRequestStatus::New]);
+        Event::fake([BookingFailed::class]);
+
+        $this->post(route('admin.bookings.store'), $this->payload(adults: 2, overrides: ['trip_request_id' => $tripRequest->id]))
+            ->assertSessionHasErrors('departure_id');
+
+        $tripRequest->refresh();
+        $this->assertNull($tripRequest->booking_id);
+        $this->assertSame(TripRequestStatus::New, $tripRequest->status);
+    }
+
+    public function test_request_page_offers_to_make_the_booking_until_it_has_one(): void
+    {
+        $tripRequest = TripRequest::factory()->for($this->trip)->create(['departure_id' => $this->departure->id]);
+
+        $this->get(route('admin.trip-requests.edit', $tripRequest))
+            ->assertInertia(fn (AssertableInertia $page) => $page->where('tripRequest.booking_id', null));
     }
 
     // Helpers

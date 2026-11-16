@@ -175,7 +175,17 @@ function formatPreferredMonth(value) {
                                 <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.trip_request.edit.booking_section') }}</h2>
                             </div>
                         </div>
-                        <div class="px-6 py-5">
+                        <div class="px-6 py-5 space-y-4">
+                            <!-- Make the booking from this request: the wizard starts with what the request tells -->
+                            <InertiaLink v-if="!tripRequest.booking_id" data-testid="make-booking"
+                                :href="route('admin.bookings.create', { trip_request: tripRequest.id })"
+                                class="flex w-full justify-center rounded-xl border-2 border-brand-primary bg-white px-6 py-3 text-sm font-bold text-brand-primary transition-colors hover:bg-brand-primary hover:text-white">
+                                {{ t('admin.trip_request.edit.make_booking') }}
+                            </InertiaLink>
+                            <InertiaLink v-else :href="route('admin.bookings.show', tripRequest.booking_id)"
+                                data-testid="view-booking" class="block text-sm text-brand-link underline">
+                                {{ t('admin.trip_request.edit.view_booking') }}
+                            </InertiaLink>
                             <Select
                                 v-model="form.booking_id"
                                 :label="t('admin.trip_request.edit.booking_label')"

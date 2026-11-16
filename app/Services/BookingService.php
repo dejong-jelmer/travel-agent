@@ -5,10 +5,12 @@ namespace App\Services;
 use App\DTO\CreateBookingData;
 use App\DTO\UpdateBookingData;
 use App\Enums\TravelerType;
+use App\Enums\TripRequest\Status as TripRequestStatus;
 use App\Events\DepartureMinimumReached;
 use App\Exceptions\NoPriceAvailableException;
 use App\Models\Booking;
 use App\Models\Departure;
+use App\Models\TripRequest;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 
@@ -90,6 +92,14 @@ class BookingService
 
         // Create the travelers
         $this->createTravelers($booking, $travelersData, $bookingData->main_booker['index']);
+
+        // The request the booking was made from is handled now
+        if ($bookingData->trip_request_id) {
+            TripRequest::whereKey($bookingData->trip_request_id)->update([
+                'booking_id' => $booking->id,
+                'status' => TripRequestStatus::Converted,
+            ]);
+        }
 
         return $booking;
     }

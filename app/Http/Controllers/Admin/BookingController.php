@@ -22,6 +22,7 @@ use App\Models\Booking;
 use App\Models\Departure;
 use App\Models\Setting;
 use App\Models\Trip;
+use App\Models\TripRequest;
 use App\Services\BookingService;
 use App\Services\CountryService;
 use App\Services\DataTableService;
@@ -77,7 +78,15 @@ class BookingController extends Controller
             ->withParticipantCounts(),
         ])->get();
 
+        // A booking can start from a request that has none yet
+        $tripRequest = $request->filled('trip_request')
+            ? TripRequest::whereNull('booking_id')->find($request->integer('trip_request'))
+            : null;
+
         return Inertia::render('Admin/Booking/Create', [
+            'fromRequest' => $tripRequest?->only([
+                'id', 'trip_id', 'departure_id', 'travelers_count', 'single_room', 'name', 'email', 'phone',
+            ]),
             'trips' => $trips->map(fn (Trip $trip) => [
                 ...$trip->toArray(),
                 'departures' => $trip->departures
