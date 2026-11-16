@@ -100,6 +100,7 @@ class CreateBookingRequest extends FormRequest
                 ],
                 'departure_date' => ['exclude'],
                 'return_date' => ['exclude'],
+                ...BookingValidationRules::singleRooms(count($this->input('travelers.adults', []))),
             ];
         }
 
@@ -111,6 +112,7 @@ class CreateBookingRequest extends FormRequest
 
         return [
             'departure_id' => ['prohibited'],
+            'single_rooms' => ['exclude'],
             'departure_date' => $departureDateRules,
             'return_date' => ['nullable', 'date', 'after:departure_date'],
         ];
@@ -145,7 +147,7 @@ class CreateBookingRequest extends FormRequest
             BookingValidationRules::contact(),
             BookingValidationRules::travelers(),
             BookingValidationRules::mainBooker(),
-            BookingValidationRules::costItems(),
+            BookingValidationRules::costItems(required: ! $this->isForGroupTrip()),
         );
     }
 }

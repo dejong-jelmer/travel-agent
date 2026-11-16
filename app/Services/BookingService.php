@@ -6,6 +6,7 @@ use App\DTO\CreateBookingData;
 use App\DTO\UpdateBookingData;
 use App\Enums\TravelerType;
 use App\Events\DepartureMinimumReached;
+use App\Exceptions\NoPriceAvailableException;
 use App\Models\Booking;
 use App\Models\Departure;
 use Illuminate\Support\Facades\DB;
@@ -13,7 +14,10 @@ use Illuminate\Validation\ValidationException;
 
 class BookingService
 {
-    public function __construct(private FeesAndFundsService $feesAndFunds) {}
+    public function __construct(
+        private FeesAndFundsService $feesAndFunds,
+        private PriceCalculatorService $priceCalculator,
+    ) {}
 
     /**
      * Create a new booking with contact details, travelers, and cost items from validated DTO data.
@@ -67,6 +71,7 @@ class BookingService
             // Snapshot the current settings so later changes leave this booking untouched.
             'fees_and_funds' => $this->feesAndFunds->asCents(),
             'final_price' => $bookingData->final_price,
+            ...($departure ? $this->departurePrice($departure, $bookingData, $totalAdults + $totalChildren) : []),
         ]);
 
         $booking->syncCostItems($bookingData->cost_items);
@@ -143,6 +148,10 @@ class BookingService
 
             $updateData['final_price'] = $bookingData->final_price;
 
+            if ($departure && $bookingData->single_rooms !== null) {
+                $updateData['single_rooms'] = $bookingData->single_rooms;
+            }
+
             $booking->update($updateData);
 
             if ($bookingData->cost_items !== null) {
@@ -171,6 +180,34 @@ class BookingService
 
             return $booking;
         });
+    }
+
+    /**
+     * The price snapshot of a new booking on a departure, so a later change of the departure's price leaves the
+     * booking untouched. Without a number of single rooms, a traveler on their own gets one.
+     *
+     * @return array<string, int|null>
+     *
+     * @throws ValidationException when neither the departure nor its trip has a price
+     */
+    private function departurePrice(Departure $departure, CreateBookingData $bookingData, int $travelers): array
+    {
+        $singleRooms = $bookingData->single_rooms ?? ($travelers === 1 ? 1 : 0);
+
+        try {
+            $price = $this->priceCalculator->forDeparture($departure, $travelers, $singleRooms);
+        } catch (NoPriceAvailableException) {
+            throw ValidationException::withMessages(['departure_id' => __('departure.booking.no_price')]);
+        }
+
+        return [
+            'trip_price_id' => $price->tripPriceId,
+            'price_per_person' => (int) $price->perPerson->getAmount(),
+            'single_supplement' => (int) $price->singleSupplementPerRoom->getAmount(),
+            'single_rooms' => $singleRooms,
+            'base_total_price' => (int) $price->baseTotal->getAmount(),
+            'grand_total_price' => (int) $price->grandTotal->getAmount(),
+        ];
     }
 
     /**

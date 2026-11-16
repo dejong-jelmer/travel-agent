@@ -7,6 +7,7 @@ return [
         'cancelled' => 'This departure is cancelled.',
         'departed' => 'This departure has already left.',
         'full' => 'This departure is full.',
+        'no_price' => 'This departure has no price: set a price per person on the departure, or a price on the trip for the day of departure.',
         'not_enough_seats' => 'This departure has room for :available more, this booking needs :requested places.',
     ],
 

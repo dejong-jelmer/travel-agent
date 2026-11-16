@@ -7,6 +7,7 @@ return [
         'cancelled' => 'Dit vertrek is geannuleerd.',
         'departed' => 'Dit vertrek is al vertrokken.',
         'full' => 'Dit vertrek is vol.',
+        'no_price' => 'Dit vertrek heeft geen prijs: stel een prijs per persoon in op het vertrek, of een prijs op de reis voor de vertrekdatum.',
         'not_enough_seats' => 'Op dit vertrek is nog plek voor :available, deze boeking heeft :requested plekken nodig.',
     ],
 

@@ -29,6 +29,7 @@ class CreateBookingData implements Arrayable
         public readonly ?int $margin_amount,
         public readonly ?int $fee_per_person,
         public readonly ?int $final_price,
+        public readonly ?int $single_rooms = null,
     ) {}
 
     /**
@@ -61,6 +62,7 @@ class CreateBookingData implements Arrayable
             margin_amount: $parsed['margin_amount'],
             fee_per_person: $parsed['fee_per_person'],
             final_price: $parsed['final_price'],
+            single_rooms: isset($validated['single_rooms']) ? (int) $validated['single_rooms'] : null,
         );
     }
 }

@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Enums\Booking\CostCategory;
 use App\Enums\Booking\PaymentStatus;
 use App\Enums\Booking\Status;
+use App\Enums\SettingKey;
 use App\Enums\TravelerType;
 use App\Enums\Trip\TripFormat;
 use App\Events\BookingFailed;
@@ -15,6 +16,7 @@ use App\Models\BookingChange;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;
 use App\Models\Departure;
+use App\Models\Setting;
 use App\Models\Trip;
 use App\Models\User;
 use Carbon\Carbon;
@@ -44,6 +46,8 @@ class GroupBookingTest extends TestCase
             'returns_on' => today()->addMonths(3)->addDays(7),
             'min_participants' => 4,
             'max_participants' => 6,
+            'price_per_person' => 120000,
+            'single_supplement' => 15000,
         ]);
     }
 
@@ -360,16 +364,200 @@ class GroupBookingTest extends TestCase
         $mail->assertSeeInText(route('admin.trips.show', $this->trip));
     }
 
+    // Price
+
+    public function test_booking_on_a_departure_is_sold_at_the_price_of_the_departure(): void
+    {
+        $this->setFees();
+
+        $booking = $this->createBooking(adults: 2, overrides: ['travelers' => [
+            'adults' => $this->travelers(2, TravelerType::Adult),
+            'children' => $this->travelers(1, TravelerType::Child),
+        ]]);
+
+        $this->assertSame(120000, $booking->price_per_person);
+        $this->assertSame(15000, $booking->single_supplement);
+        $this->assertSame(0, $booking->single_rooms);
+        $this->assertSame(360000, $booking->base_total_price);
+        $this->assertSame(363750, $booking->grand_total_price);
+        $this->assertSame(363750, $booking->calculated_price);
+        $this->assertSame(363750, $booking->display_price);
+        $this->assertNull($booking->trip_price_id);
+    }
+
+    public function test_booking_on_a_departure_needs_no_cost_items_or_margin(): void
+    {
+        $payload = $this->payload();
+        unset($payload['cost_items'], $payload['margin_percentage']);
+
+        $this->post(route('admin.bookings.store'), $payload)->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail();
+        $this->assertCount(0, $booking->costItems);
+        $this->assertSame(240000, $booking->calculated_price);
+    }
+
+    public function test_cost_items_of_a_booking_on_a_departure_do_not_change_its_price(): void
+    {
+        $booking = $this->createBooking(adults: 2);
+
+        $this->assertCount(1, $booking->costItems);
+        $this->assertSame(240000, $booking->calculated_price);
+    }
+
+    public function test_booking_of_an_individual_trip_still_needs_cost_items_and_a_margin(): void
+    {
+        $individual = Trip::factory()->withPrices()->create();
+        $payload = $this->payload(overrides: [
+            'trip' => ['id' => $individual->id],
+            'departure_id' => null,
+            'departure_date' => today()->addMonths(2)->toDateString(),
+        ]);
+        unset($payload['cost_items'], $payload['margin_percentage']);
+
+        $this->post(route('admin.bookings.store'), $payload)->assertSessionHasErrors(['cost_items', 'margin_percentage']);
+    }
+
+    public function test_traveler_on_their_own_gets_a_single_room_unless_told_otherwise(): void
+    {
+        $solo = $this->createBooking(adults: 1);
+        $sharing = $this->createBooking(adults: 1, overrides: ['single_rooms' => 0]);
+
+        $this->assertSame(1, $solo->single_rooms);
+        $this->assertSame(135000, $solo->calculated_price);
+        $this->assertSame(0, $sharing->single_rooms);
+        $this->assertSame(120000, $sharing->calculated_price);
+    }
+
+    public function test_booking_pays_the_supplement_for_every_single_room(): void
+    {
+        $booking = $this->createBooking(adults: 3, overrides: ['single_rooms' => 1]);
+
+        $this->assertSame(1, $booking->single_rooms);
+        $this->assertSame(375000, $booking->calculated_price);
+    }
+
+    public function test_booking_cannot_have_more_single_rooms_than_adults(): void
+    {
+        $this->post(route('admin.bookings.store'), $this->payload(adults: 2, children: 1, overrides: ['single_rooms' => 3]))
+            ->assertSessionHasErrors('single_rooms');
+
+        $this->assertSame(0, Booking::count());
+    }
+
+    public function test_final_price_overrides_the_price_of_the_departure(): void
+    {
+        $booking = $this->createBooking(adults: 2, overrides: ['final_price' => 200000]);
+
+        $this->assertSame(240000, $booking->calculated_price);
+        $this->assertSame(200000, $booking->display_price);
+    }
+
+    public function test_changing_the_single_rooms_recalculates_the_price_from_the_snapshot(): void
+    {
+        $this->setFees();
+        $booking = $this->createBooking(adults: 2);
+        $this->departure->update(['price_per_person' => 999900, 'single_supplement' => 99900]);
+
+        $this->put(route('admin.bookings.update', $booking), $this->updatePayload($booking, ['single_rooms' => 2]))
+            ->assertSessionHasNoErrors();
+
+        $booking->refresh();
+        $this->assertSame(2, $booking->single_rooms);
+        $this->assertSame(120000, $booking->price_per_person);
+        $this->assertSame(273750, $booking->calculated_price);
+        $this->assertSame(273750, $booking->grand_total_price);
+        $this->assertNotNull(BookingChange::where('booking_id', $booking->id)->where('field', 'single_rooms')->first());
+    }
+
+    public function test_updating_a_booking_without_single_rooms_keeps_them_and_the_price(): void
+    {
+        $booking = $this->createBooking(adults: 1);
+        $payload = $this->updatePayload($booking, ['status' => Status::Confirmed->value]);
+        unset($payload['cost_items'], $payload['margin_percentage']);
+
+        $this->put(route('admin.bookings.update', $booking), $payload)->assertSessionHasNoErrors();
+
+        $booking->refresh();
+        $this->assertSame(1, $booking->single_rooms);
+        $this->assertSame(135000, $booking->calculated_price);
+    }
+
+    public function test_changing_the_price_of_the_departure_leaves_existing_bookings_untouched(): void
+    {
+        $booking = $this->createBooking(adults: 2);
+
+        $this->departure->update(['price_per_person' => 150000]);
+        $later = $this->createBooking(adults: 2);
+
+        $this->assertSame(240000, $booking->refresh()->calculated_price);
+        $this->assertSame(300000, $later->calculated_price);
+    }
+
+    public function test_departure_without_its_own_price_is_booked_at_the_price_of_the_trip(): void
+    {
+        $this->trip->prices()->delete();
+        $tripPrice = $this->trip->prices()->create([
+            'valid_from' => today(),
+            'valid_until' => today()->addYear(),
+            'base_price_pp' => 90000,
+            'single_supplement' => 10000,
+            'label' => 'high_season',
+        ]);
+        $this->departure->update(['price_per_person' => null, 'single_supplement' => null]);
+
+        $booking = $this->createBooking(adults: 1);
+
+        $this->assertSame(90000, $booking->price_per_person);
+        $this->assertSame(10000, $booking->single_supplement);
+        $this->assertSame(100000, $booking->calculated_price);
+        $this->assertSame($tripPrice->id, $booking->trip_price_id);
+    }
+
+    public function test_booking_is_rejected_on_a_departure_without_any_price(): void
+    {
+        $this->trip->prices()->delete();
+        $this->departure->update(['price_per_person' => null]);
+        Event::fake([BookingFailed::class]);
+
+        $this->post(route('admin.bookings.store'), $this->payload())
+            ->assertSessionHasErrors(['departure_id' => __('departure.booking.no_price')]);
+
+        $this->assertSame(0, Booking::count());
+        Event::assertNotDispatched(BookingFailed::class);
+    }
+
+    public function test_single_rooms_are_ignored_for_an_individual_trip(): void
+    {
+        $individual = Trip::factory()->withPrices()->create(['blocked_dates' => null]);
+
+        $this->post(route('admin.bookings.store'), $this->payload(overrides: [
+            'trip' => ['id' => $individual->id],
+            'departure_id' => null,
+            'departure_date' => today()->addMonths(2)->toDateString(),
+            'single_rooms' => 2,
+        ]))->assertSessionHasNoErrors();
+
+        $this->assertSame(0, Booking::firstOrFail()->single_rooms);
+    }
+
     // Helpers
+
+    private function setFees(): void
+    {
+        Setting::set(SettingKey::BookingFee, '25.00');
+        Setting::set(SettingKey::GuaranteeFund, '10.00');
+        Setting::set(SettingKey::EmergencyFund, '2.50');
+    }
 
     private function occupy(int $travelers, Status $status = Status::New): Booking
     {
         return Booking::factory()->onDeparture($this->departure, adults: $travelers)->create(['status' => $status]);
     }
 
-    private function createBooking(int $adults = 2): Booking
+    private function createBooking(int $adults = 2, array $overrides = []): Booking
     {
-        $this->post(route('admin.bookings.store'), $this->payload(adults: $adults))->assertSessionHasNoErrors();
+        $this->post(route('admin.bookings.store'), $this->payload(adults: $adults, overrides: $overrides))->assertSessionHasNoErrors();
 
         return Booking::latest('id')->firstOrFail();
     }

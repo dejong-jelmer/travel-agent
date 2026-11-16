@@ -66,6 +66,7 @@ class Booking extends Model
         'trip_price_id',
         'price_per_person',
         'single_supplement',
+        'single_rooms',
         'base_total_price',
         'grand_total_price',
         'fees_and_funds',
@@ -86,6 +87,7 @@ class Booking extends Model
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
+        'single_rooms' => 'integer',
         'margin_basis_points' => 'integer',
         'margin_amount' => 'integer',
         'fee_per_person' => 'integer',
@@ -161,8 +163,13 @@ class Booking extends Model
                 'margin_amount',
                 'fee_per_person',
                 'fees_and_funds',
+                'single_rooms',
             ])) {
                 $booking->calculated_price = $booking->computeCalculatedPrice();
+
+                if ($booking->isSoldAtDeparturePrice()) {
+                    $booking->grand_total_price = $booking->calculated_price;
+                }
             }
         });
 
@@ -480,10 +487,39 @@ class Booking extends Model
      * Only the percentage part is rounded, as in calculateBookingPrice() in JS.
      * The fees and funds snapshot is charged once per booking, on top of the
      * margin, so no margin is made on it.
+     *
+     * A booking on a departure is not priced from its costs: it is sold at the
+     * price of the departure, see computeDeparturePrice().
      */
     public function computeCalculatedPrice(): int
     {
+        if ($this->isSoldAtDeparturePrice()) {
+            return $this->computeDeparturePrice();
+        }
+
         return $this->computeMarginedPrice() + $this->feesAndFundsTotal;
+    }
+
+    /**
+     * Whether this booking is sold at the fixed price of a departure, snapshotted on the booking when it was made.
+     */
+    public function isSoldAtDeparturePrice(): bool
+    {
+        return $this->departure_id !== null && $this->price_per_person !== null;
+    }
+
+    /**
+     * The sales price of a booking on a departure, from the price snapshot on the booking:
+     *
+     * price_per_person * travelers + single_supplement * single_rooms + fees_and_funds_total
+     *
+     * Children pay the same price per person as adults.
+     */
+    private function computeDeparturePrice(): int
+    {
+        return $this->price_per_person * (($this->total_adults ?? 0) + ($this->total_children ?? 0))
+            + ($this->single_supplement ?? 0) * ($this->single_rooms ?? 0)
+            + $this->feesAndFundsTotal;
     }
 
     /**
