@@ -41,6 +41,29 @@ return [
             'intro' => 'This departure has reached its minimum number of confirmed participants.',
             'action' => 'The departure is not guaranteed yet. You do that yourself, once you are sure it goes ahead.',
         ],
+        'digest' => [
+            'subject' => '{1} :count departure needs your attention|[2,*] :count departures need your attention',
+            'label' => 'Daily overview',
+            'title' => 'Departures that need a decision',
+            'intro' => 'For these departures you have something to decide or arrange.',
+            'groups' => [
+                'overdue' => [
+                    'title' => 'Decision date passed',
+                    'help' => 'The decision date has passed without a decision. Guarantee the departure or cancel it; cancelling for lack of participants is only possible while the legal term has not passed.',
+                ],
+                'due_soon' => [
+                    'title' => 'Decision date approaching, minimum not reached',
+                    'help' => 'You have to decide soon and the minimum number of confirmed participants is not reached yet.',
+                ],
+                'awaits_guarantee' => [
+                    'title' => 'Minimum reached, waiting for your guarantee',
+                    'help' => 'These departures have enough confirmed participants. Guarantee them once you are sure they go ahead.',
+                ],
+            ],
+            'row' => ':confirmed confirmed, minimum :minimum · :occupied of :maximum places taken · decision date :date',
+            'button' => 'View all departures',
+            'footer' => 'Daily overview of departures of group trips. You only get this mail when there is something to do.',
+        ],
         'section_departure' => 'The departure',
         'label_trip' => 'Trip',
         'label_period' => 'Period',

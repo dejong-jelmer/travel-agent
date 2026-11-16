@@ -41,6 +41,29 @@ return [
             'intro' => 'Dit vertrek heeft het minimum aantal bevestigde deelnemers gehaald.',
             'action' => 'Het vertrek is nog niet gegarandeerd. Dat doe je zelf, zodra je zeker weet dat het doorgaat.',
         ],
+        'digest' => [
+            'subject' => '{1} :count vertrek vraagt je aandacht|[2,*] :count vertrekken vragen je aandacht',
+            'label' => 'Dagelijks overzicht',
+            'title' => 'Vertrekken die een besluit vragen',
+            'intro' => 'Voor deze vertrekken moet je iets beslissen of regelen.',
+            'groups' => [
+                'overdue' => [
+                    'title' => 'Beslisdatum voorbij',
+                    'help' => 'De beslisdatum is verstreken zonder besluit. Garandeer het vertrek of annuleer het; annuleren vanwege te weinig deelnemers kan alleen nog zolang de wettelijke termijn niet voorbij is.',
+                ],
+                'due_soon' => [
+                    'title' => 'Beslisdatum nadert, minimum niet gehaald',
+                    'help' => 'Binnenkort moet je beslissen en het minimum aantal bevestigde deelnemers is nog niet gehaald.',
+                ],
+                'awaits_guarantee' => [
+                    'title' => 'Minimum gehaald, wacht op jouw garantie',
+                    'help' => 'Deze vertrekken hebben genoeg bevestigde deelnemers. Garandeer ze zodra je zeker weet dat ze doorgaan.',
+                ],
+            ],
+            'row' => ':confirmed bevestigd, minimum :minimum · :occupied van :maximum plekken bezet · beslisdatum :date',
+            'button' => 'Bekijk alle vertrekken',
+            'footer' => 'Dagelijks overzicht van vertrekken van groepsreizen. Je krijgt deze mail alleen als er iets te doen is.',
+        ],
         'section_departure' => 'Het vertrek',
         'label_trip' => 'Reis',
         'label_period' => 'Periode',

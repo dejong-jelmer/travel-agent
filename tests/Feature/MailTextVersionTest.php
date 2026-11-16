@@ -7,6 +7,7 @@ use App\Events\BookingFailed;
 use App\Mail\AdminBookingFailedMail;
 use App\Mail\AdminBookingNotificationMail;
 use App\Mail\AdminContactFormNotificationMail;
+use App\Mail\AdminDepartureDigestMail;
 use App\Mail\AdminDepartureMinimumReachedMail;
 use App\Mail\AdminNewsletterSubscriptionMail;
 use App\Mail\BookingConfirmationMail;
@@ -50,6 +51,7 @@ class MailTextVersionTest extends TestCase
             new TripRequestConfirmationMail($tripRequest),
             new TripRequestNotificationMail($tripRequest),
             new AdminDepartureMinimumReachedMail(Departure::factory()->for($trip)->create()),
+            new AdminDepartureDigestMail(Departure::with('trip')->get()),
         ];
 
         foreach ($mailables as $mailable) {
