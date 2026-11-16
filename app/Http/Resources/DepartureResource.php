@@ -21,11 +21,11 @@ class DepartureResource extends JsonResource
     public function toArray(Request $request): array
     {
         $status = $this->status();
-        $awaitsDecision = ! $this->isGuaranteed() && ! $this->isCancelled() && ! $this->isCompleted();
 
         return [
             'id' => $this->id,
             'trip_id' => $this->trip_id,
+            'trip' => $this->whenLoaded('trip', fn () => $this->trip->only(['id', 'name', 'slug'])),
             'departs_on' => $this->departs_on->toDateString(),
             'returns_on' => $this->returns_on->toDateString(),
             'duration_in_days' => $this->durationInDays(),
@@ -45,12 +45,14 @@ class DepartureResource extends JsonResource
             'confirmed_participants' => $this->confirmedParticipants(),
             'available_seats' => $this->availableSeats(),
             'has_reached_minimum' => $this->hasReachedMinimum(),
-            // The minimum is reached and the admin has not decided yet
-            'awaits_guarantee' => $awaitsDecision && $this->hasReachedMinimum(),
-            // The decision date has passed without a decision
-            'decision_overdue' => $awaitsDecision && $this->decision_date->lt(today()),
+            // What the admin has to do now, see the methods on Departure
+            'awaits_guarantee' => $this->awaitsGuarantee(),
+            'decision_overdue' => $this->isDecisionOverdue(),
+            'decision_due_soon' => $this->isDecisionDueSoon(),
+            'needs_attention' => $this->needsAttention(),
+            'days_until_decision' => (int) today()->diffInDays($this->decision_date, false),
             'can_be_edited' => $this->canBeEdited(),
-            'can_be_guaranteed' => $awaitsDecision,
+            'can_be_guaranteed' => $this->awaitsDecision(),
             'can_be_cancelled' => $this->canBeCancelled(),
         ];
     }

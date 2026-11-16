@@ -3,7 +3,8 @@ import { useForm } from '@inertiajs/vue3';
 
 // Adds a departure to a trip, or edits the given one.
 const props = defineProps({
-    trip: { type: Object, required: true },
+    // The trip a new departure is added to; an existing departure needs none
+    trip: { type: Object, default: null },
     departure: { type: Object, default: null },
 });
 

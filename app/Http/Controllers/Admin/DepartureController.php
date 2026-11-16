@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Booking\Status as BookingStatus;
 use App\Enums\Trip\TripFormat;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\DepartureRequest;
+use App\Http\Resources\DepartureBookingResource;
 use App\Http\Resources\DepartureResource;
 use App\Models\Departure;
 use App\Models\Trip;
@@ -21,6 +23,50 @@ class DepartureController extends Controller
     use HasPageMetadata;
 
     public function __construct(private DepartureService $departures) {}
+
+    /**
+     * The departures of all trips: what needs the admin's attention first, then what is coming up, then the most
+     * recent departures that are over or cancelled.
+     */
+    public function overview(Request $request): Response
+    {
+        $upcoming = Departure::upcoming()->withParticipantCounts()->with('trip')->orderBy('departs_on')->get();
+        [$attention, $rest] = $upcoming->partition(fn (Departure $departure) => $departure->needsAttention());
+
+        $past = Departure::withParticipantCounts()->with('trip')
+            ->where(fn ($query) => $query->whereNotNull('cancelled_at')->orWhereDate('returns_on', '<', today()))
+            ->orderByDesc('departs_on')
+            ->limit(20)
+            ->get();
+
+        return Inertia::render('Admin/Departures/Index', [
+            // The most urgent first: the decision that is due the soonest
+            'attention' => DepartureResource::collection($attention->sortBy('decision_date')->values())->resolve($request),
+            'upcoming' => DepartureResource::collection($rest->values())->resolve($request),
+            'past' => DepartureResource::collection($past)->resolve($request),
+            'title' => $this->pageTitle('departure.title_index'),
+        ]);
+    }
+
+    /**
+     * A departure with its participant list: every booking on it, the ones that hold places first.
+     */
+    public function show(Request $request, Departure $departure): Response
+    {
+        $departure->load('trip');
+
+        $bookings = $departure->bookings()
+            ->with(['travelers', 'contact'])
+            ->orderByRaw('CASE WHEN status = ? THEN 1 ELSE 0 END', [BookingStatus::Canceled->value])
+            ->orderBy('id')
+            ->get();
+
+        return Inertia::render('Admin/Departures/Show', [
+            'departure' => (new DepartureResource($departure))->resolve($request),
+            'bookings' => DepartureBookingResource::collection($bookings)->resolve($request),
+            'title' => $this->pageTitle('departure.title_show'),
+        ]);
+    }
 
     /**
      * The departures of a group trip, the first to depart first.

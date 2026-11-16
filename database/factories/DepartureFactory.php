@@ -31,7 +31,11 @@ class DepartureFactory extends Factory
             'max_participants' => 12,
             'price_per_person' => fake()->numberBetween(899, 1999) * 100,
             'single_supplement' => fake()->numberBetween(150, 500) * 100,
-            'decision_date' => Departure::latestDecisionDateFor($departsOn, $returnsOn),
+            // From the dates the departure ends up with, so a test that sets its own dates gets a matching deadline
+            'decision_date' => fn (array $attributes) => Departure::latestDecisionDateFor(
+                Carbon::parse($attributes['departs_on']),
+                Carbon::parse($attributes['returns_on'])
+            ),
         ];
     }
 

@@ -85,6 +85,15 @@ class Departure extends Model
     }
 
     /**
+     * Scope a query to the departures that still matter day to day: not cancelled, and the travelers not back yet.
+     */
+    #[Scope]
+    protected function upcoming(Builder $query): void
+    {
+        $query->whereNull('cancelled_at')->whereDate('returns_on', '>=', today());
+    }
+
+    /**
      * Scope a query to load the participant counts with the departures, as occupied_seats and
      * confirmed_participants, in the same query. Use it wherever more than one departure is shown: without it
      * occupiedSeats() and confirmedParticipants() run a query per departure.
@@ -161,6 +170,49 @@ class Departure extends Model
             $this->isGuaranteed() => DepartureStatus::Guaranteed,
             default => DepartureStatus::Open,
         };
+    }
+
+    /**
+     * Whether the admin still has to decide if the departure goes ahead.
+     */
+    public function awaitsDecision(): bool
+    {
+        return ! $this->isGuaranteed() && ! $this->isCancelled() && ! $this->isCompleted();
+    }
+
+    /**
+     * Whether the minimum is reached while the admin has not guaranteed the departure yet.
+     */
+    public function awaitsGuarantee(): bool
+    {
+        return $this->awaitsDecision() && $this->hasReachedMinimum();
+    }
+
+    /**
+     * Whether the decision date has passed without a decision.
+     */
+    public function isDecisionOverdue(): bool
+    {
+        return $this->awaitsDecision() && $this->decision_date->lt(today());
+    }
+
+    /**
+     * Whether the decision is due within the warning period of config/departures.php while the minimum is not
+     * reached: the departure may have to be cancelled, and that has to happen on time.
+     */
+    public function isDecisionDueSoon(): bool
+    {
+        return $this->awaitsDecision()
+            && ! $this->hasReachedMinimum()
+            && $this->decision_date->betweenIncluded(today(), today()->addDays(config('departures.decision_warning_days')));
+    }
+
+    /**
+     * Whether the admin has something to do for this departure now.
+     */
+    public function needsAttention(): bool
+    {
+        return $this->awaitsGuarantee() || $this->isDecisionOverdue() || $this->isDecisionDueSoon();
     }
 
     /**

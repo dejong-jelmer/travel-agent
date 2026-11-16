@@ -9,6 +9,8 @@ vi.mock("@inertiajs/vue3", () => ({
 }));
 
 import Index from "@/Pages/Admin/Trip/Departures/Index.vue";
+import Overview from "@/Pages/Admin/Departures/Index.vue";
+import Show from "@/Pages/Admin/Departures/Show.vue";
 import Pill from "@/Components/Atoms/Pill.vue";
 import Button from "@/Components/Atoms/Button.vue";
 
@@ -34,25 +36,33 @@ const departure = (attributes = {}) => ({
     has_reached_minimum: false,
     awaits_guarantee: false,
     decision_overdue: false,
+    decision_due_soon: false,
+    needs_attention: false,
+    days_until_decision: 40,
+    trip: { id: 1, name: "Vézère", slug: "vezere" },
     can_be_edited: true,
     can_be_guaranteed: true,
     can_be_cancelled: true,
     ...attributes,
 });
 
+const global = {
+    components: { Pill, Button },
+    mocks: { route: (name, id) => `/${name}/${id?.slug ?? id ?? ""}` },
+    stubs: {
+        Admin: { template: "<div><slot /></div>" },
+        Modal: { props: ["open"], template: '<div v-if="open" data-testid="modal"><slot /></div>' },
+        Input: true,
+        TextArea: true,
+        Checkbox: true,
+        BookingStatusBadge: { template: "<span><slot /></span>" },
+        PaymentStatusBadge: { template: "<span><slot /></span>" },
+    },
+};
+
 const mountPage = (props) => mount(Index, {
     props: { trip: { id: 1, name: "Vézère", slug: "vezere" }, isGroupTrip: true, departures: [], ...props },
-    global: {
-        components: { Pill, Button },
-        mocks: { route: (name, id) => `/${name}/${id?.slug ?? id}` },
-        stubs: {
-            Admin: { template: "<div><slot /></div>" },
-            Modal: { props: ["open"], template: '<div v-if="open" data-testid="modal"><slot /></div>' },
-            Input: true,
-            TextArea: true,
-            Checkbox: true,
-        },
-    },
+    global,
 });
 
 describe("Departures index", () => {
@@ -137,5 +147,124 @@ describe("Departures index", () => {
 
         expect(wrapper.text()).toContain("individuele reis");
         expect(wrapper.find('[data-testid="add-departure"]').exists()).toBe(false);
+    });
+});
+
+describe("Departure card", () => {
+    it("warns when the decision is due soon and the minimum is not reached", () => {
+        const wrapper = mountPage({
+            departures: [departure({ decision_due_soon: true, needs_attention: true, days_until_decision: 3 })],
+        });
+
+        expect(wrapper.find('[data-testid="decision-due-soon"]').text())
+            .toContain("Over 3 dagen moet je beslissen en er ontbreken nog 3 bevestigde deelnemers");
+    });
+
+    it("links to the participant list", () => {
+        const link = mountPage({ departures: [departure()] }).find('[data-testid="participants"]');
+
+        expect(link.attributes("href")).toBe("/admin.departures.show/7");
+    });
+});
+
+describe("Departures overview", () => {
+    const mountOverview = (props) => mount(Overview, {
+        props: { attention: [], upcoming: [], past: [], ...props },
+        global,
+    });
+
+    it("puts what needs attention first, with the trip of every departure", () => {
+        const wrapper = mountOverview({
+            attention: [departure({ id: 1, awaits_guarantee: true, needs_attention: true, trip: { id: 2, name: "Lascaux", slug: "lascaux" } })],
+            upcoming: [departure({ id: 2 })],
+            past: [departure({ id: 3, status: { value: "completed", label: "Afgerond" }, can_be_edited: false, can_be_guaranteed: false, can_be_cancelled: false })],
+        });
+
+        const sections = wrapper.findAll("section").map((section) => section.attributes("data-testid"));
+        expect(sections).toEqual(["section-attention", "section-upcoming", "section-past"]);
+        expect(wrapper.find('[data-testid="section-attention"]').text()).toContain("Actie nodig");
+        expect(wrapper.find('[data-testid="section-attention"]').text()).toContain("Lascaux");
+        expect(wrapper.find('[data-testid="section-upcoming"]').text()).toContain("Vézère");
+    });
+
+    it("leaves the attention section out when nothing needs it", () => {
+        const wrapper = mountOverview({ upcoming: [departure()] });
+
+        expect(wrapper.find('[data-testid="section-attention"]').exists()).toBe(false);
+        expect(wrapper.find('[data-testid="section-past"]').exists()).toBe(false);
+    });
+
+    it("says there are no departures yet", () => {
+        expect(mountOverview().text()).toContain("Er zijn nog geen vertrekken");
+    });
+});
+
+describe("Participant list", () => {
+    const booking = (attributes = {}) => ({
+        id: 11,
+        reference: "2027-000011",
+        status: "confirmed",
+        status_label: "Bevestigd",
+        payment_status: "paid",
+        payment_status_label: "Betaald",
+        occupies_seat: true,
+        counts_towards_minimum: true,
+        participants: 2,
+        single_rooms: 1,
+        display_price: 259000,
+        main_booker: "Anne de Vries",
+        email: "anne@example.com",
+        phone: "0612345678",
+        travelers: [
+            { id: 1, full_name: "Anne de Vries", type: "adult", birthdate: "01-02-1980", special_requests: "Vegetarisch" },
+            { id: 2, full_name: "Sam de Vries", type: "child", birthdate: "03-04-2018", special_requests: null },
+        ],
+        ...attributes,
+    });
+
+    const mountShow = (bookings) => mount(Show, {
+        props: { departure: departure({ occupied_seats: 2 }), bookings },
+        global,
+    });
+
+    it("lists the travelers of every booking that holds places, with the totals", () => {
+        const wrapper = mountShow([booking()]);
+        const table = wrapper.find('[data-testid="participants-table"]').text();
+
+        expect(table).toContain("2027-000011");
+        expect(table).toContain("Anne de Vries");
+        expect(table).toContain("Sam de Vries");
+        expect(table).toContain("kind");
+        expect(table).toContain("anne@example.com");
+        expect(table).toContain("Bevestigd");
+        expect(table).toMatch(/€\s2\.590,00/);
+        expect(wrapper.find('[data-testid="totals"]').text()).toBe("2 deelnemers · 1 boekingen · 1 eenpersoonskamers");
+    });
+
+    it("gathers the special requests", () => {
+        const requests = mountShow([booking()]).find('[data-testid="special-requests"]').text();
+
+        expect(requests).toContain("Anne de Vries");
+        expect(requests).toContain("Vegetarisch");
+        expect(requests).not.toContain("Sam de Vries");
+    });
+
+    it("keeps canceled bookings out of the list and the totals", () => {
+        const wrapper = mountShow([
+            booking(),
+            booking({ id: 12, reference: "2027-000012", status: "canceled", occupies_seat: false, main_booker: "Piet Jansen", single_rooms: 2 }),
+        ]);
+
+        expect(wrapper.find('[data-testid="participants-table"]').text()).not.toContain("2027-000012");
+        expect(wrapper.find('[data-testid="canceled-bookings"]').text()).toContain("2027-000012");
+        expect(wrapper.find('[data-testid="canceled-bookings"]').text()).toContain("Piet Jansen");
+        expect(wrapper.find('[data-testid="totals"]').text()).toContain("1 eenpersoonskamers");
+    });
+
+    it("says when nobody has booked yet and shows no actions on the departure", () => {
+        const wrapper = mountShow([]);
+
+        expect(wrapper.text()).toContain("Er zijn nog geen boekingen op dit vertrek.");
+        expect(wrapper.find('[data-testid="guarantee"]').exists()).toBe(false);
     });
 });

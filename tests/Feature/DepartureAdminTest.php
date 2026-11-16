@@ -145,6 +145,131 @@ class DepartureAdminTest extends TestCase
         $this->assertNull($departure->refresh()->guaranteed_at);
     }
 
+    // All trips
+
+    public function test_overview_of_all_trips_puts_what_needs_attention_first(): void
+    {
+        $otherTrip = Trip::factory()->create(['format' => TripFormat::Group]);
+
+        $quiet = $this->departure(['departs_on' => '2027-03-01', 'returns_on' => '2027-03-07']);
+        $minimumReached = $this->departure(['departs_on' => '2027-09-01', 'returns_on' => '2027-09-07']);
+        $this->book($minimumReached, BookingStatus::Confirmed, 4);
+        $overdue = $this->departure(['trip_id' => $otherTrip->id, 'decision_date' => '2027-01-08']);
+        $dueSoon = $this->departure(['decision_date' => '2027-01-15']);
+        $guaranteed = $this->departure(['decision_date' => '2027-01-08', 'guaranteed_at' => now()]);
+        $cancelled = $this->departure(['cancelled_at' => now(), 'cancellation_reason' => 'Strike']);
+        $completed = $this->departure(['departs_on' => '2026-12-01', 'returns_on' => '2026-12-07']);
+
+        $this->get(route('admin.departures.index'))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Departures/Index')
+                // The decision that is due the soonest first
+                ->where('attention', fn ($attention) => collect($attention)->pluck('id')->all() === [$overdue->id, $dueSoon->id, $minimumReached->id])
+                ->where('attention.0.decision_overdue', true)
+                ->where('attention.0.trip.name', $otherTrip->name)
+                ->where('attention.1.decision_due_soon', true)
+                ->where('attention.1.days_until_decision', 5)
+                ->where('attention.2.awaits_guarantee', true)
+                ->where('upcoming', fn ($upcoming) => collect($upcoming)->pluck('id')->all() === [$quiet->id, $guaranteed->id])
+                ->where('upcoming.0.needs_attention', false)
+                ->where('past', fn ($past) => collect($past)->pluck('id')->sort()->values()->all() === [$cancelled->id, $completed->id])
+        );
+    }
+
+    public function test_decision_is_only_due_soon_inside_the_warning_period_and_below_the_minimum(): void
+    {
+        $outside = $this->departure(['decision_date' => '2027-01-18']);
+        $onTheEdge = $this->departure(['decision_date' => '2027-01-17']);
+        $today = $this->departure(['decision_date' => '2027-01-10']);
+        $reached = $this->departure(['decision_date' => '2027-01-12']);
+        $this->book($reached, BookingStatus::Confirmed, 4);
+
+        $this->assertFalse($outside->isDecisionDueSoon());
+        $this->assertTrue($onTheEdge->isDecisionDueSoon());
+        $this->assertTrue($today->isDecisionDueSoon());
+        $this->assertFalse($today->isDecisionOverdue());
+        $this->assertFalse($reached->isDecisionDueSoon());
+        $this->assertTrue($reached->awaitsGuarantee());
+
+        config(['departures.decision_warning_days' => 14]);
+        $this->assertTrue($outside->isDecisionDueSoon());
+    }
+
+    public function test_overview_of_all_trips_loads_the_counts_in_the_departure_queries(): void
+    {
+        foreach (range(1, 4) as $month) {
+            $this->book($this->departure(['departs_on' => "2027-0{$month}-20", 'returns_on' => "2027-0{$month}-26"]), BookingStatus::Confirmed);
+        }
+
+        DB::enableQueryLog();
+        $this->get(route('admin.departures.index'))->assertOk();
+        $countQueries = collect(DB::getQueryLog())->filter(fn (array $query) => str_contains($query['query'], 'total_adults'));
+        DB::disableQueryLog();
+
+        // One for the upcoming departures, one for the past ones, however many departures there are
+        $this->assertCount(2, $countQueries);
+    }
+
+    public function test_participant_list_shows_every_booking_with_its_travelers(): void
+    {
+        $departure = $this->departure();
+        $confirmed = Booking::factory()->onDeparture($departure, adults: 2, children: 1)->withTravelers(adults: 2, children: 1)
+            ->create(['status' => BookingStatus::Confirmed, 'single_rooms' => 1]);
+        $canceled = Booking::factory()->onDeparture($departure, adults: 1)->withTravelers(adults: 1, children: 0)
+            ->create(['status' => BookingStatus::Canceled]);
+        $new = Booking::factory()->onDeparture($departure, adults: 1)->withTravelers(adults: 1, children: 0)
+            ->create(['status' => BookingStatus::New]);
+        $this->book($this->departure(), BookingStatus::Confirmed);
+        $traveler = $confirmed->travelers()->first();
+        $traveler->update(['special_requests' => 'Glutenvrij', 'special_requests_consent' => true]);
+
+        $this->get(route('admin.departures.show', $departure))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Departures/Show')
+                ->where('departure.id', $departure->id)
+                ->where('departure.trip.name', $this->trip->name)
+                ->where('departure.occupied_seats', 4)
+                ->where('departure.confirmed_participants', 3)
+                // The canceled booking goes last
+                ->where('bookings', fn ($bookings) => collect($bookings)->pluck('id')->all() === [$confirmed->id, $new->id, $canceled->id])
+                ->where('bookings.0.reference', $confirmed->reference)
+                ->where('bookings.0.participants', 3)
+                ->where('bookings.0.single_rooms', 1)
+                ->where('bookings.0.occupies_seat', true)
+                ->where('bookings.0.counts_towards_minimum', true)
+                ->has('bookings.0.travelers', 3)
+                ->where('bookings.0.travelers', fn ($travelers) => collect($travelers)->contains(
+                    fn ($row) => $row['id'] === $traveler->id && $row['special_requests'] === 'Glutenvrij'
+                ))
+                ->where('bookings.1.counts_towards_minimum', false)
+                ->where('bookings.2.occupies_seat', false)
+        );
+    }
+
+    public function test_dashboard_lists_the_departures_that_need_attention(): void
+    {
+        $this->departure(['departs_on' => '2027-03-01', 'returns_on' => '2027-03-07']);
+        $overdue = $this->departure(['decision_date' => '2027-01-08']);
+        $this->departure(['cancelled_at' => now(), 'cancellation_reason' => 'Strike', 'decision_date' => '2027-01-08']);
+
+        $this->get(route('admin.dashboard'))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('departures.upcoming', 2)
+                ->has('departures.attention', 1)
+                ->where('departures.attention.0.id', $overdue->id)
+                ->where('departures.attention.0.trip.name', $this->trip->name)
+        );
+    }
+
+    public function test_non_admin_cannot_see_the_overview_or_a_participant_list(): void
+    {
+        $departure = $this->departure();
+        $this->actingAs(User::factory()->create(['role' => UserRole::Guest]));
+
+        $this->get(route('admin.departures.index'))->assertForbidden();
+        $this->get(route('admin.departures.show', $departure))->assertForbidden();
+    }
+
     // Creating
 
     public function test_admin_can_create_a_departure(): void

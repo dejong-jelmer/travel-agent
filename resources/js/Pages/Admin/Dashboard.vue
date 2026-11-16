@@ -1,6 +1,7 @@
 <script setup>
 import { computed } from 'vue'
-import { Link } from '@inertiajs/vue3'
+import { Link, usePage } from '@inertiajs/vue3'
+import { formatDate } from '@/Departures/format.js'
 import { useI18n } from 'vue-i18n'
 import {
     CalendarDaysIcon,
@@ -16,10 +17,13 @@ import {
 const props = defineProps({
     bookings: Object,
     tripRequests: Object,
+    // { upcoming: number, attention: [departure] }, the departures of group trips that need the admin now
+    departures: { type: Object, default: () => ({ upcoming: 0, attention: [] }) },
     systemHealth: Object
 })
 
 const { t } = useI18n()
+const locale = computed(() => usePage().props.locale)
 
 // Helper functies voor system health
 const getStatusColor = (status) => {
@@ -229,6 +233,48 @@ const requestStats = computed(() => [
                     </div>
                 </div>
             </component>
+        </div>
+
+        <!-- Departures that need attention -->
+        <div v-if="departures.upcoming > 0" data-testid="dashboard-departures"
+            class="mb-8 bg-white rounded-2xl shadow-sm border overflow-hidden"
+            :class="departures.attention.length ? 'border-status-warning' : 'border-gray-100'">
+            <div class="px-6 py-4 flex flex-wrap items-center justify-between gap-2 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900 flex items-center">
+                    <CalendarDaysIcon class="h-5 w-5 mr-2 text-brand-primary" />
+                    {{ t('admin.dashboard.departures.title') }}
+                    <span v-if="departures.attention.length"
+                        class="ml-3 inline-flex items-center rounded-full bg-status-warning/20 px-2.5 py-0.5 text-xs font-semibold text-brand-text">
+                        {{ departures.attention.length }}
+                    </span>
+                </h3>
+                <Link :href="route('admin.departures.index')" class="text-sm text-brand-link underline">
+                    {{ t('admin.dashboard.departures.view_all') }}
+                </Link>
+            </div>
+            <p v-if="departures.attention.length === 0" class="px-6 py-4 text-sm text-gray-600">
+                {{ t('admin.dashboard.departures.none') }}
+                {{ t('admin.dashboard.departures.upcoming', { count: departures.upcoming }) }}
+            </p>
+            <ul v-else class="divide-y divide-gray-100">
+                <li v-for="departure in departures.attention" :key="departure.id">
+                    <Link :href="route('admin.departures.show', departure.id)"
+                        class="flex flex-wrap items-center justify-between gap-2 px-6 py-3 hover:bg-gray-50 transition-colors">
+                        <span class="font-medium text-gray-900">
+                            {{ departure.trip?.name }} · {{ formatDate(departure.departs_on, locale) }}
+                        </span>
+                        <span class="text-sm text-gray-600">
+                            {{ departure.decision_overdue
+                                ? t('admin.dashboard.departures.decision_overdue')
+                                : departure.awaits_guarantee
+                                    ? t('admin.dashboard.departures.awaits_guarantee')
+                                    : t('admin.dashboard.departures.decision_due_soon', { date: formatDate(departure.decision_date, locale) }) }}
+                            · {{ t('admin.departures.progress.confirmed', { count: departure.confirmed_participants }) }},
+                            {{ t('admin.departures.progress.minimum', { count: departure.min_participants }) }}
+                        </span>
+                    </Link>
+                </li>
+            </ul>
         </div>
 
         <!-- Quick Actions Section -->

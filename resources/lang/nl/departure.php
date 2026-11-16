@@ -3,6 +3,7 @@
 return [
     // Page titles (Admin)
     'title_index' => 'Vertrekken',
+    'title_show' => 'Deelnemerslijst',
 
     // Flash messages
     'created' => 'Het vertrek is aangemaakt.',
@@ -48,7 +49,7 @@ return [
         'label_decision_date' => 'Beslisdatum',
         'confirmed_of_minimum' => ':confirmed deelnemers, minimum :minimum',
         'occupied_of_maximum' => ':occupied van :maximum plekken',
-        'button' => 'Bekijk de vertrekken',
+        'button' => 'Bekijk het vertrek',
         'footer' => 'Automatische notificatie over een vertrek van een groepsreis.',
     ],
 ];

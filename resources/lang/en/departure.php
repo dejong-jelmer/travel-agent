@@ -3,6 +3,7 @@
 return [
     // Page titles (Admin)
     'title_index' => 'Departures',
+    'title_show' => 'Participant list',
 
     // Flash messages
     'created' => 'The departure has been created.',
@@ -48,7 +49,7 @@ return [
         'label_decision_date' => 'Decision date',
         'confirmed_of_minimum' => ':confirmed participants, minimum :minimum',
         'occupied_of_maximum' => ':occupied of :maximum places',
-        'button' => 'View the departures',
+        'button' => 'View the departure',
         'footer' => 'Automatic notification about a departure of a group trip.',
     ],
 ];

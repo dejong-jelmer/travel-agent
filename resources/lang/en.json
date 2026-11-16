@@ -978,7 +978,8 @@
             "new_testimonial": "New testimonial",
             "home": "Home",
             "settings": "Settings",
-            "logout": "Logout"
+            "logout": "Logout",
+            "departures": "Departures"
         }
     },
     "about": {
@@ -1323,6 +1324,15 @@
                 },
                 "last_checked": "Last checked: {time}",
                 "loading": "System status is loading…"
+            },
+            "departures": {
+                "title": "Departures that need attention",
+                "none": "No departure needs your attention now.",
+                "upcoming": "{count} upcoming departures",
+                "view_all": "View all departures",
+                "awaits_guarantee": "Minimum reached, not guaranteed yet",
+                "decision_overdue": "Decision date has passed",
+                "decision_due_soon": "Decision date {date}, minimum not reached"
             }
         },
         "trips": {
@@ -1729,7 +1739,8 @@
             "decision": {
                 "label": "Decision date",
                 "overdue": "The decision date has passed and no decision has been made.",
-                "awaits_guarantee": "The minimum is reached. Guarantee the departure once you are sure it goes ahead."
+                "awaits_guarantee": "The minimum is reached. Guarantee the departure once you are sure it goes ahead.",
+                "due_soon": "In {count} day you have to decide and {missing} confirmed participants are still missing for the minimum. | In {count} days you have to decide and {missing} confirmed participants are still missing for the minimum."
             },
             "guaranteed_on": "Guaranteed on {date}",
             "cancelled_on": "Cancelled on {date}",
@@ -1738,7 +1749,8 @@
                 "edit": "Edit",
                 "guarantee": "Guarantee",
                 "cancel": "Cancel",
-                "delete": "Delete"
+                "delete": "Delete",
+                "participants": "Participants"
             },
             "guarantee_confirm": "This promises your travelers that the departure goes ahead. It cannot be undone. Guarantee the departure?",
             "guarantee_confirm_below_minimum": "The minimum of {min} confirmed participants is not reached yet (now {confirmed}). This promises your travelers that the departure goes ahead anyway. It cannot be undone. Guarantee the departure?",
@@ -1773,6 +1785,36 @@
                 "reason_placeholder": "For example: minimum number of participants not reached",
                 "submit": "Cancel departure",
                 "back": "Do not cancel"
+            },
+            "all_trips": "Departures of all trips",
+            "overview": {
+                "subtitle": "All departures of your group trips, with what needs your attention on top.",
+                "attention": "Action needed",
+                "upcoming": "Upcoming departures",
+                "upcoming_empty": "No other upcoming departures.",
+                "past": "Completed and cancelled",
+                "empty": "There are no departures yet. Add them to a group trip.",
+                "to_trips": "To the trips"
+            },
+            "show": {
+                "title": "Participant list",
+                "participants": "Participants",
+                "totals": "{participants} participants · {bookings} bookings · {rooms} single rooms",
+                "empty": "There are no bookings on this departure yet.",
+                "columns": {
+                    "booking": "Booking",
+                    "travelers": "Travelers",
+                    "contact": "Contact",
+                    "single_rooms": "Single rooms",
+                    "status": "Status",
+                    "payment": "Payment",
+                    "price": "Price"
+                },
+                "child": "child",
+                "anonymized": "{count} travelers (anonymized)",
+                "special_requests": "Special requests",
+                "canceled": "Canceled bookings",
+                "persons": "{count} persons"
             }
         }
     }

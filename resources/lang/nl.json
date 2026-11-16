@@ -978,7 +978,8 @@
             "new_testimonial": "Nieuwe ervaring",
             "home": "Home",
             "settings": "Instellingen",
-            "logout": "Uitloggen"
+            "logout": "Uitloggen",
+            "departures": "Vertrekken"
         }
     },
     "about": {
@@ -1321,6 +1322,15 @@
                 },
                 "last_checked": "Laatste check: {time}",
                 "loading": "Systeem status wordt geladen…"
+            },
+            "departures": {
+                "title": "Vertrekken die aandacht vragen",
+                "none": "Geen vertrek vraagt nu je aandacht.",
+                "upcoming": "{count} komende vertrekken",
+                "view_all": "Bekijk alle vertrekken",
+                "awaits_guarantee": "Minimum gehaald, nog niet gegarandeerd",
+                "decision_overdue": "Beslisdatum voorbij",
+                "decision_due_soon": "Beslisdatum {date}, minimum niet gehaald"
             }
         },
         "trips": {
@@ -1727,7 +1737,8 @@
             "decision": {
                 "label": "Beslisdatum",
                 "overdue": "De beslisdatum is voorbij en er is nog geen besluit genomen.",
-                "awaits_guarantee": "Het minimum is gehaald. Garandeer het vertrek zodra je zeker weet dat het doorgaat."
+                "awaits_guarantee": "Het minimum is gehaald. Garandeer het vertrek zodra je zeker weet dat het doorgaat.",
+                "due_soon": "Over {count} dag moet je beslissen en er ontbreken nog {missing} bevestigde deelnemers voor het minimum. | Over {count} dagen moet je beslissen en er ontbreken nog {missing} bevestigde deelnemers voor het minimum."
             },
             "guaranteed_on": "Gegarandeerd op {date}",
             "cancelled_on": "Geannuleerd op {date}",
@@ -1736,7 +1747,8 @@
                 "edit": "Bewerken",
                 "guarantee": "Garanderen",
                 "cancel": "Annuleren",
-                "delete": "Verwijderen"
+                "delete": "Verwijderen",
+                "participants": "Deelnemers"
             },
             "guarantee_confirm": "Je belooft je reizigers hiermee dat dit vertrek doorgaat. Dat kun je niet terugdraaien. Vertrek garanderen?",
             "guarantee_confirm_below_minimum": "Het minimum van {min} bevestigde deelnemers is nog niet gehaald (nu {confirmed}). Je belooft je reizigers hiermee dat dit vertrek toch doorgaat. Dat kun je niet terugdraaien. Vertrek garanderen?",
@@ -1771,6 +1783,36 @@
                 "reason_placeholder": "Bijvoorbeeld: minimum aantal deelnemers niet gehaald",
                 "submit": "Vertrek annuleren",
                 "back": "Niet annuleren"
+            },
+            "all_trips": "Vertrekken van alle reizen",
+            "overview": {
+                "subtitle": "Alle vertrekken van je groepsreizen, met wat je aandacht vraagt bovenaan.",
+                "attention": "Actie nodig",
+                "upcoming": "Komende vertrekken",
+                "upcoming_empty": "Geen andere komende vertrekken.",
+                "past": "Afgerond en geannuleerd",
+                "empty": "Er zijn nog geen vertrekken. Voeg ze toe bij een groepsreis.",
+                "to_trips": "Naar de reizen"
+            },
+            "show": {
+                "title": "Deelnemerslijst",
+                "participants": "Deelnemers",
+                "totals": "{participants} deelnemers · {bookings} boekingen · {rooms} eenpersoonskamers",
+                "empty": "Er zijn nog geen boekingen op dit vertrek.",
+                "columns": {
+                    "booking": "Boeking",
+                    "travelers": "Reizigers",
+                    "contact": "Contact",
+                    "single_rooms": "1-pers. kamers",
+                    "status": "Status",
+                    "payment": "Betaling",
+                    "price": "Prijs"
+                },
+                "child": "kind",
+                "anonymized": "{count} reizigers (geanonimiseerd)",
+                "special_requests": "Bijzonderheden",
+                "canceled": "Geannuleerde boekingen",
+                "persons": "{count} personen"
             }
         }
     }

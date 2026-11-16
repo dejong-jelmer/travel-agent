@@ -26,4 +26,16 @@ return [
         ['min_duration_days' => 0, 'days_before_departure' => 2],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Decision warning
+    |--------------------------------------------------------------------------
+    |
+    | The number of days before its decision date from which a departure that
+    | has not reached its minimum is pointed out to the admin.
+    |
+    */
+
+    'decision_warning_days' => 7,
+
 ];

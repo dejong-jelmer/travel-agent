@@ -58,7 +58,7 @@
         <tr>
             <td align="center" style="padding:36px 0 0 0;">
                 @include('emails.partials.button', [
-                    'url' => route('admin.trips.departures.index', $departure->trip),
+                    'url' => route('admin.departures.show', $departure),
                     'text' => __('departure.mail.button'),
                 ])
             </td>
