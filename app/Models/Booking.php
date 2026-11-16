@@ -27,6 +27,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * @property Trip $trip
+ * @property Departure|null $departure
  * @property BookingContact $contact
  * @property BookingTraveler $mainBooker
  */
@@ -50,6 +51,7 @@ class Booking extends Model
 
     protected $fillable = [
         'trip_id',
+        'departure_id',
         'main_booker_id',
         'departure_date',
         'return_date',
@@ -228,6 +230,16 @@ class Booking extends Model
     public function trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class)->withTrashed();
+    }
+
+    /**
+     * The departure of a group trip this booking has places on. Null for an individual trip.
+     *
+     * @return BelongsTo<Departure, $this>
+     */
+    public function departure(): BelongsTo
+    {
+        return $this->belongsTo(Departure::class);
     }
 
     public function tripRequest(): HasOne

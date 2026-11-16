@@ -28,6 +28,13 @@ return [
         'individual' => 'You pick your own departure date and travel in your own company.',
         'group' => 'You travel on a fixed departure date, together with other travellers.',
     ],
+    'departure_statuses' => [
+        'open' => 'Open',
+        'guaranteed' => 'Guaranteed',
+        'full' => 'Full',
+        'cancelled' => 'Cancelled',
+        'completed' => 'Completed',
+    ],
     'trip_requests' => [
         'new' => 'New',
         'contacted' => 'Contacted',

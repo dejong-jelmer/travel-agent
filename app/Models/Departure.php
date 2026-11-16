@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use App\Enums\Booking\Status as BookingStatus;
+use App\Enums\Trip\DepartureStatus;
 use Carbon\CarbonInterface;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 /**
  * A fixed departure of a group trip, which travelers book a place on.
@@ -71,6 +77,110 @@ class Departure extends Model
     }
 
     /**
+     * @return HasMany<Booking, $this>
+     */
+    public function bookings(): HasMany
+    {
+        return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Scope a query to load the participant counts with the departures, as occupied_seats and
+     * confirmed_participants, in the same query. Use it wherever more than one departure is shown: without it
+     * occupiedSeats() and confirmedParticipants() run a query per departure.
+     */
+    #[Scope]
+    protected function withParticipantCounts(Builder $query): void
+    {
+        $participants = DB::raw('total_adults + total_children');
+
+        $query->withSum([
+            'bookings as occupied_seats' => fn (Builder $bookings) => $bookings->whereIn('status', BookingStatus::seatOccupying()),
+            'bookings as confirmed_participants' => fn (Builder $bookings) => $bookings->whereIn('status', BookingStatus::minimumCounting()),
+        ], $participants);
+    }
+
+    /**
+     * The number of places taken: the travelers of every booking that is not canceled or deleted.
+     */
+    public function occupiedSeats(): int
+    {
+        return $this->participantCount('occupied_seats', BookingStatus::seatOccupying());
+    }
+
+    /**
+     * The number of travelers that count towards the minimum: those of confirmed and completed bookings.
+     */
+    public function confirmedParticipants(): int
+    {
+        return $this->participantCount('confirmed_participants', BookingStatus::minimumCounting());
+    }
+
+    public function availableSeats(): int
+    {
+        return max(0, $this->max_participants - $this->occupiedSeats());
+    }
+
+    public function isFull(): bool
+    {
+        return $this->occupiedSeats() >= $this->max_participants;
+    }
+
+    public function hasReachedMinimum(): bool
+    {
+        return $this->confirmedParticipants() >= $this->min_participants;
+    }
+
+    public function isGuaranteed(): bool
+    {
+        return $this->guaranteed_at !== null;
+    }
+
+    public function isCancelled(): bool
+    {
+        return $this->cancelled_at !== null;
+    }
+
+    /**
+     * Whether the travelers are back: the day of return has passed.
+     */
+    public function isCompleted(): bool
+    {
+        return ! $this->isCancelled() && $this->returns_on->lt(today());
+    }
+
+    /**
+     * The state of the departure, the first that applies of: cancelled, completed, full, guaranteed, open.
+     */
+    public function status(): DepartureStatus
+    {
+        return match (true) {
+            $this->isCancelled() => DepartureStatus::Cancelled,
+            $this->isCompleted() => DepartureStatus::Completed,
+            $this->isFull() => DepartureStatus::Full,
+            $this->isGuaranteed() => DepartureStatus::Guaranteed,
+            default => DepartureStatus::Open,
+        };
+    }
+
+    /**
+     * Promise the travelers that this departure goes ahead. The promise stands, also when bookings are canceled
+     * afterwards: nothing in the app takes guaranteed_at away again.
+     *
+     * @throws \DomainException when the departure is cancelled
+     */
+    public function guarantee(): void
+    {
+        if ($this->isCancelled()) {
+            throw new \DomainException('A cancelled departure cannot be guaranteed.');
+        }
+
+        if (! $this->isGuaranteed()) {
+            $this->update(['guaranteed_at' => now()]);
+        }
+    }
+
+    /**
      * The length of the trip in days, counting both the day of departure and the day of return.
      */
     public function durationInDays(): int
@@ -101,6 +211,22 @@ class Departure extends Model
         }
 
         throw new \LogicException("No decision deadline is configured for a trip of {$duration} days.");
+    }
+
+    /**
+     * A participant count, from the withParticipantCounts() scope when it was applied and from a query otherwise.
+     *
+     * @param  list<BookingStatus>  $statuses
+     */
+    private function participantCount(string $attribute, array $statuses): int
+    {
+        if (array_key_exists($attribute, $this->attributes)) {
+            return (int) $this->attributes[$attribute];
+        }
+
+        return (int) $this->bookings()
+            ->whereIn('status', $statuses)
+            ->sum(DB::raw('total_adults + total_children'));
     }
 
     private static function durationInDaysBetween(CarbonInterface $departsOn, CarbonInterface $returnsOn): int

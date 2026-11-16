@@ -28,6 +28,13 @@ return [
         'individual' => 'Je kiest zelf je vertrekdatum en reist in je eigen gezelschap.',
         'group' => 'Je reist op een vaste vertrekdatum, samen met andere reizigers.',
     ],
+    'departure_statuses' => [
+        'open' => 'Open',
+        'guaranteed' => 'Gegarandeerd',
+        'full' => 'Vol',
+        'cancelled' => 'Geannuleerd',
+        'completed' => 'Afgerond',
+    ],
     'trip_requests' => [
         'new' => 'Nieuw',
         'contacted' => 'Gecontacteerd',
