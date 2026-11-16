@@ -392,7 +392,10 @@
                 "format": {
                     "label": "Reisvorm",
                     "help": "Individueel: de klant kiest zelf een datum. Groepsreis: de klant boekt op een vast vertrek.",
-                    "locked": "De reisvorm ligt vast zolang er boekingen zijn die nog moeten vertrekken."
+                    "locked": {
+                        "individual": "De reisvorm ligt vast zolang er boekingen zijn die nog moeten vertrekken.",
+                        "group": "De reisvorm ligt vast zolang de reis vertrekken heeft."
+                    }
                 },
                 "min_advance": {
                     "label": "Minimale boekingstermijn",

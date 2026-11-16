@@ -106,7 +106,7 @@ class TripValidationRules
                 Rule::enum(TripFormat::class),
                 function (string $attribute, mixed $value, \Closure $fail) use ($trip) {
                     if ($trip && $value !== $trip->format->value && $trip->hasLockedFormat()) {
-                        $fail(__('trip.format.locked'));
+                        $fail(__('trip.format.locked.'.$trip->format->value));
                     }
                 },
             ],

@@ -36,7 +36,7 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
-    // The format of a trip with bookings that still have to depart cannot change
+    // The format of a trip with bookings that still have to depart, or with departures, cannot change
     formatLocked: {
         type: Boolean,
         default: false
@@ -489,7 +489,7 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                         :label="t('forms.trip.fields.format.label')" :options="tripFormatOptions"
                                         :disabled="formatLocked" :feedback="form.errors.format" />
                                     <span class="block text-xs text-gray-700/30 mt-2">
-                                        {{ formatLocked ? t('forms.trip.fields.format.locked') : t('forms.trip.fields.format.help') }}
+                                        {{ formatLocked ? t(`forms.trip.fields.format.locked.${form.format}`) : t('forms.trip.fields.format.help') }}
                                     </span>
                                 </div>
                                 <div class="p-4 bg-white rounded-lg border border-gray-200">

@@ -131,7 +131,10 @@ return [
     ],
 
     'format' => [
-        'locked' => 'The trip format cannot change while there are bookings that still have to depart.',
+        'locked' => [
+            'individual' => 'The trip format cannot change while there are bookings that still have to depart.',
+            'group' => 'The trip format cannot change while the trip has departures. Delete the departures first.',
+        ],
     ],
 
     // How a trip travels, shown on the trip cards: by night train when its itinerary has a night train

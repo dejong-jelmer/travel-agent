@@ -131,7 +131,10 @@ return [
     ],
 
     'format' => [
-        'locked' => 'De reisvorm kan niet worden gewijzigd zolang er boekingen zijn die nog moeten vertrekken.',
+        'locked' => [
+            'individual' => 'De reisvorm kan niet worden gewijzigd zolang er boekingen zijn die nog moeten vertrekken.',
+            'group' => 'De reisvorm kan niet worden gewijzigd zolang de reis vertrekken heeft. Verwijder eerst de vertrekken.',
+        ],
     ],
 
     // How a trip travels, shown on the trip cards: by night train when its itinerary has a night train

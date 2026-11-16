@@ -320,10 +320,11 @@ class Trip extends Model
     }
 
     /**
-     * Whether the format can no longer change, because bookings were made in the current one.
+     * Whether the format can no longer change, because the trip is in use in the current one.
      *
      * An individual trip is locked while it has bookings that still have to depart: they hold a date of their own,
      * which a group trip does not have. Canceled bookings and bookings that have departed stay as they are.
+     * A group trip is locked while it has departures, which an individual trip does not have.
      */
     public function hasLockedFormat(): bool
     {
@@ -332,8 +333,18 @@ class Trip extends Model
                 ->where('status', '!=', BookingStatus::Canceled)
                 ->whereDate('departure_date', '>=', today())
                 ->exists(),
-            TripFormat::Group => false,
+            TripFormat::Group => $this->departures()->exists(),
         };
+    }
+
+    /**
+     * The fixed departures of a group trip, the first to depart first.
+     *
+     * @return HasMany<Departure, $this>
+     */
+    public function departures(): HasMany
+    {
+        return $this->hasMany(Departure::class)->orderBy('departs_on');
     }
 
     public function tripRequests(): HasMany
@@ -439,17 +450,6 @@ class Trip extends Model
     }
 
     /**
-     * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ..., 'category' => ..., 'label' => ...]
-     *
-     * The category is cast to a HighlightCategory; highlights stored before categories existed, or with a category
-     * that no longer exists, get none. The label is the own label that replaces the default label of the category.
-     *
-     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{title: string, description: string|null, category: HighlightCategory|null, label: string|null}>|null, mixed>
-     */
-    protected function highlights(): Attribute
-    {
-        return Attribute::make(
-    /**
      * The trip type ready for the public pages: value, label and a one-sentence description.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<array{value: string, label: string, description: string}, never>
@@ -470,6 +470,17 @@ class Trip extends Model
         return Attribute::get(fn () => $this->format->isShownToVisitors() ? $this->format->toDisplay() : null);
     }
 
+    /**
+     * Get the trip highlights, stored as a list of ['title' => ..., 'description' => ..., 'category' => ..., 'label' => ...]
+     *
+     * The category is cast to a HighlightCategory; highlights stored before categories existed, or with a category
+     * that no longer exists, get none. The label is the own label that replaces the default label of the category.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array<int, array{title: string, description: string|null, category: HighlightCategory|null, label: string|null}>|null, mixed>
+     */
+    protected function highlights(): Attribute
+    {
+        return Attribute::make(
             get: fn (?string $value) => $value === null ? null : collect(json_decode($value, true) ?? [])
                 ->map(fn (array $highlight) => [
                     'title' => $highlight['title'],

@@ -15,6 +15,7 @@ use App\Enums\Trip\TripFormat;
 use App\Enums\Trip\TripType;
 use App\Enums\UserRole;
 use App\Models\Booking;
+use App\Models\Departure;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -1689,7 +1690,7 @@ class TripTest extends TestCase
         Booking::factory()->for($trip)->create(['departure_date' => today()->addMonth(), 'status' => BookingStatus::Confirmed]);
 
         $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Group->value]))
-            ->assertSessionHasErrors(['format' => __('trip.format.locked')]);
+            ->assertSessionHasErrors(['format' => __('trip.format.locked.individual')]);
 
         $this->assertSame(TripFormat::Individual, $trip->refresh()->format);
         $this->get(route('admin.trips.edit', $trip))->assertInertia(
@@ -1719,6 +1720,22 @@ class TripTest extends TestCase
             ->assertSessionHasNoErrors();
 
         $this->assertSame(TripFormat::Group, $trip->refresh()->format);
+    }
+
+    public function test_trip_format_cannot_change_while_a_group_trip_has_departures(): void
+    {
+        $trip = Trip::factory()->create(['format' => TripFormat::Group]);
+        $departure = Departure::factory()->for($trip)->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Individual->value]))
+            ->assertSessionHasErrors(['format' => __('trip.format.locked.group')]);
+        $this->assertSame(TripFormat::Group, $trip->refresh()->format);
+
+        $departure->delete();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Individual->value]))
+            ->assertSessionHasNoErrors();
+        $this->assertSame(TripFormat::Individual, $trip->refresh()->format);
     }
 
     // Helper Methods
@@ -1860,7 +1877,6 @@ class TripTest extends TestCase
             'trip_id' => $trip->id,
         ]);
     }
-}
 
     // Trip type and format on the public pages
     public function test_trip_show_passes_the_type_and_format_ready_for_display(): void
@@ -1926,3 +1942,4 @@ class TripTest extends TestCase
             $this->assertStringNotContainsString('enum.', $display['description'], $case->value);
         }
     }
+}

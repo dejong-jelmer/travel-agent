@@ -392,7 +392,10 @@
                 "format": {
                     "label": "Trip format",
                     "help": "Individual: the customer picks a date. Group trip: the customer books a fixed departure.",
-                    "locked": "The format is fixed while there are bookings that still have to depart."
+                    "locked": {
+                        "individual": "The format is fixed while there are bookings that still have to depart.",
+                        "group": "The format is fixed while the trip has departures."
+                    }
                 },
                 "min_advance": {
                     "label": "Minimum booking lead time",
