@@ -38,6 +38,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Database\Eloquent\Collection<int, Itinerary> $itineraries
  * @property array<int, array{value: string, label: string}> $transport_formatted
  * @property bool|null $has_night_train
+ * @property TripType $type
  * @property TripFormat $format
  */
 class Trip extends Model
@@ -448,6 +449,27 @@ class Trip extends Model
     protected function highlights(): Attribute
     {
         return Attribute::make(
+    /**
+     * The trip type ready for the public pages: value, label and a one-sentence description.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array{value: string, label: string, description: string}, never>
+     */
+    protected function typeDisplay(): Attribute
+    {
+        return Attribute::get(fn () => $this->type->toDisplay());
+    }
+
+    /**
+     * The trip format ready for the public pages like type_display, or null when the format is not pointed out to
+     * visitors (see TripFormat::isShownToVisitors()).
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array{value: string, label: string, description: string}|null, never>
+     */
+    protected function formatDisplay(): Attribute
+    {
+        return Attribute::get(fn () => $this->format->isShownToVisitors() ? $this->format->toDisplay() : null);
+    }
+
             get: fn (?string $value) => $value === null ? null : collect(json_decode($value, true) ?? [])
                 ->map(fn (array $highlight) => [
                     'title' => $highlight['title'],

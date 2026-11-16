@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from '@lucide/vue';
+import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark, Building2, House, Route, Users } from '@lucide/vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
@@ -134,6 +134,17 @@ const hasCountryInfo = computed(() =>
 )
 
 const hasKeyFacts = computed(() => props.trip.key_facts?.length > 0)
+
+// The traits of the trip with their explanation: the format only when it is pointed out (format_display is null for an
+// individual trip, see Trip::formatDisplay()), then the type. The format comes first, as on the trip card. The icons are keyed by the enum values of TripType and
+// TripFormat; a value missing here is shown without an icon.
+const TRAIT_ICONS = {
+    city_trip: Building2,
+    single_base: House,
+    tour: Route,
+    group: Users,
+}
+const traits = computed(() => [props.trip.format_display, props.trip.type_display].filter(Boolean))
 
 // The first section of the description opens the page next to the key facts, the others get a card each
 const leadSection = computed(() => props.descriptionSections[0] ?? null)
@@ -277,6 +288,18 @@ const contactUrl = computed(() => {
                                             {{ t('trip_show.inquiry.duration_label', { duration: trip.duration }) }}
                                         </span>
                                     </p>
+
+                                    <!-- What kind of trip it is, with a short explanation -->
+                                    <ul v-if="traits.length" class="space-y-4 pt-2">
+                                        <li v-for="trait in traits" :key="trait.value" class="flex items-start gap-3">
+                                            <component :is="TRAIT_ICONS[trait.value]" v-if="TRAIT_ICONS[trait.value]"
+                                                class="w-5 h-5 mt-0.5 shrink-0 text-brand-primary" aria-hidden="true" />
+                                            <div class="min-w-0">
+                                                <p class="text-base font-semibold text-brand-primary">{{ trait.label }}</p>
+                                                <p class="text-sm leading-relaxed text-brand-light">{{ trait.description }}</p>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </template>
 
                                 <template v-else-if="activeCardTab === 'practical'">

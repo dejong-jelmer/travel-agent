@@ -34,7 +34,7 @@ class TripController extends Controller
     {
         // The trip cards have no use for the gallery paths, which would fetch every trip's gallery
         $trips = Trip::with(['heroImage', 'prices', 'destinations.country'])->withTravelMode()->published()->get()
-            ->append('travel_mode')->makeHidden('image_paths');
+            ->append(['travel_mode', 'type_display', 'format_display'])->makeHidden('image_paths');
         $seo = $this->shareSeo('seo.trips');
 
         return Inertia::render('Trip/Index', [
@@ -70,7 +70,7 @@ class TripController extends Controller
             'title' => $seo['title'],
             // The description is only sent split into sections, the highlights and the itinerary only ready for
             // display, so none of them goes along twice
-            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries']),
+            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries'])->append(['type_display', 'format_display']),
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
             'itinerary' => $this->itineraries->forDisplay($trip),

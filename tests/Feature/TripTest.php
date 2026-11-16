@@ -1861,3 +1861,68 @@ class TripTest extends TestCase
         ]);
     }
 }
+
+    // Trip type and format on the public pages
+    public function test_trip_show_passes_the_type_and_format_ready_for_display(): void
+    {
+        $trip = Trip::factory()->create([
+            'type' => TripType::SingleBase->value,
+            'format' => TripFormat::Group->value,
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('trip.type_display', [
+                    'value' => 'single_base',
+                    'label' => 'Standplaatsreis',
+                    'description' => __('enum.trip_type_descriptions.single_base'),
+                ])
+                ->where('trip.format_display', [
+                    'value' => 'group',
+                    'label' => 'Groepsreis',
+                    'description' => __('enum.trip_format_descriptions.group'),
+                ])
+        );
+    }
+
+    public function test_trip_index_points_out_only_group_trips(): void
+    {
+        Trip::factory()->create(['type' => TripType::Tour->value, 'format' => TripFormat::Individual->value]);
+
+        $response = $this->get(route('trips.index'));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Index')
+                ->where('trips.0.type_display.label', 'Rondreis')
+                ->where('trips.0.format_display', null)
+        );
+    }
+
+    public function test_home_passes_the_trip_type_to_the_trip_cards(): void
+    {
+        Trip::factory()->create(['type' => TripType::CityTrip->value]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('trips.0.type_display.label', 'Stedentrip')
+        );
+    }
+
+    public function test_every_trip_type_and_format_has_a_label_and_description(): void
+    {
+        foreach ([...TripType::cases(), ...TripFormat::cases()] as $case) {
+            $display = $case->toDisplay();
+
+            $this->assertStringNotContainsString('enum.', $display['label'], $case->value);
+            $this->assertStringNotContainsString('enum.', $display['description'], $case->value);
+        }
+    }

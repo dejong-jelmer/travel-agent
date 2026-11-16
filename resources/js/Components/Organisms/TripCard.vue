@@ -2,8 +2,11 @@
 import { Link } from "@inertiajs/vue3";
 import placeholder from "@/../images/placeholder.webp";
 import { ArrowRight, Moon, TrainFront } from "@lucide/vue";
+import { computed } from "vue";
 
-// The trip comes with travel_mode ({ value: 'night_train' or 'day_train', label }), see Trip::travelMode()
+// The trip comes with travel_mode ({ value: 'night_train' or 'day_train', label }), see Trip::travelMode(), and with
+// type_display and format_display ({ value, label, description }, format_display null for an individual trip), see
+// Trip::typeDisplay() and Trip::formatDisplay()
 const props = defineProps({
     trip: Object,
     // Eager for a card that is in view when the page opens, such as the first one on the trips page
@@ -16,6 +19,13 @@ const props = defineProps({
 // Rendered width of the card: the full width (or most of it, in the slider) on phones, two side by side on tablets,
 // and from laptop on three in a row of at most about 420px each
 const IMAGE_SIZES = '(min-width: 900px) 420px, (min-width: 600px) 50vw, 100vw';
+
+// The traits shown as labels above the footer: the format only when it is pointed out, then the type. The format is the
+// exception (a group trip), so it comes first and its label stands out a little more.
+const traits = computed(() => [
+    props.trip.format_display && { ...props.trip.format_display, variant: 'highlight' },
+    props.trip.type_display && { ...props.trip.type_display, variant: 'outline' },
+].filter(Boolean));
 
 </script>
 <template>
@@ -49,11 +59,19 @@ const IMAGE_SIZES = '(min-width: 900px) 420px, (min-width: 600px) 50vw, 100vw';
                 {{ trip.subtitle }}
             </p>
 
+            <!-- Traits of the trip, pushed down with the footer so they line up across the cards in a row -->
+            <ul v-if="traits.length" class="mt-auto flex flex-wrap gap-2 pb-4">
+                <li v-for="trait in traits" :key="trait.value">
+                    <TripTraitBadge :label="trait.label" :variant="trait.variant" />
+                </li>
+            </ul>
+
             <!-- Travel mode and duration, and the call to action. The footer is a size container: from 300px on, where
                  the longest travel mode and duration fit next to the call to action, they share a line; below that the
                  duration goes under the travel mode, without the separator. -->
             <div
-                class="mt-auto flex items-center justify-between gap-3 py-4 border-t border-brand-accent/20 text-sm [container-type:inline-size]">
+                :class="{ 'mt-auto': !traits.length }"
+                class="flex items-center justify-between gap-3 py-4 border-t border-brand-accent/20 text-sm [container-type:inline-size]">
                 <p class="flex items-center gap-2 text-brand-text">
                     <Moon v-if="trip.travel_mode.value === 'night_train'" class="w-4 h-4 shrink-0 text-brand-primary"
                         aria-hidden="true" />
