@@ -17,7 +17,7 @@
 {!! __('departure.mail.label_decision_date') !!}: {!! $departure->decision_date->format('d-m-Y') !!}
 
 {!! __('departure.mail.button') !!}:
-{!! route('admin.trips.show', $departure->trip) !!}
+{!! route('admin.trips.departures.index', $departure->trip) !!}
 @endsection
 @section('footer')
 {!! __('departure.mail.footer') !!}

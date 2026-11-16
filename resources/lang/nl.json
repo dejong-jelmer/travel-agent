@@ -1417,7 +1417,8 @@
                     "title": "Vervoer",
                     "subtitle": "Gebruikte vervoersmiddelen",
                     "empty": "Geen vervoersmiddelen ingesteld"
-                }
+                },
+                "departures_tooltip": "Bekijk de vertrekken van deze groepsreis"
             },
             "edit": {
                 "items": {
@@ -1697,6 +1698,79 @@
                     "no_subscribers_found": "Geen abbonees gevonden.",
                     "no_subscribers_found_with_search": "Geen abbonees gevonden met de zoekopdracht: \"{search}\"."
                 }
+            }
+        },
+        "departures": {
+            "title": "Vertrekken",
+            "subtitle": "De vaste vertrekken van {trip}",
+            "add": "Vertrek toevoegen",
+            "empty": "Deze reis heeft nog geen vertrekken. Voeg het eerste vertrek toe om boekingen te kunnen aannemen.",
+            "not_a_group_trip": "Deze reis is een individuele reis en heeft geen vertrekken. Zet de reisvorm op groepsreis om vertrekken toe te voegen.",
+            "edit_trip": "Reis bewerken",
+            "days": "{count} dagen",
+            "status": {
+                "guaranteed_too": "Gegarandeerd"
+            },
+            "progress": {
+                "confirmed": "{count} bevestigd",
+                "held": "{count} in afwachting",
+                "minimum": "minimum {count}",
+                "seats": "{occupied} van {max} plekken bezet",
+                "available": "nog {count} vrij",
+                "aria": "{confirmed} bevestigd en {held} in afwachting van maximaal {max}, minimum {min}"
+            },
+            "price": {
+                "label": "Prijs p.p.",
+                "supplement": "Toeslag 1-persoonskamer",
+                "from_trip": "prijs van de reis"
+            },
+            "decision": {
+                "label": "Beslisdatum",
+                "overdue": "De beslisdatum is voorbij en er is nog geen besluit genomen.",
+                "awaits_guarantee": "Het minimum is gehaald. Garandeer het vertrek zodra je zeker weet dat het doorgaat."
+            },
+            "guaranteed_on": "Gegarandeerd op {date}",
+            "cancelled_on": "Geannuleerd op {date}",
+            "reason": "Reden",
+            "actions": {
+                "edit": "Bewerken",
+                "guarantee": "Garanderen",
+                "cancel": "Annuleren",
+                "delete": "Verwijderen"
+            },
+            "guarantee_confirm": "Je belooft je reizigers hiermee dat dit vertrek doorgaat. Dat kun je niet terugdraaien. Vertrek garanderen?",
+            "guarantee_confirm_below_minimum": "Het minimum van {min} bevestigde deelnemers is nog niet gehaald (nu {confirmed}). Je belooft je reizigers hiermee dat dit vertrek toch doorgaat. Dat kun je niet terugdraaien. Vertrek garanderen?",
+            "delete_confirm": "Weet je zeker dat je dit vertrek wilt verwijderen?",
+            "form": {
+                "create_title": "Vertrek toevoegen",
+                "edit_title": "Vertrek bewerken",
+                "departs_on": "Vertrekdatum",
+                "returns_on": "Terugreisdatum",
+                "min_participants": "Minimum deelnemers",
+                "max_participants": "Maximum deelnemers",
+                "price_per_person": "Prijs per persoon (€)",
+                "price_help": "Leeg: de prijs van de reis voor de vertrekdatum.",
+                "single_supplement": "Toeslag eenpersoonskamer (€)",
+                "supplement_help": "Leeg: de toeslag van de reis. 0: geen toeslag.",
+                "decision_date": "Beslisdatum",
+                "decision_help": "De datum waarop je besluit of het vertrek doorgaat. Leeg: de uiterste datum die de wet toestaat.",
+                "guaranteed": "Direct garanderen",
+                "guaranteed_help": "Het vertrek gaat hoe dan ook door. Dit kun je niet terugdraaien.",
+                "dates_move_bookings": "Dit vertrek heeft boekingen. Als je de datums wijzigt, krijgen die boekingen de nieuwe datums. Informeer je reizigers zelf.",
+                "save": "Opslaan",
+                "close": "Sluiten"
+            },
+            "cancel": {
+                "title": "Vertrek annuleren",
+                "intro": "Je annuleert het vertrek van {date}. Dit kun je niet terugdraaien.",
+                "bookings": "Alle boekingen op dit vertrek worden ook geannuleerd ({seats} bezette plekken). Je reizigers krijgen hier geen automatische mail over: informeer ze zelf en regel de terugbetaling.",
+                "no_bookings": "Er zijn geen boekingen op dit vertrek.",
+                "warning_guaranteed": "Dit vertrek is gegarandeerd. Je hebt je reizigers beloofd dat het doorgaat; annuleren kan dan alleen bij overmacht.",
+                "warning_decision_passed": "De beslisdatum ({date}) is voorbij. Annuleren omdat het minimum niet gehaald is kan wettelijk niet meer; alleen overmacht is nog een geldige reden.",
+                "reason": "Reden van annulering",
+                "reason_placeholder": "Bijvoorbeeld: minimum aantal deelnemers niet gehaald",
+                "submit": "Vertrek annuleren",
+                "back": "Niet annuleren"
             }
         }
     }

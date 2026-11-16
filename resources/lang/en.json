@@ -1419,7 +1419,8 @@
                     "title": "Transport",
                     "subtitle": "Used modes of transport",
                     "empty": "No modes of transport set"
-                }
+                },
+                "departures_tooltip": "View the departures of this group trip"
             },
             "edit": {
                 "items": {
@@ -1699,6 +1700,79 @@
                     "no_subscribers_found": "No subscribers found.",
                     "no_subscribers_found_with_search": "No subscribers found matching: \"{search}\"."
                 }
+            }
+        },
+        "departures": {
+            "title": "Departures",
+            "subtitle": "The fixed departures of {trip}",
+            "add": "Add departure",
+            "empty": "This trip has no departures yet. Add the first one to take bookings.",
+            "not_a_group_trip": "This trip is an individual trip and has no departures. Set its format to group trip to add departures.",
+            "edit_trip": "Edit trip",
+            "days": "{count} days",
+            "status": {
+                "guaranteed_too": "Guaranteed"
+            },
+            "progress": {
+                "confirmed": "{count} confirmed",
+                "held": "{count} pending",
+                "minimum": "minimum {count}",
+                "seats": "{occupied} of {max} places taken",
+                "available": "{count} left",
+                "aria": "{confirmed} confirmed and {held} pending of at most {max}, minimum {min}"
+            },
+            "price": {
+                "label": "Price p.p.",
+                "supplement": "Single room supplement",
+                "from_trip": "price of the trip"
+            },
+            "decision": {
+                "label": "Decision date",
+                "overdue": "The decision date has passed and no decision has been made.",
+                "awaits_guarantee": "The minimum is reached. Guarantee the departure once you are sure it goes ahead."
+            },
+            "guaranteed_on": "Guaranteed on {date}",
+            "cancelled_on": "Cancelled on {date}",
+            "reason": "Reason",
+            "actions": {
+                "edit": "Edit",
+                "guarantee": "Guarantee",
+                "cancel": "Cancel",
+                "delete": "Delete"
+            },
+            "guarantee_confirm": "This promises your travelers that the departure goes ahead. It cannot be undone. Guarantee the departure?",
+            "guarantee_confirm_below_minimum": "The minimum of {min} confirmed participants is not reached yet (now {confirmed}). This promises your travelers that the departure goes ahead anyway. It cannot be undone. Guarantee the departure?",
+            "delete_confirm": "Are you sure you want to delete this departure?",
+            "form": {
+                "create_title": "Add departure",
+                "edit_title": "Edit departure",
+                "departs_on": "Departure date",
+                "returns_on": "Return date",
+                "min_participants": "Minimum participants",
+                "max_participants": "Maximum participants",
+                "price_per_person": "Price per person (€)",
+                "price_help": "Empty: the price of the trip for the day of departure.",
+                "single_supplement": "Single room supplement (€)",
+                "supplement_help": "Empty: the supplement of the trip. 0: no supplement.",
+                "decision_date": "Decision date",
+                "decision_help": "The day you decide whether the departure goes ahead. Empty: the last day the law allows.",
+                "guaranteed": "Guarantee right away",
+                "guaranteed_help": "The departure goes ahead no matter what. This cannot be undone.",
+                "dates_move_bookings": "This departure has bookings. When you change the dates, those bookings get the new dates. Inform your travelers yourself.",
+                "save": "Save",
+                "close": "Close"
+            },
+            "cancel": {
+                "title": "Cancel departure",
+                "intro": "You are cancelling the departure of {date}. This cannot be undone.",
+                "bookings": "All bookings on this departure are cancelled as well ({seats} places taken). Your travelers get no automatic mail about this: inform them yourself and arrange the refund.",
+                "no_bookings": "There are no bookings on this departure.",
+                "warning_guaranteed": "This departure is guaranteed. You promised your travelers it goes ahead; cancelling is then only possible in case of force majeure.",
+                "warning_decision_passed": "The decision date ({date}) has passed. Cancelling because the minimum was not reached is no longer allowed by law; only force majeure is still a valid reason.",
+                "reason": "Reason for cancelling",
+                "reason_placeholder": "For example: minimum number of participants not reached",
+                "submit": "Cancel departure",
+                "back": "Do not cancel"
             }
         }
     }

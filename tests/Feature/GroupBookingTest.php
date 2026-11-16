@@ -361,7 +361,7 @@ class GroupBookingTest extends TestCase
         $mail->assertSeeInHtml('5 van 6 plekken');
         $mail->assertSeeInHtml('nog niet gegarandeerd');
         $mail->assertSeeInText('4 deelnemers, minimum 4');
-        $mail->assertSeeInText(route('admin.trips.show', $this->trip));
+        $mail->assertSeeInText(route('admin.trips.departures.index', $this->trip));
     }
 
     // Price

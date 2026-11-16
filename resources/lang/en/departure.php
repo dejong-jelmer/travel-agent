@@ -1,6 +1,27 @@
 <?php
 
 return [
+    // Page titles (Admin)
+    'title_index' => 'Departures',
+
+    // Flash messages
+    'created' => 'The departure has been created.',
+    'updated' => 'The departure has been updated.',
+    'deleted' => 'The departure has been deleted.',
+    'guaranteed' => 'The departure is guaranteed.',
+    'cancelled' => '{0} The departure is cancelled. There were no bookings to cancel.|{1} The departure is cancelled, along with :count booking.|[2,*] The departure is cancelled, along with :count bookings.',
+
+    'validation' => [
+        'not_a_group_trip' => 'Only a group trip has departures. Set the format of this trip to group trip first.',
+        'decision_date_too_late' => 'The decision date of this departure may not be later than :date.',
+        'deadline_passed' => 'The last decision date for this departure (:date) has passed, so the minimum number of participants can no longer be relied on. Create the departure as guaranteed.',
+        'not_editable' => 'A cancelled or completed departure can no longer be changed.',
+        'max_below_occupied' => ':occupied places are already taken. The maximum cannot go below that.',
+        'not_cancellable' => 'This departure is already cancelled or has already left.',
+        'not_guaranteeable' => 'A cancelled or completed departure cannot be guaranteed.',
+        'has_bookings' => 'This departure has bookings and cannot be deleted. Cancel the departure when it does not go ahead.',
+    ],
+
     // Why a booking cannot get places on a departure
     'booking' => [
         'required' => 'Choose a departure for this group trip.',
@@ -27,7 +48,7 @@ return [
         'label_decision_date' => 'Decision date',
         'confirmed_of_minimum' => ':confirmed participants, minimum :minimum',
         'occupied_of_maximum' => ':occupied of :maximum places',
-        'button' => 'View the trip',
+        'button' => 'View the departures',
         'footer' => 'Automatic notification about a departure of a group trip.',
     ],
 ];

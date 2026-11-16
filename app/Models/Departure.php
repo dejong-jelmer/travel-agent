@@ -164,6 +164,22 @@ class Departure extends Model
     }
 
     /**
+     * Whether the departure can still change: it is not cancelled and the travelers are not back yet.
+     */
+    public function canBeEdited(): bool
+    {
+        return ! $this->isCancelled() && ! $this->isCompleted();
+    }
+
+    /**
+     * Whether the departure can still be cancelled: it is not cancelled yet and has not left.
+     */
+    public function canBeCancelled(): bool
+    {
+        return ! $this->isCancelled() && $this->departs_on->gt(today());
+    }
+
+    /**
      * Why a booking of this many travelers cannot get places on this departure, as a message for the admin, or null
      * when it can. The count is only safe to act on while the departure row is locked, see BookingService.
      */

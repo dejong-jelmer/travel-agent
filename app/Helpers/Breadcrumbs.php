@@ -57,6 +57,14 @@ class Breadcrumbs
                 ['label' => __('itinerary.title_create'), 'route' => null],
             ],
 
+            // Departures (nested under trip)
+            'admin.trips.departures.index' => [
+                self::dashboardCrumb(),
+                self::tripCrumb(),
+                ['label' => request()->route('trip')->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [request()->route('trip')]],
+                ['label' => __('departure.title_index'), 'route' => null],
+            ],
+
             // Itinerary edit (unnested route)
             'admin.itineraries.edit' => self::itineraryEdit(),
 
