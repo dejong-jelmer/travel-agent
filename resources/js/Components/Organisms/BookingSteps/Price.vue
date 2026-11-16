@@ -17,6 +17,8 @@ const costCategories = computed(() => page.props.cost_categories ?? []);
 const fmt = (cents) => formatCents(cents, page.props.locale);
 
 const costItems = toRef(props.booking, 'cost_items');
+// A booking on a departure is sold at the price of the departure, not built from cost items. Keep the template to
+// one root element, without a comment next to it: BookingForm swaps the steps in a <Transition>, which needs that.
 const isGroup = computed(() => isGroupBooking(props.booking));
 
 // Snapshot for an existing booking, current settings for a new one.
@@ -54,7 +56,6 @@ function clearItemError(index, field) {
 </script>
 
 <template>
-    <!-- A booking on a departure is sold at the price of the departure, not built from cost items -->
     <DeparturePrice v-if="isGroup" :booking="booking" />
 
     <div v-else key="price" class="space-y-6">

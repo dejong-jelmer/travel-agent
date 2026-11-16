@@ -8,6 +8,7 @@ vi.mock("@inertiajs/vue3", () => ({
 
 import DeparturePicker from "@/Components/Organisms/BookingSteps/DeparturePicker.vue";
 import DeparturePrice from "@/Components/Organisms/BookingSteps/DeparturePrice.vue";
+import Price from "@/Components/Organisms/BookingSteps/Price.vue";
 import Input from "@/Components/Molecules/Input.vue";
 
 const departure = (attributes = {}) => ({
@@ -132,5 +133,36 @@ describe("DeparturePrice", () => {
         const wrapper = mount(DeparturePrice, { props: { booking: picked({ departure: null }) }, global });
 
         expect(wrapper.find('[data-testid="no-departure-price"]').exists()).toBe(true);
+    });
+});
+
+// BookingForm swaps the steps inside a <Transition mode="out-in">. That only works on a component with one element
+// as its root: with anything next to it, also a comment, the step never leaves and the next one stays empty.
+describe("Price step root", () => {
+    const mountPrice = (booking) => mount(Price, { props: { booking }, global: { ...global, stubs: { ...global.stubs, Select: true } } });
+
+    it("is a single element for an individual booking", () => {
+        const wrapper = mountPrice(form([], {
+            trip: { id: 1, format: "individual" },
+            cost_items: [{ category: "train", label: "", amount_per_person: null, quantity: 2 }],
+            margin_percentage: 15,
+            margin_amount: null,
+            fee_per_person: null,
+        }));
+
+        expect(wrapper.element.nodeType).toBe(Node.ELEMENT_NODE);
+        expect(wrapper.element.parentElement.childNodes).toHaveLength(1);
+        expect(wrapper.find("#margin_percentage").exists()).toBe(true);
+    });
+
+    it("is a single element for a booking on a departure", () => {
+        const wrapper = mountPrice(form([departure()], {
+            departure_id: 7,
+            departure: { id: 7, available_seats: 4, price_per_person: 120000, single_supplement: 15000 },
+        }));
+
+        expect(wrapper.element.nodeType).toBe(Node.ELEMENT_NODE);
+        expect(wrapper.element.parentElement.childNodes).toHaveLength(1);
+        expect(wrapper.find("#single_rooms").exists()).toBe(true);
     });
 });
