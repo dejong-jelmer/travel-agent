@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\Booking\Status as BookingStatus;
 use App\Enums\Trip\DepartureStatus;
+use App\Enums\TripRequest\Status as TripRequestStatus;
 use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
@@ -85,6 +86,14 @@ class Departure extends Model
     }
 
     /**
+     * @return HasMany<TripRequest, $this>
+     */
+    public function tripRequests(): HasMany
+    {
+        return $this->hasMany(TripRequest::class);
+    }
+
+    /**
      * Scope a query to the departures that still matter day to day: not cancelled, and the travelers not back yet.
      */
     #[Scope]
@@ -100,6 +109,21 @@ class Departure extends Model
     protected function visibleToVisitors(Builder $query): void
     {
         $query->whereNull('cancelled_at')->whereDate('departs_on', '>', today());
+    }
+
+    /**
+     * Scope a query to load what the open requests on the departures ask, as requested_seats (the travelers of the
+     * requests for a place) and interested_requests (the requests waiting for a place that comes free). Requests
+     * reserve nothing, so these say what may come, not what is taken.
+     */
+    #[Scope]
+    protected function withRequestCounts(Builder $query): void
+    {
+        $query->withSum([
+            'tripRequests as requested_seats' => fn (Builder $requests) => $requests->whereIn('status', TripRequestStatus::open())->where('interest_only', false),
+        ], 'travelers_count')->withCount([
+            'tripRequests as interested_requests' => fn (Builder $requests) => $requests->whereIn('status', TripRequestStatus::open())->where('interest_only', true),
+        ]);
     }
 
     /**

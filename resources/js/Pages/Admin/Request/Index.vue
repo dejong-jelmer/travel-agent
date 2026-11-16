@@ -11,6 +11,8 @@ const props = defineProps({
 
 const { t } = useI18n();
 
+const departureDate = (value) => new Intl.DateTimeFormat('nl', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value));
+
 const columns = [
     { key: 'id', label: '#', sortable: true },
     { key: 'name', label: t('admin.trip_request.index.table_headers.name'), sortable: true },
@@ -48,6 +50,13 @@ const currentFilters = computed(() => ({
                 <!-- Custom cell for trip -->
                 <template #cell-trip="{ row }">
                     {{ row.trip?.name ?? '-' }}
+                    <!-- A request for a group trip names its departure, and whether it waits for a place -->
+                    <span v-if="row.departure" class="block text-xs text-gray-500">
+                        {{ departureDate(row.departure.departs_on) }}
+                        <span v-if="row.interest_only" class="ml-1 rounded-full bg-brand-earth/45 px-2 py-0.5 text-brand-text">
+                            {{ t('admin.trip_request.interest_short') }}
+                        </span>
+                    </span>
                 </template>
 
                 <!-- Custom cell for status -->

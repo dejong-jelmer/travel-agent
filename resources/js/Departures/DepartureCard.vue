@@ -49,6 +49,13 @@ const price = (cents) => (cents === null ? t('admin.departures.price.from_trip')
         <DepartureProgress :occupied="departure.occupied_seats" :confirmed="departure.confirmed_participants"
             :min="departure.min_participants" :max="departure.max_participants" />
 
+        <!-- Open requests reserve nothing, so they are told apart from the bar -->
+        <p v-if="departure.requested_seats || departure.interested_requests" data-testid="open-requests"
+            class="flex flex-wrap gap-x-3 text-xs text-gray-600">
+            <span v-if="departure.requested_seats">{{ $t('admin.departures.requests.seats', { count: departure.requested_seats }) }}</span>
+            <span v-if="departure.interested_requests">{{ $t('admin.departures.requests.interest', { count: departure.interested_requests }) }}</span>
+        </p>
+
         <!-- What needs the admin's attention -->
         <p v-if="departure.decision_overdue" data-testid="decision-overdue"
             class="flex gap-3 text-sm text-brand-text bg-status-warning/10 border border-status-warning rounded-lg p-3">

@@ -165,4 +165,14 @@ class TripRequest extends Model
     {
         $query->where('status', Status::New);
     }
+
+    /**
+     * Scope a query to the requests the admin still has to handle: new or contacted, not yet converted to a booking
+     * or archived.
+     */
+    #[Scope]
+    protected function open(Builder $query): void
+    {
+        $query->whereIn('status', Status::open());
+    }
 }

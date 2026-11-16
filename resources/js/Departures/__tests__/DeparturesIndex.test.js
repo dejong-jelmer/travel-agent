@@ -268,3 +268,18 @@ describe("Participant list", () => {
         expect(wrapper.find('[data-testid="guarantee"]').exists()).toBe(false);
     });
 });
+
+describe("Open requests on a departure", () => {
+    it("shows the places asked and the requests waiting, apart from the bar", () => {
+        const text = mountPage({ departures: [departure({ requested_seats: 5, interested_requests: 1 })] })
+            .find('[data-testid="open-requests"]').text();
+
+        expect(text).toContain("5 plekken aangevraagd");
+        expect(text).toContain("1 wacht op een vrije plek");
+    });
+
+    it("says nothing without open requests or without the counts", () => {
+        expect(mountPage({ departures: [departure({ requested_seats: 0, interested_requests: 0 })] }).find('[data-testid="open-requests"]').exists()).toBe(false);
+        expect(mountPage({ departures: [departure()] }).find('[data-testid="open-requests"]').exists()).toBe(false);
+    });
+});

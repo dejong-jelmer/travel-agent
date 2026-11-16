@@ -44,6 +44,9 @@ class DepartureResource extends JsonResource
             'occupied_seats' => $this->occupiedSeats(),
             'confirmed_participants' => $this->confirmedParticipants(),
             'available_seats' => $this->availableSeats(),
+            // Only when loaded with the withRequestCounts() scope, on the admin pages that show them
+            'requested_seats' => $this->whenHas('requested_seats', fn ($seats) => (int) $seats),
+            'interested_requests' => $this->whenHas('interested_requests', fn ($count) => (int) $count),
             'has_reached_minimum' => $this->hasReachedMinimum(),
             // What the admin has to do now, see the methods on Departure
             'awaits_guarantee' => $this->awaitsGuarantee(),

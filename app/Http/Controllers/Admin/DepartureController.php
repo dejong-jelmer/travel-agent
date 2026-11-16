@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\DepartureRequest;
 use App\Http\Resources\DepartureBookingResource;
+use App\Http\Resources\DepartureRequestResource;
 use App\Http\Resources\DepartureResource;
 use App\Models\Departure;
 use App\Models\Trip;
@@ -30,10 +31,10 @@ class DepartureController extends Controller
      */
     public function overview(Request $request): Response
     {
-        $upcoming = Departure::upcoming()->withParticipantCounts()->with('trip')->orderBy('departs_on')->get();
+        $upcoming = Departure::upcoming()->withParticipantCounts()->withRequestCounts()->with('trip')->orderBy('departs_on')->get();
         [$attention, $rest] = $upcoming->partition(fn (Departure $departure) => $departure->needsAttention());
 
-        $past = Departure::withParticipantCounts()->with('trip')
+        $past = Departure::withParticipantCounts()->withRequestCounts()->with('trip')
             ->where(fn ($query) => $query->whereNotNull('cancelled_at')->orWhereDate('returns_on', '<', today()))
             ->orderByDesc('departs_on')
             ->limit(20)
@@ -53,7 +54,7 @@ class DepartureController extends Controller
      */
     public function show(Request $request, Departure $departure): Response
     {
-        $departure->load('trip');
+        $departure = Departure::withParticipantCounts()->withRequestCounts()->with('trip')->findOrFail($departure->id);
 
         $bookings = $departure->bookings()
             ->with(['travelers', 'contact'])
@@ -64,6 +65,10 @@ class DepartureController extends Controller
         return Inertia::render('Admin/Departures/Show', [
             'departure' => (new DepartureResource($departure))->resolve($request),
             'bookings' => DepartureBookingResource::collection($bookings)->resolve($request),
+            // The requests still to handle, the ones for a place before the ones waiting for a place that comes free
+            'tripRequests' => DepartureRequestResource::collection(
+                $departure->tripRequests()->open()->orderBy('interest_only')->orderBy('created_at')->get()
+            )->resolve($request),
             'title' => $this->pageTitle('departure.title_show'),
         ]);
     }
@@ -73,7 +78,7 @@ class DepartureController extends Controller
      */
     public function index(Request $request, Trip $trip): Response
     {
-        $departures = $trip->departures()->withParticipantCounts()->get();
+        $departures = $trip->departures()->withParticipantCounts()->withRequestCounts()->get();
 
         return Inertia::render('Admin/Trip/Departures/Index', [
             'trip' => $trip->only(['id', 'name', 'slug', 'duration']),

@@ -18,7 +18,7 @@ class DashboardController extends Controller
 
     public function showDashboard(Request $request, SystemHealthService $healthService)
     {
-        $departures = Departure::upcoming()->withParticipantCounts()->with('trip')->orderBy('decision_date')->get();
+        $departures = Departure::upcoming()->withParticipantCounts()->withRequestCounts()->with('trip')->orderBy('decision_date')->get();
         $attention = $departures->filter(fn (Departure $departure) => $departure->needsAttention())->values();
 
         return Inertia::render('Admin/Dashboard', [

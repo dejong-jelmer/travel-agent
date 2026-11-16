@@ -1598,8 +1598,15 @@
                 "booking_label": "Booking",
                 "booking_placeholder": "No booking linked",
                 "submit": "Save changes",
-                "submit_processing": "Saving…"
-            }
+                "submit_processing": "Saving…",
+                "departure": "Departure",
+                "seats_now": "{available} of {max} places free now",
+                "single_room": "Single room",
+                "yes": "Yes",
+                "no": "No"
+            },
+            "interest_only": "Departure was full: would like to hear when a place comes free",
+            "interest_short": "waiting for a place"
         },
         "booking": {
             "actions": {
@@ -1870,7 +1877,14 @@
                 "anonymized": "{count} travelers (anonymized)",
                 "special_requests": "Special requests",
                 "canceled": "Canceled bookings",
-                "persons": "{count} persons"
+                "persons": "{count} persons",
+                "open_requests": "Open requests",
+                "open_requests_help": "Requests reserve no places. Convert a request to a booking to secure the places.",
+                "single_room": "single room"
+            },
+            "requests": {
+                "seats": "{count} place requested | {count} places requested",
+                "interest": "{count} waiting for a free place | {count} waiting for a free place"
             }
         }
     }

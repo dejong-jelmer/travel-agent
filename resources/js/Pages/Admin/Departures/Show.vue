@@ -8,6 +8,9 @@ import { formatCents } from '@/Support/money.js';
 const props = defineProps({
     departure: { type: Object, required: true },
     bookings: { type: Array, required: true },
+    // Shape: [{ id, name, email, travelers, single_room, interest_only, status, status_label, created_at_formatted }],
+    // the requests on the departure that are still to handle
+    tripRequests: { type: Array, default: () => [] },
 });
 
 const locale = computed(() => usePage().props.locale);
@@ -98,6 +101,36 @@ const specialRequests = computed(() => active.value.flatMap((booking) => booking
                         </tbody>
                     </table>
                 </div>
+            </section>
+
+            <section v-if="tripRequests.length" data-testid="open-trip-requests"
+                class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                <div class="border-b border-gray-200 px-6 py-4">
+                    <h2 class="text-lg font-semibold text-gray-700">{{ $t('admin.departures.show.open_requests') }}</h2>
+                    <p class="mt-1 text-sm text-gray-700/50">{{ $t('admin.departures.show.open_requests_help') }}</p>
+                </div>
+                <ul class="divide-y divide-gray-100">
+                    <li v-for="request in tripRequests" :key="request.id"
+                        class="px-6 py-3 text-sm flex flex-wrap items-center justify-between gap-2">
+                        <span>
+                            <Link :href="route('admin.trip-requests.edit', request.id)" class="font-semibold text-brand-primary hover:underline">
+                                {{ request.name }}
+                            </Link>
+                            <span class="text-gray-600">
+                                · {{ $t('admin.departures.show.persons', { count: request.travelers }) }}
+                                <template v-if="request.single_room"> · {{ $t('admin.departures.show.single_room') }}</template>
+                                · {{ request.created_at_formatted }}
+                            </span>
+                        </span>
+                        <span class="flex items-center gap-2">
+                            <span v-if="request.interest_only"
+                                class="rounded-full bg-brand-earth/45 px-2.5 py-0.5 text-xs font-medium text-brand-text">
+                                {{ $t('admin.trip_request.interest_short') }}
+                            </span>
+                            <TripRequestStatusBadge :status="request.status">{{ request.status_label }}</TripRequestStatusBadge>
+                        </span>
+                    </li>
+                </ul>
             </section>
 
             <section v-if="specialRequests.length" data-testid="special-requests"

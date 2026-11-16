@@ -1596,8 +1596,15 @@
                 "booking_label": "Boeking",
                 "booking_placeholder": "Geen boeking gekoppeld",
                 "submit": "Wijzigingen opslaan",
-                "submit_processing": "Bezig met opslaan…"
-            }
+                "submit_processing": "Bezig met opslaan…",
+                "departure": "Vertrek",
+                "seats_now": "nu {available} van {max} plekken vrij",
+                "single_room": "Eenpersoonskamer",
+                "yes": "Ja",
+                "no": "Nee"
+            },
+            "interest_only": "Vertrek was vol: wil horen als er een plek vrijkomt",
+            "interest_short": "wacht op plek"
         },
         "booking": {
             "actions": {
@@ -1868,7 +1875,14 @@
                 "anonymized": "{count} reizigers (geanonimiseerd)",
                 "special_requests": "Bijzonderheden",
                 "canceled": "Geannuleerde boekingen",
-                "persons": "{count} personen"
+                "persons": "{count} personen",
+                "open_requests": "Open aanvragen",
+                "open_requests_help": "Aanvragen reserveren geen plek. Zet een aanvraag om naar een boeking om de plekken vast te leggen.",
+                "single_room": "eenpersoonskamer"
+            },
+            "requests": {
+                "seats": "{count} plek aangevraagd | {count} plekken aangevraagd",
+                "interest": "{count} wacht op een vrije plek | {count} wachten op een vrije plek"
             }
         }
     }

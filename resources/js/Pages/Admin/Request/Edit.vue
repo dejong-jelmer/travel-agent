@@ -1,5 +1,5 @@
 <script setup>
-import { useForm } from '@inertiajs/vue3';
+import { Link as InertiaLink, useForm } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { FileText, Activity, Link } from '@lucide/vue';
 
@@ -7,9 +7,15 @@ const { t } = useI18n();
 
 const props = defineProps({
     tripRequest: Object,
+    // The number of travelers as the mails show it, "more than 6" included
+    travelersLabel: String,
+    // The departure of a request for a group trip, see DepartureResource; null for an individual trip
+    departure: { type: Object, default: null },
     statusOptions: Array,
     bookingOptions: Array,
 });
+
+const departureDate = (value) => new Intl.DateTimeFormat('nl', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${value}T00:00:00`));
 
 const form = useForm({
     status: props.tripRequest.status,
@@ -78,7 +84,30 @@ function formatPreferredMonth(value) {
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.trip_request.edit.trip') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ tripRequest.trip?.name ?? '-' }}</dd>
                             </div>
-                            <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
+                            <!-- A request for a group trip: its departure, as it stands now -->
+                            <template v-if="departure">
+                                <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start" data-testid="request-departure">
+                                    <dt class="text-sm font-medium text-gray-500">{{ t('admin.trip_request.edit.departure') }}</dt>
+                                    <dd class="text-sm text-gray-900 col-span-2 space-y-1">
+                                        <InertiaLink :href="route('admin.departures.show', departure.id)" class="text-brand-link underline">
+                                            {{ departureDate(departure.departs_on) }} – {{ departureDate(departure.returns_on) }}
+                                        </InertiaLink>
+                                        <p class="text-gray-500">
+                                            {{ departure.status.label }} ·
+                                            {{ t('admin.trip_request.edit.seats_now', { available: departure.available_seats, max: departure.max_participants }) }}
+                                        </p>
+                                        <p v-if="tripRequest.interest_only" data-testid="request-interest"
+                                            class="inline-block rounded-full bg-brand-earth/45 px-2.5 py-0.5 text-xs font-medium text-brand-text">
+                                            {{ t('admin.trip_request.interest_only') }}
+                                        </p>
+                                    </dd>
+                                </div>
+                                <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
+                                    <dt class="text-sm font-medium text-gray-500">{{ t('admin.trip_request.edit.single_room') }}</dt>
+                                    <dd class="text-sm text-gray-900 col-span-2">{{ tripRequest.single_room ? t('admin.trip_request.edit.yes') : t('admin.trip_request.edit.no') }}</dd>
+                                </div>
+                            </template>
+                            <div v-if="!departure" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.trip_request.edit.preferred_period') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">
                                     {{ formatPreferredMonth(tripRequest.preferred_month) ?? t('admin.trip_request.edit.no_preference') }}
@@ -89,9 +118,9 @@ function formatPreferredMonth(value) {
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.trip_request.edit.travelers_count') }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2">{{ tripRequest.travelers_count ?? '-' }}</dd>
+                                <dd class="text-sm text-gray-900 col-span-2">{{ travelersLabel }}</dd>
                             </div>
-                            <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
+                            <div v-if="!departure" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
                                 <dt class="text-sm font-medium text-gray-500">{{ t('admin.trip_request.edit.departure_station') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">
                                     {{ tripRequest.departure_station }}
