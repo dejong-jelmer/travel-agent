@@ -10,6 +10,7 @@ use App\Enums\Trip\ItineraryType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\Trip\TripType;
 use App\Enums\UserRole;
 use App\Models\Destination;
 use App\Models\Image;
@@ -103,6 +104,7 @@ class TripTest extends TestCase
                 ['title' => 'highlight 3', 'description' => null],
             ],
             'published_at' => now(),
+            'type' => TripType::Tour->value,
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
             'prices' => [
@@ -123,6 +125,7 @@ class TripTest extends TestCase
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
         $this->assertEquals($tripData['subtitle'], $trip->subtitle);
+        $this->assertSame(TripType::Tour, $trip->type);
         $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals(
             array_map(fn (array $highlight) => [...$highlight, 'category' => null, 'label' => null], $tripData['highlights']),
@@ -198,6 +201,7 @@ class TripTest extends TestCase
                 ['title' => 'updated highlight 3', 'description' => null],
             ],
             'published_at' => now()->addDay(fake()->randomDigit())->startOfDay()->toDateTimeString(),
+            'type' => TripType::Tour->value,
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
             'prices' => [
@@ -275,6 +279,7 @@ class TripTest extends TestCase
             'destinations' => $this->destinations->modelKeys(),
             'highlights' => [['title' => 'highlight', 'description' => null]],
             'published_at' => now()->addDay()->startOfDay()->toDateTimeString(),
+            'type' => TripType::Tour->value,
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
             'prices' => [
@@ -1564,6 +1569,66 @@ class TripTest extends TestCase
         );
     }
 
+    public function test_trip_forms_pass_the_trip_type_options_with_their_labels(): void
+    {
+        $trip = Trip::factory()->create();
+
+        // Built inside the assertion: the request sets the locale the labels are translated in
+        $expected = fn () => array_map(
+            fn (TripType $type) => ['id' => $type->value, 'name' => __("enum.trip_types.{$type->value}")],
+            TripType::cases()
+        );
+
+        $this->get(route('admin.trips.create'))->assertInertia(
+            fn (AssertableInertia $page) => $page->component('Admin/Trip/Create')->where('tripTypeOptions', $expected())
+        );
+        $this->get(route('admin.trips.edit', $trip))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Trip/Edit')
+                ->where('tripTypeOptions', $expected())
+                ->where('trip.type', TripType::CityTrip->value)
+        );
+    }
+
+    #[DataProvider('tripTypes')]
+    public function test_trip_update_saves_every_trip_type(TripType $type): void
+    {
+        $trip = Trip::factory()->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['type' => $type->value]))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame($type, $trip->refresh()->type);
+    }
+
+    public static function tripTypes(): array
+    {
+        return array_map(fn (TripType $type) => [$type], TripType::cases());
+    }
+
+    public function test_trip_update_rejects_an_unknown_trip_type(): void
+    {
+        $trip = Trip::factory()->create(['type' => TripType::Tour]);
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['type' => 'cruise']))
+            ->assertSessionHasErrors('type');
+
+        $this->assertSame(TripType::Tour, $trip->refresh()->type);
+    }
+
+    public function test_trip_update_requires_a_trip_type(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['type' => null]))
+            ->assertSessionHasErrors('type');
+    }
+
+    public function test_trip_store_rejects_an_unknown_trip_type(): void
+    {
+        $this->post(route('admin.trips.store'), ['type' => 'cruise'])->assertSessionHasErrors('type');
+    }
+
     // Helper Methods
 
     private function generateTripUpdatePayload(Trip $trip, array $overrides = []): array
@@ -1573,6 +1638,7 @@ class TripTest extends TestCase
             'subtitle' => $trip->subtitle,
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),
+            'type' => $trip->type->value,
             'destinations' => $this->destinations->modelKeys(),
             'highlights' => [['title' => 'highlight 1', 'description' => null]],
             'meta_title' => $trip->meta_title,

@@ -7,6 +7,7 @@ use App\Enums\Transport;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\Trip\TripType;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -50,6 +51,7 @@ class TripFactory extends Factory
             'subtitle' => fake()->text(100),
             'description' => $this->generateDescription($city),
             'featured' => true,
+            'type' => TripType::CityTrip,
             'published_at' => today()->toDateTimeString(),
             'highlights' => fake()->optional()->randomElements(self::HIGHLIGHTS, fake()->numberBetween(1, 4)) ?? [],
             'meta_title' => $this->generateMetaTitle($city, $duration),

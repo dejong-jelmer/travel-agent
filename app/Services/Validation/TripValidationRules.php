@@ -8,6 +8,7 @@ use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\Trip\TripType;
 use App\Models\Trip;
 use App\Rules\NoOverlappingPricePeriods;
 use App\Services\TripContentParser;
@@ -84,6 +85,7 @@ class TripValidationRules
     {
         return [
             'active' => ['boolean'],
+            'type' => ['required', 'string', Rule::enum(TripType::class)],
             'featured' => ['boolean'],
             'published_at' => ['required', 'date'],
             'min_advance_days' => ['nullable', 'integer', 'min:0', 'max:730'],

@@ -385,6 +385,10 @@
                     "label": "Featured",
                     "help": "Should this trip be featured on the homepage?"
                 },
+                "type": {
+                    "label": "Trip type",
+                    "help": "The kind of trip: a city trip, a single base or a tour"
+                },
                 "min_advance": {
                     "label": "Minimum booking lead time",
                     "help": "How far in advance must a booking be made?",

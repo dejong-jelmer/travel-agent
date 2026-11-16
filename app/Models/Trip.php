@@ -67,6 +67,7 @@ class Trip extends Model
         'journey_section',
         'section_images',
         'hero_focus',
+        'type',
         'transport',
         'featured',
         'published_at',

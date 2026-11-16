@@ -26,6 +26,11 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [{ id, name }], the cases of the TripType enum
+    tripTypeOptions: {
+        type: Array,
+        default: () => []
+    },
     // Shape: [{ id, name }], the sections of the saved description that can become the journey section
     journeySectionOptions: {
         type: Array,
@@ -461,6 +466,14 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     <div class="p-6 space-y-6">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
+                                <div class="p-4 bg-white rounded-lg border border-gray-200">
+                                    <Select name="type" v-model="form.type" :required="true"
+                                        :label="t('forms.trip.fields.type.label')" :options="tripTypeOptions"
+                                        :feedback="form.errors.type" />
+                                    <span class="block text-xs text-gray-700/30 mt-2">
+                                        {{ t('forms.trip.fields.type.help') }}
+                                    </span>
+                                </div>
                                 <div class="p-4 bg-white rounded-lg border border-gray-200">
                                     <Label for="published_at" :required="true">{{
                                         t('forms.trip.fields.published_at.label')

@@ -385,6 +385,10 @@
                     "label": "Uitgelicht",
                     "help": "Moet deze reis worden uitgelicht op de homepage?"
                 },
+                "type": {
+                    "label": "Reistype",
+                    "help": "Het soort reis: een citytrip, één vaste verblijfplaats of een rondreis"
+                },
                 "min_advance": {
                     "label": "Minimale boekingstermijn",
                     "help": "Hoe ver van tevoren moet een boeking worden gemaakt?",
