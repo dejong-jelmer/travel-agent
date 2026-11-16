@@ -467,7 +467,9 @@ class Trip extends Model
      */
     protected function formatDisplay(): Attribute
     {
-        return Attribute::get(fn () => $this->format->isShownToVisitors() ? $this->format->toDisplay() : null);
+        return Attribute::make(
+            get: fn () => $this->format->isShownToVisitors() ? $this->format->toDisplay() : null
+        );
     }
 
     /**
