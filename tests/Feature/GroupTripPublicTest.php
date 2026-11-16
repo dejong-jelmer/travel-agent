@@ -321,4 +321,79 @@ class GroupTripPublicTest extends TestCase
     {
         $this->assertSame([], $this->showDepartures());
     }
+
+    // Structured data
+
+    private function touristTrip(?Trip $trip = null): array
+    {
+        $response = $this->get(route('trips.show', $trip ?? $this->trip))->assertOk();
+        $jsonLd = [];
+
+        $response->assertInertia(function (AssertableInertia $page) use (&$jsonLd) {
+            $jsonLd = $page->toArray()['props']['seo']['jsonLd'];
+        });
+
+        return collect($jsonLd['@graph'])->firstWhere('@type', 'TouristTrip');
+    }
+
+    public function test_structured_data_of_a_group_trip_has_an_offer_per_departure(): void
+    {
+        $this->trip->update(['min_advance_days' => 14]);
+        $this->departure(['price_per_person' => 129550]);
+        $few = $this->departure(['price_per_person' => 119500, 'departs_on' => '2027-07-01', 'returns_on' => '2027-07-07']);
+        $this->book($few, 5);
+        $full = $this->departure(['price_per_person' => 110000, 'departs_on' => '2027-08-01', 'returns_on' => '2027-08-07']);
+        $this->book($full, 8);
+
+        $offers = $this->touristTrip()['offers'];
+
+        $this->assertCount(3, $offers);
+        $this->assertSame([
+            '@type' => 'Offer',
+            'price' => 1295.5,
+            'priceCurrency' => 'EUR',
+            'availability' => 'https://schema.org/InStock',
+            'validThrough' => '2027-06-06',
+            'url' => route('trips.show', $this->trip),
+            'itemOffered' => [
+                '@type' => 'Trip',
+                'name' => $this->trip->name,
+                'departureTime' => '2027-06-20',
+                'arrivalTime' => '2027-06-26',
+            ],
+        ], $offers[0]);
+        $this->assertSame('https://schema.org/LimitedAvailability', $offers[1]['availability']);
+        $this->assertSame('https://schema.org/SoldOut', $offers[2]['availability']);
+    }
+
+    public function test_structured_data_leaves_out_departures_a_visitor_cannot_request_or_without_a_price(): void
+    {
+        $this->departure(['cancelled_at' => now(), 'cancellation_reason' => 'Strike']);
+        $this->departure(['departs_on' => '2027-01-10', 'returns_on' => '2027-01-16']);
+        $this->departure(['price_per_person' => null, 'departs_on' => '2028-06-20', 'returns_on' => '2028-06-26']);
+        $priced = $this->departure(['departs_on' => '2027-09-01', 'returns_on' => '2027-09-07']);
+
+        $offers = $this->touristTrip()['offers'];
+
+        $this->assertSame(['2027-09-01'], array_column(array_column($offers, 'itemOffered'), 'departureTime'));
+        $this->assertNotNull($priced);
+    }
+
+    public function test_structured_data_of_a_group_trip_without_departures_has_no_offers(): void
+    {
+        TripPrice::factory()->for($this->trip)->create(['base_price_pp' => 50000]);
+
+        $this->assertArrayNotHasKey('offers', $this->touristTrip());
+    }
+
+    public function test_structured_data_of_an_individual_trip_keeps_one_aggregate_offer(): void
+    {
+        $individual = Trip::factory()->withHeroImage()->create(['published_at' => '2027-01-01']);
+        TripPrice::factory()->for($individual)->create(['base_price_pp' => 89900]);
+
+        $offers = $this->touristTrip($individual)['offers'];
+
+        $this->assertSame('AggregateOffer', $offers['@type']);
+        $this->assertEquals(899, $offers['lowPrice']);
+    }
 }

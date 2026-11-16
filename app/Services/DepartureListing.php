@@ -41,6 +41,7 @@ class DepartureListing
      *     is_guaranteed: bool,
      *     min_participants: int|null,
      *     decision_date: string|null,
+     *     requestable_until: string,
      * }>
      */
     public function forTrip(Trip $trip): array
@@ -48,7 +49,7 @@ class DepartureListing
         $listing = [];
 
         foreach ($trip->requestableDepartures() as $departure) {
-            $listing[] = $this->forDeparture($departure->setRelation('trip', $trip));
+            $listing[] = $this->forDeparture($departure->setRelation('trip', $trip), $trip->min_advance_days);
         }
 
         return $listing;
@@ -70,7 +71,7 @@ class DepartureListing
     /**
      * @return array<string, mixed>
      */
-    private function forDeparture(Departure $departure): array
+    private function forDeparture(Departure $departure, ?int $advanceDays): array
     {
         try {
             $price = $this->priceCalculator->forDeparture($departure, persons: 1, singleRooms: 1);
@@ -103,6 +104,8 @@ class DepartureListing
             'decision_date' => $isGuaranteed || $departure->decision_date->lt(today())
                 ? null
                 : $departure->decision_date->toDateString(),
+            // The last day a place can be requested, for the structured data
+            'requestable_until' => $departure->lastRequestDate($advanceDays)->toDateString(),
         ];
     }
 }

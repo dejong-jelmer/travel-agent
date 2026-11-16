@@ -14,6 +14,7 @@ use App\Enums\Trip\TripType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
+use App\Services\DepartureListing;
 use App\Services\OgImageService;
 use App\Support\MoneyHelper;
 use Illuminate\Database\Eloquent\Attributes\Scope;
@@ -679,9 +680,14 @@ class Trip extends Model
      * `base_price_pp` across price rows, stored in cents) - the same source that
      * feeds `price_formatted`. Trips without a price are "expected" and get no Offer.
      *
+     * A group trip gets an Offer per departure instead, built from the departures as the trip page lists them (see
+     * DepartureListing::forTrip()): its price, its dates as the Trip it offers, and how much room is left. A
+     * departure without a price gets none.
+     *
+     * @param  list<array<string, mixed>>  $departures  The departures of a group trip as DepartureListing lists them
      * @return array<string, mixed>
      */
-    public function toTouristTripSchema(): array
+    public function toTouristTripSchema(array $departures = []): array
     {
         $schema = [
             '@type' => 'TouristTrip',
@@ -695,7 +701,13 @@ class Trip extends Model
             $schema['itinerary'] = $itinerary;
         }
 
-        if (! $this->is_expected && $this->starting_from_price !== null) {
+        if ($this->format === TripFormat::Group) {
+            $offers = $this->departureOffers($departures);
+
+            if ($offers !== []) {
+                $schema['offers'] = $offers;
+            }
+        } elseif (! $this->is_expected && $this->starting_from_price !== null) {
             $schema['offers'] = [
                 '@type' => 'AggregateOffer',
                 'lowPrice' => round($this->starting_from_price / 100, 2),
@@ -706,6 +718,47 @@ class Trip extends Model
         }
 
         return $schema;
+    }
+
+    /**
+     * An Offer per departure of a group trip that has a price. The prices are per person; the fees and funds a
+     * booking pays once on top are not in them, as on the trip page.
+     *
+     * @param  list<array<string, mixed>>  $departures
+     * @return list<array<string, mixed>>
+     */
+    private function departureOffers(array $departures): array
+    {
+        $url = route('trips.show', $this->slug);
+        $offers = [];
+
+        foreach ($departures as $departure) {
+            if ($departure['price_per_person'] === null) {
+                continue;
+            }
+
+            $offers[] = [
+                '@type' => 'Offer',
+                'price' => round($departure['price_per_person'] / 100, 2),
+                'priceCurrency' => config('seo.currency', 'EUR'),
+                'availability' => match ($departure['availability']) {
+                    DepartureListing::FULL => 'https://schema.org/SoldOut',
+                    DepartureListing::FEW_SEATS => 'https://schema.org/LimitedAvailability',
+                    default => 'https://schema.org/InStock',
+                },
+                // The last day a place can be requested
+                'validThrough' => $departure['requestable_until'],
+                'url' => $url,
+                'itemOffered' => [
+                    '@type' => 'Trip',
+                    'name' => $this->name,
+                    'departureTime' => $departure['departs_on'],
+                    'arrivalTime' => $departure['returns_on'],
+                ],
+            ];
+        }
+
+        return $offers;
     }
 
     /**

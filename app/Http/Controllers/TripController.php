@@ -54,6 +54,8 @@ class TripController extends Controller
     {
         $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items', 'prices', 'visibleDepartures']);
 
+        $departures = $this->departures->forTrip($trip);
+
         $breadcrumbs = BreadcrumbTrail::home()
             ->add(__('trip.title_index'), route('trips.index'))
             ->add($trip->name);
@@ -64,7 +66,7 @@ class TripController extends Controller
             ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->name)),
             // Same sizes as the hero image in TripHero
             ...$this->preloadImageSeo($trip->heroImage, '100vw'),
-        ], jsonLd: array_merge($trip->toTouristTripSchema(), [
+        ], jsonLd: array_merge($trip->toTouristTripSchema($departures), [
             'provider' => $this->travelAgencySchema(),
         ]), breadcrumbs: $breadcrumbs);
 
@@ -74,7 +76,7 @@ class TripController extends Controller
             // display, so none of them goes along twice
             'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries', 'visibleDepartures'])->append(['type_display', 'format_display']),
             // The departures of a group trip that can still be requested; empty for an individual trip
-            'departures' => $this->departures->forTrip($trip),
+            'departures' => $departures,
             'departureFees' => $this->departures->feesPerBooking(),
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
