@@ -15,6 +15,9 @@ const form = useForm({
     booking_fee: props.settings.booking_fee ?? null,
     guarantee_fund: props.settings.guarantee_fund ?? null,
     emergency_fund: props.settings.emergency_fund ?? null,
+    default_booking_margin_percentage: props.settings.default_booking_margin_percentage ?? null,
+    default_booking_margin_amount: props.settings.default_booking_margin_amount ?? null,
+    default_booking_fee_per_person: props.settings.default_booking_fee_per_person ?? null,
 });
 
 function submit() {
@@ -98,6 +101,53 @@ function submit() {
                                 :label="t('forms.settings.fields.emergency_fund.label')"
                                 :placeholder="t('forms.settings.fields.emergency_fund.help')"
                                 :feedback="form.errors.emergency_fund"
+                                step="0.50"
+                                min="0"
+                            />
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Default Margin Section -->
+                <div class="space-y-8">
+                    <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">
+                                {{ t('forms.settings.sections.default_margin') }}
+                            </h2>
+                            <p class="mt-1 text-sm text-gray-700/30">
+                                {{ t('forms.settings.sections.default_margin_help') }}
+                            </p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <Input
+                                type="number"
+                                name="default_booking_margin_percentage"
+                                v-model="form.default_booking_margin_percentage"
+                                :label="t('forms.settings.fields.default_booking_margin_percentage.label')"
+                                :placeholder="t('forms.settings.fields.default_booking_margin_percentage.help')"
+                                :feedback="form.errors.default_booking_margin_percentage"
+                                step="0.5"
+                                min="0"
+                                max="95"
+                            />
+                            <Input
+                                type="number"
+                                name="default_booking_margin_amount"
+                                v-model="form.default_booking_margin_amount"
+                                :label="t('forms.settings.fields.default_booking_margin_amount.label')"
+                                :placeholder="t('forms.settings.fields.default_booking_margin_amount.help')"
+                                :feedback="form.errors.default_booking_margin_amount"
+                                step="0.50"
+                                min="0"
+                            />
+                            <Input
+                                type="number"
+                                name="default_booking_fee_per_person"
+                                v-model="form.default_booking_fee_per_person"
+                                :label="t('forms.settings.fields.default_booking_fee_per_person.label')"
+                                :placeholder="t('forms.settings.fields.default_booking_fee_per_person.help')"
+                                :feedback="form.errors.default_booking_fee_per_person"
                                 step="0.50"
                                 min="0"
                             />

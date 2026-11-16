@@ -40,7 +40,6 @@ class BookingService
             'total_adults' => $totalAdults,
             'total_children' => $totalChildren,
             'margin_basis_points' => $bookingData->margin_basis_points,
-            'margin_in_percentage' => $bookingData->margin_in_percentage,
             'margin_amount' => $bookingData->margin_amount,
             'fee_per_person' => $bookingData->fee_per_person,
             // Snapshot the current settings so later changes leave this booking untouched.
@@ -89,10 +88,6 @@ class BookingService
 
             if ($bookingData->margin_basis_points !== null) {
                 $updateData['margin_basis_points'] = $bookingData->margin_basis_points;
-            }
-
-            if ($bookingData->margin_in_percentage !== null) {
-                $updateData['margin_in_percentage'] = $bookingData->margin_in_percentage;
             }
 
             if ($bookingData->margin_amount !== null) {

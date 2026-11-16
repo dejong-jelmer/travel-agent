@@ -16,7 +16,6 @@ describe("calculateBookingPrice — shared vectors", () => {
         (_name, vector) => {
             const result = calculateBookingPrice({
                 costItems: vector.cost_items,
-                marginInPercentage: vector.margin_in_percentage,
                 marginPercentage: vector.margin_percentage,
                 marginAmountCents: vector.margin_amount ?? 0,
                 feePerPersonCents: vector.fee_per_person ?? 0,
@@ -36,14 +35,6 @@ describe("calculateBookingPrice — shared vectors", () => {
             );
         },
     );
-
-    it("covers both margin modes", () => {
-        const modes = new Set(
-            fixture.vectors.map((vector) => vector.margin_in_percentage),
-        );
-
-        expect(modes).toEqual(new Set([true, false]));
-    });
 });
 
 describe("calculateBookingPrice — defaults", () => {

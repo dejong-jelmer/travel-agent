@@ -76,7 +76,7 @@ class BookingTest extends TestCase
                 ['category' => CostCategory::Transfer->value, 'label' => 'Transfer station-hotel', 'amount_per_person' => 9000, 'quantity' => 2],
                 ['category' => CostCategory::Ticket->value, 'label' => 'Toegang grottenroute', 'amount_per_person' => 3000, 'quantity' => 2],
             ],
-            'margin_percentage' => 35,
+            'margin_percentage' => 15,
         ]);
 
         $response = $this->post(route('admin.bookings.store'), $payload);
@@ -86,10 +86,10 @@ class BookingTest extends TestCase
 
         $this->assertCount(4, $booking->costItems);
         $this->assertSame(170000, $booking->total_cost);
-        $this->assertSame(3500, $booking->margin_basis_points);
-        // 170000 / (1 - 0.35) = 261538.461... rounded to 261538.
-        $this->assertSame(261538, $booking->calculated_price);
-        $this->assertSame(261538, $booking->display_price);
+        $this->assertSame(1500, $booking->margin_basis_points);
+        // 170000 / (1 - 0.15) = 200000.
+        $this->assertSame(200000, $booking->calculated_price);
+        $this->assertSame(200000, $booking->display_price);
     }
 
     public function test_booking_calculates_price_with_a_fixed_margin_and_fee_per_adult(): void
@@ -101,9 +101,9 @@ class BookingTest extends TestCase
                 ['category' => CostCategory::Train->value, 'label' => 'TGV Parijs–Bordeaux retour', 'amount_per_person' => 40000, 'quantity' => 2],
                 ['category' => CostCategory::Accommodation->value, 'label' => 'Boutiquehotel Sarlat', 'amount_per_person' => 45000, 'quantity' => 2],
             ],
-            'margin_in_percentage' => false,
-            'margin_amount' => 50000,
-            'fee_per_person' => 2500,
+            'margin_percentage' => 15,
+            'margin_amount' => 30000,
+            'fee_per_person' => 7500,
         ]);
 
         $response = $this->post(route('admin.bookings.store'), $payload);
@@ -111,11 +111,10 @@ class BookingTest extends TestCase
 
         $booking = Booking::firstOrFail()->load('costItems');
 
-        $this->assertFalse($booking->margin_in_percentage);
         $this->assertSame(170000, $booking->total_cost);
-        // 170000 cost + 50000 fixed margin + 2 adults x 2500 fee = 225000.
-        $this->assertSame(225000, $booking->calculated_price);
-        $this->assertSame(225000, $booking->display_price);
+        // 170000 / (1 - 0.15) = 200000, + 30000 fixed margin + 2 adults x 7500 fee = 245000.
+        $this->assertSame(245000, $booking->calculated_price);
+        $this->assertSame(245000, $booking->display_price);
     }
 
     public function test_fees_and_funds_are_added_on_top_of_the_calculated_price(): void
@@ -167,16 +166,53 @@ class BookingTest extends TestCase
         $this->assertSame($priceAtBooking, $booking->calculated_price);
     }
 
-    public function test_fixed_margin_requires_a_margin_amount_and_fee_per_person(): void
+    public function test_margin_amount_and_fee_per_person_are_optional(): void
     {
         $payload = $this->generateBookingPayload([
-            'margin_in_percentage' => false,
+            'numberOfAdults' => 2,
+            'numberOfChildren' => 0,
+            'margin_percentage' => 15,
+            'margin_amount' => null,
+            'fee_per_person' => null,
         ]);
-        unset($payload['margin_amount'], $payload['fee_per_person']);
 
         $response = $this->post(route('admin.bookings.store'), $payload);
+        $response->assertSessionHasNoErrors();
 
-        $response->assertSessionHasErrors(['margin_amount', 'fee_per_person']);
+        $booking = Booking::firstOrFail();
+
+        $this->assertNull($booking->margin_amount);
+        $this->assertNull($booking->fee_per_person);
+        // 140000 / (1 - 0.15) = 164705.88... rounded to 164706, nothing on top.
+        $this->assertSame(164706, $booking->calculated_price);
+    }
+
+    public function test_updating_the_margin_amount_and_fee_to_zero_clears_them(): void
+    {
+        $payload = $this->generateBookingPayload([
+            'numberOfAdults' => 2,
+            'numberOfChildren' => 0,
+            'margin_percentage' => 35,
+            'margin_amount' => 50000,
+            'fee_per_person' => 2500,
+        ]);
+        $this->post(route('admin.bookings.store'), $payload)->assertSessionHasNoErrors();
+
+        $booking = Booking::firstOrFail();
+        // 215385 + 50000 fixed margin + 2 adults x 2500 fee = 270385.
+        $this->assertSame(270385, $booking->calculated_price);
+
+        $updatePayload = $this->generateUpdatePayload($booking, [
+            'margin_amount' => 0,
+            'fee_per_person' => 0,
+        ]);
+        $this->put(route('admin.bookings.update', $booking), $updatePayload)->assertSessionHasNoErrors();
+
+        $booking->refresh();
+
+        $this->assertSame(0, $booking->margin_amount);
+        $this->assertSame(0, $booking->fee_per_person);
+        $this->assertSame(215385, $booking->calculated_price);
     }
 
     public function test_final_price_overrides_calculated_price(): void

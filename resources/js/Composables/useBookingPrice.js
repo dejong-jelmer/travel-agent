@@ -27,10 +27,6 @@ export function useBookingPrice(booking, feesAndFunds) {
     const form = computed(() => unref(booking));
     const fees = computed(() => unref(feesAndFunds) ?? {});
 
-    const marginInPercentage = computed(
-        () => form.value.margin_in_percentage !== false,
-    );
-
     // The fee is charged per adult; children do not pay it.
     const adultCount = computed(() => {
         const count = Number(form.value.participants?.adults);
@@ -46,7 +42,6 @@ export function useBookingPrice(booking, feesAndFunds) {
                 amount_per_person: toCents(item.amount_per_person),
                 quantity: item.quantity,
             })),
-            marginInPercentage: marginInPercentage.value,
             marginPercentage: form.value.margin_percentage,
             marginAmountCents: toCents(form.value.margin_amount),
             feePerPersonCents: toCents(form.value.fee_per_person),
@@ -66,9 +61,9 @@ export function useBookingPrice(booking, feesAndFunds) {
     const calculatedPriceCents = computed(() => price.value.calculatedPriceCents);
 
     return {
-        marginInPercentage,
         adultCount,
         costItemSubtotalCents,
+        percentageMarginCents: computed(() => price.value.percentageMarginCents),
         totalCostCents: computed(() => price.value.totalCostCents),
         // The fixed margin as typed, without the per-adult fee.
         fixedMarginCents: computed(() => toCents(form.value.margin_amount)),

@@ -42,17 +42,19 @@ const feesAndFundsTotalCents = computed(() =>
     sumFeesAndFunds(props.booking.fees_and_funds),
 );
 
+const feeTotalCents = computed(
+    () => (props.booking.fee_per_person ?? 0) * (props.booking.total_adults ?? 0),
+);
+
 // Derived from the stored price rather than recalculated, so this page always
 // shows what the server actually persisted.
-const marginAmountCents = computed(
+const percentageMarginCents = computed(
     () =>
         (props.booking.calculated_price ?? 0) -
         feesAndFundsTotalCents.value -
-        totalCostCents.value,
-);
-
-const feeTotalCents = computed(
-    () => (props.booking.fee_per_person ?? 0) * (props.booking.total_adults ?? 0),
+        totalCostCents.value -
+        (props.booking.margin_amount ?? 0) -
+        feeTotalCents.value,
 );
 
 const hasOverride = computed(() => props.booking.final_price !== null && props.booking.final_price !== undefined);
@@ -71,11 +73,13 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                             </h1>
                             <div class="mt-2 flex items-center gap-3">
                                 <p class="text-sm text-gray-700/50">{{ booking.trip?.name }}</p>
-                                <BookingStatusBadge :status="booking.status">{{ booking.status_label }}</BookingStatusBadge>
+                                <BookingStatusBadge :status="booking.status">{{ booking.status_label }}
+                                </BookingStatusBadge>
                             </div>
                         </div>
                         <div class="flex space-x-2">
-                            <IconLink type="info" icon="Route" :href="route('admin.bookings.travel-plan', booking)" v-tippy="'Reisplan'" />
+                            <IconLink type="info" icon="Route" :href="route('admin.bookings.travel-plan', booking)"
+                                v-tippy="'Reisplan'" />
                             <IconLink type="info" icon="Pencil" :href="route('admin.bookings.edit', booking)"
                                 v-tippy="t('admin.booking.actions.edit')" />
                             <IconLink type="delete" icon="Trash2" :href="route('admin.bookings.destroy', booking)"
@@ -91,13 +95,15 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <FileText class="h-4 w-4 text-gray-400 flex-shrink-0" />
-                                <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.details') }}</h2>
+                                <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.details') }}
+                                </h2>
                             </div>
                             <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.info') }}</p>
                         </div>
                         <dl class="divide-y divide-gray-100">
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.reference') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.reference') }}
+                                </dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.reference }}</dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
@@ -110,19 +116,23 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                                 </dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.departure_date') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.departure_date')
+                                    }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.departure_date_formatted }}</dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.return_date') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.return_date') }}
+                                </dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.return_date_formatted }}</dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.created_at') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.created_at') }}
+                                </dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.created_at_formatted }}</dd>
                             </div>
                             <div v-if="booking.trip_request" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.trip_request') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.trip_request') }}
+                                </dt>
                                 <dd class="text-sm col-span-2">
                                     <DefaultLink :href="route('admin.trip-requests.edit', booking.trip_request)"
                                         class="text-gray-900 hover:text-brand-link underline">
@@ -131,8 +141,10 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                                 </dd>
                             </div>
                             <div v-if="booking.internal_notes" class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.internal_notes') }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2 whitespace-pre-line">{{ booking.internal_notes }}</dd>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.internal_notes')
+                                    }}</dt>
+                                <dd class="text-sm text-gray-900 col-span-2 whitespace-pre-line">{{
+                                    booking.internal_notes }}</dd>
                             </div>
                         </dl>
                     </section>
@@ -142,26 +154,32 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <User class="h-4 w-4 text-gray-400 flex-shrink-0" />
-                                <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.contact') }}</h2>
+                                <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.contact') }}
+                                </h2>
                             </div>
                             <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.contact_info') }}</p>
                         </div>
                         <dl class="divide-y divide-gray-100">
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.contact_name') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.contact_name') }}
+                                </dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.contact?.name }}</dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.contact_email') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.contact_email')
+                                    }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.contact?.email }}</dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.contact_telephone') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{
+                                    t('admin.booking.show.contact_telephone') }}</dt>
                                 <dd class="text-sm text-gray-900 col-span-2">{{ booking.contact?.phone }}</dd>
                             </div>
                             <div class="px-6 py-4 grid grid-cols-3 gap-4 items-start">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.contact_address') }}</dt>
-                                <dd class="text-sm text-gray-900 col-span-2 whitespace-pre-line">{{ booking.contact?.address }}</dd>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.contact_address')
+                                    }}</dt>
+                                <dd class="text-sm text-gray-900 col-span-2 whitespace-pre-line">{{
+                                    booking.contact?.address }}</dd>
                             </div>
                         </dl>
                     </section>
@@ -172,25 +190,29 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                             <div class="flex items-center gap-3">
                                 <div class="flex items-center gap-2">
                                     <Users class="h-4 w-4 text-gray-400 flex-shrink-0" />
-                                    <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.travelers') }}</h2>
+                                    <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.travelers')
+                                        }}</h2>
                                 </div>
                                 <span class="text-xs font-medium bg-gray-100 text-gray-600 rounded-full px-2 py-0.5">
                                     {{ totalTravelers }}
                                 </span>
                             </div>
-                            <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.travelers_subheader') }}</p>
+                            <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.travelers_subheader')
+                                }}</p>
                         </div>
                         <div class="p-6">
                             <div class="grid grid-cols-1 laptop:grid-cols-2 gap-6">
                                 <div v-if="booking.adults?.length">
-                                    <h3 class="text-sm font-medium text-gray-700 mb-3">{{ t('booker.adults', booking.adults.length) }}</h3>
+                                    <h3 class="text-sm font-medium text-gray-700 mb-3">{{ t('booker.adults',
+                                        booking.adults.length) }}</h3>
                                     <div class="space-y-2">
                                         <Booker v-for="(adult, index) in booking.adults" :key="index" :booker="adult"
                                             :index="index" />
                                     </div>
                                 </div>
                                 <div v-if="booking.children?.length">
-                                    <h3 class="text-sm font-medium text-gray-700 mb-3">{{ t('booker.children', booking.children.length) }}</h3>
+                                    <h3 class="text-sm font-medium text-gray-700 mb-3">{{ t('booker.children',
+                                        booking.children.length) }}</h3>
                                     <div class="space-y-2">
                                         <Booker v-for="(child, index) in booking.children" :key="index"
                                             :booker="child" />
@@ -207,21 +229,26 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <Activity class="h-4 w-4 text-gray-400 flex-shrink-0" />
-                                <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.booking_status') }}</h2>
+                                <h2 class="text-lg font-semibold text-gray-700">{{
+                                    t('admin.booking.show.booking_status') }}</h2>
                             </div>
                             <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.status_info') }}</p>
                         </div>
                         <dl class="divide-y divide-gray-100">
                             <div class="flex items-center justify-between px-6 py-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.booking_status') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.booking_status')
+                                    }}</dt>
                                 <dd>
-                                    <BookingStatusBadge :status="booking.status">{{ booking.status_label }}</BookingStatusBadge>
+                                    <BookingStatusBadge :status="booking.status">{{ booking.status_label }}
+                                    </BookingStatusBadge>
                                 </dd>
                             </div>
                             <div class="flex items-center justify-between px-6 py-4">
-                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.payment_status') }}</dt>
+                                <dt class="text-sm font-medium text-gray-500">{{ t('admin.booking.show.payment_status')
+                                    }}</dt>
                                 <dd>
-                                    <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status_label }}</PaymentStatusBadge>
+                                    <PaymentStatusBadge :status="booking.payment_status">{{ booking.payment_status_label
+                                        }}</PaymentStatusBadge>
                                 </dd>
                             </div>
                         </dl>
@@ -232,16 +259,19 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                         <div class="border-b border-gray-200 bg-white px-6 py-4">
                             <div class="flex items-center gap-2">
                                 <Receipt class="h-4 w-4 text-gray-400 flex-shrink-0" />
-                                <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.pricing.title') }}</h2>
+                                <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.booking.show.pricing.title')
+                                    }}</h2>
                             </div>
-                            <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.pricing.subtitle') }}</p>
+                            <p class="mt-1 text-sm text-gray-700/30 pl-6">{{ t('admin.booking.show.pricing.subtitle') }}
+                            </p>
                         </div>
                         <div class="p-6 space-y-3">
                             <div v-if="costItems.length === 0" class="text-sm text-gray-500 italic">
                                 {{ t('admin.booking.show.pricing.no_cost_items') }}
                             </div>
 
-                            <ul v-else class="divide-y divide-gray-100 border border-gray-100 rounded-lg overflow-hidden">
+                            <ul v-else
+                                class="divide-y divide-gray-100 border border-gray-100 rounded-lg overflow-hidden">
                                 <li v-for="(item, index) in costItems" :key="index"
                                     class="grid grid-cols-12 gap-2 px-4 py-3 text-sm bg-gray-50">
                                     <div class="col-span-5">
@@ -258,22 +288,21 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                             </ul>
 
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.total_cost') }}</span>
+                                <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.total_cost')
+                                    }}</span>
                                 <span class="font-semibold text-gray-900">{{ formatPrice(totalCostCents) }}</span>
                             </div>
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <span class="text-sm font-medium text-gray-700">
-                                    <template v-if="booking.margin_in_percentage">
-                                        {{ t('booking_steps.price.margin') }} ({{ marginPercentage }}%)
-                                    </template>
-                                    <template v-else>{{ t('booking_steps.price.margin_fixed') }}</template>
+                                    {{ t('booking_steps.price.margin') }} ({{ marginPercentage }}%)
                                 </span>
-                                <span class="font-semibold text-gray-900">
-                                    {{ formatPrice(booking.margin_in_percentage ? marginAmountCents : booking.margin_amount) }}
-                                </span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(percentageMarginCents) }}</span>
                             </div>
-                            <div v-if="!booking.margin_in_percentage"
-                                class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                                <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.margin_fixed') }}</span>
+                                <span class="font-semibold text-gray-900">{{ formatPrice(booking.margin_amount ?? 0) }}</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                                 <span class="text-sm font-medium text-gray-700">
                                     {{ t('booking_steps.price.fee_total', { count: booking.total_adults ?? 0 }) }}
                                 </span>
@@ -281,11 +310,13 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                             </div>
                             <div v-for="[key, cents] in feesAndFundsRows" :key="key"
                                 class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">{{ t(`booking_steps.overview.${key}`) }}</span>
+                                <span class="text-sm font-medium text-gray-700">{{ t(`booking_steps.overview.${key}`)
+                                    }}</span>
                                 <span class="font-semibold text-gray-900">{{ formatPrice(cents) }}</span>
                             </div>
                             <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                                <span class="text-sm font-medium text-gray-700">{{ t('booking_steps.price.calculated_price') }}</span>
+                                <span class="text-sm font-medium text-gray-700">{{
+                                    t('booking_steps.price.calculated_price') }}</span>
                                 <span class="font-semibold text-gray-900"
                                     :class="{ 'line-through opacity-50': hasOverride }">
                                     {{ formatPrice(booking.calculated_price) }}
@@ -293,12 +324,17 @@ const hasOverride = computed(() => props.booking.final_price !== null && props.b
                             </div>
                             <div v-if="hasOverride"
                                 class="flex items-center justify-between p-3 bg-brand-accent/10 rounded-lg border border-brand-accent/30">
-                                <span class="text-sm font-medium text-brand-accent">{{ t('booking_steps.price.final_price') }}</span>
-                                <span class="font-semibold text-brand-accent">{{ formatPrice(booking.final_price) }}</span>
+                                <span class="text-sm font-medium text-brand-accent">{{
+                                    t('booking_steps.price.final_price') }}</span>
+                                <span class="font-semibold text-brand-accent">{{ formatPrice(booking.final_price)
+                                    }}</span>
                             </div>
-                            <div class="flex items-center justify-between p-4 bg-brand-primary/5 rounded-lg border border-brand-primary/20">
-                                <span class="text-sm font-semibold text-gray-700">{{ t('booking_steps.price.display_price') }}</span>
-                                <span class="text-lg font-bold text-brand-primary">{{ formatPrice(booking.display_price) }}</span>
+                            <div
+                                class="flex items-center justify-between p-4 bg-brand-primary/5 rounded-lg border border-brand-primary/20">
+                                <span class="text-sm font-semibold text-gray-700">{{
+                                    t('booking_steps.price.display_price') }}</span>
+                                <span class="text-lg font-bold text-brand-primary">{{ formatPrice(booking.display_price)
+                                    }}</span>
                             </div>
                         </div>
                     </section>

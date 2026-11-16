@@ -2,7 +2,7 @@
 import { watch, reactive, readonly, computed } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 
-const DEFAULT_MARGIN_BASIS_POINTS = 3500;
+const DEFAULT_MARGIN_BASIS_POINTS = 1500;
 
 const createCostItem = (data = {}) => ({
     category: data.category || "train",
@@ -66,6 +66,15 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
     const initialMarginBp =
         db_booking?.margin_basis_points ?? defaultMargin;
 
+    // A new booking starts with the amounts from the settings. An existing
+    // booking keeps its own, where empty means none.
+    const initialMarginAmount = db_booking
+        ? db_booking.margin_amount
+        : usePage().props.default_margin_amount;
+    const initialFeePerPerson = db_booking
+        ? db_booking.fee_per_person
+        : usePage().props.default_fee_per_person;
+
     const booking = useForm({
         trip: trip || null,
         status: db_booking?.status || null,
@@ -100,16 +109,11 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         internal_notes: db_booking?.internal_notes || "",
         cost_items: costItems,
         margin_percentage: initialMarginBp / 100,
-        margin_in_percentage: db_booking?.margin_in_percentage ?? true,
         // Stored in euros; converted to cents on submit.
         margin_amount:
-            db_booking?.margin_amount != null
-                ? db_booking.margin_amount / 100
-                : null,
+            initialMarginAmount != null ? initialMarginAmount / 100 : null,
         fee_per_person:
-            db_booking?.fee_per_person != null
-                ? db_booking.fee_per_person / 100
-                : null,
+            initialFeePerPerson != null ? initialFeePerPerson / 100 : null,
         final_price:
             db_booking?.final_price != null
                 ? db_booking.final_price / 100
