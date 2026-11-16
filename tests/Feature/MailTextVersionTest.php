@@ -7,6 +7,7 @@ use App\Events\BookingFailed;
 use App\Mail\AdminBookingFailedMail;
 use App\Mail\AdminBookingNotificationMail;
 use App\Mail\AdminContactFormNotificationMail;
+use App\Mail\AdminDepartureMinimumReachedMail;
 use App\Mail\AdminNewsletterSubscriptionMail;
 use App\Mail\BookingConfirmationMail;
 use App\Mail\NewsletterCampaignMail;
@@ -14,6 +15,7 @@ use App\Mail\NewsletterConfirmation;
 use App\Mail\TripRequestConfirmationMail;
 use App\Mail\TripRequestNotificationMail;
 use App\Models\Booking;
+use App\Models\Departure;
 use App\Models\NewsletterCampaign;
 use App\Models\NewsletterSubscriber;
 use App\Models\Trip;
@@ -47,6 +49,7 @@ class MailTextVersionTest extends TestCase
             new NewsletterCampaignMail($campaign, $subscriber),
             new TripRequestConfirmationMail($tripRequest),
             new TripRequestNotificationMail($tripRequest),
+            new AdminDepartureMinimumReachedMail(Departure::factory()->for($trip)->create()),
         ];
 
         foreach ($mailables as $mailable) {
@@ -55,6 +58,7 @@ class MailTextVersionTest extends TestCase
             $mailable->assertDontSeeInText('&#039;');
             $mailable->assertDontSeeInText('&amp;');
             $mailable->assertDontSeeInText('trip_request.mail.');
+            $mailable->assertDontSeeInText('departure.mail.');
         }
     }
 

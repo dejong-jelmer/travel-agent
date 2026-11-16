@@ -164,6 +164,24 @@ class Departure extends Model
     }
 
     /**
+     * Why a booking of this many travelers cannot get places on this departure, as a message for the admin, or null
+     * when it can. The count is only safe to act on while the departure row is locked, see BookingService.
+     */
+    public function refusalToBook(int $travelers): ?string
+    {
+        return match (true) {
+            $this->isCancelled() => __('departure.booking.cancelled'),
+            $this->departs_on->lte(today()) => __('departure.booking.departed'),
+            $this->availableSeats() === 0 => __('departure.booking.full'),
+            $this->availableSeats() < $travelers => __('departure.booking.not_enough_seats', [
+                'available' => $this->availableSeats(),
+                'requested' => $travelers,
+            ]),
+            default => null,
+        };
+    }
+
+    /**
      * Promise the travelers that this departure goes ahead. The promise stands, also when bookings are canceled
      * afterwards: nothing in the app takes guaranteed_at away again.
      *

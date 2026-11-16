@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Events\BookingCreated;
 use App\Events\BookingFailed;
+use App\Events\DepartureMinimumReached;
 use App\Events\NewsletterSubscriptionRequested;
 use App\Events\TripRequestCreated;
+use App\Listeners\NotifyAdminOfDepartureMinimumReached;
 use App\Listeners\NotifyAdminOfFailedBooking;
 use App\Listeners\NotifyAdminOfNewBooking;
 use App\Listeners\NotifyAdminOfNewsletterSubscription;
@@ -24,6 +26,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         BookingFailed::class => [
             NotifyAdminOfFailedBooking::class,
+        ],
+        DepartureMinimumReached::class => [
+            NotifyAdminOfDepartureMinimumReached::class,
         ],
         NewsletterSubscriptionRequested::class => [
             SendNewsletterConfirmationEmail::class,
