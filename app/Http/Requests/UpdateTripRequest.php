@@ -82,6 +82,7 @@ class UpdateTripRequest extends FormRequest
             TripValidationRules::keyFacts(),
             TripValidationRules::prices(),
             TripValidationRules::settings(),
+            TripValidationRules::format($trip),
             TripValidationRules::seo(),
             TripValidationRules::destinations(),
             TripValidationRules::transport(),

@@ -15,6 +15,10 @@ return [
         'single_base' => 'Single base',
         'tour' => 'Tour',
     ],
+    'trip_formats' => [
+        'individual' => 'Individual trip',
+        'group' => 'Group trip',
+    ],
     'trip_requests' => [
         'new' => 'New',
         'contacted' => 'Contacted',

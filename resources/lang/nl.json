@@ -389,6 +389,11 @@
                     "label": "Reistype",
                     "help": "Het soort reis: een citytrip, één vaste verblijfplaats of een rondreis"
                 },
+                "format": {
+                    "label": "Reisvorm",
+                    "help": "Individueel: de klant kiest zelf een datum. Groepsreis: de klant boekt op een vast vertrek.",
+                    "locked": "De reisvorm ligt vast zolang er boekingen zijn die nog moeten vertrekken."
+                },
                 "min_advance": {
                     "label": "Minimale boekingstermijn",
                     "help": "Hoe ver van tevoren moet een boeking worden gemaakt?",

@@ -10,6 +10,7 @@ const props = defineProps({
     highlightCategoryOptions: Array,
     heroFocusOptions: Array,
     tripTypeOptions: Array,
+    tripFormatOptions: Array,
     practicalSections: Object,
 });
 
@@ -29,6 +30,7 @@ const form = useForm({
     journey_section: "",
     duration: "",
     type: props.tripTypeOptions?.[0]?.id ?? "",
+    format: props.tripFormatOptions?.[0]?.id ?? "",
     transport: [],
     destinations: [],
     heroImage: null,
@@ -63,6 +65,7 @@ function submit() {
             :highlight-category-options="highlightCategoryOptions"
             :hero-focus-options="heroFocusOptions"
             :trip-type-options="tripTypeOptions"
+            :trip-format-options="tripFormatOptions"
             :practical-sections="practicalSections"
             @submit="submit" />
     </Admin>

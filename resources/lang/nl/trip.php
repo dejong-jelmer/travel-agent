@@ -130,6 +130,10 @@ return [
         'airplane' => 'Vliegtuig',
     ],
 
+    'format' => [
+        'locked' => 'De reisvorm kan niet worden gewijzigd zolang er boekingen zijn die nog moeten vertrekken.',
+    ],
+
     // How a trip travels, shown on the trip cards: by night train when its itinerary has a night train
     'travel_mode' => [
         'night_train' => 'Nachttrein',

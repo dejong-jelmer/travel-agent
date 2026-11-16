@@ -8,6 +8,7 @@ use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\Trip\TripFormat;
 use App\Enums\Trip\TripType;
 use App\Models\Trip;
 use App\Rules\NoOverlappingPricePeriods;
@@ -89,6 +90,26 @@ class TripValidationRules
             'featured' => ['boolean'],
             'published_at' => ['required', 'date'],
             'min_advance_days' => ['nullable', 'integer', 'min:0', 'max:730'],
+        ];
+    }
+
+    /**
+     * The format is one of the TripFormat cases. An existing trip keeps its format once it is locked, see
+     * Trip::hasLockedFormat().
+     */
+    public static function format(?Trip $trip = null): array
+    {
+        return [
+            'format' => [
+                'required',
+                'string',
+                Rule::enum(TripFormat::class),
+                function (string $attribute, mixed $value, \Closure $fail) use ($trip) {
+                    if ($trip && $value !== $trip->format->value && $trip->hasLockedFormat()) {
+                        $fail(__('trip.format.locked'));
+                    }
+                },
+            ],
         ];
     }
 

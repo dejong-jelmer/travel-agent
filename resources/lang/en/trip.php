@@ -130,6 +130,10 @@ return [
         'airplane' => 'Airplane',
     ],
 
+    'format' => [
+        'locked' => 'The trip format cannot change while there are bookings that still have to depart.',
+    ],
+
     // How a trip travels, shown on the trip cards: by night train when its itinerary has a night train
     'travel_mode' => [
         'night_train' => 'Night train',

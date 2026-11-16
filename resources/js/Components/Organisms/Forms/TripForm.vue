@@ -31,6 +31,16 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [{ id, name }], the cases of the TripFormat enum
+    tripFormatOptions: {
+        type: Array,
+        default: () => []
+    },
+    // The format of a trip with bookings that still have to depart cannot change
+    formatLocked: {
+        type: Boolean,
+        default: false
+    },
     // Shape: [{ id, name }], the sections of the saved description that can become the journey section
     journeySectionOptions: {
         type: Array,
@@ -472,6 +482,14 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                                         :feedback="form.errors.type" />
                                     <span class="block text-xs text-gray-700/30 mt-2">
                                         {{ t('forms.trip.fields.type.help') }}
+                                    </span>
+                                </div>
+                                <div class="p-4 bg-white rounded-lg border border-gray-200">
+                                    <Select name="format" v-model="form.format" :required="true"
+                                        :label="t('forms.trip.fields.format.label')" :options="tripFormatOptions"
+                                        :disabled="formatLocked" :feedback="form.errors.format" />
+                                    <span class="block text-xs text-gray-700/30 mt-2">
+                                        {{ formatLocked ? t('forms.trip.fields.format.locked') : t('forms.trip.fields.format.help') }}
                                     </span>
                                 </div>
                                 <div class="p-4 bg-white rounded-lg border border-gray-200">

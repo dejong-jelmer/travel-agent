@@ -11,6 +11,8 @@ const props = defineProps({
     highlightCategoryOptions: Array,
     heroFocusOptions: Array,
     tripTypeOptions: Array,
+    tripFormatOptions: Array,
+    formatLocked: Boolean,
     journeySectionOptions: Array,
     practicalSections: Object,
 });
@@ -63,6 +65,8 @@ function submit() {
             :highlight-category-options="highlightCategoryOptions"
             :hero-focus-options="heroFocusOptions"
             :trip-type-options="tripTypeOptions"
+            :trip-format-options="tripFormatOptions"
+            :format-locked="formatLocked"
             :journey-section-options="journeySectionOptions"
             :gallery-images="trip.images"
             :practical-sections="practicalSections"

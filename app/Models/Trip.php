@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Enums\Booking\Status as BookingStatus;
 use App\Enums\Transport;
 use App\Enums\Trip\HeroFocus;
 use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItineraryType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\TripFormat;
 use App\Enums\Trip\TripType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
@@ -36,6 +38,7 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Database\Eloquent\Collection<int, Itinerary> $itineraries
  * @property array<int, array{value: string, label: string}> $transport_formatted
  * @property bool|null $has_night_train
+ * @property TripFormat $format
  */
 class Trip extends Model
 {
@@ -68,6 +71,7 @@ class Trip extends Model
         'section_images',
         'hero_focus',
         'type',
+        'format',
         'transport',
         'featured',
         'published_at',
@@ -100,8 +104,13 @@ class Trip extends Model
         'published_at' => 'date',
         'featured' => 'boolean',
         'type' => TripType::class,
+        'format' => TripFormat::class,
         // Null keeps the hero image centred
         'hero_focus' => HeroFocus::class,
+    ];
+
+    protected $attributes = [
+        'format' => TripFormat::Individual->value,
     ];
 
     // Sortable properties
@@ -307,6 +316,23 @@ class Trip extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Whether the format can no longer change, because bookings were made in the current one.
+     *
+     * An individual trip is locked while it has bookings that still have to depart: they hold a date of their own,
+     * which a group trip does not have. Canceled bookings and bookings that have departed stay as they are.
+     */
+    public function hasLockedFormat(): bool
+    {
+        return match ($this->format) {
+            TripFormat::Individual => $this->bookings()
+                ->where('status', '!=', BookingStatus::Canceled)
+                ->whereDate('departure_date', '>=', today())
+                ->exists(),
+            TripFormat::Group => false,
+        };
     }
 
     public function tripRequests(): HasMany

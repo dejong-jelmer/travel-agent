@@ -389,6 +389,11 @@
                     "label": "Trip type",
                     "help": "The kind of trip: a city trip, a single base or a tour"
                 },
+                "format": {
+                    "label": "Trip format",
+                    "help": "Individual: the customer picks a date. Group trip: the customer books a fixed departure.",
+                    "locked": "The format is fixed while there are bookings that still have to depart."
+                },
                 "min_advance": {
                     "label": "Minimum booking lead time",
                     "help": "How far in advance must a booking be made?",

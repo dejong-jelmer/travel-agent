@@ -15,6 +15,10 @@ return [
         'single_base' => 'Vast verblijf',
         'tour' => 'Rondreis',
     ],
+    'trip_formats' => [
+        'individual' => 'Individuele reis',
+        'group' => 'Groepsreis',
+    ],
     'trip_requests' => [
         'new' => 'Nieuw',
         'contacted' => 'Gecontacteerd',
