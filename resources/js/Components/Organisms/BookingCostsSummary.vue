@@ -22,12 +22,11 @@ const categoryLabel = (id) =>
 
 // Snapshot for an existing booking, current settings for a new one.
 const {
-    marginInPercentage,
+    percentageMarginCents,
     adultCount,
     costItemSubtotalCents,
     totalCostCents,
     fixedMarginCents,
-    marginCents,
     feeTotalCents,
     feesAndFundsRows,
     calculatedPriceCents,
@@ -72,14 +71,22 @@ const {
             <div class="flex items-center">
                 <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
                 <span class="flex-1 flex items-center gap-2">
-                    <span v-if="marginInPercentage">{{ $t('booking_steps.price.margin') }} ({{ booking.margin_percentage }}%)</span>
-                    <span v-else>{{ $t('booking_steps.price.margin_fixed') }}</span>
+                    <span>{{ $t('booking_steps.price.margin') }} ({{ booking.margin_percentage }}%)</span>
                     <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
-                    <span class="font-bold">{{ fmt(marginInPercentage ? marginCents : fixedMarginCents) }}</span>
+                    <span class="font-bold">{{ fmt(percentageMarginCents) }}</span>
                 </span>
             </div>
 
-            <div v-if="!marginInPercentage" class="flex items-center">
+            <div class="flex items-center">
+                <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
+                <span class="flex-1 flex items-center gap-2">
+                    <span>{{ $t('booking_steps.price.margin_fixed') }}</span>
+                    <span class="flex-1 border-b border-dotted border-brand-light/60"></span>
+                    <span class="font-bold">{{ fmt(fixedMarginCents) }}</span>
+                </span>
+            </div>
+
+            <div class="flex items-center">
                 <Euro class="inline w-4 h-4 mr-2 text-brand-light" />
                 <span class="flex-1 flex items-center gap-2">
                     <span>{{ $t('booking_steps.price.fee_total', { count: adultCount }) }}</span>

@@ -53,14 +53,14 @@ export function feesAndFundsEntries(feesAndFunds = {}) {
 /**
  * Break the sales price down into its parts.
  *
- * Percentage margin works on the sales side: 35% margin means cost is 65% of
- * the sales price. A fixed margin is added on top of the cost instead, together
- * with a fee for every adult. The fees and funds are charged once per booking,
- * on top of either margin, so no margin is made on them.
+ * The margin is the sum of three parts. The percentage works on the sales side,
+ * over the cost only: 15% margin means cost is 85% of that part. A fixed margin
+ * per booking and a fee for every adult are added on top. Only the percentage
+ * part is rounded. The fees and funds are charged once per booking, on top of
+ * the margin, so no margin is made on them.
  */
 export function calculateBookingPrice({
     costItems = [],
-    marginInPercentage = true,
     marginPercentage = 0,
     marginAmountCents = 0,
     feePerPersonCents = 0,
@@ -71,12 +71,12 @@ export function calculateBookingPrice({
     const feeTotalCents = toNumber(feePerPersonCents) * toNumber(adults);
     const feesAndFundsTotalCents = sumFeesAndFunds(feesAndFunds);
 
-    const marginedPriceCents = marginInPercentage
-        ? percentagePrice(totalCostCents, marginPercentage)
-        : totalCostCents + toNumber(marginAmountCents) + feeTotalCents;
+    const percentagePriceCents = percentagePrice(totalCostCents, marginPercentage);
+    const marginedPriceCents = percentagePriceCents + toNumber(marginAmountCents) + feeTotalCents;
 
     return {
         totalCostCents,
+        percentageMarginCents: percentagePriceCents - totalCostCents,
         feeTotalCents,
         feesAndFundsTotalCents,
         marginedPriceCents,

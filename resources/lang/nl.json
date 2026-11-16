@@ -582,9 +582,23 @@
             "heading": "Globale Instellingen",
             "subheading": "Configureer globale boekingsregels",
             "sections": {
-                "fees": "Kosten"
+                "fees": "Kosten",
+                "default_margin": "Standaardmarge",
+                "default_margin_help": "Hiermee start een nieuwe boeking. Per boeking aan te passen."
             },
             "fields": {
+                "default_booking_margin_percentage": {
+                    "label": "Standaard margepercentage (%)",
+                    "help": "Marge over de inkoop."
+                },
+                "default_booking_margin_amount": {
+                    "label": "Standaard vast margebedrag (€)",
+                    "help": "Vaste marge per boeking in euro."
+                },
+                "default_booking_fee_per_person": {
+                    "label": "Standaard fee per persoon (€)",
+                    "help": "Fee per volwassene in euro."
+                },
                 "booking_season_end": {
                     "label": "Einde boekingsseizoen",
                     "help": "Er kunnen geen boekingen worden gemaakt na deze datum. Laat leeg voor geen bovengrens."
@@ -844,12 +858,11 @@
                 "quantity": "Aantal"
             },
             "total_cost": "Totale inkoop",
-            "margin": "Marge (%)",
-            "margin_in_percentage": "Marge berekenen als percentage",
+            "margin": "Marge",
+            "margin_percentage": "Marge (%)",
             "margin_fixed": "Vast margebedrag (€)",
             "fee_per_person": "Fee per persoon (€)",
             "fee_total": "Fee ({count} volwassenen)",
-            "margin_amount": "Marge in euro",
             "calculated_price": "Berekende prijs",
             "final_price": "Eindprijs (€)",
             "final_price_help": "Laat leeg om berekende prijs te gebruiken",

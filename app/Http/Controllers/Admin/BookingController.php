@@ -23,6 +23,7 @@ use App\Services\BookingService;
 use App\Services\CountryService;
 use App\Services\DataTableService;
 use App\Services\FeesAndFundsService;
+use App\Support\MoneyHelper;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -67,6 +68,8 @@ class BookingController extends Controller
             'countries' => CountryService::countries(),
             'cost_categories' => CostCategory::options(),
             'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, Booking::DEFAULT_MARGIN_BASIS_POINTS),
+            'default_margin_amount' => $this->settingInCents(SettingKey::DefaultBookingMarginAmount),
+            'default_fee_per_person' => $this->settingInCents(SettingKey::DefaultBookingFeePerPerson),
             'fees_and_funds' => $this->feesAndFunds->asCents(),
             'title' => $this->pageTitle('booking.title_create'),
         ]);
@@ -139,6 +142,16 @@ class BookingController extends Controller
 
         return redirect()->route('admin.bookings.index')
             ->with('success', __('booking.deleted', ['reference' => $booking->reference]));
+    }
+
+    /**
+     * A euro amount from the settings in cents, or null when it is not set.
+     */
+    private function settingInCents(SettingKey $key): ?int
+    {
+        $euros = Setting::get($key);
+
+        return $euros === null ? null : MoneyHelper::toCents($euros);
     }
 
     private function handleBookingError(Exception $e, string $context, CreateBookingData $data): void

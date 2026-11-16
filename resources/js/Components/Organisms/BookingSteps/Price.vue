@@ -16,17 +16,12 @@ const fmt = (cents) => formatCents(cents, page.props.locale);
 
 const costItems = toRef(props.booking, 'cost_items');
 
-const marginInPercentage = computed({
-    get: () => props.booking.margin_in_percentage,
-    set: (value) => (props.booking.margin_in_percentage = value),
-});
-
 // Snapshot for an existing booking, current settings for a new one.
 const {
     adultCount,
     totalCostCents,
     fixedMarginCents,
-    marginCents,
+    percentageMarginCents,
     feeTotalCents,
     feesAndFundsRows,
     calculatedPriceCents,
@@ -71,25 +66,22 @@ function clearItemError(index, field) {
             <div v-for="(item, index) in costItems" :key="index"
                 class="grid grid-cols-1 tablet:grid-cols-12 gap-3 items-start p-3 rounded-lg bg-slate-50/50">
                 <div class="tablet:col-span-3">
-                    <Select :name="`cost_items.${index}.category`"
-                        :label="$t('booking_steps.price.column.category')" :showLabel="true"
-                        v-model="item.category" :options="costCategories"
+                    <Select :name="`cost_items.${index}.category`" :label="$t('booking_steps.price.column.category')"
+                        :showLabel="true" v-model="item.category" :options="costCategories"
                         :feedback="booking.errors[`cost_items.${index}.category`]"
                         @update:modelValue="clearItemError(index, 'category')" />
                 </div>
                 <div class="tablet:col-span-5">
                     <Input type="text" :name="`cost_items.${index}.label`"
                         :label="$t('booking_steps.price.column.label')" :showLabel="true" :required="true"
-                        v-model="item.label"
-                        :placeholder="$t('booking_steps.price.label_placeholder')"
+                        v-model="item.label" :placeholder="$t('booking_steps.price.label_placeholder')"
                         :feedback="booking.errors[`cost_items.${index}.label`]"
                         @keyup="clearItemError(index, 'label')" />
                 </div>
                 <div class="tablet:col-span-2">
                     <Input type="number" :name="`cost_items.${index}.amount_per_person`"
                         :label="$t('booking_steps.price.column.amount_per_person')" :showLabel="true" :required="true"
-                        v-model="item.amount_per_person" step="0.01" min="0"
-                        placeholder="0.00"
+                        v-model="item.amount_per_person" step="0.01" min="0" placeholder="0.00"
                         :feedback="booking.errors[`cost_items.${index}.amount_per_person`]"
                         @keyup="clearItemError(index, 'amount_per_person')" />
                 </div>
@@ -103,8 +95,7 @@ function clearItemError(index, field) {
                 <div class="tablet:col-span-1 flex tablet:justify-end items-end h-full pb-1">
                     <button type="button"
                         class="p-2 rounded-lg text-brand-text/60 hover:text-status-error hover:bg-status-error/10 transition-colors"
-                        :disabled="costItems.length === 1"
-                        :title="$t('booking_steps.price.remove_item')"
+                        :disabled="costItems.length === 1" :title="$t('booking_steps.price.remove_item')"
                         @click="removeItem(index)">
                         <X class="w-4 h-4" />
                     </button>
@@ -128,67 +119,55 @@ function clearItemError(index, field) {
                     </div>
                 </div>
                 <div class="space-y-2">
-                    <Checkbox v-model="marginInPercentage" name="margin_in_percentage">
-                        {{ $t('booking_steps.price.margin_in_percentage') }}
-                    </Checkbox>
-                    <Input v-if="marginInPercentage" type="number" name="margin_percentage"
-                        :label="$t('booking_steps.price.margin')" :showLabel="true" :required="true"
-                        v-model="booking.margin_percentage" step="0.5" min="0" max="95"
-                        :feedback="booking.errors['margin_percentage']"
+                    <Input type="number" name="margin_percentage" :label="$t('booking_steps.price.margin_percentage')"
+                        :showLabel="true" :required="true" v-model="booking.margin_percentage" step="5.0" min="0"
+                        max="95" :feedback="booking.errors['margin_percentage']"
                         @keyup="booking.clearErrors('margin_percentage')" />
-                    <template v-else>
-                        <Input type="number" name="margin_amount"
-                            :label="$t('booking_steps.price.margin_fixed')" :showLabel="true" :required="true"
-                            v-model="booking.margin_amount" step="0.01" min="0"
-                            placeholder="0.00"
-                            :feedback="booking.errors['margin_amount']"
-                            @keyup="booking.clearErrors('margin_amount')" />
-                        <Input type="number" name="fee_per_person"
-                            :label="$t('booking_steps.price.fee_per_person')" :showLabel="true" :required="true"
-                            v-model="booking.fee_per_person" step="0.01" min="0"
-                            placeholder="0.00"
-                            :feedback="booking.errors['fee_per_person']"
-                            @keyup="booking.clearErrors('fee_per_person')" />
-                    </template>
+                    <Input type="number" name="margin_amount" :label="$t('booking_steps.price.margin_fixed')"
+                        :showLabel="true" :required="false" v-model="booking.margin_amount" step="25.0" min="0"
+                        placeholder="0.00" :feedback="booking.errors['margin_amount']"
+                        @keyup="booking.clearErrors('margin_amount')" />
+                    <Input type="number" name="fee_per_person" :label="$t('booking_steps.price.fee_per_person')"
+                        :showLabel="true" :required="false" v-model="booking.fee_per_person" step="25.00" min="0"
+                        placeholder="0.00" :feedback="booking.errors['fee_per_person']"
+                        @keyup="booking.clearErrors('fee_per_person')" />
                 </div>
             </div>
 
             <div class="flex items-center justify-between pt-2 border-t border-brand-subtle/20">
-                <span class="text-brand-text/70">
-                    {{ $t('booking_steps.price.margin_amount') }}
-                </span>
-                <span class="font-medium text-brand-text/70">
-                    {{ fmt(marginInPercentage ? marginCents : fixedMarginCents) }}
-                </span>
+                <span class="text-brand-text/70">{{ $t('booking_steps.price.margin') }} ({{ booking.margin_percentage
+                }}%)</span>
+                <span class="font-medium text-brand-text/70">{{ fmt(percentageMarginCents) }}</span>
             </div>
 
-            <div v-if="!marginInPercentage" class="flex items-center justify-between">
-                <span class="text-brand-text/70">
-                    {{ $t('booking_steps.price.fee_total', { count: adultCount }) }}
-                </span>
+            <div class="flex items-center justify-between">
+                <span class="text-brand-text/70">{{ $t('booking_steps.price.margin_fixed') }}</span>
+                <span class="font-medium text-brand-text/70">{{ fmt(fixedMarginCents) }}</span>
+            </div>
+
+            <div class="flex items-center justify-between">
+                <span class="text-brand-text/70">{{ $t('booking_steps.price.fee_total', { count: adultCount }) }}</span>
                 <span class="font-medium text-brand-text/70">{{ fmt(feeTotalCents) }}</span>
             </div>
 
-            <div v-for="[key, cents] in feesAndFundsRows" :key="key"
-                class="flex items-center justify-between">
+            <div v-for="[key, cents] in feesAndFundsRows" :key="key" class="flex items-center justify-between">
                 <span class="text-brand-text/70">{{ $t(`booking_steps.overview.${key}`) }}</span>
                 <span class="font-medium text-brand-text/70">{{ fmt(cents) }}</span>
             </div>
 
             <div class="flex items-center justify-between">
                 <span class="text-brand-text/70">{{ $t('booking_steps.price.calculated_price') }}</span>
-                <span class="font-bold text-brand-primary"
-                    :class="{ 'line-through opacity-50': hasOverride }">{{ fmt(calculatedPriceCents) }}</span>
+                <span class="font-bold text-brand-primary" :class="{ 'line-through opacity-50': hasOverride }">{{
+                    fmt(calculatedPriceCents) }}</span>
             </div>
 
-            <div class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6 items-end pt-2 border-t border-brand-subtle/20">
+            <div
+                class="grid grid-cols-1 tablet:grid-cols-2 gap-4 tablet:gap-6 items-end pt-2 border-t border-brand-subtle/20">
                 <div>
-                    <Input type="number" name="final_price"
-                        :label="$t('booking_steps.price.final_price')" :showLabel="true"
-                        v-model="booking.final_price" step="0.01" min="0"
+                    <Input type="number" name="final_price" :label="$t('booking_steps.price.final_price')"
+                        :showLabel="true" v-model="booking.final_price" step="10.00" min="0"
                         :placeholder="$t('booking_steps.price.final_price_help')"
-                        :feedback="booking.errors['final_price']"
-                        @keyup="booking.clearErrors('final_price')" />
+                        :feedback="booking.errors['final_price']" @keyup="booking.clearErrors('final_price')" />
                     <p v-if="hasOverride" class="mt-1 flex items-center gap-1 text-xs text-brand-accent">
                         <Info class="w-3 h-3" />
                         {{ $t('booking_steps.price.override_active') }}

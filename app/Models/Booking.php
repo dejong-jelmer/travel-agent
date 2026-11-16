@@ -38,7 +38,7 @@ class Booking extends Model
         SoftDeletes,
         Sortable;
 
-    public const DEFAULT_MARGIN_BASIS_POINTS = 3500;
+    public const DEFAULT_MARGIN_BASIS_POINTS = 1500;
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
@@ -68,7 +68,6 @@ class Booking extends Model
         'grand_total_price',
         'fees_and_funds',
         'margin_basis_points',
-        'margin_in_percentage',
         'margin_amount',
         'fee_per_person',
         'calculated_price',
@@ -86,7 +85,6 @@ class Booking extends Model
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
         'margin_basis_points' => 'integer',
-        'margin_in_percentage' => 'boolean',
         'margin_amount' => 'integer',
         'fee_per_person' => 'integer',
         'calculated_price' => 'integer',
@@ -109,7 +107,6 @@ class Booking extends Model
     protected $attributes = [
         'status' => Status::New->value,
         'payment_status' => PaymentStatus::Pending->value,
-        'margin_in_percentage' => true,
     ];
 
     // Sortable properties
@@ -159,7 +156,6 @@ class Booking extends Model
         static::saving(function (self $booking) {
             if ($booking->exists && $booking->isDirty([
                 'margin_basis_points',
-                'margin_in_percentage',
                 'margin_amount',
                 'fee_per_person',
                 'fees_and_funds',
@@ -458,13 +454,19 @@ class Booking extends Model
     /**
      * Recompute the sales price from cost items and the margin.
      *
-     * Percentage margin works on the sales side: 35% margin means cost = 65% of sales.
-     * calculated_price = total_cost / (1 - margin / 100).
+     * The margin is the sum of three parts:
+     * - a percentage on the sales side, over the cost only: 15% margin means
+     *   cost = 85% of that part, so total_cost / (1 - margin / 100);
+     * - a fixed margin_amount per booking;
+     * - a fee_per_person for every adult (children do not pay it).
      *
-     * Fixed margin is added on top of the cost instead:
-     * calculated_price = total_cost + margin_amount + fee_per_person * total_adults.
+     * calculated_price = round(total_cost / (1 - margin / 100))
+     *     + margin_amount
+     *     + fee_per_person * total_adults
+     *     + fees_and_funds_total
      *
-     * The fees and funds snapshot is charged once per booking, on top of either
+     * Only the percentage part is rounded, as in calculateBookingPrice() in JS.
+     * The fees and funds snapshot is charged once per booking, on top of the
      * margin, so no margin is made on it.
      */
     public function computeCalculatedPrice(): int
@@ -477,12 +479,6 @@ class Booking extends Model
      */
     private function computeMarginedPrice(): int
     {
-        if (! $this->margin_in_percentage) {
-            return $this->totalCost
-                + ($this->margin_amount ?? 0)
-                + ($this->fee_per_person ?? 0) * ($this->total_adults ?? 0);
-        }
-
         $margin = ($this->margin_basis_points ?? 0) / 10000;
 
         if ($margin < 0 || $margin >= 1.0) {
@@ -491,7 +487,9 @@ class Booking extends Model
             );
         }
 
-        return (int) round($this->totalCost / (1 - $margin));
+        return (int) round($this->totalCost / (1 - $margin))
+            + ($this->margin_amount ?? 0)
+            + ($this->fee_per_person ?? 0) * ($this->total_adults ?? 0);
     }
 
     /**

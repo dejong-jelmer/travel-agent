@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Enums\ModelAction;
+use App\Enums\SettingKey;
 use App\Helpers\Breadcrumbs;
 use App\Models\Booking;
 use App\Models\Setting;
@@ -51,7 +52,10 @@ class AppServiceProvider extends ServiceProvider
                     'newTripRequestsCount' => TripRequest::new()->count(),
                 ]
                 : null,
-            'settings' => fn () => Setting::pluck('value', 'key')->all(),
+            'settings' => fn () => Setting::whereNotIn(
+                'key',
+                array_map(fn (SettingKey $key) => $key->value, SettingKey::defaultMargins()),
+            )->pluck('value', 'key')->all(),
         ]);
 
         Inertia::share('breadcrumbs', fn () => Breadcrumbs::generate());

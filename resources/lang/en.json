@@ -582,9 +582,23 @@
             "heading": "Global Settings",
             "subheading": "Configure global booking rules",
             "sections": {
-                "fees": "Fees"
+                "fees": "Fees",
+                "default_margin": "Default margin",
+                "default_margin_help": "A new booking starts with these. Adjustable per booking."
             },
             "fields": {
+                "default_booking_margin_percentage": {
+                    "label": "Default margin percentage (%)",
+                    "help": "Margin over the cost."
+                },
+                "default_booking_margin_amount": {
+                    "label": "Default fixed margin amount (€)",
+                    "help": "Fixed margin per booking in euros."
+                },
+                "default_booking_fee_per_person": {
+                    "label": "Default fee per person (€)",
+                    "help": "Fee per adult in euros."
+                },
                 "booking_season_end": {
                     "label": "End of booking season",
                     "help": "Bookings cannot be made beyond this date. Leave empty for no upper limit."
@@ -844,12 +858,11 @@
                 "quantity": "Quantity"
             },
             "total_cost": "Total cost",
-            "margin": "Margin (%)",
-            "margin_in_percentage": "Calculate margin as a percentage",
+            "margin": "Margin",
+            "margin_percentage": "Margin (%)",
             "margin_fixed": "Fixed margin amount (€)",
             "fee_per_person": "Fee per person (€)",
             "fee_total": "Fee ({count} adults)",
-            "margin_amount": "Margin in euros",
             "calculated_price": "Calculated price",
             "final_price": "Final price (€)",
             "final_price_help": "Leave empty to use calculated price",

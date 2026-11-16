@@ -19,6 +19,9 @@ class UpdateSettingsRequest extends FormRequest
             'booking_fee' => ['nullable', 'numeric', 'min:0'],
             'guarantee_fund' => ['nullable', 'numeric', 'min:0'],
             'emergency_fund' => ['nullable', 'numeric', 'min:0'],
+            'default_booking_margin_percentage' => ['nullable', 'numeric', 'between:0,95'],
+            'default_booking_margin_amount' => ['nullable', 'numeric', 'min:0'],
+            'default_booking_fee_per_person' => ['nullable', 'numeric', 'min:0'],
         ];
     }
 }
