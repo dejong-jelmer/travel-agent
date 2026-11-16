@@ -1,4 +1,4 @@
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import { mount } from "@vue/test-utils";
 import { reactive } from "vue";
 
@@ -6,10 +6,19 @@ vi.mock("@inertiajs/vue3", () => ({
     usePage: () => ({ props: { locale: "nl", fees_and_funds: { booking_fee: 2500 } } }),
 }));
 
-import DeparturePicker from "@/Components/Organisms/BookingSteps/DeparturePicker.vue";
-import DeparturePrice from "@/Components/Organisms/BookingSteps/DeparturePrice.vue";
-import Price from "@/Components/Organisms/BookingSteps/Price.vue";
-import Input from "@/Components/Molecules/Input.vue";
+// The test files share one module cache, and a file that ran before this one (BookingForm.test.js) has already loaded
+// these components with the real Inertia. Loading them again after a reset is what makes the mock above reach them.
+let DeparturePicker, DeparturePrice, Price, Input;
+
+beforeAll(async () => {
+    vi.resetModules();
+
+    DeparturePicker = (await import("@/Components/Organisms/BookingSteps/DeparturePicker.vue")).default;
+    DeparturePrice = (await import("@/Components/Organisms/BookingSteps/DeparturePrice.vue")).default;
+    Price = (await import("@/Components/Organisms/BookingSteps/Price.vue")).default;
+    Input = (await import("@/Components/Molecules/Input.vue")).default;
+    global.components = { Input };
+});
 
 const departure = (attributes = {}) => ({
     id: 7,
@@ -37,7 +46,8 @@ const form = (departures, attributes = {}) => reactive({
 });
 
 const global = {
-    components: { Input },
+    // Filled in beforeAll, once the components are loaded
+    components: {},
     mocks: { route: (name, trip) => `/${name}/${trip.slug}` },
     stubs: { FormFeedback: { props: ["message"], template: "<p>{{ message }}</p>" }, Label: { template: "<label><slot /></label>" } },
 };

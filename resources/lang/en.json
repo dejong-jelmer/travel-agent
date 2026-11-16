@@ -1082,7 +1082,8 @@
             "from_price": "From €{price},-",
             "days": "{duration} days",
             "per_person": "p.p.",
-            "expected": "Expected"
+            "expected": "Expected",
+            "expected_group": "Departure dates to follow"
         },
         "about_trip": "About this trip",
         "gallery_image_alt": "Photo {position} of {trip}",
@@ -1130,14 +1131,22 @@
             "preferred_period_placeholder": "E.g. September 2026",
             "direct_contact_label": "Or reach out directly:",
             "direct_contact_form": "Or ask a question about this trip",
-            "send_email": "Send an email"
+            "send_email": "Send an email",
+            "explanation_group": "Choose a departure date and make a request. I will contact you afterwards.",
+            "expected_group": "Departure dates to follow",
+            "prices_group_1": "The price is per person and belongs to the departure. Each booking pays booking costs and the contributions to the guarantee and emergency funds on top.",
+            "prices_group_2": "If you would like a room to yourself, the single room supplement applies."
         },
         "extra_trip_info": {
             "title": "How does an application work?",
             "steps-1": "You submit an application via the form on this page",
             "steps-2": "I will contact you to discuss your wishes",
             "steps-3": "You will receive a personalized travel proposal",
-            "steps-4": "Upon agreement, I will arrange everything and ensure that you have all travel documents in hand on time"
+            "steps-4": "Upon agreement, I will arrange everything and ensure that you have all travel documents in hand on time",
+            "group_steps-1": "You choose a departure and make a request on this page",
+            "group_steps-2": "I contact you and confirm whether there is a place",
+            "group_steps-3": "Your place is certain once I confirm your request",
+            "group_steps-4": "Before departure you receive all travel documents"
         },
         "departures": {
             "title": "Departure dates",

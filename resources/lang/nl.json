@@ -1080,7 +1080,8 @@
             "from_price": "Vanaf €{price},-",
             "days": "{duration} dagen",
             "per_person": "p.p.",
-            "expected": "Verwacht"
+            "expected": "Verwacht",
+            "expected_group": "Vertrekdata volgen"
         },
         "about_trip": "Waarom {trip}",
         "gallery_image_alt": "Foto {position} van {trip}",
@@ -1128,14 +1129,22 @@
             "preferred_period_placeholder": "Bijv. september 2026",
             "direct_contact_label": "Of neem direct contact op:",
             "direct_contact_form": "Of stel een vraag over deze reis",
-            "send_email": "Stuur een e-mail"
+            "send_email": "Stuur een e-mail",
+            "explanation_group": "Kies een vertrekdatum en doe een aanvraag. Ik neem daarna contact met je op.",
+            "expected_group": "Vertrekdata volgen",
+            "prices_group_1": "De prijs geldt per persoon en hoort bij het vertrek. Per boeking komen er boekingskosten en de bijdragen aan het garantie- en calamiteitenfonds bij.",
+            "prices_group_2": "Wil je een kamer voor jezelf, dan geldt de toeslag voor een eenpersoonskamer."
         },
         "extra_trip_info": {
             "title": "Hoe verloopt een aanvraag?",
             "steps-1": "Je dient een aanvraag in via het formulier op deze pagina",
             "steps-2": "Ik neem contact met je op om je wensen door te nemen",
             "steps-3": "Je ontvangt een persoonlijk reisvoorstel",
-            "steps-4": "Bij akkoord regel ik alles en zorg ik dat je tijdig alle reisdocumenten in handen hebt"
+            "steps-4": "Bij akkoord regel ik alles en zorg ik dat je tijdig alle reisdocumenten in handen hebt",
+            "group_steps-1": "Je kiest een vertrek en doet een aanvraag via deze pagina",
+            "group_steps-2": "Ik neem contact met je op en bevestig of er plek is",
+            "group_steps-3": "Je plek is zeker zodra ik je aanvraag bevestig",
+            "group_steps-4": "Voor vertrek ontvang je alle reisdocumenten"
         },
         "departures": {
             "title": "Vertrekdata",

@@ -268,7 +268,7 @@ const contactUrl = computed(() => {
                     <TripItems v-reveal :trip-items="tripItems" />
 
                     <!-- Plan this trip -->
-                    <TripPlanCard v-reveal @request="requestModalOpen = !requestModalOpen" />
+                    <TripPlanCard v-reveal :is-group-trip="isGroupTrip" @request="requestModalOpen = !requestModalOpen" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->
@@ -301,7 +301,7 @@ const contactUrl = computed(() => {
                                     <p class="flex flex-col space-y-1 text-base text-brand-text mt-1">
                                         <span class="font-bold">
                                             {{ trip.is_expected
-                                                ? t('trip_show.inquiry.expected')
+                                                ? (isGroupTrip ? t('trip_show.inquiry.expected_group') : t('trip_show.inquiry.expected'))
                                                 : t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
                                         </span>
                                         <span>
@@ -366,7 +366,7 @@ const contactUrl = computed(() => {
                                     {{ t('trip_show.inquiry.title') }}
                                 </h3>
                                 <p class="text-base text-brand-text leading-relaxed">
-                                    {{ t('trip_show.inquiry.explanation') }}
+                                    {{ isGroupTrip ? t('trip_show.inquiry.explanation_group') : t('trip_show.inquiry.explanation') }}
                                 </p>
                             </div>
                             <div class="p-6 space-y-6">
