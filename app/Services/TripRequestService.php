@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Enums\TripRequest\Status;
+use App\Models\Departure;
 use App\Models\Trip;
 use App\Models\TripRequest;
 
@@ -15,8 +16,16 @@ class TripRequestService
             $preferredMonth = $validated['preferred_year'].'-'.str_pad($validated['preferred_month'], 2, '0', STR_PAD_LEFT);
         }
 
+        // A request on a full departure is interest in a place that comes free; it reserves nothing either way
+        $departure = isset($validated['departure_id'])
+            ? Departure::withParticipantCounts()->find($validated['departure_id'])
+            : null;
+
         return TripRequest::create([
             'trip_id' => $trip->id,
+            'departure_id' => $departure?->id,
+            'single_room' => (bool) ($validated['single_room'] ?? false),
+            'interest_only' => $departure !== null && $departure->isFull(),
             'name' => $validated['name'],
             'email' => $validated['email'],
             'phone' => $validated['phone'] ?? null,

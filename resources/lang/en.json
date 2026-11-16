@@ -1219,7 +1219,18 @@
                 "rotterdam": "Rotterdam Centraal (Eurostar)",
                 "breda": "Breda Centraal (EuroCity)",
                 "other": "Anders / weet ik nog niet"
-            }
+            },
+            "title_group": "Request for {tripName}",
+            "departure_label": "Which date would you like to join?",
+            "departure_placeholder": "Choose a departure",
+            "departure_full_suffix": "full",
+            "interest_notice": "This departure is full. Leave your details and I will let you know when a place comes free.",
+            "single_room_label": "I would like a single room",
+            "group_reservation_note": "Your request does not reserve a place yet. Your place is certain once I confirm your request.",
+            "submit_group": "Make a request",
+            "submit_interest": "Let me know",
+            "success_group": "Thank you! Your request has arrived. I will let you know as soon as possible whether there is a place.",
+            "success_interest": "Thank you! You are on the list. When a place comes free, you will hear from me."
         }
     },
     "date_picker": {

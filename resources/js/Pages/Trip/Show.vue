@@ -63,6 +63,12 @@ function requestDeparture(departure) {
     requestModalOpen.value = true
 }
 
+// The other buttons open the form without a departure picked
+function openRequest() {
+    requestedDeparture.value = null
+    requestModalOpen.value = true
+}
+
 // LightBox, opening from the gallery buttons
 const lightboxRef = ref(null)
 const thumbnails = []
@@ -268,7 +274,7 @@ const contactUrl = computed(() => {
                     <TripItems v-reveal :trip-items="tripItems" />
 
                     <!-- Plan this trip -->
-                    <TripPlanCard v-reveal :is-group-trip="isGroupTrip" @request="requestModalOpen = !requestModalOpen" />
+                    <TripPlanCard v-reveal :is-group-trip="isGroupTrip" @request="openRequest" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->
@@ -377,7 +383,7 @@ const contactUrl = computed(() => {
                                 <!-- CTA buttons -->
                                 <div class="space-y-3">
                                     <div class="block">
-                                        <Button @click="requestModalOpen = !requestModalOpen"
+                                        <Button @click="openRequest"
                                             class="w-full flex justify-center items-center">
                                             {{ t('trip_show.inquiry.cta_make_request') }}
                                         </Button>
@@ -433,7 +439,7 @@ const contactUrl = computed(() => {
                 </button>
             </nav>
             <div class="flex items-center gap-1 px-2 py-2">
-                <Button @click="requestModalOpen = !requestModalOpen"
+                <Button @click="openRequest"
                     class="w-full flex justify-center items-center gap-1 group">
                     {{ t('trip_show.inquiry.cta_make_request') }}
                     <ChevronRight class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -443,6 +449,7 @@ const contactUrl = computed(() => {
         </div>
     </Layout>
     <Modal :open="requestModalOpen" @close="requestModalOpen = false">
-        <TripRequestForm :trip="trip" @submitted="requestModalOpen = false" />
+        <TripRequestForm :trip="trip" :departures="departures" :departure="requestedDeparture"
+            @submitted="requestModalOpen = false" />
     </Modal>
 </template>
