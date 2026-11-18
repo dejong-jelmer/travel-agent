@@ -1150,7 +1150,7 @@
         },
         "departures": {
             "title": "Departure dates",
-            "intro": "You travel on one of these dates, together with other travelers.",
+            "eyebrow": "Group trip",
             "none": "There are no departure dates planned at the moment.",
             "per_person": "per person",
             "single_supplement": "single room + {price}",

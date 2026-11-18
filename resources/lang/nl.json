@@ -1148,7 +1148,7 @@
         },
         "departures": {
             "title": "Vertrekdata",
-            "intro": "Je reist op een van deze data, samen met andere reizigers.",
+            "eyebrow": "Groepsreis",
             "none": "Er staan nu geen vertrekdata gepland.",
             "per_person": "per persoon",
             "single_supplement": "eenpersoonskamer + {price}",

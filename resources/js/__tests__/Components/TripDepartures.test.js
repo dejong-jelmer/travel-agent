@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 import TripDepartures from "@/Components/Organisms/TripDepartures.vue";
-import Button from "@/Components/Atoms/Button.vue";
 
 const departure = (attributes = {}) => ({
     id: 7,
@@ -20,10 +19,6 @@ const departure = (attributes = {}) => ({
 
 const mountList = (props) => mount(TripDepartures, {
     props,
-    global: {
-        components: { Button },
-        stubs: { BaseCard: { template: "<section><slot /></section>" } },
-    },
 });
 
 describe("TripDepartures", () => {
@@ -33,7 +28,21 @@ describe("TripDepartures", () => {
         expect(text).toContain("zo 20 juni – za 26 juni 2027");
         expect(text).toMatch(/€\s1\.295\s+per persoon/);
         expect(text).toMatch(/eenpersoonskamer \+ €\s150/);
-        expect(text).toContain("Je reist op een van deze data, samen met andere reizigers.");
+        expect(text).not.toContain("Je reist op een van deze data");
+    });
+
+    it("sums the period up in a date tile", () => {
+        const wrapper = mountList({ departures: [departure({ departs_on: "2027-02-05", returns_on: "2027-02-07" })] });
+        const tile = wrapper.findAll('[data-testid="departure-7"] div[aria-hidden="true"] > span').map((span) => span.text());
+
+        expect(tile).toEqual(["vr – zo", "5–7", "feb 2027", "februari 2027"]);
+    });
+
+    it("names both months in the tile of a departure across months", () => {
+        const wrapper = mountList({ departures: [departure({ departs_on: "2027-01-30", returns_on: "2027-02-01" })] });
+        const tile = wrapper.findAll('[data-testid="departure-7"] div[aria-hidden="true"] > span').map((span) => span.text());
+
+        expect(tile).toEqual(["za – ma", "30–1", "jan – feb 2027", "jan – feb 2027"]);
     });
 
     it("tells from how many participants a departure goes ahead and by when that is known", () => {
