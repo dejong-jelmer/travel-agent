@@ -97,15 +97,18 @@ const feeItems = computed(() => Object.entries(props.fees.items ?? {})
                     </div>
 
                     <p v-if="departure.price_per_person !== null"
-                        class="col-start-2 row-start-1 self-center flex flex-col [@container(min-width:40rem)]:self-end [@container(min-width:40rem)]:flex-row [@container(min-width:40rem)]:flex-wrap [@container(min-width:40rem)]:items-baseline [@container(min-width:40rem)]:gap-x-2">
+                        class="col-start-2 row-start-1 self-center flex flex-col gap-0.5 [@container(min-width:40rem)]:self-end">
                         <span class="text-[28px] leading-tight font-semibold"
                             :class="departure.availability === 'full' ? 'text-brand-light' : 'text-brand-text'">
                             {{ money(departure.price_per_person) }}
                         </span>
                         {{ ' ' }}
                         <span class="text-sm text-brand-light">
-                            {{ $t('trip_show.departures.per_person') }}<template v-if="departure.single_supplement">
-                                · {{ $t('trip_show.departures.single_supplement', { price: money(departure.single_supplement) }) }}</template>
+                            <!-- Breaks between the two parts; inside the supplement only when a stacked row is too narrow -->
+                            <span class="whitespace-nowrap">{{ $t('trip_show.departures.per_person') }}<template v-if="departure.single_supplement"> ·</template></span>
+                            <template v-if="departure.single_supplement">
+                                {{ ' ' }}<span class="[@container(min-width:40rem)]:whitespace-nowrap">{{ $t('trip_show.departures.single_supplement', { price: money(departure.single_supplement) }) }}</span>
+                            </template>
                         </span>
                     </p>
 
@@ -131,7 +134,8 @@ const feeItems = computed(() => Object.entries(props.fees.items ?? {})
                         </p>
                     </div>
 
-                    <div class="col-span-2 row-start-3 [@container(min-width:40rem)]:col-span-1 [@container(min-width:40rem)]:col-start-3 [@container(min-width:40rem)]:row-start-1 [@container(min-width:40rem)]:row-span-2 [@container(min-width:40rem)]:self-center">
+                    <div :class="{ 'border-t border-brand-earth/60 pt-[14px] [@container(min-width:40rem)]:border-t-0 [@container(min-width:40rem)]:pt-0': departure.availability !== 'full' }"
+                        class="col-span-2 row-start-3 [@container(min-width:40rem)]:col-span-1 [@container(min-width:40rem)]:col-start-3 [@container(min-width:40rem)]:row-start-1 [@container(min-width:40rem)]:row-span-2 [@container(min-width:40rem)]:self-center">
                         <div v-if="departure.availability === 'full'"
                             class="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 [@container(min-width:40rem)]:flex-col [@container(min-width:40rem)]:items-end [@container(min-width:40rem)]:text-right">
                             <p class="text-[15px] font-semibold text-brand-text" data-testid="full">
@@ -143,11 +147,16 @@ const feeItems = computed(() => Object.entries(props.fees.items ?? {})
                                 {{ $t('trip_show.departures.full_interest') }}
                             </button>
                         </div>
+                        <!-- Styled as the "Bekijk reis" link of the trip cards (TripCard.vue) -->
                         <button v-else type="button" data-testid="request"
-                            class="inline-flex min-h-12 w-full items-center justify-center gap-2 whitespace-nowrap rounded-full bg-brand-primary px-6 text-[15px] font-medium text-white transition-colors duration-200 hover:bg-brand-text focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary [@container(min-width:40rem)]:w-auto"
+                            class="group flex min-h-12 w-full items-center justify-between gap-3 whitespace-nowrap rounded-full text-base font-semibold text-brand-primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-primary [@container(min-width:40rem)]:w-auto"
                             @click="$emit('request', departure)">
                             {{ $t('trip_show.departures.cta') }}
-                            <ArrowRight class="h-4 w-4 shrink-0" aria-hidden="true" />
+                            <!-- Moves a little to the right while hovering, unless the visitor prefers reduced motion -->
+                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand-accent text-white transition-transform duration-200 motion-safe:group-hover:translate-x-[3px]"
+                                aria-hidden="true">
+                                <ArrowRight class="h-4 w-4" />
+                            </span>
                         </button>
                     </div>
                 </li>
