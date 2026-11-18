@@ -13,6 +13,7 @@ use App\Models\Trip;
 use App\Models\TripPrice;
 use Database\Seeders\CountrySeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\DB;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -395,5 +396,22 @@ class GroupTripPublicTest extends TestCase
 
         $this->assertSame('AggregateOffer', $offers['@type']);
         $this->assertEquals(899, $offers['lowPrice']);
+    }
+
+    public function test_trip_page_prices_its_departures_without_a_query_per_departure(): void
+    {
+        TripPrice::factory()->for($this->trip)->create(['valid_from' => '2027-01-01', 'valid_until' => '2027-12-31', 'base_price_pp' => 99000]);
+        foreach (range(3, 8) as $month) {
+            $this->departure(['price_per_person' => null, 'single_supplement' => null, 'departs_on' => "2027-0{$month}-10", 'returns_on' => "2027-0{$month}-16"]);
+        }
+
+        DB::enableQueryLog();
+        $departures = $this->showDepartures();
+        $priceQueries = collect(DB::getQueryLog())->filter(fn (array $query) => str_contains($query['query'], 'from `trip_prices`'));
+        DB::disableQueryLog();
+
+        $this->assertCount(6, $departures);
+        $this->assertSame([99000], array_values(array_unique(array_column($departures, 'price_per_person'))));
+        $this->assertCount(1, $priceQueries);
     }
 }

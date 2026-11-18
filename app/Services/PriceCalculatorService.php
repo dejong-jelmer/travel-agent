@@ -119,8 +119,16 @@ class PriceCalculatorService
         );
     }
 
+    /**
+     * The price row of the trip for a day. Uses the loaded price rows when the trip has them, so a page that lists
+     * several departures of a trip does not query the price rows per departure.
+     */
     private function resolvePriceRow(Trip $trip, Carbon $departureDate): ?TripPrice
     {
+        if ($trip->relationLoaded('prices')) {
+            return $trip->priceRowOn($departureDate);
+        }
+
         return TripPrice::query()
             ->where('trip_id', $trip->id)
             ->where('valid_from', '<=', $departureDate)

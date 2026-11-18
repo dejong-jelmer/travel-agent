@@ -16,6 +16,8 @@ return [
     'deleted' => 'Booking :reference has been deleted.',
     'error' => [
         'no_prices_available' => 'There are no prices available for this trip. Please try again later.',
+        'request_has_booking' => 'This request already has a booking. View the linked booking.',
+        'request_missing' => 'This request no longer exists.',
         'create_failed' => 'Something went wrong while creating your booking. Please try again later.',
     ],
 

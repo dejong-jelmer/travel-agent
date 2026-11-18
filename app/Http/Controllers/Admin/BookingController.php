@@ -69,26 +69,39 @@ class BookingController extends Controller
         ]);
     }
 
-    public function create(Request $request): Response
+    public function create(Request $request): Response|RedirectResponse
     {
         // A group trip is booked on one of its departures that still has to leave
-        $trips = Trip::with(['departures' => fn ($departures) => $departures
+        // A booking can start from a request that has none yet. A request that already has one, or that is gone,
+        // sends the admin back with a word instead of opening an empty wizard.
+        $tripRequest = null;
+
+        if ($request->filled('trip_request')) {
+            $tripRequest = TripRequest::find($request->integer('trip_request'));
+
+            if (! $tripRequest) {
+                return redirect()->route('admin.trip-requests.index')->with('error', __('booking.error.request_missing'));
+            }
+
+            if ($tripRequest->booking_id) {
+                return redirect()->route('admin.trip-requests.edit', $tripRequest)
+                    ->with('error', __('booking.error.request_has_booking'));
+            }
+        }
+
+        // With what their starting price and the price of a departure without its own are made of
+        $trips = Trip::withStartingPrice()->with(['departures' => fn ($departures) => $departures
             ->upcoming()
             ->whereDate('departs_on', '>', today())
             ->withParticipantCounts(),
         ])->get();
-
-        // A booking can start from a request that has none yet
-        $tripRequest = $request->filled('trip_request')
-            ? TripRequest::whereNull('booking_id')->find($request->integer('trip_request'))
-            : null;
 
         return Inertia::render('Admin/Booking/Create', [
             'fromRequest' => $tripRequest?->only([
                 'id', 'trip_id', 'departure_id', 'travelers_count', 'single_room', 'name', 'email', 'phone',
             ]),
             'trips' => $trips->map(fn (Trip $trip) => [
-                ...$trip->toArray(),
+                ...$trip->makeHidden('visibleDepartures')->toArray(),
                 'departures' => $trip->departures
                     ->map(fn (Departure $departure) => $this->bookableDeparture($request, $departure->setRelation('trip', $trip)))
                     ->all(),

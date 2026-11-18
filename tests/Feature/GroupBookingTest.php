@@ -644,14 +644,49 @@ class GroupBookingTest extends TestCase
         );
     }
 
-    public function test_wizard_ignores_a_request_that_already_has_a_booking(): void
+    public function test_wizard_sends_a_request_that_already_has_a_booking_back_to_the_request(): void
     {
         $tripRequest = TripRequest::factory()->for($this->trip)->create(['booking_id' => $this->occupy(1)->id]);
 
         $this->get(route('admin.bookings.create', ['trip_request' => $tripRequest->id]))
-            ->assertInertia(fn (AssertableInertia $page) => $page->where('fromRequest', null));
+            ->assertRedirect(route('admin.trip-requests.edit', $tripRequest))
+            ->assertSessionHas('error', __('booking.error.request_has_booking'));
+    }
+
+    public function test_wizard_sends_a_request_that_is_gone_back_to_the_requests(): void
+    {
+        $this->get(route('admin.bookings.create', ['trip_request' => 999999]))
+            ->assertRedirect(route('admin.trip-requests.index'))
+            ->assertSessionHas('error', __('booking.error.request_missing'));
+    }
+
+    public function test_wizard_without_a_request_starts_empty(): void
+    {
         $this->get(route('admin.bookings.create'))
             ->assertInertia(fn (AssertableInertia $page) => $page->where('fromRequest', null));
+    }
+
+    public function test_wizard_loads_the_prices_of_all_departures_without_a_query_per_departure(): void
+    {
+        foreach (range(1, 4) as $month) {
+            Departure::factory()->for($this->trip)->create([
+                'departs_on' => today()->addMonths($month)->addDays(3),
+                'returns_on' => today()->addMonths($month)->addDays(10),
+                'price_per_person' => null,
+                'single_supplement' => null,
+            ]);
+        }
+        Trip::factory()->withPrices()->count(2)->create(['format' => TripFormat::Group])->each(
+            fn (Trip $trip) => Departure::factory()->for($trip)->create(['price_per_person' => null, 'single_supplement' => null])
+        );
+
+        DB::enableQueryLog();
+        $this->get(route('admin.bookings.create'))->assertOk();
+        $priceQueries = collect(DB::getQueryLog())->filter(fn (array $query) => str_contains($query['query'], 'from `trip_prices`'));
+        DB::disableQueryLog();
+
+        // The price rows of all trips in one query, however many departures fall back on them
+        $this->assertCount(1, $priceQueries);
     }
 
     public function test_saving_a_booking_made_from_a_request_links_and_converts_the_request(): void

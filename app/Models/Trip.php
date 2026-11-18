@@ -17,6 +17,7 @@ use App\Models\Traits\Sortable;
 use App\Services\DepartureListing;
 use App\Services\OgImageService;
 use App\Support\MoneyHelper;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -283,7 +284,7 @@ class Trip extends Model
         $full = [];
 
         foreach ($this->requestableDepartures() as $departure) {
-            $price = $departure->price_per_person ?? $this->priceRowFor($departure)?->base_price_pp;
+            $price = $departure->price_per_person ?? $this->priceRowOn($departure->departs_on)?->base_price_pp;
 
             if ($price === null) {
                 continue;
@@ -304,16 +305,17 @@ class Trip extends Model
     }
 
     /**
-     * The price row of the trip that is valid on the day a departure leaves, the most recent one first, as
-     * PriceCalculatorService picks it.
+     * The price row of the trip that is valid on a day, from the loaded price rows: when several are, the one that
+     * starts the latest. PriceCalculatorService uses it when the price rows are loaded, and otherwise runs the same
+     * selection as a query.
      */
-    private function priceRowFor(Departure $departure): ?TripPrice
+    public function priceRowOn(CarbonInterface $date): ?TripPrice
     {
         $match = null;
 
         /** @var TripPrice $price */
         foreach ($this->prices as $price) {
-            $isValid = $price->valid_from->lte($departure->departs_on) && $price->valid_until->gte($departure->departs_on);
+            $isValid = $price->valid_from->lte($date) && $price->valid_until->gte($date);
 
             if ($isValid && ($match === null || $price->valid_from->gt($match->valid_from))) {
                 $match = $price;
