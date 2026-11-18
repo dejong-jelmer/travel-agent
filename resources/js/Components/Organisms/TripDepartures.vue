@@ -65,9 +65,13 @@ const feeItems = computed(() => Object.entries(props.fees.items ?? {})
 </script>
 
 <template>
-    <section aria-labelledby="trip-departures-heading" class="rounded-[28px] bg-white p-5 tablet:p-12">
+    <!-- The target of "Kies een vertrekdatum" on the trip page: kept clear of the sticky header (header-height in
+         tailwind.config.js), and the heading takes the focus once the page is there -->
+    <section id="departure-dates" aria-labelledby="trip-departures-heading"
+        class="scroll-mt-[calc(theme(header-height.laptop)+16px)] rounded-[28px] bg-white p-5 tablet:p-12">
         <p class="text-[13px] uppercase tracking-[0.12em] text-brand-light">{{ $t('trip_show.departures.eyebrow') }}</p>
-        <h2 id="trip-departures-heading" class="mt-1 text-[36px] leading-tight font-semibold text-brand-primary">
+        <h2 id="trip-departures-heading" tabindex="-1"
+            class="mt-1 rounded text-[36px] leading-tight font-semibold text-brand-primary focus:outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-primary">
             {{ $t('trip_show.departures.title') }}
         </h2>
 

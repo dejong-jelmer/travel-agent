@@ -1124,6 +1124,7 @@
             "duration_label": "{duration} dagen",
             "explanation": "Ik kijk graag met je naar de beste periode en je voorkeuren.",
             "cta_make_request": "Vraag voorstel aan",
+            "cta_choose_departure": "Kies een vertrekdatum",
             "cta_send_message": "Stel een vraag",
             "preferred_period_label": "Voorkeursperiode (optioneel)",
             "preferred_period_placeholder": "Bijv. september 2026",

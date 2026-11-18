@@ -24,4 +24,26 @@ describe("TripPlanCard", () => {
         expect(text).not.toContain("persoonlijk reisvoorstel");
         expect(wrapper.find('[data-testid="group-prices"]').text()).toContain("garantie- en calamiteitenfonds");
     });
+
+    it("opens the request form of an individual trip", async () => {
+        const wrapper = mountCard();
+
+        expect(wrapper.text()).toContain("Vraag voorstel aan");
+        await wrapper.find("button").trigger("click");
+
+        expect(wrapper.emitted("request")).toHaveLength(1);
+        expect(wrapper.emitted("chooseDeparture")).toBeUndefined();
+    });
+
+    it("takes a group trip to its departures instead of the request form", async () => {
+        const wrapper = mountCard({ isGroupTrip: true });
+        const link = wrapper.find('[data-testid="choose-departure"]');
+
+        expect(link.text()).toBe("Kies een vertrekdatum");
+        expect(link.attributes("href")).toBe("#departure-dates");
+        await link.trigger("click");
+
+        expect(wrapper.emitted("chooseDeparture")).toHaveLength(1);
+        expect(wrapper.emitted("request")).toBeUndefined();
+    });
 });
