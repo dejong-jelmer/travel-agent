@@ -80,6 +80,9 @@ function displayDate(entry) {
                                 route('admin.trips.itineraries.index', trip)
                                 : route('admin.trips.itineraries.create', trip)"
                                 v-tippy="t('admin.trips.show.itinerary_tooltip')" />
+                            <IconLink v-if="trip.format === 'group'" icon="CalendarDays"
+                                :href="route('admin.trips.departures.index', trip)"
+                                v-tippy="t('admin.trips.show.departures_tooltip')" />
                         </div>
                     </div>
                 </div>

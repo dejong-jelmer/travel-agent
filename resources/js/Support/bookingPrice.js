@@ -85,6 +85,40 @@ export function calculateBookingPrice({
     };
 }
 
+/**
+ * The sales price of a booking on a departure of a group trip.
+ *
+ * It is not built from costs: every traveler pays the price per person of the
+ * departure, every single room its supplement, and the fees and funds are
+ * charged once. This mirrors Booking::computeDeparturePrice() in PHP.
+ */
+export function calculateDeparturePrice({
+    pricePerPersonCents = 0,
+    singleSupplementCents = 0,
+    travelers = 0,
+    singleRooms = 0,
+    feesAndFunds = {},
+} = {}) {
+    const baseTotalCents = toNumber(pricePerPersonCents) * toNumber(travelers);
+    const supplementTotalCents = toNumber(singleSupplementCents) * toNumber(singleRooms);
+    const feesAndFundsTotalCents = sumFeesAndFunds(feesAndFunds);
+
+    return {
+        baseTotalCents,
+        supplementTotalCents,
+        feesAndFundsTotalCents,
+        calculatedPriceCents: baseTotalCents + supplementTotalCents + feesAndFundsTotalCents,
+    };
+}
+
+/**
+ * The single rooms of a booking on a departure when none are chosen: a traveler
+ * on their own gets one. As BookingService::departurePrice() in PHP.
+ */
+export function defaultSingleRooms(travelers) {
+    return toNumber(travelers) === 1 ? 1 : 0;
+}
+
 function percentagePrice(totalCostCents, marginPercentage) {
     const clamped = Math.min(
         Math.max(toNumber(marginPercentage), 0),

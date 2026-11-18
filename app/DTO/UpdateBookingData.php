@@ -26,6 +26,7 @@ class UpdateBookingData implements Arrayable
         public readonly ?int $margin_amount,
         public readonly ?int $fee_per_person,
         public readonly ?int $final_price,
+        public readonly ?int $single_rooms = null,
     ) {}
 
     /**
@@ -49,6 +50,7 @@ class UpdateBookingData implements Arrayable
             margin_amount: array_key_exists('margin_amount', $validated) ? $parsed['margin_amount'] : null,
             fee_per_person: array_key_exists('fee_per_person', $validated) ? $parsed['fee_per_person'] : null,
             final_price: array_key_exists('final_price', $validated) ? $parsed['final_price'] : null,
+            single_rooms: isset($validated['single_rooms']) ? (int) $validated['single_rooms'] : null,
         );
     }
 }

@@ -10,6 +10,8 @@ use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\Trip\TripFormat;
+use App\Enums\Trip\TripType;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
@@ -70,6 +72,8 @@ class TripController extends Controller
             'keyFactIconOptions' => KeyFactIcon::options(),
             'highlightCategoryOptions' => HighlightCategory::options(),
             'heroFocusOptions' => HeroFocus::options(),
+            'tripTypeOptions' => TripType::options(),
+            'tripFormatOptions' => TripFormat::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
@@ -140,6 +144,9 @@ class TripController extends Controller
             'keyFactIconOptions' => KeyFactIcon::options(),
             'highlightCategoryOptions' => HighlightCategory::options(),
             'heroFocusOptions' => HeroFocus::options(),
+            'tripTypeOptions' => TripType::options(),
+            'tripFormatOptions' => TripFormat::options(),
+            'formatLocked' => $trip->hasLockedFormat(),
             'journeySectionOptions' => $this->journeySectionOptions($trip->description),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),

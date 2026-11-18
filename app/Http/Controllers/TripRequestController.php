@@ -15,7 +15,7 @@ class TripRequestController extends Controller
     public function store(CreateTripRequestRequest $request, Trip $trip): RedirectResponse
     {
         $tripRequest = $this->tripRequestService->store($request->validated(), $trip);
-        $tripRequest->load('trip');
+        $tripRequest->load(['trip', 'departure']);
 
         TripRequestCreated::dispatch($tripRequest);
 

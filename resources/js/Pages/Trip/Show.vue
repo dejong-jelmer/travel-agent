@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark } from '@lucide/vue';
+import { ChevronRight, ChevronDown, Phone, AtSign, CircleQuestionMark, Building2, House, Route, Users } from '@lucide/vue';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/vue'
 import { Link } from '@inertiajs/vue3'
 import { useI18n } from 'vue-i18n'
@@ -33,6 +33,16 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: see TripDepartures. The departures of a group trip that can still be requested, empty for an individual trip
+    departures: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: { total, items }, what a booking on a departure pays once on top of the price per person
+    departureFees: {
+        type: Object,
+        default: () => ({ total: 0, items: {} })
+    },
     tripItems: Object,
     practicalSections: Object,
     travelInfoSections: Object,
@@ -43,6 +53,21 @@ const { t } = useI18n()
 
 // Modal
 const requestModalOpen = ref(false)
+
+// A group trip is requested on one of its departures; the one a visitor picked in the list is kept for the form
+const isGroupTrip = computed(() => props.trip.format === 'group')
+const requestedDeparture = ref(null)
+
+function requestDeparture(departure) {
+    requestedDeparture.value = departure
+    requestModalOpen.value = true
+}
+
+// The other buttons open the form without a departure picked
+function openRequest() {
+    requestedDeparture.value = null
+    requestModalOpen.value = true
+}
 
 // LightBox, opening from the gallery buttons
 const lightboxRef = ref(null)
@@ -135,6 +160,17 @@ const hasCountryInfo = computed(() =>
 
 const hasKeyFacts = computed(() => props.trip.key_facts?.length > 0)
 
+// The traits of the trip with their explanation: the format only when it is pointed out (format_display is null for an
+// individual trip, see Trip::formatDisplay()), then the type. The format comes first, as on the trip card. The icons are keyed by the enum values of TripType and
+// TripFormat; a value missing here is shown without an icon.
+const TRAIT_ICONS = {
+    city_trip: Building2,
+    single_base: House,
+    tour: Route,
+    group: Users,
+}
+const traits = computed(() => [props.trip.format_display, props.trip.type_display].filter(Boolean))
+
 // The first section of the description opens the page next to the key facts, the others get a card each
 const leadSection = computed(() => props.descriptionSections[0] ?? null)
 // A card can have a photo from the gallery next to it, with the same alt text as in the slider. The photos alternate
@@ -214,6 +250,10 @@ const contactUrl = computed(() => {
                         <LightBox ref="lightboxRef" :images="trip.images" />
                     </BaseCard>
 
+                    <!-- The departures of a group trip: the dates are what a visitor needs first to decide -->
+                    <TripDepartures v-if="isGroupTrip" v-reveal :departures="departures" :fees="departureFees"
+                        @request="requestDeparture" />
+
                     <!-- Other description sections, a card each -->
                     <div v-if="storySections.length" class="space-y-8">
                         <TripStorySection v-for="section in storySections" :key="section.key" :section="section"
@@ -234,7 +274,7 @@ const contactUrl = computed(() => {
                     <TripItems v-reveal :trip-items="tripItems" />
 
                     <!-- Plan this trip -->
-                    <TripPlanCard v-reveal @request="requestModalOpen = !requestModalOpen" />
+                    <TripPlanCard v-reveal :is-group-trip="isGroupTrip" @request="openRequest" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->
@@ -267,7 +307,7 @@ const contactUrl = computed(() => {
                                     <p class="flex flex-col space-y-1 text-base text-brand-text mt-1">
                                         <span class="font-bold">
                                             {{ trip.is_expected
-                                                ? t('trip_show.inquiry.expected')
+                                                ? (isGroupTrip ? t('trip_show.inquiry.expected_group') : t('trip_show.inquiry.expected'))
                                                 : t('trip_show.inquiry.price_from', { price: trip.price_formatted }) }}
                                         </span>
                                         <span>
@@ -277,6 +317,18 @@ const contactUrl = computed(() => {
                                             {{ t('trip_show.inquiry.duration_label', { duration: trip.duration }) }}
                                         </span>
                                     </p>
+
+                                    <!-- What kind of trip it is, with a short explanation -->
+                                    <ul v-if="traits.length" class="space-y-4 pt-2">
+                                        <li v-for="trait in traits" :key="trait.value" class="flex items-start gap-3">
+                                            <component :is="TRAIT_ICONS[trait.value]" v-if="TRAIT_ICONS[trait.value]"
+                                                class="w-5 h-5 mt-0.5 shrink-0 text-brand-primary" aria-hidden="true" />
+                                            <div class="min-w-0">
+                                                <p class="text-base font-semibold text-brand-primary">{{ trait.label }}</p>
+                                                <p class="text-sm leading-relaxed text-brand-light">{{ trait.description }}</p>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </template>
 
                                 <template v-else-if="activeCardTab === 'practical'">
@@ -320,7 +372,7 @@ const contactUrl = computed(() => {
                                     {{ t('trip_show.inquiry.title') }}
                                 </h3>
                                 <p class="text-base text-brand-text leading-relaxed">
-                                    {{ t('trip_show.inquiry.explanation') }}
+                                    {{ isGroupTrip ? t('trip_show.inquiry.explanation_group') : t('trip_show.inquiry.explanation') }}
                                 </p>
                             </div>
                             <div class="p-6 space-y-6">
@@ -331,7 +383,7 @@ const contactUrl = computed(() => {
                                 <!-- CTA buttons -->
                                 <div class="space-y-3">
                                     <div class="block">
-                                        <Button @click="requestModalOpen = !requestModalOpen"
+                                        <Button @click="openRequest"
                                             class="w-full flex justify-center items-center">
                                             {{ t('trip_show.inquiry.cta_make_request') }}
                                         </Button>
@@ -387,7 +439,7 @@ const contactUrl = computed(() => {
                 </button>
             </nav>
             <div class="flex items-center gap-1 px-2 py-2">
-                <Button @click="requestModalOpen = !requestModalOpen"
+                <Button @click="openRequest"
                     class="w-full flex justify-center items-center gap-1 group">
                     {{ t('trip_show.inquiry.cta_make_request') }}
                     <ChevronRight class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
@@ -397,6 +449,7 @@ const contactUrl = computed(() => {
         </div>
     </Layout>
     <Modal :open="requestModalOpen" @close="requestModalOpen = false">
-        <TripRequestForm :trip="trip" @submitted="requestModalOpen = false" />
+        <TripRequestForm :trip="trip" :departures="departures" :departure="requestedDeparture"
+            @submitted="requestModalOpen = false" />
     </Modal>
 </template>

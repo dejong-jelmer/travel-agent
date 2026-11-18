@@ -4,6 +4,7 @@ namespace App\DTO;
 
 use App\DTO\Traits\ArrayableDTO;
 use App\DTO\Traits\BookingDataParser;
+use App\Models\Departure;
 use App\Models\Trip;
 use Carbon\Carbon;
 use Illuminate\Contracts\Support\Arrayable;
@@ -15,6 +16,7 @@ class CreateBookingData implements Arrayable
 
     public function __construct(
         public readonly Trip $trip,
+        public readonly ?Departure $departure,
         public readonly array $main_booker,
         public readonly array $travelers,
         public readonly BookingContactData $contact,
@@ -27,6 +29,8 @@ class CreateBookingData implements Arrayable
         public readonly ?int $margin_amount,
         public readonly ?int $fee_per_person,
         public readonly ?int $final_price,
+        public readonly ?int $single_rooms = null,
+        public readonly ?int $trip_request_id = null,
     ) {}
 
     /**
@@ -37,15 +41,21 @@ class CreateBookingData implements Arrayable
         $validated = $request->validated();
         $parsed = self::parseValidatedData($validated);
 
+        // A booking of a group trip takes its dates from the departure it is made on
+        $departure = isset($validated['departure_id']) ? Departure::findOrFail($validated['departure_id']) : null;
+
         return new self(
             trip: self::findTrip($validated['trip']['id'] ?? null),
+            departure: $departure,
             main_booker: $parsed['main_booker'],
             travelers: $parsed['travelers'],
             contact: $parsed['contact'],
-            date: Carbon::parse($validated['departure_date']),
-            return_date: isset($validated['return_date'])
-                ? Carbon::parse($validated['return_date'])
-                : null,
+            date: $departure ? Carbon::instance($departure->departs_on) : Carbon::parse($validated['departure_date']),
+            return_date: match (true) {
+                $departure !== null => Carbon::instance($departure->returns_on),
+                isset($validated['return_date']) => Carbon::parse($validated['return_date']),
+                default => null,
+            },
             has_accepted_conditions: $validated['has_accepted_conditions'] ?? false,
             has_confirmed: $validated['has_confirmed'] ?? false,
             cost_items: $parsed['cost_items'],
@@ -53,6 +63,8 @@ class CreateBookingData implements Arrayable
             margin_amount: $parsed['margin_amount'],
             fee_per_person: $parsed['fee_per_person'],
             final_price: $parsed['final_price'],
+            single_rooms: isset($validated['single_rooms']) ? (int) $validated['single_rooms'] : null,
+            trip_request_id: isset($validated['trip_request_id']) ? (int) $validated['trip_request_id'] : null,
         );
     }
 }

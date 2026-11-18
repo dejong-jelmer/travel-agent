@@ -8,8 +8,9 @@ const props = defineProps({
 const { t } = useI18n()
 
 const tripMeta = computed(() => ({
+    // A group trip without departures to request has no price yet, only dates still to come
     price: props.trip.is_expected
-        ? t('trip_show.hero.expected')
+        ? (props.trip.format === 'group' ? t('trip_show.hero.expected_group') : t('trip_show.hero.expected'))
         : `${t('trip_show.hero.from_price', { price: props.trip.price_formatted })} ${t('trip_show.hero.per_person')}`,
     data: [
         props.trip.destinations_formatted,

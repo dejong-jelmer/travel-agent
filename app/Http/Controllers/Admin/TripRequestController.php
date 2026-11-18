@@ -7,7 +7,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateTripRequestRequest;
+use App\Http\Resources\DepartureResource;
 use App\Models\Booking;
+use App\Models\Departure;
 use App\Models\TripRequest;
 use App\Services\DataTableService;
 use Illuminate\Http\RedirectResponse;
@@ -23,7 +25,7 @@ class TripRequestController extends Controller
     public function index(DataTableRequest $request): Response
     {
         $tripRequests = $this->dataTableService
-            ->applyFilters(TripRequest::with(['trip']), $request, TripRequest::filters())
+            ->applyFilters(TripRequest::with(['trip', 'departure']), $request, TripRequest::filters())
             ->paginate()
             ->withQueryString();
 
@@ -48,8 +50,15 @@ class TripRequestController extends Controller
             ])
             ->all();
 
+        $departure = $tripRequest->departure_id
+            ? Departure::withParticipantCounts()->find($tripRequest->departure_id)
+            : null;
+
         return Inertia::render('Admin/Request/Edit', [
             'tripRequest' => $tripRequest->load('trip'),
+            'travelersLabel' => $tripRequest->travelersLabel(),
+            // The departure of a request for a group trip, with how many places it has left now
+            'departure' => $departure ? (new DepartureResource($departure))->resolve(request()) : null,
             'statusOptions' => Status::options(),
             'bookingOptions' => $bookingOptions,
             'title' => $this->pageTitle('trip_request.title_edit'),

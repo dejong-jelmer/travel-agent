@@ -9,6 +9,7 @@ use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\Testimonial;
 use App\Models\Trip;
 use App\Services\CountryService;
+use App\Services\DepartureListing;
 use App\Services\ItineraryService;
 use App\Services\OgImageService;
 use App\Services\TripContentParser;
@@ -25,6 +26,7 @@ class TripController extends Controller
         private readonly OgImageService $ogImages,
         private readonly TripContentParser $contentParser,
         private readonly ItineraryService $itineraries,
+        private readonly DepartureListing $departures,
     ) {}
 
     /**
@@ -33,8 +35,8 @@ class TripController extends Controller
     public function index(): Response
     {
         // The trip cards have no use for the gallery paths, which would fetch every trip's gallery
-        $trips = Trip::with(['heroImage', 'prices', 'destinations.country'])->withTravelMode()->published()->get()
-            ->append('travel_mode')->makeHidden('image_paths');
+        $trips = Trip::with(['heroImage', 'destinations.country'])->withStartingPrice()->withTravelMode()->published()->get()
+            ->append(['travel_mode', 'type_display', 'format_display'])->makeHidden(['image_paths', 'visibleDepartures']);
         $seo = $this->shareSeo('seo.trips');
 
         return Inertia::render('Trip/Index', [
@@ -50,7 +52,9 @@ class TripController extends Controller
      */
     public function show(Trip $trip): Response
     {
-        $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items']);
+        $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items', 'prices', 'visibleDepartures']);
+
+        $departures = $this->departures->forTrip($trip);
 
         $breadcrumbs = BreadcrumbTrail::home()
             ->add(__('trip.title_index'), route('trips.index'))
@@ -62,7 +66,7 @@ class TripController extends Controller
             ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->name)),
             // Same sizes as the hero image in TripHero
             ...$this->preloadImageSeo($trip->heroImage, '100vw'),
-        ], jsonLd: array_merge($trip->toTouristTripSchema(), [
+        ], jsonLd: array_merge($trip->toTouristTripSchema($departures), [
             'provider' => $this->travelAgencySchema(),
         ]), breadcrumbs: $breadcrumbs);
 
@@ -70,7 +74,10 @@ class TripController extends Controller
             'title' => $seo['title'],
             // The description is only sent split into sections, the highlights and the itinerary only ready for
             // display, so none of them goes along twice
-            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries']),
+            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries', 'visibleDepartures'])->append(['type_display', 'format_display']),
+            // The departures of a group trip that can still be requested; empty for an individual trip
+            'departures' => $departures,
+            'departureFees' => $this->departures->feesPerBooking(),
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
             'itinerary' => $this->itineraries->forDisplay($trip),

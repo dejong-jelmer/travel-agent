@@ -27,6 +27,12 @@ return [
         'preferred_period_note_max' => 'De toelichting op je voorkeursperiode mag maximaal :max tekens bevatten.',
         'notes_max' => 'Je opmerkingen mogen maximaal :max tekens bevatten.',
         'consent_privacy_accepted' => 'Je moet nog akkoord gaan met het privacybeleid.',
+        'departure_required' => 'Kies een vertrekdatum.',
+        'departure_closed' => 'Voor dit vertrek kun je helaas geen aanvraag meer doen. Kies een andere datum.',
+        'departure_full' => 'Dit vertrek is inmiddels vol. Je kunt nog wel laten weten dat je graag hoort als er een plek vrijkomt.',
+        'not_enough_seats' => '{1} Op dit vertrek is nog plek voor :count reiziger.|[2,*] Op dit vertrek is nog plek voor :count reizigers.',
+        'travelers_count_required' => 'Laat weten met hoeveel mensen je komt.',
+        'travelers_count_max' => 'Bij een groepsreis kun je voor maximaal 6 reizigers een aanvraag doen.',
     ],
 
     // Mail - Confirmation to requester
@@ -64,6 +70,18 @@ return [
         'notification_label_station' => 'Vertrekstation',
 
         'notification_travelers_more_than_8' => 'Meer dan 8 (exact aantal navragen)',
+        'notification_label_departure' => 'Vertrek',
+        'notification_label_interest' => 'Let op',
+        'notification_label_single_room' => 'Eenpersoonskamer',
+        'notification_travelers_more_than_6' => 'Meer dan 6 (exact aantal navragen)',
+        'interest_only' => 'Dit vertrek is vol: wil horen als er een plek vrijkomt',
+        'yes' => 'Ja',
+        'no' => 'Nee',
+        'confirmation_group_note' => 'Je aanvraag reserveert nog geen plek. Je plek is zeker zodra ik je aanvraag bevestig.',
+        'confirmation_interest_note' => 'Dit vertrek is op dit moment vol. Komt er een plek vrij, dan laat ik het je weten.',
+        'confirmation_what_to_expect_group_1' => 'Ik kijk of er op het vertrek van je keuze nog plek is.',
+        'confirmation_what_to_expect_group_2' => 'We nemen samen door wat er bij de reis is inbegrepen en wat de reissom wordt.',
+        'confirmation_what_to_expect_group_3' => 'Je krijgt ruim de gelegenheid om vragen te stellen - er is geen verplichting om direct te boeken.',
         'notification_not_specified' => 'Niet opgegeven',
         'notification_no_notes' => 'Geen bijzonderheden opgegeven.',
 

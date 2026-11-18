@@ -11,23 +11,30 @@ use App\Enums\ModelAction;
 use App\Enums\SettingKey;
 use App\Events\BookingCreated;
 use App\Events\BookingFailed;
+use App\Exceptions\NoPriceAvailableException;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateBookingRequest;
 use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateBookingRequest;
+use App\Http\Resources\DepartureResource;
 use App\Models\Booking;
+use App\Models\Departure;
 use App\Models\Setting;
 use App\Models\Trip;
+use App\Models\TripRequest;
 use App\Services\BookingService;
 use App\Services\CountryService;
 use App\Services\DataTableService;
 use App\Services\FeesAndFundsService;
+use App\Services\PriceCalculatorService;
 use App\Support\MoneyHelper;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -39,6 +46,7 @@ class BookingController extends Controller
         private BookingService $bookingService,
         private DataTableService $dataTableService,
         private FeesAndFundsService $feesAndFunds,
+        private PriceCalculatorService $priceCalculator,
     ) {}
 
     /**
@@ -61,10 +69,43 @@ class BookingController extends Controller
         ]);
     }
 
-    public function create(): Response
+    public function create(Request $request): Response|RedirectResponse
     {
+        // A group trip is booked on one of its departures that still has to leave
+        // A booking can start from a request that has none yet. A request that already has one, or that is gone,
+        // sends the admin back with a word instead of opening an empty wizard.
+        $tripRequest = null;
+
+        if ($request->filled('trip_request')) {
+            $tripRequest = TripRequest::find($request->integer('trip_request'));
+
+            if (! $tripRequest) {
+                return redirect()->route('admin.trip-requests.index')->with('error', __('booking.error.request_missing'));
+            }
+
+            if ($tripRequest->booking_id) {
+                return redirect()->route('admin.trip-requests.edit', $tripRequest)
+                    ->with('error', __('booking.error.request_has_booking'));
+            }
+        }
+
+        // With what their starting price and the price of a departure without its own are made of
+        $trips = Trip::withStartingPrice()->with(['departures' => fn ($departures) => $departures
+            ->upcoming()
+            ->whereDate('departs_on', '>', today())
+            ->withParticipantCounts(),
+        ])->get();
+
         return Inertia::render('Admin/Booking/Create', [
-            'trips' => Trip::get(),
+            'fromRequest' => $tripRequest?->only([
+                'id', 'trip_id', 'departure_id', 'travelers_count', 'single_room', 'name', 'email', 'phone',
+            ]),
+            'trips' => $trips->map(fn (Trip $trip) => [
+                ...$trip->makeHidden('visibleDepartures')->toArray(),
+                'departures' => $trip->departures
+                    ->map(fn (Departure $departure) => $this->bookableDeparture($request, $departure->setRelation('trip', $trip)))
+                    ->all(),
+            ])->all(),
             'countries' => CountryService::countries(),
             'cost_categories' => CostCategory::options(),
             'default_margin_basis_points' => (int) Setting::get(SettingKey::DefaultBookingMarginBasisPoints, Booking::DEFAULT_MARGIN_BASIS_POINTS),
@@ -81,6 +122,9 @@ class BookingController extends Controller
 
         try {
             $booking = $this->bookingService->create($bookingData);
+        } catch (ValidationException $e) {
+            // The departure ran out of places between the form and the save: an answer for the form, not a failure
+            throw $e;
         } catch (Exception $e) {
             $this->handleBookingError($e, 'Booking create failed', $bookingData);
 
@@ -98,7 +142,7 @@ class BookingController extends Controller
     public function show(Booking $booking): Response
     {
         return Inertia::render('Admin/Booking/Show', [
-            'booking' => $booking->load(['trip', 'contact', 'adults', 'children', 'mainBooker', 'tripRequest', 'costItems']),
+            'booking' => $booking->load(['trip', 'departure', 'contact', 'adults', 'children', 'mainBooker', 'tripRequest', 'costItems']),
             'cost_categories' => CostCategory::options(),
             'title' => $this->pageTitle('booking.title_show'),
         ]);
@@ -110,7 +154,7 @@ class BookingController extends Controller
     public function edit(Booking $booking): Response
     {
         return Inertia::render('Admin/Booking/Edit', [
-            'db_booking' => $booking->load(['trip', 'contact', 'travelers', 'adults', 'mainBooker', 'costItems']),
+            'db_booking' => $booking->load(['trip', 'departure', 'contact', 'travelers', 'adults', 'mainBooker', 'costItems']),
             'statusOptions' => Status::options(),
             'paymentStatusOptions' => PaymentStatus::options(),
             'cost_categories' => CostCategory::options(),
@@ -142,6 +186,27 @@ class BookingController extends Controller
 
         return redirect()->route('admin.bookings.index')
             ->with('success', __('booking.deleted', ['reference' => $booking->reference]));
+    }
+
+    /**
+     * A departure as the booking wizard offers it: with the price a booking on it gets, in cents, whether that
+     * comes from the departure or from the trip. Both are null when neither has a price; it cannot be booked then.
+     *
+     * @return array<string, mixed>
+     */
+    private function bookableDeparture(Request $request, Departure $departure): array
+    {
+        try {
+            $price = $this->priceCalculator->forDeparture($departure, persons: 1, singleRooms: 1);
+        } catch (NoPriceAvailableException) {
+            $price = null;
+        }
+
+        return [
+            ...(new DepartureResource($departure))->resolve($request),
+            'booking_price_per_person' => $price ? (int) $price->perPerson->getAmount() : null,
+            'booking_single_supplement' => $price ? (int) $price->singleSupplement->getAmount() : null,
+        ];
     }
 
     /**

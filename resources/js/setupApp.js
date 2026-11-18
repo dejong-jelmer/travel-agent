@@ -15,7 +15,7 @@ import reveal from './Directives/reveal.js'
 const EAGER_COMPONENTS = import.meta.glob([
     './Components/Atoms/{Button,CallButton,DecorativeLine,DefaultLink,FormFeedback,HighlightIcon,KeyFactIcon,Label,MailButton,Pill,ResponsiveImage,ScrollIndicator,SectionHeader}.vue',
     './Components/Molecules/{BaseCard,Card,Checkbox,Input,MobileMenu,Modal,NavDropdown,NavLink,Newsletter,PageBreadcrumbs,PriceBadge,PullQuote,QuoteBlock,Select,TextArea,USP}.vue',
-    './Components/Organisms/{Footer,HomeHero,HomeTestimonials,HorizontalSlider,Nav,PageHero,TestimonialSlider,Topbar,TripCard,TripHero,TripHighlights,TripItems,TripItinerary,TripKeyFacts,TripPlanCard,TripStorySection,TripTestimonials,TripTravelInfo,Trust}.vue',
+    './Components/Organisms/{Footer,HomeHero,HomeTestimonials,HorizontalSlider,Nav,PageHero,TestimonialSlider,Topbar,TripCard,TripDepartures,TripHero,TripHighlights,TripItems,TripItinerary,TripKeyFacts,TripPlanCard,TripStorySection,TripTestimonials,TripTravelInfo,Trust}.vue',
     './Components/Organisms/Forms/{ContactForm,TripRequestForm}.vue',
     './Templates/{Layout,NewsletterTemplate}.vue',
     './Icons/{Logo,LogoWhite,Sto,StoSmall}.vue',

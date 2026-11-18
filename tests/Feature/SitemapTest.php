@@ -3,7 +3,9 @@
 namespace Tests\Feature;
 
 use App\Enums\BlogPost\Status;
+use App\Enums\Trip\TripFormat;
 use App\Models\BlogPost;
+use App\Models\Departure;
 use App\Models\Trip;
 use App\Services\SitemapBuilder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -89,6 +91,49 @@ class SitemapTest extends TestCase
 
         $this->assertStringNotContainsString(route('trips.show', $this->draftTrip->slug), $xml);
         $this->assertStringNotContainsString(route('blog.show', $this->draftPost->slug), $xml);
+    }
+
+    public function test_trip_is_last_modified_when_it_or_one_of_its_departures_last_changed(): void
+    {
+        $trip = $this->lastModifiedTrip();
+        $this->travelTo('2027-03-01 10:00:00', fn () => $trip->touch());
+
+        $this->assertSame('2027-03-01', $this->sitemapLastModified($trip));
+
+        $departure = $this->travelTo('2027-04-15 08:00:00', fn () => Departure::factory()->for($trip)->create([
+            'departs_on' => '2027-09-01',
+            'returns_on' => '2027-09-07',
+        ]));
+        $this->assertSame('2027-04-15', $this->sitemapLastModified($trip));
+
+        // A departure that changed before the trip itself leaves the trip's own date
+        $this->travelTo('2027-05-01 08:00:00', fn () => $trip->touch());
+        $this->assertSame('2027-05-01', $this->sitemapLastModified($trip));
+
+        $this->travelTo('2027-05-20 08:00:00', fn () => $departure->update(['cancelled_at' => now(), 'cancellation_reason' => 'Strike']));
+        $this->assertSame('2027-05-20', $this->sitemapLastModified($trip));
+    }
+
+    private function lastModifiedTrip(): Trip
+    {
+        return Trip::factory()->create([
+            'slug' => 'groepsreis',
+            'format' => TripFormat::Group,
+            'published_at' => today()->subDay(),
+        ]);
+    }
+
+    /**
+     * The date part of the lastmod the sitemap gives the page of a trip.
+     */
+    private function sitemapLastModified(Trip $trip): string
+    {
+        // Built directly: the route caches the XML, which would hide the change from a second look
+        $xml = simplexml_load_string(app(SitemapBuilder::class)->build()->render());
+        $xml->registerXPathNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
+        $lastmod = $xml->xpath("//s:url[s:loc='".route('trips.show', $trip->slug)."']/s:lastmod");
+
+        return substr((string) $lastmod[0], 0, 10);
     }
 
     public function test_sitemap_command_writes_the_same_sitemap_to_a_file(): void

@@ -2,6 +2,8 @@
 import { useI18n } from 'vue-i18n'
 import { toRef, computed } from 'vue'
 import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+import { isGroupBooking } from '@/Composables/useDeparturePrice.js'
+import DeparturePicker from './DeparturePicker.vue'
 
 const { formattedDate } = useDateFormatter();
 const { t } = useI18n();
@@ -15,6 +17,14 @@ const props = defineProps({
 const departure_date = toRef(props.booking, 'departure_date')
 const return_date = toRef(props.booking, 'return_date')
 const participants = toRef(props.booking, 'participants')
+
+const isGroup = computed(() => isGroupBooking(props.booking))
+
+// A group booking cannot be larger than the places left on its departure
+const maxParticipants = computed(() => {
+    const available = props.booking.departure?.available_seats
+    return isGroup.value && Number.isInteger(available) ? Math.min(6, available) : 6
+})
 
 const participantSummary = computed(() => {
     const adults = props.booking.participants?.adults || 0;
@@ -73,8 +83,11 @@ const participantSummary = computed(() => {
                 </div>
             </div>
 
+            <!-- Vertrek (groepsreis) -->
+            <DeparturePicker v-if="isGroup" :booking="booking" />
+
             <!-- Vertrekdatum -->
-            <div class="bg-brand-secondary/40 border border-brand-primary/10 rounded-xl p-4 space-y-3">
+            <div v-if="!isGroup" class="bg-brand-secondary/40 border border-brand-primary/10 rounded-xl p-4 space-y-3">
                 <div class="flex justify-between items-center">
                     <p class="text-xs font-semibold uppercase tracking-wide text-brand-light">
                         <i18n-t keypath="booking_steps.trip.choose_date" tag="span">
@@ -92,7 +105,7 @@ const participantSummary = computed(() => {
             </div>
 
             <!-- Retourdatum (optioneel) -->
-            <div class="bg-brand-secondary/40 border border-brand-primary/10 rounded-xl p-4 space-y-3">
+            <div v-if="!isGroup" class="bg-brand-secondary/40 border border-brand-primary/10 rounded-xl p-4 space-y-3">
                 <div class="flex justify-between items-center">
                     <p class="text-xs font-semibold uppercase tracking-wide text-brand-light">
                         {{ $t('booking_steps.trip.return_date') }}
@@ -122,10 +135,12 @@ const participantSummary = computed(() => {
                                 participantSummary.childLabel }}</span>
                     </span>
                 </div>
-                <PersonPicker v-model="participants" />
+                <PersonPicker v-model="participants" :max-total="maxParticipants" />
+                <FormFeedback v-if="booking.errors['participants']" :message="booking.errors['participants']" />
             </div>
         </div>
 
-        <BookingCostsSummary :booking="booking" />
+        <DeparturePriceSummary v-if="isGroup" :booking="booking" />
+        <BookingCostsSummary v-else :booking="booking" />
     </div>
 </template>

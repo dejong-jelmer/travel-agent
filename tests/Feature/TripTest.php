@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Enums\Booking\Status as BookingStatus;
 use App\Enums\Transport;
 use App\Enums\Trip\HeroFocus;
 use App\Enums\Trip\HighlightCategory;
@@ -10,7 +11,11 @@ use App\Enums\Trip\ItineraryType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\Trip\TripFormat;
+use App\Enums\Trip\TripType;
 use App\Enums\UserRole;
+use App\Models\Booking;
+use App\Models\Departure;
 use App\Models\Destination;
 use App\Models\Image;
 use App\Models\Itinerary;
@@ -103,6 +108,8 @@ class TripTest extends TestCase
                 ['title' => 'highlight 3', 'description' => null],
             ],
             'published_at' => now(),
+            'type' => TripType::Tour->value,
+            'format' => TripFormat::Individual->value,
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
             'prices' => [
@@ -123,6 +130,7 @@ class TripTest extends TestCase
         $response->assertRedirect(route('admin.trips.show', $trip));
         $this->assertEquals($tripData['name'], $trip->name);
         $this->assertEquals($tripData['subtitle'], $trip->subtitle);
+        $this->assertSame(TripType::Tour, $trip->type);
         $this->assertEquals($tripData['description'], $trip->description);
         $this->assertEquals(
             array_map(fn (array $highlight) => [...$highlight, 'category' => null, 'label' => null], $tripData['highlights']),
@@ -198,6 +206,8 @@ class TripTest extends TestCase
                 ['title' => 'updated highlight 3', 'description' => null],
             ],
             'published_at' => now()->addDay(fake()->randomDigit())->startOfDay()->toDateTimeString(),
+            'type' => TripType::Tour->value,
+            'format' => TripFormat::Individual->value,
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
             'prices' => [
@@ -275,6 +285,8 @@ class TripTest extends TestCase
             'destinations' => $this->destinations->modelKeys(),
             'highlights' => [['title' => 'highlight', 'description' => null]],
             'published_at' => now()->addDay()->startOfDay()->toDateTimeString(),
+            'type' => TripType::Tour->value,
+            'format' => TripFormat::Individual->value,
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
             'prices' => [
@@ -1564,6 +1576,168 @@ class TripTest extends TestCase
         );
     }
 
+    public function test_trip_forms_pass_the_trip_type_options_with_their_labels(): void
+    {
+        $trip = Trip::factory()->create();
+
+        // Built inside the assertion: the request sets the locale the labels are translated in
+        $expected = fn () => array_map(
+            fn (TripType $type) => ['id' => $type->value, 'name' => __("enum.trip_types.{$type->value}")],
+            TripType::cases()
+        );
+
+        $this->get(route('admin.trips.create'))->assertInertia(
+            fn (AssertableInertia $page) => $page->component('Admin/Trip/Create')->where('tripTypeOptions', $expected())
+        );
+        $this->get(route('admin.trips.edit', $trip))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Trip/Edit')
+                ->where('tripTypeOptions', $expected())
+                ->where('trip.type', TripType::CityTrip->value)
+        );
+    }
+
+    #[DataProvider('tripTypes')]
+    public function test_trip_update_saves_every_trip_type(TripType $type): void
+    {
+        $trip = Trip::factory()->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['type' => $type->value]))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame($type, $trip->refresh()->type);
+    }
+
+    public static function tripTypes(): array
+    {
+        return array_map(fn (TripType $type) => [$type], TripType::cases());
+    }
+
+    public function test_trip_update_rejects_an_unknown_trip_type(): void
+    {
+        $trip = Trip::factory()->create(['type' => TripType::Tour]);
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['type' => 'cruise']))
+            ->assertSessionHasErrors('type');
+
+        $this->assertSame(TripType::Tour, $trip->refresh()->type);
+    }
+
+    public function test_trip_update_requires_a_trip_type(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['type' => null]))
+            ->assertSessionHasErrors('type');
+    }
+
+    public function test_trip_store_rejects_an_unknown_trip_type(): void
+    {
+        $this->post(route('admin.trips.store'), ['type' => 'cruise'])->assertSessionHasErrors('type');
+    }
+
+    public function test_new_trip_is_individual_by_default(): void
+    {
+        $this->assertSame(TripFormat::Individual, (new Trip)->format);
+        $this->assertSame(TripFormat::Individual, Trip::factory()->create()->refresh()->format);
+    }
+
+    public function test_trip_forms_pass_the_trip_format_options_with_their_labels(): void
+    {
+        $trip = Trip::factory()->create();
+
+        // Built inside the assertion: the request sets the locale the labels are translated in
+        $expected = fn () => [
+            ['id' => 'individual', 'name' => __('enum.trip_formats.individual')],
+            ['id' => 'group', 'name' => __('enum.trip_formats.group')],
+        ];
+
+        $this->get(route('admin.trips.create'))->assertInertia(
+            fn (AssertableInertia $page) => $page->component('Admin/Trip/Create')->where('tripFormatOptions', $expected())
+        );
+        $this->get(route('admin.trips.edit', $trip))->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Admin/Trip/Edit')
+                ->where('tripFormatOptions', $expected())
+                ->where('trip.format', TripFormat::Individual->value)
+                ->where('formatLocked', false)
+        );
+    }
+
+    public function test_trip_update_saves_a_group_trip(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Group->value]))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame(TripFormat::Group, $trip->refresh()->format);
+    }
+
+    public function test_trip_update_rejects_an_unknown_or_missing_trip_format(): void
+    {
+        $trip = Trip::factory()->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => 'private']))
+            ->assertSessionHasErrors('format');
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => null]))
+            ->assertSessionHasErrors('format');
+    }
+
+    public function test_trip_format_cannot_change_while_a_booking_still_has_to_depart(): void
+    {
+        $trip = Trip::factory()->create();
+        Booking::factory()->for($trip)->create(['departure_date' => today()->addMonth(), 'status' => BookingStatus::Confirmed]);
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Group->value]))
+            ->assertSessionHasErrors(['format' => __('trip.format.locked.individual')]);
+
+        $this->assertSame(TripFormat::Individual, $trip->refresh()->format);
+        $this->get(route('admin.trips.edit', $trip))->assertInertia(
+            fn (AssertableInertia $page) => $page->where('formatLocked', true)
+        );
+    }
+
+    public function test_trip_with_a_locked_format_can_still_be_saved_in_its_own_format(): void
+    {
+        $trip = Trip::factory()->create();
+        Booking::factory()->for($trip)->create(['departure_date' => today()->addMonth()]);
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['name' => 'Renamed trip']))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame('Renamed trip', $trip->refresh()->name);
+    }
+
+    public function test_trip_format_can_change_when_its_bookings_are_canceled_departed_or_deleted(): void
+    {
+        $trip = Trip::factory()->create();
+        Booking::factory()->for($trip)->create(['departure_date' => today()->addMonth(), 'status' => BookingStatus::Canceled]);
+        Booking::factory()->for($trip)->create(['departure_date' => today()->subMonth(), 'return_date' => today()->subWeeks(3)]);
+        Booking::factory()->for($trip)->create(['departure_date' => today()->addMonth()])->delete();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Group->value]))
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame(TripFormat::Group, $trip->refresh()->format);
+    }
+
+    public function test_trip_format_cannot_change_while_a_group_trip_has_departures(): void
+    {
+        $trip = Trip::factory()->create(['format' => TripFormat::Group]);
+        $departure = Departure::factory()->for($trip)->create();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Individual->value]))
+            ->assertSessionHasErrors(['format' => __('trip.format.locked.group')]);
+        $this->assertSame(TripFormat::Group, $trip->refresh()->format);
+
+        $departure->delete();
+
+        $this->post(route('admin.trips.update', $trip), $this->generateTripUpdatePayload($trip, ['format' => TripFormat::Individual->value]))
+            ->assertSessionHasNoErrors();
+        $this->assertSame(TripFormat::Individual, $trip->refresh()->format);
+    }
+
     // Helper Methods
 
     private function generateTripUpdatePayload(Trip $trip, array $overrides = []): array
@@ -1573,6 +1747,8 @@ class TripTest extends TestCase
             'subtitle' => $trip->subtitle,
             'description' => $trip->description,
             'published_at' => $trip->published_at->toDateTimeString(),
+            'type' => $trip->type->value,
+            'format' => $trip->format->value,
             'destinations' => $this->destinations->modelKeys(),
             'highlights' => [['title' => 'highlight 1', 'description' => null]],
             'meta_title' => $trip->meta_title,
@@ -1700,5 +1876,70 @@ class TripTest extends TestCase
         $this->assertDatabaseMissing('trip_items', [
             'trip_id' => $trip->id,
         ]);
+    }
+
+    // Trip type and format on the public pages
+    public function test_trip_show_passes_the_type_and_format_ready_for_display(): void
+    {
+        $trip = Trip::factory()->create([
+            'type' => TripType::SingleBase->value,
+            'format' => TripFormat::Group->value,
+        ]);
+
+        $response = $this->get(route('trips.show', $trip));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Show')
+                ->where('trip.type_display', [
+                    'value' => 'single_base',
+                    'label' => 'Standplaatsreis',
+                    'description' => __('enum.trip_type_descriptions.single_base'),
+                ])
+                ->where('trip.format_display', [
+                    'value' => 'group',
+                    'label' => 'Groepsreis',
+                    'description' => __('enum.trip_format_descriptions.group'),
+                ])
+        );
+    }
+
+    public function test_trip_index_points_out_only_group_trips(): void
+    {
+        Trip::factory()->create(['type' => TripType::Tour->value, 'format' => TripFormat::Individual->value]);
+
+        $response = $this->get(route('trips.index'));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->component('Trip/Index')
+                ->where('trips.0.type_display.label', 'Rondreis')
+                ->where('trips.0.format_display', null)
+        );
+    }
+
+    public function test_home_passes_the_trip_type_to_the_trip_cards(): void
+    {
+        Trip::factory()->create(['type' => TripType::CityTrip->value]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertOk();
+        $response->assertInertia(
+            fn (AssertableInertia $page) => $page
+                ->where('trips.0.type_display.label', 'Stedentrip')
+        );
+    }
+
+    public function test_every_trip_type_and_format_has_a_label_and_description(): void
+    {
+        foreach ([...TripType::cases(), ...TripFormat::cases()] as $case) {
+            $display = $case->toDisplay();
+
+            $this->assertStringNotContainsString('enum.', $display['label'], $case->value);
+            $this->assertStringNotContainsString('enum.', $display['description'], $case->value);
+        }
     }
 }

@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
+use App\Enums\Booking\Status as BookingStatus;
 use App\Enums\Transport;
 use App\Enums\Trip\HeroFocus;
 use App\Enums\Trip\HighlightCategory;
 use App\Enums\Trip\ItineraryType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
+use App\Enums\Trip\TripFormat;
 use App\Enums\Trip\TripType;
 use App\Models\Traits\HasFormattedDates;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
+use App\Services\DepartureListing;
 use App\Services\OgImageService;
 use App\Support\MoneyHelper;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -36,6 +40,8 @@ use Illuminate\Support\Str;
  * @property \Illuminate\Database\Eloquent\Collection<int, Itinerary> $itineraries
  * @property array<int, array{value: string, label: string}> $transport_formatted
  * @property bool|null $has_night_train
+ * @property TripType $type
+ * @property TripFormat $format
  */
 class Trip extends Model
 {
@@ -67,6 +73,8 @@ class Trip extends Model
         'journey_section',
         'section_images',
         'hero_focus',
+        'type',
+        'format',
         'transport',
         'featured',
         'published_at',
@@ -99,8 +107,13 @@ class Trip extends Model
         'published_at' => 'date',
         'featured' => 'boolean',
         'type' => TripType::class,
+        'format' => TripFormat::class,
         // Null keeps the hero image centred
         'hero_focus' => HeroFocus::class,
+    ];
+
+    protected $attributes = [
+        'format' => TripFormat::Individual->value,
     ];
 
     // Sortable properties
@@ -246,15 +259,70 @@ class Trip extends Model
     }
 
     /**
-     * Get the lowest base price per person across all price rows.
+     * Get the lowest price per person in cents: across all price rows for an individual trip, across the departures
+     * a visitor can still join for a group trip.
      *
      * @return \Illuminate\Database\Eloquent\Casts\Attribute<float|null, never>
      */
     protected function startingFromPrice(): Attribute
     {
         return Attribute::make(
-            get: fn () => $this->prices->min('base_price_pp')
+            get: fn () => $this->format === TripFormat::Group
+                ? $this->startingFromDeparturePrice()
+                : $this->prices->min('base_price_pp')
         );
+    }
+
+    /**
+     * The lowest price per person of the departures a visitor can still request. A departure without a price of its own
+     * counts with the price of the trip for its day of departure. Full departures are left out, so the price is one
+     * a visitor can still get; when every departure is full, the lowest of those is shown.
+     */
+    private function startingFromDeparturePrice(): ?int
+    {
+        $available = [];
+        $full = [];
+
+        foreach ($this->requestableDepartures() as $departure) {
+            $price = $departure->price_per_person ?? $this->priceRowOn($departure->departs_on)?->base_price_pp;
+
+            if ($price === null) {
+                continue;
+            }
+
+            if ($departure->isFull()) {
+                $full[] = (int) $price;
+            } else {
+                $available[] = (int) $price;
+            }
+        }
+
+        return match (true) {
+            $available !== [] => min($available),
+            $full !== [] => min($full),
+            default => null,
+        };
+    }
+
+    /**
+     * The price row of the trip that is valid on a day, from the loaded price rows: when several are, the one that
+     * starts the latest. PriceCalculatorService uses it when the price rows are loaded, and otherwise runs the same
+     * selection as a query.
+     */
+    public function priceRowOn(CarbonInterface $date): ?TripPrice
+    {
+        $match = null;
+
+        /** @var TripPrice $price */
+        foreach ($this->prices as $price) {
+            $isValid = $price->valid_from->lte($date) && $price->valid_until->gte($date);
+
+            if ($isValid && ($match === null || $price->valid_from->gt($match->valid_from))) {
+                $match = $price;
+            }
+        }
+
+        return $match;
     }
 
     /**
@@ -306,6 +374,74 @@ class Trip extends Model
     public function bookings(): HasMany
     {
         return $this->hasMany(Booking::class);
+    }
+
+    /**
+     * Whether the format can no longer change, because the trip is in use in the current one.
+     *
+     * An individual trip is locked while it has bookings that still have to depart: they hold a date of their own,
+     * which a group trip does not have. Canceled bookings and bookings that have departed stay as they are.
+     * A group trip is locked while it has departures, which an individual trip does not have.
+     */
+    public function hasLockedFormat(): bool
+    {
+        return match ($this->format) {
+            TripFormat::Individual => $this->bookings()
+                ->where('status', '!=', BookingStatus::Canceled)
+                ->whereDate('departure_date', '>=', today())
+                ->exists(),
+            TripFormat::Group => $this->departures()->exists(),
+        };
+    }
+
+    /**
+     * The fixed departures of a group trip, the first to depart first.
+     *
+     * @return HasMany<Departure, $this>
+     */
+    public function departures(): HasMany
+    {
+        return $this->hasMany(Departure::class)->orderBy('departs_on');
+    }
+
+    /**
+     * The departures the public site shows, with their participant counts: not cancelled and still to leave.
+     *
+     * @return HasMany<Departure, $this>
+     */
+    public function visibleDepartures(): HasMany
+    {
+        return $this->departures()->visibleToVisitors()->withParticipantCounts();
+    }
+
+    /**
+     * The departures a visitor can still request a place on: the visible ones that leave no sooner than the trip's
+     * minimum number of days in advance.
+     *
+     * @return \Illuminate\Support\Collection<int, Departure>
+     */
+    public function requestableDepartures(): \Illuminate\Support\Collection
+    {
+        $requestable = [];
+
+        /** @var Departure $departure */
+        foreach ($this->visibleDepartures as $departure) {
+            if ($departure->acceptsRequests($this->min_advance_days)) {
+                $requestable[] = $departure;
+            }
+        }
+
+        return collect($requestable);
+    }
+
+    /**
+     * Scope a query to load what the starting price of a trip is made of, so a list of trips does not run a query
+     * per trip for it.
+     */
+    #[Scope]
+    protected function withStartingPrice(Builder $query): void
+    {
+        $query->with(['prices', 'visibleDepartures']);
     }
 
     public function tripRequests(): HasMany
@@ -408,6 +544,29 @@ class Trip extends Model
 
             return ['value' => $mode, 'label' => (string) __("trip.travel_mode.{$mode}")];
         });
+    }
+
+    /**
+     * The trip type ready for the public pages: value, label and a one-sentence description.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array{value: string, label: string, description: string}, never>
+     */
+    protected function typeDisplay(): Attribute
+    {
+        return Attribute::get(fn () => $this->type->toDisplay());
+    }
+
+    /**
+     * The trip format ready for the public pages like type_display, or null when the format is not pointed out to
+     * visitors (see TripFormat::isShownToVisitors()).
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<array{value: string, label: string, description: string}|null, never>
+     */
+    protected function formatDisplay(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->format->isShownToVisitors() ? $this->format->toDisplay() : null
+        );
     }
 
     /**
@@ -523,9 +682,14 @@ class Trip extends Model
      * `base_price_pp` across price rows, stored in cents) - the same source that
      * feeds `price_formatted`. Trips without a price are "expected" and get no Offer.
      *
+     * A group trip gets an Offer per departure instead, built from the departures as the trip page lists them (see
+     * DepartureListing::forTrip()): its price, its dates as the Trip it offers, and how much room is left. A
+     * departure without a price gets none.
+     *
+     * @param  list<array<string, mixed>>  $departures  The departures of a group trip as DepartureListing lists them
      * @return array<string, mixed>
      */
-    public function toTouristTripSchema(): array
+    public function toTouristTripSchema(array $departures = []): array
     {
         $schema = [
             '@type' => 'TouristTrip',
@@ -539,7 +703,13 @@ class Trip extends Model
             $schema['itinerary'] = $itinerary;
         }
 
-        if (! $this->is_expected && $this->starting_from_price !== null) {
+        if ($this->format === TripFormat::Group) {
+            $offers = $this->departureOffers($departures);
+
+            if ($offers !== []) {
+                $schema['offers'] = $offers;
+            }
+        } elseif (! $this->is_expected && $this->starting_from_price !== null) {
             $schema['offers'] = [
                 '@type' => 'AggregateOffer',
                 'lowPrice' => round($this->starting_from_price / 100, 2),
@@ -550,6 +720,47 @@ class Trip extends Model
         }
 
         return $schema;
+    }
+
+    /**
+     * An Offer per departure of a group trip that has a price. The prices are per person; the fees and funds a
+     * booking pays once on top are not in them, as on the trip page.
+     *
+     * @param  list<array<string, mixed>>  $departures
+     * @return list<array<string, mixed>>
+     */
+    private function departureOffers(array $departures): array
+    {
+        $url = route('trips.show', $this->slug);
+        $offers = [];
+
+        foreach ($departures as $departure) {
+            if ($departure['price_per_person'] === null) {
+                continue;
+            }
+
+            $offers[] = [
+                '@type' => 'Offer',
+                'price' => round($departure['price_per_person'] / 100, 2),
+                'priceCurrency' => config('seo.currency', 'EUR'),
+                'availability' => match ($departure['availability']) {
+                    DepartureListing::FULL => 'https://schema.org/SoldOut',
+                    DepartureListing::FEW_SEATS => 'https://schema.org/LimitedAvailability',
+                    default => 'https://schema.org/InStock',
+                },
+                // The last day a place can be requested
+                'validThrough' => $departure['requestable_until'],
+                'url' => $url,
+                'itemOffered' => [
+                    '@type' => 'Trip',
+                    'name' => $this->name,
+                    'departureTime' => $departure['departs_on'],
+                    'arrivalTime' => $departure['returns_on'],
+                ],
+            ];
+        }
+
+        return $offers;
     }
 
     /**

@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import { mount } from "@vue/test-utils";
 import TripCard from "@/Components/Organisms/TripCard.vue";
 import ResponsiveImage from "@/Components/Atoms/ResponsiveImage.vue";
+import TripTraitBadge from "@/Components/Atoms/TripTraitBadge.vue";
 
 const heroImage = {
     public_url: '/storage/images/verona.jpg',
@@ -24,6 +25,8 @@ const trip = (attributes = {}) => ({
     is_expected: false,
     duration: 8,
     travel_mode: { value: 'night_train', label: 'Night train' },
+    type_display: { value: 'single_base', label: 'Standplaatsreis', description: 'Je verblijft op één plek.' },
+    format_display: null,
     hero_image: heroImage,
     ...attributes,
 });
@@ -31,7 +34,7 @@ const trip = (attributes = {}) => ({
 const mountCard = (props) => mount(TripCard, {
     props,
     global: {
-        components: { ResponsiveImage },
+        components: { ResponsiveImage, TripTraitBadge },
         mocks: { route: (name, params) => `/reizen/${params.slug}` },
         stubs: {
             Link: { props: ['href'], template: '<a :href="href"><slot /></a>' },
@@ -61,5 +64,20 @@ describe("TripCard", () => {
         expect(img.attributes('src')).toContain('placeholder');
         expect(img.attributes('srcset')).toBeUndefined();
         expect(img.attributes('loading')).toBe('lazy');
+    });
+
+    it("shows the trip type as a label, without the format of an individual trip", () => {
+        const labels = mountCard({ trip: trip() }).findAll('li').map(li => li.text());
+
+        expect(labels).toEqual(['Standplaatsreis']);
+    });
+
+    it("shows the format before the type for a group trip", () => {
+        const card = mountCard({
+            trip: trip({ format_display: { value: 'group', label: 'Groepsreis', description: 'Op een vaste datum.' } }),
+        });
+
+        expect(card.findAll('li').map(li => li.text())).toEqual(['Groepsreis', 'Standplaatsreis']);
+        expect(card.findAllComponents(TripTraitBadge).map(badge => badge.props('variant'))).toEqual(['highlight', 'outline']);
     });
 });

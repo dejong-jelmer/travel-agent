@@ -1,0 +1,62 @@
+<?php
+
+namespace App\Http\Resources;
+
+use App\Models\Departure;
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+/**
+ * A departure as the admin pages show it: its own values, its participant counts and what follows from them.
+ *
+ * Load the departures with the withParticipantCounts() scope, or every departure runs its own count queries.
+ *
+ * @mixin Departure
+ */
+class DepartureResource extends JsonResource
+{
+    /**
+     * @return array<string, mixed>
+     */
+    public function toArray(Request $request): array
+    {
+        $status = $this->status();
+
+        return [
+            'id' => $this->id,
+            'trip_id' => $this->trip_id,
+            'trip' => $this->whenLoaded('trip', fn () => $this->trip->only(['id', 'name', 'slug'])),
+            'departs_on' => $this->departs_on->toDateString(),
+            'returns_on' => $this->returns_on->toDateString(),
+            'duration_in_days' => $this->durationInDays(),
+            'min_participants' => $this->min_participants,
+            'max_participants' => $this->max_participants,
+            // In cents, null when the price of the trip applies
+            'price_per_person' => $this->price_per_person,
+            'single_supplement' => $this->single_supplement,
+            'decision_date' => $this->decision_date->toDateString(),
+            'latest_decision_date' => $this->latestDecisionDate()->toDateString(),
+            'guaranteed_at' => $this->guaranteed_at?->toIso8601String(),
+            'cancelled_at' => $this->cancelled_at?->toIso8601String(),
+            'cancellation_reason' => $this->cancellation_reason,
+            'status' => ['value' => $status->value, 'label' => $status->label()],
+            'is_guaranteed' => $this->isGuaranteed(),
+            'occupied_seats' => $this->occupiedSeats(),
+            'confirmed_participants' => $this->confirmedParticipants(),
+            'available_seats' => $this->availableSeats(),
+            // Only when loaded with the withRequestCounts() scope, on the admin pages that show them
+            'requested_seats' => $this->whenHas('requested_seats', fn ($seats) => (int) $seats),
+            'interested_requests' => $this->whenHas('interested_requests', fn ($count) => (int) $count),
+            'has_reached_minimum' => $this->hasReachedMinimum(),
+            // What the admin has to do now, see the methods on Departure
+            'awaits_guarantee' => $this->awaitsGuarantee(),
+            'decision_overdue' => $this->isDecisionOverdue(),
+            'decision_due_soon' => $this->isDecisionDueSoon(),
+            'needs_attention' => $this->needsAttention(),
+            'days_until_decision' => (int) today()->diffInDays($this->decision_date, false),
+            'can_be_edited' => $this->canBeEdited(),
+            'can_be_guaranteed' => $this->awaitsDecision(),
+            'can_be_cancelled' => $this->canBeCancelled(),
+        ];
+    }
+}

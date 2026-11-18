@@ -94,6 +94,11 @@ const menuGroups = computed(() => [
                 ]
             },
             {
+                label: t('admin_menu.items.departures'),
+                path: new URL(route('admin.departures.index'), window.location.origin).pathname,
+                icon: CalendarDaysIcon,
+            },
+            {
                 label: t('admin_menu.items.travel_library'),
                 path: new URL(route('admin.travel-library'), window.location.origin).pathname,
                 icon: Library,
