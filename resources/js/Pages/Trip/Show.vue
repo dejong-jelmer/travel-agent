@@ -263,16 +263,16 @@ const contactUrl = computed(() => {
                         <LightBox ref="lightboxRef" :images="trip.images" />
                     </BaseCard>
 
-                    <!-- The departures of a group trip: the dates are what a visitor needs first to decide -->
-                    <TripDepartures v-if="isGroupTrip" v-reveal :departures="departures" :fees="departureFees"
-                        @request="requestDeparture" />
-
                     <!-- Other description sections, a card each -->
                     <div v-if="storySections.length" class="space-y-8">
                         <TripStorySection v-for="section in storySections" :key="section.key" :section="section"
                             :variant="section.variant" :image="section.image" :image-alt="section.imageAlt"
                             :image-side="section.imageSide" />
                     </div>
+
+                    <!-- The departures of a group trip: after the story, before the day-by-day itinerary -->
+                    <TripDepartures v-if="isGroupTrip" v-reveal :departures="departures" :fees="departureFees"
+                        @request="requestDeparture" />
 
                     <!-- Itinerary -->
                     <TripItinerary :items="itinerary" />

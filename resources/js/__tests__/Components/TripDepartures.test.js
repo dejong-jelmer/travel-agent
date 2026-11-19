@@ -79,7 +79,7 @@ describe("TripDepartures", () => {
     it("asks a place on the departure that is clicked", async () => {
         const wrapper = mountList({ departures: [departure(), departure({ id: 8 })] });
 
-        expect(wrapper.find('[data-testid="departure-8"] [data-testid="request"]').text()).toBe("Doe een aanvraag");
+        expect(wrapper.find('[data-testid="departure-8"] [data-testid="request"]').text()).toBe("Vraag aan");
         await wrapper.find('[data-testid="departure-8"] [data-testid="request"]').trigger("click");
 
         expect(wrapper.emitted("request")[0][0].id).toBe(8);

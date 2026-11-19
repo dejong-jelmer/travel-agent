@@ -1161,7 +1161,7 @@
             "seats_left": "{count} place left | {count} places left",
             "full": "Full",
             "full_interest": "Would you like to hear when a place comes free?",
-            "cta": "Make a request",
+            "cta": "Request",
             "fees": "Prices are per person. Each booking pays {amount} on top: {items}."
         }
     },

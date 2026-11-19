@@ -1159,7 +1159,7 @@
             "seats_left": "Nog {count} plaats | Nog {count} plaatsen",
             "full": "Vol",
             "full_interest": "Wil je horen als er een plek vrijkomt?",
-            "cta": "Doe een aanvraag",
+            "cta": "Vraag aan",
             "fees": "Prijzen zijn per persoon. Per boeking komt daar {amount} bij: {items}."
         }
     },
