@@ -55,13 +55,13 @@ class BlogPostController extends Controller
                     'name' => config('blog.author_name'),
                     'url' => route('about'),
                 ],
+                // The agency's own node, as a plain Organization with its logo as an ImageObject
                 'publisher' => [
+                    ...$this->travelAgencySchema(),
                     '@type' => 'Organization',
-                    'name' => config('app.name'),
-                    'url' => config('app.url'),
                     'logo' => [
                         '@type' => 'ImageObject',
-                        'url' => asset(config('seo.logo')),
+                        'url' => $this->travelAgencySchema()['logo'],
                     ],
                 ],
             ],

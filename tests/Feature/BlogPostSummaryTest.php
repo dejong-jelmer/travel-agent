@@ -52,6 +52,19 @@ class BlogPostSummaryTest extends TestCase
         ], (new BlogPost(['body' => '<p>Eerste alinea.</p><p>Tweede alinea.</p><h3>Een kop</h3>']))->bodyAroundSummary());
     }
 
+    public function test_body_is_split_before_a_heading_with_attributes_and_keeps_nested_markup_whole(): void
+    {
+        $body = '<p>Met <strong>de <em>nachttrein</em></strong> naar <a href="https://www.sncf.fr">Bordeaux</a>.</p>'
+            .'<blockquote><p>Een citaat.</p></blockquote>'
+            .'<H2 id="dag-1" class="kop">Dag <em>1</em></H2><p>Verder.</p>';
+
+        $this->assertSame([
+            'intro' => '<p>Met <strong>de <em>nachttrein</em></strong> naar <a href="https://www.sncf.fr">Bordeaux</a>.</p>'
+                .'<blockquote><p>Een citaat.</p></blockquote>',
+            'rest' => '<H2 id="dag-1" class="kop">Dag <em>1</em></H2><p>Verder.</p>',
+        ], (new BlogPost(['body' => $body]))->bodyAroundSummary());
+    }
+
     public function test_body_without_paragraphs_is_all_introduction(): void
     {
         $this->assertSame(
