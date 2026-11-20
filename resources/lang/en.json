@@ -65,6 +65,7 @@
             "label": "About the author",
             "link": "More about me"
         },
+        "last_updated": "Last updated: {date}",
         "summary_title": "In brief",
         "related_trips": "Trips that go with this story"
     },

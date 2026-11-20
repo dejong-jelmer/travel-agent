@@ -98,20 +98,54 @@ class SitemapTest extends TestCase
         $trip = $this->lastModifiedTrip();
         $this->travelTo('2027-03-01 10:00:00', fn () => $trip->touch());
 
-        $this->assertSame('2027-03-01', $this->sitemapLastModified($trip));
+        $this->assertSame('2027-03-01', $this->sitemapLastModified(route('trips.show', $trip->slug)));
 
         $departure = $this->travelTo('2027-04-15 08:00:00', fn () => Departure::factory()->for($trip)->create([
             'departs_on' => '2027-09-01',
             'returns_on' => '2027-09-07',
         ]));
-        $this->assertSame('2027-04-15', $this->sitemapLastModified($trip));
+        $this->assertSame('2027-04-15', $this->sitemapLastModified(route('trips.show', $trip->slug)));
 
         // A departure that changed before the trip itself leaves the trip's own date
         $this->travelTo('2027-05-01 08:00:00', fn () => $trip->touch());
-        $this->assertSame('2027-05-01', $this->sitemapLastModified($trip));
+        $this->assertSame('2027-05-01', $this->sitemapLastModified(route('trips.show', $trip->slug)));
 
         $this->travelTo('2027-05-20 08:00:00', fn () => $departure->update(['cancelled_at' => now(), 'cancellation_reason' => 'Strike']));
-        $this->assertSame('2027-05-20', $this->sitemapLastModified($trip));
+        $this->assertSame('2027-05-20', $this->sitemapLastModified(route('trips.show', $trip->slug)));
+    }
+
+    public function test_story_is_last_modified_when_it_was_last_saved(): void
+    {
+        $post = $this->travelTo('2027-03-01 10:00:00', fn () => BlogPost::factory()->create([
+            'slug' => 'bijgewerkt-verhaal',
+            'status' => Status::Published,
+            'published_at' => '2027-02-20 09:00:00',
+        ]));
+        $this->travelTo('2027-03-02 10:00:00', fn () => $this->assertSame(
+            '2027-03-01',
+            $this->sitemapLastModified(route('blog.show', $post->slug)),
+        ));
+
+        $this->travelTo('2027-04-15 08:00:00', fn () => $post->update(['title' => 'Een nieuwe titel']));
+        $this->travelTo('2027-04-16 08:00:00', fn () => $this->assertSame(
+            '2027-04-15',
+            $this->sitemapLastModified(route('blog.show', $post->slug)),
+        ));
+    }
+
+    public function test_story_scheduled_ahead_is_last_modified_when_it_went_live(): void
+    {
+        // Saved on 1 March, published by its date on 10 March without another save
+        $post = $this->travelTo('2027-03-01 10:00:00', fn () => BlogPost::factory()->create([
+            'slug' => 'gepland-verhaal',
+            'status' => Status::Published,
+            'published_at' => '2027-03-10 07:00:00',
+        ]));
+
+        $this->travelTo('2027-03-12 10:00:00', fn () => $this->assertSame(
+            '2027-03-10',
+            $this->sitemapLastModified(route('blog.show', $post->slug)),
+        ));
     }
 
     private function lastModifiedTrip(): Trip
@@ -124,14 +158,14 @@ class SitemapTest extends TestCase
     }
 
     /**
-     * The date part of the lastmod the sitemap gives the page of a trip.
+     * The date part of the lastmod the sitemap gives a page.
      */
-    private function sitemapLastModified(Trip $trip): string
+    private function sitemapLastModified(string $url): string
     {
         // Built directly: the route caches the XML, which would hide the change from a second look
         $xml = simplexml_load_string(app(SitemapBuilder::class)->build()->render());
         $xml->registerXPathNamespace('s', 'http://www.sitemaps.org/schemas/sitemap/0.9');
-        $lastmod = $xml->xpath("//s:url[s:loc='".route('trips.show', $trip->slug)."']/s:lastmod");
+        $lastmod = $xml->xpath("//s:url[s:loc='{$url}']/s:lastmod");
 
         return substr((string) $lastmod[0], 0, 10);
     }

@@ -3,6 +3,7 @@ import { usePage } from '@inertiajs/vue3';
 import { useI18n } from 'vue-i18n';
 import { useDateFormatter } from '@/Composables/useDateFormatter';
 import { computed } from 'vue';
+import { lastUpdatedDate } from '@/Support/storyDates';
 
 const props = defineProps({
     post: Object,
@@ -25,6 +26,10 @@ const props = defineProps({
 const { t } = useI18n();
 const locale = computed(() => usePage().props.locale);
 const { formattedDate } = useDateFormatter();
+
+// The day the story was last updated, only when that is after the day it was published
+const lastUpdated = computed(() => lastUpdatedDate(props.post.published_at, props.post.updated_at,
+    (date) => formattedDate(date, { longDay: false, locale: locale.value })));
 </script>
 
 <template>
@@ -32,9 +37,15 @@ const { formattedDate } = useDateFormatter();
         <article class="max-w-wide mx-auto px-4 py-12 laptop:py-20">
             <!-- Header -->
             <header class="max-w-3xl mx-auto text-center mb-10">
-                <time class="text-sm text-gray-500">{{ formattedDate(post.published_at, {
-                    longDay: false, locale: locale
-                    }) }}</time>
+                <p class="text-sm text-gray-500">
+                    <time :datetime="post.published_at">{{ formattedDate(post.published_at, {
+                        longDay: false, locale: locale
+                        }) }}</time>
+                    <template v-if="lastUpdated">
+                        <span aria-hidden="true"> · </span>
+                        <time :datetime="post.updated_at" data-testid="last-updated">{{ t('blog.last_updated', { date: lastUpdated }) }}</time>
+                    </template>
+                </p>
                 <h1 class="text-4xl laptop:text-5xl font-poppins text-brand-text mt-3">
                     {{ post.title }}
                 </h1>

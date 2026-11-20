@@ -50,10 +50,12 @@ class SitemapBuilder
             )
         );
 
-        BlogPost::published()->get()->each(
+        // Only the columns the url and its lastmod need: the body of every story would otherwise be fetched
+        BlogPost::published()->get(['id', 'slug', 'published_at', 'updated_at'])->each(
             fn (BlogPost $post) => $sitemap->add(
                 Url::create(route('blog.show', $post->slug))
-                    ->setLastModificationDate($post->updated_at)
+                    // A published story always has a publication date, so it always has a last modification
+                    ->setLastModificationDate($post->lastModifiedAt() ?? $post->published_at)
             )
         );
 

@@ -338,6 +338,26 @@ class BlogPostTest extends TestCase
         $this->assertSame([route('home'), route('blog.index')], array_column($elements, 'item'));
     }
 
+    public function test_story_scheduled_ahead_is_not_modified_before_it_was_published(): void
+    {
+        // Saved on 1 March, published by its date on 10 March without another save
+        $post = $this->travelTo('2027-03-01 10:00:00', fn () => BlogPost::factory()->create([
+            'status' => Status::Published,
+            'published_at' => '2027-03-10 07:00:00',
+        ]));
+
+        $this->travelTo('2027-03-12 10:00:00', function () use ($post) {
+            $published = $post->published_at->toIso8601String();
+
+            $this->get(route('blog.show', $post))
+                ->assertInertia(fn (AssertableInertia $page) => $page
+                    ->where('seo.article_modified_time', $published)
+                    ->where('seo.jsonLd.@graph.0.dateModified', $published)
+                    ->etc()
+                );
+        });
+    }
+
     // Helper Methods
 
     private function validBlogPostData(array $overrides = []): array

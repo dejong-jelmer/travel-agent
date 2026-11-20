@@ -65,6 +65,7 @@
             "label": "Over de schrijver",
             "link": "Meer over mij"
         },
+        "last_updated": "Laatst bijgewerkt: {date}",
         "summary_title": "In het kort",
         "related_trips": "Reizen die hierbij passen"
     },

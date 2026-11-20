@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\BlogPost\Status;
 use App\Models\Traits\ManagesImages;
 use App\Models\Traits\Sortable;
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -98,6 +99,19 @@ class BlogPost extends Model
     }
 
     /**
+     * When the story last changed for a reader: its last save, but never before it was published. A story scheduled
+     * ahead goes live without a save, so its updated_at can lie before its publication.
+     */
+    public function lastModifiedAt(): ?CarbonInterface
+    {
+        if ($this->published_at === null || $this->updated_at === null) {
+            return $this->updated_at ?? $this->published_at;
+        }
+
+        return $this->updated_at->max($this->published_at);
+    }
+
+    /**
      * The key points of the summary, one per line. Empty lines are dropped, as is a bullet typed in front of a point.
      *
      * @return list<string>
@@ -149,7 +163,7 @@ class BlogPost extends Model
             'description' => $this->meta_description ?: $this->excerpt,
             'image' => $this->heroImage?->public_url,
             'datePublished' => $this->published_at?->toIso8601String(),
-            'dateModified' => $this->updated_at?->toIso8601String(),
+            'dateModified' => $this->lastModifiedAt()?->toIso8601String(),
             'mainEntityOfPage' => route('blog.show', $this->slug),
         ], fn ($v) => $v !== null);
     }
