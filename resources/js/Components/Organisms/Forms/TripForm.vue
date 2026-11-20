@@ -399,6 +399,10 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                             </p>
                         </div>
 
+                        <ImageAltInput v-if="form.heroImage" name="hero_image_alt" v-model="form.hero_image_alt"
+                            :fallback="form.subtitle ? `${form.name} - ${form.subtitle}` : form.name"
+                            :feedback="form.errors.hero_image_alt" />
+
                         <div v-if="form.heroImage">
                             <p class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ t('forms.trip.fields.hero_focus.label') }}

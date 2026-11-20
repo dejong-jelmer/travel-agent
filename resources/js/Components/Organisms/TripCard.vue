@@ -35,7 +35,7 @@ const traits = computed(() => [
 
         <!-- Image, positioned absolutely: in the flex column a taller photo would otherwise stretch the 16/10 box -->
         <div class="relative aspect-[16/10]">
-            <ResponsiveImage v-if="trip.hero_image" :image="trip.hero_image" :sizes="IMAGE_SIZES" :alt="trip.name"
+            <ResponsiveImage v-if="trip.hero_image" :image="trip.hero_image" :sizes="IMAGE_SIZES" :alt="trip.hero_image.alt || trip.name"
                 :loading="loading" class="absolute inset-0 w-full h-full object-cover" />
             <img v-else :src="placeholder" :alt="trip.name" width="600" height="600"
                 class="absolute inset-0 w-full h-full object-cover" :loading="loading" />

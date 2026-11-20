@@ -64,13 +64,17 @@ const { t } = useI18n();
                         <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.itinerary.tabs.media') }} *</h2>
                         <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.itinerary.sections.media.subtitle') }}</p>
                     </div>
-                    <div class="p-6">
-                        <ImageUploader v-model="form.image" preview-size="large"
-                            :label="form.image ? t('forms.itinerary.fields.image.change') : t('forms.itinerary.fields.image.select')"
-                            :feedback="form.errors.image" />
-                        <p class="mt-2 text-xs text-gray-700/30">
-                            {{ t('forms.itinerary.fields.image.help') }}
-                        </p>
+                    <div class="p-6 space-y-6">
+                        <div>
+                            <ImageUploader v-model="form.image" preview-size="large"
+                                :label="form.image ? t('forms.itinerary.fields.image.change') : t('forms.itinerary.fields.image.select')"
+                                :feedback="form.errors.image" />
+                            <p class="mt-2 text-xs text-gray-700/30">
+                                {{ t('forms.itinerary.fields.image.help') }}
+                            </p>
+                        </div>
+                        <ImageAltInput v-if="form.image" name="image_alt" v-model="form.image_alt"
+                            :fallback="form.title" :feedback="form.errors.image_alt" />
                     </div>
                 </section>
             </div>

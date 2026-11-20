@@ -61,9 +61,11 @@ const { t } = useI18n();
                     <div class="border-b border-gray-200 bg-white px-6 py-4">
                         <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.blog_post.sections.image.title') }}</h2>
                     </div>
-                    <div class="p-6">
+                    <div class="p-6 space-y-6">
                         <ImageUploader v-model="form.featured_image" preview-size="large"
                             :feedback="form.errors.featured_image" />
+                        <ImageAltInput v-if="form.featured_image" name="featured_image_alt" v-model="form.featured_image_alt"
+                            :fallback="form.title" :feedback="form.errors.featured_image_alt" />
                     </div>
                 </section>
 

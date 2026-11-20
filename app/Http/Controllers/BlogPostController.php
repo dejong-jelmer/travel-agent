@@ -44,7 +44,7 @@ class BlogPostController extends Controller
             'og_type' => 'article',
             'article_published_time' => $post->published_at?->toIso8601String(),
             'article_modified_time' => $post->updated_at?->toIso8601String(),
-            ...$this->ogImageSeo($this->ogImages->forImage($post->heroImage, $post->title)),
+            ...$this->ogImageSeo($this->ogImages->forImage($post->heroImage, $post->heroImage?->alt ?: $post->title)),
         ];
 
         $jsonLd = array_merge(

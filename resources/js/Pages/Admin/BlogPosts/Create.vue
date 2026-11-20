@@ -11,6 +11,7 @@ const form = useForm({
     excerpt: "",
     body: "",
     featured_image: null,
+    featured_image_alt: "",
     meta_title: "",
     meta_description: "",
     status: "draft",

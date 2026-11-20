@@ -28,7 +28,7 @@ const HERO_SIZES = '100vw'
 <template>
     <PageHero :responsive-image="trip.hero_image" :sizes="HERO_SIZES" :image-position="trip.hero_focus"
         :title="trip.name" :subtitle="trip.subtitle"
-        :alt="`${trip.name} - ${trip.subtitle}`">
+        :alt="trip.hero_image?.alt || `${trip.name} - ${trip.subtitle}`">
         <template #meta>
             <p class="text-base tablet:text-xl font-poppins text-white">
                 {{ tripMeta.price }}

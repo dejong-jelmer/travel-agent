@@ -34,6 +34,7 @@ const form = useForm({
     transport: [],
     destinations: [],
     heroImage: null,
+    hero_image_alt: '',
     hero_focus: null,
     images: [],
     featured: false,

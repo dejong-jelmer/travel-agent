@@ -64,7 +64,7 @@ class TripController extends Controller
         $seo = $this->shareSeo(overrides: [
             'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
-            ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->name)),
+            ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->heroImage?->alt ?: $trip->name)),
             // Same sizes as the hero image in TripHero
             ...$this->preloadImageSeo($trip->heroImage, '100vw'),
         ], jsonLd: array_merge($trip->toTouristTripSchema($departures), [

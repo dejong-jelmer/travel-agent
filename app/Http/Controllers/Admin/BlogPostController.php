@@ -49,7 +49,7 @@ class BlogPostController extends Controller
 
     public function store(CreateBlogPostRequest $request): RedirectResponse
     {
-        $validated = $request->safe()->except(['featured_image', 'trips']);
+        $validated = $request->safe()->except(['featured_image', 'featured_image_alt', 'trips']);
         $status = Status::from($validated['status']);
 
         $slug = SlugService::generateUniqueFor(BlogPost::class, $validated['title']);
@@ -64,6 +64,7 @@ class BlogPostController extends Controller
         if ($request->hasFile('featured_image')) {
             $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
         }
+        $post->setImageAlt(ImageRelation::HeroImage, $request->safe()->input('featured_image_alt'));
 
         return redirect()->route('admin.posts.index')
             ->with('success', __('blog.posts.created'));
@@ -91,7 +92,7 @@ class BlogPostController extends Controller
 
     public function update(UpdateBlogPostRequest $request, BlogPost $post): RedirectResponse
     {
-        $validated = $request->safe()->except(['featured_image', 'slug', 'trips']);
+        $validated = $request->safe()->except(['featured_image', 'featured_image_alt', 'slug', 'trips']);
         $status = Status::from($validated['status']);
         $slug = SlugService::generateUniqueFor(BlogPost::class, $request->input('title'), $post->id);
 
@@ -114,6 +115,7 @@ class BlogPostController extends Controller
         } elseif ($request->filled('featured_image')) {
             $post->syncImages($request->input('featured_image'), ImageRelation::HeroImage, true);
         }
+        $post->setImageAlt(ImageRelation::HeroImage, $request->safe()->input('featured_image_alt'));
 
         return redirect()->route('admin.posts.show', $post)
             ->with('success', __('blog.posts.updated'));

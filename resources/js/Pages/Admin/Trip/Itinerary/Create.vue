@@ -16,6 +16,7 @@ const form = useForm({
     accommodation: '',
     remark: '',
     image: '',
+    image_alt: '',
 });
 
 function submit() {

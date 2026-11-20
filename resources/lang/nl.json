@@ -182,6 +182,10 @@
         }
     },
     "forms": {
+        "image_alt": {
+            "label": "Alt-tekst",
+            "help": "Beschrijf kort wat er op de foto te zien is, voor schermlezers en zoekmachines. Leeg laten: de tekst in het veld wordt gebruikt."
+        },
         "actions": {
             "add": "Toevoegen",
             "delete": "Verwijderen",

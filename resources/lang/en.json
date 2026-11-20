@@ -182,6 +182,10 @@
         }
     },
     "forms": {
+        "image_alt": {
+            "label": "Alt text",
+            "help": "Briefly describe what the photo shows, for screen readers and search engines. Left empty, the text shown in the field is used."
+        },
         "actions": {
             "add": "Add",
             "delete": "Delete",

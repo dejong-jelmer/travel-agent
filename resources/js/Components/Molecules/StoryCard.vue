@@ -30,7 +30,7 @@ const { formattedDate } = useDateFormatter();
         <Card>
             <!-- Featured Image -->
             <div class="aspect-[16/10] overflow-hidden bg-gray-100">
-                <ResponsiveImage v-if="post.hero_image" :image="post.hero_image" :sizes="sizes" :alt="post.title"
+                <ResponsiveImage v-if="post.hero_image" :image="post.hero_image" :sizes="sizes" :alt="post.hero_image.alt || post.title"
                     :loading="loading"
                     class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div v-else class="w-full h-full flex items-center justify-center text-gray-300">

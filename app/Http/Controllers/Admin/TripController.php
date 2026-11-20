@@ -87,7 +87,7 @@ class TripController extends Controller
         $trip = new Trip;
 
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
-        $validatedFields = $request->safe()->except(['heroImage', 'images']);
+        $validatedFields = $request->safe()->except(['heroImage', 'hero_image_alt', 'images']);
         $destinations = $request->safe()->destinations ?? [];
 
         $trip->fill(
@@ -99,6 +99,7 @@ class TripController extends Controller
 
         $trip->save();
         $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
+        $trip->setImageAlt(ImageRelation::HeroImage, $request->safe()->input('hero_image_alt'));
         $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
 
         if (count($destinations)) {
@@ -159,7 +160,7 @@ class TripController extends Controller
     public function update(UpdateTripRequest $request, Trip $trip): RedirectResponse
     {
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
-        $validatedFields = $request->safe()->except(['heroImage', 'images', 'destinations']);
+        $validatedFields = $request->safe()->except(['heroImage', 'hero_image_alt', 'images', 'destinations']);
         $destinations = $request->safe()->destinations ?? [];
 
         $trip->fill(
@@ -174,6 +175,7 @@ class TripController extends Controller
         if (isset($validatedFiles['heroImage'])) {
             $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         }
+        $trip->setImageAlt(ImageRelation::HeroImage, $request->safe()->input('hero_image_alt'));
 
         // Sync images array (handles mix of existing paths and new uploads)
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {

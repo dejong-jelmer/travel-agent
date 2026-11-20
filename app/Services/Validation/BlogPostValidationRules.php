@@ -15,6 +15,7 @@ class BlogPostValidationRules
             'body' => ['required', 'string'],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'featured_image' => array_merge(['nullable'], ImageValidationRules::baseImage()),
+            ...ImageValidationRules::alt('featured_image_alt'),
             'meta_title' => ['nullable', 'string', 'max:60'],
             'meta_description' => ['nullable', 'string', 'max:160'],
             'status' => ['required', Rule::enum(Status::class)],

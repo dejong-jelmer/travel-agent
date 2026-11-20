@@ -17,6 +17,7 @@ const form = useForm({
     excerpt: props.blogPost.excerpt ?? "",
     body: props.blogPost.body,
     featured_image: props.blogPost.hero_image?.public_url ?? null,
+    featured_image_alt: props.blogPost.hero_image?.alt ?? "",
     meta_title: props.blogPost.meta_title ?? "",
     meta_description: props.blogPost.meta_description ?? "",
     status: props.blogPost.status,

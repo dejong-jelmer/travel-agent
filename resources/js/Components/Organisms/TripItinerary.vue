@@ -70,7 +70,7 @@ const imageSizes = '(min-width: 1071px) 220px, (min-width: 900px) calc(66.7vw - 
                     <!-- Photo above the text, or to the right of it once the column has room for both -->
                     <div
                         class="flex flex-col gap-4 mt-4 [@container(min-width:520px)]:flex-row [@container(min-width:520px)]:items-start [@container(min-width:520px)]:gap-6">
-                        <ResponsiveImage v-if="item.image" :image="item.image" :sizes="imageSizes" :alt="item.title"
+                        <ResponsiveImage v-if="item.image" :image="item.image" :sizes="imageSizes" :alt="item.image.alt || item.title"
                             loading="lazy"
                             class="w-full aspect-[16/10] flex-shrink-0 object-cover rounded-xl [@container(min-width:520px)]:order-last [@container(min-width:520px)]:w-[220px] [@container(min-width:520px)]:aspect-[4/3]" />
                         <div class="flex-1 min-w-0">

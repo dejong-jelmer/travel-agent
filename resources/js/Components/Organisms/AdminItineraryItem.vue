@@ -81,7 +81,7 @@ const props = defineProps({
                             <button ref="thumbnail" type="button" aria-haspopup="dialog"
                                 class="block w-full rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:-outline-offset-4 focus-visible:outline-brand-accent"
                                 @click="openLightbox">
-                                <ResponsiveImage :image="itinerary.image" :sizes="imageSizes" :alt="itinerary.title" loading="lazy"
+                                <ResponsiveImage :image="itinerary.image" :sizes="imageSizes" :alt="itinerary.image.alt || itinerary.title" loading="lazy"
                                     class="w-full h-auto max-h-40 tablet:max-h-60 object-cover cursor-zoom-in hover:opacity-90" />
                             </button>
                         </div>
