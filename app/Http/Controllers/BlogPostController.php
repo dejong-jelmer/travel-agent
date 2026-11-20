@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\BreadcrumbTrail;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\BlogPost;
 use App\Services\OgImageService;
@@ -47,7 +48,6 @@ class BlogPostController extends Controller
         ];
 
         $jsonLd = array_merge(
-            ['@context' => 'https://schema.org'],
             $post->toBlogPostingSchema(),
             [
                 'author' => [
@@ -55,10 +55,23 @@ class BlogPostController extends Controller
                     'name' => config('blog.author_name'),
                     'url' => route('about'),
                 ],
-                'publisher' => $this->travelAgencySchema(),
+                'publisher' => [
+                    '@type' => 'Organization',
+                    'name' => config('app.name'),
+                    'url' => config('app.url'),
+                    'logo' => [
+                        '@type' => 'ImageObject',
+                        'url' => asset(config('seo.logo')),
+                    ],
+                ],
             ],
         );
-        $seo = $this->shareSeo(overrides: $overrides, jsonLd: $jsonLd);
+
+        $breadcrumbs = BreadcrumbTrail::home()
+            ->add(__('nav.blog'), route('blog.index'))
+            ->add($post->title);
+
+        $seo = $this->shareSeo(overrides: $overrides, jsonLd: $jsonLd, breadcrumbs: $breadcrumbs);
 
         return Inertia::render('Blog/Show', [
             'post' => $post,

@@ -301,6 +301,39 @@ class BlogPostTest extends TestCase
         $response->assertStatus(200);
     }
 
+    public function test_blog_post_page_renders_blog_posting_and_breadcrumb_json_ld(): void
+    {
+        $post = BlogPost::factory()->published()->create([
+            'title' => 'Met de nachttrein naar "Wenen" </script>',
+        ]);
+
+        $response = $this->get(route('blog.show', $post))->assertOk();
+
+        $found = preg_match('#<script type="application/ld\+json">\s*(.+?)\s*</script>#s', $response->getContent(), $matches);
+        $this->assertSame(1, $found, 'The page renders no JSON-LD block.');
+        $jsonLd = json_decode($matches[1], true, flags: JSON_THROW_ON_ERROR);
+
+        $this->assertSame('https://schema.org', $jsonLd['@context']);
+        $this->assertSame(['BlogPosting', 'BreadcrumbList'], array_column($jsonLd['@graph'], '@type'));
+
+        [$posting, $breadcrumbList] = $jsonLd['@graph'];
+
+        $this->assertSame($post->title, $posting['headline']);
+        $this->assertSame($post->meta_description ?: $post->excerpt, $posting['description']);
+        $this->assertSame($post->published_at->toIso8601String(), $posting['datePublished']);
+        $this->assertSame($post->updated_at->toIso8601String(), $posting['dateModified']);
+        $this->assertSame(route('blog.show', $post), $posting['mainEntityOfPage']);
+        $this->assertSame(['@type' => 'Person', 'name' => config('blog.author_name'), 'url' => route('about')], $posting['author']);
+        $this->assertSame('Organization', $posting['publisher']['@type']);
+        $this->assertSame(config('app.name'), $posting['publisher']['name']);
+        $this->assertSame(['@type' => 'ImageObject', 'url' => asset(config('seo.logo'))], $posting['publisher']['logo']);
+
+        $elements = $breadcrumbList['itemListElement'];
+        $this->assertSame([1, 2, 3], array_column($elements, 'position'));
+        $this->assertSame([__('home.title'), __('nav.blog'), $post->title], array_column($elements, 'name'));
+        $this->assertSame([route('home'), route('blog.index')], array_column($elements, 'item'));
+    }
+
     // Helper Methods
 
     private function validBlogPostData(array $overrides = []): array
