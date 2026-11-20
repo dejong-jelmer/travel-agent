@@ -1126,6 +1126,7 @@
             "duration_label": "{duration} days",
             "explanation": "I would be happy to look with you at the best time, your preferences, and what makes this trip special for you. Nothing is final until we have agreed on it together.",
             "cta_make_request": "Make a request",
+            "cta_choose_departure": "Choose a departure date",
             "cta_send_message": "Send a message",
             "preferred_period_label": "Preferred period (optional)",
             "preferred_period_placeholder": "E.g. September 2026",
@@ -1150,7 +1151,7 @@
         },
         "departures": {
             "title": "Departure dates",
-            "intro": "You travel on one of these dates, together with other travelers.",
+            "eyebrow": "Group trip",
             "none": "There are no departure dates planned at the moment.",
             "per_person": "per person",
             "single_supplement": "single room + {price}",
@@ -1160,7 +1161,7 @@
             "seats_left": "{count} place left | {count} places left",
             "full": "Full",
             "full_interest": "Would you like to hear when a place comes free?",
-            "cta": "Make a request",
+            "cta": "Request",
             "fees": "Prices are per person. Each booking pays {amount} on top: {items}."
         }
     },

@@ -69,6 +69,19 @@ function openRequest() {
     requestModalOpen.value = true
 }
 
+// On a group trip those buttons are links to the departures instead (#departure-dates, which works without script
+// too): a smooth scroll unless the visitor prefers reduced motion, then the focus on the heading of the block, so a
+// keyboard user continues from there
+function jumpToDepartures(event) {
+    const target = document.getElementById('departure-dates')
+    if (!target) return
+
+    event.preventDefault()
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    target.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'start' })
+    document.getElementById('trip-departures-heading')?.focus({ preventScroll: true })
+}
+
 // LightBox, opening from the gallery buttons
 const lightboxRef = ref(null)
 const thumbnails = []
@@ -250,16 +263,16 @@ const contactUrl = computed(() => {
                         <LightBox ref="lightboxRef" :images="trip.images" />
                     </BaseCard>
 
-                    <!-- The departures of a group trip: the dates are what a visitor needs first to decide -->
-                    <TripDepartures v-if="isGroupTrip" v-reveal :departures="departures" :fees="departureFees"
-                        @request="requestDeparture" />
-
                     <!-- Other description sections, a card each -->
                     <div v-if="storySections.length" class="space-y-8">
                         <TripStorySection v-for="section in storySections" :key="section.key" :section="section"
                             :variant="section.variant" :image="section.image" :image-alt="section.imageAlt"
                             :image-side="section.imageSide" />
                     </div>
+
+                    <!-- The departures of a group trip: after the story, before the day-by-day itinerary -->
+                    <TripDepartures v-if="isGroupTrip" v-reveal :departures="departures" :fees="departureFees"
+                        @request="requestDeparture" />
 
                     <!-- Itinerary -->
                     <TripItinerary :items="itinerary" />
@@ -274,7 +287,8 @@ const contactUrl = computed(() => {
                     <TripItems v-reveal :trip-items="tripItems" />
 
                     <!-- Plan this trip -->
-                    <TripPlanCard v-reveal :is-group-trip="isGroupTrip" @request="openRequest" />
+                    <TripPlanCard v-reveal :is-group-trip="isGroupTrip" @request="openRequest"
+                        @choose-departure="jumpToDepartures" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->
@@ -383,7 +397,11 @@ const contactUrl = computed(() => {
                                 <!-- CTA buttons -->
                                 <div class="space-y-3">
                                     <div class="block">
-                                        <Button @click="openRequest"
+                                        <Button v-if="isGroupTrip" href="#departure-dates" @click="jumpToDepartures"
+                                            class="w-full flex justify-center items-center">
+                                            {{ t('trip_show.inquiry.cta_choose_departure') }}
+                                        </Button>
+                                        <Button v-else @click="openRequest"
                                             class="w-full flex justify-center items-center">
                                             {{ t('trip_show.inquiry.cta_make_request') }}
                                         </Button>
@@ -439,9 +457,10 @@ const contactUrl = computed(() => {
                 </button>
             </nav>
             <div class="flex items-center gap-1 px-2 py-2">
-                <Button @click="openRequest"
+                <Button :href="isGroupTrip ? '#departure-dates' : null"
+                    @click="isGroupTrip ? jumpToDepartures($event) : openRequest()"
                     class="w-full flex justify-center items-center gap-1 group">
-                    {{ t('trip_show.inquiry.cta_make_request') }}
+                    {{ isGroupTrip ? t('trip_show.inquiry.cta_choose_departure') : t('trip_show.inquiry.cta_make_request') }}
                     <ChevronRight class="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
                 </Button>
 

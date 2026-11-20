@@ -7,7 +7,9 @@ const props = defineProps({
     isGroupTrip: { type: Boolean, default: false },
 });
 
-defineEmits(['request']);
+// request: an individual trip opens the request form. chooseDeparture: a group trip is requested per departure, so
+// the button takes the visitor to the departures; it passes the click so the page can scroll there itself.
+defineEmits(['request', 'chooseDeparture']);
 </script>
 
 <template>
@@ -28,7 +30,11 @@ defineEmits(['request']);
                 </p>
                 <!-- Request button with the phone number next to it -->
                 <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-                    <Button @click="$emit('request')" class="flex justify-center items-center">
+                    <Button v-if="isGroupTrip" href="#departure-dates" data-testid="choose-departure"
+                        class="flex justify-center items-center" @click="$emit('chooseDeparture', $event)">
+                        {{ $t('trip_show.inquiry.cta_choose_departure') }}
+                    </Button>
+                    <Button v-else @click="$emit('request')" class="flex justify-center items-center">
                         {{ $t('trip_show.inquiry.cta_make_request') }}
                     </Button>
                     <span class="flex items-center gap-2 text-brand-primary">

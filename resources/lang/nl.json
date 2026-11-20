@@ -1124,6 +1124,7 @@
             "duration_label": "{duration} dagen",
             "explanation": "Ik kijk graag met je naar de beste periode en je voorkeuren.",
             "cta_make_request": "Vraag voorstel aan",
+            "cta_choose_departure": "Kies een vertrekdatum",
             "cta_send_message": "Stel een vraag",
             "preferred_period_label": "Voorkeursperiode (optioneel)",
             "preferred_period_placeholder": "Bijv. september 2026",
@@ -1148,7 +1149,7 @@
         },
         "departures": {
             "title": "Vertrekdata",
-            "intro": "Je reist op een van deze data, samen met andere reizigers.",
+            "eyebrow": "Groepsreis",
             "none": "Er staan nu geen vertrekdata gepland.",
             "per_person": "per persoon",
             "single_supplement": "eenpersoonskamer + {price}",
@@ -1158,7 +1159,7 @@
             "seats_left": "Nog {count} plaats | Nog {count} plaatsen",
             "full": "Vol",
             "full_interest": "Wil je horen als er een plek vrijkomt?",
-            "cta": "Doe een aanvraag",
+            "cta": "Vraag aan",
             "fees": "Prijzen zijn per persoon. Per boeking komt daar {amount} bij: {items}."
         }
     },
