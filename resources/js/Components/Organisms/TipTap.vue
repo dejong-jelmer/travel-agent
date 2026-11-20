@@ -1,8 +1,22 @@
 <script setup>
 import { useEditor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
+import { Heading } from '@tiptap/extension-heading'
 import Link from '@tiptap/extension-link'
 import { TextStyle, FontSize } from '@tiptap/extension-text-style'
+
+// Headings hold plain text: no bold, italic, font size or link inside them. Pasted text (from Google Docs or Word,
+// for example) often marks its headings bold; the schema drops those marks, also from content loaded into the editor.
+const PlainHeading = Heading.extend({ marks: '' })
+
+// Links have no title attribute: the toolbar never sets one, and a pasted one mostly repeats the URL. Leaving the
+// attribute out of the schema drops it from pasted and loaded content.
+const LinkWithoutTitle = Link.extend({
+    addAttributes() {
+        const { title, ...attributes } = this.parent?.() ?? {}
+        return attributes
+    },
+})
 
 const props = defineProps({
     modelValue: String,
@@ -25,8 +39,10 @@ const fontSizes = ['11px', '12px', '14px', '16px', '18px', '20px', '24px', '30px
 const editor = useEditor({
     content: props.modelValue,
     extensions: [
-        StarterKit,
-        Link.configure({ openOnClick: false }),
+        // StarterKit's own link stays off: it would clash with the one configured below
+        StarterKit.configure({ heading: false, link: false }),
+        PlainHeading,
+        LinkWithoutTitle.configure({ openOnClick: false }),
         TextStyle,
         FontSize
     ],
