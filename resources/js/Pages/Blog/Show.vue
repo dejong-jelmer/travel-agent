@@ -8,6 +8,11 @@ const props = defineProps({
     post: Object,
     // The name and bio for the author box, from config/blog.php
     author: Object,
+    // The published trips this story goes with, see RelatedTrips
+    trips: {
+        type: Array,
+        default: () => [],
+    },
 });
 
 const { t } = useI18n();
@@ -43,5 +48,8 @@ const { formattedDate } = useDateFormatter();
             <!-- Who wrote it -->
             <AuthorBox :name="author.name" :bio="author.bio" class="max-w-3xl mx-auto mt-16" />
         </article>
+
+        <!-- The trips this story goes with -->
+        <RelatedTrips :trips="trips" class="max-w-wide mx-auto px-4 pb-12 laptop:pb-20" />
     </Layout>
 </template>

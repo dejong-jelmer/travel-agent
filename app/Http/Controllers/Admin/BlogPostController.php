@@ -10,6 +10,7 @@ use App\Http\Requests\CreateBlogPostRequest;
 use App\Http\Requests\DataTableRequest;
 use App\Http\Requests\UpdateBlogPostRequest;
 use App\Models\BlogPost;
+use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\SlugService;
 use Illuminate\Http\RedirectResponse;
@@ -41,13 +42,14 @@ class BlogPostController extends Controller
     {
         return Inertia::render('Admin/BlogPosts/Create', [
             'statusOptions' => Status::options(),
+            'tripOptions' => $this->tripOptions(),
             'title' => $this->pageTitle('blog.posts.title_create'),
         ]);
     }
 
     public function store(CreateBlogPostRequest $request): RedirectResponse
     {
-        $validated = $request->safe()->except(['featured_image']);
+        $validated = $request->safe()->except(['featured_image', 'trips']);
         $status = Status::from($validated['status']);
 
         $slug = SlugService::generateUniqueFor(BlogPost::class, $validated['title']);
@@ -56,6 +58,8 @@ class BlogPostController extends Controller
             'slug' => $slug,
             'published_at' => $status === Status::Published ? now() : null,
         ]));
+
+        $post->trips()->sync($request->safe()->trips ?? []);
 
         if ($request->hasFile('featured_image')) {
             $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
@@ -77,14 +81,17 @@ class BlogPostController extends Controller
     {
         return Inertia::render('Admin/BlogPosts/Edit', [
             'blogPost' => $post->load('heroImage'),
+            // The ids of the related trips, as strings like the option ids
+            'tripIds' => $post->trips()->pluck('trips.id')->map(fn (int $id) => (string) $id)->all(),
             'statusOptions' => Status::options(),
+            'tripOptions' => $this->tripOptions(),
             'title' => $this->pageTitle('blog.posts.title_edit'),
         ]);
     }
 
     public function update(UpdateBlogPostRequest $request, BlogPost $post): RedirectResponse
     {
-        $validated = $request->safe()->except(['featured_image', 'slug']);
+        $validated = $request->safe()->except(['featured_image', 'slug', 'trips']);
         $status = Status::from($validated['status']);
         $slug = SlugService::generateUniqueFor(BlogPost::class, $request->input('title'), $post->id);
 
@@ -96,6 +103,9 @@ class BlogPostController extends Controller
             },
         ]));
         $post->save();
+
+        // The form always sends its trips, but an empty list goes missing in form data: no trips means none
+        $post->trips()->sync($request->safe()->trips ?? []);
 
         if ($request->hasFile('featured_image')) {
             $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
@@ -115,5 +125,18 @@ class BlogPostController extends Controller
 
         return redirect()->route('admin.posts.index')
             ->with('success', __('blog.posts.deleted'));
+    }
+
+    /**
+     * The trips a story can be related to, by name, ids as strings (a select returns its values as strings).
+     *
+     * @return list<array{id: string, name: string}>
+     */
+    private function tripOptions(): array
+    {
+        return Trip::orderBy('name')->pluck('name', 'id')
+            ->map(fn (string $name, int $id) => ['id' => (string) $id, 'name' => $name])
+            ->values()
+            ->all();
     }
 }

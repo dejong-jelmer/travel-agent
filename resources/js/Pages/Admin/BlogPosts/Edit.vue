@@ -4,6 +4,9 @@ import { useForm } from "@inertiajs/vue3";
 const props = defineProps({
     blogPost: Object,
     statusOptions: Array,
+    tripOptions: Array,
+    // The ids of the related trips, as strings
+    tripIds: Array,
 });
 
 const form = useForm({
@@ -17,6 +20,7 @@ const form = useForm({
     meta_title: props.blogPost.meta_title ?? "",
     meta_description: props.blogPost.meta_description ?? "",
     status: props.blogPost.status,
+    trips: props.tripIds,
 });
 
 function submit() {
@@ -26,6 +30,6 @@ function submit() {
 
 <template>
     <Admin>
-        <BlogPostForm :form="form" :status-options="statusOptions" @submit="submit" />
+        <BlogPostForm :form="form" :status-options="statusOptions" :trip-options="tripOptions" @submit="submit" />
     </Admin>
 </template>

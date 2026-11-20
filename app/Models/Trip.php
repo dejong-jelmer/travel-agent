@@ -243,6 +243,16 @@ class Trip extends Model
         return $this->hasMany(Testimonial::class);
     }
 
+    /**
+     * The stories that go with this trip.
+     *
+     * @return BelongsToMany<BlogPost, $this>
+     */
+    public function blogPosts(): BelongsToMany
+    {
+        return $this->belongsToMany(BlogPost::class);
+    }
+
     public function recalculateDuration(): void
     {
         $max = $this->itineraries()

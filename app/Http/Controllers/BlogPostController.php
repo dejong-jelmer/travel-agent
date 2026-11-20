@@ -79,6 +79,10 @@ class BlogPostController extends Controller
                 'name' => config('blog.author_name'),
                 'bio' => config('blog.author_bio'),
             ],
+            // As on the trips page: the trip cards have no use for the gallery paths, which would fetch every gallery
+            'trips' => $post->trips()->with(['destinations', 'heroImage'])->withStartingPrice()->withTravelMode()->published()
+                ->orderBy('name')->get()->append(['travel_mode', 'type_display', 'format_display'])
+                ->makeHidden(['image_paths', 'visibleDepartures', 'pivot']),
             'title' => $seo['title'],
             'seo' => $seo,
         ]);

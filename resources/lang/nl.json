@@ -64,7 +64,8 @@
         "author": {
             "label": "Over de schrijver",
             "link": "Meer over mij"
-        }
+        },
+        "related_trips": "Reizen die hierbij passen"
     },
     "trip_card": {
         "days": "dagen",
@@ -693,6 +694,10 @@
                 "meta": {
                     "title": "SEO",
                     "subtitle": "Zoekmachine optimalisatie"
+                },
+                "trips": {
+                    "title": "Gerelateerde reizen",
+                    "subtitle": "De reizen die bij dit verhaal passen. Ze staan onder het verhaal, en het verhaal staat op hun reispagina."
                 }
             },
             "fields": {
@@ -701,7 +706,9 @@
                 "body": "Inhoud",
                 "meta_title": "Meta titel",
                 "meta_description": "Meta omschrijving",
-                "status": "Status"
+                "status": "Status",
+                "trips": "Reizen",
+                "trips_help": "Houd Ctrl (of Cmd op een Mac) ingedrukt om meerdere reizen te kiezen of er een uit te zetten."
             },
             "submit": {
                 "create": "Blogpost aanmaken",
@@ -1080,6 +1087,7 @@
         }
     },
     "trip_show": {
+        "related_stories": "Lees ook",
         "hero": {
             "from_price": "Vanaf €{price},-",
             "days": "{duration} dagen",

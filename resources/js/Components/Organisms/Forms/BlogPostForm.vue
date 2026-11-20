@@ -4,6 +4,8 @@ import { useI18n } from 'vue-i18n';
 const props = defineProps({
     form: Object,
     statusOptions: Array,
+    // Shape: [{ id, name }], the trips by name, ids as strings
+    tripOptions: Array,
 });
 
 const emit = defineEmits(['submit']);
@@ -62,6 +64,20 @@ const { t } = useI18n();
                     <div class="p-6">
                         <ImageUploader v-model="form.featured_image" preview-size="large"
                             :feedback="form.errors.featured_image" />
+                    </div>
+                </section>
+
+                <!-- Related trips: shown below the story, and the story below each of them -->
+                <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                    <div class="border-b border-gray-200 bg-white px-6 py-4">
+                        <h2 class="text-lg font-semibold text-gray-700">{{ t('forms.blog_post.sections.trips.title') }}</h2>
+                        <p class="mt-1 text-sm text-gray-700/30">{{ t('forms.blog_post.sections.trips.subtitle') }}</p>
+                    </div>
+                    <div class="p-6 space-y-2">
+                        <Select name="trips" :label="t('forms.blog_post.fields.trips')" v-model="form.trips"
+                            :multiple="true" :options="tripOptions" :feedback="form.errors.trips"
+                            size="8" />
+                        <p class="text-sm text-gray-700/50">{{ t('forms.blog_post.fields.trips_help') }}</p>
                     </div>
                 </section>
 

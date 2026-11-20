@@ -3,6 +3,7 @@
 namespace App\Services\Validation;
 
 use App\Enums\BlogPost\Status;
+use App\Models\Trip;
 use Illuminate\Validation\Rule;
 
 class BlogPostValidationRules
@@ -17,6 +18,8 @@ class BlogPostValidationRules
             'meta_title' => ['nullable', 'string', 'max:60'],
             'meta_description' => ['nullable', 'string', 'max:160'],
             'status' => ['required', Rule::enum(Status::class)],
+            'trips' => ['nullable', 'array'],
+            'trips.*' => ['integer', 'distinct', Rule::exists(Trip::class, 'id')->withoutTrashed()],
         ], $additions);
     }
 }

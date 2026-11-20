@@ -64,7 +64,8 @@
         "author": {
             "label": "About the author",
             "link": "More about me"
-        }
+        },
+        "related_trips": "Trips that go with this story"
     },
     "trip_card": {
         "days": "days",
@@ -693,6 +694,10 @@
                 "meta": {
                     "title": "SEO",
                     "subtitle": "Search engine optimization"
+                },
+                "trips": {
+                    "title": "Related trips",
+                    "subtitle": "The trips that go with this story. They are shown below the story, and the story on their trip page."
                 }
             },
             "fields": {
@@ -701,7 +706,9 @@
                 "body": "Content",
                 "meta_title": "Meta title",
                 "meta_description": "Meta description",
-                "status": "Status"
+                "status": "Status",
+                "trips": "Trips",
+                "trips_help": "Hold Ctrl (or Cmd on a Mac) to select several trips or to deselect one."
             },
             "submit": {
                 "create": "Create blog post",
@@ -1082,6 +1089,7 @@
         "terms_link": "Read the travel conditions and the STO-Garant scheme"
     },
     "trip_show": {
+        "related_stories": "Read also",
         "hero": {
             "from_price": "From €{price},-",
             "days": "{duration} days",

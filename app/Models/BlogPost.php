@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -60,6 +61,16 @@ class BlogPost extends Model
     public function heroImage(): MorphOne
     {
         return $this->morphOne(Image::class, 'imageable')->where('is_primary', true);
+    }
+
+    /**
+     * The trips this story goes with.
+     *
+     * @return BelongsToMany<Trip, $this>
+     */
+    public function trips(): BelongsToMany
+    {
+        return $this->belongsToMany(Trip::class);
     }
 
     /**

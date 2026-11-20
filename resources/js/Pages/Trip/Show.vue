@@ -33,6 +33,11 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: see RelatedStories. The published stories that go with this trip, newest first
+    stories: {
+        type: Array,
+        default: () => []
+    },
     // Shape: see TripDepartures. The departures of a group trip that can still be requested, empty for an individual trip
     departures: {
         type: Array,
@@ -289,6 +294,9 @@ const contactUrl = computed(() => {
                     <!-- Plan this trip -->
                     <TripPlanCard v-reveal :is-group-trip="isGroupTrip" @request="openRequest"
                         @choose-departure="jumpToDepartures" />
+
+                    <!-- Stories that go with this trip -->
+                    <RelatedStories v-reveal :stories="stories" />
                 </div>
 
                 <!-- Right Column - Booking Sidebar -->
