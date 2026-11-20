@@ -45,6 +45,11 @@ const { t } = useI18n();
                             v-model="form.excerpt" :feedback="form.errors.excerpt"
                             :rows="3" />
 
+                        <TextArea name="summary" :label="t('forms.blog_post.fields.summary')"
+                            :description="t('forms.blog_post.fields.summary_help')"
+                            v-model="form.summary" :feedback="form.errors.summary"
+                            :rows="4" />
+
                         <div>
                             <Label for-field="body" :required="true">{{ t('forms.blog_post.fields.body') }}</Label>
                             <TipTap v-model="form.body" class="mt-1" />

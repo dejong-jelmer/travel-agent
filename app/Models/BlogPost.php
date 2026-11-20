@@ -31,6 +31,7 @@ class BlogPost extends Model
         'slug',
         'body',
         'excerpt',
+        'summary',
         'meta_title',
         'meta_description',
         'status',
@@ -94,6 +95,45 @@ class BlogPost extends Model
         return Attribute::make(
             get: fn () => $this->status === Status::Published
         );
+    }
+
+    /**
+     * The key points of the summary, one per line. Empty lines are dropped, as is a bullet typed in front of a point.
+     *
+     * @return list<string>
+     */
+    public function summaryPoints(): array
+    {
+        $points = array_map(
+            fn (string $line) => trim(preg_replace('/^\s*[-*•]\s*/u', '', $line) ?? $line),
+            preg_split('/\R/u', (string) $this->summary) ?: [],
+        );
+
+        return array_values(array_filter($points, fn (string $point) => $point !== ''));
+    }
+
+    /**
+     * Split the body where the summary goes: after the introduction, which ends at the first H2. A body without one
+     * is split after its first paragraph; a body without paragraphs is all introduction.
+     *
+     * @return array{intro: string, rest: string}
+     */
+    public function bodyAroundSummary(): array
+    {
+        $body = (string) $this->body;
+        $heading = stripos($body, '<h2');
+
+        if ($heading !== false) {
+            $splitAt = $heading;
+        } else {
+            $paragraphEnd = stripos($body, '</p>');
+            $splitAt = $paragraphEnd === false ? strlen($body) : $paragraphEnd + strlen('</p>');
+        }
+
+        return [
+            'intro' => substr($body, 0, $splitAt),
+            'rest' => substr($body, $splitAt),
+        ];
     }
 
     /**

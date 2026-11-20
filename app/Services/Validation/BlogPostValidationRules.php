@@ -14,6 +14,7 @@ class BlogPostValidationRules
             'title' => ['required', 'string', 'max:255'],
             'body' => ['required', 'string'],
             'excerpt' => ['nullable', 'string', 'max:500'],
+            'summary' => ['nullable', 'string', 'max:1000'],
             'featured_image' => array_merge(['nullable'], ImageValidationRules::baseImage()),
             ...ImageValidationRules::alt('featured_image_alt'),
             'meta_title' => ['nullable', 'string', 'max:60'],

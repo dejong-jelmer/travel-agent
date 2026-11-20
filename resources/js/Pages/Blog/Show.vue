@@ -6,6 +6,13 @@ import { computed } from 'vue';
 
 const props = defineProps({
     post: Object,
+    // Shape: { intro, rest }, the HTML of the body split where the summary goes; rest is empty without a summary
+    body: Object,
+    // The key points of the story for "In het kort", empty when it has none
+    summary: {
+        type: Array,
+        default: () => [],
+    },
     // The name and bio for the author box, from config/blog.php
     author: Object,
     // The published trips this story goes with, see RelatedTrips
@@ -42,8 +49,10 @@ const { formattedDate } = useDateFormatter();
                     :alt="post.hero_image.alt || post.title" class="w-full rounded-lg object-cover" />
             </div>
 
-            <!-- Body -->
-            <div class="max-w-3xl mx-auto prose prose-lg prose-brand" v-html="post.body"></div>
+            <!-- Body: the introduction, the summary of the key points, then the rest of the story -->
+            <div class="max-w-3xl mx-auto prose prose-lg prose-brand" v-html="body.intro"></div>
+            <StorySummary :points="summary" class="max-w-3xl mx-auto my-10" />
+            <div v-if="body.rest" class="max-w-3xl mx-auto prose prose-lg prose-brand" v-html="body.rest"></div>
 
             <!-- Who wrote it -->
             <AuthorBox :name="author.name" :bio="author.bio" class="max-w-3xl mx-auto mt-16" />

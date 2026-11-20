@@ -9,6 +9,7 @@ const props = defineProps({
 const form = useForm({
     title: "",
     excerpt: "",
+    summary: "",
     body: "",
     featured_image: null,
     featured_image_alt: "",

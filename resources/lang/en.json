@@ -65,6 +65,7 @@
             "label": "About the author",
             "link": "More about me"
         },
+        "summary_title": "In brief",
         "related_trips": "Trips that go with this story"
     },
     "trip_card": {
@@ -707,6 +708,8 @@
             "fields": {
                 "title": "Title",
                 "excerpt": "Excerpt",
+                "summary": "Summary",
+                "summary_help": "Optional. One key point per line; they are shown as \"In het kort\" after the introduction of the story, before the first H2 heading.",
                 "body": "Content",
                 "meta_title": "Meta title",
                 "meta_description": "Meta description",
@@ -1543,6 +1546,7 @@
             },
             "show": {
                 "excerpt": "Excerpt",
+                "summary": "Summary",
                 "body": "Content",
                 "status": "Status",
                 "published_at": "Publication date",

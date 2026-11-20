@@ -65,6 +65,7 @@
             "label": "Over de schrijver",
             "link": "Meer over mij"
         },
+        "summary_title": "In het kort",
         "related_trips": "Reizen die hierbij passen"
     },
     "trip_card": {
@@ -707,6 +708,8 @@
             "fields": {
                 "title": "Titel",
                 "excerpt": "Excerpt",
+                "summary": "Samenvatting",
+                "summary_help": "Optioneel. Eén kernpunt per regel; ze staan als \"In het kort\" na de inleiding van het verhaal, voor de eerste H2-kop.",
                 "body": "Inhoud",
                 "meta_title": "Meta titel",
                 "meta_description": "Meta omschrijving",
@@ -1541,6 +1544,7 @@
             },
             "show": {
                 "excerpt": "Excerpt",
+                "summary": "Samenvatting",
                 "body": "Inhoud",
                 "status": "Status",
                 "published_at": "Publicatiedatum",

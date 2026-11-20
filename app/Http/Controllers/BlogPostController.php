@@ -73,8 +73,13 @@ class BlogPostController extends Controller
 
         $seo = $this->shareSeo(overrides: $overrides, jsonLd: $jsonLd, breadcrumbs: $breadcrumbs);
 
+        $summary = $post->summaryPoints();
+
         return Inertia::render('Blog/Show', [
-            'post' => $post,
+            // The body goes along split around the summary, the summary as its points, so neither goes twice
+            'post' => $post->makeHidden(['body', 'summary']),
+            'body' => $summary ? $post->bodyAroundSummary() : ['intro' => $post->body, 'rest' => ''],
+            'summary' => $summary,
             'author' => [
                 'name' => config('blog.author_name'),
                 'bio' => config('blog.author_bio'),
