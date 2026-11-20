@@ -9,7 +9,6 @@
                 { "amount_per_person": 9000, "quantity": 2 },
                 { "amount_per_person": 3000, "quantity": 2 }
             ],
-            "margin_in_percentage": true,
             "margin_percentage": 35,
             "margin_amount": null,
             "fee_per_person": null,
@@ -27,7 +26,6 @@
             "cost_items": [
                 { "amount_per_person": 85000, "quantity": 2 }
             ],
-            "margin_in_percentage": true,
             "margin_percentage": 35,
             "margin_amount": null,
             "fee_per_person": null,
@@ -45,13 +43,12 @@
             }
         },
         {
-            "name": "fixed margin with a fee per adult, percentage is ignored",
+            "name": "fixed margin with a fee per adult",
             "cost_items": [
                 { "amount_per_person": 40000, "quantity": 2 },
                 { "amount_per_person": 45000, "quantity": 2 }
             ],
-            "margin_in_percentage": false,
-            "margin_percentage": 35,
+            "margin_percentage": 0,
             "margin_amount": 50000,
             "fee_per_person": 2500,
             "adults": 2,
@@ -72,8 +69,7 @@
             "cost_items": [
                 { "amount_per_person": 20000, "quantity": 3 }
             ],
-            "margin_in_percentage": false,
-            "margin_percentage": 35,
+            "margin_percentage": 0,
             "margin_amount": 25000,
             "fee_per_person": 1500,
             "adults": 2,
@@ -90,8 +86,7 @@
             "cost_items": [
                 { "amount_per_person": 25000, "quantity": 1 }
             ],
-            "margin_in_percentage": false,
-            "margin_percentage": 35,
+            "margin_percentage": 0,
             "margin_amount": 10000,
             "fee_per_person": 0,
             "adults": 3,
@@ -108,7 +103,6 @@
             "cost_items": [
                 { "amount_per_person": 12345, "quantity": 2 }
             ],
-            "margin_in_percentage": true,
             "margin_percentage": 0,
             "margin_amount": null,
             "fee_per_person": null,
@@ -126,7 +120,6 @@
             "cost_items": [
                 { "amount_per_person": 10, "quantity": 1 }
             ],
-            "margin_in_percentage": true,
             "margin_percentage": 20,
             "margin_amount": null,
             "fee_per_person": null,
@@ -144,7 +137,6 @@
             "cost_items": [
                 { "amount_per_person": 999, "quantity": 1 }
             ],
-            "margin_in_percentage": true,
             "margin_percentage": 7.5,
             "margin_amount": null,
             "fee_per_person": null,
@@ -162,7 +154,6 @@
             "cost_items": [
                 { "amount_per_person": 10000, "quantity": 1 }
             ],
-            "margin_in_percentage": true,
             "margin_percentage": 95,
             "margin_amount": null,
             "fee_per_person": null,
@@ -178,7 +169,6 @@
         {
             "name": "no cost items yet, only the fees apply",
             "cost_items": [],
-            "margin_in_percentage": true,
             "margin_percentage": 35,
             "margin_amount": null,
             "fee_per_person": null,
@@ -189,6 +179,28 @@
                 "fees_and_funds_total": 2500,
                 "margined_price": 0,
                 "calculated_price": 2500
+            }
+        },
+        {
+            "name": "percentage margin, fixed margin and a fee per adult combined",
+            "cost_items": [
+                { "amount_per_person": 40000, "quantity": 2 },
+                { "amount_per_person": 45000, "quantity": 2 }
+            ],
+            "margin_percentage": 35,
+            "margin_amount": 50000,
+            "fee_per_person": 2500,
+            "adults": 2,
+            "fees_and_funds": {
+                "booking_fee": 2500,
+                "guarantee_fund": 1000,
+                "emergency_fund": 250
+            },
+            "expected": {
+                "total_cost": 170000,
+                "fees_and_funds_total": 3750,
+                "margined_price": 316538,
+                "calculated_price": 320288
             }
         }
     ]

@@ -27,6 +27,7 @@ use Staudenmeir\EloquentHasManyDeep\HasRelationships;
 
 /**
  * @property Trip $trip
+ * @property Departure|null $departure
  * @property BookingContact $contact
  * @property BookingTraveler $mainBooker
  */
@@ -38,7 +39,7 @@ class Booking extends Model
         SoftDeletes,
         Sortable;
 
-    public const DEFAULT_MARGIN_BASIS_POINTS = 3500;
+    public const DEFAULT_MARGIN_BASIS_POINTS = 1500;
 
     protected array $formattedDates = [
         'departure_date' => ['format' => 'dddd LL'],
@@ -50,6 +51,7 @@ class Booking extends Model
 
     protected $fillable = [
         'trip_id',
+        'departure_id',
         'main_booker_id',
         'departure_date',
         'return_date',
@@ -64,11 +66,11 @@ class Booking extends Model
         'trip_price_id',
         'price_per_person',
         'single_supplement',
+        'single_rooms',
         'base_total_price',
         'grand_total_price',
         'fees_and_funds',
         'margin_basis_points',
-        'margin_in_percentage',
         'margin_amount',
         'fee_per_person',
         'calculated_price',
@@ -85,8 +87,8 @@ class Booking extends Model
         'status' => Status::class,
         'payment_status' => PaymentStatus::class,
         'fees_and_funds' => 'array',
+        'single_rooms' => 'integer',
         'margin_basis_points' => 'integer',
-        'margin_in_percentage' => 'boolean',
         'margin_amount' => 'integer',
         'fee_per_person' => 'integer',
         'calculated_price' => 'integer',
@@ -109,7 +111,6 @@ class Booking extends Model
     protected $attributes = [
         'status' => Status::New->value,
         'payment_status' => PaymentStatus::Pending->value,
-        'margin_in_percentage' => true,
     ];
 
     // Sortable properties
@@ -159,12 +160,16 @@ class Booking extends Model
         static::saving(function (self $booking) {
             if ($booking->exists && $booking->isDirty([
                 'margin_basis_points',
-                'margin_in_percentage',
                 'margin_amount',
                 'fee_per_person',
                 'fees_and_funds',
+                'single_rooms',
             ])) {
                 $booking->calculated_price = $booking->computeCalculatedPrice();
+
+                if ($booking->isSoldAtDeparturePrice()) {
+                    $booking->grand_total_price = $booking->calculated_price;
+                }
             }
         });
 
@@ -232,6 +237,16 @@ class Booking extends Model
     public function trip(): BelongsTo
     {
         return $this->belongsTo(Trip::class)->withTrashed();
+    }
+
+    /**
+     * The departure of a group trip this booking has places on. Null for an individual trip.
+     *
+     * @return BelongsTo<Departure, $this>
+     */
+    public function departure(): BelongsTo
+    {
+        return $this->belongsTo(Departure::class);
     }
 
     public function tripRequest(): HasOne
@@ -458,18 +473,53 @@ class Booking extends Model
     /**
      * Recompute the sales price from cost items and the margin.
      *
-     * Percentage margin works on the sales side: 35% margin means cost = 65% of sales.
-     * calculated_price = total_cost / (1 - margin / 100).
+     * The margin is the sum of three parts:
+     * - a percentage on the sales side, over the cost only: 15% margin means
+     *   cost = 85% of that part, so total_cost / (1 - margin / 100);
+     * - a fixed margin_amount per booking;
+     * - a fee_per_person for every adult (children do not pay it).
      *
-     * Fixed margin is added on top of the cost instead:
-     * calculated_price = total_cost + margin_amount + fee_per_person * total_adults.
+     * calculated_price = round(total_cost / (1 - margin / 100))
+     *     + margin_amount
+     *     + fee_per_person * total_adults
+     *     + fees_and_funds_total
      *
-     * The fees and funds snapshot is charged once per booking, on top of either
+     * Only the percentage part is rounded, as in calculateBookingPrice() in JS.
+     * The fees and funds snapshot is charged once per booking, on top of the
      * margin, so no margin is made on it.
+     *
+     * A booking on a departure is not priced from its costs: it is sold at the
+     * price of the departure, see computeDeparturePrice().
      */
     public function computeCalculatedPrice(): int
     {
+        if ($this->isSoldAtDeparturePrice()) {
+            return $this->computeDeparturePrice();
+        }
+
         return $this->computeMarginedPrice() + $this->feesAndFundsTotal;
+    }
+
+    /**
+     * Whether this booking is sold at the fixed price of a departure, snapshotted on the booking when it was made.
+     */
+    public function isSoldAtDeparturePrice(): bool
+    {
+        return $this->departure_id !== null && $this->price_per_person !== null;
+    }
+
+    /**
+     * The sales price of a booking on a departure, from the price snapshot on the booking:
+     *
+     * price_per_person * travelers + single_supplement * single_rooms + fees_and_funds_total
+     *
+     * Children pay the same price per person as adults.
+     */
+    private function computeDeparturePrice(): int
+    {
+        return $this->price_per_person * (($this->total_adults ?? 0) + ($this->total_children ?? 0))
+            + ($this->single_supplement ?? 0) * ($this->single_rooms ?? 0)
+            + $this->feesAndFundsTotal;
     }
 
     /**
@@ -477,12 +527,6 @@ class Booking extends Model
      */
     private function computeMarginedPrice(): int
     {
-        if (! $this->margin_in_percentage) {
-            return $this->totalCost
-                + ($this->margin_amount ?? 0)
-                + ($this->fee_per_person ?? 0) * ($this->total_adults ?? 0);
-        }
-
         $margin = ($this->margin_basis_points ?? 0) / 10000;
 
         if ($margin < 0 || $margin >= 1.0) {
@@ -491,7 +535,9 @@ class Booking extends Model
             );
         }
 
-        return (int) round($this->totalCost / (1 - $margin));
+        return (int) round($this->totalCost / (1 - $margin))
+            + ($this->margin_amount ?? 0)
+            + ($this->fee_per_person ?? 0) * ($this->total_adults ?? 0);
     }
 
     /**

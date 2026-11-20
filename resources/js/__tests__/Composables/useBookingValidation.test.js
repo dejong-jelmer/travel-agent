@@ -993,3 +993,53 @@ describe("useBookingValidation", () => {
         });
     });
 });
+
+describe("validation of a group booking", () => {
+    const { validateTripStep, validatePriceStep } = useBookingValidation();
+
+    const form = (attributes = {}) => ({
+        trip: { id: 1, format: "group" },
+        departure_id: 7,
+        departure: { id: 7, available_seats: 4, price_per_person: 120000, single_supplement: 15000 },
+        participants: { adults: 2, children: 1 },
+        single_rooms: null,
+        final_price: null,
+        cost_items: [{ category: "train", label: "", amount_per_person: null, quantity: 2 }],
+        margin_percentage: 15,
+        ...attributes,
+    });
+
+    it("needs a departure instead of a date", () => {
+        expect(validateTripStep(form({ departure_id: null, departure: null, departure_date: null }))).toHaveProperty("departure_id");
+        expect(validateTripStep(form())).toEqual({});
+    });
+
+    it("cannot book more travelers than there are places left", () => {
+        const errors = validateTripStep(form({ participants: { adults: 4, children: 1 } }));
+
+        expect(errors.participants).toBe('validation.errors.not_enough_seats|{"available":4,"requested":5}');
+        expect(validateTripStep(form({ participants: { adults: 4, children: 0 } }))).toEqual({});
+    });
+
+    it("skips the cost items and the margin in the price step", () => {
+        expect(validatePriceStep(form())).toEqual({});
+    });
+
+    it("limits the single rooms to one per adult", () => {
+        expect(validatePriceStep(form({ single_rooms: 3 }))).toHaveProperty("single_rooms");
+        expect(validatePriceStep(form({ single_rooms: 2 }))).toEqual({});
+        expect(validatePriceStep(form({ single_rooms: -1 }))).toHaveProperty("single_rooms");
+    });
+
+    it("refuses a departure without a price and a negative final price", () => {
+        expect(validatePriceStep(form({ departure: { ...form().departure, price_per_person: null } }))).toHaveProperty("departure_id");
+        expect(validatePriceStep(form({ final_price: -5 }))).toHaveProperty("final_price");
+    });
+
+    it("still validates an individual booking as before", () => {
+        const individual = form({ trip: { format: "individual" }, departure_id: null, departure: null, departure_date: null });
+
+        expect(validateTripStep(individual)).toHaveProperty("departure_date");
+        expect(validatePriceStep(individual)).toHaveProperty("cost_items.0.label");
+    });
+});

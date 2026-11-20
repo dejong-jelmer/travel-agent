@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\DTO\BreadcrumbTrail;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\BlogPost;
+use App\Models\Trip;
 use App\Services\OgImageService;
+use Illuminate\Database\Eloquent\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -42,12 +45,12 @@ class BlogPostController extends Controller
             'description' => $post->meta_description ?: $post->excerpt,
             'og_type' => 'article',
             'article_published_time' => $post->published_at?->toIso8601String(),
-            'article_modified_time' => $post->updated_at?->toIso8601String(),
-            ...$this->ogImageSeo($this->ogImages->forImage($post->heroImage, $post->title)),
+            'article_modified_time' => $post->lastModifiedAt()?->toIso8601String(),
+            ...$this->ogImageSeo($this->ogImages->forImage($post->heroImage, $post->heroImage?->alt ?: $post->title)),
         ];
 
+        $agency = $this->travelAgencySchema();
         $jsonLd = array_merge(
-            ['@context' => 'https://schema.org'],
             $post->toBlogPostingSchema(),
             [
                 'author' => [
@@ -55,15 +58,51 @@ class BlogPostController extends Controller
                     'name' => config('blog.author_name'),
                     'url' => route('about'),
                 ],
-                'publisher' => $this->travelAgencySchema(),
+                // The agency's own node, as a plain Organization with its logo as an ImageObject
+                'publisher' => [
+                    ...$agency,
+                    '@type' => 'Organization',
+                    'logo' => [
+                        '@type' => 'ImageObject',
+                        'url' => $agency['logo'],
+                    ],
+                ],
             ],
         );
-        $seo = $this->shareSeo(overrides: $overrides, jsonLd: $jsonLd);
+
+        $breadcrumbs = BreadcrumbTrail::home()
+            ->add(__('nav.blog'), route('blog.index'))
+            ->add($post->title);
+
+        $seo = $this->shareSeo(overrides: $overrides, jsonLd: $jsonLd, breadcrumbs: $breadcrumbs);
+
+        $summary = $post->summaryPoints();
 
         return Inertia::render('Blog/Show', [
-            'post' => $post,
+            // The body goes along split around the summary, the summary as its points, so neither goes twice
+            'post' => $post->makeHidden(['body', 'summary']),
+            'body' => $summary ? $post->bodyAroundSummary() : ['intro' => $post->body, 'rest' => ''],
+            'summary' => $summary,
+            'author' => [
+                'name' => config('blog.author_name'),
+                'bio' => config('blog.author_bio'),
+            ],
+            'trips' => $this->relatedTrips($post),
             'title' => $seo['title'],
             'seo' => $seo,
         ]);
+    }
+
+    /**
+     * The published trips the story goes with, by name, ready for a trip card. As on the trips page, the cards have
+     * no use for the gallery paths, which would fetch every gallery.
+     *
+     * @return Collection<int, Trip>
+     */
+    private function relatedTrips(BlogPost $post): Collection
+    {
+        return $post->trips()->with(['destinations', 'heroImage'])->withStartingPrice()->withTravelMode()->published()
+            ->orderBy('name')->get()->append(['travel_mode', 'type_display', 'format_display'])
+            ->makeHidden(['image_paths', 'visibleDepartures', 'pivot']);
     }
 }

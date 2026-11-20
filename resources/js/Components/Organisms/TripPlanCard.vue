@@ -2,7 +2,14 @@
 import { Phone, ShieldCheck } from '@lucide/vue';
 import portrait from '@/../images/me_thumb.webp';
 
-defineEmits(['request']);
+// A group trip is requested on a fixed departure at a fixed price, so it gets texts of its own
+const props = defineProps({
+    isGroupTrip: { type: Boolean, default: false },
+});
+
+// request: an individual trip opens the request form. chooseDeparture: a group trip is requested per departure, so
+// the button takes the visitor to the departures; it passes the click so the page can scroll there itself.
+defineEmits(['request', 'chooseDeparture']);
 </script>
 
 <template>
@@ -19,11 +26,15 @@ defineEmits(['request']);
 
             <div class="col-span-2 tablet:col-span-1 tablet:col-start-2 space-y-8">
                 <p class="text-base text-brand-text leading-relaxed">
-                    {{ $t('trip_show.inquiry.explanation') }}
+                    {{ isGroupTrip ? $t('trip_show.inquiry.explanation_group') : $t('trip_show.inquiry.explanation') }}
                 </p>
                 <!-- Request button with the phone number next to it -->
                 <div class="flex flex-wrap items-center gap-x-6 gap-y-3">
-                    <Button @click="$emit('request')" class="flex justify-center items-center">
+                    <Button v-if="isGroupTrip" href="#departure-dates" data-testid="choose-departure"
+                        class="flex justify-center items-center" @click="$emit('chooseDeparture', $event)">
+                        {{ $t('trip_show.inquiry.cta_choose_departure') }}
+                    </Button>
+                    <Button v-else @click="$emit('request')" class="flex justify-center items-center">
                         {{ $t('trip_show.inquiry.cta_make_request') }}
                     </Button>
                     <span class="flex items-center gap-2 text-brand-primary">
@@ -46,7 +57,7 @@ defineEmits(['request']);
                             </span>
                             <!-- leading-7 matches the 28px badge, so it lines up with the first line -->
                             <span class="text-base leading-7 text-brand-text">
-                                {{ $t(`trip_show.extra_trip_info.steps-${step}`) }}
+                                {{ isGroupTrip ? $t(`trip_show.extra_trip_info.group_steps-${step}`) : $t(`trip_show.extra_trip_info.steps-${step}`) }}
                             </span>
                         </li>
                     </ol>
@@ -57,7 +68,11 @@ defineEmits(['request']);
                     <h3 class="text-lg font-semibold text-brand-primary mb-2">
                         Prijzen
                     </h3>
-                    <div class="space-y-4 text-base text-brand-text leading-relaxed">
+                    <div v-if="isGroupTrip" class="space-y-4 text-base text-brand-text leading-relaxed" data-testid="group-prices">
+                        <p>{{ $t('trip_show.inquiry.prices_group_1') }}</p>
+                        <p>{{ $t('trip_show.inquiry.prices_group_2') }}</p>
+                    </div>
+                    <div v-else class="space-y-4 text-base text-brand-text leading-relaxed">
                         <p>
                             De getoonde prijs is een vanaf prijs per persoon, op basis van twee personen. Inclusief btw,
                             bijdrage garantiefonds en boekingskosten. Wat je uiteindelijk betaalt hangt af van wanneer

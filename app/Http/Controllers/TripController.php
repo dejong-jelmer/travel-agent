@@ -6,9 +6,11 @@ use App\DTO\BreadcrumbTrail;
 use App\Enums\Destination\TravelInfo;
 use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Models\BlogPost;
 use App\Models\Testimonial;
 use App\Models\Trip;
 use App\Services\CountryService;
+use App\Services\DepartureListing;
 use App\Services\ItineraryService;
 use App\Services\OgImageService;
 use App\Services\TripContentParser;
@@ -25,6 +27,7 @@ class TripController extends Controller
         private readonly OgImageService $ogImages,
         private readonly TripContentParser $contentParser,
         private readonly ItineraryService $itineraries,
+        private readonly DepartureListing $departures,
     ) {}
 
     /**
@@ -33,8 +36,8 @@ class TripController extends Controller
     public function index(): Response
     {
         // The trip cards have no use for the gallery paths, which would fetch every trip's gallery
-        $trips = Trip::with(['heroImage', 'prices', 'destinations.country'])->withTravelMode()->published()->get()
-            ->append('travel_mode')->makeHidden('image_paths');
+        $trips = Trip::with(['heroImage', 'destinations.country'])->withStartingPrice()->withTravelMode()->published()->get()
+            ->append(['travel_mode', 'type_display', 'format_display'])->makeHidden(['image_paths', 'visibleDepartures']);
         $seo = $this->shareSeo('seo.trips');
 
         return Inertia::render('Trip/Index', [
@@ -50,7 +53,9 @@ class TripController extends Controller
      */
     public function show(Trip $trip): Response
     {
-        $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items']);
+        $trip->load(['heroImage', 'images', 'destinations', 'itineraries', 'itineraries.image', 'items', 'prices', 'visibleDepartures']);
+
+        $departures = $this->departures->forTrip($trip);
 
         $breadcrumbs = BreadcrumbTrail::home()
             ->add(__('trip.title_index'), route('trips.index'))
@@ -59,10 +64,10 @@ class TripController extends Controller
         $seo = $this->shareSeo(overrides: [
             'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
-            ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->name)),
+            ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->heroImage?->alt ?: $trip->name)),
             // Same sizes as the hero image in TripHero
             ...$this->preloadImageSeo($trip->heroImage, '100vw'),
-        ], jsonLd: array_merge($trip->toTouristTripSchema(), [
+        ], jsonLd: array_merge($trip->toTouristTripSchema($departures), [
             'provider' => $this->travelAgencySchema(),
         ]), breadcrumbs: $breadcrumbs);
 
@@ -70,11 +75,15 @@ class TripController extends Controller
             'title' => $seo['title'],
             // The description is only sent split into sections, the highlights and the itinerary only ready for
             // display, so none of them goes along twice
-            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries']),
+            'trip' => $trip->makeHidden(['description', 'highlights', 'itineraries', 'visibleDepartures'])->append(['type_display', 'format_display']),
+            // The departures of a group trip that can still be requested; empty for an individual trip
+            'departures' => $departures,
+            'departureFees' => $this->departures->feesPerBooking(),
             'descriptionSections' => $this->descriptionSections($trip),
             'highlights' => $this->highlights($trip),
             'itinerary' => $this->itineraries->forDisplay($trip),
             'testimonials' => $this->testimonials($trip),
+            'stories' => $this->stories($trip),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
@@ -136,6 +145,26 @@ class TripController extends Controller
     {
         return $trip->testimonials()->forDisplay()->get()
             ->map(fn (Testimonial $testimonial) => $testimonial->toDisplay())
+            ->all();
+    }
+
+    /**
+     * The published stories that go with the trip, newest first, with only what a story card shows: the body of
+     * every story would otherwise go along.
+     *
+     * @return list<array{id: int, slug: string, title: string, excerpt: string|null, published_at: string|null, hero_image: \App\Models\Image|null}>
+     */
+    private function stories(Trip $trip): array
+    {
+        return $trip->blogPosts()->published()->with('heroImage')->latest('published_at')->get()
+            ->map(fn (BlogPost $post) => [
+                'id' => $post->id,
+                'slug' => $post->slug,
+                'title' => $post->title,
+                'excerpt' => $post->excerpt,
+                'published_at' => $post->published_at?->toIso8601String(),
+                'hero_image' => $post->heroImage,
+            ])
             ->all();
     }
 }

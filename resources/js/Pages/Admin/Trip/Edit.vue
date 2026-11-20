@@ -10,6 +10,9 @@ const props = defineProps({
     keyFactIconOptions: Array,
     highlightCategoryOptions: Array,
     heroFocusOptions: Array,
+    tripTypeOptions: Array,
+    tripFormatOptions: Array,
+    formatLocked: Boolean,
     journeySectionOptions: Array,
     practicalSections: Object,
 });
@@ -30,6 +33,7 @@ const form = useForm({
     // Spread into an object: PHP sends a trip without section photos as an empty array
     section_images: { ...props.trip.section_images },
     heroImage: props.trip.hero_image?.public_url ?? null,
+    hero_image_alt: props.trip.hero_image?.alt ?? '',
     images: props.trip.image_paths ?? [],
     items: props.trip.items ?? [],
     prices: props.trip.prices?.map(p => ({
@@ -61,6 +65,9 @@ function submit() {
             :key-fact-icon-options="keyFactIconOptions"
             :highlight-category-options="highlightCategoryOptions"
             :hero-focus-options="heroFocusOptions"
+            :trip-type-options="tripTypeOptions"
+            :trip-format-options="tripFormatOptions"
+            :format-locked="formatLocked"
             :journey-section-options="journeySectionOptions"
             :gallery-images="trip.images"
             :practical-sections="practicalSections"

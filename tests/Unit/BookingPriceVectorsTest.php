@@ -51,16 +51,6 @@ class BookingPriceVectorsTest extends TestCase
         );
     }
 
-    public function test_the_vectors_cover_both_margin_modes(): void
-    {
-        $modes = array_unique(array_column(
-            array_column(iterator_to_array(self::vectors()), 0),
-            'margin_in_percentage',
-        ));
-
-        $this->assertEqualsCanonicalizing([true, false], array_values($modes));
-    }
-
     /**
      * @return iterable<string, array{array<string, mixed>}>
      */
@@ -76,7 +66,6 @@ class BookingPriceVectorsTest extends TestCase
     private function bookingFor(array $vector): Booking
     {
         $booking = new Booking([
-            'margin_in_percentage' => $vector['margin_in_percentage'],
             'margin_basis_points' => (int) round($vector['margin_percentage'] * 100),
             'margin_amount' => $vector['margin_amount'],
             'fee_per_person' => $vector['fee_per_person'],

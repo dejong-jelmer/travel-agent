@@ -10,6 +10,8 @@ use App\Enums\Trip\ItemType;
 use App\Enums\Trip\KeyFactIcon;
 use App\Enums\Trip\PracticalInfo;
 use App\Enums\Trip\PriceLabel;
+use App\Enums\Trip\TripFormat;
+use App\Enums\Trip\TripType;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Http\Requests\CreateTripRequest;
@@ -70,6 +72,8 @@ class TripController extends Controller
             'keyFactIconOptions' => KeyFactIcon::options(),
             'highlightCategoryOptions' => HighlightCategory::options(),
             'heroFocusOptions' => HeroFocus::options(),
+            'tripTypeOptions' => TripType::options(),
+            'tripFormatOptions' => TripFormat::options(),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_create'),
         ]);
@@ -83,7 +87,7 @@ class TripController extends Controller
         $trip = new Trip;
 
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
-        $validatedFields = $request->safe()->except(['heroImage', 'images']);
+        $validatedFields = $request->safe()->except(['heroImage', 'hero_image_alt', 'images']);
         $destinations = $request->safe()->destinations ?? [];
 
         $trip->fill(
@@ -95,6 +99,7 @@ class TripController extends Controller
 
         $trip->save();
         $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
+        $trip->setImageAlt(ImageRelation::HeroImage, $request->safe()->input('hero_image_alt'));
         $trip->syncImages($validatedFiles['images'], ImageRelation::Images);
 
         if (count($destinations)) {
@@ -140,6 +145,9 @@ class TripController extends Controller
             'keyFactIconOptions' => KeyFactIcon::options(),
             'highlightCategoryOptions' => HighlightCategory::options(),
             'heroFocusOptions' => HeroFocus::options(),
+            'tripTypeOptions' => TripType::options(),
+            'tripFormatOptions' => TripFormat::options(),
+            'formatLocked' => $trip->hasLockedFormat(),
             'journeySectionOptions' => $this->journeySectionOptions($trip->description),
             'practicalSections' => PracticalInfo::labels(),
             'title' => $this->pageTitle('trip.title_edit'),
@@ -152,7 +160,7 @@ class TripController extends Controller
     public function update(UpdateTripRequest $request, Trip $trip): RedirectResponse
     {
         $validatedFiles = $request->safe()->only(['heroImage', 'images']);
-        $validatedFields = $request->safe()->except(['heroImage', 'images', 'destinations']);
+        $validatedFields = $request->safe()->except(['heroImage', 'hero_image_alt', 'images', 'destinations']);
         $destinations = $request->safe()->destinations ?? [];
 
         $trip->fill(
@@ -167,6 +175,7 @@ class TripController extends Controller
         if (isset($validatedFiles['heroImage'])) {
             $trip->syncImages($validatedFiles['heroImage'], ImageRelation::HeroImage, true);
         }
+        $trip->setImageAlt(ImageRelation::HeroImage, $request->safe()->input('hero_image_alt'));
 
         // Sync images array (handles mix of existing paths and new uploads)
         if (isset($validatedFiles['images']) && is_array($validatedFiles['images'])) {

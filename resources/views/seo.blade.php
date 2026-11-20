@@ -56,8 +56,4 @@
     <meta name="twitter:image:alt" content="{{ $seo['og_image_alt'] }}">
 @endisset
 
-@if(!empty($jsonLd))
-    <script type="application/ld+json">
-        {!! json_encode($jsonLd, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_HEX_TAG) !!}
-    </script>
-@endif
+<x-json-ld :data="$jsonLd" />

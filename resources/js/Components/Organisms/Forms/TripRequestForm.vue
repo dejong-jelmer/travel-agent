@@ -10,11 +10,21 @@ const props = defineProps({
         type: Object,
         required: true,
     },
+    // Shape: see TripDepartures. The departures of a group trip a visitor can request; empty for an individual trip
+    departures: {
+        type: Array,
+        default: () => [],
+    },
+    // The departure the visitor picked in the list, which the form starts with
+    departure: {
+        type: Object,
+        default: null,
+    },
 })
 
 const emit = defineEmits(['submitted'])
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const toast = useToast()
 
 const form = useForm({
@@ -28,6 +38,40 @@ const form = useForm({
     departure_station: '',
     notes: '',
     consent_privacy: false,
+    // Group trips only
+    departure_id: props.departure ? String(props.departure.id) : '',
+    single_room: false,
+})
+
+// A group trip is requested on one of its departures, with its date, by a group of at most 6
+const isGroupTrip = computed(() => props.trip.format === 'group')
+const GROUP_MAX_TRAVELERS = 6
+
+const selectedDeparture = computed(() => props.departures.find((departure) => String(departure.id) === form.departure_id) ?? null)
+
+// A full departure takes interest in a place that comes free instead of a request
+const isInterest = computed(() => selectedDeparture.value?.availability === 'full')
+
+const departureDay = (value, options) => new Intl.DateTimeFormat(locale.value, options).format(new Date(`${value}T00:00:00`))
+
+const departureOptions = computed(() => props.departures.map((departure) => ({
+    id: String(departure.id),
+    name: `${departureDay(departure.departs_on, { day: 'numeric', month: 'long' })} – ${departureDay(departure.returns_on, { day: 'numeric', month: 'long', year: 'numeric' })}`
+        + (departure.availability === 'full' ? ` · ${t('trip_request.form.departure_full_suffix')}` : ''),
+})))
+
+// The places left are only known when few are; a request for more than that would be turned down
+const groupTravelerOptions = computed(() => {
+    const seatsLeft = selectedDeparture.value?.seats_left
+    const max = Number.isInteger(seatsLeft) && !isInterest.value ? Math.min(GROUP_MAX_TRAVELERS, seatsLeft) : GROUP_MAX_TRAVELERS
+
+    return Array.from({ length: max }, (_, i) => ({ id: String(i + 1), name: String(i + 1) }))
+})
+
+watch(groupTravelerOptions, (options) => {
+    if (Number(form.travelers_count) > options.length) {
+        form.travelers_count = ''
+    }
 })
 
 const honeypot = ref(null)
@@ -83,10 +127,14 @@ function submit() {
         return
     }
 
-    form.post(route('trip-requests.store', props.trip.slug), {
+    const interest = isGroupTrip.value && isInterest.value
+
+    form.transform((data) => ({ ...data, interest })).post(route('trip-requests.store', props.trip.slug), {
         preserveScroll: true,
         onSuccess: () => {
-            toast.success(t('trip_request.form.success'))
+            toast.success(t(interest
+                ? 'trip_request.form.success_interest'
+                : (isGroupTrip.value ? 'trip_request.form.success_group' : 'trip_request.form.success')))
             emit('submitted')
         },
     })
@@ -98,7 +146,7 @@ function submit() {
         <!-- Header -->
         <div class="text-center mb-2">
             <h2 class="text-xl tablet:text-2xl font-semibold text-brand-primary">
-                {{ t('trip_request.form.title', { tripName: trip.name }) }}
+                {{ isGroupTrip ? t('trip_request.form.title_group', { tripName: trip.name }) : t('trip_request.form.title', { tripName: trip.name }) }}
             </h2>
             <p v-if="trip.subtitle" class="text-sm text-brand-text/70 mt-2 leading-relaxed">
                 {{ trip.subtitle }}
@@ -138,8 +186,33 @@ function submit() {
                 {{ t('trip_request.form.section_trip') }}
             </h3>
 
+            <!-- Group trip: a departure, the number of travelers and a single room -->
+            <template v-if="isGroupTrip">
+                <Select name="departure_id" :label="t('trip_request.form.departure_label')" :required="true"
+                    :options="departureOptions" :placeholder="t('trip_request.form.departure_placeholder')"
+                    v-model="form.departure_id" :feedback="form.errors.departure_id" />
+
+                <p v-if="isInterest" data-testid="interest-notice"
+                    class="text-sm text-brand-text bg-brand-earth/30 rounded-lg px-4 py-3 leading-relaxed">
+                    {{ t('trip_request.form.interest_notice') }}
+                </p>
+
+                <div class="grid grid-cols-1 tablet:grid-cols-2 gap-5 tablet:items-end">
+                    <Select name="travelers_count" :label="t('trip_request.form.travelers_count_label')" :required="true"
+                        :options="groupTravelerOptions" :placeholder="t('trip_request.form.travelers_count_placeholder')"
+                        v-model="form.travelers_count" :feedback="form.errors.travelers_count" />
+                    <Checkbox name="single_room" v-model="form.single_room" class="pb-2">
+                        <span class="text-sm">{{ t('trip_request.form.single_room_label') }}</span>
+                    </Checkbox>
+                </div>
+
+                <p v-if="!isInterest" class="text-xs text-brand-primary/60" data-testid="no-reservation">
+                    {{ t('trip_request.form.group_reservation_note') }}
+                </p>
+            </template>
+
             <!-- Period: month + year side by side -->
-            <div>
+            <div v-if="!isGroupTrip">
                 <Label forField="preferred_month">
                     {{ t('trip_request.form.preferred_month_label') }}
                 </Label>
@@ -153,12 +226,12 @@ function submit() {
                 </div>
             </div>
 
-            <Input type="text" name="preferred_period_note" :label="t('trip_request.form.preferred_period_note_label')"
+            <Input v-if="!isGroupTrip" type="text" name="preferred_period_note" :label="t('trip_request.form.preferred_period_note_label')"
                 :placeholder="t('trip_request.form.preferred_period_note_placeholder')"
                 v-model="form.preferred_period_note" :feedback="form.errors.preferred_period_note" />
 
 
-            <div class="grid grid-cols-1 tablet:grid-cols-3 gap-5">
+            <div v-if="!isGroupTrip" class="grid grid-cols-1 tablet:grid-cols-3 gap-5">
                 <div class="col-span-2">
 
                     <Select name="departure_station" :label="t('trip_request.form.departure_station_label')"
@@ -216,7 +289,11 @@ function submit() {
         <div class="flex justify-center">
             <Button color="accent" type="submit" :disabled="form.processing"
                 class="w-full tablet:w-auto flex justify-center items-center">
-                <span v-if="!form.processing">{{ t('trip_request.form.submit_button') }}</span>
+                <span v-if="!form.processing">
+                    {{ isGroupTrip
+                        ? (isInterest ? t('trip_request.form.submit_interest') : t('trip_request.form.submit_group'))
+                        : t('trip_request.form.submit_button') }}
+                </span>
                 <span v-else class="flex items-center gap-2">
                     <LoaderCircle class="animate-spin h-5 w-5" />
                     {{ t('trip_request.form.submit_processing') }}

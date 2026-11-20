@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 
 class BookingController extends Controller
@@ -28,6 +29,9 @@ class BookingController extends Controller
 
         try {
             $booking = $this->bookingService->create($bookingData);
+        } catch (ValidationException $e) {
+            // The departure ran out of places between the form and the save: an answer for the form, not a failure
+            throw $e;
         } catch (Exception $e) {
             $this->handleBookingError($e, 'Booking create failed', $bookingData);
 

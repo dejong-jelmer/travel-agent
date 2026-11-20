@@ -2,7 +2,7 @@
 import { watch, reactive, readonly, computed } from "vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 
-const DEFAULT_MARGIN_BASIS_POINTS = 3500;
+const DEFAULT_MARGIN_BASIS_POINTS = 1500;
 
 const createCostItem = (data = {}) => ({
     category: data.category || "train",
@@ -66,8 +66,36 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
     const initialMarginBp =
         db_booking?.margin_basis_points ?? defaultMargin;
 
+    // A new booking starts with the amounts from the settings. An existing
+    // booking keeps its own, where empty means none.
+    const initialMarginAmount = db_booking
+        ? db_booking.margin_amount
+        : usePage().props.default_margin_amount;
+    const initialFeePerPerson = db_booking
+        ? db_booking.fee_per_person
+        : usePage().props.default_fee_per_person;
+
+    // A booking on a departure of a group trip keeps the price it was made at
+    const departure = db_booking?.departure
+        ? {
+            id: db_booking.departure.id,
+            departs_on: db_booking.departure.departs_on?.slice(0, 10),
+            returns_on: db_booking.departure.returns_on?.slice(0, 10),
+            available_seats: null,
+            price_per_person: db_booking.price_per_person,
+            single_supplement: db_booking.single_supplement,
+        }
+        : null;
+
     const booking = useForm({
         trip: trip || null,
+        // Group trips only: the departure the booking is on. `departure` holds what the form shows of it and is
+        // not submitted; an empty single_rooms means the default for the number of travelers.
+        departure_id: db_booking?.departure_id ?? null,
+        departure,
+        single_rooms: db_booking?.single_rooms ?? null,
+        // The request this booking is made from, which is linked to it on save
+        trip_request_id: null,
         status: db_booking?.status || null,
         payment_status: db_booking?.payment_status || null,
         participants: {
@@ -100,16 +128,11 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         internal_notes: db_booking?.internal_notes || "",
         cost_items: costItems,
         margin_percentage: initialMarginBp / 100,
-        margin_in_percentage: db_booking?.margin_in_percentage ?? true,
         // Stored in euros; converted to cents on submit.
         margin_amount:
-            db_booking?.margin_amount != null
-                ? db_booking.margin_amount / 100
-                : null,
+            initialMarginAmount != null ? initialMarginAmount / 100 : null,
         fee_per_person:
-            db_booking?.fee_per_person != null
-                ? db_booking.fee_per_person / 100
-                : null,
+            initialFeePerPerson != null ? initialFeePerPerson / 100 : null,
         final_price:
             db_booking?.final_price != null
                 ? db_booking.final_price / 100
@@ -266,8 +289,9 @@ export function useBooking(trip, db_booking, main_booker_index = 0) {
         };
     });
 
-    // Auto-select first available date when no departure_date is set
-    if (!booking.departure_date) {
+    // Auto-select first available date when no departure_date is set. A group trip has no free dates: its
+    // dates come from the departure that is picked.
+    if (!booking.departure_date && trip?.format !== 'group') {
         const isDisabled = disabledDates.value;
         const { minDate, maxDate } = constraints.value;
         const candidate = new Date(minDate);

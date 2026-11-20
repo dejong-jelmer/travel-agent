@@ -8,8 +8,9 @@ const props = defineProps({
 const { t } = useI18n()
 
 const tripMeta = computed(() => ({
+    // A group trip without departures to request has no price yet, only dates still to come
     price: props.trip.is_expected
-        ? t('trip_show.hero.expected')
+        ? (props.trip.format === 'group' ? t('trip_show.hero.expected_group') : t('trip_show.hero.expected'))
         : `${t('trip_show.hero.from_price', { price: props.trip.price_formatted })} ${t('trip_show.hero.per_person')}`,
     data: [
         props.trip.destinations_formatted,
@@ -27,7 +28,7 @@ const HERO_SIZES = '100vw'
 <template>
     <PageHero :responsive-image="trip.hero_image" :sizes="HERO_SIZES" :image-position="trip.hero_focus"
         :title="trip.name" :subtitle="trip.subtitle"
-        :alt="`${trip.name} - ${trip.subtitle}`">
+        :alt="trip.hero_image?.alt || `${trip.name} - ${trip.subtitle}`">
         <template #meta>
             <p class="text-base tablet:text-xl font-poppins text-white">
                 {{ tripMeta.price }}

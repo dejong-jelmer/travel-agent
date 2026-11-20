@@ -26,6 +26,21 @@ const props = defineProps({
         type: Array,
         default: () => []
     },
+    // Shape: [{ id, name }], the cases of the TripType enum
+    tripTypeOptions: {
+        type: Array,
+        default: () => []
+    },
+    // Shape: [{ id, name }], the cases of the TripFormat enum
+    tripFormatOptions: {
+        type: Array,
+        default: () => []
+    },
+    // The format of a trip with bookings that still have to depart, or with departures, cannot change
+    formatLocked: {
+        type: Boolean,
+        default: false
+    },
     // Shape: [{ id, name }], the sections of the saved description that can become the journey section
     journeySectionOptions: {
         type: Array,
@@ -384,6 +399,10 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                             </p>
                         </div>
 
+                        <ImageAltInput v-if="form.heroImage" name="hero_image_alt" v-model="form.hero_image_alt"
+                            :fallback="form.subtitle ? `${form.name} - ${form.subtitle}` : form.name"
+                            :feedback="form.errors.hero_image_alt" />
+
                         <div v-if="form.heroImage">
                             <p class="block text-sm font-medium text-gray-700 mb-2">
                                 {{ t('forms.trip.fields.hero_focus.label') }}
@@ -461,6 +480,22 @@ const { length: metaDescriptionLength, charsLeft: metaDescriptionCharsLeft, coun
                     <div class="p-6 space-y-6">
                         <div>
                             <div class="grid grid-cols-1 gap-4">
+                                <div class="p-4 bg-white rounded-lg border border-gray-200">
+                                    <Select name="type" v-model="form.type" :required="true"
+                                        :label="t('forms.trip.fields.type.label')" :options="tripTypeOptions"
+                                        :feedback="form.errors.type" />
+                                    <span class="block text-xs text-gray-700/30 mt-2">
+                                        {{ t('forms.trip.fields.type.help') }}
+                                    </span>
+                                </div>
+                                <div class="p-4 bg-white rounded-lg border border-gray-200">
+                                    <Select name="format" v-model="form.format" :required="true"
+                                        :label="t('forms.trip.fields.format.label')" :options="tripFormatOptions"
+                                        :disabled="formatLocked" :feedback="form.errors.format" />
+                                    <span class="block text-xs text-gray-700/30 mt-2">
+                                        {{ formatLocked ? t(`forms.trip.fields.format.locked.${form.format}`) : t('forms.trip.fields.format.help') }}
+                                    </span>
+                                </div>
                                 <div class="p-4 bg-white rounded-lg border border-gray-200">
                                     <Label for="published_at" :required="true">{{
                                         t('forms.trip.fields.published_at.label')

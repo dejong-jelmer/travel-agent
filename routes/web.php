@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\BlogPostController as AdminBlogPostController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DepartureController;
 use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\ItineraryController;
 use App\Http\Controllers\Admin\Newsletter\CampaignController;
@@ -90,6 +91,16 @@ Route::prefix('admin')
 
         // Trip prices
         Route::get('trips/{trip}/prices', TripPriceController::class)->name('trips.prices');
+
+        // Departures of a group trip
+        Route::get('/trips/{trip}/departures', [DepartureController::class, 'index'])->name('trips.departures.index');
+        Route::post('/trips/{trip}/departures', [DepartureController::class, 'store'])->name('trips.departures.store');
+        Route::get('/departures', [DepartureController::class, 'overview'])->name('departures.index');
+        Route::get('/departures/{departure}', [DepartureController::class, 'show'])->name('departures.show');
+        Route::put('/departures/{departure}', [DepartureController::class, 'update'])->name('departures.update');
+        Route::delete('/departures/{departure}', [DepartureController::class, 'destroy'])->name('departures.destroy');
+        Route::post('/departures/{departure}/guarantee', [DepartureController::class, 'guarantee'])->name('departures.guarantee');
+        Route::post('/departures/{departure}/cancel', [DepartureController::class, 'cancel'])->name('departures.cancel');
 
         // Trip resource Itinerary routes
         Route::resource('trips.itineraries', ItineraryController::class)->except(['show', 'edit', 'update', 'destroy']);

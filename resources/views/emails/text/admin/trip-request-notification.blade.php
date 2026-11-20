@@ -1,15 +1,5 @@
 @extends('emails.text.default')
 @php
-    $notSpecified = __('trip_request.mail.notification_not_specified');
-
-    if ($tripRequest->travelers_count === 9) {
-        $travelers = __('trip_request.mail.notification_travelers_more_than_8');
-    } elseif ($tripRequest->travelers_count) {
-        $travelers = (string) $tripRequest->travelers_count;
-    } else {
-        $travelers = $notSpecified;
-    }
-
     $replySubject = 'Re: ' . __('trip_request.mail.notification_reply_subject', ['trip' => $tripRequest->trip->name]);
     $replyUrl = 'mailto:' . $tripRequest->email . '?subject=' . rawurlencode($replySubject);
 @endphp
@@ -32,12 +22,9 @@
 == {!! __('trip_request.mail.notification_section_preferences') !!} ==
 
 {!! __('trip_request.mail.notification_label_trip') !!}: {!! $tripRequest->trip->name !!} ({!! $tripRequest->trip->slug !!})
-{!! __('trip_request.mail.notification_label_period') !!}: {!! $tripRequest->preferred_month ?? $notSpecified !!}
-@if ($tripRequest->preferred_period_note)
-{!! __('trip_request.mail.notification_label_period_note') !!}: {!! $tripRequest->preferred_period_note !!}
-@endif
-{!! __('trip_request.mail.notification_label_travelers') !!}: {!! $travelers !!}
-{!! __('trip_request.mail.notification_label_station') !!}: {!! $tripRequest->departure_station ?? $notSpecified !!}
+@foreach ($tripRequest->summaryRows() as $row)
+{!! $row['label'] !!}: {!! $row['value'] !!}
+@endforeach
 
 == {!! __('trip_request.mail.notification_section_notes') !!} ==
 

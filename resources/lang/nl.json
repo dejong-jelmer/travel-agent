@@ -60,7 +60,14 @@
         "index": {
             "title": "Mijn verhalen",
             "no_posts": "Ik heb nog geen verhalen gepubliceerd."
-        }
+        },
+        "author": {
+            "label": "Over de schrijver",
+            "link": "Meer over mij"
+        },
+        "last_updated": "Laatst bijgewerkt: {date}",
+        "summary_title": "In het kort",
+        "related_trips": "Reizen die hierbij passen"
     },
     "trip_card": {
         "days": "dagen",
@@ -177,6 +184,10 @@
         }
     },
     "forms": {
+        "image_alt": {
+            "label": "Alt-tekst",
+            "help": "Beschrijf kort wat er op de foto te zien is, voor schermlezers en zoekmachines. Leeg laten: de tekst in het veld wordt gebruikt."
+        },
         "actions": {
             "add": "Toevoegen",
             "delete": "Verwijderen",
@@ -385,6 +396,18 @@
                     "label": "Uitgelicht",
                     "help": "Moet deze reis worden uitgelicht op de homepage?"
                 },
+                "type": {
+                    "label": "Reistype",
+                    "help": "Het soort reis: een citytrip, één vaste verblijfplaats of een rondreis"
+                },
+                "format": {
+                    "label": "Reisvorm",
+                    "help": "Individueel: de klant kiest zelf een datum. Groepsreis: de klant boekt op een vast vertrek.",
+                    "locked": {
+                        "individual": "De reisvorm ligt vast zolang er boekingen zijn die nog moeten vertrekken.",
+                        "group": "De reisvorm ligt vast zolang de reis vertrekken heeft."
+                    }
+                },
                 "min_advance": {
                     "label": "Minimale boekingstermijn",
                     "help": "Hoe ver van tevoren moet een boeking worden gemaakt?",
@@ -582,9 +605,23 @@
             "heading": "Globale Instellingen",
             "subheading": "Configureer globale boekingsregels",
             "sections": {
-                "fees": "Kosten"
+                "fees": "Kosten",
+                "default_margin": "Standaardmarge",
+                "default_margin_help": "Hiermee start een nieuwe boeking. Per boeking aan te passen."
             },
             "fields": {
+                "default_booking_margin_percentage": {
+                    "label": "Standaard margepercentage (%)",
+                    "help": "Marge over de inkoop."
+                },
+                "default_booking_margin_amount": {
+                    "label": "Standaard vast margebedrag (€)",
+                    "help": "Vaste marge per boeking in euro."
+                },
+                "default_booking_fee_per_person": {
+                    "label": "Standaard fee per persoon (€)",
+                    "help": "Fee per volwassene in euro."
+                },
                 "booking_season_end": {
                     "label": "Einde boekingsseizoen",
                     "help": "Er kunnen geen boekingen worden gemaakt na deze datum. Laat leeg voor geen bovengrens."
@@ -663,15 +700,23 @@
                 "meta": {
                     "title": "SEO",
                     "subtitle": "Zoekmachine optimalisatie"
+                },
+                "trips": {
+                    "title": "Gerelateerde reizen",
+                    "subtitle": "De reizen die bij dit verhaal passen. Ze staan onder het verhaal, en het verhaal staat op hun reispagina."
                 }
             },
             "fields": {
                 "title": "Titel",
                 "excerpt": "Excerpt",
+                "summary": "Samenvatting",
+                "summary_help": "Optioneel. Eén kernpunt per regel; ze staan als \"In het kort\" na de inleiding van het verhaal, voor de eerste H2-kop.",
                 "body": "Inhoud",
                 "meta_title": "Meta titel",
                 "meta_description": "Meta omschrijving",
-                "status": "Status"
+                "status": "Status",
+                "trips": "Reizen",
+                "trips_help": "Houd Ctrl (of Cmd op een Mac) ingedrukt om meerdere reizen te kiezen of er een uit te zetten."
             },
             "submit": {
                 "create": "Blogpost aanmaken",
@@ -784,7 +829,15 @@
             "adult_singular": "volwassene",
             "adult_plural": "volwassenen",
             "child_singular": "kind",
-            "child_plural": "kinderen"
+            "child_plural": "kinderen",
+            "choose_departure": "Kies een vertrek",
+            "no_departure_chosen": "Geen vertrek gekozen",
+            "no_departures": "Deze groepsreis heeft geen vertrekken waarop je nog kunt boeken. Voeg eerst een vertrek toe.",
+            "manage_departures": "Vertrekken beheren",
+            "seats_left": "nog {count} plek vrij | nog {count} plekken vrij",
+            "full": "vol",
+            "no_price": "geen prijs ingesteld",
+            "group_notice": "Dit is een groepsreis: de datums komen van het vertrek."
         },
         "contact": {
             "heading": "Contactgegevens",
@@ -844,17 +897,22 @@
                 "quantity": "Aantal"
             },
             "total_cost": "Totale inkoop",
-            "margin": "Marge (%)",
-            "margin_in_percentage": "Marge berekenen als percentage",
+            "margin": "Marge",
+            "margin_percentage": "Marge (%)",
             "margin_fixed": "Vast margebedrag (€)",
             "fee_per_person": "Fee per persoon (€)",
             "fee_total": "Fee ({count} volwassenen)",
-            "margin_amount": "Marge in euro",
             "calculated_price": "Berekende prijs",
             "final_price": "Eindprijs (€)",
             "final_price_help": "Laat leeg om berekende prijs te gebruiken",
             "display_price": "Verkoopprijs",
-            "override_active": "De berekende prijs wordt overschreven. Toeslagen en fondsen zitten in dit bedrag."
+            "override_active": "De berekende prijs wordt overschreven. Toeslagen en fondsen zitten in dit bedrag.",
+            "departure_heading": "Prijs van het vertrek",
+            "departure_intro": "Een groepsreis verkoop je tegen de vaste prijs van het vertrek. Kostenposten en marge horen bij het vertrek, niet bij de boeking.",
+            "travelers_total": "{count} × prijs per persoon",
+            "single_rooms": "Eenpersoonskamers",
+            "single_rooms_help": "Per kamer geldt de toeslag van {amount}. Maximaal één per volwassene.",
+            "single_rooms_total": "{count} × toeslag eenpersoonskamer"
         }
     },
     "hero": {
@@ -902,7 +960,11 @@
             "missing_cost_items": "Voeg ten minste één kostenpost toe.",
             "invalid_amount": "Voer een geldig bedrag in.",
             "invalid_quantity": "Voer een geldig aantal in (1 t/m 20).",
-            "invalid_margin": "Voer een marge in tussen 0 en 95%."
+            "invalid_margin": "Voer een marge in tussen 0 en 95%.",
+            "missing_departure": "Kies een vertrek.",
+            "not_enough_seats": "Op dit vertrek is nog plek voor {available}, je boekt voor {requested}.",
+            "departure_without_price": "Dit vertrek heeft geen prijs. Stel eerst een prijs in op het vertrek of op de reis.",
+            "invalid_single_rooms": "Kies 0 tot {max} eenpersoonskamers."
         },
         "fields": {
             "first_name": "Voornaam",
@@ -953,7 +1015,8 @@
             "new_testimonial": "Nieuwe ervaring",
             "home": "Home",
             "settings": "Instellingen",
-            "logout": "Uitloggen"
+            "logout": "Uitloggen",
+            "departures": "Vertrekken"
         }
     },
     "about": {
@@ -1032,11 +1095,13 @@
         }
     },
     "trip_show": {
+        "related_stories": "Lees ook",
         "hero": {
             "from_price": "Vanaf €{price},-",
             "days": "{duration} dagen",
             "per_person": "p.p.",
-            "expected": "Verwacht"
+            "expected": "Verwacht",
+            "expected_group": "Vertrekdata volgen"
         },
         "about_trip": "Waarom {trip}",
         "gallery_image_alt": "Foto {position} van {trip}",
@@ -1079,19 +1144,43 @@
             "duration_label": "{duration} dagen",
             "explanation": "Ik kijk graag met je naar de beste periode en je voorkeuren.",
             "cta_make_request": "Vraag voorstel aan",
+            "cta_choose_departure": "Kies een vertrekdatum",
             "cta_send_message": "Stel een vraag",
             "preferred_period_label": "Voorkeursperiode (optioneel)",
             "preferred_period_placeholder": "Bijv. september 2026",
             "direct_contact_label": "Of neem direct contact op:",
             "direct_contact_form": "Of stel een vraag over deze reis",
-            "send_email": "Stuur een e-mail"
+            "send_email": "Stuur een e-mail",
+            "explanation_group": "Kies een vertrekdatum en doe een aanvraag. Ik neem daarna contact met je op.",
+            "expected_group": "Vertrekdata volgen",
+            "prices_group_1": "De prijs geldt per persoon en hoort bij het vertrek. Per boeking komen er boekingskosten en de bijdragen aan het garantie- en calamiteitenfonds bij.",
+            "prices_group_2": "Wil je een kamer voor jezelf, dan geldt de toeslag voor een eenpersoonskamer."
         },
         "extra_trip_info": {
             "title": "Hoe verloopt een aanvraag?",
             "steps-1": "Je dient een aanvraag in via het formulier op deze pagina",
             "steps-2": "Ik neem contact met je op om je wensen door te nemen",
             "steps-3": "Je ontvangt een persoonlijk reisvoorstel",
-            "steps-4": "Bij akkoord regel ik alles en zorg ik dat je tijdig alle reisdocumenten in handen hebt"
+            "steps-4": "Bij akkoord regel ik alles en zorg ik dat je tijdig alle reisdocumenten in handen hebt",
+            "group_steps-1": "Je kiest een vertrek en doet een aanvraag via deze pagina",
+            "group_steps-2": "Ik neem contact met je op en bevestig of er plek is",
+            "group_steps-3": "Je plek is zeker zodra ik je aanvraag bevestig",
+            "group_steps-4": "Voor vertrek ontvang je alle reisdocumenten"
+        },
+        "departures": {
+            "title": "Vertrekdata",
+            "eyebrow": "Groepsreis",
+            "none": "Er staan nu geen vertrekdata gepland.",
+            "per_person": "per persoon",
+            "single_supplement": "eenpersoonskamer + {price}",
+            "guaranteed": "Vertrek gegarandeerd",
+            "minimum": "Gaat door vanaf {min} deelnemers.",
+            "decision": "Uiterlijk {date} hoor je of de reis doorgaat.",
+            "seats_left": "Nog {count} plaats | Nog {count} plaatsen",
+            "full": "Vol",
+            "full_interest": "Wil je horen als er een plek vrijkomt?",
+            "cta": "Vraag aan",
+            "fees": "Prijzen zijn per persoon. Per boeking komt daar {amount} bij: {items}."
         }
     },
     "trip_request": {
@@ -1149,7 +1238,18 @@
                 "rotterdam": "Rotterdam Centraal (Eurostar)",
                 "breda": "Breda Centraal (EuroCity)",
                 "other": "Anders / weet ik nog niet"
-            }
+            },
+            "title_group": "Aanvraag voor {tripName}",
+            "departure_label": "Op welke datum wil je mee?",
+            "departure_placeholder": "Kies een vertrek",
+            "departure_full_suffix": "vol",
+            "interest_notice": "Dit vertrek is vol. Laat je gegevens achter, dan hoor je het van me als er een plek vrijkomt.",
+            "single_room_label": "Ik wil graag een eenpersoonskamer",
+            "group_reservation_note": "Je aanvraag reserveert nog geen plek. Je plek is zeker zodra ik je aanvraag bevestig.",
+            "submit_group": "Doe een aanvraag",
+            "submit_interest": "Laat het me weten",
+            "success_group": "Bedankt! Je aanvraag is binnen. Ik laat je zo snel mogelijk weten of er plek is.",
+            "success_interest": "Bedankt! Je staat genoteerd. Komt er een plek vrij, dan hoor je het van me."
         }
     },
     "date_picker": {
@@ -1296,6 +1396,15 @@
                 },
                 "last_checked": "Laatste check: {time}",
                 "loading": "Systeem status wordt geladen…"
+            },
+            "departures": {
+                "title": "Vertrekken die aandacht vragen",
+                "none": "Geen vertrek vraagt nu je aandacht.",
+                "upcoming": "{count} komende vertrekken",
+                "view_all": "Bekijk alle vertrekken",
+                "awaits_guarantee": "Minimum gehaald, nog niet gegarandeerd",
+                "decision_overdue": "Beslisdatum voorbij",
+                "decision_due_soon": "Beslisdatum {date}, minimum niet gehaald"
             }
         },
         "trips": {
@@ -1392,7 +1501,8 @@
                     "title": "Vervoer",
                     "subtitle": "Gebruikte vervoersmiddelen",
                     "empty": "Geen vervoersmiddelen ingesteld"
-                }
+                },
+                "departures_tooltip": "Bekijk de vertrekken van deze groepsreis"
             },
             "edit": {
                 "items": {
@@ -1435,6 +1545,7 @@
             },
             "show": {
                 "excerpt": "Excerpt",
+                "summary": "Samenvatting",
                 "body": "Inhoud",
                 "status": "Status",
                 "published_at": "Publicatiedatum",
@@ -1507,8 +1618,17 @@
                 "booking_label": "Boeking",
                 "booking_placeholder": "Geen boeking gekoppeld",
                 "submit": "Wijzigingen opslaan",
-                "submit_processing": "Bezig met opslaan…"
-            }
+                "submit_processing": "Bezig met opslaan…",
+                "departure": "Vertrek",
+                "seats_now": "nu {available} van {max} plekken vrij",
+                "single_room": "Eenpersoonskamer",
+                "yes": "Ja",
+                "no": "Nee",
+                "make_booking": "Zet om naar boeking",
+                "view_booking": "Bekijk de gekoppelde boeking"
+            },
+            "interest_only": "Vertrek was vol: wil horen als er een plek vrijkomt",
+            "interest_short": "wacht op plek"
         },
         "booking": {
             "actions": {
@@ -1581,13 +1701,18 @@
                     "price_per_person": "Prijs per persoon",
                     "single_supplement": "Eenpersoonstoeslag",
                     "total": "Totaal",
-                    "no_cost_items": "Geen kostenposten vastgelegd voor deze boeking."
-                }
+                    "no_cost_items": "Geen kostenposten vastgelegd voor deze boeking.",
+                    "group_subtitle": "De vaste prijs van het vertrek, zoals vastgelegd bij deze boeking"
+                },
+                "departure": "Vertrek",
+                "departure_link": "Bekijk het vertrek"
             },
             "create": {
                 "title": "Nieuwe boeking aanmaken",
                 "subtitle": "Selecteer een reis en vul de boekingsgegevens in.",
-                "select_trip": "Selecteer een reis"
+                "select_trip": "Selecteer een reis",
+                "from_request": "Je maakt een boeking vanuit de aanvraag van {name}. Wat de aanvraag vertelt, is al ingevuld; de boeking wordt na opslaan aan de aanvraag gekoppeld.",
+                "view_request": "Bekijk de aanvraag"
             }
         },
         "destinations": {
@@ -1672,6 +1797,118 @@
                     "no_subscribers_found": "Geen abbonees gevonden.",
                     "no_subscribers_found_with_search": "Geen abbonees gevonden met de zoekopdracht: \"{search}\"."
                 }
+            }
+        },
+        "departures": {
+            "title": "Vertrekken",
+            "subtitle": "De vaste vertrekken van {trip}",
+            "add": "Vertrek toevoegen",
+            "empty": "Deze reis heeft nog geen vertrekken. Voeg het eerste vertrek toe om boekingen te kunnen aannemen.",
+            "not_a_group_trip": "Deze reis is een individuele reis en heeft geen vertrekken. Zet de reisvorm op groepsreis om vertrekken toe te voegen.",
+            "edit_trip": "Reis bewerken",
+            "days": "{count} dagen",
+            "status": {
+                "guaranteed_too": "Gegarandeerd"
+            },
+            "progress": {
+                "confirmed": "{count} bevestigd",
+                "held": "{count} in afwachting",
+                "minimum": "minimum {count}",
+                "seats": "{occupied} van {max} plekken bezet",
+                "available": "nog {count} vrij",
+                "aria": "{confirmed} bevestigd en {held} in afwachting van maximaal {max}, minimum {min}"
+            },
+            "price": {
+                "label": "Prijs p.p.",
+                "supplement": "Toeslag 1-persoonskamer",
+                "from_trip": "prijs van de reis"
+            },
+            "decision": {
+                "label": "Beslisdatum",
+                "overdue": "De beslisdatum is voorbij en er is nog geen besluit genomen.",
+                "awaits_guarantee": "Het minimum is gehaald. Garandeer het vertrek zodra je zeker weet dat het doorgaat.",
+                "due_soon": "Over {count} dag moet je beslissen en er ontbreken nog {missing} bevestigde deelnemers voor het minimum. | Over {count} dagen moet je beslissen en er ontbreken nog {missing} bevestigde deelnemers voor het minimum."
+            },
+            "guaranteed_on": "Gegarandeerd op {date}",
+            "cancelled_on": "Geannuleerd op {date}",
+            "reason": "Reden",
+            "actions": {
+                "edit": "Bewerken",
+                "guarantee": "Garanderen",
+                "cancel": "Annuleren",
+                "delete": "Verwijderen",
+                "participants": "Deelnemers"
+            },
+            "guarantee_confirm": "Je belooft je reizigers hiermee dat dit vertrek doorgaat. Dat kun je niet terugdraaien. Vertrek garanderen?",
+            "guarantee_confirm_below_minimum": "Het minimum van {min} bevestigde deelnemers is nog niet gehaald (nu {confirmed}). Je belooft je reizigers hiermee dat dit vertrek toch doorgaat. Dat kun je niet terugdraaien. Vertrek garanderen?",
+            "delete_confirm": "Weet je zeker dat je dit vertrek wilt verwijderen?",
+            "form": {
+                "create_title": "Vertrek toevoegen",
+                "edit_title": "Vertrek bewerken",
+                "departs_on": "Vertrekdatum",
+                "returns_on": "Terugreisdatum",
+                "min_participants": "Minimum deelnemers",
+                "max_participants": "Maximum deelnemers",
+                "price_per_person": "Prijs per persoon (€)",
+                "price_help": "Leeg: de prijs van de reis voor de vertrekdatum.",
+                "single_supplement": "Toeslag eenpersoonskamer (€)",
+                "supplement_help": "Leeg: de toeslag van de reis. 0: geen toeslag.",
+                "decision_date": "Beslisdatum",
+                "decision_help": "De datum waarop je besluit of het vertrek doorgaat. Leeg: de uiterste datum die de wet toestaat.",
+                "guaranteed": "Direct garanderen",
+                "guaranteed_help": "Het vertrek gaat hoe dan ook door. Dit kun je niet terugdraaien.",
+                "dates_move_bookings": "Dit vertrek heeft boekingen. Als je de datums wijzigt, krijgen die boekingen de nieuwe datums. Informeer je reizigers zelf.",
+                "save": "Opslaan",
+                "close": "Sluiten"
+            },
+            "cancel": {
+                "title": "Vertrek annuleren",
+                "intro": "Je annuleert het vertrek van {date}. Dit kun je niet terugdraaien.",
+                "bookings": "Alle boekingen op dit vertrek worden ook geannuleerd ({seats} bezette plekken). Je reizigers krijgen hier geen automatische mail over: informeer ze zelf en regel de terugbetaling.",
+                "no_bookings": "Er zijn geen boekingen op dit vertrek.",
+                "warning_guaranteed": "Dit vertrek is gegarandeerd. Je hebt je reizigers beloofd dat het doorgaat; annuleren kan dan alleen bij overmacht.",
+                "warning_decision_passed": "De beslisdatum ({date}) is voorbij. Annuleren omdat het minimum niet gehaald is kan wettelijk niet meer; alleen overmacht is nog een geldige reden.",
+                "reason": "Reden van annulering",
+                "reason_placeholder": "Bijvoorbeeld: minimum aantal deelnemers niet gehaald",
+                "submit": "Vertrek annuleren",
+                "back": "Niet annuleren"
+            },
+            "all_trips": "Vertrekken van alle reizen",
+            "overview": {
+                "subtitle": "Alle vertrekken van je groepsreizen, met wat je aandacht vraagt bovenaan.",
+                "attention": "Actie nodig",
+                "upcoming": "Komende vertrekken",
+                "upcoming_empty": "Geen andere komende vertrekken.",
+                "past": "Afgerond en geannuleerd",
+                "empty": "Er zijn nog geen vertrekken. Voeg ze toe bij een groepsreis.",
+                "to_trips": "Naar de reizen"
+            },
+            "show": {
+                "title": "Deelnemerslijst",
+                "participants": "Deelnemers",
+                "totals": "{participants} deelnemers · {bookings} boekingen · {rooms} eenpersoonskamers",
+                "empty": "Er zijn nog geen boekingen op dit vertrek.",
+                "columns": {
+                    "booking": "Boeking",
+                    "travelers": "Reizigers",
+                    "contact": "Contact",
+                    "single_rooms": "1-pers. kamers",
+                    "status": "Status",
+                    "payment": "Betaling",
+                    "price": "Prijs"
+                },
+                "child": "kind",
+                "anonymized": "{count} reizigers (geanonimiseerd)",
+                "special_requests": "Bijzonderheden",
+                "canceled": "Geannuleerde boekingen",
+                "persons": "{count} personen",
+                "open_requests": "Open aanvragen",
+                "open_requests_help": "Aanvragen reserveren geen plek. Zet een aanvraag om naar een boeking om de plekken vast te leggen.",
+                "single_room": "eenpersoonskamer"
+            },
+            "requests": {
+                "seats": "{count} plek aangevraagd | {count} plekken aangevraagd",
+                "interest": "{count} wacht op een vrije plek | {count} wachten op een vrije plek"
             }
         }
     }

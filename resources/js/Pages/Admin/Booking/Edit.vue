@@ -1,6 +1,8 @@
 <script setup>
 import { useBooking } from '@/Composables/useBooking.js';
+import { isGroupBooking, departureBookingPayload } from '@/Composables/useDeparturePrice.js';
 import { computed } from 'vue';
+import { Link } from '@inertiajs/vue3';
 
 const props = defineProps({
     db_booking: Object,
@@ -24,7 +26,7 @@ const bookingReference = computed(() => props.db_booking.reference || '[No refer
 const toCents = (euros) => Math.round(Number(euros) * 100);
 
 function submit() {
-    booking.transform((data) => ({
+    booking.transform((data) => isGroupBooking(data) ? departureBookingPayload(data) : ({
         ...data,
         cost_items: (data.cost_items ?? []).map((item, index) => ({
             category: item.category,
@@ -33,14 +35,8 @@ function submit() {
             quantity: Number(item.quantity),
             sort_order: index,
         })),
-        margin_amount:
-            data.margin_amount === null || data.margin_amount === ''
-                ? null
-                : toCents(data.margin_amount),
-        fee_per_person:
-            data.fee_per_person === null || data.fee_per_person === ''
-                ? null
-                : toCents(data.fee_per_person),
+        margin_amount: toCents(data.margin_amount),
+        fee_per_person: toCents(data.fee_per_person),
         final_price:
             data.final_price === null || data.final_price === ''
                 ? null
@@ -94,7 +90,15 @@ function submit() {
                                     $t('admin.booking.show.departure_date') }}</label>
                                 <p class="mt-1 text-gray-900">{{ db_booking.departure_date_formatted || '[No date]' }}</p>
                             </div>
-                            <div>
+                            <!-- A booking on a departure keeps the dates of the departure -->
+                            <div v-if="db_booking.departure_id">
+                                <label class="text-sm font-medium text-gray-700">{{ $t('admin.booking.show.return_date') }}</label>
+                                <p class="mt-1 text-gray-900">{{ db_booking.return_date_formatted || '[No date]' }}</p>
+                                <Link :href="route('admin.departures.show', db_booking.departure_id)" class="mt-1 inline-block text-sm text-brand-link underline">
+                                    {{ $t('admin.booking.show.departure_link') }}
+                                </Link>
+                            </div>
+                            <div v-else>
                                 <Label class="text-brand-text" forField="return_date">{{ $t('admin.booking.edit.return_date') }}</Label>
                                 <DatePicker v-model="booking.return_date"
                                     :min-date="db_booking.departure_date"

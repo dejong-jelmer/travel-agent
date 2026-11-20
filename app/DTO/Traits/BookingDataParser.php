@@ -36,9 +36,6 @@ trait BookingDataParser
             ? (int) round(((float) $validated['margin_percentage']) * 100)
             : null;
 
-        $marginInPercentage = ! array_key_exists('margin_in_percentage', $validated)
-            || (bool) $validated['margin_in_percentage'];
-
         $marginAmount = isset($validated['margin_amount']) && $validated['margin_amount'] !== ''
             ? (int) $validated['margin_amount']
             : null;
@@ -60,7 +57,6 @@ trait BookingDataParser
             'contact' => BookingContactData::fromArray($mainBookerFullName, $validated['contact']),
             'cost_items' => $costItems,
             'margin_basis_points' => $marginBasisPoints,
-            'margin_in_percentage' => $marginInPercentage,
             'margin_amount' => $marginAmount,
             'fee_per_person' => $feePerPerson,
             'final_price' => $finalPrice,

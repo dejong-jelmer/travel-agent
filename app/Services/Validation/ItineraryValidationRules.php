@@ -29,6 +29,7 @@ class ItineraryValidationRules
     {
         return [
             'image' => ['nullable', ...ImageValidationRules::baseImage()],
+            ...ImageValidationRules::alt('image_alt'),
         ];
     }
 
@@ -36,6 +37,7 @@ class ItineraryValidationRules
     {
         return [
             'image' => ['nullable', ...ImageValidationRules::baseImageOrString()],
+            ...ImageValidationRules::alt('image_alt'),
         ];
     }
 }

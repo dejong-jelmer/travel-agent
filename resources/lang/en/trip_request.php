@@ -24,6 +24,12 @@ return [
         'preferred_period_note_max' => 'The period note may not exceed :max characters.',
         'notes_max' => 'Your notes may not exceed :max characters.',
         'consent_privacy_accepted' => 'You must agree to the privacy policy.',
+        'departure_required' => 'Choose a departure date.',
+        'departure_closed' => 'This departure can no longer be requested. Please choose another date.',
+        'departure_full' => 'This departure has just filled up. You can still let me know you would like to hear when a place comes free.',
+        'not_enough_seats' => '{1} This departure has room for :count more traveler.|[2,*] This departure has room for :count more travelers.',
+        'travelers_count_required' => 'Let me know how many people are coming.',
+        'travelers_count_max' => 'A group trip can be requested for at most 6 travelers.',
     ],
 
     'mail' => [
@@ -59,6 +65,18 @@ return [
         'notification_label_station' => 'Departure station',
 
         'notification_travelers_more_than_8' => 'More than 8 (ask for exact number)',
+        'notification_label_departure' => 'Departure',
+        'notification_label_interest' => 'Note',
+        'notification_label_single_room' => 'Single room',
+        'notification_travelers_more_than_6' => 'More than 6 (ask for exact number)',
+        'interest_only' => 'This departure is full: would like to hear when a place comes free',
+        'yes' => 'Yes',
+        'no' => 'No',
+        'confirmation_group_note' => 'Your request does not reserve a place yet. Your place is certain once I confirm your request.',
+        'confirmation_interest_note' => 'This departure is full at the moment. When a place comes free, I will let you know.',
+        'confirmation_what_to_expect_group_1' => 'I check whether there is still room on the departure you chose.',
+        'confirmation_what_to_expect_group_2' => 'We go through what the trip includes and what the total price will be.',
+        'confirmation_what_to_expect_group_3' => 'You get plenty of room to ask questions - there is no obligation to book right away.',
         'notification_not_specified' => 'Not specified',
         'notification_no_notes' => 'No notes provided.',
 

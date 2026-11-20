@@ -1,6 +1,7 @@
 <script setup>
 import { Briefcase, Calendar, Train, Users, User, Phone, Mail, AtSign } from "@lucide/vue";
 import { useDateFormatter } from '@/Composables/useDateFormatter.js'
+import { isGroupBooking } from '@/Composables/useDeparturePrice.js'
 
 const { formattedDate } = useDateFormatter();
 
@@ -57,7 +58,8 @@ defineProps({
             </section>
 
             <!-- Kosten -->
-            <BookingCostsSummary :booking="booking" />
+            <DeparturePriceSummary v-if="isGroupBooking(booking)" :booking="booking" />
+            <BookingCostsSummary v-else :booking="booking" />
 
             <!-- Reizigers -->
             <section>

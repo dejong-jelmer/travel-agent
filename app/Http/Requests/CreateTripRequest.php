@@ -52,6 +52,7 @@ class CreateTripRequest extends FormRequest
             TripValidationRules::keyFacts(),
             TripValidationRules::prices(),
             TripValidationRules::settings(),
+            TripValidationRules::format(),
             TripValidationRules::seo(),
             TripValidationRules::destinations(),
             TripValidationRules::transport(),

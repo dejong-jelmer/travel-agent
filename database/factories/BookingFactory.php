@@ -8,6 +8,7 @@ use App\Enums\SettingKey;
 use App\Models\Booking;
 use App\Models\BookingContact;
 use App\Models\BookingTraveler;
+use App\Models\Departure;
 use App\Models\Trip;
 use App\Models\TripPrice;
 use Carbon\Carbon;
@@ -67,6 +68,21 @@ class BookingFactory extends Factory
             ];
             $booking->saveQuietly();
         });
+    }
+
+    /**
+     * Book places on a departure of a group trip: the booking takes over its trip and dates.
+     */
+    public function onDeparture(Departure $departure, int $adults = 2, int $children = 0): static
+    {
+        return $this->state(fn () => [
+            'trip_id' => $departure->trip_id,
+            'departure_id' => $departure->id,
+            'departure_date' => $departure->departs_on,
+            'return_date' => $departure->returns_on,
+            'total_adults' => $adults,
+            'total_children' => $children,
+        ]);
     }
 
     public function asNew(): static

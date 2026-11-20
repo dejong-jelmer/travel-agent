@@ -57,6 +57,26 @@ class Breadcrumbs
                 ['label' => __('itinerary.title_create'), 'route' => null],
             ],
 
+            // Departures (nested under trip)
+            'admin.trips.departures.index' => [
+                self::dashboardCrumb(),
+                self::tripCrumb(),
+                // The slug, not the trip itself: the trail is sent to the page, which would serialize the whole trip
+                ['label' => request()->route('trip')->name ?? __('trip.title_show'), 'route' => 'admin.trips.show', 'params' => [request()->route('trip')->slug]],
+                ['label' => __('departure.title_index'), 'route' => null],
+            ],
+
+            // Departures (all trips)
+            'admin.departures.index' => [
+                self::dashboardCrumb(),
+                ['label' => __('departure.title_index'), 'route' => null],
+            ],
+            'admin.departures.show' => [
+                self::dashboardCrumb(),
+                ['label' => __('departure.title_index'), 'route' => 'admin.departures.index'],
+                ['label' => __('departure.title_show'), 'route' => null],
+            ],
+
             // Itinerary edit (unnested route)
             'admin.itineraries.edit' => self::itineraryEdit(),
 

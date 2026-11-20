@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Enums\Trip\ItemType;
+use App\Enums\Trip\TripFormat;
+use App\Enums\Trip\TripType;
 use App\Models\Destination;
 use App\Models\Trip;
 use App\Models\TripItem;
@@ -54,6 +56,8 @@ class TripItemTest extends TestCase
                 ['title' => 'highlight 2', 'description' => null],
             ],
             'published_at' => now()->toDateTimeString(),
+            'type' => TripType::CityTrip->value,
+            'format' => TripFormat::Individual->value,
             'meta_title' => fake()->text(60),
             'meta_description' => fake()->text(160),
         ], $overrides);

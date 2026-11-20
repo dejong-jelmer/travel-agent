@@ -9,6 +9,7 @@ const props = defineProps({
 const form = useForm({
     ...props.itinerary,
     image: props.itinerary.image?.public_url ?? null,
+    image_alt: props.itinerary.image?.alt ?? '',
 });
 
 function submit() {

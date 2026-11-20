@@ -21,7 +21,12 @@ class UpdateBookingRequest extends FormRequest
 
     public function rules(): array
     {
+        $onDeparture = $this->booking->departure_id !== null;
+
         return array_merge(
+            $onDeparture
+                ? BookingValidationRules::singleRooms($this->booking->total_adults)
+                : ['single_rooms' => ['exclude']],
             [
                 'status' => [
                     'required',
@@ -42,7 +47,7 @@ class UpdateBookingRequest extends FormRequest
             BookingValidationRules::contact(),
             BookingValidationRules::travelers(),
             BookingValidationRules::mainBooker(),
-            BookingValidationRules::costItems(),
+            BookingValidationRules::costItems(required: ! $onDeparture),
         );
     }
 }
