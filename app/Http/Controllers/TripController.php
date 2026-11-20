@@ -6,6 +6,7 @@ use App\DTO\BreadcrumbTrail;
 use App\Enums\Destination\TravelInfo;
 use App\Enums\Trip\PracticalInfo;
 use App\Http\Controllers\Traits\HasPageMetadata;
+use App\Models\BlogPost;
 use App\Models\Testimonial;
 use App\Models\Trip;
 use App\Services\CountryService;
@@ -63,7 +64,7 @@ class TripController extends Controller
         $seo = $this->shareSeo(overrides: [
             'title' => $trip->meta_title.' | '.config('app.name'),
             'description' => $trip->meta_description,
-            ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->name)),
+            ...$this->ogImageSeo($this->ogImages->forImage($trip->heroImage, $trip->heroImage?->alt ?: $trip->name)),
             // Same sizes as the hero image in TripHero
             ...$this->preloadImageSeo($trip->heroImage, '100vw'),
         ], jsonLd: array_merge($trip->toTouristTripSchema($departures), [
@@ -82,6 +83,7 @@ class TripController extends Controller
             'highlights' => $this->highlights($trip),
             'itinerary' => $this->itineraries->forDisplay($trip),
             'testimonials' => $this->testimonials($trip),
+            'stories' => $this->stories($trip),
             'tripItems' => TripItemService::aggregate($trip),
             'practicalSections' => PracticalInfo::labels(),
             'travelInfoSections' => TravelInfo::labels(),
@@ -143,6 +145,26 @@ class TripController extends Controller
     {
         return $trip->testimonials()->forDisplay()->get()
             ->map(fn (Testimonial $testimonial) => $testimonial->toDisplay())
+            ->all();
+    }
+
+    /**
+     * The published stories that go with the trip, newest first, with only what a story card shows: the body of
+     * every story would otherwise go along.
+     *
+     * @return list<array{id: int, slug: string, title: string, excerpt: string|null, published_at: string|null, hero_image: \App\Models\Image|null}>
+     */
+    private function stories(Trip $trip): array
+    {
+        return $trip->blogPosts()->published()->with('heroImage')->latest('published_at')->get()
+            ->map(fn (BlogPost $post) => [
+                'id' => $post->id,
+                'slug' => $post->slug,
+                'title' => $post->title,
+                'excerpt' => $post->excerpt,
+                'published_at' => $post->published_at?->toIso8601String(),
+                'hero_image' => $post->heroImage,
+            ])
             ->all();
     }
 }

@@ -60,7 +60,14 @@
         "index": {
             "title": "Blog",
             "no_posts": "No blog posts have been published yet."
-        }
+        },
+        "author": {
+            "label": "About the author",
+            "link": "More about me"
+        },
+        "last_updated": "Last updated: {date}",
+        "summary_title": "In brief",
+        "related_trips": "Trips that go with this story"
     },
     "trip_card": {
         "days": "days",
@@ -177,6 +184,10 @@
         }
     },
     "forms": {
+        "image_alt": {
+            "label": "Alt text",
+            "help": "Briefly describe what the photo shows, for screen readers and search engines. Left empty, the text shown in the field is used."
+        },
         "actions": {
             "add": "Add",
             "delete": "Delete",
@@ -689,15 +700,23 @@
                 "meta": {
                     "title": "SEO",
                     "subtitle": "Search engine optimization"
+                },
+                "trips": {
+                    "title": "Related trips",
+                    "subtitle": "The trips that go with this story. They are shown below the story, and the story on their trip page."
                 }
             },
             "fields": {
                 "title": "Title",
                 "excerpt": "Excerpt",
+                "summary": "Summary",
+                "summary_help": "Optional. One key point per line; they are shown as \"In het kort\" after the introduction of the story, before the first H2 heading.",
                 "body": "Content",
                 "meta_title": "Meta title",
                 "meta_description": "Meta description",
-                "status": "Status"
+                "status": "Status",
+                "trips": "Trips",
+                "trips_help": "Hold Ctrl (or Cmd on a Mac) to select several trips or to deselect one."
             },
             "submit": {
                 "create": "Create blog post",
@@ -1078,6 +1097,7 @@
         "terms_link": "Read the travel conditions and the STO-Garant scheme"
     },
     "trip_show": {
+        "related_stories": "Read also",
         "hero": {
             "from_price": "From €{price},-",
             "days": "{duration} days",
@@ -1527,6 +1547,7 @@
             },
             "show": {
                 "excerpt": "Excerpt",
+                "summary": "Summary",
                 "body": "Content",
                 "status": "Status",
                 "published_at": "Publication date",

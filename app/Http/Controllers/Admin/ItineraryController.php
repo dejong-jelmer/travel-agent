@@ -61,13 +61,14 @@ class ItineraryController extends Controller
     public function store(CreateItineraryRequest $request, Trip $trip): RedirectResponse
     {
         $itinerary = new Itinerary;
-        $validatedFields = $request->safe()->except('image');
+        $validatedFields = $request->safe()->except(['image', 'image_alt']);
 
         $itinerary->fill($validatedFields);
         $itinerary->trip()->associate($trip);
         $itinerary->order = $trip->itineraries->count() + 1;
         $itinerary->save();
         $itinerary->syncImageFromRequest($request, 'image', ImageRelation::Image);
+        $itinerary->setImageAlt(ImageRelation::Image, $request->safe()->input('image_alt'));
 
         return redirect()
             ->route('admin.trips.itineraries.index', $itinerary->trip)
@@ -91,11 +92,12 @@ class ItineraryController extends Controller
      */
     public function update(UpdateItineraryRequest $request, Itinerary $itinerary): RedirectResponse
     {
-        $validatedFields = $request->safe()->except('image');
+        $validatedFields = $request->safe()->except(['image', 'image_alt']);
 
         $itinerary->update($validatedFields);
 
         $itinerary->syncImageFromRequest($request, 'image', ImageRelation::Image);
+        $itinerary->setImageAlt(ImageRelation::Image, $request->safe()->input('image_alt'));
 
         return redirect()
             ->route('admin.trips.itineraries.index', $itinerary->trip)

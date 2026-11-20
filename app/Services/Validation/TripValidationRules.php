@@ -145,6 +145,7 @@ class TripValidationRules
 
         return [
             'heroImage' => ['required', ...ImageValidationRules::baseImage()],
+            ...ImageValidationRules::alt('hero_image_alt'),
         ];
     }
 
@@ -152,6 +153,7 @@ class TripValidationRules
     {
         return [
             'heroImage' => ['nullable', ...ImageValidationRules::baseImageOrString()],
+            ...ImageValidationRules::alt('hero_image_alt'),
         ];
     }
 

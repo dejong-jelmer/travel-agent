@@ -27,6 +27,16 @@ final class ImageValidationRules
     }
 
     /**
+     * The alt text of an image, sent next to its upload field. Empty means the page's own alt applies.
+     *
+     * @return array<string, array<int, string>>
+     */
+    public static function alt(string $field): array
+    {
+        return [$field => ['nullable', 'string', 'max:255']];
+    }
+
+    /**
      * Image validation rules that accept both existing paths and new uploads.
      *
      * Validates:

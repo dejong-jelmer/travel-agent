@@ -49,6 +49,16 @@ const { formattedDate } = useDateFormatter();
                         </div>
                     </section>
 
+                    <!-- Summary, one point per line -->
+                    <section v-if="blogPost.summary" class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
+                        <div class="border-b border-gray-200 bg-white px-6 py-4">
+                            <h2 class="text-lg font-semibold text-gray-700">{{ t('admin.blog_posts.show.summary') }}</h2>
+                        </div>
+                        <div class="p-6">
+                            <p class="text-gray-600 whitespace-pre-line">{{ blogPost.summary }}</p>
+                        </div>
+                    </section>
+
                     <!-- Body -->
                     <section class="bg-white rounded-lg border border-gray-200 shadow-sm overflow-hidden">
                         <div class="border-b border-gray-200 bg-white px-6 py-4">

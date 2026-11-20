@@ -60,7 +60,14 @@
         "index": {
             "title": "Mijn verhalen",
             "no_posts": "Ik heb nog geen verhalen gepubliceerd."
-        }
+        },
+        "author": {
+            "label": "Over de schrijver",
+            "link": "Meer over mij"
+        },
+        "last_updated": "Laatst bijgewerkt: {date}",
+        "summary_title": "In het kort",
+        "related_trips": "Reizen die hierbij passen"
     },
     "trip_card": {
         "days": "dagen",
@@ -177,6 +184,10 @@
         }
     },
     "forms": {
+        "image_alt": {
+            "label": "Alt-tekst",
+            "help": "Beschrijf kort wat er op de foto te zien is, voor schermlezers en zoekmachines. Leeg laten: de tekst in het veld wordt gebruikt."
+        },
         "actions": {
             "add": "Toevoegen",
             "delete": "Verwijderen",
@@ -689,15 +700,23 @@
                 "meta": {
                     "title": "SEO",
                     "subtitle": "Zoekmachine optimalisatie"
+                },
+                "trips": {
+                    "title": "Gerelateerde reizen",
+                    "subtitle": "De reizen die bij dit verhaal passen. Ze staan onder het verhaal, en het verhaal staat op hun reispagina."
                 }
             },
             "fields": {
                 "title": "Titel",
                 "excerpt": "Excerpt",
+                "summary": "Samenvatting",
+                "summary_help": "Optioneel. Eén kernpunt per regel; ze staan als \"In het kort\" na de inleiding van het verhaal, voor de eerste H2-kop.",
                 "body": "Inhoud",
                 "meta_title": "Meta titel",
                 "meta_description": "Meta omschrijving",
-                "status": "Status"
+                "status": "Status",
+                "trips": "Reizen",
+                "trips_help": "Houd Ctrl (of Cmd op een Mac) ingedrukt om meerdere reizen te kiezen of er een uit te zetten."
             },
             "submit": {
                 "create": "Blogpost aanmaken",
@@ -1076,6 +1095,7 @@
         }
     },
     "trip_show": {
+        "related_stories": "Lees ook",
         "hero": {
             "from_price": "Vanaf €{price},-",
             "days": "{duration} dagen",
@@ -1525,6 +1545,7 @@
             },
             "show": {
                 "excerpt": "Excerpt",
+                "summary": "Samenvatting",
                 "body": "Inhoud",
                 "status": "Status",
                 "published_at": "Publicatiedatum",

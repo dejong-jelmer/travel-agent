@@ -40,7 +40,7 @@
                     @if (!empty($tripImage))
                         <td width="168" class="email-stack email-stack-img" style="padding:16px 20px 24px 0;vertical-align:top;">
                             <a href="{{ $tripUrl }}">
-                                <img src="{{ $tripImage }}" alt="{{ $trip->name }}" width="168" height="126"
+                                <img src="{{ $tripImage }}" alt="{{ $trip->heroImage?->alt ?: $trip->name }}" width="168" height="126"
                                     style="display:block;width:168px;height:126px;object-fit:cover;border:0;">
                             </a>
                         </td>

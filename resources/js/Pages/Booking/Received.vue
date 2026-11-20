@@ -51,7 +51,7 @@ const { t } = useI18n()
                             <!-- Trip Image Header -->
                             <div v-if="booking.trip.hero_image" class="h-48 laptop:h-64 relative">
                                 <img :src="booking.trip.hero_image.public_url"
-                                    :alt="`${booking.trip.name} - ${booking.trip.destinations_formatted}`"
+                                    :alt="booking.trip.hero_image.alt || `${booking.trip.name} - ${booking.trip.destinations_formatted}`"
                                     :width="booking.trip.hero_image.width" :height="booking.trip.hero_image.height"
                                     loading="lazy" class="absolute inset-0 h-full w-full object-cover" />
                                 <div class="absolute inset-0 bg-gradient-to-t from-brand-primary/50 to-transparent">

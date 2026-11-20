@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 
 /**
+ * @property string|null $alt What the image shows; null when the page's own alt applies
  * @property string $public_url
  * @property string $full_path
  * @property array<int, array{width: int, height: int, size: int}>|null $variants
@@ -26,6 +27,7 @@ class Image extends Model
         'is_primary',
         'order',
         'original_name',
+        'alt',
         'mime_type',
         'size',
         'width',

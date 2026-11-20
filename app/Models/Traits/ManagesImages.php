@@ -67,6 +67,18 @@ trait ManagesImages
     }
 
     /**
+     * Set the alt text of the image of a single-image relation. Call it after syncing the image, so a new upload
+     * gets it too. Empty stores null: the page then uses its own alt, such as the title. Without an image there is
+     * nothing to describe, so nothing happens.
+     *
+     * @param  ImageRelation  $relation  A relation that holds one image (heroImage, image).
+     */
+    public function setImageAlt(ImageRelation $relation, ?string $alt): void
+    {
+        $relation->getRelation($this)->update(['alt' => filled($alt) ? $alt : null]);
+    }
+
+    /**
      * Sync images - add new, keep existing, and remove deleted images.
      *
      * Uses two-phase commit to ensure atomicity and avoid race conditions:
