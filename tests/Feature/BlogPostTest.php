@@ -295,6 +295,10 @@ class BlogPostTest extends TestCase
                 ->component('Blog/Show')
                 ->has('post')
                 ->where('post.slug', $post->slug)
+                ->where('author', [
+                    'name' => config('blog.author_name'),
+                    'bio' => config('blog.author_bio'),
+                ])
                 ->etc()
         );
 

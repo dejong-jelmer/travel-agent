@@ -6,6 +6,8 @@ import { computed } from 'vue';
 
 const props = defineProps({
     post: Object,
+    // The name and bio for the author box, from config/blog.php
+    author: Object,
 });
 
 const { t } = useI18n();
@@ -37,6 +39,9 @@ const { formattedDate } = useDateFormatter();
 
             <!-- Body -->
             <div class="max-w-3xl mx-auto prose prose-lg prose-brand" v-html="post.body"></div>
+
+            <!-- Who wrote it -->
+            <AuthorBox :name="author.name" :bio="author.bio" class="max-w-3xl mx-auto mt-16" />
         </article>
     </Layout>
 </template>

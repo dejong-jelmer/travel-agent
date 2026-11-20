@@ -60,6 +60,10 @@
         "index": {
             "title": "Mijn verhalen",
             "no_posts": "Ik heb nog geen verhalen gepubliceerd."
+        },
+        "author": {
+            "label": "Over de schrijver",
+            "link": "Meer over mij"
         }
     },
     "trip_card": {

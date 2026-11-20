@@ -60,6 +60,10 @@
         "index": {
             "title": "Blog",
             "no_posts": "No blog posts have been published yet."
+        },
+        "author": {
+            "label": "About the author",
+            "link": "More about me"
         }
     },
     "trip_card": {

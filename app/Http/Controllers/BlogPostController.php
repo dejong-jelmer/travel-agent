@@ -75,6 +75,10 @@ class BlogPostController extends Controller
 
         return Inertia::render('Blog/Show', [
             'post' => $post,
+            'author' => [
+                'name' => config('blog.author_name'),
+                'bio' => config('blog.author_bio'),
+            ],
             'title' => $seo['title'],
             'seo' => $seo,
         ]);
