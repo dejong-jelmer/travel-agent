@@ -1,4 +1,20 @@
+# Every crawler may read the whole site. Pages that should stay out of search results say so themselves with a
+# noindex robots meta tag; blocking them here would keep crawlers from seeing that tag.
 User-agent: *
 Disallow:
+
+# AI crawlers, allowed explicitly. A crawler follows only the most specific group that names it, so each group
+# allows everything, like the group above.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
 
 Sitemap: https://omdatwereizen.nl/sitemap.xml
