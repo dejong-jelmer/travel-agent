@@ -47,6 +47,7 @@ class BlogPostController extends Controller
             ...$this->ogImageSeo($this->ogImages->forImage($post->heroImage, $post->heroImage?->alt ?: $post->title)),
         ];
 
+        $agency = $this->travelAgencySchema();
         $jsonLd = array_merge(
             $post->toBlogPostingSchema(),
             [
@@ -57,11 +58,11 @@ class BlogPostController extends Controller
                 ],
                 // The agency's own node, as a plain Organization with its logo as an ImageObject
                 'publisher' => [
-                    ...$this->travelAgencySchema(),
+                    ...$agency,
                     '@type' => 'Organization',
                     'logo' => [
                         '@type' => 'ImageObject',
-                        'url' => $this->travelAgencySchema()['logo'],
+                        'url' => $agency['logo'],
                     ],
                 ],
             ],

@@ -77,6 +77,18 @@ class ImageAltTest extends TestCase
             );
     }
 
+    public function test_an_alt_without_an_image_is_ignored(): void
+    {
+        // The form keeps an alt typed before the image was removed; without an image there is nothing to describe
+        $this->post(route('admin.posts.store'), $this->storyData([
+            'featured_image_alt' => 'Kastelen langs de Dordogne',
+        ]))->assertSessionHasNoErrors()->assertRedirect(route('admin.posts.index'));
+
+        $post = BlogPost::firstOrFail();
+        $this->assertNull($post->heroImage);
+        $this->assertDatabaseCount('images', 0);
+    }
+
     public function test_an_alt_longer_than_255_characters_is_refused(): void
     {
         $this->post(route('admin.posts.store'), $this->storyData([
