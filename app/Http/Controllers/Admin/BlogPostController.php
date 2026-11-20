@@ -14,6 +14,7 @@ use App\Models\Trip;
 use App\Services\DataTableService;
 use App\Services\SlugService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -54,12 +55,17 @@ class BlogPostController extends Controller
 
         $slug = SlugService::generateUniqueFor(BlogPost::class, $validated['title']);
 
-        $post = BlogPost::create(array_merge($validated, [
-            'slug' => $slug,
-            'published_at' => $status === Status::Published ? now() : null,
-        ]));
+        // The story and its trips are saved together; the images follow outside the transaction, as syncImages
+        // uploads files and runs its own
+        $post = DB::transaction(function () use ($validated, $slug, $status, $request) {
+            $post = BlogPost::create(array_merge($validated, [
+                'slug' => $slug,
+                'published_at' => $status === Status::Published ? now() : null,
+            ]));
+            $post->trips()->sync($request->safe()->trips ?? []);
 
-        $post->trips()->sync($request->safe()->trips ?? []);
+            return $post;
+        });
 
         if ($request->hasFile('featured_image')) {
             $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);
@@ -103,10 +109,13 @@ class BlogPostController extends Controller
                 default => $post->published_at,
             },
         ]));
-        $post->save();
 
-        // The form always sends its trips, but an empty list goes missing in form data: no trips means none
-        $post->trips()->sync($request->safe()->trips ?? []);
+        // The story and its trips are saved together; the images follow outside the transaction, as in store()
+        DB::transaction(function () use ($post, $request) {
+            $post->save();
+            // The form always sends its trips, but an empty list goes missing in form data: no trips means none
+            $post->trips()->sync($request->safe()->trips ?? []);
+        });
 
         if ($request->hasFile('featured_image')) {
             $post->syncImages($request->file('featured_image'), ImageRelation::HeroImage, true);

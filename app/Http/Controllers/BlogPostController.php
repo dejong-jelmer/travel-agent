@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\DTO\BreadcrumbTrail;
 use App\Http\Controllers\Traits\HasPageMetadata;
 use App\Models\BlogPost;
+use App\Models\Trip;
 use App\Services\OgImageService;
+use Illuminate\Database\Eloquent\Collection;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -85,12 +87,22 @@ class BlogPostController extends Controller
                 'name' => config('blog.author_name'),
                 'bio' => config('blog.author_bio'),
             ],
-            // As on the trips page: the trip cards have no use for the gallery paths, which would fetch every gallery
-            'trips' => $post->trips()->with(['destinations', 'heroImage'])->withStartingPrice()->withTravelMode()->published()
-                ->orderBy('name')->get()->append(['travel_mode', 'type_display', 'format_display'])
-                ->makeHidden(['image_paths', 'visibleDepartures', 'pivot']),
+            'trips' => $this->relatedTrips($post),
             'title' => $seo['title'],
             'seo' => $seo,
         ]);
+    }
+
+    /**
+     * The published trips the story goes with, by name, ready for a trip card. As on the trips page, the cards have
+     * no use for the gallery paths, which would fetch every gallery.
+     *
+     * @return Collection<int, Trip>
+     */
+    private function relatedTrips(BlogPost $post): Collection
+    {
+        return $post->trips()->with(['destinations', 'heroImage'])->withStartingPrice()->withTravelMode()->published()
+            ->orderBy('name')->get()->append(['travel_mode', 'type_display', 'format_display'])
+            ->makeHidden(['image_paths', 'visibleDepartures', 'pivot']);
     }
 }
